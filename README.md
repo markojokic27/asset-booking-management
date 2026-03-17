@@ -1,12 +1,15 @@
-# Asset Management
+# Asset Booking Management
 
-Welcome to Asset Booking and Management system for your Workplace. This is an internal project for Maurer Internship 2026.
+Welcome to Asset Booking and Management system for your Workplace. 
+
+This is an internal project for Maurer Internship 2026.
 
 ## Table of Contents
 
-- [Asset Management](#asset-management)
+- [Asset Booking Management](#asset-booking-management)
   - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
+  - [Asset Booking Management software system](#asset-booking-management-software-system)
+    - [Introduction](#introduction)
     - [Functional Requirements](#functional-requirements)
     - [Non-Functional Requirements](#non-functional-requirements)
     - [Use Cases Document](#use-cases-document)
@@ -14,7 +17,8 @@ Welcome to Asset Booking and Management system for your Workplace. This is an in
     - [Test Plan](#test-plan)
     - [Test Cases Document](#test-cases-document)
   - [Local Development Environment setup and instructions](#local-development-environment-setup-and-instructions)
-    - [Solution Document](#solution-document)
+    - [Environment vars](#environment-vars)
+  - [Solution Document](#solution-document)
   - [API first! API documentation](#api-first-api-documentation)
     - [API Testing with Bruno](#api-testing-with-bruno)
   - [BackEnd](#backend)
@@ -23,12 +27,13 @@ Welcome to Asset Booking and Management system for your Workplace. This is an in
     - [Dockerfile](#dockerfile)
   - [Database](#database)
     - [ER Model](#er-model)
+    - [Dockerfile for DB](#dockerfile-for-db)
     - [DB Schema migrations](#db-schema-migrations)
   - [FrontEnd](#frontend)
     - [FrontEnd Code Architecture](#frontend-code-architecture)
     - [Dockerfile for FrontEnd](#dockerfile-for-frontend)
   - [CI-CD](#ci-cd)
-    - [Builds](#builds)
+    - [Pipeline, Builds](#pipeline-builds)
     - [Tests](#tests)
     - [Deployment to VM](#deployment-to-vm)
   - [Demo VM](#demo-vm)
@@ -55,11 +60,15 @@ Welcome to Asset Booking and Management system for your Workplace. This is an in
 
 ---
 
-## Introduction
+## Asset Booking Management software system
+
+### Introduction
 
 Asset Booking and Management system for your Workplace. It is a dimple but powerful web and mobile software for booking and management of Maurer workplace assets.
 
 This is an internal project for Maurer Internship 2026.
+
+![Asset Booking Management](/docs/images/asset-logo.jpg)
 
 Key features and examples:
 - Book workplace assets easily!
@@ -73,7 +82,7 @@ Key features and examples:
 - Maintain real-time visibility of assets and people who booked them
 - Provides Reports about Asset usage
 
-![Asset Booking Management](/docs/images/asset-logo.jpg)
+---
 
 ### Functional Requirements
 
@@ -103,7 +112,11 @@ TODO Add or link content...
 
 TODO Add or link content...
 
-### Solution Document
+### Environment vars
+
+TODO Add or link content...
+
+## Solution Document
 
 TODO Add or link content...
 
@@ -116,6 +129,8 @@ TODO Add or link content...
 TODO Add or link content...
 
 ## BackEnd 
+
+TODO Add or link content...
 
 ### BackEnd Code Architecture
 
@@ -137,6 +152,8 @@ TODO Add or link content...
 
 TODO Add or link content...
 
+### Dockerfile for DB
+
 ### DB Schema migrations
 
 TODO Add or link content...
@@ -157,7 +174,7 @@ TODO Add or link content...
 
 TODO Add or link content...
 
-### Builds
+### Pipeline, Builds
 
 TODO Add or link content...
 
