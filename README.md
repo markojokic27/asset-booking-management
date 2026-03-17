@@ -1,30 +1,232 @@
-# Asset Booking Management
+# Asset Management
+
+Welcome to Asset Booking and Management system for your Workplace. This is an internal project for Maurer Internship 2026.
+
+## Table of Contents
+
+- [Asset Management](#asset-management)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+    - [Functional Requirements](#functional-requirements)
+    - [Non-Functional Requirements](#non-functional-requirements)
+    - [Use Cases Document](#use-cases-document)
+    - [Use Cases Diagram](#use-cases-diagram)
+    - [Test Plan](#test-plan)
+    - [Test Cases Document](#test-cases-document)
+  - [Local Development Environment setup and instructions](#local-development-environment-setup-and-instructions)
+    - [Solution Document](#solution-document)
+  - [API first! API documentation](#api-first-api-documentation)
+    - [API Testing with Bruno](#api-testing-with-bruno)
+  - [BackEnd](#backend)
+    - [BackEnd Code Architecture](#backend-code-architecture)
+    - [LDAP Authentication](#ldap-authentication)
+    - [Dockerfile](#dockerfile)
+  - [Database](#database)
+    - [ER Model](#er-model)
+    - [DB Schema migrations](#db-schema-migrations)
+  - [FrontEnd](#frontend)
+    - [FrontEnd Code Architecture](#frontend-code-architecture)
+    - [Dockerfile for FrontEnd](#dockerfile-for-frontend)
+  - [CI-CD](#ci-cd)
+    - [Builds](#builds)
+    - [Tests](#tests)
+    - [Deployment to VM](#deployment-to-vm)
+  - [Demo VM](#demo-vm)
+  - [Documentation](#documentation)
+    - [Link to Functional Requirements](#link-to-functional-requirements)
+    - [Link to Non-Functional Requirements](#link-to-non-functional-requirements)
+    - [Link to Use Cases Document](#link-to-use-cases-document)
+    - [Link to Use Cases Diagram](#link-to-use-cases-diagram)
+    - [Link to Test Cases Document](#link-to-test-cases-document)
+    - [Link to Solution Document](#link-to-solution-document)
+    - [Link to API Documentation](#link-to-api-documentation)
+    - [Link to DB ER Model Documentation](#link-to-db-er-model-documentation)
+    - [Link to GitLab Issues board](#link-to-gitlab-issues-board)
+    - [Link to GitLab Wiki pages](#link-to-gitlab-wiki-pages)
+    - [Link to ADRs folder](#link-to-adrs-folder)
+    - [Link to Technical Manual](#link-to-technical-manual)
+    - [Link to User Manual](#link-to-user-manual)
+  - [Getting started with GitLab?](#getting-started-with-gitlab)
+    - [Add your files](#add-your-files)
+    - [Integrate with your tools](#integrate-with-your-tools)
+    - [Collaborate with your team](#collaborate-with-your-team)
+    - [Test and Deploy](#test-and-deploy)
+ 
+
+---
+
+## Introduction
+
+Asset Booking and Management system for your Workplace. It is a dimple but powerful web and mobile software for booking and management of Maurer workplace assets.
+
+This is an internal project for Maurer Internship 2026.
+
+Key features and examples:
+- Book workplace assets easily!
+- A great option if your workplace has hot desks that need to be booked by your employees
+- Reserve a free parking spot in garage for today
+- Reserve a meeting room at 13 h
+- Book a shared laptop for using for some period
+- System which prevents double bookings
+- Book available assets such as parking spots via QR code using mobile app
+- Keep a comprehensive list of workplace assets and empower employees to book them effortlessly
+- Maintain real-time visibility of assets and people who booked them
+- Provides Reports about Asset usage
+
+![Asset Booking Management](/docs/images/asset-logo.jpg)
+
+### Functional Requirements
+
+TODO Add or link content...
+
+### Non-Functional Requirements
+
+TODO Add or link content...
+
+### Use Cases Document
+
+TODO Add or link content...
+
+### Use Cases Diagram
+
+TODO Add or link content...
+
+### Test Plan
+
+TODO Add or link content...
+
+### Test Cases Document
+
+TODO Add or link content...
+
+## Local Development Environment setup and instructions
+
+TODO Add or link content...
+
+### Solution Document
+
+TODO Add or link content...
+
+## API first! API documentation
+
+TODO Add or link content...
+
+### API Testing with Bruno
+
+TODO Add or link content...
+
+## BackEnd 
+
+### BackEnd Code Architecture
+
+TODO Add or link content...
+
+### LDAP Authentication
+
+TODO Add or link content...
+
+### Dockerfile
+
+TODO Add or link content...
+
+## Database
+
+TODO Add or link content...
+
+### ER Model
+
+TODO Add or link content...
+
+### DB Schema migrations
+
+TODO Add or link content...
+
+## FrontEnd
+
+TODO Add or link content...
+
+### FrontEnd Code Architecture
+
+TODO Add or link content...
+
+### Dockerfile for FrontEnd
+
+TODO Add or link content...
+
+## CI-CD
+
+TODO Add or link content...
+
+### Builds
+
+TODO Add or link content...
+
+### Tests
+
+TODO Add or link content...
+
+### Deployment to VM
+
+TODO Add or link content...
+
+## Demo VM
+
+TODO Add or link content...
+
+## Documentation
+
+### Link to Functional Requirements
+
+### Link to Non-Functional Requirements
+
+### Link to Use Cases Document
+
+### Link to Use Cases Diagram
+
+### Link to Test Cases Document
+
+### Link to Solution Document
+
+### Link to API Documentation
+
+### Link to DB ER Model Documentation
+
+### Link to GitLab Issues board
+
+### Link to GitLab Wiki pages
+
+### Link to ADRs folder
+
+### Link to Technical Manual
+
+### Link to User Manual
+
+![Asset Booking Management](/docs/images/asset-logo2.jpg)
 
 
-
-## Getting started
+## Getting started with GitLab?
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Already a pro? Just edit this README.md and make it your own according company standards.
 
-## Add your files
+### Add your files
 
 * [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
 * [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
 
 ```
 cd existing_repo
-git remote add origin https://student-gitlab.tools.split.local/studentpractice/asset-booking-management.git
+git remote add origin https://student-gitlab.tools.split.local/studentpractice/asset-management.git
 git branch -M main
 git push -uf origin main
 ```
 
-## Integrate with your tools
+### Integrate with your tools
 
-* [Set up project integrations](https://student-gitlab.tools.split.local/studentpractice/asset-booking-management/-/settings/integrations)
+* [Set up project integrations](https://student-gitlab.tools.split.local/studentpractice/asset-management/-/settings/integrations)
 
-## Collaborate with your team
+### Collaborate with your team
 
 * [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
 * [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
@@ -32,62 +234,13 @@ git push -uf origin main
 * [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
 * [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
 
-## Test and Deploy
+### Test and Deploy
 
 Use the built-in continuous integration in GitLab.
 
 * [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
 * [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
+* [Deploy to Kubernetes using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
 * [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
 * [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
