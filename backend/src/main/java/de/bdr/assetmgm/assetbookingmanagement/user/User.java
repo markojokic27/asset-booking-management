@@ -1,3 +1,5 @@
+// test commit comment 
+
 package de.bdr.assetmgm.assetbookingmanagement.user;
 
 public class User {
