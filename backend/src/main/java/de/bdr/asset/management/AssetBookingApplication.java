@@ -1,13 +1,13 @@
-package de.bdr.assetmgm.assetbookingmanagement;
+package de.bdr.asset.management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AssetbookingmanagementApplication {
+public class AssetBookingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AssetbookingmanagementApplication.class, args);
+		SpringApplication.run(AssetBookingApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package de.bdr.assetmgm.assetbookingmanagement.user;
+package de.bdr.asset.management.user;
 
 public class UserNotFoundException extends RuntimeException{
 

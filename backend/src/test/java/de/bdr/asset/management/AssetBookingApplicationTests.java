@@ -1,10 +1,10 @@
-package de.bdr.assetmgm.assetbookingmanagement;
+package de.bdr.asset.management;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AssetbookingmanagementApplicationTests {
+class AssetBookingApplicationTests {
 
 	@Test
 	void contextLoads() {
