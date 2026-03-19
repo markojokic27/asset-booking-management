@@ -86,7 +86,7 @@ Key features and examples:
 
 ### Functional Requirements
 
-TODO Add or link content...
+[Link to Functional Requirements](docs/functionalRequirements/functional_requirements.adoc)
 
 ### Non-Functional Requirements
 
@@ -98,7 +98,7 @@ TODO Add or link content...
 
 ### Use Cases Diagram
 
-TODO Add or link content...
+![UseCaseDiagram](docs/useCase/UseCaseDiagram.png)
 
 ### Test Plan
 
@@ -193,12 +193,15 @@ TODO Add or link content...
 ## Documentation
 
 ### Link to Functional Requirements
+[Functional Requirements](docs/functionalRequirements/functional_requirements.adoc)
 
 ### Link to Non-Functional Requirements
 
 ### Link to Use Cases Document
 
 ### Link to Use Cases Diagram
+[Use Case Diagram](docs/useCase/UseCaseDiagram.png)
+
 
 ### Link to Test Cases Document
 
