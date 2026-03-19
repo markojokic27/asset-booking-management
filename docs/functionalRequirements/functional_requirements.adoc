@@ -1,0 +1,43 @@
+== Functional Requirements
+1. The system shall allow users to log in via web or mobile application and validate credentials against an LDAP directory.
+
+2. The system shall support biometric authentication (Face ID, fingerprint) in the mobile application.
+
+3. The system shall FranCes!Koli26#
+ after a predefined period of inactivity.
+
+4. The system shall allow management of users, including roles and permissions.
+
+5. The system shall allow management of asset categories, including defining different categories and configuring booking time periods for each category.
+
+6. The system shall support CRUD (create, read, update, delete) operations for assets.
+
+7. The system shall support asset maintenance management, including tracking and updating maintenance status.
+
+8. The system shall display the location of assets within buildings or office areas.
+
+9. The system shall allow users to search assets by category, availability, and time period.
+
+10. The system shall allow users to book assets (laptop, parking spot, book, meeting room, desk).
+
+11. The system shall support quick booking (for parking spots, desks, books) via mobile application, with minimal required input from the user.
+
+12. The system shall support recurring bookings for users with appropriate permissions.
+
+13. The system shall provide booking confirmation after a successful reservation.
+
+14. The system shall prevent double booking of the same asset within the same time period.
+
+15. The system shall generate asset usage reports.
+
+16. The system shall manage booking expiration by automatically canceling or updating expired reservations.
+
+17. The system shall notify managers when booking approval is required.
+
+18. The system shall allow managers to approve or reject booking requests via email or mobile push notification.
+
+19. The system shall support integration with Google Calendar for booking synchronization (optional).
+
+20. The system shall support email integration for notifications and communication.
+
+21. The system shall support QR code integration for asset identification and interaction.
