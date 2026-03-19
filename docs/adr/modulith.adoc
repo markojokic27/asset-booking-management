@@ -1,0 +1,114 @@
+= ADR: Adopt Modulith Architecture for Asset Booking System
+:status: Accepted
+:toc:
+
+== Status
+Accepted
+
+== Context
+We are building an *internal asset booking management system* for company use. The system will allow employees to book shared resources such as:
+
+* Meeting rooms
+* Laptops
+* Parking spaces
+* Other company assets
+
+Key constraints and characteristics:
+
+* The system will be used by approximately *100–150 users*
+* It is an *internal application*, not customer-facing
+* Backend is implemented using *Java with Spring / Spring Boot*
+* The expected load and traffic are relatively low to moderate
+* Development team size is limited, and we want to optimize for simplicity and maintainability
+
+We evaluated the following architectural approaches:
+
+=== Monolith
+A simple monolithic architecture would be easy to start with, but risks becoming disorganized as features grow (e.g., bookings, assets, users, approvals).
+
+=== Microservices
+Microservices would provide strong isolation and scalability, but introduce:
+
+* Infrastructure complexity (deployment, monitoring, networking)
+* Higher development overhead
+* Unnecessary complexity given the small user base and internal nature of the system
+
+=== Modulith (Modular Monolith)
+A modulith provides a balance:
+
+* Single deployable unit
+* Clear modular boundaries aligned with business domains
+* Lower operational complexity than microservices
+
+== Decision
+We will adopt a *modulith architecture using Spring Boot*.
+
+The system will:
+
+* Be deployed as a *single application*
+* Be organized into *domain-based modules (packages)*
+* Enforce clear separation between domains
+
+=== Planned Domains (initial)
+
+* `user` — manages users and roles
+* `asset-category` — handles different asset category definitions
+* `asset` — manages assets (rooms, laptops, parking spaces, etc.)
+* `booking` — handles reservations and scheduling
+* `report` — handles
+
+Each domain will encapsulate:
+
+* Controllers (REST endpoints)
+* Services (business logic)
+* Entities (JPA models)
+* Repositories (data access)
+
+== Consequences
+
+=== Positive
+
+* *Simplicity*: Single deployable Spring Boot application
+* *Maintainability*: Clear domain boundaries improve code organization
+* *Low operational overhead*: No need for distributed systems infrastructure
+* *Good fit for scale*: Suitable for 100–150 internal users
+* *Faster development*: Easier debugging, testing, and deployment
+* *Future flexibility*: Domains can be extracted into microservices if needed
+
+=== Negative
+
+* Requires discipline to maintain *strict module boundaries*
+* Risk of *tight coupling* if domains are not properly isolated
+* Cannot scale individual components independently (whole app scales together)
+
+== Implementation Notes
+
+* Use *package-by-domain* structure in Spring Boot
+
+* Avoid direct access between domains; use *service interfaces* where needed
+* Shared logic (e.g., utilities, common configs) should go into a `utilities` module
+
+== Alternatives Considered
+
+=== Monolith (Unstructured)
+Rejected because:
+
+* Can become hard to maintain as features grow
+* Lacks clear separation of concerns
+
+=== Microservices
+Rejected because:
+
+* Overkill for internal system with limited users
+* Adds unnecessary infrastructure and operational complexity
+* Slows down development for current team size
+
+== Future Considerations
+
+* If system complexity or user base grows significantly:
+
+** Extract domains (or only some of the domains) into microservices, 
+
+* Introduce stricter module boundaries (e.g., via architectural tests)
+* Monitor performance and scalability needs over time
+
