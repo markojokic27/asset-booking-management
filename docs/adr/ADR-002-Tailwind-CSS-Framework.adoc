@@ -1,0 +1,59 @@
+= ADR-002-Tailwind-CSS-Framework
+
+== Status
+
+Proposed
+
+== Context
+
+We need a frontend CSS framework which we can use to design our website to be visually appealing and responsive for all devices.
+
+== What is Tailwind?
+
+It is an open-source CSS framework that provides a set of low-level utility classes that can be used to create unique designs.
+
+== Why Tailwind?
+
+=== Pros of Tailwind
+. Integrates easily with React - Can be added via npm, also supports postCSS
+. Easy to use - Classes are low level, so they do one thing only, making their combinations very powerful
+. Small file size - Can generate a CSS file for only the classes it needs, not the whole framework.
+. Large community support - Also has a lot of component libraries which are also open source and work well with React
+
+=== Cons of Tailwind
+. Hard to master - While easy to use and get started, there are a lot of classes which need to be used and learned
+. Limited pre-built components - It relies heavily on component libraries that build on top of tailwind
+
+== Consequences
+
+=== Positive
+
+* *Simplicity*: Classes are self explanitory and easy to learn
+* *Maintainability*: Easy to add or adapt new styles
+
+=== Negative
+
+* *Consistency*: Everyone needs to be on the same page when it comes to applying classes and styles
+
+== Alternatives rejected
+
+=== MIUI
+
+. Bundle Size: Bundle size enlarged because of the pre-installed features and styles.
+. Customisation Effort: Might need more effort to customize beyond the scope of material design.
+. Design Limitations: If the project doesn't follow material design guidelines, it might feel limiting.
+. Learning Curve: It is necessary to familiarize oneself with Material-UI's API and theming system in order to proceed.
+. Overhead: Css in js adds more dependencies and makes the project more difficult.
+. Paid components - Not all components are free, making it quite limiting
+
+=== Bootstrap
+
+. Bundle size - Same as MIUI, the whole framework has to be loaded
+. Global styles - It applies global styles by default, making it hard to troubleshoot when the design is not following the intended vision
+. Same look - A lot of websites using Bootstrap can look the same which makes it limiting when designing new sites
+
+== Future considerations
+
+* If there are CSS frameworks that solve these considerations better than Tailwind CSS:
+
+** Change to the other framework
