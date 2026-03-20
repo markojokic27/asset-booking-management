@@ -1,0 +1,8 @@
+= Test Plan document
+
+TODO Define and specify which kind of test we will have.
+
+- End To End Tests
+- API tests 
+- Smoke Tests (API tests + most important E2E tests)
+- Load / Performance tests  
