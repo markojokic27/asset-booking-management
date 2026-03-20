@@ -1,0 +1,50 @@
+= ADR [000]: [Short, Descriptive Title]
+:author: [Your Name / Internship 2026]
+:date: 2026-03-20
+:status: Proposed | Accepted | Superseded | Deprecated
+:tags: backend, frontend, database, deployment, documentation
+
+== Status
+{status}
+
+== Context
+Describe the problem we are solving and the technical or business constraints. 
+
+_**Example:** We need an in-memory database for local development to ensure fast startup times and zero-configuration for new developers._
+
+== Decision
+What is the specific choice being made? 
+
+_**Example:** We will use **H2 Database** in `mem` mode for the `local` and `test` Spring Boot profiles._
+
+== Rationale
+Why was this choice made over others?
+
+_Example_
+
+* **Pro:** No external infrastructure (Docker/Postgres) required for local dev.
+* **Pro:** Integrated perfectly with Spring Boot 4 via `spring-boot-starter-data-jpa`.
+* **Con:** Data is volatile and lost on application restart.
+* **Con:** Slight SQL dialect differences compared to the Production (PostgreSQL) environment.
+
+== Alternatives Considered
+
+_Example_
+
+* *PostgreSQL via Docker:* Rejected due to higher resource overhead for simple local feature development.
+* *SQLite:* Rejected because Spring Boot's auto-configuration for H2 is more mature.
+
+== Consequences
+
+What happens after this decision is implemented?
+
+_Example_
+
+1. Add `com.h2database:h2` dependency to `pom.xml`.
+2. Configure `application-local.yaml` with `jdbc:h2:mem:testdb`.
+3. Ensure all developers use the `--spring.profiles.active=local` flag.
+
+[NOTE]
+====
+If we encounter complex native SQL queries that H2 cannot parse, we will revisit using **Testcontainers** with a real PostgreSQL instance for integration tests.
+====
