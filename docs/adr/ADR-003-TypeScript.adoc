@@ -1,0 +1,34 @@
+= ADR 003: Adoption of TypeScript for Frontend Development
+
+== Status
+Accepted
+
+== Context
+We are developing a frontend application using React. While JavaScript enables fast development, its lack of static typing can lead to runtime errors, especially in larger applications and teams. We need a solution that improves code safety and maintainability.
+
+== Decision
+We will use *TypeScript (TS)* as the primary language for frontend development instead of plain JavaScript.
+
+== Rationale
+
+* **Pro:** Static typing helps catch errors during development (compile-time).
+* **Pro:** Better tooling support (autocomplete, refactoring, IDE integration).
+* **Pro:** Clearly defined component APIs (e.g., typed props in React).
+* **Pro:** More scalable for large applications and teams.
+* **Con:** Additional overhead for writing and maintaining types.
+* **Con:** Slightly steeper learning curve compared to JavaScript.
+
+== Alternatives Considered
+
+* *JavaScript (JS):*
+  Rejected due to lack of static typing and higher risk of runtime errors.
+
+* *JavaScript + JSDoc:*
+  Rejected because it does not provide the same level of type safety and tooling as TypeScript.
+
+== Consequences
+
+1. The project will use `.ts` and `.tsx` files.
+2. Types must be defined for components, API calls, and data models.
+3. The development team needs basic knowledge of TypeScript.
+4. The build process includes compiling TypeScript to JavaScript.
