@@ -55,7 +55,7 @@ The system will:
 * `asset-category` — handles different asset category definitions
 * `asset` — manages assets (rooms, laptops, parking spaces, etc.)
 * `booking` — handles reservations and scheduling
-* `report` — handles
+* `report` — handles user usage reporting
 
 Each domain will encapsulate:
 
