@@ -1,0 +1,176 @@
+= Asset Category Domain
+:status: Proposed
+:toc:
+
+== Status
+Proposed
+
+== Entity
+
+Name of entity: AssetCategory +
+
+=== Fields
+* id : Long
+* name : String
+* createdTimestamp : LocalDateTime
+* lastModifiedTimestamp : LocalDateTime
+
+=== Example implementation
+
+[source, java]
+----
+@Entity
+@Table(name = "asset_category")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class AssetCategory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name cannot exceed 100 characters")
+    @Column(nullable = false)
+    private String name;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdTimestamp;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedTimestamp;
+}
+----
+
+=== For discussion
+* Additional fields and namings
+* Possible AssetCategoryConfig to handle minimum Booking duration... 
+
+== DTOs
+
+DTO for every type of request
+
+=== AssetCategoryCreateDTO
+[source, java]
+----
+public record AssetCategoryCreateDTO (
+    Long id,
+
+    @NotBlank(message = "Name is required")
+    String name,
+)
+----
+
+=== AssetCategoryListDTO
+[source, java]
+----
+public record AssetCategoryListDTO (
+    Long id,
+
+    @NotBlank(message = "Name is required")
+    String name,
+)
+----
+
+=== AssetCategoryRetrieveDTO
+[source, java]
+----
+public record AssetCategoryRetrieveDTO (
+    Long id,
+
+    @NotBlank(message = "Name is required")
+    String name,
+
+    LocalDateTime createdTimestamp,
+
+    LocalDateTime lastModifiedTimestamp
+)
+----
+
+=== AssetCategoryUpdateDTO
+[source, java]
+----
+public record AssetCategoryUpdateDTO (
+    @NotBlank(message = "Name is required")
+    String name
+)
+----
+
+=== AssetCategoryDeleteDTO
+[source, java]
+----
+public record AssetCategoryDeleteDTO (
+    Long id
+)
+----
+
+=== For discussion
+* Naming convention
+* This type of DTO structure, one for each scenario IF we expect those to change (due to changing fields and such)
+
+== Service Interface
+
+[source, java]
+----
+public interface AssetCategoryService {
+    AssetCategoryRetrieveDTO createAssetCategory(AssetCategoryRetrieveDTO assetCategoryRequest);
+
+    AssetCategoryRetrieveDTO updateAssetCategory(AssetCategoryRetrieveDTO assetCategoryRequest);
+}
+----
+
+== Service Implementation
+
+[source, java]
+----
+public class AssetCategoryServiceImpl implements AssetCategiryService {
+    @Override
+    public AssetCategoryRetrieveDTO createAssetCategory(AssetCategoryRetrieveDTO assetCategoryRequest) {
+
+        // TODO Implement...
+
+        return null;
+    }
+
+    @Override
+    public AssetCategoryRetrieveDTO updateAssetCategory(AssetCategoryRetrieveDTO assetCategoryRequest) {
+
+        // TODO Implement...
+
+        return null;
+    }
+}
+----
+
+== Repository Interface
+
+[source, java]
+----
+public interface AssetCategoryRepository extends JpaRepository<AssetCategory, Long>{
+
+}
+----
+
+== Repository Implementation
+
+=== For discussion
+* Decide if this will follow the Service pattern for consistency since it is not standard to have a RepoImpl. Reasoning being that we could define our own queries in the future without having to update the names.
+
+== Controller
+
+WIP +
+* Likely a @RestController component
+
+== Appropriate Exceptions
+
+[source, java]
+----
+class AssetCategoryNotFoundException extends RuntimeException {
+    AssertCategoryNotFoundException(long id) {
+        super("Could not find asset category" + id);
+    }
+}
+----
