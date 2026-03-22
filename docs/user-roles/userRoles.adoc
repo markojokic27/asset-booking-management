@@ -1,0 +1,4 @@
+== User Roles
+* Admin
+* (Line) Manager
+* Employee
