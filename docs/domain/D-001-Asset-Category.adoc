@@ -174,3 +174,14 @@ class AssetCategoryNotFoundException extends RuntimeException {
     }
 }
 ----
+
+== Mapper
+
+Make a Mapper class that handles conversions between the Objects and DTOs.
+
+=== For discussion
+* If we are going to use a manual Mapper or a mapping library like MapStruct or ModelMapper
+
+== Tests
+
+Will be included after discussions of how the domain will look when finalized.
