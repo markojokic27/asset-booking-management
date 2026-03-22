@@ -1,0 +1,93 @@
+= ADR 003: CI/CD Pipelines
+David Jezidzic / Internship 2026
+2026-03-20
+:status: Proposed
+:tags: deployment, documentation
+
+== Status
+
+{status}
+
+== Context
+
+Manual build, test, and deployment steps increase errors, slow delivery, and make it hard to keep QA, staging, and production consistent.
+We need automated pipelines to integrate changes early, test them reliably, and promote the same build across environments.
+
+== Decision
+
+Adopt Continuous Integration (CI) and Continuous Delivery (CD) as standard practice.
+
+For CI:
+
+Every commit or merge request triggers an automated build.
+
+Unit and (where applicable) integration tests run on each change.
+
+Pipelines provide fast feedback on merge safety.
+
+For CD:
+
+Successful CI builds deploy automatically to QA.
+
+Passing builds promote to staging.
+
+Staging → production uses a controlled, auditable “go/no‑go” step.
+
+== Rationale
+
+CI:
+
+Catches integration issues early.
+
+Keeps main always deployable.
+
+Favors small, frequent changes backed by automated tests.
+
+CD:
+
+Provides a clear path to production (QA → Staging → Production).
+
+Uses one automated process across environments, reducing drift and human error.
+
+Speeds delivery while keeping a governance point before production.
+
+== Alternatives Considered
+
+Manual build and deployment
+
+Pro: No new tooling.
+
+Con: Slow, error‑prone, and not scalable.
+
+CI only, no CD
+
+Pro: Better code quality and feedback.
+
+Con: Deployments stay manual and inconsistent.
+
+Full continuous deployment for all systems
+
+Pro: Maximum automation.
+
+Con: Too risky and demanding for complex, stateful systems today.
+
+== Consequences
+
+Positive
+
+Every commit is built and tested, improving quality and feedback speed.
+
+QA, staging, and production share the same deployment pipeline.
+
+Releases become more predictable and auditable.
+
+Negative / Risks
+
+Pipelines and tests require setup and ongoing maintenance.
+
+Flaky or slow tests can reduce productivity.
+
+Stateful systems may still need extra manual control and safeguards.
+
+[NOTE]
+As test coverage, monitoring, and rollout techniques mature, we may later automate selected production deployments and record that in a follow‑up ADR.

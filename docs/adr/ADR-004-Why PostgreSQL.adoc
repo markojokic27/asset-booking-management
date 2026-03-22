@@ -1,0 +1,49 @@
+= ADR 004: Why PostgreSQL?
+David Jezidžić
+1.0, 2026-03-20
+:status: Accepted
+:tags: backend, database, security
+
+== Status
+
+{status}
+
+== Context
+
+We must choose a primary relational database for an asset booking system that needs strong consistency, good performance on complex queries, and strict data security.
+PostgreSQL and MySQL are both open source RDBMS, SQL‑based, and widely used, so either is technically feasible.
+
+
+== Decision
+
+We choose PostgreSQL as the main database for the asset booking system instead of MySQL.
+
+== Rationale
+
+Both are relational, SQL‑based, open source, with backups, replication, and access control.
+
+PostgreSQL is fully ACID‑compliant and uses MVCC in all configurations, which is safer for concurrent bookings.
+
+PostgreSQL offers richer indexing and data types (JSONB, advanced indexes), better for complex queries and reporting.
+
+PostgreSQL has stronger built‑in security features (roles, Row‑Level Security), which fits our “security‑first” needs.
+
+== Alternatives Considered
+
+MySQL
+
+Simpler for small, read‑heavy apps.
+
+But engine‑dependent ACID/MVCC, fewer advanced index/data‑type options, and less powerful DB‑level security.
+
+Use both PostgreSQL and MySQL
+
+More flexibility, but more operational complexity and split expertise.
+
+== Consequences
+
+Standardize on PostgreSQL for this system (schema, migrations, tooling).
+
+Use PostgreSQL roles and optionally Row‑Level Security to protect booking data.
+
+Developers focus on one primary SQL dialect and tuning model.
