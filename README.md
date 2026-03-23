@@ -198,6 +198,7 @@ TODO Add or link content...
 ### Link to Non-Functional Requirements
 
 ### Link to Use Cases Document
+[Use Cases Document](docs/useCase/useCaseDocument.adoc)
 
 ### Link to Use Cases Diagram
 [Use Case Diagram](docs/use-cases/UseCaseDiagram.png)
