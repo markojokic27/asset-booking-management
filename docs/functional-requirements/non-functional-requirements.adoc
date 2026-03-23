@@ -1,7 +1,65 @@
-== Functional Requirements
+== Non-Functional Requirements
 
-NF1. TODO
+== NF1: Performance
+* NF1.1: The system shall respond to user requests within 2 seconds under normal load.
+* NF1.2: The system shall support at least 150 concurrent users with the ability to scale up to 300 users.
+* NF1.3: Booking creation, modification and cancellation shall be processed in real time.
+* NF1.4: Asset availability information shall update immediately after a booking action.
+* NF1.5: QR code scanning and asset lookup shall return results within 2 seconds.
 
-NF2. TODO
+== NF2: Security
+* NF2.1: The system shall require user authentication (login) - company LDAP file.
+* NF2.2: The system shall ensure that employee users can only access their own bookings and permitted assets.
+* NF2.3: Role-based access control (RBAC) shall be implemented (e.g. user, manager, administrator).
+* NF2.4: Sensitive data (e.g. user information) shall be encrypted during transmission (HTTPS).
+* NF2.5: The system shall prevent unauthorized booking, modification or deletion of assets.
+* NF2.6: The system shall log important system actions (bookings, approvals, cancellations).
+* NF2.7: All users should have an overview of all bookings.
+* NF2.8: The manager should allow the booking of assets from certain categories.
 
-...
+== NF3: Usability
+* NF3.1: The application shall be accessible via web and mobile devices.
+* NF3.2: The user interface shall be intuitive and easy to use for non-technical users.
+* NF3.3: QR code functionality shall be simple and fast to use.
+* NF3.4: Users shall be able to create a booking in only a few steps.
+* NF3.5: Important actions (booking confirmations or errors) shall be clearly communicated to the user.
+
+== NF4: Compatibility
+* NF4.1: The system shall support modern web browsers (Chrome, Edge, Firefox, Safari).
+* NF4.2: The system shall support mobile platforms (Android and iOS).
+* NF4.3: The user interface shall be responsive across different screen sizes.
+* NF4.4: The system shall support integration with external services such as Google Calendar.
+* NF4.5: The system shall support integration with email services.
+
+== NF5: Scalability
+* NF5.1: The system shall support increasing numbers of users.
+* NF5.2: The system shall support increasing numbers of assets.
+* NF5.3: The system shall support increasing numbers of bookings.
+* NF5.4: The architecture shall allow future expansion without major redesign.
+* NF5.5: The system should allow additional integrations or modules in the future.
+
+== NF6: Availability and Reliability
+* NF6.1: The system shall be available 24/7 (except during scheduled maintenance).
+* NF6.2: System uptime should be at least 99%.
+* NF6.3: The system shall ensure data consistency and prevent double bookings.
+* NF6.4: In case of system failure, data shall not be lost.
+* NF6.5: The system shall maintain regular backups of critical data.
+
+== NF7: Notifications
+* NF7.1: The system shall notify users about booking confirmations.
+* NF7.2: The system shall notify users about cancellations.
+* NF7.3: The system shall notify users about booking reminders.
+* NF7.4: The system shall notify users about asset issues or maintenance.
+* NF7.5: Managers shall receive notifications when booking approval is required.
+* NF7.6: Notifications may be delivered via email.
+* NF7.7: Notifications may be delivered via in-app notifications.
+* NF7.8: Notifications may be delivered via push notifications.
+
+== NF8: Maintainability
+* NF8.1: The system shall allow easy updates and bug fixes.
+* NF8.2: The codebase shall be modular and maintainable.
+* NF8.3: System errors shall be logged to support troubleshooting and debugging.
+
+== NF9: Localization
+* NF9.1: The system should support multiple languages.
+* NF9.2: Date and time formats shall follow local standards.
