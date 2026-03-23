@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.user.department.DepartmentEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package de.bdr.asset.management.user;
+package de.bdr.asset.management.user.department;
 
 /**
  * Department enumeration.

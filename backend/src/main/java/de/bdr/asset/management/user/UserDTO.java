@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.user.department.DepartmentEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
