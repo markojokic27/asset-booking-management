@@ -1,0 +1,39 @@
+= ADR 008: React 19 for Frontend Development
+
+== Status
+Accepted
+
+== Context
+We are developing a React-based frontend application and need to choose a stable and future-proof version of the framework. While React 18 is widely used, newer versions introduce improvements in performance, developer experience, and modern development patterns.
+
+To ensure long-term maintainability and alignment with the evolving React ecosystem, we need to adopt a version that supports modern features and integrates well with current tooling.
+
+== Decision
+We will use *React 19* as the primary frontend library instead of React 18.
+
+== Rationale
+
+* **Pro:** Latest stable version, ensuring long-term support and compatibility with the ecosystem.
+* **Pro:** Improved handling of asynchronous data via new APIs such as `use()`.
+* **Pro:** Enhanced form handling with Actions and better state management for submissions, loading, and errors.
+* **Pro:** Simpler component patterns (e.g., passing `ref` as a regular prop), reducing boilerplate code.
+* **Pro:** Automatic performance optimizations through the React Compiler, reducing the need for manual optimizations.
+* **Pro:** Better integration with modern tools and frameworks such as Vite and Next.js.
+* **Con:** New features may require team onboarding and adaptation.
+* **Con:** Some third-party libraries may lag in full compatibility with the latest version.
+
+== Alternatives Considered
+
+* *React 18:*
+  Rejected due to lack of newer features and improvements available in React 19.
+
+* *Other frameworks (e.g., Vue, Angular):*
+  Rejected because the project is already aligned with the React ecosystem and team expertise.
+
+== Consequences
+
+1. The project will use React 19 as the core frontend library.
+2. Developers will adopt new APIs and patterns introduced in React 19.
+3. Some existing patterns (e.g., `forwardRef`, manual memoization) may be reduced or eliminated.
+4. Team members need to stay updated with new React features and best practices.
+5. Compatibility with third-party libraries will be monitored during development.

@@ -1,0 +1,41 @@
+= ADR 007: Vite as React Build Tool
+
+== Status
+Accepted
+
+== Context
+We are developing a React frontend application and need a build tool that provides fast startup times, efficient development workflow, and modern tooling.
+
+Create React App (CRA), while previously a standard choice, is no longer actively recommended for new projects and introduces slower startup and less flexible configuration. We require a solution that aligns with current frontend best practices and improves developer experience.
+
+== Decision
+We will use *Vite* as the primary build tool for the React application instead of Create React App.
+
+== Rationale
+
+* **Pro:** Near-instant development server startup using native ES modules.
+* **Pro:** Fast Hot Module Replacement (HMR), enabling immediate feedback during development.
+* **Pro:** Uses modern tooling (*esbuild* for dependency pre-bundling and *Rollup* for production builds).
+* **Pro:** Simple and minimal configuration, easy to extend as the project grows.
+* **Pro:** Widely adopted and recommended in modern frontend development.
+* **Con:** Requires some manual configuration compared to CRA in certain cases.
+* **Con:** Migration from CRA-based projects may require additional effort.
+
+== Alternatives Considered
+
+* *Create React App (CRA):*
+  Rejected due to slower performance, outdated approach, and lack of active recommendation for new projects.
+
+* *Next.js:*
+  Rejected because the project does not require server-side rendering or full-stack framework capabilities.
+
+* *Parcel:*
+  Rejected due to lower adoption and less ecosystem support compared to Vite.
+
+== Consequences
+
+1. The project will be initialized using Vite.
+2. Development server will be run via `npm run dev`.
+3. Build process will use Vite configuration (`vite.config.js` or `vite.config.ts`).
+4. Developers will benefit from faster feedback loops during development.
+5. The setup will be easier to maintain and extend in the future.

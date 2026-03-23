@@ -1,0 +1,63 @@
+= ADR 009: Adoption of Feature-Based Frontend Folder Structure
+
+== Status
+Accepted
+
+== Context
+We are building a scalable frontend application using React, Vite, TypeScript, and Tailwind. As the application grows, maintaining a clear and consistent project structure becomes critical for developer productivity, code maintainability, and team collaboration.
+
+A flat or purely technical (e.g., components-, hooks-, services-based) structure can lead to tight coupling, unclear ownership, and difficulty in scaling features independently. Therefore, we need a structure that promotes modularity, separation of concerns, and long-term maintainability.
+
+== Decision
+We will adopt a *feature-based folder structure* combined with clearly defined global layers for shared logic and configuration.
+
+The structure includes the following key directories:
+
+* *app/* – Application entry point, routing, and global providers.
+* *assets/* – Static resources (images, fonts, icons).
+* *components/* – Reusable, generic UI components.
+* *features/* – Core application modules organized by domain (self-contained features).
+* *pages/* – Route-level components (screens).
+* *services/* – API communication and external integrations.
+* *store/* – Global client-side state management.
+* *hooks/* – Shared reusable custom hooks.
+* *utils/* – Pure helper and utility functions.
+* *types/* – Global TypeScript types and interfaces.
+* *styles/* – Global styling and Tailwind configuration.
+* *config/* – Application-wide configuration.
+
+== Rationale
+
+* **Pro:** Feature-based architecture improves scalability by isolating domain logic within self-contained modules.
+* **Pro:** Clear separation of concerns (UI, business logic, data, configuration).
+* **Pro:** Reduces coupling between unrelated parts of the application.
+* **Pro:** Improves team collaboration by enabling parallel work on independent features.
+* **Pro:** Encourages reusability through shared layers (components, hooks, utils).
+* **Pro:** Centralized API handling via services layer ensures consistency in communication with backend systems.
+* **Pro:** Clear distinction between global state (store) and server state (handled via dedicated tools like React Query).
+* **Pro:** Easier onboarding due to predictable and standardized structure.
+* **Con:** Initial setup requires discipline and understanding of architectural boundaries.
+* **Con:** Risk of over-engineering for very small features or simple projects.
+* **Con:** Developers must follow conventions strictly to avoid structure degradation.
+
+== Alternatives Considered
+
+* *Layer-based structure (components/, hooks/, services/ only):*
+  Rejected due to poor scalability and difficulty in grouping feature-specific logic.
+
+* *Monolithic structure (everything in a few folders):*
+  Rejected because it leads to high coupling and reduced maintainability as the project grows.
+
+* *Micro-frontend architecture:*
+  Rejected due to unnecessary complexity for the current project scope.
+
+== Consequences
+
+1. All new functionality must be implemented within the appropriate *feature/* module.
+2. Shared logic must be placed in global folders (components, hooks, utils, types).
+3. Pages will act only as composition layers for features.
+4. API communication must go through the centralized *services/* layer.
+5. Global state must be minimized and managed via the *store/* directory.
+6. Folder structure conventions must be enforced through code reviews.
+7. The project becomes easier to scale, maintain, and extend over time.
+
