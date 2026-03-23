@@ -1,0 +1,49 @@
+= ADR 006: Gitflow Branching Strategy
+
+== Status
+
+Accepted
+
+
+== Context
+
+The team needs a clear and structured branching strategy to manage feature development, releases, and hotfixes. The project involves multiple developers and requires a reliable way to separate development work from production-ready code, while also supporting controlled release cycles and urgent bug fixes.
+
+
+== Decision
+
+We will adopt the Gitflow branching model as the standard workflow for this project.
+
+
+== Rationale
+
+Pros:
+
+- Provides a well-defined and structured workflow
+- Clear separation between development (develop) and production (main)
+- Supports formal release cycles through release branches
+- Enables safe and organized handling of hotfixes
+- Improves collaboration in teams with multiple developers
+
+Cons:
+
+- More complex than simpler workflows like GitHub Flow
+- Requires managing multiple branches
+- Introduces additional overhead in merging and coordination
+
+
+== Alternatives Considered
+
+GitHub Flow:
+
+- Simpler and more lightweight
+- Better suited for continuous delivery and frequent deployments
+- Rejected because the project requires structured releases and stricter control over production changes
+
+
+== Consequences
+
+- Team must follow Gitflow branching conventions (main, develop, feature/*, release/*, hotfix/*)
+- Additional process overhead for branch management and merges
+- More controlled and predictable release process
+- Clear workflow for handling urgent production fixes
