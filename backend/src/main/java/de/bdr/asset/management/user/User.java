@@ -51,7 +51,6 @@ public class User {
 
     /** User Status */
     @NotNull(message = "Status is required")
-    @Pattern(regexp = "ACTIVE|INACTIVE|STUDENT|LEFT_COMPANY", message = "Status must be ACTIVE, INACTIVE, STUDENT or LEFT_COMPANY")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;

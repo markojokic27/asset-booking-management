@@ -30,21 +30,4 @@ public record UserDTO (
 
         LocalDateTime lastModifiedTimestamp
 ) {
-
-    /**
-     * A static factory method for easy conversion from User to UserDTO
-     */
-    public static UserDTO fromEntity(User user) {
-        return new UserDTO(
-                user.getId(),
-                user.getUserName(),
-                user.getFullName(),
-                user.getDepartment(),
-                user.getRoom(),
-                user.getStatus(),
-                user.getNotes(),
-                user.getCreatedTimestamp(),
-                user.getLastModifiedTimestamp()
-        );
-    }
 }
