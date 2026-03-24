@@ -2,6 +2,7 @@
 
 == User
 * id - PK
+* username
 * surname
 * name
 * email
@@ -11,7 +12,6 @@
 * notes
 * department - FK
 * manager_email
-* notes
 * benefit
 * created_at
 * last_modified_at

@@ -48,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiError"
+                $ref: "#/components/schemas/Error"
     post:
       summary: Create a user
       operationId: createUsers
@@ -62,8 +62,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiError"
-  /users/{userId}:
+                $ref: "#/components/schemas/Error"
+  /v1/users/{id}:
     get:
       summary: Info for a specific user
       operationId: showUserById
@@ -83,7 +83,366 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiError"
+                $ref: "#/components/schemas/Error"
+  /v1/assets:
+    get:
+      summary: Get all Assets 
+      tags:
+        - Assets
+      parameters:
+        - name: pageNumber
+          in: query
+          description: The page number to return
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: perPage       # limit
+          in: query
+          description: The number of items to return per Page
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Assets"
+              examples:
+                Assets:
+                  $ref: "#/components/examples/AssetsExample"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create new Asset
+      tags:
+        - Assets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 50
+                categoryId:
+                  $ref: "#/components/schemas/Id"
+                description:
+                  type: string
+                  minLength: 2
+                  maxLength: 256
+                code:
+                  type: string
+                status:
+                  type: string
+                  enum: [AVAILABLE, UNAVAILABLE]
+                location:
+                  type: string
+              required:
+                - name
+                - categoryId
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Asset"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/assets/{id}:
+    get:
+      summary: Get Asset by id
+      tags:
+        - Assets
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update Asset
+      tags:
+        - Assets
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  maxLength: 50
+                categoryId:
+                  $ref: "#/components/schemas/Id"
+                description:
+                  type: string
+                  minLength: 2
+                  maxLength: 256
+                code:
+                  type: string
+                status:
+                  type: string
+                  enum: [AVAILABLE, UNAVAILABLE]
+                location:
+                  type: string
+              required:
+                - name
+                - categoryId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/bookings:
+    get:
+      summary: Get all Bookings 
+      tags:
+        - Bookings 
+      parameters:
+        - name: pageNumber
+          in: query
+          description: The page number to return
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: perPage       # limit
+          in: query
+          description: The number of items to return per Page
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Bookings"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create new Booking
+      tags:
+        - Bookings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assetId:
+                  $ref: "#/components/schemas/Id"
+                note:
+                  type: string
+                  minLength: 2
+                  maxLength: 256
+                timestampStart:
+                  type: string
+                  format: date-time
+                timestampEnd:
+                  type: string
+                  format: date-time
+              required:
+                - assetId
+                - timetampStart
+                - timeStampEnd
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/Booking"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/bookings/{id}:
+    get:
+      summary: Get Booking by id
+      tags:
+        - Bookings
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update Booking
+      tags:
+        - Bookings
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+                  minLength: 2
+                  maxLength: 256
+                timestampStart:
+                  type: string
+                  format: date-time
+                timestampEnd:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/bookings/{id}/cancel-booking:
+    put:
+      summary: Cancel Booking
+      tags:
+        - Bookings
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: '#/components/schemas/Id'
+                  status:
+                    type: string
+                    enum: [AVAILABLE]
+                required:
+                  - id
+                  - status
+              example:
+                id: 1
+                status: "AVAILABLE"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Id:
@@ -271,7 +630,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Booking'
-    ApiError:
+    Error:
       required:
         - code
         - message
@@ -294,6 +653,33 @@ components:
       schema:
         $ref: '#/components/schemas/Id'
   responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Invalid request data"
+            code: "BAD_REQUEST"
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Not found"
+            code: "NOT_FOUND"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Something went wrong"
+            code: "INTERNAL_ERROR"
   examples:
     UsersExample:
       value:
@@ -302,11 +688,22 @@ components:
           name: "John"
           surname: "Doe"
           email: "johndoe@gmail.com"
-          role: EMPLOYEE
-          status: ACTIVE
+          role: "EMPLOYEE"
+          status: "ACTIVE"
           note: "This is a note about John."
           departmentId: 101
           managerEmail: "manager1@example.com"
           benefit: ALL
+          createdAt: "2026-03-24T10:00:00Z"
+          lastModifiedAt: "2026-03-24T12:00:00Z"
+    AssetsExample:
+      value:
+        - id: 1
+          name: "Laptop 1"
+          description: "Macbook Pro"
+          categoryId: 2
+          code: "string"
+          status: "AVAILABLE"
+          location: "string"
           createdAt: "2026-03-24T10:00:00Z"
           lastModifiedAt: "2026-03-24T12:00:00Z"
