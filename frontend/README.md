@@ -1,3 +1,112 @@
+# Frontend Setup and Running
+
+This project uses **React + Vite + TypeScript + Tailwind CSS**.
+
+---
+
+Before running the project, make sure you have installed:
+
+* **Node.js** (recommended version: 18+)
+* **npm** (comes with Node.js)
+
+Check versions:
+
+```bash
+node -v
+npm -v
+```
+
+---
+
+## Installation
+
+Navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install all required packages:
+
+```bash
+npm install
+```
+
+---
+
+## Key Dependencies
+
+The project uses the following main packages:
+
+* react
+* react-dom
+* vite
+* typescript
+* tailwindcss
+* @tailwindcss/postcss
+* postcss
+* autoprefixer
+
+All dependencies are installed automatically via `npm install`.
+
+---
+
+## Run the Application
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The app will be available at:
+
+```
+http://localhost:5173
+```
+
+---
+
+## Production Build
+
+Build the app:
+
+```bash
+npm run build
+```
+
+Preview the build:
+
+```bash
+npm run preview
+```
+
+---
+##  Recommended VS Code Extension
+
+For a better development experience with Tailwind CSS, install:
+
+  Tailwind CSS IntelliSense
+
+---
+
+## Notes
+
+
+* If you encounter issues, try:
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+* Restart the server after configuration changes (e.g., Tailwind).
+
+---
+
+  Deafult ReadMe file:
+  
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
