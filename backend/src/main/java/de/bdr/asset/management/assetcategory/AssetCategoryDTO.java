@@ -1,8 +1,9 @@
 package de.bdr.asset.management.assetcategory;
 
-import jakarta.validation.constraints.NotBlank;
-
 import java.time.LocalDateTime;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record AssetCategoryDTO(
         Long id,
@@ -12,7 +13,7 @@ public record AssetCategoryDTO(
 
         String description,
 
-        @NotBlank(message="Booking period is required")
+        @NotNull(message="Booking period is required")
         BookingPeriodEnum bookingPeriod,
 
         boolean approval,
