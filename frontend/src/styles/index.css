@@ -379,9 +379,6 @@
       margin-left: calc((11 / 12) * 100%);
     }
   }
-}
-
-@layer components {
   @media (min-width: 1536px) {
     .container {
       max-width: 1296px;
