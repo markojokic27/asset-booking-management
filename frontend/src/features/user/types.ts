@@ -24,12 +24,12 @@ export type Department =
   notes?: string;
   department: Department; 
   manager_email?: string;
-  benefit?: UserBenefit;
+  benefit?: User;
   createdAt: Date;
   lastModifiedAt: Date;
 };
 
-export type UserDto = User & {
+export type UserDto = Omit<User, 'password'> & {
   isActive: boolean;
   hasBenefit: boolean;
   managerName?: string;
