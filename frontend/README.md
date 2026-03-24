@@ -6,8 +6,8 @@ This project uses **React + Vite + TypeScript + Tailwind CSS**.
 
 Before running the project, make sure you have installed:
 
-* **Node.js** (recommended version: 18+)
-* **npm** (comes with Node.js)
+- **Node.js** (recommended version: 18+)
+- **npm** (comes with Node.js)
 
 Check versions:
 
@@ -38,14 +38,14 @@ npm install
 
 The project uses the following main packages:
 
-* react
-* react-dom
-* vite
-* typescript
-* tailwindcss
-* @tailwindcss/postcss
-* postcss
-* autoprefixer
+- react
+- react-dom
+- vite
+- typescript
+- tailwindcss
+- @tailwindcss/postcss
+- postcss
+- autoprefixer
 
 All dependencies are installed automatically via `npm install`.
 
@@ -82,30 +82,30 @@ npm run preview
 ```
 
 ---
-##  Recommended VS Code Extension
+
+## Recommended VS Code Extension
 
 For a better development experience with Tailwind CSS, install:
 
-  Tailwind CSS IntelliSense
+    Tailwind CSS IntelliSense
+    Prettier - Code formatter
 
 ---
 
 ## Notes
 
-
-* If you encounter issues, try:
+- If you encounter issues, try:
 
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-* Restart the server after configuration changes (e.g., Tailwind).
+- Restart the server after configuration changes (e.g., Tailwind).
 
 ---
 
-  Deafult ReadMe file:
-  
+Deafult ReadMe file:
 
 # React + TypeScript + Vite
 
@@ -149,15 +149,15 @@ export default defineConfig([
       // other options...
     },
   },
-])
+]);
 ```
 
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js
 // eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+import reactX from 'eslint-plugin-react-x';
+import reactDom from 'eslint-plugin-react-dom';
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -178,5 +178,5 @@ export default defineConfig([
       // other options...
     },
   },
-])
+]);
 ```
