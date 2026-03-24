@@ -90,11 +90,11 @@ Key features and examples:
 
 ### Non-Functional Requirements
 
-TODO Add or link content...
+[Non-Functional Requirements](docs/functional-requirements/non-functional-requirements.adoc)
 
 ### Use Cases Document
 
-TODO Add or link content...
+[Use Case Document](docs/use-cases/useCaseDocument.adoc)
 
 ### Use Cases Diagram
 
@@ -198,6 +198,7 @@ TODO Add or link content...
 ### Link to Non-Functional Requirements
 
 ### Link to Use Cases Document
+[Use Cases Document](docs/useCase/useCaseDocument.adoc)
 
 ### Link to Use Cases Diagram
 [Use Case Diagram](docs/use-cases/UseCaseDiagram.png)

@@ -1,3 +1,106 @@
 = Test Cases Document
 
-TODO...
+= Login via web or mobile app
+
+== 1. Successfull login with valid credentials
+
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|User exist in database a|
+1. Open app 
+2. Enter valid username 
+3. Enter valid password 
+4. Click Login|User is authenticated and redirected to the home page|
+|===
+
+== 2. Login with incorrect password
+
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|User exist in database a|
+1. Open app 
+2. Enter valid username 
+3. Enter wrong password 
+4. Click Login|Error message is displayed: "Invalid username or password"
+|===
+
+
+== 3. Login with incorrect username
+
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|User exist in database a|
+1. Open app 
+2. Enter wrong username 
+3. Enter valid password 
+4. Click Login|Error message is displayed: "Invalid username or password"
+|===
+
+== 4. Login with both fields empty
+
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|/ a|
+1. Open app 
+2. Leave username and password empty
+3. Click Login|Error message is displayed: "Username and password are required"
+|===
+
+== 5. Login with empty username
+
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|/ a|
+1. Open app 
+2. Leave username empty
+3. Enter valid password 
+4. Click Login|Error message is displayed: "Password is required"
+|===
+
+== 6. Login with empty username
+
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|/ a|
+1. Open app 
+2. Enter valid username
+3. Leave password empty
+4. Click Login|Error message is displayed: "Username is required"
+|===
+
+== 7. Login with correct credentials as Manager
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|Manager exist in database a|
+1. Open app 
+2. Enter valid username 
+3. Enter valid password 
+4. Click Login|Mamager is authenticated and sees manager-level UI|
+|===
+
+== 8. Login with correct credentials as Admin
+[cols="1,1,1", options="header"]
+
+|===
+|Preconditions|Steps|Expected Result
+|Admin exist in database a|
+1. Open app 
+2. Enter valid username 
+3. Enter valid password 
+4. Click Login|Mamager is authenticated and sees admin-level UI|
+|===
+
