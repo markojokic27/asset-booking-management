@@ -67,7 +67,7 @@
 4. Click Login|Error message is displayed: "Password is required"
 |===
 
-== 6. Login with empty username
+== 6. Login with empty password
 
 [cols="1,1,1", options="header"]
 
@@ -79,28 +79,3 @@
 3. Leave password empty
 4. Click Login|Error message is displayed: "Username is required"
 |===
-
-== 7. Login with correct credentials as Manager
-[cols="1,1,1", options="header"]
-
-|===
-|Preconditions|Steps|Expected Result
-|Manager exist in database a|
-1. Open app 
-2. Enter valid username 
-3. Enter valid password 
-4. Click Login|Mamager is authenticated and sees manager-level UI|
-|===
-
-== 8. Login with correct credentials as Admin
-[cols="1,1,1", options="header"]
-
-|===
-|Preconditions|Steps|Expected Result
-|Admin exist in database a|
-1. Open app 
-2. Enter valid username 
-3. Enter valid password 
-4. Click Login|Mamager is authenticated and sees admin-level UI|
-|===
-
