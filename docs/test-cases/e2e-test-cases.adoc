@@ -88,7 +88,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin|
-
 1. Open “Add Category” form
 2. Fill required fields
 3. Click Save|Category is created; confirmation message shown|
@@ -100,7 +99,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin|
-
 1. Open “Add Category” form
 2. Leave some required fields empty
 3. Click Save|System highlights missing fields; category not saved|
@@ -112,7 +110,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin; "Parking" exists|
-
 1. Open “Add Category” form
 2. Enter name "Parking"
 3. Fill other fields
@@ -125,7 +122,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin; "Laptop" exists|
-
 1. Open “Edit” for "Laptop"
 2. Change fields as needed
 3. Click Save|Changes saved; confirmation message displayed|
@@ -137,7 +133,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin; "Laptop" exists; no active bookings|
-
 1. Open “Edit” for "Laptop"
 2. Click Delete
 3. Confirm deletion|Category marked inactive; confirmation message shown|
@@ -149,7 +144,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin; "Laptop" has active/future bookings|
-
 1. Open “Edit” for "Laptop"
 2. Click Delete
 3. Confirm deletion|Warning: cannot delete with active/future bookings|
@@ -161,7 +155,6 @@
 |===
 |Preconditions|Steps|Expected Result
 |User logged in as Admin; "Laptop" exists|
-
 1. Open “Edit” for "Laptop"
 2. Enter invalid data (e.g., minimum booking duration set to 0 hours)
 3. Click Save|Validation error shown; minimum booking duration must be at least 1 hour; changes not saved|
