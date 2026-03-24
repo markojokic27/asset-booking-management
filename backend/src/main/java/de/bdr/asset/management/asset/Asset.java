@@ -26,7 +26,7 @@ public class Asset {
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
-    
+
 
     @CreationTimestamp
     @Column(updatable=false)
