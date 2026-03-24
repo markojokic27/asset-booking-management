@@ -1,0 +1,55 @@
+= Domain Model
+
+== User
+* id - PK
+* surname
+* name
+* email
+* password
+* role
+* status
+* notes
+* department - FK
+* manager_email
+* notes
+* benefit
+* created_at
+* last_modified_at
+
+== Department
+* id - PK
+* name
+* manager_id - FK
+* created_at
+* last_modified_at
+
+== AssetCategory
+* id - PK
+* name
+* description
+* booking_period
+* approval
+* created_at
+* last_modified_at
+
+== Asset
+* id - PK
+* name
+* category_id- FK
+* description
+* code
+* status
+* location
+* created_at
+* last_modified_at
+
+== Booking
+* id - PK
+* user_id - FK
+* asset_id - FK
+* notes
+* status
+* timestamp_start
+* timestamp_end
+* created_at
+* last_modified_at
