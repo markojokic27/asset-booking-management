@@ -53,12 +53,16 @@ paths:
               examples:
                 Users:
                   $ref: "#/components/examples/UsersExample"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         default:
-          description: unexpected error
+          description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiError"
+                $ref: "#/components/schemas/Error"
     
   /api/v1/users/{id}:
     get:
@@ -82,14 +86,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           description: User not found
+        '500':
+          $ref: '#/components/responses/NotFound'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
     patch:
       summary: Partially update User
       description: Use this to deactivate a user by setting status to INACTIVE.
@@ -135,14 +143,17 @@ paths:
               examples:
                 User:
                   $ref: '#/components/examples/SingleUserExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           description: User not found
+          $ref: '#/components/responses/NotFound'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
 
   /api/v1/departments:
@@ -179,12 +190,16 @@ paths:
               examples:
                 Departments:
                   $ref: '#/components/examples/DepartmentsExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
     post:
       summary: Create Department
@@ -204,12 +219,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Department'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
   /api/v1/departments/{id}:
     get:
       summary: Get Department by ID
@@ -232,14 +251,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Department'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         '404':
           description: Department not found
+          $ref: '#/components/responses/NotFound'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
     put:
       summary: Update Department
@@ -270,15 +294,20 @@ paths:
                 $ref: '#/components/schemas/Department'
               examples:
                 Department:
-                  $ref: "#/components/examples/DepartmentExample" 
+                  $ref: "#/components/examples/DepartmentExample"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         '404':
           description: Department not found
+          $ref: '#/components/responses/NotFound'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
   /api/v1/asset-categories:
     get:
       summary: Get all Asset Categories
@@ -318,7 +347,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
     post:
       summary: Create Asset Category
@@ -338,12 +367,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AssetCategory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
   /api/v1/asset-categories/{id}:
     get:
       summary: Get Asset Category by ID
@@ -369,14 +402,19 @@ paths:
               examples:
                 AssetCategory:
                   $ref: '#/components/examples/AssetCategoryExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         '404':
           description: Asset category not found
+          $ref: '#/components/responses/NotFound'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
     put:
       summary: Update Asset Category
@@ -407,12 +445,17 @@ paths:
                 $ref: '#/components/schemas/AssetCategory'
         '404':
           description: Asset category not found
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
     delete:
       summary: Delete Asset Category
@@ -432,14 +475,19 @@ paths:
       responses:
         '204':
           description: Asset category deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
         '404':
           description: Asset category not found
+          $ref: '#/components/responses/NotFound'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -628,7 +676,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Booking'
-    ApiError:
+    Error:
       required:
         - code
         - message
@@ -651,6 +699,33 @@ components:
       schema:
         $ref: '#/components/schemas/Id'
   responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Invalid request data"
+            code: "BAD_REQUEST"
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Not found"
+            code: "NOT_FOUND"
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            message: "Something went wrong"
+            code: "INTERNAL_ERROR"
   examples:
     UsersExample:
       value:
@@ -682,19 +757,19 @@ components:
           lastModifiedAt: "2026-03-24T12:00:00Z"
     SingleUserExample:
       value:
-        - id: 1
-          username: "johndoe"
-          name: "John"
-          surname: "Doe"
-          email: "johndoe@gmail.com"
-          role: EMPLOYEE
-          status: ACTIVE
-          note: "This is a note about John DOE."
-          departmentId: 101
-          managerEmail: "manager1@example.com"
-          benefit: ALL
-          createdAt: "2026-03-24T10:00:00Z"
-          lastModifiedAt: "2026-03-24T12:00:00Z"
+        id: 1
+        username: "johndoe"
+        name: "John"
+        surname: "Doe"
+        email: "johndoe@gmail.com"
+        role: EMPLOYEE
+        status: ACTIVE
+        note: "This is a note about John DOE."
+        departmentId: 101
+        managerEmail: "manager1@example.com"
+        benefit: ALL
+        createdAt: "2026-03-24T10:00:00Z"
+        lastModifiedAt: "2026-03-24T12:00:00Z"
 
     DepartmentExample:
       summary: Single department
