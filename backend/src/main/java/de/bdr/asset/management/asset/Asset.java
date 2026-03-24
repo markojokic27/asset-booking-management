@@ -1,10 +1,9 @@
 package de.bdr.asset.management.asset;
 
-import de.bdr.asset.management.user.UserStatusEnum;
+import de.bdr.asset.management.assetcategory.AssetCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,15 +12,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table (name = "asset")
+@Table(name = "asset")
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Asset {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long Id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
 
     @NotBlank(message="Name is required")
     @Size(max=100, message="Name cannot exceed 100 characters")
@@ -33,10 +34,18 @@ public class Asset {
     private String description;
 
     @NotNull(message = "Status is required")
-    @Pattern(regexp = "", message = "Status must be ")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserStatusEnum status;
+    private AssetStatusEnum assetStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private AssetCategory category;
+
+    @NotBlank(message="Location is required")
+    @Size(max=255, message="Location cannot exceed 255 characters")
+    @Column(nullable=false)
+    private String location;
 
     @CreationTimestamp
     @Column(updatable=false)
