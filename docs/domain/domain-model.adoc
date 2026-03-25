@@ -49,7 +49,7 @@
 * asset_id - FK
 * notes
 * status
-* timestamp_start
-* timestamp_end
+* booking_start_time
+* booking_end_time
 * created_at
 * last_modified_at
