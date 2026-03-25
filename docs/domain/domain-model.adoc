@@ -9,10 +9,10 @@
 * password
 * role
 * status
-* notes
 * department - FK
 * manager_email
 * benefit
+* notes
 * created_at
 * last_modified_at
 
@@ -47,9 +47,9 @@
 * id - PK
 * user_id - FK
 * asset_id - FK
-* notes
 * status
 * booking_start_time
 * booking_end_time
+* notes
 * created_at
 * last_modified_at

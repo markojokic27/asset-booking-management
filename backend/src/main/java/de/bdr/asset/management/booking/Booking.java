@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * Booking domain-entity model.
  */
 @Entity
-@Table(name = "booking") // can not put just "booking" because of conflict with database booking!
+@Table(name = "booking")
 @Getter
 @Setter
 @NoArgsConstructor

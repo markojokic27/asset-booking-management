@@ -1,8 +1,7 @@
 package de.bdr.asset.management.user;
 
-import de.bdr.asset.management.user.department.DepartmentEnum;
+import de.bdr.asset.management.user.department.Department;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,38 +24,46 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Username, as one retrieved from LDAP */
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "Username can only contain letters, numbers, dots, underscores, or hyphens")
-    @Column(nullable = false, unique = true)
-    private String userName;
+    /** Username of user*/
+    @Column(nullable = false, unique = true, length = 50)
+    private String username;
 
-    /** Full name */
-    @NotBlank(message = "Full name is required")
-    @Size(max = 100, message = "Full name cannot exceed 100 characters")
-    @Column(nullable = false)
-    private String fullName;
+    /** Family name */
+    @Column(nullable = false, length = 100)
+    private String surname;
 
-    /** Department name */
-    @NotNull(message = "Department is required")
-    @Size(max = 100, message = "Department name is too long")
+    /** First name */
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    /** Email of user */
+    @Column(nullable = false, length = 254)
+    private String email;
+
+    /** Password of user */
+    @Column(nullable = false, length = 60) // BCrypt hash is 60 characters long
+    private String password;
+
+    /** Role of user */
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private DepartmentEnum department;
-
-    /** Room name */
-    @Size(max = 50, message = "Room identifier is too long")
-    private String room;
+    private UserRoleEnum role;
 
     /** User Status */
-    @NotNull(message = "Status is required")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
+    /** ID of department, foreign key */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
+    /** Email of manager */
+    @Column(nullable = false, length = 254)
+    private String managerEmail;
+
     /** Notes, Additional information's */
-    @Size(max = 1000, message = "Notes cannot exceed 1000 characters")
     @Column(columnDefinition = "TEXT")
     private String notes;
 

@@ -1,29 +1,17 @@
 package de.bdr.asset.management.user.department;
 
-import java.time.LocalDateTime;
-
+import de.bdr.asset.management.user.User;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import de.bdr.asset.management.user.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
 
+/**
+ * Department domain-entity model.
+ */
 @Entity
 @Table(name="department")
 @Getter
@@ -32,6 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Department {
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -42,13 +31,13 @@ public class Department {
     private DepartmentEnum name;
 
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="user_id", referencedColumnName="id")
+    @JoinColumn(name="manager_id", referencedColumnName="id")
     private User manager;
 
     @CreationTimestamp
     @Column(updatable=false)
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime lastModifiedTimestamp;
+    private LocalDateTime lastModifiedAt;
 }
