@@ -63,10 +63,10 @@ public class User {
     /** Created at */
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedTimestamp;
+    private LocalDateTime lastModifiedAt;
 
 }

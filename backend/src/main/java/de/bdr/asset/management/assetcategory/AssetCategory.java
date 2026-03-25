@@ -22,6 +22,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Asset category domain-entity model.
+ */
 @Entity
 @Table(name="asset_category")
 @Getter
@@ -53,8 +56,8 @@ public class AssetCategory {
 
     @CreationTimestamp
     @Column(updatable=false)
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime lastModifiedTimestamp;
+    private LocalDateTime lastModifiedAt;
 }

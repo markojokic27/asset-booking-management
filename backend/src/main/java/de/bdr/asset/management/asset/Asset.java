@@ -11,6 +11,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Asset domain-entity model.
+ */
 @Entity
 @Table(name = "asset")
 @Getter
@@ -49,8 +52,8 @@ public class Asset {
 
     @CreationTimestamp
     @Column(updatable=false)
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    private LocalDateTime lastModifiedTimestamp;
+    private LocalDateTime lastModifiedAt;
 }

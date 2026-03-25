@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * Booking domain-entity model.
  */
 @Entity
-@Table(name = "asset_booking") // can not put just "booking" because of conflict with database booking!
+@Table(name = "booking") // can not put just "booking" because of conflict with database booking!
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,11 +45,11 @@ public class Booking {
 
     /** Booking reservation start */
     @Column(nullable = false)
-    private LocalDateTime startTime;
+    private LocalDateTime bookingStartTime;
 
     /** Booking reservation end */
     @Column(nullable = false)
-    private LocalDateTime endTime;
+    private LocalDateTime bookingEndTime;
 
     /** Notes, Additional information's */
     @Size(max = 1000, message = "Notes cannot exceed 1000 characters")
@@ -59,9 +59,9 @@ public class Booking {
     /** Created at */
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime lastModifiedAt;
 }
