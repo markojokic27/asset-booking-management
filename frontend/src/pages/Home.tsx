@@ -1,12 +1,13 @@
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
 
 export default function Home() {
   const navigate = useNavigate();
   const arr = Array.from({ length: 12 }, (_, i) => i);
   const boxClass =
-    'mb-8 flex h-32 items-center justify-center rounded-lg bg-gray-200 text-2xl font-bold';
+    'mb-8 flex h-32 items-center justify-center rounded-lg bg-gray-400 text-2xl font-bold';
 
   const handleLogout = () => {
     document.cookie = 'auth=; Max-Age=0; path=/';
@@ -23,12 +24,17 @@ export default function Home() {
             </h1>
             <Button
               onClick={handleLogout}
-              className="bg-red-500 border-red-500 hover:bg-red-600 hover:border-red-600 text-white"
+              size="sm"
+              className="border-red-500 bg-red-500 text-white hover:border-red-600 hover:bg-red-600"
             >
               Logout
             </Button>
-
-           
+          </LayoutColumn>
+          <LayoutColumn span={3}>
+            <Input
+              placeholder="Search assets..."
+              errorMessage="Please enter a search term"
+            />
           </LayoutColumn>
         </LayoutRow>
       </Layout>

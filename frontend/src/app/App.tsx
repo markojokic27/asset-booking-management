@@ -8,7 +8,7 @@ export default function App() {
         <Link to="/manager">Manager</Link>
       </nav>
 
-      <main className="h-full bg-gray-400 pt-12">
+      <main className="h-full bg-gray-200 pt-12">
         <Outlet />
       </main>
     </>

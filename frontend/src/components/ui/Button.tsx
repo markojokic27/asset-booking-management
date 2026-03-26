@@ -51,8 +51,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             'border-0 bg-transparent p-0 underline underline-offset-4 hover:no-underline',
 
           // sizes
-          size === 'sm' && 'px-4 py-3 text-xs',
-          size === 'md' && 'px-6 py-4 text-base',
+          size === 'sm' && 'px-4 py-3',
+          size === 'md' && 'px-6 py-4',
 
           // disabled (visual + functional)
           isDisabled && 'pointer-events-none cursor-default opacity-50',
