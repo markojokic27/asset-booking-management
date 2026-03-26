@@ -9,7 +9,7 @@
 * password
 * role
 * status
-* department - FK
+* department_id - FK
 * manager_email
 * benefit
 * notes
