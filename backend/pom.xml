@@ -77,6 +77,13 @@
 			<version>42.6.0</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Flyway Database Migrations -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

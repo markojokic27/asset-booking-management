@@ -23,7 +23,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    public Asset createAsset(AssetDTO assetRequest) {
+    public AssetDTO createAsset(AssetDTO assetRequest) {
         // TODO: IMPLEMENT THE FUNCTION
         return null;
     }
@@ -35,7 +35,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    public Asset getAssetById(Long id) {
+    public AssetDTO getAssetById(Long id) {
         // TODO: IMPLEMENT THE FUNCTION
         return null;
     }
@@ -46,7 +46,7 @@ public class AssetServiceImpl implements AssetService {
      * @return a list of Asset records
      */
     @Override
-    public List<Asset> getAllAssets() {
+    public List<AssetDTO> getAllAssets() {
         // TODO: IMPLEMENT THE FUNCTION
         return null;
     }
@@ -59,7 +59,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    public Asset updateAsset(Long id, AssetDTO assetRequest) {
+    public AssetDTO updateAsset(Long id, AssetDTO assetRequest) {
         // TODO: IMPLEMENT THE FUNCTION
         return null;
     }
