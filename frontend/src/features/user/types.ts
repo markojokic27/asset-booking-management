@@ -14,8 +14,8 @@ export type User = {
   role: UserRole;
   status: UserStatus;
   notes?: string;
-  department: string;  // FK na Department
-  managerEail: string;
+  departmentId: number;  // FK na Department
+  managerEmail: string;
   benefit?: UserBenefit;
   createdAt: Date;
   lastModifiedAt: Date;

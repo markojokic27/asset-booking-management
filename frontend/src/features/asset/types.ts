@@ -3,11 +3,11 @@ export type AssetStatus = 'AVAILABLE' | 'UNAVAILABLE';
 export type Asset = {
   id: string;
   name: string;
-  categoryId: string;    // FK
+  categoryId: number;    // FK
   description?: string;
-  code?: string;
+  code: string;
   status: AssetStatus;
-  location?: string;
+  location: string;
   createdAt: Date;
   lastModifiedAt: Date;
 };
