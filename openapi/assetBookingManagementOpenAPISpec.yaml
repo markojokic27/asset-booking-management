@@ -2,8 +2,15 @@ openapi: "3.1.0"
 info:
   version: 1.0.0
   title: Asset Booking Manager
-  license:
-    name: MIT
+  description:
+    "The Asset Booking Manager API allows users to discover, reserve, and manage
+    \ shared assets such as meeting rooms, vehicles, devices, and other equipment
+    \ within an organization. It exposes endpoints for searching assets by type
+    \ and availability, creating and updating reservations, and enforcing booking
+    \ rules and time windows for different asset categories. Consumers can
+    \ integrate this API into internal portals or mobile apps to streamline
+    \ scheduling, prevent double-bookings, and improve overall asset utilization
+    \ through centralized, auditable booking workflows."
 servers:
   - url: http://demoVM.swagger.io/v1
 security:
@@ -12,7 +19,6 @@ paths:
   /v1/users:
     get:
       summary: Get all Users
-      operationId: listUsers
       tags:
         - Users
       parameters:
@@ -34,56 +40,442 @@ paths:
             maximum: 150
             default: 10
       responses:
-        200:
+        '200':
           description: OK
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/Users"
+                $ref: "#/components/schemas/UsersResponse"
               examples:
                 Users:
-                  $ref: "#/components/examples/UsersExample"
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                  $ref: "#/components/examples/UsersResponseExample"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     post:
       summary: Create a user
-      operationId: createUsers
       tags:
         - Users
+      description: Access restricted to Admin only.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
       responses:
-        201:
-          description: Null response
-        default:
-          description: unexpected error
+        '201':
+          description: Created
           content:
-            application/json:
+            application/json:    
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/UserResponse"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/NotFound'
+
   /v1/users/{id}:
     get:
-      summary: Info for a specific user
-      operationId: showUserById
+      summary: Get User by ID
       tags:
         - Users
       parameters:
-        - $ref: '#/components/parameters/IdParam'
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       responses:
-        200:
-          description: Expected response to a valid request
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Users"
-        default:
-          description: unexpected error
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      summary: Update User
+      description: Access restricted to Admin only.
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        '200':
+          description: User updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/UserResponse'
+              examples:
+                User Response:
+                  $ref: '#/components/examples/SingleUserExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      summary: Soft delete
+      description: Use this to deactivate a user by setting status to INACTIVE.
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: status
+          in: query
+          description: "Set status to INACTIVE"
+          required: true
+          schema:
+            type: string
+            enum:
+              - INACTIVE
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+                  maxLength: 256
+            examples:
+              DeactivateUserExample:
+                summary: Soft delete (deactivate) user
+                value:
+                  note: "Left company or temporarly absent"
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              examples:
+                User Response:
+                  $ref: '#/components/examples/SingleUserExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /v1/departments:
+    get:
+      summary: Get all Departments
+      tags:
+        - Departments
+      parameters:
+        - name: pageNumber
+          in: query
+          description: The page number to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: perPage
+          in: query
+          description: The number of items to return per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 10
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentsResponse'
+              examples:
+                Departments:
+                  $ref: '#/components/examples/DepartmentsResponseExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Create Department
+      description: Access restricted to Admin only.
+      tags:
+        - Departments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /v1/departments/{id}:
+    get:
+      summary: Get Department by ID
+      tags:
+        - Departments
+      parameters:
+        - name: id
+          in: path
+          description: ID of the department
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      summary: Update Department
+      description: Access restricted to Admin and Manager
+      tags:
+        - Departments
+      parameters:
+        - name: id
+          in: path
+          description: ID of the department
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentResponse'
+              examples:
+                Department:
+                  $ref: "#/components/examples/DepartmentResponseExample"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '404':
+          description: Department not found
+          $ref: '#/components/responses/NotFound'
+  /v1/asset-categories:
+    get:
+      summary: Get all Asset Categories
+      tags:
+        - Asset Categories
+      parameters:
+        - name: pageNumber
+          in: query
+          description: The page number to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: perPage
+          in: query
+          description: The number of items to return per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 150
+            default: 10
+      responses:
+        '200':
+          description: Get all asset categories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetCategoriesResponse'
+              examples:
+                AssetCategories:
+                  $ref: '#/components/examples/AssetCategoriesResponseExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Create Asset Category
+      description: Access restricted to Admin only.
+      tags:
+        - Asset Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetCategoryRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /v1/asset-categories/{id}:
+    get:
+      summary: Get Asset Category by ID
+      tags:
+        - Asset Categories
+      parameters:
+        - name: id
+          in: path
+          description: ID of the asset category
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetCategoryResponse'
+              examples:
+                AssetCategory:
+                  $ref: '#/components/examples/AssetCategoryResponseExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      summary: Update Asset Category
+      description: Access restricted for Admin only.
+      tags:
+        - Asset Categories
+      parameters:
+        - name: id
+          in: path
+          description: ID of the asset category
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetCategoryRequest'
+      responses:
+        '200':
+          description: Asset category updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetCategoryResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+# Delete asset categorry or soft delete (mark status as inactive)
+    delete:
+      summary: Delete Asset Category
+      description: Access restricted for Admin only.
+      tags:
+        - Asset Categories
+      parameters:
+        - name: id
+          in: path
+          description: ID of the asset category
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '204':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '404':
+          description: Asset category not found
+          $ref: '#/components/responses/NotFound'
+
   /v1/assets:
     get:
       summary: Get all Assets 
@@ -113,22 +505,18 @@ paths:
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/Assets"
+                $ref: "#/components/schemas/AssetsResponse"
               examples:
                 Assets:
-                  $ref: "#/components/examples/AssetsExample"
+                  $ref: "#/components/examples/AssetsResponseExample"
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
     post:
       summary: Create new Asset
+      description: Access restricted for Admin only.
       tags:
         - Assets
       requestBody:
@@ -136,45 +524,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  minLength: 2
-                  maxLength: 50
-                categoryId:
-                  $ref: "#/components/schemas/Id"
-                description:
-                  type: string
-                  minLength: 2
-                  maxLength: 256
-                code:
-                  type: string
-                status:
-                  type: string
-                  enum: [AVAILABLE, UNAVAILABLE]
-                location:
-                  type: string
-              required:
-                - name
-                - categoryId
+              $ref: "#/components/schemas/AssetResponse"
       responses:
         '201':
           description: Created
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/Asset"
+                $ref: "#/components/schemas/AssetResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
   /v1/assets/{id}:
     get:
       summary: Get Asset by id
@@ -188,21 +550,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Asset"
+                $ref: "#/components/schemas/AssetResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
     put:
       summary: Update Asset
+      description: Access restricted for Admin only.
       tags:
         - Assets
       parameters:
@@ -212,47 +570,21 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  minLength: 2
-                  maxLength: 50
-                categoryId:
-                  $ref: "#/components/schemas/Id"
-                description:
-                  type: string
-                  minLength: 2
-                  maxLength: 256
-                code:
-                  type: string
-                status:
-                  type: string
-                  enum: [AVAILABLE, UNAVAILABLE]
-                location:
-                  type: string
-              required:
-                - name
-                - categoryId
+              $ref: "#/components/schemas/AssetRequest"
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Asset"
+                $ref: "#/components/schemas/AssetResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
   /v1/bookings:
     get:
       summary: Get all Bookings 
@@ -282,17 +614,11 @@ paths:
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/Bookings"
+                $ref: "#/components/schemas/BookingsResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
     post:
       summary: Create new Booking
       tags:
@@ -310,33 +636,30 @@ paths:
                   type: string
                   minLength: 2
                   maxLength: 256
-                timestampStart:
+                bookingStart:
                   type: string
                   format: date-time
-                timestampEnd:
+                bookingEnd:
                   type: string
                   format: date-time
               required:
                 - assetId
-                - timetampStart
-                - timeStampEnd
+                - bookingStart
+                - tbookingEnd
       responses:
         '201':
           description: Created
           content:
             application/json:    
               schema:
-                $ref: "#/components/schemas/Booking"
+                $ref: "#/components/schemas/BookingResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
         default:
           description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+
   /v1/bookings/{id}:
     get:
       summary: Get Booking by id
@@ -350,19 +673,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Booking"
+                $ref: "#/components/schemas/BookingResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
     put:
       summary: Update Booking
       tags:
@@ -380,10 +697,10 @@ paths:
                   type: string
                   minLength: 2
                   maxLength: 256
-                timestampStart:
+                bookingStart:
                   type: string
                   format: date-time
-                timestampEnd:
+                bookingEnd:
                   type: string
                   format: date-time
       responses:
@@ -392,19 +709,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Booking"
+                $ref: "#/components/schemas/BookingResponse"
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /v1/bookings/{id}/cancel-booking:
     put:
       summary: Cancel Booking
@@ -437,23 +748,65 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Id:
       type: integer
       format: int64
       minimum: 1
-    User:
+    UserRequest:
+      type: object
+      required:
+        - name
+        - username
+        - role
+        - departmentId
+        - status
+      properties:
+        username:
+          type: string 
+          minLength: 3
+          maxLength: 20
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+        surname:
+          type: string
+          minLength: 3
+          maxLength: 50
+        email:
+          type: string 
+          format: email
+          examples: 
+            - 'johndoe@gmail.com'
+        role:
+          enum: [EMPLOYEE, MANAGER]
+        status:
+          enum: [ACTIVE, INACTIVE]
+          default: ACTIVE
+        note:
+          type: string
+          maxLength: 256
+        departmentId:
+          $ref: '#/components/schemas/Id'
+        managerEmail:
+          type: string
+          format: email
+          examples: 
+            - 'johndoe2@gmail.com'
+        benefit:
+          enum: [ALL, REC_PARK]
+
+    UserResponse:
       type: object
       required:
         - id
         - name
+        - username
+        - role
+        - departmentId
+        - status
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -497,11 +850,24 @@ components:
         lastModifiedAt:
           type: string
           format: date-time
-    Users:
+    
+    UsersResponse:
       type: array
       items:
-        $ref: "#/components/schemas/User"
-    Department:
+        $ref: "#/components/schemas/UserResponse"
+    DepartmentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 50
+        managerId:
+          $ref: '#/components/schemas/Id'
+      required:
+        - name 
+        - managerId
+    DepartmentResponse:
       type: object
       properties:
         id:
@@ -522,11 +888,32 @@ components:
         - id 
         - name 
         - managerId
-    Departments:
+    DepartmentsResponse:
       type: array 
       items:
-        $ref: '#/components/schemas/Department'
-    AssetCategory:
+        $ref: '#/components/schemas/DepartmentResponse'
+    AssetCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 50
+        description:
+          type: string
+          minLength: 2
+          maxLength: 256
+        bookingPeriod:
+          enum: [HOUR, DAY, WEEK, MONTH]
+        approval:
+          type: boolean 
+          default: false
+      required:
+        - id 
+        - name
+        - bookingPeriod
+
+    AssetCategoryResponse:
       type: object
       properties:
         id:
@@ -554,11 +941,34 @@ components:
         - id 
         - name
         - bookingPeriod
-    AssetCategories:
+    AssetCategoriesResponse:
       type: array
       items:
-        $ref: '#/components/schemas/AssetCategory'
-    Asset:
+        $ref: '#/components/schemas/AssetCategoryResponse'
+    AssetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 50
+        categoryId:
+          $ref: "#/components/schemas/Id"
+        description:
+          type: string
+          minLength: 2
+          maxLength: 256
+        code:
+          type: string
+        status:
+          type: string
+          enum: [AVAILABLE, UNAVAILABLE]
+        location:
+          type: string
+      required:
+        - name
+        - categoryId
+    AssetResponse:
       type: object
       properties:
         id:
@@ -590,11 +1000,11 @@ components:
         - id
         - categoryId
         - name
-    Assets:
+    AssetsResponse:
       type: array
       items:
-        $ref: '#/components/schemas/Asset'
-    Booking:
+        $ref: '#/components/schemas/AssetResponse'
+    BookingResponse:
       type: object
       properties:
         id:
@@ -608,10 +1018,10 @@ components:
           maxLength: 256
         status:
           enum: [SUCCESSFUL, PENDING, REJECTED]
-        timestampStart:
+        bookingStart:
           type: string 
           format: date-time
-        timestampEnd:
+        bookingEnd:
           type: string 
           format: date-time
         createdAt:
@@ -626,20 +1036,57 @@ components:
         - assetId 
         - timestampStart
         - timestampEnd
-    Bookings:
+    BookingsResponse:
       type: array
       items:
-        $ref: '#/components/schemas/Booking'
-    Error:
+        $ref: '#/components/schemas/BookingResponse'
+    ApiError:
+      type: object
       required:
         - code
         - message
+        - status
+        - timestamp
       properties:
         code:
-          type: integer
-          format: int32
+          type: string
+          examples:
+            - NOT_FOUND
         message:
           type: string
+          examples:
+            - User not found
+        status:
+          type: integer
+          format: int32
+          examples: 
+            - 404
+          description: HTTP status code
+        timestamp:
+          type: string
+          format: date-time
+          examples:
+            - 2026-03-26T12:00:00Z
+          description: Time when the error occurred
+        path:
+          type: string
+          examples:
+            - /v1/users/123
+          description: The endpoint where the error occurred
+        details:
+          type: array
+          description: Details list
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                examples:
+                  - email
+              issue:
+                type: string
+                examples:
+                  - Invalid format
   securitySchemes:
     bearerAuth:
       type: http
@@ -658,30 +1105,50 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
           example:
-            message: "Invalid request data"
-            code: "BAD_REQUEST"
+            code: BAD_REQUEST
+            message: Invalid request data
+            status: 400
+            timestamp: 2026-03-26T12:00:00Z
+            path: /api/example
+            details:
+              - field: email
+                issue: Invalid format
+
     NotFound:
       description: Not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
           example:
-            message: "Not found"
-            code: "NOT_FOUND"
+            code: NOT_FOUND
+            message: Resource not found
+            status: 404
+            timestamp: 2026-03-26T12:00:00Z
+            path: /v1/example/123
+            details:
+              - field: id
+                issue: Not found
+
     InternalServerError:
       description: Internal server error
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
           example:
-            message: "Something went wrong"
-            code: "INTERNAL_ERROR"
+            code: INTERNAL_ERROR
+            message: Something went wrong
+            status: 500
+            timestamp: 2026-03-26T12:00:00Z
+            path: /api/example
+            details:
+              - field: example
+                issue: Example
   examples:
-    UsersExample:
+    UsersResponseExample:
       value:
         - id: 1
           username: "johndoe"
@@ -696,7 +1163,71 @@ components:
           benefit: ALL
           createdAt: "2026-03-24T10:00:00Z"
           lastModifiedAt: "2026-03-24T12:00:00Z"
-    AssetsExample:
+    SingleUserExample:
+      value:
+        id: 1
+        username: "johndoe"
+        name: "John"
+        surname: "Doe"
+        email: "johndoe@gmail.com"
+        role: EMPLOYEE
+        status: ACTIVE
+        note: "This is a note about John DOE."
+        departmentId: 101
+        managerEmail: "manager1@example.com"
+        benefit: ALL
+        createdAt: "2026-03-24T10:00:00Z"
+        lastModifiedAt: "2026-03-24T12:00:00Z"
+
+    DepartmentResponseExample:
+      value:
+        id: 10
+        name: "Engineering"
+        managerId: 3
+        createdAt: "2026-03-24T10:00:00Z"
+        lastModifiedAt: "2026-03-24T12:00:00Z"
+    DepartmentsResponseExample:
+      value:
+        - id: 10
+          name: "Engineering"
+          managerId: 3
+          createdAt: "2026-03-24T10:00:00Z"
+          lastModifiedAt: "2026-03-24T12:00:00Z"
+        - id: 20
+          name: "Human Resources"
+          managerId: 5
+          createdAt: "2026-03-20T09:30:00Z"
+          lastModifiedAt: "2026-03-22T14:15:00Z"
+
+    AssetCategoryResponseExample:
+      summary: Single asset category
+      value:
+        id: 1
+        name: "Conference Rooms"
+        description: "Meeting rooms equipped with projector and whiteboard"
+        bookingPeriod: HOUR
+        approval: true
+        createdAt: "2026-03-01T08:00:00Z"
+        lastModifiedAt: "2026-03-10T09:30:00Z"
+
+    AssetCategoriesResponseExample:
+      summary: List of asset categories
+      value:
+        - id: 1
+          name: "Conference Rooms"
+          description: "Meeting rooms equipped with projector and whiteboard"
+          bookingPeriod: HOUR
+          approval: true
+          createdAt: "2026-03-01T08:00:00Z"
+          lastModifiedAt: "2026-03-10T09:30:00Z"
+        - id: 2
+          name: "Company Cars"
+          description: "Pool vehicles available for business trips"
+          bookingPeriod: DAY
+          approval: false
+          createdAt: "2026-02-15T10:15:00Z"
+          lastModifiedAt: "2026-02-20T11:45:00Z"
+    AssetsResponseExample:
       value:
         - id: 1
           name: "Laptop 1"

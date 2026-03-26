@@ -1,55 +1,74 @@
 = Domain Model
 
 == User
-* id - PK
-* username
-* surname
-* name
-* email
-* password
-* role
-* status
-* department - FK
-* manager_email
-* benefit
-* notes
-* created_at
-* last_modified_at
-
+[options = "header", cols="1,1,2"]
+|===
+| Field | Type | Validation
+| id - PK | BIGINT |  NOT NULL
+| username | VARCHAR(50) | NOT NULL, UNIQUE, MIN=3, MAX=50
+| surname | VARCHAR(100) | NOT NULL
+| name | VARCHAR(100) | NOT NULL
+| email | VARCHAR(100) | NOT NULL, UNIQUE, EMAIL FORMAT
+| password | VARCHAR(100) | NOT NULL, MIN=8
+| role | ENUM (EMPLOYEE, ADMIN, MANAGER)| NOT NULL
+| status | ENUM (ACTIVE, INACTIVE)| NOT NULL, DEFAULT=ACTIVE
+| departmentId - FK | BIGINT | NOT NULL
+| manager_email | VARCHAR(100) | EMAIL FORMAT, NOT NULL
+| benefit | ENUM (ALL, REC_PARK,?) | OPTIONAL
+| note | VARCHAR(255) | OPTIONAL
+| created_at | TIMESTAMP | NOT NULL, DEFAULT=NOW()
+| last_modified_at | TIMESTAMP | NOT NULL, AUTO UPDATE
+|===
 == Department
-* id - PK
-* name
-* manager_id - FK
-* created_at
-* last_modified_at
+[options = "header", cols="1,1,2"]
+|===
+| Field | Type | Validation
+| id - PK | BIGINT | NOT NULL
+| name | VARCHAR(100) | NOT NULL
+| managerId - FK | BIGINT | NOT NULL
+| createdAt | TIMESTAMP | NOT NULL, DEFAULT=NOW()
+| lastModifiedAt | TIMESTAMP | NOT NULL, AUTO UPDATE
+|===
 
 == AssetCategory
-* id - PK
-* name
-* description
-* booking_period
-* approval
-* created_at
-* last_modified_at
+[options = "header", cols="1,1,2"]
+|===
+| Field | Type | Validation
+| id - PK | BIGINT | NOT NULL
+| name | VARCHAR(100) | NOT NULL
+| description | VARCHAR(255) | OPTIONAL
+| bookingPeriod | ENUM (HOUR, DAY, WEEK, MONTH) | NOT NULL
+| approval | BOOLEAN | DEFAULT=false
+| createdAt | TIMESTAMP | NOT NULL, DEFAULT=NOW()
+| lastModifiedAt | TIMESTAMP | NOT NULL, AUTO UPDATE
+|===
 
 == Asset
-* id - PK
-* name
-* category_id- FK
-* description
-* code
-* status
-* location
-* created_at
-* last_modified_at
+[options = "header", cols="1,1,2"]
+|===
+| Field | Type | Validation
+| id - PK | BIGINT | NOT NULL
+| name | VARCHAR(100) | NOT NULL
+| categoryId- FK | BIGINT | NOT NULL
+| description | VARCHAR(255) | OPTIONAL
+| code | VARCHAR(255) | OPTIONAL
+| status | ENUM (AVAILABLE, UNAVAILABLE) | NOT NULL
+| location | VARCHAR (50) | OPTIONAL
+| createdAt | TIMESTAMP | NOT NULL, DEFAULT=NOW()
+| lastModifiedAt | TIMESTAMP | NOT NULL, AUTO UPDATE
+|===
 
 == Booking
-* id - PK
-* user_id - FK
-* asset_id - FK
-* status
-* booking_start_time
-* booking_end_time
-* notes
-* created_at
-* last_modified_at
+[options = "header", cols="1,1,2"]
+|===
+| Field | Type | Validation
+| id - PK | BIGINT | NOT NULL
+| userId - FK | BIGINT | NOT NULL
+| assetId - FK | BIGINT | NOT NULL
+| status | ENUM (SUCCESSFUL, PENDING, REJECTED) | NOT NULL
+| bookingStart | TIMESTAMP | NOT NULL, FORMAT='YYYY-MM-DD HH:mm'
+| bookingEnd | TIMESTAMP | NOT NULL, FORMAT='YYYY-MM-DD HH:mm'
+| note | VARCHAR (255) | OPTIONAL
+| createdAt | TIMESTAMP | NOT NULL, DEFAULT=NOW()
+| lastModifiedAt | TIMESTAMP | NOT NULL, AUTO UPDATE
+|===
