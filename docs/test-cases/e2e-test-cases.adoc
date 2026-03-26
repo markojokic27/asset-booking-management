@@ -4,172 +4,216 @@
 
 == 1. Successfull login with valid credentials
 
-[cols="1,1,1", options="header"]
-
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User exist in database a|
-1. Open app 
-2. Enter valid username 
-3. Enter valid password 
-4. Click Login|User is authenticated and redirected to the home page|
+|Preconditions|Actor|Steps|Expected Result
+
+|User exist in database
+|Employee, Manager, Admin
+a|
+1. Open app
+2. Enter valid username
+3. Enter valid password
+4. Click Login
+|User is authenticated and redirected to the home page
+
 |===
 
 == 2. Login with incorrect password
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User exist in database
+|Employee, Manager, Admin
+a|
+1. Open app
+2. Enter valid username
+3. Enter wrong password
+4. Click Login
+|Error message is displayed: "Invalid username or password"
 
 |===
-|Preconditions|Steps|Expected Result
-|User exist in database a|
-1. Open app 
-2. Enter valid username 
-3. Enter wrong password 
-4. Click Login|Error message is displayed: "Invalid username or password"
-|===
-
 
 == 3. Login with incorrect username
 
-[cols="1,1,1", options="header"]
-
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User exist in database a|
-1. Open app 
-2. Enter wrong username 
-3. Enter valid password 
-4. Click Login|Error message is displayed: "Invalid username or password"
+|Preconditions|Actor|Steps|Expected Result
+
+|User exist in database
+|Employee, Manager, Admin
+a|
+1. Open app
+2. Enter wrong username
+3. Enter valid password
+4. Click Login
+|Error message is displayed: "Invalid username or password"
+
 |===
 
 == 4. Login with both fields empty
 
-[cols="1,1,1", options="header"]
-
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|/ a|
-1. Open app 
+|Preconditions|Actor|Steps|Expected Result
+
+|/
+|Employee, Manager, Admin
+a|
+1. Open app
 2. Leave username and password empty
-3. Click Login|Error message is displayed: "Username and password are required"
+3. Click Login
+|Error message is displayed: "Username and password are required"
+
 |===
 
 == 5. Login with empty username
 
-[cols="1,1,1", options="header"]
-
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|/ a|
-1. Open app 
+|Preconditions|Actor|Steps|Expected Result
+
+|/
+|Employee, Manager, Admin
+a|
+1. Open app
 2. Leave username empty
-3. Enter valid password 
-4. Click Login|Error message is displayed: "Password is required"
+3. Enter valid password
+4. Click Login
+|Error message is displayed: "Password is required"
+
 |===
 
 == 6. Login with empty password
 
-[cols="1,1,1", options="header"]
-
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|/ a|
-1. Open app 
+|Preconditions|Actor|Steps|Expected Result
+
+|/
+|Employee, Manager, Admin
+a|
+1. Open app
 2. Enter valid username
 3. Leave password empty
-4. Click Login|Error message is displayed: "Username is required"
+4. Click Login
+|Error message is displayed: "Username is required"
+
 |===
 
 = Asset Category Management
 
 == 1. Successful creation of a new asset category
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
+|Preconditions|Actor|Steps|Expected Result
+
 |User logged in as Admin
+|Admin
 a|
 . Open "Add Category" form
 . Fill required fields
 . Click Save
-|Category is created; confirmation message shown|
+|Category is created; confirmation message shown
+
 |===
 
 == 2. Attempt to create a category with missing required fields
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
+|Preconditions|Actor|Steps|Expected Result
+
 |User logged in as Admin
+|Admin
 a|
 . Open "Add Category" form
 . Leave some required fields empty
 . Click Save
-|System highlights missing fields; category not saved|
+|System highlights missing fields; category not saved
+
 |===
 
 == 3. Attempt to create a category with an existing name
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User logged in as Admin; "Parking" exists
+|Preconditions|Actor|Steps|Expected Result
+
+|User logged in as Admin; "Parking" exists in the system
+|Admin
 a|
 . Open "Add Category" form
 . Enter name "Parking"
 . Fill other fields
 . Click Save
-|Warning about duplicate name; option to edit or cancel|
+|Warning about duplicate name; option to edit or cancel
+
 |===
 
 == 4. Successful update of an existing asset category
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User logged in as Admin; "Laptop" exists
+|Preconditions|Actor|Steps|Expected Result
+
+|User logged in as Admin; Category "Laptop" exists in the system
+|Admin
 a|
 . Open "Edit" for "Laptop"
 . Change fields as needed
 . Click Save
-|Changes saved; confirmation message displayed|
+|Changes saved; confirmation message displayed
+
 |===
 
 == 5. Successful deletion of an asset category
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User logged in as Admin; "Laptop" exists; no active bookings
+|Preconditions|Actor|Steps|Expected Result
+
+|User logged in as Admin; Category "Laptop" exists in the system; no active bookings
+|Admin
 a|
 . Open "Edit" for "Laptop"
 . Click Delete
 . Confirm deletion
-|Category marked inactive; confirmation message shown|
+|Category marked inactive; confirmation message shown
+
 |===
 
 == 6. Attempt to delete a category with active bookings
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User logged in as Admin; "Laptop" has active/future bookings
+|Preconditions|Actor|Steps|Expected Result
+
+|User logged in as Admin; Category "Laptop" has active/future bookings
+|Admin
 a|
 . Open "Edit" for "Laptop"
 . Click Delete
 . Confirm deletion
-|Warning: cannot delete with active/future bookings|
+|Warning: cannot delete with active/future bookings
+
 |===
 
 == 7. Attempt to save invalid data
 
-[cols="1,1,1", options="header"]
+[cols="1,1,1,1", options="header"]
 |===
-|Preconditions|Steps|Expected Result
-|User logged in as Admin; "Laptop" exists
+|Preconditions|Actor|Steps|Expected Result
+
+|User logged in as Admin; Category "Laptop" exists in the system
+|Admin
 a|
 . Open "Edit" for "Laptop"
 . Enter invalid data (e.g., minimum booking duration set to 0 hours)
 . Click Save
-|Validation error shown; minimum booking duration must be at least 1 hour; changes not saved|
+|Validation error shown (e.g. minimum booking duration must be at least 1 hour); changes not saved
+
 |===
