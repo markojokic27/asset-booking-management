@@ -180,3 +180,32 @@ export default defineConfig([
   },
 ]);
 ```
+# Running and building the docker image
+
+```bash
+docker build -t vite-app
+docker run -d --name frontend -p 8080:8080 vite-app
+```
+
+## Notes
+Build command makes the final image.
+Run command takes that image and creates a container for it. 
+
+- -d flag: Detached, so that the terminal is free to use, run the container as a daemon
+- --name flag: Set the name of the container, so that all following commands are consistent
+- -p flag: Port setting, map the external 8080 to the internal 8080
+- vite-app: Name of the image we gave in the build command
+
+http://127.0.0.1:8080 - Check if the app is started after using the run command
+
+## Basic commands
+```bash
+# Check the list of containers
+docker container list
+
+CONTAINER ID   IMAGE      COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+e1dbe48cba34   vite-app   "busybox httpd -f -v…"   4 seconds ago   Up 3 seconds   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp   frontend
+
+# Stop the container
+docker container stop frontend
+```
