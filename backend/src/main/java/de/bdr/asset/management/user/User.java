@@ -75,5 +75,4 @@ public class User {
     /** Last Modified at */
     @UpdateTimestamp
     private LocalDateTime lastModifiedAt;
-
 }

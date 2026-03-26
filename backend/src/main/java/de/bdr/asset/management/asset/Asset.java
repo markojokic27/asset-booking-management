@@ -2,9 +2,6 @@ package de.bdr.asset.management.asset;
 
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,31 +25,29 @@ public class Asset {
     private Long id;
 
     /** Name of asset */
-    @NotBlank(message="Name is required")
-    @Size(max=100, message="Name cannot exceed 100 characters")
-    @Column(nullable=false)
+    @Column(nullable = false, length = 100)
     private String name;
-
-    /** Description of asset */
-    @Size(max=255, message="Description cannot exceed 255 characters")
-    @Column(columnDefinition="TEXT")
-    private String description;
-
-    /** Asset Status */
-    @NotNull(message = "Status is required")
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private AssetStatusEnum assetStatus;
 
     /** ID of asset category, foreign key */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private AssetCategory category;
 
+    /** Description of asset */
+    @Column(columnDefinition="TEXT")
+    private String description;
+
+    /** QR code of asset */
+    @Column(nullable = false, unique = true, length = 2000)
+    private String code;
+
+    /** Asset Status */
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AssetStatusEnum status;
+
     /** Location of asset */
-    @NotBlank(message="Location is required")
-    @Size(max=255, message="Location cannot exceed 255 characters")
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String location;
 
     /** Created at */

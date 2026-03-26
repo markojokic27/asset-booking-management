@@ -1,6 +1,6 @@
 package de.bdr.asset.management.booking;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -18,15 +18,12 @@ public record BookingDTO(
         BookingStatusEnum status,
 
         @NotNull(message = "Start time is required")
-        LocalDateTime startTime,
+        LocalDateTime bookingStartTime,
 
         @NotNull(message = "End time is required")
-        LocalDateTime endTime,
+        LocalDateTime bookingEndTime,
 
-        String notes,
-
-        LocalDateTime createdTimestamp,
-
-        LocalDateTime lastModifiedTimestamp
+        @Size(max = 1000, message = "Notes cannot exceed 1000 characters")
+        String notes
 ) {
 }

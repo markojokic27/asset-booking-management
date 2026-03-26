@@ -1,9 +1,6 @@
 package de.bdr.asset.management.assetcategory;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,18 +24,14 @@ public class AssetCategory {
     private Long id;
 
     /** Name of asset category */
-    @NotBlank(message="Name is required")
-    @Size(max=100, message="Name cannot exceed 100 characters")
-    @Column(nullable=false)
+    @Column(nullable=false, length = 100)
     private String name;
 
     /** Description of asset category */
-    @Size(max=255, message="Description cannot exceed 255 characters")
     @Column(columnDefinition="TEXT")
     private String description;
 
     /** Period of booking */
-    @NotNull(message="Booking period is required")
     @Column(nullable=false)
     @Enumerated(EnumType.STRING)
     private BookingPeriodEnum bookingPeriod;

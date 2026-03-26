@@ -3,8 +3,6 @@ package de.bdr.asset.management.booking;
 import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,7 +36,6 @@ public class Booking {
     private Asset asset;
 
     /** Booking Status */
-    @NotNull(message = "Status is required")
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BookingStatusEnum status;
@@ -52,7 +49,6 @@ public class Booking {
     private LocalDateTime bookingEndTime;
 
     /** Notes, Additional information's */
-    @Size(max = 1000, message = "Notes cannot exceed 1000 characters")
     @Column(columnDefinition = "TEXT")
     private String notes;
 
