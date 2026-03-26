@@ -19,7 +19,7 @@ This is an internal project for Maurer Internship 2026.
   - [Local Development Environment setup and instructions](#local-development-environment-setup-and-instructions)
     - [Environment vars](#environment-vars)
   - [Solution Document](#solution-document)
-  - [API first! API documentation](#api-first-api-documentation)
+  - [API first! API documentation](#api-first-api-documdentation)
     - [API Testing with Bruno](#api-testing-with-bruno)
   - [BackEnd](#backend)
     - [BackEnd Code Architecture](#backend-code-architecture)
@@ -102,15 +102,15 @@ Key features and examples:
 
 ### Test Plan
 
-TODO Add or link content...
+[Test Plan](docs/test-cases/test-plan.adoc)
 
 ### Test Cases Document
 
-TODO Add or link content...
+[Test Cases Document](docs/test-cases/e2e-test-cases.adoc)
 
 ## Local Development Environment setup and instructions
 
-TODO Add or link content...
+[Local Development Environment setup and instructions](/frontend/README.md)
 
 ### Environment vars
 
@@ -118,11 +118,11 @@ TODO Add or link content...
 
 ## Solution Document
 
-TODO Add or link content...
+[Solution Document](/docs/solution-document/solution-document.adoc)
 
 ## API first! API documentation
 
-TODO Add or link content...
+[API documentation (assetBooking)](/openapi/assetBookingManagementOpenAPISpec.yaml)
 
 ### API Testing with Bruno
 
@@ -130,45 +130,42 @@ TODO Add or link content...
 
 ## BackEnd 
 
-TODO Add or link content...
+[Backend](/backend/)
 
 ### BackEnd Code Architecture
 
-TODO Add or link content...
-
-### LDAP Authentication
-
-TODO Add or link content...
+[BackEnd Code Architecture](/backend/src/)
 
 ### Dockerfile
 
-TODO Add or link content...
+[Dockerfile](/backend/Dockerfile)
 
 ## Database
 
-TODO Add or link content...
+[Database](/deployment/database/db_init.sql)
 
 ### ER Model
 
-TODO Add or link content...
+[ER Model](/docs/database/ER.png)
 
 ### Dockerfile for DB
 
+
 ### DB Schema migrations
 
-TODO Add or link content...
+[Database](/deployment/database/db_init.sql)
 
 ## FrontEnd
 
-TODO Add or link content...
+[Frontend](/frontend/)
 
 ### FrontEnd Code Architecture
 
-TODO Add or link content...
+[Frontend Code Arhitecture](/frontend/src/)
 
 ### Dockerfile for FrontEnd
 
-TODO Add or link content...
+[Dockerfile](/frontend/Dockerfile)
 
 ## CI-CD
 
@@ -176,7 +173,7 @@ TODO Add or link content...
 
 ### Pipeline, Builds
 
-TODO Add or link content...
+[CI-CD](/docs/adr/ADR-005-CI%20-%20CD%20Pipelines.adoc)
 
 ### Tests
 
@@ -197,30 +194,49 @@ TODO Add or link content...
 
 ### Link to Non-Functional Requirements
 
+[Non-Functional Requirements](docs/functional-requirements/non-functional-requirements.adoc)
+
 ### Link to Use Cases Document
 [Use Cases Document](docs/useCase/useCaseDocument.adoc)
 
 ### Link to Use Cases Diagram
 [Use Case Diagram](docs/use-cases/UseCaseDiagram.png)
 
+### Link to Test Cases
 
-### Link to Test Cases Document
+[Test Cases Document](docs/test-cases/e2e-test-cases.adoc)
 
 ### Link to Solution Document
 
+[Solution Document](/docs/solution-document/solution-document.adoc)
+
 ### Link to API Documentation
+
+[API documentation (assetBooking)](/openapi/assetBookingManagementOpenAPISpec.yaml)
 
 ### Link to DB ER Model Documentation
 
+[ER Model Documentation](/docs/database/ER.png)
+
 ### Link to GitLab Issues board
+
+https://student-gitlab.tn.internal/studentpractice/asset-booking-management/-/issues
 
 ### Link to GitLab Wiki pages
 
+https://student-gitlab.tn.internal/studentpractice/asset-booking-management
+
 ### Link to ADRs folder
+
+[ADR folder](docs/adr)
 
 ### Link to Technical Manual
 
+[Tehnical Manual](/docs/technical-manual/technical-manual.adoc)
+
 ### Link to User Manual
+
+[User Manual](/docs/user-manual/user-manual.adoc)
 
 ![Asset Booking Management](/docs/images/asset-logo2.jpg)
 
