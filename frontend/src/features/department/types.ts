@@ -1,14 +1,11 @@
 export type Department = {
   id: string;
-
   name: string;
-
-  managerId: string; // FK na User
-
-  createdDate: Date;
-  lastModifiedDate: Date;
+  managerId: string;       // FK na User
+  createdAt: Date;
+  lastModifiedAt: Date;
 };
 
 export type DepartmentDto = Department & {
-  //managerName?: string;
+  managerName?: string;    // opcionalno, samo za prikaz
 };

@@ -1,30 +1,19 @@
-export type BookingStatus =
-  | "PENDING"
-  | "APPROVED"
-  | "REJECTED"
-  | "CANCELLED"
-  | "ACTIVE";
-  //| "ENDED";
+export type BookingStatus = 'SUCCESSFUL' | 'PENDING' | 'REJECTED';
 
 export type Booking = {
   id: string;
-
-  userId: string;
-  assetId: string;
-
-  timestampStart: Date;
-  timestampEnd: Date;
-
+  userId: string;           // FK na User
+  assetId: string;          // FK na Asset
+  bookingStart: Date;
+  bookingEnd: Date;
   status: BookingStatus;
-
-  notes?: string;
-
-  createdDate: Date;
-  lastModifiedDate: Date;
+  note?: string;
+  createdAt: Date;
+  lastModifiedAt: Date;
 };
 
 export type BookingDto = Booking & {
   userName?: string;
   assetName?: string;
-  assetCategory?:string;
+  assetCategory?: string;
 };
