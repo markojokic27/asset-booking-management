@@ -3,7 +3,15 @@
 -- DATABASE 
 -- ==========================================================
 
-CREATE DATABASE asset_mgm;
+DO
+$do$
+BEGIN
+   IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'asset_mgm') THEN
+      CREATE DATABASE asset_mgm;
+END IF;
+END
+$do$;
+
 
 -- Connect to the database (psql)
 \c asset_mgm;
