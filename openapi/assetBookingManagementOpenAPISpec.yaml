@@ -74,7 +74,7 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/InternalServerError'
 
   /v1/users/{id}:
     get:
@@ -524,7 +524,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AssetResponse"
+              $ref: "#/components/schemas/AssetRequest"
       responses:
         '201':
           description: Created
@@ -645,7 +645,7 @@ paths:
               required:
                 - assetId
                 - bookingStart
-                - tbookingEnd
+                - bookingEnd
       responses:
         '201':
           description: Created
@@ -909,7 +909,7 @@ components:
           type: boolean 
           default: false
       required:
-        - id 
+        - id #maybe to delete
         - name
         - bookingPeriod
 
@@ -1034,8 +1034,8 @@ components:
         - id
         - userId
         - assetId 
-        - timestampStart
-        - timestampEnd
+        - bookingStart
+        - bookingEnd
     BookingsResponse:
       type: array
       items:
