@@ -1,13 +1,15 @@
-export type BookingPeriod = 'daily' | 'weekly' | 'monthly';
+export type BookingPeriod = 'HOUR' | 'DAY' | 'WEEK' | 'MONTH';
 
 export type AssetCategory = {
   id: string;
   name: string;
   description?: string;
-  booking_period: BookingPeriod;
+  bookingPeriod: BookingPeriod;
   approval: boolean;
   createdAt: Date;
   lastModifiedAt: Date;
 };
 
-export type AssetCategoryDto = AssetCategory & {};
+export type AssetCategoryDto = AssetCategory & {
+  // dodati dodatna polja za prikaz u UI ako zatreba
+};

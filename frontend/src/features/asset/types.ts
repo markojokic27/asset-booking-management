@@ -1,20 +1,17 @@
+export type AssetStatus = 'AVAILABLE' | 'UNAVAILABLE';
+
 export type Asset = {
   id: string;
-
   name: string;
+  categoryId: string;    // FK
   description?: string;
-
   code?: string;
+  status: AssetStatus;
   location?: string;
-
-  status: string;  // ili neki enum?
-
-  categoryId: string;
-
-  createdDate: Date;
-  lastModifiedDate: Date;
+  createdAt: Date;
+  lastModifiedAt: Date;
 };
 
 export type AssetDto = Asset & {
-  categoryName?: string;
+  categoryName?: string;     // opcionalno za UI prikaz
 };

@@ -1,20 +1,15 @@
 package de.bdr.asset.management.user.department;
 
-import java.time.LocalDateTime;
-
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 public record DepartmentDTO(
-    Long id,
 
-    @NotNull(message="Name is required")
-    DepartmentEnum name,
+        Long id,
 
-    Long managerId,
+        @NotNull(message="Name is required")
+        String name,
 
-    LocalDateTime createdTimestamp,
-
-    LocalDateTime lastModifiedTimestamp
+        @NotNull(message = "Manager ID is required")
+        Long managerId
 ) {
-    
 }

@@ -1,30 +1,22 @@
-export type Department =
-  | 'ADVANCED_TECHNOLOGIES'
-  | 'ARCHITECTURE'
-  | 'CLOUD_DATA_MANAGEMENT'
-  | 'DEVOPS'
-  | 'FINANCE'
-  | 'HR'
-  | 'MOBILE_SECURITY'
-  | 'OPERATIONS'
-  | 'SECURITY_SYSTEMS';
+export type UserRole = 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
 
-  export type UserRole = 'employee' | 'manager' | 'admin';
+export type UserStatus = 'ACTIVE' | 'INACTIVE';
 
-  export type UserBenefit = 'parking';
+export type UserBenefit = 'ALL' | 'REC_PARK';
 
-  export type User = {
+export type User = {
   id: string;
+  username: string;
   surname: string;
   name: string;
   email: string;
   password: string;
-  role: UserRole;             
-  status: string;           // npr. 'active' | 'inactive' | 'banned' (treba definirati)
+  role: UserRole;
+  status: UserStatus;
   notes?: string;
-  department: Department; 
-  manager_email?: string;
-  benefit?: User;
+  department: string;  // FK na Department
+  managerEail: string;
+  benefit?: UserBenefit;
   createdAt: Date;
   lastModifiedAt: Date;
 };
