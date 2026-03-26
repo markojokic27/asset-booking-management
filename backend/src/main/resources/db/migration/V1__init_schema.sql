@@ -1,57 +1,10 @@
 
 -- ==========================================================
--- DATABASE 
--- ==========================================================
-/*
-DO
-$do$
-BEGIN
-   IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'asset_mgm') THEN
-      CREATE DATABASE asset_mgm;
-END IF;
-END
-$do$;
-
-
--- Connect to the database (psql)
-\c asset_mgm;
-
--- ==========================================================
--- USER (ROLE)
--- ==========================================================
-
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_roles WHERE rolname = 'asset_mgm_user'
-    ) THEN
-CREATE ROLE asset_mgm_user WITH LOGIN PASSWORD 'frane!Jure22';
-END IF;
-END
-$$;
-
--- Grant basic DB access
-GRANT CONNECT ON DATABASE asset_mgm TO asset_mgm_user;
-
--- ==========================================================
 -- SCHEMA
 -- ==========================================================
-*/
+
 CREATE SCHEMA IF NOT EXISTS asset_booking_mgm;
-/*
--- Allow usage of schema
-GRANT USAGE ON SCHEMA asset_booking_mgm TO asset_mgm_user;
 
--- Allow creating objects in schema
-GRANT CREATE ON SCHEMA asset_booking_mgm TO asset_mgm_user;
-
--- Set default privileges for future tables
-ALTER DEFAULT PRIVILEGES IN SCHEMA asset_booking_mgm
-GRANT ALL ON TABLES TO asset_mgm_user;
-
-ALTER DEFAULT PRIVILEGES IN SCHEMA asset_booking_mgm
-GRANT ALL ON SEQUENCES TO asset_mgm_user;
-*/
 -- Set search path
 SET search_path TO asset_booking_mgm;
 
