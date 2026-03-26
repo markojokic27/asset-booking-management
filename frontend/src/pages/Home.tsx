@@ -1,5 +1,6 @@
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/Button';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -20,12 +21,14 @@ export default function Home() {
             <h1 className="my-8 text-center text-5xl font-bold">
               Asset manager
             </h1>
-            <button
+            <Button
               onClick={handleLogout}
-              className="rounded bg-red-500 px-4 py-2 text-white"
+              className="bg-red-500 border-red-500 hover:bg-red-600 hover:border-red-600 text-white"
             >
               Logout
-            </button>
+            </Button>
+
+           
           </LayoutColumn>
         </LayoutRow>
       </Layout>

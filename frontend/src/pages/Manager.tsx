@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
+import { Button } from '../components/ui/Button';
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -11,12 +12,7 @@ export default function NotFound() {
           <h1 className="mt-20 mb-10 text-center text-6xl font-black">
             Manager Page
           </h1>
-          <button
-            onClick={() => navigate('/')}
-            className="rounded bg-blue-500 px-4 py-2 text-white"
-          >
-            Go to Home
-          </button>
+          <Button onClick={() => navigate('/')}>Go to Home</Button>
         </LayoutColumn>
       </LayoutRow>
     </Layout>

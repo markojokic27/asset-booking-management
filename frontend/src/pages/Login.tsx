@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
+import { Button } from '../components/ui/Button';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,12 +27,7 @@ export default function Login() {
           <h1 className="mt-20 mb-10 text-center text-6xl font-black">
             Login Page
           </h1>
-          <button
-            onClick={handleLogin}
-            className="rounded bg-blue-500 px-4 py-2 text-white"
-          >
-            Login
-          </button>
+          <Button onClick={handleLogin}>Login</Button>
         </LayoutColumn>
       </LayoutRow>
     </Layout>
