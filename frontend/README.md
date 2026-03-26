@@ -208,4 +208,10 @@ e1dbe48cba34   vite-app   "busybox httpd -f -v…"   4 seconds ago   Up 3 second
 
 # Stop the container
 docker container stop frontend
+
+# If it reports that there is already a container with name /fontend
+docker rm -f frontend && docker run -d --name frontend -p 8080:8080 vite-app
+
+# Prune all stoped containers 
+docker container prune
 ```

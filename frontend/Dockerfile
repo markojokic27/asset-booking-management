@@ -45,9 +45,15 @@ FROM busybox:1.37 AS runner
 # Same as before in the builder
 WORKDIR /app
 
+# Create non-root user
+RUN adduser -D appuser
+
 # From builder, copy the dist folder as it is the only
 # thing we need for the build
 COPY --from=builder /app/dist .
+
+# Switch to non-root user for security
+USER appuser
 
 # Command to run the container
 CMD ["busybox", "httpd", "-f", "-v", "-p", "8080"]
