@@ -1,8 +1,9 @@
 = Test Cases Document
 
 = Login via web or mobile app
+User enters valid username and password that exist in the database and successfully logs into the application
 
-== 1. Successfull login with valid credentials
+== 1. Successfull login with valid credentials [POSITIVE]
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -19,7 +20,8 @@ a|
 
 |===
 
-== 2. Login with incorrect password
+== 2. Login with incorrect password [NEGATIVE]
+User enters a valid username but an incorrect password and is denied access to the application
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -36,7 +38,8 @@ a|
 
 |===
 
-== 3. Login with incorrect username
+== 3. Login with incorrect username [NEGATIVE]
+User enters an incorrect username with a valid password and is denied access to the application
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -53,7 +56,8 @@ a|
 
 |===
 
-== 4. Login with both fields empty
+== 4. Login with both fields empty [NEGATIVE]
+User attempts to log in without entering any credentials and is prevented from submitting the form
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -69,7 +73,8 @@ a|
 
 |===
 
-== 5. Login with empty username
+== 5. Login with empty username [NEGATIVE]
+User attempts to log in without entering a username and is prevented from submitting the form
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -82,11 +87,12 @@ a|
 2. Leave username empty
 3. Enter valid password
 4. Click Login
-|Error message is displayed: "Password is required"
+|Error message is displayed: "Username is required"
 
 |===
 
-== 6. Login with empty password
+== 6. Login with empty password [NEGATIVE]
+User attempts to log in without entering a password and is prevented from submitting the form
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -99,13 +105,70 @@ a|
 2. Enter valid username
 3. Leave password empty
 4. Click Login
-|Error message is displayed: "Username is required"
+|Error message is displayed: "Password is required"
+
+|===
+
+= Biometric login
+
+== 7. Succesfull biometric login [POSITIVE]
+User scans their registered face or fingerprint and successfully enter the application
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is registered in the system. Face or fingerprint is stored in the database.
+|Employee, Manager, Admin
+a|
+1. Open mobile app
+2. Select biometric login option
+3. Scan registered face or fingerprint
+|User is authenticated and redirected to home screen
+
+|===
+
+== 8. Unregistered Biometric [NEGATIVE]
+A user whose biometric data is not in the database attempts to log in using biometric
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is registered in the system. Face or fingerprint is not stored in the database.
+|Employee, Manager, Admin
+a|
+1. Open mobile app
+2. Select biometric login option
+3. Scan unregistered face or fingerprint
+|Error message is display: "Face or fingerprint not recognized. Please try again or use username/password."
+
+|===
+
+= Adding biometric parameters [POSITIVE]
+
+== 9. Successful adding biometric parameters
+A user successfully adds their face or fingerprint to the system for future biometric login
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the app via username and password.
+|Employee, Manager, Admin
+a|
+1. Open mobile app
+2. Select biometric login option
+3. Scan face or fingerprint
+|User is authenticated and redirected to home screen
 
 |===
 
 = Asset Category Management
 
-== 1. Successful creation of a new asset category
+== 11. Successful creation of a new asset category [POSITIVE]
+Admin fills in all required fields for a new asset category and successfully saves it to the system
+
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -121,7 +184,8 @@ a|
 
 |===
 
-== 2. Attempt to create a category with missing required fields
+== 12. Attempt to create a category with missing required fields [NEGATIVE]
+Admin attempts to save a new asset category without filling in all required fields and is prevented from doing so
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -137,7 +201,8 @@ a|
 
 |===
 
-== 3. Attempt to create a category with an existing name
+== 13. Attempt to create a category with an existing name [NEGATIVE]
+Admin attempts to create a new asset category using a name that already exists in the system and receives a warning
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -154,7 +219,8 @@ a|
 
 |===
 
-== 4. Successful update of an existing asset category
+== 14. Successful update of an existing asset category [POSITIVE]
+Admin edits the details or booking rules of an existing asset category and successfully saves the changes
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -170,7 +236,8 @@ a|
 
 |===
 
-== 5. Successful deletion of an asset category
+== 15. Successful deletion of an asset category [POSITIVE]
+Admin deletes an asset category that has no active or future bookings and the category is marked as inactive in the system
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -186,7 +253,8 @@ a|
 
 |===
 
-== 6. Attempt to delete a category with active bookings
+== 16. Attempt to delete a category with active bookings [NEGATIVE]
+Admin attempts to delete an asset category that contains assets with active or future bookings and is prevented from doing so
 
 [cols="1,1,1,1", options="header"]
 |===
@@ -202,7 +270,8 @@ a|
 
 |===
 
-== 7. Attempt to save invalid data
+== 17. Attempt to save invalid data [NEGATIVE]
+Admin attempts to save an asset category with invalid data such as a booking duration of zero hours and receives a validation error
 
 [cols="1,1,1,1", options="header"]
 |===
