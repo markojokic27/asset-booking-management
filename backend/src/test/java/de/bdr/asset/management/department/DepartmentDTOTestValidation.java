@@ -1,6 +1,7 @@
 package de.bdr.asset.management.department;
 
 import de.bdr.asset.management.user.department.DepartmentDTO;
+import de.bdr.asset.management.user.department.DepartmentEnum;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -25,7 +26,7 @@ public class DepartmentDTOTestValidation {
     private DepartmentDTO validDTO(){
         return new DepartmentDTO(
            1L,
-           "DEVOPS",
+           DepartmentEnum.DEVOPS,
            2L
         );
     }
@@ -54,7 +55,7 @@ public class DepartmentDTOTestValidation {
     //ManagerId is null
     @Test
     void nullManagerId_shouldFailNotNull(){
-        DepartmentDTO dto=new DepartmentDTO(1L, "DEVOPS", null);
+        DepartmentDTO dto=new DepartmentDTO(1L, DepartmentEnum.DEVOPS, null);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("managerId"));
     }
 

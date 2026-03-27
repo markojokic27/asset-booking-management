@@ -7,7 +7,7 @@ public record DepartmentDTO(
         Long id,
 
         @NotNull(message="Name is required")
-        String name,
+        DepartmentEnum name,
 
         @NotNull(message = "Manager ID is required")
         Long managerId
