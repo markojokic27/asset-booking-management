@@ -28,7 +28,7 @@ public class AssetCategoryController {
     @PostMapping
     public ResponseEntity<AssetCategoryDTO> create(@Valid @RequestBody AssetCategoryDTO request) {
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(service.createAssetCategory(request));
     }
     // READ
