@@ -1,0 +1,138 @@
+info:
+  name: Get all Departments
+  type: http
+  seq: 1
+  tags:
+    - Departments
+
+http:
+  method: GET
+  url: "{{baseUrl}}/v1/departments"
+  params:
+    - name: pageNumber
+      value: "1"
+      type: query
+      description: The page number to return
+    - name: perPage
+      value: "10"
+      type: query
+      description: The number of items to return per page
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: Departments
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: pageNumber
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: perPage
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          [
+            {
+              "id": 10,
+              "name": "Engineering",
+              "managerId": 3,
+              "createdAt": "2026-03-24T10:00:00Z",
+              "lastModifiedAt": "2026-03-24T12:00:00Z"
+            },
+            {
+              "id": 20,
+              "name": "Human Resources",
+              "managerId": 5,
+              "createdAt": "2026-03-20T09:30:00Z",
+              "lastModifiedAt": "2026-03-22T14:15:00Z"
+            }
+          ]
+  - name: 400 Response
+    description: Bad request
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: pageNumber
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: perPage
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "BAD_REQUEST",
+            "message": "Invalid request data",
+            "status": 400,
+            "timestamp": {},
+            "path": "/api/example",
+            "details": [
+              {
+                "field": "email",
+                "issue": "Invalid format"
+              }
+            ]
+          }
+  - name: 500 Response
+    description: Internal server error
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: pageNumber
+          value: "1"
+          type: query
+          description: The page number to return
+        - name: perPage
+          value: "10"
+          type: query
+          description: The number of items to return per page
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "INTERNAL_ERROR",
+            "message": "Something went wrong",
+            "status": 500,
+            "timestamp": {},
+            "path": "/api/example",
+            "details": [
+              {
+                "field": "example",
+                "issue": "Example"
+              }
+            ]
+          }

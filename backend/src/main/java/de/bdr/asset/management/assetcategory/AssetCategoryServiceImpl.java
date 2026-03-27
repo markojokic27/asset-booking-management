@@ -1,13 +1,16 @@
 package de.bdr.asset.management.assetcategory;
 
-import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 /**
  * Implementation of AssetCategory Service
+ * Currently returns only dummy data.
  */
 @Service
 public class AssetCategoryServiceImpl implements AssetCategoryService {
+    // TODO: Update the functions to not use dummy data
     private final AssetCategoryRepository repository;
 
     public AssetCategoryServiceImpl(AssetCategoryRepository repository) {
@@ -22,8 +25,13 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryDTO createAssetCategory(AssetCategoryDTO assetCategoryRequest){
-        // TODO: IMPLEMENT THE FUNCTIONS
-        return null;
+        return new AssetCategoryDTO(
+                1L,
+                "Dummy Asset category",
+                "Dummy Desc",
+                BookingPeriodEnum.HOUR,
+                false
+        );
     }
 
     /**
@@ -34,8 +42,13 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryDTO getAssetCategoryById(Long id){
-        // TODO: IMPLEMENT THE FUNCTIONS
-        return null;
+        return new AssetCategoryDTO(
+                1L,
+                "Dummy Asset category",
+                "Dummy Desc",
+                BookingPeriodEnum.HOUR,
+                false
+        );
     }
 
     /**
@@ -45,8 +58,26 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public List<AssetCategoryDTO> getAllAssetCategories(){
-        // TODO: IMPLEMENT THE FUNCTIONS
-        return null;
+        List<AssetCategoryDTO> dummyList = new ArrayList<>();
+        dummyList.add(
+            new AssetCategoryDTO(
+                    1L,
+                    "Dummy Asset category",
+                    "Dummy Desc",
+                    BookingPeriodEnum.HOUR,
+                    false
+            )
+        );
+        dummyList.add(
+                new AssetCategoryDTO(
+                        2L,
+                        "2 Dummy Asset category",
+                        "Dummy Desc 2",
+                        BookingPeriodEnum.HOUR,
+                        false
+                )
+        );
+        return dummyList;
     }
 
     /**
@@ -58,8 +89,13 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryDTO updateAssetCategory(Long id, AssetCategoryDTO assetCategoryRequest){
-        // TODO: IMPLEMENT THE FUNCTIONS
-        return null;
+        return new AssetCategoryDTO(
+                1L,
+                "Dummy Asset category",
+                "Dummy Desc",
+                BookingPeriodEnum.HOUR,
+                false
+        );
     }
 
     /**
@@ -70,6 +106,6 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public void deleteAssetCategoryById(Long id){
-        // TODO: IMPLEMENT THE FUNCTIONS
+
     }
 }

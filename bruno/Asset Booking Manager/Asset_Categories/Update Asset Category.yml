@@ -1,0 +1,195 @@
+info:
+  name: Update Asset Category
+  type: http
+  seq: 4
+  tags:
+    - Asset_Categories
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/v1/asset-categories/:id"
+  params:
+    - name: id
+      value: "1"
+      type: path
+      description: ID of the asset category
+  body:
+    type: json
+    data: |-
+      {
+        "name": "",
+        "description": "",
+        "bookingPeriod": "HOUR",
+        "approval": false
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: Asset category updated
+    request:
+      url: "{{baseUrl}}/v1/asset-categories/:id"
+      method: PUT
+      params:
+        - name: id
+          value: "1"
+          type: path
+          description: ID of the asset category
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "description": "",
+            "bookingPeriod": "HOUR",
+            "approval": false
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": 0,
+            "name": "",
+            "description": "",
+            "bookingPeriod": "HOUR",
+            "approval": false,
+            "createdAt": "",
+            "lastModifiedAt": ""
+          }
+  - name: 400 Response
+    description: Bad request
+    request:
+      url: "{{baseUrl}}/v1/asset-categories/:id"
+      method: PUT
+      params:
+        - name: id
+          value: "1"
+          type: path
+          description: ID of the asset category
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "description": "",
+            "bookingPeriod": "HOUR",
+            "approval": false
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "BAD_REQUEST",
+            "message": "Invalid request data",
+            "status": 400,
+            "timestamp": {},
+            "path": "/api/example",
+            "details": [
+              {
+                "field": "email",
+                "issue": "Invalid format"
+              }
+            ]
+          }
+  - name: 404 Response
+    description: Not found
+    request:
+      url: "{{baseUrl}}/v1/asset-categories/:id"
+      method: PUT
+      params:
+        - name: id
+          value: "1"
+          type: path
+          description: ID of the asset category
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "description": "",
+            "bookingPeriod": "HOUR",
+            "approval": false
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "NOT_FOUND",
+            "message": "Resource not found",
+            "status": 404,
+            "timestamp": {},
+            "path": "/v1/example/123",
+            "details": [
+              {
+                "field": "id",
+                "issue": "Not found"
+              }
+            ]
+          }
+  - name: 500 Response
+    description: Internal server error
+    request:
+      url: "{{baseUrl}}/v1/asset-categories/:id"
+      method: PUT
+      params:
+        - name: id
+          value: "1"
+          type: path
+          description: ID of the asset category
+      body:
+        type: json
+        data: |-
+          {
+            "name": "",
+            "description": "",
+            "bookingPeriod": "HOUR",
+            "approval": false
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "INTERNAL_ERROR",
+            "message": "Something went wrong",
+            "status": 500,
+            "timestamp": {},
+            "path": "/api/example",
+            "details": [
+              {
+                "field": "example",
+                "issue": "Example"
+              }
+            ]
+          }
+
+docs: Access restricted for Admin only.

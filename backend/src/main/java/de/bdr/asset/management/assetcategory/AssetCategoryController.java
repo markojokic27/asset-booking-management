@@ -1,9 +1,19 @@
 package de.bdr.asset.management.assetcategory;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1/asset-categories")
@@ -16,37 +26,43 @@ public class AssetCategoryController {
 
     // CREATE
     @PostMapping
-    public AssetCategoryDTO create(@RequestBody AssetCategoryDTO request) {
-        // TODO: Explore RequestEntity for returning responses
-        return service.createAssetCategory(request);
+    public ResponseEntity<AssetCategoryDTO> create(@Valid @RequestBody AssetCategoryDTO request) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(service.createAssetCategory(request));
     }
     // READ
     // ALL
     @GetMapping
-    public List<AssetCategoryDTO> getAll() {
-        // TODO: Explore RequestEntity for returning responses
-        return service.getAllAssetCategories();
+    public ResponseEntity<List<AssetCategoryDTO>> getAll() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(service.getAllAssetCategories());
     }
 
     // BY ID
     @GetMapping("/{id}")
-    public AssetCategoryDTO getById(@PathVariable Long id) {
-        // TODO: Explore RequestEntity for returning responses
-        return service.getAssetCategoryById(id);
+    ResponseEntity<AssetCategoryDTO> getById(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(service.getAssetCategoryById(id));
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public AssetCategoryDTO update(@PathVariable Long id, @RequestBody AssetCategoryDTO request) {
-        // TODO: Explore RequestEntity for returning responses
-        return service.updateAssetCategory(id, request);
+    ResponseEntity<AssetCategoryDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryDTO request) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(service.updateAssetCategory(id, request));
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        // TODO: Explore RequestEntity for returning responses
         service.deleteAssetCategoryById(id);
-        return ResponseEntity.noContent().build();
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(null);
     }
 }
