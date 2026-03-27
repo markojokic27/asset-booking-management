@@ -25,12 +25,14 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryDTO createAssetCategory(AssetCategoryDTO assetCategoryRequest){
+        // TODO: Implement a mapper function to handle this
+        
         return new AssetCategoryDTO(
                 1L,
-                "Dummy Asset category",
-                "Dummy Desc",
-                BookingPeriodEnum.HOUR,
-                false
+                assetCategoryRequest.name(),
+                assetCategoryRequest.description(),
+                assetCategoryRequest.bookingPeriod(),
+                assetCategoryRequest.approval()
         );
     }
 

@@ -1,9 +1,9 @@
 package de.bdr.asset.management.user.department;
 
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 /**
  * Implementation of Department Service
  * Currently returns only dummy data.
@@ -21,10 +21,12 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentDTO createDepartment(DepartmentDTO departmentRequest) {
+        // TODO: Implement a mapper function to handle this
+        
         return new DepartmentDTO(
                 1L,
-                DepartmentEnum.ARCHITECTURE,
-                1L
+                departmentRequest.name(),
+                departmentRequest.managerId()
         );
     }
 

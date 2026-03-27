@@ -1,15 +1,16 @@
 package de.bdr.asset.management.asset;
 
-import org.springframework.stereotype.Service;
-
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of Asset Service
  */
 @Service
 public class AssetServiceImpl implements AssetService {
-
+    // TODO: Update the functions to not use dummy data
     private final AssetRepository repository;
 
     public AssetServiceImpl(AssetRepository repository) {
@@ -24,8 +25,17 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetDTO createAsset(AssetDTO assetRequest) {
-        // TODO: IMPLEMENT THE FUNCTION
-        return null;
+        // TODO: Implement a mapper function to handle this
+        
+        return new AssetDTO(
+            1L,
+            assetRequest.name(),
+            assetRequest.categoryId(),
+            assetRequest.description(),
+            assetRequest.code(),
+            assetRequest.status(),
+            assetRequest.location()
+        );
     }
 
     /**
@@ -36,8 +46,15 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetDTO getAssetById(Long id) {
-        // TODO: IMPLEMENT THE FUNCTION
-        return null;
+        return new AssetDTO(
+            1L,
+            "Dummy Asset Get by Id",
+            1L,
+            "Dummy Asset Desc",
+            "Code string",
+            AssetStatusEnum.ACTIVE,
+            "Prizemlje"
+        );
     }
 
     /**
@@ -47,8 +64,32 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public List<AssetDTO> getAllAssets() {
-        // TODO: IMPLEMENT THE FUNCTION
-        return null;
+        List<AssetDTO> dummyList = new ArrayList<>();
+        dummyList.add(
+            new AssetDTO(
+                1L,
+                "Dummy Asset 1",
+                1L,
+                "Dummy Asset Desc",
+                "Code string",
+                AssetStatusEnum.ACTIVE,
+                "Prizemlje"
+            )
+        );
+
+        dummyList.add(
+            new AssetDTO(
+                2L,
+                "Dummy Asset 2",
+                2L,
+                "Dummy Asset Desc",
+                "Code string",
+                AssetStatusEnum.DAMAGED,
+                "Kat"
+            )
+        );
+
+        return dummyList;
     }
 
     /**
@@ -60,7 +101,14 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetDTO updateAsset(Long id, AssetDTO assetRequest) {
-        // TODO: IMPLEMENT THE FUNCTION
-        return null;
+        return new AssetDTO(
+            1L,
+            "Dummy Asset Update",
+            1L,
+            "Dummy Asset Desc",
+            "Code string",
+            AssetStatusEnum.ACTIVE,
+            "Prizemlje"
+        );
     }
 }

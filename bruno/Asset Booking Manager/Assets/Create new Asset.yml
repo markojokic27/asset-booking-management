@@ -12,12 +12,12 @@ http:
     type: json
     data: |-
       {
-        "name": "",
-        "categoryId": 0,
-        "description": "",
-        "code": "",
-        "status": "AVAILABLE",
-        "location": ""
+        "name": "Parking",
+        "categoryId": 1,
+        "description": "New asset",
+        "code": "A",
+        "status": "ACTIVE",
+        "location": "Prizemlje"
       }
   auth: inherit
 

@@ -1,15 +1,17 @@
 package de.bdr.asset.management.booking;
 
-import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 /**
  * Implementation of Booking Service
  */
 @Service
 public class BookingServiceImpl implements BookingService {
-
+    // TODO: Update the functions to not use dummy data
     private final BookingRepository repository;
 
     public BookingServiceImpl(BookingRepository repository) {
@@ -24,10 +26,17 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingDTO createBooking(BookingDTO bookingRequest) {
-
-        // TODO Implement...
-
-        return null;
+        // TODO: Implement a mapper function to handle this
+        
+        return new BookingDTO(
+            1L,
+            bookingRequest.userId(),
+            bookingRequest.assetId(),
+            bookingRequest.status(),
+            bookingRequest.bookingStartTime(),
+            bookingRequest.bookingEndTime(),
+            bookingRequest.notes()
+        );
     }
 
     /**
@@ -38,10 +47,15 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingDTO getBookingById(Long id) {
-
-        // TODO Implement...
-
-        return null;
+        return new BookingDTO(
+            1L,
+            1L,
+            1L,
+            BookingStatusEnum.APPROVED,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            "Dummy Notes"
+        );
     }
 
     /**
@@ -51,10 +65,33 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<BookingDTO> getAllBookings() {
+        List<BookingDTO> dummyList = new ArrayList<>();
 
-        // TODO Implement...
+        dummyList.add(
+            new BookingDTO(
+                1L,
+                1L,
+                1L,
+                BookingStatusEnum.APPROVED,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "Dummy Notes 1"
+            )
+        );
 
-        return null;
+        dummyList.add(
+            new BookingDTO(
+                2L,
+                1L,
+                2L,
+                BookingStatusEnum.PENDING,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                "Dummy Notes 2"
+            )
+        );
+
+        return dummyList;
     }
 
     /**
@@ -66,10 +103,15 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingDTO updateBooking(Long id, BookingDTO bookingRequest) {
-
-        // TODO Implement...
-
-        return null;
+        return new BookingDTO(
+            1L,
+            1L,
+            1L,
+            BookingStatusEnum.APPROVED,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            "Dummy Notes"
+        );
     }
 
     /**
@@ -81,6 +123,5 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void deleteBooking(Long id) {
 
-        // TODO Implement...
     }
 }
