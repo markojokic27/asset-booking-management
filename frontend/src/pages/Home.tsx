@@ -2,9 +2,11 @@ import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const arr = Array.from({ length: 12 }, (_, i) => i);
   const boxClass =
     'mb-8 flex h-32 items-center justify-center rounded-lg bg-gray-400 text-2xl font-bold';
@@ -35,6 +37,7 @@ export default function Home() {
               placeholder="Search assets..."
               errorMessage="Please enter a search term"
             />
+            <h1>{t('common.save')}</h1>
           </LayoutColumn>
         </LayoutRow>
       </Layout>
