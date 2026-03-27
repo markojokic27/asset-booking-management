@@ -6,7 +6,7 @@ export default function App() {
     <>
       <Header />
 
-      <main className="min-h-screen bg-gray-200 pt-22">
+      <main className="min-h-screen bg-gray-200 pt-22 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
         <Outlet />
       </main>
     </>

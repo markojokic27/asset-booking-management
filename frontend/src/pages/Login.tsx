@@ -24,7 +24,7 @@ export default function Login() {
     <Layout>
       <LayoutRow>
         <LayoutColumn className="flex h-screen flex-col items-center justify-center">
-          <h1 className="mt-20 mb-10 text-center text-6xl font-black">
+          <h1 className="mt-20 mb-10 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
             Login Page
           </h1>
           <Button onClick={handleLogin}>Login</Button>

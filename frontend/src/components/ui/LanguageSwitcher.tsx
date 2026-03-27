@@ -21,7 +21,7 @@ function LanguageSwitcher() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button className="group flex items-center focus:outline-none">
+        <button className="group flex items-center text-gray-900 focus:outline-none dark:text-gray-100">
           {currentLanguage?.label || 'Select Language'}
           <ChevronDown className="h-6 w-6 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180" />{' '}
         </button>
@@ -29,13 +29,13 @@ function LanguageSwitcher() {
 
       <DropdownMenu.Content
         align="end"
-        className="mt-1 rounded border bg-white shadow"
+        className="mt-1 rounded border border-gray-200 bg-white text-gray-900 shadow dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
       >
         {languages.map((lang) => (
           <DropdownMenu.Item
             key={lang.code}
             onSelect={() => handleChange(lang.code)}
-            className="cursor-pointer px-6 py-2 hover:bg-gray-100 hover:outline-none"
+            className="cursor-pointer px-6 py-2 hover:bg-gray-100 hover:outline-none dark:hover:bg-gray-800"
           >
             {lang.label}
           </DropdownMenu.Item>

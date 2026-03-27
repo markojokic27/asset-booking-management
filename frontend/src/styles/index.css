@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Tailwind v4: enable class-based dark mode via `.dark` on `<html>` */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer utilities {
   .w-column-1 {
     width: calc((1 / 12) * 100%);
