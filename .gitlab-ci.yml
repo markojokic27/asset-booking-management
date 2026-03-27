@@ -9,7 +9,7 @@ variables:
   # PostgreSQL service config — mirrors your asset_mgm DB
   POSTGRES_DB: asset_mgm
   POSTGRES_USER: asset_mgm_user
-  POSTGRES_PASSWORD: $DB_PASSWORD          # set this in GitLab → Settings → CI/CD → Variables
+  POSTGRES_PASSWORD: $DB_PASSWORD # set this in GitLab → Settings → CI/CD → Variables
 
 # ─────────────────────────────────────────
 # COMPILE STAGE
@@ -22,23 +22,23 @@ backend:compile:
     - mvn clean compile -DskipTests -Dmaven.repo.local=.m2/repository
   artifacts:
     paths:
-      - backend/target/           # passes compiled classes to test stage
+      - backend/target/ # passes compiled classes to test stage
     expire_in: 1 hour
   cache:
     key: maven-$CI_PROJECT_ID
     paths:
-      - backend/.m2/repository/   # avoids re-downloading dependencies each run
+      - backend/.m2/repository/ # avoids re-downloading dependencies each run
 
 frontend:compile:
   stage: compile
-  image: node:24-alpine           # matches your FROM node:24.14-alpine
+  image: node:24-alpine # matches your FROM node:24.14-alpine
   script:
     - cd frontend
-    - npm ci --legacy-peer-deps 
+    - npm ci --legacy-peer-deps
     - npm run build
   artifacts:
     paths:
-      - frontend/dist/            # passes /dist to dockerise stage
+      - frontend/dist/ # passes /dist to dockerise stage
     expire_in: 1 hour
   cache:
     key: npm-$CI_PROJECT_ID
@@ -52,7 +52,7 @@ backend:test:
   stage: test
   image: maven:3.9-eclipse-temurin-21
   services:
-    - name: postgres:18           # spins up a real PostgreSQL 18 instance
+    - name: postgres:18 # spins up a real PostgreSQL 18 instance
       alias: postgres
   variables:
     POSTGRES_HOST_AUTH_METHOD: md5
@@ -61,14 +61,14 @@ backend:test:
     SPRING_DATASOURCE_PASSWORD: $DB_PASSWORD
     # ensures your asset_booking_mgm schema is the default search path
     SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: asset_booking_mgm
-    SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop   # creates schema fresh for each test run
+    SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop # creates schema fresh for each test run
   script:
     - cd backend
     - mvn test -Dmaven.repo.local=.m2/repository
   artifacts:
     reports:
-      junit: backend/target/surefire-reports/*.xml   # shows test results directly in MR
-    when: always                                       # upload report even on failure
+      junit: backend/target/surefire-reports/*.xml # shows test results directly in MR
+    when: always # upload report even on failure
   cache:
     key: maven-$CI_PROJECT_ID
     paths:
@@ -79,9 +79,9 @@ frontend:test:
   image: node:24-alpine
   script:
     - cd frontend
-    - npm ci --legacy-peer-deps    # ← add this flag
+    - npm ci --legacy-peer-deps # ← add this flag
     - npm run test -- --watchAll=false --ci
-  allow_failure: true     # matches your "TODO: Implement testing stage" in Dockerfile
+  allow_failure: true # matches your "TODO: Implement testing stage" in Dockerfile
   cache:
     key: npm-$CI_PROJECT_ID
     paths:
