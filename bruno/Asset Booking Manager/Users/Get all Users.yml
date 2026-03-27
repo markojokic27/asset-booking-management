@@ -8,15 +8,6 @@ info:
 http:
   method: GET
   url: "{{baseUrl}}/v1/users"
-  params:
-    - name: pageNumber
-      value: "1"
-      type: query
-      description: The page number to return
-    - name: perPage
-      value: "10"
-      type: query
-      description: The number of items to return per Page
   auth: inherit
 
 settings:

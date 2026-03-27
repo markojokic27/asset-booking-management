@@ -3,16 +3,19 @@ FROM maven:3.9.4-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copy Maven wrapper and pom.xml first (for caching dependencies)
-
 COPY pom.xml .
 
+# Download dependencies (cached layer)
+RUN mvn -B -q -e -DskipTests dependency:go-offline
 
 # Copy source code and build JAR
 COPY src ./src
-RUN mvn package
+
+# Build
+RUN mvn -B -q -DskipTests package
 
 # Stage 2: Run the Spring Boot application
-FROM eclipse-temurin:21-jdk-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copy JAR from the build stage

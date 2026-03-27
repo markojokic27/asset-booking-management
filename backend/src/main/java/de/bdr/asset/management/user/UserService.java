@@ -17,7 +17,7 @@ public interface UserService {
     UserResponseDTO getUserById(Long id);
 
     // Get all users with pagination
-    List<UserResponseDTO> getAllUsers(int pageNumber, int perPage);
+    List<UserResponseDTO> getAllUsers();
     
     // Soft delete / deactivate a user
     UserResponseDTO deleteUser(Long id, String status, String note);
