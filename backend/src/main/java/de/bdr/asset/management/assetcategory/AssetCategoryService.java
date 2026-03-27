@@ -14,5 +14,5 @@ public interface AssetCategoryService {
     AssetCategoryDTO updateAssetCategory(Long id, AssetCategoryDTO assetCategoryRequest);
 
     // DELETE (SOFT)
-    void deleteAssetCategoryById(Long id);
+    void deleteAssetCategory(Long id);
 }

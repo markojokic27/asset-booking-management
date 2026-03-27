@@ -105,7 +105,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @implNote Should be a soft delete by setting it to inactive or such
      */
     @Override
-    public void deleteAssetCategoryById(Long id){
+    public void deleteAssetCategory(Long id){
 
     }
 }

@@ -59,7 +59,7 @@ public class AssetCategoryController {
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.deleteAssetCategoryById(id);
+        service.deleteAssetCategory(id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
