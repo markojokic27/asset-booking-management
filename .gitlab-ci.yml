@@ -79,7 +79,7 @@ frontend:test:
   image: node:24-alpine
   script:
     - cd frontend
-    - npm ci
+    - npm ci --legacy-peer-deps    # ← add this flag
     - npm run test -- --watchAll=false --ci
   allow_failure: true     # matches your "TODO: Implement testing stage" in Dockerfile
   cache:
