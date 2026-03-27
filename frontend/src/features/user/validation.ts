@@ -33,7 +33,10 @@ export const userValidationSchema = z.object({
   managerEmail: z
     .email('Manager email nije ispravnog formata')
     .max(254, 'Manager email može imati najviše 254 znaka'),
-  notes: z.string().max(1000, 'Notes može imati najviše 1000 znakova').optional(),
+  notes: z
+    .string()
+    .max(1000, 'Notes može imati najviše 1000 znakova')
+    .optional(),
 });
 
 export type UserFormValues = z.infer<typeof userValidationSchema>;

@@ -11,9 +11,7 @@ function LanguageSwitcher() {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
-  const currentLanguage = languages.find(
-    (lang) => lang.code === i18n.language
-  );
+  const currentLanguage = languages.find((lang) => lang.code === i18n.language);
 
   const handleChange = (code: string) => {
     i18n.changeLanguage(code);

@@ -1,4 +1,4 @@
-import type { UserDto } from "../user/types";
+import type { UserDto } from '../user/types';
 
 export type LoginFormValues = {
   email: string;

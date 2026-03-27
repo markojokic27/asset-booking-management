@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-export const bookingStatusSchema = z.enum(['SUCCESSFUL', 'PENDING', 'REJECTED']);
+export const bookingStatusSchema = z.enum([
+  'SUCCESSFUL',
+  'PENDING',
+  'REJECTED',
+]);
 
 export const bookingValidationSchema = z
   .object({

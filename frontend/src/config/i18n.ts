@@ -6,19 +6,17 @@ import deTranslation from './locales/de.json';
 
 const savedLanguage = localStorage.getItem('language');
 
-i18next
-  .use(initReactI18next)
-  .init({
-    lng: savedLanguage || 'hr',
-    fallbackLng: 'en',
-    resources: {
-      en: { translation: enTranslation },
-      hr: { translation: hrTranslation },
-      de: { translation: deTranslation },
-    },
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+i18next.use(initReactI18next).init({
+  lng: savedLanguage || 'hr',
+  fallbackLng: 'en',
+  resources: {
+    en: { translation: enTranslation },
+    hr: { translation: hrTranslation },
+    de: { translation: deTranslation },
+  },
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18next;

@@ -3,7 +3,7 @@ export type AssetStatus = 'AVAILABLE' | 'UNAVAILABLE';
 export type Asset = {
   id: string;
   name: string;
-  categoryId: number;    // FK
+  categoryId: number; // FK
   description?: string;
   code: string;
   status: AssetStatus;
@@ -13,5 +13,5 @@ export type Asset = {
 };
 
 export type AssetDto = Asset & {
-  categoryName?: string;     // opcionalno za UI prikaz
+  categoryName?: string; // opcionalno za UI prikaz
 };

@@ -22,4 +22,6 @@ export const assetCategoryValidationSchema = z.object({
   }),
 });
 
-export type AssetCategoryFormValues = z.infer<typeof assetCategoryValidationSchema>;
+export type AssetCategoryFormValues = z.infer<
+  typeof assetCategoryValidationSchema
+>;
