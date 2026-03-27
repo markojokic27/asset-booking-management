@@ -41,14 +41,14 @@ export const router = createBrowserRouter([
         element: <Manager />,
         loader: requireAuth,
       },
-      {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '*',
-        element: <NotFound />,
-      },
     ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);

@@ -14,7 +14,7 @@ export const Logo: React.FC<React.ComponentPropsWithoutRef<'svg'>> = ({
       height="32"
       x="-.08823529"
       fill="none"
-      fill-rule="evenodd"
+      fillRule="evenodd"
     />
   </svg>
 );
