@@ -34,7 +34,7 @@ frontend:compile:
   image: node:24-alpine           # matches your FROM node:24.14-alpine
   script:
     - cd frontend
-    - npm ci
+    - npm ci --legacy-peer-deps 
     - npm run build
   artifacts:
     paths:
