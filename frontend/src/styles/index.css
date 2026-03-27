@@ -387,4 +387,46 @@
       max-width: 1296px;
     }
   }
+
+  .pulled-background-account::after {
+    width: calc(100% + (100vw - 100%) / 2 - 4px);
+    height: 100%;
+  }
+
+  .pulled-background-account::before {
+    width: 100vw;
+    height: 100%;
+  }
+  @media (min-width: 1024px) {
+    .pulled-background-account::after {
+      height: calc(100vh - 84px);
+    }
+    .pulled-background-account::before {
+      height: calc(100vh - 84px);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pulled-background-account::after {
+      width: calc(100% + ((100vw - 100%) / 2 - 16px));
+    }
+  }
+  @media (min-width: 1024px) {
+    .pulled-background-account {
+      height: calc(100vh - 84px);
+    }
+    .pulled-background-account::after {
+      width: calc((100% + 48px) + ((100vw - 1024px) / 2));
+    }
+  }
+  @media (min-width: 1296px) {
+    .pulled-background-account::after {
+      width: calc((100% + 48px) + ((100vw - 1296px) / 2));
+    }
+  }
+  @media (min-width: 1536px) {
+    .pulled-background-account::after {
+      width: calc((100% + 48px) + ((100vw - 1536px) / 2));
+    }
+  }
 }

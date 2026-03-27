@@ -19,7 +19,7 @@ function LanguageSwitcher() {
   };
 
   return (
-    <DropdownMenu.Root>
+    <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button className="group flex items-center text-gray-900 focus:outline-none dark:text-gray-100">
           {currentLanguage?.label || 'Select Language'}
