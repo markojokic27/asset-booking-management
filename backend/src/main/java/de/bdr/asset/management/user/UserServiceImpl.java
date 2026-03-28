@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService {
             userRequest.status(),
             userRequest.departmentId(),
             userRequest.managerEmail(),
-            userRequest.notes()
+            userRequest.notes(),
+                userRequest.benefit()
         );
     }
 
@@ -47,7 +48,8 @@ public class UserServiceImpl implements UserService {
             userRequest.status(),
             userRequest.departmentId(),
             userRequest.managerEmail(),
-            userRequest.notes()
+            userRequest.notes(),
+                userRequest.benefit()
         );
     }
 
@@ -64,7 +66,8 @@ public class UserServiceImpl implements UserService {
             UserStatusEnum.ACTIVE,
             1L,
             "userRequest.managerEmail()",
-            "userRequest.notes()"
+            "userRequest.notes()",
+                "ALL"
         );
     }
 
@@ -83,7 +86,8 @@ public class UserServiceImpl implements UserService {
                 UserStatusEnum.ACTIVE,
                 1L,
                 "Manager Email 1",
-                "Notes 1"
+                "Notes 1",
+                    "ALL"
             )
         );
 
@@ -98,7 +102,8 @@ public class UserServiceImpl implements UserService {
                 UserStatusEnum.ACTIVE,
                 2L,
                 "Manager Email 2",
-                "Notes 2"
+                "Notes 2",
+                    "ALL"
             )
         );
 

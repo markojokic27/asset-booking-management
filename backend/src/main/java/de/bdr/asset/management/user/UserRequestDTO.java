@@ -40,5 +40,9 @@ public record UserRequestDTO(
         String managerEmail,
 
         @Size(max = 1000)
-        String notes
+        String notes,
+
+        @NotBlank(message = "Benefit is required")
+        @Size(max = 100)
+        String benefit
 ) {}

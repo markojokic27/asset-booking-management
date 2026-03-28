@@ -32,7 +32,8 @@ public class UserRequestDTOTestValidation {
                 UserStatusEnum.ACTIVE,
                 5L,
                 "antem@maurer-electonics.hr",
-                "text"
+                "text",
+                "ALL"
         );
     }
 
@@ -51,14 +52,14 @@ public class UserRequestDTOTestValidation {
     // Note is null
     @Test
     void nullNotes_shouldBeValid(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).noneMatch(v -> v.getPropertyPath().toString().equals("notes"));
     }
 
     // Note is too long
     @Test
     void notesTooLong_shouldFailSize(){
-        UserRequestDTO dto = new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr","a".repeat(1001));
+        UserRequestDTO dto = new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr","a".repeat(1001), "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("notes"));
     }
 
@@ -67,35 +68,35 @@ public class UserRequestDTOTestValidation {
     // Username is blank
     @Test
     void blankUsername_shouldFailNotBlank(){
-        UserRequestDTO dto=new UserRequestDTO( " ", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( " ", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("username"));
     }
 
     // Username is too short
     @Test
     void usernameTooShort_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO( "ab", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ab", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("username"));
     }
 
     // Username is too long
     @Test
     void usernameTooLong_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO( "a".repeat(60), "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "a".repeat(60), "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("username"));
     }
 
     // Username with invalid characters
     @Test
     void usernameInvalidChars_shouldFailPattern(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic!", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic!", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("username"));
     }
 
     // Username with allowed characters
     @Test
     void usernameAllowedChars_shouldBeValid(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic48", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic48", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).noneMatch(v -> v.getPropertyPath().toString().equals("username"));
     }
 
@@ -104,14 +105,14 @@ public class UserRequestDTOTestValidation {
     // Surname is blank
     @Test
     void blankSurname_shouldFailNotBlank(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", " ", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", " ", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("surname"));
     }
 
     // Surname is too long
     @Test
     void surnameTooLong_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "a". repeat(101), "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "a". repeat(101), "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("surname"));
     }
 
@@ -120,14 +121,14 @@ public class UserRequestDTOTestValidation {
     // Name is blank
     @Test
     void blankName_shouldFailNotBlank(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", " ", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", " ", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     // Name is too long
     @Test
     void nameTooLong_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "a".repeat(101), "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "a".repeat(101), "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
@@ -136,21 +137,21 @@ public class UserRequestDTOTestValidation {
     // Email is blank
     @Test
     void blankEmail_shouldFailNotBlank(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", " ", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", " ", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("email"));
     }
 
     // Email with invalid format
     @Test
     void invalidEmailFormat_shouldFailEmail(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", " ivanivic", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", " ivanivic", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("email"));
     }
 
     // Email is too long
     @Test
     void emailTooLong_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic".repeat(255) + "@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic".repeat(255) + "@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("email"));
     }
 
@@ -159,28 +160,28 @@ public class UserRequestDTOTestValidation {
     //Password is blank
     @Test
     void blankPassword_shouldFailNotBlank (){
-        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", " ", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", " ", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("password"));
     }
 
     //Password is too short
     @Test
     void passwordTooShort_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "pass1", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "pass1", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("password"));
     }
 
     //Password is too long
     @Test
     void passwordTooLong_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr",  "p".repeat(53), UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr",  "p".repeat(53), UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("password"));
     }
 
     //Password with min lenght
     @Test
     void passwordMinLength_shouldBeValid(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "passw.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "passw.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).noneMatch(v->v.getPropertyPath().toString().equals("password"));
     }
 
@@ -190,7 +191,7 @@ public class UserRequestDTOTestValidation {
 
     @Test
     void nullRole_shouldFailNotNull(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", null , UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", null , UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("role"));
     }
 
@@ -199,7 +200,7 @@ public class UserRequestDTOTestValidation {
     //Status is null
     @Test
     void nullStatus_shouldFailNotNull(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE , null,  5L, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE , null,  5L, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("status"));
     }
 
@@ -208,35 +209,31 @@ public class UserRequestDTOTestValidation {
     //DepartmentId is null
     @Test
     void nullDepartmentId_shouldFailNotNull(){
-        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE , UserStatusEnum.ACTIVE,  null, "antem@maurer-electonics.hr", null);
+        UserRequestDTO dto=new UserRequestDTO("ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE , UserStatusEnum.ACTIVE,  null, "antem@maurer-electonics.hr", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("departmentId"));
     }
 
     //Manager email
 
-
     // Manager email is blank
     @Test
     void blankManagerEmail_shouldFailNotBlank(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, " ", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, " ", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("managerEmail"));
     }
 
     // Manager email with invalid format
     @Test
     void invalidManagerEmailFormat_shouldFailEmail(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "a1+", null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "a1+", null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("managerEmail"));
     }
 
     // Manager email is too long
     @Test
     void managerEmailTooLong_shouldFailSize(){
-        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "a".repeat(260), null);
+        UserRequestDTO dto=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "a".repeat(260), null, "ALL");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("managerEmail"));
     }
-
-
-
 
 }

@@ -10,5 +10,6 @@ public record UserResponseDTO(
         UserStatusEnum status,
         Long departmentId,
         String managerEmail,
-        String notes
+        String notes,
+        String benefit
 ) {}

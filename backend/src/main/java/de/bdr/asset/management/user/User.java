@@ -6,7 +6,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
 
 /**
  * User domain-entity model.
@@ -25,7 +26,7 @@ public class User {
     private Long id;
 
     /** Username of user*/
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 100)
     private String username;
 
     /** Family name */
@@ -37,11 +38,11 @@ public class User {
     private String name;
 
     /** Email of user */
-    @Column(nullable = false, length = 254)
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
 
     /** Password of user */
-    @Column(nullable = false, length = 60) // BCrypt hash is 60 characters long
+    @Column(nullable = false, length = 100)
     private String password;
 
     /** Role of user */
@@ -60,19 +61,23 @@ public class User {
     private Department department;
 
     /** Email of manager */
-    @Column(nullable = false, length = 254)
+    @Column(nullable = false, length = 100)
     private String managerEmail;
 
     /** Notes, Additional information's */
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 255)
     private String notes;
+
+    /** User benefits */
+    @Column(nullable = false, length = 100)
+    private String benefit;
 
     /** Created at */
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedAt;
+    private Instant lastModifiedAt;
 }
