@@ -7,7 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Booking domain-entity model.
@@ -42,22 +42,22 @@ public class Booking {
 
     /** Booking reservation start */
     @Column(nullable = false)
-    private LocalDateTime bookingStartTime;
+    private Instant bookingStartTime;
 
     /** Booking reservation end */
     @Column(nullable = false)
-    private LocalDateTime bookingEndTime;
+    private Instant bookingEndTime;
 
     /** Notes, Additional information's */
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 255)
     private String notes;
 
     /** Created at */
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedAt;
+    private Instant lastModifiedAt;
 }
