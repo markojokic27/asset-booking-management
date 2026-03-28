@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -24,15 +25,15 @@ public class AssetCategory {
     private Long id;
 
     /** Name of asset category */
-    @Column(nullable=false, length = 100)
+    @Column(nullable=false, length = 100, unique = true)
     private String name;
 
     /** Description of asset category */
-    @Column(columnDefinition="TEXT")
+    @Column(length = 255)
     private String description;
 
     /** Period of booking */
-    @Column(nullable=false)
+    @Column(nullable=false, length = 50)
     @Enumerated(EnumType.STRING)
     private BookingPeriodEnum bookingPeriod;
 
@@ -43,9 +44,9 @@ public class AssetCategory {
     /** Created at */
     @CreationTimestamp
     @Column(updatable=false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedAt;
+    private Instant lastModifiedAt;
 }
