@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Department domain-entity model.
@@ -25,21 +25,21 @@ public class Department {
     private Long id;
 
     /** Name of department */
-    @Column(nullable=false)
+    @Column(nullable=false, unique = true)
     @Enumerated(EnumType.STRING)
     private DepartmentEnum name;
 
     /** ID of manager, foreign key */
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="manager_id", referencedColumnName="id")
+    @OneToOne
+    @JoinColumn(name="manager_id", referencedColumnName="id", unique = true)
     private User manager;
 
     /** Created at */
     @CreationTimestamp
     @Column(updatable=false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedAt;
+    private Instant lastModifiedAt;
 }
