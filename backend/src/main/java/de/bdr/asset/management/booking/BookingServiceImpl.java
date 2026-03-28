@@ -1,6 +1,6 @@
 package de.bdr.asset.management.booking;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +52,8 @@ public class BookingServiceImpl implements BookingService {
             1L,
             1L,
             BookingStatusEnum.APPROVED,
-            LocalDateTime.now(),
-            LocalDateTime.now(),
+            Instant.now(),
+            Instant.now(),
             "Dummy Notes"
         );
     }
@@ -73,8 +73,8 @@ public class BookingServiceImpl implements BookingService {
                 1L,
                 1L,
                 BookingStatusEnum.APPROVED,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                Instant.now(),
+                Instant.now(),
                 "Dummy Notes 1"
             )
         );
@@ -85,8 +85,8 @@ public class BookingServiceImpl implements BookingService {
                 1L,
                 2L,
                 BookingStatusEnum.PENDING,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
+                Instant.now(),
+                Instant.now(),
                 "Dummy Notes 2"
             )
         );
@@ -108,8 +108,8 @@ public class BookingServiceImpl implements BookingService {
             1L,
             1L,
             BookingStatusEnum.APPROVED,
-            LocalDateTime.now(),
-            LocalDateTime.now(),
+            Instant.now(),
+            Instant.now(),
             "Dummy Notes"
         );
     }

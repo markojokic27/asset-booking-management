@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,8 +29,8 @@ public class BookingDTOTestValidation {
                 2L,
                 1L,
                 BookingStatusEnum.ACTIVE,
-                LocalDateTime.of(2026, 4, 1, 9, 0),
-                LocalDateTime.of(2026, 4, 14, 9, 0),
+                LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC),
+                LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC),
                 "text"
         );
     }
@@ -49,7 +50,7 @@ public class BookingDTOTestValidation {
     //UserId is null
     @Test
     void nullUserId_shouldFailNotNull(){
-        BookingDTO dto=new BookingDTO(1L, null, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0), LocalDateTime.of(2026, 4, 14, 9, 0), "text");
+        BookingDTO dto=new BookingDTO(1L, null, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("userId"));
     }
 
@@ -59,7 +60,7 @@ public class BookingDTOTestValidation {
 
     @Test
     void nullAssetId_shouldFailNotNull(){
-        BookingDTO dto=new BookingDTO(1L, 2L, null, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0), LocalDateTime.of(2026, 4, 14, 9, 0), "text");
+        BookingDTO dto=new BookingDTO(1L, 2L, null, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("assetId"));
     }
 
@@ -69,7 +70,7 @@ public class BookingDTOTestValidation {
 
     @Test
     void nullStatus_shouldFailNotNull(){
-        BookingDTO dto=new BookingDTO(1L, 2L, 1L, null, LocalDateTime.of(2026, 4, 1, 9, 0), LocalDateTime.of(2026, 4, 14, 9, 0), "text");
+        BookingDTO dto=new BookingDTO(1L, 2L, 1L, null, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("status"));
     }
 
@@ -79,7 +80,7 @@ public class BookingDTOTestValidation {
 
     @Test
     void nullBookimgStartTime_shouldFailNotNull(){
-        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, null, LocalDateTime.of(2026, 4, 14, 9, 0), "text");
+        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, null, LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("bookingStartTime"));
     }
 
@@ -89,7 +90,7 @@ public class BookingDTOTestValidation {
 
     @Test
     void nullBookimgEndTime_shouldFailNotNull(){
-        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0), null, "text");
+        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), null, "text");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("bookingEndTime"));
     }
 
@@ -98,14 +99,14 @@ public class BookingDTOTestValidation {
     //Notes is too long
     @Test
     void notesTooLong_shouldFailSize(){
-        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0), LocalDateTime.of(2026, 4, 14, 9, 0), "t".repeat(2300));
+        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "t".repeat(2300));
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("notes"));
     }
 
     // Notes is null, should be allowed
     @Test
     void nullNotes_shouldBeValid() {
-        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0), LocalDateTime.of(2026, 4, 14, 9, 0), null);
+        BookingDTO dto=new BookingDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), null);
         assertThat(validator.validate(dto)).noneMatch(v -> v.getPropertyPath().toString().equals("notes"));
     }
 
