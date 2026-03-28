@@ -24,7 +24,7 @@ public record AssetDTO(
         AssetStatusEnum status,
 
         @NotBlank(message="Location is required")
-        @Size(max=255, message="Location content cannot exceed 255 characters")
+        @Size(max=100, message="Location content cannot exceed 255 characters")
         String location
 ) {
 }

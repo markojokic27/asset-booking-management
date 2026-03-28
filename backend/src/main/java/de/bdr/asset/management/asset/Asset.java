@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Asset domain-entity model.
@@ -34,11 +34,11 @@ public class Asset {
     private AssetCategory category;
 
     /** Description of asset */
-    @Column(columnDefinition="TEXT")
+    @Column(length = 255)
     private String description;
 
     /** QR code of asset */
-    @Column(nullable = false, unique = true, length = 2000)
+    @Column(unique = true, length = 2000)
     private String code;
 
     /** Asset Status */
@@ -53,9 +53,9 @@ public class Asset {
     /** Created at */
     @CreationTimestamp
     @Column(updatable=false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /** Last Modified at */
     @UpdateTimestamp
-    private LocalDateTime lastModifiedAt;
+    private Instant lastModifiedAt;
 }
