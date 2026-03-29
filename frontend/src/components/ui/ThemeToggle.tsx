@@ -18,7 +18,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label="Toggle dark mode"
       aria-pressed={isDark}
       className={twMerge(
-        'relative inline-flex h-10 w-26 items-center rounded-full bg-gray-200 p-1 text-gray-700 shadow-sm outline-none ring-1 ring-black/5 transition-colors hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-blue-500',
+        'relative inline-flex h-10 w-26 items-center rounded-full bg-gray-200 p-1 text-gray-700 shadow-sm ring-1 ring-black/5 transition-colors outline-none hover:bg-gray-300 hover:cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500',
         'dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10 dark:hover:bg-gray-700',
         className
       )}
@@ -31,7 +31,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
       <span
         aria-hidden="true"
         className={twMerge(
-          'absolute left-1 top-1 h-8 w-12 rounded-full bg-gray-100 shadow transition-transform duration-200 ease-in-out',
+          'absolute top-1 left-1 h-8 w-12 rounded-full bg-gray-100 shadow transition-transform duration-300 ease-in-out',
           'dark:bg-gray-900',
           isDark && 'translate-x-12'
         )}

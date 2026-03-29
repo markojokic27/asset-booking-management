@@ -20,7 +20,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error || undefined}
           className={twMerge(
             // base
-            'w-full rounded-xl border bg-white text-gray-900 leading-none transition-colors outline-none focus:border-blue-500 focus:ring-1 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-400',
+            'relative w-full rounded-xl border bg-white leading-none text-gray-900 transition-colors outline-none focus:border-blue-500 focus:ring-1 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-400',
 
             // size
             size === 'sm' && 'px-3 py-2 text-xs',
@@ -40,7 +40,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         {error && errorMessage && (
-          <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+          <p className="absolute mt-2 text-sm text-red-500">{errorMessage}</p>
         )}
       </div>
     );

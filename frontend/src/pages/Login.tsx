@@ -1,40 +1,27 @@
-import { useNavigate } from 'react-router-dom';
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
-import { Button } from '../components/ui/Button';
 import { Header } from '../components/layout/Header';
 import LoginForm from '../features/auth/components/LoginForm';
 
 export default function Login() {
-  const navigate = useNavigate();
-
-  /*   const handleLogin = async () => {
-    await fetch('http://localhost:8080/api/login', {
-      method: 'POST',
-      credentials: 'include',
-    });
-
-    navigate('/');
-  };
- */
-
-  const handleLogin = () => {
-    document.cookie = 'auth=true; path=/';
-    navigate('/');
-  };
-
   return (
-    <>
+    <main className="min-h-screen bg-gray-200 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
       <Header />
       <Layout>
         <LayoutRow>
-          <LayoutColumn className="flex h-screen flex-col items-center justify-center">
-            <h1 className="mt-20 mb-10 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
+          <LayoutColumn
+            mdSpan={6}
+            mdOffset={3}
+            smOffset={2}
+            smSpan={8}
+            className="mt-30 flex flex-col items-center justify-center rounded-3xl border-2 border-blue-500 bg-gray-100 px-6 py-6 md:px-6 lg:px-10 lg:py-10 dark:bg-gray-900"
+          >
+            <h1 className="mb-6 text-center text-6xl font-black text-gray-900 lg:mb-10 dark:text-gray-100">
               Login
             </h1>
             <LoginForm />
           </LayoutColumn>
         </LayoutRow>
       </Layout>
-    </>
+    </main>
   );
 }

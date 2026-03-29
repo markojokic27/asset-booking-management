@@ -24,6 +24,13 @@ export default function Home() {
             <h1 className="my-8 text-center text-5xl font-bold text-gray-900 dark:text-gray-100">
               Asset manager
             </h1>
+          </LayoutColumn>
+          <LayoutColumn className="flex">
+            <Input
+              placeholder="Search assets..."
+              errorMessage="Please enter a search term"
+              className="w-50"
+            />
             <Button
               onClick={handleLogout}
               size="sm"
@@ -32,24 +39,13 @@ export default function Home() {
               Logout
             </Button>
           </LayoutColumn>
-          <LayoutColumn span={3}>
-            <Input
-              placeholder="Search assets..."
-              errorMessage="Please enter a search term"
-            />
+          <LayoutColumn className="my-20 text-xl">
             <h1>{t('common.save')}</h1>
           </LayoutColumn>
         </LayoutRow>
       </Layout>
       <Layout>
-        <LayoutRow className="mt-8">
-          {arr.map((i) => (
-            <LayoutColumn key={i} span={1}>
-              <div className={boxClass}>{i + 1}</div>
-            </LayoutColumn>
-          ))}
-        </LayoutRow>
-        <LayoutRow>
+        <LayoutRow className="text-center">
           <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
             <div className={boxClass}>Responsive column</div>
           </LayoutColumn>

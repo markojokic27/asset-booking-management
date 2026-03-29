@@ -21,7 +21,7 @@ function LanguageSwitcher() {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <button className="group flex items-center text-gray-900 focus:outline-none dark:text-gray-100">
+        <button className="group flex items-center text-gray-900 hover:cursor-pointer focus:outline-none dark:text-gray-100">
           {currentLanguage?.label || 'Select Language'}
           <ChevronDown className="h-6 w-6 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180" />{' '}
         </button>
