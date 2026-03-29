@@ -7,7 +7,7 @@ export default function App() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-200 pt-22 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+      <main className="min-h-screen bg-gray-200 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
         <Layout>
           <LayoutRow className="relative">
             <Navbar />
@@ -16,7 +16,7 @@ export default function App() {
             </LayoutColumn>
           </LayoutRow>
         </Layout>
-      </main>g-gray-200 min-h-screen
+      </main>
     </>
   );
 }
