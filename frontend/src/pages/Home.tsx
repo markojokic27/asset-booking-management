@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 export default function Home() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const boxClass =
-    'mb-8 flex h-32 items-center justify-center rounded-lg bg-gray-400 text-2xl font-bold text-gray-900 dark:bg-gray-800 dark:text-gray-100';
 
   const handleLogout = () => {
     document.cookie = 'auth=; Max-Age=0; path=/';
@@ -40,22 +38,6 @@ export default function Home() {
           </LayoutColumn>
           <LayoutColumn className="my-20 text-xl">
             <h1>{t('common.save')}</h1>
-          </LayoutColumn>
-        </LayoutRow>
-      </Layout>
-      <Layout>
-        <LayoutRow className="text-center">
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
           </LayoutColumn>
         </LayoutRow>
       </Layout>

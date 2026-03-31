@@ -555,28 +555,46 @@
   }
 }
 
-@theme {
+:root {
+  --color-bg: #f5f5f5;
+  --color-text: #252525;
+  --color-surface: #e4e4e4;
+  --color-border: #e4e4e4;
 
-  /* Set font Roboto as deafult*/
-  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
 
   --shadow-card: 0px 0px 7px 3px rgba(0, 0, 0, 0.08);
   --shadow-button: 0px 4px 4px #030044;
+}
 
-  /* white */
-  --color-bg-light: #f5f5f5;
-  /* dark grey */
-  --color-bg-dark: #252525;
-  /* light blue */
-  --color-btn-primary: #0043CE;
-  /* dark blue */
-  --color-btn-hover: #0036a5;
-  /* light grey */
-  --color-surface-light: #e4e4e4;
-  /* black */
-  --color-surface-dark: #000000;
-  /* light grey */
-  --color-border-light: #e4e4e4;
-  /* dark grey */
-  --color-border-dark: #252525;
+.dark {
+  --color-bg: #252525;
+  --color-text: #f5f5f5;
+  --color-surface: #000000;
+  --color-border: #252525;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    color: var(--color-text);
+  }
 }

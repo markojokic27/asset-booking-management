@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export const Header: React.FC = () => {
   return (
-    <div className="fixed top-0 z-40 mx-auto h-20 w-full bg-gray-100 shadow-md dark:bg-gray-900 dark:shadow-black/20">
+    <div className="fixed top-0 z-40 mx-auto h-20 w-full bg-(--color-surface) shadow-md">
       <Layout className="h-full">
         <LayoutRow className="flex h-full items-center">
           <LayoutColumn className="flex items-center justify-between">
