@@ -3,6 +3,7 @@ package de.bdr.asset.management.user;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * User Controller
  */
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -29,7 +30,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(
-            @RequestBody UserRequestDTO userRequest
+            @Valid @RequestBody UserRequestDTO userRequest
     ) {
         // TODO: restrict to Admin if needed
         UserResponseDTO createdUser = userService.createUser(userRequest);
@@ -47,7 +48,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
-            @RequestBody UserRequestDTO userRequest
+            @Valid @RequestBody UserRequestDTO userRequest
     ) {
         UserResponseDTO updatedUser = userService.updateUser(id, userRequest);
         return ResponseEntity.ok(updatedUser);
