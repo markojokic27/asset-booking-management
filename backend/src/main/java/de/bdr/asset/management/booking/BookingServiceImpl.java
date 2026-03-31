@@ -1,21 +1,30 @@
 package de.bdr.asset.management.booking;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import de.bdr.asset.management.asset.Asset;
+import de.bdr.asset.management.asset.AssetRepository;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.user.User;
+import de.bdr.asset.management.user.UserRepository;
 
 /**
  * Implementation of Booking Service
  */
 @Service
 public class BookingServiceImpl implements BookingService {
-    // TODO: Update the functions to not use dummy data
     private final BookingRepository repository;
+    private final BookingMapper mapper;
+    private final UserRepository userRepository;
+    private final AssetRepository assetRepository;
 
-    public BookingServiceImpl(BookingRepository repository) {
+    public BookingServiceImpl(BookingRepository repository, BookingMapper mapper, UserRepository userRepository, AssetRepository assetRepository) {
         this.repository = repository;
+        this.mapper = mapper;
+        this.userRepository = userRepository;
+        this.assetRepository = assetRepository;
     }
 
     /**
@@ -26,17 +35,18 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO bookingRequest) {
-        // TODO: Implement a mapper function to handle this
+        User user = userRepository.findById(bookingRequest.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
+
+        Asset asset = assetRepository.findById(bookingRequest.assetId())
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId()));
         
-        return new BookingResponseDTO(
-            1L,
-            bookingRequest.userId(),
-            bookingRequest.assetId(),
-            bookingRequest.status(),
-            bookingRequest.bookingStartTime(),
-            bookingRequest.bookingEndTime(),
-            bookingRequest.notes()
-        );
+        Booking booking = mapper.toEntity(bookingRequest);
+        booking.setUser(user);
+        booking.setAsset(asset);
+        booking = repository.save(booking);
+
+        return mapper.toResponse(booking);
     }
 
     /**
@@ -47,15 +57,10 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingResponseDTO getBookingById(Long id) {
-        return new BookingResponseDTO(
-            1L,
-            1L,
-            1L,
-            BookingStatusEnum.APPROVED,
-            Instant.now(),
-            Instant.now(),
-            "Dummy Notes"
-        );
+        Booking booking = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
+
+        return mapper.toResponse(booking);
     }
 
     /**
@@ -65,33 +70,11 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<BookingResponseDTO> getAllBookings() {
-        List<BookingResponseDTO> dummyList = new ArrayList<>();
+        List<Booking> bookings = repository.findAll();
 
-        dummyList.add(
-            new BookingResponseDTO(
-                1L,
-                1L,
-                1L,
-                BookingStatusEnum.APPROVED,
-                Instant.now(),
-                Instant.now(),
-                "Dummy Notes 1"
-            )
-        );
-
-        dummyList.add(
-            new BookingResponseDTO(
-                1L,
-                1L,
-                2L,
-                BookingStatusEnum.PENDING,
-                Instant.now(),
-                Instant.now(),
-                "Dummy Notes 2"
-            )
-        );
-
-        return dummyList;
+        return bookings.stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     /**
@@ -103,15 +86,24 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
-        return new BookingResponseDTO(
-            1L,
-            1L,
-            1L,
-            BookingStatusEnum.APPROVED,
-            Instant.now(),
-            Instant.now(),
-            "Dummy Notes"
-        );
+        Booking booking = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
+
+        User user = userRepository.findById(bookingRequest.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
+
+        Asset asset = assetRepository.findById(bookingRequest.assetId())
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId()));
+        
+        booking.setUser(user);
+        booking.setAsset(asset);
+        booking.setStatus(bookingRequest.status());
+        booking.setBookingStartTime(bookingRequest.bookingStartTime());
+        booking.setBookingEndTime(bookingRequest.bookingEndTime());
+        booking.setNotes(bookingRequest.notes());
+        booking = repository.save(booking);
+
+        return mapper.toResponse(booking);
     }
 
     /**
@@ -122,6 +114,13 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public void deleteBooking(Long id) {
+        // TODO: Add a field for soft delete
 
+        // Booking booking = repository.findById(id)
+        //     .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id:" + id));
+
+        // booking.setStatus("DELETED"),
+
+        // repository.save(booking);
     }
 }
