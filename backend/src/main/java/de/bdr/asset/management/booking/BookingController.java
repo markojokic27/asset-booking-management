@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
+/**
+ * Booking Controller
+ */
 @RestController
 @RequestMapping("api/v1/bookings")
 public class BookingController {

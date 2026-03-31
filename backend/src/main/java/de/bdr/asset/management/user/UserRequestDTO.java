@@ -3,6 +3,7 @@ package de.bdr.asset.management.user;
 import jakarta.validation.constraints.*;
 
 public record UserRequestDTO(
+
         @NotBlank(message = "Username is required")
         @Size(min = 3, max = 50)
         @Pattern(regexp = "^[a-zA-Z0-9._-]+$", message = "Username can only contain letters, numbers, dots, underscores, or hyphens")

@@ -4,8 +4,7 @@ import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import java.time.Instant;
 
