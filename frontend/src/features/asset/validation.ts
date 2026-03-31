@@ -6,33 +6,33 @@ export const assetValidationSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, 'Naziv asseta je obavezan')
-    .max(100, 'Naziv može imati najviše 100 znakova'),
+    .min(1, 'Asset name is required')
+    .max(100, 'Name must be at most 100 characters long'),
 
   categoryId: z.coerce
-    .number({ message: 'Kategorija je obavezna' })
+    .number({ message: 'Category is required' })
     .int()
-    .positive('Kategorija je obavezna'),
+    .positive('Category is required'),
 
   description: z
     .string()
     .trim()
-    .max(255, 'Opis može imati najviše 255 znakova')
+    .max(255, 'Description must be at most 255 characters long')
     .optional(),
 
   code: z
     .string()
     .trim()
-    .min(1, 'QR code je obavezan')
-    .max(2000, 'QR code može imati najviše 2000 znakova'),
+    .min(1, 'QR code is required')
+    .max(2000, 'QR code must be at most 2000 characters long'),
 
   status: assetStatusSchema,
 
   location: z
     .string()
     .trim()
-    .min(1, 'Lokacija je obavezna')
-    .max(255, 'Lokacija može imati najviše 255 znakova'),
+    .min(1, 'Location is required')
+    .max(255, 'Location must be at most 255 characters long'),
 });
 
 export type AssetFormValues = z.infer<typeof assetValidationSchema>;

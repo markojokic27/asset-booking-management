@@ -9,34 +9,34 @@ export const bookingStatusSchema = z.enum([
 export const bookingValidationSchema = z
   .object({
     userId: z.coerce
-      .number({ message: 'Korisnik je obavezan' })
+      .number({ message: 'User is required' })
       .int()
-      .positive('Korisnik je obavezan'),
+      .positive('User is required'),
 
     assetId: z.coerce
-      .number({ message: 'Asset je obavezan' })
+      .number({ message: 'Asset is required' })
       .int()
-      .positive('Asset je obavezan'),
+      .positive('Asset is required'),
 
     status: bookingStatusSchema,
 
     bookingStart: z.coerce.date({
-      message: 'Početak rezervacije je obavezan',
+      message: 'Booking start is required',
     }),
 
     bookingEnd: z.coerce.date({
-      message: 'Kraj rezervacije je obavezan',
+      message: 'Booking end is required',
     }),
 
     note: z
       .string()
       .trim()
-      .max(1000, 'Napomena može imati najviše 1000 znakova')
+      .max(1000, 'Note must be at most 1000 characters long')
       .optional(),
   })
   .refine((data) => data.bookingEnd > data.bookingStart, {
     path: ['bookingEnd'],
-    message: 'Kraj rezervacije mora biti nakon početka',
+    message: 'Booking end must be after booking start',
   });
 
 export type BookingFormValues = z.infer<typeof bookingValidationSchema>;
