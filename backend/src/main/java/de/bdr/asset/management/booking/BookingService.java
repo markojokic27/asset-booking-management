@@ -8,14 +8,14 @@ import java.util.List;
 public interface BookingService {
 
     /** CREATE */
-    BookingRequestDTO createBooking(BookingRequestDTO bookingRequest);
+    BookingResponseDTO createBooking(BookingRequestDTO bookingRequest);
 
     /** READ */
-    BookingRequestDTO getBookingById(Long id);
-    List<BookingRequestDTO> getAllBookings();
+    BookingResponseDTO getBookingById(Long id);
+    List<BookingResponseDTO> getAllBookings();
 
     /** UPDATE */
-    BookingRequestDTO updateBooking(Long id, BookingRequestDTO bookingRequest);
+    BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest);
 
     /** DELETE (Soft) */
     void deleteBooking(Long id);

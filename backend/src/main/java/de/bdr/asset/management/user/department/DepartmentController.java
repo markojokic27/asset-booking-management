@@ -21,7 +21,7 @@ public class DepartmentController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<DepartmentRequestDTO> create(@Valid @RequestBody DepartmentRequestDTO request) {
+    public ResponseEntity<DepartmentResponseDTO> create(@Valid @RequestBody DepartmentRequestDTO request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createDepartment(request));
@@ -29,7 +29,7 @@ public class DepartmentController {
     // READ
     // ALL
     @GetMapping
-    public ResponseEntity<List<DepartmentRequestDTO>> getAll() {
+    public ResponseEntity<List<DepartmentResponseDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAllDepartments());
@@ -37,7 +37,7 @@ public class DepartmentController {
 
     // BY ID
     @GetMapping("/{id}")
-    ResponseEntity<DepartmentRequestDTO> getById(@PathVariable Long id) {
+    ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getDepartmentById(id));
@@ -45,7 +45,7 @@ public class DepartmentController {
 
     // UPDATE
     @PutMapping("/{id}")
-    ResponseEntity<DepartmentRequestDTO> update(@PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request) {
+    ResponseEntity<DepartmentResponseDTO> update(@PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateDepartment(id, request));

@@ -20,10 +20,11 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentDTO record
      */
     @Override
-    public DepartmentRequestDTO createDepartment(DepartmentRequestDTO departmentRequest) {
+    public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
         // TODO: Implement a mapper function to handle this
         
-        return new DepartmentRequestDTO(
+        return new DepartmentResponseDTO(
+                1L,
                 departmentRequest.name(),
                 departmentRequest.managerId()
         );
@@ -34,8 +35,9 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentRequestDTO record
      */
     @Override
-    public DepartmentRequestDTO getDepartmentById(Long id) {
-        return new DepartmentRequestDTO(
+    public DepartmentResponseDTO getDepartmentById(Long id) {
+        return new DepartmentResponseDTO(
+                1L,
                 DepartmentEnum.ARCHITECTURE,
                 1L
         );
@@ -45,16 +47,18 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a List of DepartmentRequestDTO records
      */
     @Override
-    public List<DepartmentRequestDTO> getAllDepartments() {
-        List<DepartmentRequestDTO> dummyList = new ArrayList<>();
+    public List<DepartmentResponseDTO> getAllDepartments() {
+        List<DepartmentResponseDTO> dummyList = new ArrayList<>();
         dummyList.add(
-                new DepartmentRequestDTO(
+                new DepartmentResponseDTO(
+                        1L,
                         DepartmentEnum.ARCHITECTURE,
                         1L
                 )
         );
         dummyList.add(
-                new DepartmentRequestDTO(
+                new DepartmentResponseDTO(
+                        1L,
                         DepartmentEnum.DEVOPS,
                         2L
                 )
@@ -68,8 +72,9 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentRequestDTO record
      */
     @Override
-    public DepartmentRequestDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
-        return new DepartmentRequestDTO(
+    public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
+        return new DepartmentResponseDTO(
+                1L,
                 DepartmentEnum.ARCHITECTURE,
                 1L
         );

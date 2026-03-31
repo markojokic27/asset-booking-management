@@ -8,14 +8,14 @@ import java.util.List;
 public interface AssetCategoryService {
 
     /** CREATE */
-    AssetCategoryRequestDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest);
+    AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest);
 
     /** READ */
-    AssetCategoryRequestDTO getAssetCategoryById(Long id);
-    List<AssetCategoryRequestDTO> getAllAssetCategories();
+    AssetCategoryResponseDTO getAssetCategoryById(Long id);
+    List<AssetCategoryResponseDTO> getAllAssetCategories();
 
     /** UPDATE */
-    AssetCategoryRequestDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest);
+    AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest);
 
     /** DELETE (Soft) */
     void deleteAssetCategory(Long id);

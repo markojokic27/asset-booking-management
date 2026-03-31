@@ -25,10 +25,11 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
-    public BookingRequestDTO createBooking(BookingRequestDTO bookingRequest) {
+    public BookingResponseDTO createBooking(BookingRequestDTO bookingRequest) {
         // TODO: Implement a mapper function to handle this
         
-        return new BookingRequestDTO(
+        return new BookingResponseDTO(
+            1L,
             bookingRequest.userId(),
             bookingRequest.assetId(),
             bookingRequest.status(),
@@ -45,8 +46,9 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
-    public BookingRequestDTO getBookingById(Long id) {
-        return new BookingRequestDTO(
+    public BookingResponseDTO getBookingById(Long id) {
+        return new BookingResponseDTO(
+            1L,
             1L,
             1L,
             BookingStatusEnum.APPROVED,
@@ -62,11 +64,12 @@ public class BookingServiceImpl implements BookingService {
      * @return a list of BookingResponseDTO records
      */
     @Override
-    public List<BookingRequestDTO> getAllBookings() {
-        List<BookingRequestDTO> dummyList = new ArrayList<>();
+    public List<BookingResponseDTO> getAllBookings() {
+        List<BookingResponseDTO> dummyList = new ArrayList<>();
 
         dummyList.add(
-            new BookingRequestDTO(
+            new BookingResponseDTO(
+                1L,
                 1L,
                 1L,
                 BookingStatusEnum.APPROVED,
@@ -77,7 +80,8 @@ public class BookingServiceImpl implements BookingService {
         );
 
         dummyList.add(
-            new BookingRequestDTO(
+            new BookingResponseDTO(
+                1L,
                 1L,
                 2L,
                 BookingStatusEnum.PENDING,
@@ -98,8 +102,9 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
-    public BookingRequestDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
-        return new BookingRequestDTO(
+    public BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
+        return new BookingResponseDTO(
+            1L,
             1L,
             1L,
             BookingStatusEnum.APPROVED,

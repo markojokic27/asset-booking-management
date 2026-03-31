@@ -24,10 +24,11 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
-    public AssetCategoryRequestDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
+    public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
         // TODO: Implement a mapper function to handle this
         
-        return new AssetCategoryRequestDTO(
+        return new AssetCategoryResponseDTO(
+                1L,
                 assetCategoryRequest.name(),
                 assetCategoryRequest.description(),
                 assetCategoryRequest.bookingPeriod(),
@@ -42,8 +43,9 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
-    public AssetCategoryRequestDTO getAssetCategoryById(Long id){
-        return new AssetCategoryRequestDTO(
+    public AssetCategoryResponseDTO getAssetCategoryById(Long id){
+        return new AssetCategoryResponseDTO(
+                1L,
                 "Dummy Asset category",
                 "Dummy Desc",
                 BookingPeriodEnum.HOUR,
@@ -57,10 +59,11 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return a list of AssetCategoryResponseDTO records
      */
     @Override
-    public List<AssetCategoryRequestDTO> getAllAssetCategories(){
-        List<AssetCategoryRequestDTO> dummyList = new ArrayList<>();
+    public List<AssetCategoryResponseDTO> getAllAssetCategories(){
+        List<AssetCategoryResponseDTO> dummyList = new ArrayList<>();
         dummyList.add(
-            new AssetCategoryRequestDTO(
+            new AssetCategoryResponseDTO(
+                    1L,
                     "Dummy Asset category",
                     "Dummy Desc",
                     BookingPeriodEnum.HOUR,
@@ -68,7 +71,8 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
             )
         );
         dummyList.add(
-                new AssetCategoryRequestDTO(
+                new AssetCategoryResponseDTO(
+                        1L,
                         "2 Dummy Asset category",
                         "Dummy Desc 2",
                         BookingPeriodEnum.HOUR,
@@ -86,8 +90,9 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
-    public AssetCategoryRequestDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
-        return new AssetCategoryRequestDTO(
+    public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
+        return new AssetCategoryResponseDTO(
+                1L,
                 "Dummy Asset category",
                 "Dummy Desc",
                 BookingPeriodEnum.HOUR,
