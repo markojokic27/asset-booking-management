@@ -7,188 +7,246 @@
   .w-column-1 {
     width: calc((1 / 12) * 100%);
   }
+
   .w-column-2 {
     width: calc((2 / 12) * 100%);
   }
+
   .w-column-3 {
     width: calc((3 / 12) * 100%);
   }
+
   .w-column-4 {
     width: calc((4 / 12) * 100%);
   }
+
   .w-column-5 {
     width: calc((5 / 12) * 100%);
   }
+
   .w-column-6 {
     width: calc((6 / 12) * 100%);
   }
+
   .w-column-7 {
     width: calc((7 / 12) * 100%);
   }
+
   .w-column-8 {
     width: calc((8 / 12) * 100%);
   }
+
   .w-column-9 {
     width: calc((9 / 12) * 100%);
   }
+
   .w-column-10 {
     width: calc((10 / 12) * 100%);
   }
+
   .w-column-11 {
     width: calc((11 / 12) * 100%);
   }
+
   .w-column-12 {
     width: calc((12 / 12) * 100%);
   }
 
-  @media (width >= 640px) {
+  @media (width >=640px) {
     .sm\:w-column-1 {
       width: calc((1 / 12) * 100%);
     }
+
     .sm\:w-column-2 {
       width: calc((2 / 12) * 100%);
     }
+
     .sm\:w-column-3 {
       width: calc((3 / 12) * 100%);
     }
+
     .sm\:w-column-4 {
       width: calc((4 / 12) * 100%);
     }
+
     .sm\:w-column-5 {
       width: calc((5 / 12) * 100%);
     }
+
     .sm\:w-column-6 {
       width: calc((6 / 12) * 100%);
     }
+
     .sm\:w-column-7 {
       width: calc((7 / 12) * 100%);
     }
+
     .sm\:w-column-8 {
       width: calc((8 / 12) * 100%);
     }
+
     .sm\:w-column-9 {
       width: calc((9 / 12) * 100%);
     }
+
     .sm\:w-column-10 {
       width: calc((10 / 12) * 100%);
     }
+
     .sm\:w-column-11 {
       width: calc((11 / 12) * 100%);
     }
+
     .sm\:w-column-12 {
       width: calc((12 / 12) * 100%);
     }
   }
-  @media (width >= 768px) {
+
+  @media (width >=768px) {
     .md\:w-column-1 {
       width: calc((1 / 12) * 100%);
     }
+
     .md\:w-column-2 {
       width: calc((2 / 12) * 100%);
     }
+
     .md\:w-column-3 {
       width: calc((3 / 12) * 100%);
     }
+
     .md\:w-column-4 {
       width: calc((4 / 12) * 100%);
     }
+
     .md\:w-column-5 {
       width: calc((5 / 12) * 100%);
     }
+
     .md\:w-column-6 {
       width: calc((6 / 12) * 100%);
     }
+
     .md\:w-column-7 {
       width: calc((7 / 12) * 100%);
     }
+
     .md\:w-column-8 {
       width: calc((8 / 12) * 100%);
     }
+
     .md\:w-column-9 {
       width: calc((9 / 12) * 100%);
     }
+
     .md\:w-column-10 {
       width: calc((10 / 12) * 100%);
     }
+
     .md\:w-column-11 {
       width: calc((11 / 12) * 100%);
     }
+
     .md\:w-column-12 {
       width: calc((12 / 12) * 100%);
     }
   }
-  @media (width >= 1024px) {
+
+  @media (width >=1024px) {
     .lg\:w-column-1 {
       width: calc((1 / 12) * 100%);
     }
+
     .lg\:w-column-2 {
       width: calc((2 / 12) * 100%);
     }
+
     .lg\:w-column-3 {
       width: calc((3 / 12) * 100%);
     }
+
     .lg\:w-column-4 {
       width: calc((4 / 12) * 100%);
     }
+
     .lg\:w-column-5 {
       width: calc((5 / 12) * 100%);
     }
+
     .lg\:w-column-6 {
       width: calc((6 / 12) * 100%);
     }
+
     .lg\:w-column-7 {
       width: calc((7 / 12) * 100%);
     }
+
     .lg\:w-column-8 {
       width: calc((8 / 12) * 100%);
     }
+
     .lg\:w-column-9 {
       width: calc((9 / 12) * 100%);
     }
+
     .lg\:w-column-10 {
       width: calc((10 / 12) * 100%);
     }
+
     .lg\:w-column-11 {
       width: calc((11 / 12) * 100%);
     }
+
     .lg\:w-column-12 {
       width: calc((12 / 12) * 100%);
     }
   }
-  @media (width >= 1296px) {
+
+  @media (width >=1296px) {
     .xl\:w-column-1 {
       width: calc((1 / 12) * 100%);
     }
+
     .xl\:w-column-2 {
       width: calc((2 / 12) * 100%);
     }
+
     .xl\:w-column-3 {
       width: calc((3 / 12) * 100%);
     }
+
     .xl\:w-column-4 {
       width: calc((4 / 12) * 100%);
     }
+
     .xl\:w-column-5 {
       width: calc((5 / 12) * 100%);
     }
+
     .xl\:w-column-6 {
       width: calc((6 / 12) * 100%);
     }
+
     .xl\:w-column-7 {
       width: calc((7 / 12) * 100%);
     }
+
     .xl\:w-column-8 {
       width: calc((8 / 12) * 100%);
     }
+
     .xl\:w-column-9 {
       width: calc((9 / 12) * 100%);
     }
+
     .xl\:w-column-10 {
       width: calc((10 / 12) * 100%);
     }
+
     .xl\:w-column-11 {
       width: calc((11 / 12) * 100%);
     }
+
     .xl\:w-column-12 {
       width: calc((12 / 12) * 100%);
     }
@@ -197,191 +255,251 @@
   .offset-0 {
     margin-left: 0;
   }
+
   .offset-1 {
     margin-left: calc((1 / 12) * 100%);
   }
+
   .offset-2 {
     margin-left: calc((2 / 12) * 100%);
   }
+
   .offset-3 {
     margin-left: calc((3 / 12) * 100%);
   }
+
   .offset-4 {
     margin-left: calc((4 / 12) * 100%);
   }
+
   .offset-5 {
     margin-left: calc((5 / 12) * 100%);
   }
+
   .offset-6 {
     margin-left: calc((6 / 12) * 100%);
   }
+
   .offset-7 {
     margin-left: calc((7 / 12) * 100%);
   }
+
   .offset-8 {
     margin-left: calc((8 / 12) * 100%);
   }
+
   .offset-9 {
     margin-left: calc((9 / 12) * 100%);
   }
+
   .offset-10 {
     margin-left: calc((10 / 12) * 100%);
   }
+
   .offset-11 {
     margin-left: calc((11 / 12) * 100%);
   }
-  @media (width >= 640px) {
+
+  @media (width >=640px) {
     .sm\:offset-0 {
       margin-left: 0;
     }
+
     .sm\:offset-1 {
       margin-left: calc((1 / 12) * 100%);
     }
+
     .sm\:offset-2 {
       margin-left: calc((2 / 12) * 100%);
     }
+
     .sm\:offset-3 {
       margin-left: calc((3 / 12) * 100%);
     }
+
     .sm\:offset-4 {
       margin-left: calc((4 / 12) * 100%);
     }
+
     .sm\:offset-5 {
       margin-left: calc((5 / 12) * 100%);
     }
+
     .sm\:offset-6 {
       margin-left: calc((6 / 12) * 100%);
     }
+
     .sm\:offset-7 {
       margin-left: calc((7 / 12) * 100%);
     }
+
     .sm\:offset-8 {
       margin-left: calc((8 / 12) * 100%);
     }
+
     .sm\:offset-9 {
       margin-left: calc((9 / 12) * 100%);
     }
+
     .sm\:offset-10 {
       margin-left: calc((10 / 12) * 100%);
     }
+
     .sm\:offset-11 {
       margin-left: calc((11 / 12) * 100%);
     }
   }
-  @media (width >= 768px) {
+
+  @media (width >=768px) {
     .md\:offset-0 {
       margin-left: 0;
     }
+
     .md\:offset-1 {
       margin-left: calc((1 / 12) * 100%);
     }
+
     .md\:offset-2 {
       margin-left: calc((2 / 12) * 100%);
     }
+
     .md\:offset-3 {
       margin-left: calc((3 / 12) * 100%);
     }
+
     .md\:offset-4 {
       margin-left: calc((4 / 12) * 100%);
     }
+
     .md\:offset-5 {
       margin-left: calc((5 / 12) * 100%);
     }
+
     .md\:offset-6 {
       margin-left: calc((6 / 12) * 100%);
     }
+
     .md\:offset-7 {
       margin-left: calc((7 / 12) * 100%);
     }
+
     .md\:offset-8 {
       margin-left: calc((8 / 12) * 100%);
     }
+
     .md\:offset-9 {
       margin-left: calc((9 / 12) * 100%);
     }
+
     .md\:offset-10 {
       margin-left: calc((10 / 12) * 100%);
     }
+
     .md\:offset-11 {
       margin-left: calc((11 / 12) * 100%);
     }
   }
-  @media (width >= 1024px) {
+
+  @media (width >=1024px) {
     .lg\:offset-0 {
       margin-left: 0;
     }
+
     .lg\:offset-1 {
       margin-left: calc((1 / 12) * 100%);
     }
+
     .lg\:offset-2 {
       margin-left: calc((2 / 12) * 100%);
     }
+
     .lg\:offset-3 {
       margin-left: calc((3 / 12) * 100%);
     }
+
     .lg\:offset-4 {
       margin-left: calc((4 / 12) * 100%);
     }
+
     .lg\:offset-5 {
       margin-left: calc((5 / 12) * 100%);
     }
+
     .lg\:offset-6 {
       margin-left: calc((6 / 12) * 100%);
     }
+
     .lg\:offset-7 {
       margin-left: calc((7 / 12) * 100%);
     }
+
     .lg\:offset-8 {
       margin-left: calc((8 / 12) * 100%);
     }
+
     .lg\:offset-9 {
       margin-left: calc((9 / 12) * 100%);
     }
+
     .lg\:offset-10 {
       margin-left: calc((10 / 12) * 100%);
     }
+
     .lg\:offset-11 {
       margin-left: calc((11 / 12) * 100%);
     }
   }
-  @media (width >= 1296px) {
+
+  @media (width >=1296px) {
     .xl\:offset-0 {
       margin-left: 0;
     }
+
     .xl\:offset-1 {
       margin-left: calc((1 / 12) * 100%);
     }
+
     .xl\:offset-2 {
       margin-left: calc((2 / 12) * 100%);
     }
+
     .xl\:offset-3 {
       margin-left: calc((3 / 12) * 100%);
     }
+
     .xl\:offset-4 {
       margin-left: calc((4 / 12) * 100%);
     }
+
     .xl\:offset-5 {
       margin-left: calc((5 / 12) * 100%);
     }
+
     .xl\:offset-6 {
       margin-left: calc((6 / 12) * 100%);
     }
+
     .xl\:offset-7 {
       margin-left: calc((7 / 12) * 100%);
     }
+
     .xl\:offset-8 {
       margin-left: calc((8 / 12) * 100%);
     }
+
     .xl\:offset-9 {
       margin-left: calc((9 / 12) * 100%);
     }
+
     .xl\:offset-10 {
       margin-left: calc((10 / 12) * 100%);
     }
+
     .xl\:offset-11 {
       margin-left: calc((11 / 12) * 100%);
     }
   }
+
   @media (min-width: 1536px) {
     .container {
       max-width: 1296px;
@@ -397,10 +515,12 @@
     width: 100vw;
     height: 100%;
   }
+
   @media (min-width: 1024px) {
     .pulled-background-account::after {
       height: calc(100vh - 84px);
     }
+
     .pulled-background-account::before {
       height: calc(100vh - 84px);
     }
@@ -411,22 +531,52 @@
       width: calc(100% + ((100vw - 100%) / 2 - 16px));
     }
   }
+
   @media (min-width: 1024px) {
     .pulled-background-account {
       height: calc(100vh - 84px);
     }
+
     .pulled-background-account::after {
       width: calc((100% + 48px) + ((100vw - 1024px) / 2));
     }
   }
+
   @media (min-width: 1296px) {
     .pulled-background-account::after {
       width: calc((100% + 48px) + ((100vw - 1296px) / 2));
     }
   }
+
   @media (min-width: 1536px) {
     .pulled-background-account::after {
       width: calc((100% + 48px) + ((100vw - 1536px) / 2));
     }
   }
+}
+
+@theme {
+
+  /* Set font Roboto as deafult*/
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0px 0px 7px 3px rgba(0, 0, 0, 0.08);
+  --shadow-button: 0px 4px 4px #030044;
+
+  /* white */
+  --color-bg-light: #f5f5f5;
+  /* dark grey */
+  --color-bg-dark: #252525;
+  /* light blue */
+  --color-btn-primary: #0043CE;
+  /* dark blue */
+  --color-btn-hover: #0036a5;
+  /* light grey */
+  --color-surface-light: #e4e4e4;
+  /* black */
+  --color-surface-dark: #000000;
+  /* light grey */
+  --color-border-light: #e4e4e4;
+  /* dark grey */
+  --color-border-dark: #252525;
 }
