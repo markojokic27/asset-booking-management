@@ -17,7 +17,7 @@ http:
         "description": "New asset",
         "code": "A",
         "status": "ACTIVE",
-        "location": "Prizemlje"
+        "location": "Ground Floor"
       }
   auth: inherit
 

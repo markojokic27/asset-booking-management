@@ -26,10 +26,10 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
-        AssetCategory newCategory = mapper.toEntity(assetCategoryRequest);
-        AssetCategory savedCategory = repository.save(newCategory);
+        AssetCategory category = mapper.toEntity(assetCategoryRequest);
+        category = repository.save(category);
 
-        return mapper.toResponse(savedCategory);
+        return mapper.toResponse(category);
     }
 
     /**
@@ -41,7 +41,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     @Override
     public AssetCategoryResponseDTO getAssetCategoryById(Long id){
         AssetCategory category = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id:" + id));
+            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
         return mapper.toResponse(category);
     }
@@ -70,7 +70,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     @Override
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
         AssetCategory category = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id:" + id));
+            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
         category.setName(assetCategoryRequest.name());
         category.setDescription(assetCategoryRequest.description());

@@ -16,12 +16,12 @@ http:
     type: json
     data: |-
       {
-        "name": "",
-        "categoryId": 0,
-        "description": "",
-        "code": "",
-        "status": "AVAILABLE",
-        "location": ""
+        "name": "Updated",
+        "categoryId": 1,
+        "description": "Updated Description",
+        "code": "A",
+        "status": "ACTIVE",
+        "location": "Updated Ground Floor"
       }
   auth: inherit
 

@@ -21,7 +21,7 @@ const RegisterForm = () => {
     surname: '',
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   const navigate = useNavigate();
 

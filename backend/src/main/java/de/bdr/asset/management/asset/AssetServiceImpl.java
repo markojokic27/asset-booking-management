@@ -4,16 +4,23 @@ import java.util.*;
 
 import org.springframework.stereotype.Service;
 
+import de.bdr.asset.management.assetcategory.AssetCategory;
+import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+
 /**
  * Implementation of Asset Service
  */
 @Service
 public class AssetServiceImpl implements AssetService {
-    // TODO: Update the functions to not use dummy data
     private final AssetRepository repository;
+    private final AssetMapper mapper;
+    private final AssetCategoryRepository assetCategoryRepository;
 
-    public AssetServiceImpl(AssetRepository repository) {
+    public AssetServiceImpl(AssetRepository repository, AssetMapper mapper, AssetCategoryRepository assetCategoryRepository) {
         this.repository = repository;
+        this.mapper = mapper;
+        this.assetCategoryRepository = assetCategoryRepository;
     }
 
     /**
@@ -24,17 +31,14 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
-        // TODO: Implement a mapper function to handle this
+        AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
+            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
+
+        Asset asset = mapper.toEntity(assetRequest);
+        asset.setCategory(category);
+        asset = repository.save(asset);
         
-        return new AssetResponseDTO(
-            1L,
-            assetRequest.name(),
-            assetRequest.categoryId(),
-            assetRequest.description(),
-            assetRequest.code(),
-            assetRequest.status(),
-            assetRequest.location()
-        );
+        return mapper.toResponse(asset);
     }
 
     /**
@@ -45,15 +49,10 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO getAssetById(Long id) {
-        return new AssetResponseDTO(
-            1L,
-            "Dummy Asset Get by Id",
-            1L,
-            "Dummy Asset Desc",
-            "Code string",
-            AssetStatusEnum.ACTIVE,
-            "Prizemlje"
-        );
+        Asset asset = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+
+        return mapper.toResponse(asset);
     }
 
     /**
@@ -63,32 +62,11 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public List<AssetResponseDTO> getAllAssets() {
-        List<AssetResponseDTO> dummyList = new ArrayList<>();
-        dummyList.add(
-            new AssetResponseDTO(
-                1L,
-                "Dummy Asset 1",
-                1L,
-                "Dummy Asset Desc",
-                "Code string",
-                AssetStatusEnum.ACTIVE,
-                "Prizemlje"
-            )
-        );
+        List<Asset> assets = repository.findAll();
 
-        dummyList.add(
-            new AssetResponseDTO(
-                1L,
-                "Dummy Asset 2",
-                2L,
-                "Dummy Asset Desc",
-                "Code string",
-                AssetStatusEnum.DAMAGED,
-                "Kat"
-            )
-        );
-
-        return dummyList;
+        return assets.stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     /**
@@ -100,14 +78,19 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
-        return new AssetResponseDTO(
-            1L,
-            "Dummy Asset Update",
-            1L,
-            "Dummy Asset Desc",
-            "Code string",
-            AssetStatusEnum.ACTIVE,
-            "Prizemlje"
-        );
+        Asset asset = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+
+        AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
+            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
+
+        asset.setName(assetRequest.name());
+        asset.setDescription(assetRequest.description());
+        asset.setCode(assetRequest.code());
+        asset.setStatus(assetRequest.status());
+        asset.setCategory(category);
+        asset = repository.save(asset);
+        
+        return mapper.toResponse(asset);
     }
 }
