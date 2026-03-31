@@ -164,9 +164,231 @@ a|
 
 |===
 
+= Booking
+
+== 10. Successful booking [POSITIVE]
+User selects an available asset, chooses a time period and successfully creates a booking
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. 
+|Employee
+a|
+. Navigate to the Assets page
+. Select a category
+. Select an available asset
+. Choose a valid date and time period
+. Click "Book" / "Confirm Booking"
+|Booking is created with status "Confirmed", Confirmation screen is displayed with booking ID, asset name, location and time, Confirmation email is sent to the user
+
+|===
+
+== 11. Attempt to book an already booked asset [NEGATIVE]
+User attempts to book an asset that is already reserved for the same time period
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. 
+|Employee
+a|
+. Navigate to the Assets page
+. Select a category (e.g. Laptops)
+. Select an asset that is already booked
+. Choose the same date and time period as the existing booking
+. Click "Book" / "Confirm Booking"
+|Error message is displayed: "This asset is already booked for the selected time period"
+
+|===
+
+== 12. Booking without a selected date [NEGATIVE]
+User attempts to create a booking without selecting a date or time period
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. 
+|Employee
+a|
+. Navigate to the Assets page
+. Select a category (e.g. Desks)
+. Select an available asset
+. Leave the date and/or time period fields empty
+. Click "Book" / "Confirm Booking"
+|Error message is displayed: "Please select a date and time period"
+
+|===
+
+== 13. Booking an inactive asset [NEGATIVE]
+User attempts to book an asset that has been deactivated by an administrator
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. 
+|Employee
+a|
+. Navigate to the Assets page
+. Attempt to find the deactivated asset in the list
+. If accessible via direct link, open the asset page
+. Attempt to click "Book"
+|Deactivated asset is not visible in the asset list, system displays "Asset not found" or "This asset is no longer available"
+
+|===
+
+
+== 14. Successful booking cancellation [POSITIVE]
+User cancels an active booking and the asset becomes available again
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. User has at least one active booking.
+|Employee
+a|
+. Navigate to "My Bookings"
+. Select an active booking
+. Click "Cancel"
+. Confirm cancellation
+|Booking is removed, asset becomes available for the cancelled time period
+
+|===
+
+== 15. Attempt to cancel a booking that has already started [NEGATIVE]
+User attempts to cancel a booking whose time period has already begun
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. User has a booking whose start time has already passed.
+|Employee
+a|
+. Navigate to "My Bookings"
+. Select a booking that is currently in progress
+. Click "Cancel"
+|Error message is displayed informing the user that the booking cannot be cancelled once it has started
+
+|===
+
+== 16. Successful modification of a booking [POSITIVE]
+User changes the time period of an existing booking to an available slot
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. User has an active booking.
+|Employee
+a|
+. Navigate to "My Bookings"
+. Select an active booking
+. Click "Modify"
+. Change the date or time period to an available slot
+. Confirm changes
+|Booking is updated with the new time period
+
+|===
+
+== 17. Attempt to modify a booking to an unavailable time slot [NEGATIVE]
+User attempts to change a booking to a time slot that is already taken by another reservation
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. User has an active booking. 
+|Employee
+a|
+. Navigate to "My Bookings"
+. Select an active booking
+. Click "Modify"
+. Choose a date and time period that is already booked
+. Confirm changes
+|Error message is displayed: "The selected time slot is not available"
+
+|===
+
+== 18. Successful quick booking via QR code [POSITIVE]
+User scans a QR code on an available asset and successfully creates a booking with minimal interaction
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system. Asset is available and has a valid QR code assigned.
+|Employee
+a|
+. Open the QR code scanner in the application
+. Scan the QR code attached to the asset
+. Review the suggested default booking time period
+. Click "Confirm"
+|Confirmation is displayed in the application, asset status is updated to unavailable for the booked period
+
+|===
+
+== 19. QR code not recognized [NEGATIVE]
+User scans an invalid or unrecognized QR code
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged into the system.
+|Employee
+a|
+. Open the QR code scanner in the application
+. Scan an invalid or unrelated QR code
+|Error message is displayed: "QR code not recognized"
+|===
+
+== 20. Manager approves a booking request [POSITIVE]
+Manager receives a notification for a pending booking request and approves it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|Booking request is in "Pending" status and requires manager approval.
+|Manager
+a|
+. Receive notification 
+. Open the booking request
+. Review request details (asset, time, requester)
+. Click "Accept"
+|Booking status is updated to "Confirmed", user is notified of the approval via email and/or push notification
+
+|===
+
+== 21. Manager rejects a booking request [POSITIVE]
+Manager receives a notification for a pending booking request and rejects it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|Booking request is in "Pending" status and requires manager approval.
+|Manager
+a|
+. Receive notification (in-app, email or push)
+. Open the booking request
+. Review request details
+. Click "Reject"
+. Optionally enter a rejection reason
+. Confirm rejection
+|Booking status is updated to "Rejected", user is notified of the rejection, asset remains available for the requested time period
+
+|===
+
 = Asset Category Management
 
-== 11. Successful creation of a new asset category [POSITIVE]
+== 22. Successful creation of a new asset category [POSITIVE]
 Admin fills in all required fields for a new asset category and successfully saves it to the system
 
 
@@ -184,7 +406,7 @@ a|
 
 |===
 
-== 12. Attempt to create a category with missing required fields [NEGATIVE]
+== 23. Attempt to create a category with missing required fields [NEGATIVE]
 Admin attempts to save a new asset category without filling in all required fields and is prevented from doing so
 
 [cols="1,1,1,1", options="header"]
@@ -201,7 +423,7 @@ a|
 
 |===
 
-== 13. Attempt to create a category with an existing name [NEGATIVE]
+== 24. Attempt to create a category with an existing name [NEGATIVE]
 Admin attempts to create a new asset category using a name that already exists in the system and receives a warning
 
 [cols="1,1,1,1", options="header"]
@@ -219,7 +441,7 @@ a|
 
 |===
 
-== 14. Successful update of an existing asset category [POSITIVE]
+== 25. Successful update of an existing asset category [POSITIVE]
 Admin edits the details or booking rules of an existing asset category and successfully saves the changes
 
 [cols="1,1,1,1", options="header"]
@@ -236,7 +458,7 @@ a|
 
 |===
 
-== 15. Successful deletion of an asset category [POSITIVE]
+== 26. Successful deletion of an asset category [POSITIVE]
 Admin deletes an asset category that has no active or future bookings and the category is marked as inactive in the system
 
 [cols="1,1,1,1", options="header"]
@@ -253,7 +475,7 @@ a|
 
 |===
 
-== 16. Attempt to delete a category with active bookings [NEGATIVE]
+== 27. Attempt to delete a category with active bookings [NEGATIVE]
 Admin attempts to delete an asset category that contains assets with active or future bookings and is prevented from doing so
 
 [cols="1,1,1,1", options="header"]
@@ -270,7 +492,7 @@ a|
 
 |===
 
-== 17. Attempt to save invalid data [NEGATIVE]
+== 28. Attempt to save invalid data [NEGATIVE]
 Admin attempts to save an asset category with invalid data such as a booking duration of zero hours and receives a validation error
 
 [cols="1,1,1,1", options="header"]
@@ -286,3 +508,4 @@ a|
 |Validation error shown (e.g. minimum booking duration must be at least 1 hour); changes not saved
 
 |===
+

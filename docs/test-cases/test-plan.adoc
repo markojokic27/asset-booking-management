@@ -82,25 +82,38 @@ Smoke test suite includes:
     - Successful asset booking 
 
 = 5. Test Cases
+
 [cols="1,1,2,1,1,1", options="header"]
 |===
 | TC ID | Module | Test Case Name | UC | Type | Automated
 | TC-01 | Authentication | Successful login with valid credentials | UC-01 | Functional | Yes
 | TC-02 | Authentication | Login with incorrect password | UC-01 | Functional | Yes
 | TC-03 | Authentication | Login with incorrect username | UC-01 | Functional | Yes
-| TC-04 | Authentication | Login with both fields empty | UC-01 |  Functional | Yes
-| TC-05 | Authentication | Login with empty username | UC-01 |  Functional | Yes
-| TC-06 | Authentication | Login with empty password | UC-01 |  Functional | Yes
-| TC-07 | Authentication | Successful biometric login | UC-03 |  Functional | No
-| TC-08 | Authentication | Biometric login with unregistered biometric | UC-03 |  Functional | No
+| TC-04 | Authentication | Login with both fields empty | UC-01 | Functional | Yes
+| TC-05 | Authentication | Login with empty username | UC-01 | Functional | Yes
+| TC-06 | Authentication | Login with empty password | UC-01 | Functional | Yes
+| TC-07 | Authentication | Successful biometric login | UC-03 | Functional | No
+| TC-08 | Authentication | Biometric login with unregistered biometric | UC-03 | Functional | No
 | TC-09 | Authentication | Successful adding of biometric parameters | UC-04 | Functional | No
-| TC-10 | Category Management | Successful creation of a new asset category | UC-10 | Functional | Yes
-| TC-11 | Category Management | Create category with missing required fields | UC-10 | Functional | Yes
-| TC-12 | Category Management | Create category with an existing name | UC-10 | Functional | Yes
-| TC-13 | Category Management | Successful update of an existing asset category | UC-11 | Functional | Yes
-| TC-14 | Category Management | Successful deletion of an asset category | UC-11 | Functional | Yes
-| TC-15 | Category Management | Delete category with active bookings blocked | UC-11 | Functional | Yes
-| TC-16 | Category Management | Attempt to save invalid data in category | UC-11 | Functional | Yes
+| TC-10 | Booking | Successful booking | UC-13, UC-14, UC-15, UC-16 | Functional | Yes
+| TC-11 | Booking | Attempt to book an already booked asset | UC-25 | Functional | Yes
+| TC-12 | Booking | Booking without a selected date | UC-13, UC-14, UC-15, UC-16 | Functional | Yes
+| TC-13 | Booking | Booking an inactive asset | UC-09 | Functional | Yes
+| TC-14 | Booking | Successful booking cancellation | UC-18 | Functional | Yes
+| TC-15 | Booking | Attempt to cancel a booking that has already started | UC-18 | Functional | Yes
+| TC-16 | Booking | Successful modification of a booking | UC-20 | Functional | Yes
+| TC-17 | Booking | Attempt to modify a booking to an unavailable time slot | UC-20, UC-25 | Functional | Yes
+| TC-18 | Booking | Successful quick booking via QR code | UC-21 | Functional | No
+| TC-19 | Booking | QR code not recognized | UC-21 | Functional | No
+| TC-20 | Booking | Manager approves a booking request | UC-30 | Functional | Yes
+| TC-21 | Booking | Manager rejects a booking request | UC-31 | Functional | Yes
+| TC-22 | Category Management | Successful creation of a new asset category | UC-10 | Functional | Yes
+| TC-23 | Category Management | Create category with missing required fields | UC-10 | Functional | Yes
+| TC-24 | Category Management | Create category with an existing name | UC-10 | Functional | Yes
+| TC-25 | Category Management | Successful update of an existing asset category | UC-11 | Functional | Yes
+| TC-26 | Category Management | Successful deletion of an asset category | UC-11 | Functional | Yes
+| TC-27 | Category Management | Delete category with active bookings blocked | UC-11 | Functional | Yes
+| TC-28 | Category Management | Attempt to save invalid data in category | UC-11 | Functional | Yes
 |===
 
 ---
