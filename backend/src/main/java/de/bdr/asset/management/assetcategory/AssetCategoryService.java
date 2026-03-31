@@ -2,17 +2,21 @@ package de.bdr.asset.management.assetcategory;
 
 import java.util.List;
 
+/**
+ * AssetCategory Service
+ */
 public interface AssetCategoryService {
-    // CREATE
+
+    /** CREATE */
     AssetCategoryDTO createAssetCategory(AssetCategoryDTO assetCategoryRequest);
 
-    // READ
+    /** READ */
     AssetCategoryDTO getAssetCategoryById(Long id);
     List<AssetCategoryDTO> getAllAssetCategories();
 
-    // UPDATE
+    /** UPDATE */
     AssetCategoryDTO updateAssetCategory(Long id, AssetCategoryDTO assetCategoryRequest);
 
-    // DELETE (SOFT)
+    /** DELETE (Soft) */
     void deleteAssetCategory(Long id);
 }

@@ -3,8 +3,7 @@ package de.bdr.asset.management.asset;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import java.time.Instant;
 

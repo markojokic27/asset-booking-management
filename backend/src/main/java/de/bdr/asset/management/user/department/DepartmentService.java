@@ -2,17 +2,21 @@ package de.bdr.asset.management.user.department;
 
 import java.util.List;
 
+/**
+ * JPA Booking Repository
+ */
 public interface DepartmentService {
-    // CREATE
+
+    /** CREATE */
     DepartmentDTO createDepartment(DepartmentDTO request);
 
-    // READ
+    /** READ */
     DepartmentDTO getDepartmentById(Long id);
     List<DepartmentDTO> getAllDepartments();
 
-    // UPDATE
+    /** UPDATE */
     DepartmentDTO updateDepartment(Long id, DepartmentDTO request);
 
-    // DELETE
+    /** DELETE (Soft) */
     void deleteDepartment(Long id);
 }

@@ -4,16 +4,13 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+/**
+ * Asset Controller
+ */
 @RestController
 @RequestMapping("api/v1/assets")
 public class AssetController {
@@ -23,7 +20,8 @@ public class AssetController {
     public AssetController(AssetService assetService) {
         this.assetService = assetService;
     }
-    // CREATE
+
+    /** CREATE */
     @PostMapping
     public ResponseEntity<AssetDTO> createAsset(@Valid @RequestBody AssetDTO assetRequest) {
         return ResponseEntity
@@ -31,7 +29,7 @@ public class AssetController {
                 .body(assetService.createAsset(assetRequest));
     }
 
-    //READ ALL
+    /** READ ALL */
     @GetMapping
     public ResponseEntity<List<AssetDTO>> getAllAssets() {
         return ResponseEntity
@@ -39,7 +37,7 @@ public class AssetController {
                 .body(assetService.getAllAssets());
     }
 
-    // BY ID
+    /** READ BY ID */
     @GetMapping("/{id}")
     public ResponseEntity<AssetDTO> getAssetById(@PathVariable Long id) {
         return ResponseEntity
@@ -47,7 +45,7 @@ public class AssetController {
                 .body(assetService.getAssetById(id));
     }
 
-    // UPDATE
+    /** UPDATE */
     @PutMapping("/{id}")
     public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetDTO assetRequest) {
         return ResponseEntity

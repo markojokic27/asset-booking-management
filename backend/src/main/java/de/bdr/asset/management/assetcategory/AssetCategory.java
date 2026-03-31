@@ -2,11 +2,9 @@ package de.bdr.asset.management.assetcategory;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * Asset category domain-entity model.

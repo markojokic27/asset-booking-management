@@ -7,18 +7,16 @@ import java.util.List;
  */
 public interface UserService {
 
-    // Create a new user
+    /** CREATE */
     UserResponseDTO createUser(UserRequestDTO userRequest);
 
-    // Update an existing user by ID
+    /** READ */
+    UserResponseDTO getUserById(Long id);
+    List<UserResponseDTO> getAllUsers();
+
+    /** UPDATE */
     UserResponseDTO updateUser(Long id, UserRequestDTO userRequest);
 
-    // Get a user by ID
-    UserResponseDTO getUserById(Long id);
-
-    // Get all users with pagination
-    List<UserResponseDTO> getAllUsers();
-    
-    // Soft delete / deactivate a user
+    /** DELETE (Soft) */
     UserResponseDTO deleteUser(Long id, String status, String note);
 }
