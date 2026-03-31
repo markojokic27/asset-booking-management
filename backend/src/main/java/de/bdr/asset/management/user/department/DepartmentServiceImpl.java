@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.user.User;
+import de.bdr.asset.management.user.UserRepository;
 /**
  * Implementation of Department Service
  * Currently returns only dummy data.
@@ -12,8 +16,14 @@ import org.springframework.stereotype.Service;
 public class DepartmentServiceImpl implements DepartmentService {
     // TODO: Update the functions to not use dummy data
     private final DepartmentRepository repository;
-
-    public DepartmentServiceImpl(DepartmentRepository repository) { this.repository = repository; }
+    private final DepartmentMapper mapper;
+    private final UserRepository userRepository;
+        
+    public DepartmentServiceImpl(DepartmentRepository repository, DepartmentMapper mapper, UserRepository userRepository) {
+        this.repository = repository;
+        this.mapper = mapper;
+        this.userRepository = userRepository;
+    }
 
     /**
      * @param departmentRequest - A DepartmentDTO record
@@ -21,13 +31,14 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
-        // TODO: Implement a mapper function to handle this
-        
-        return new DepartmentResponseDTO(
-                1L,
-                departmentRequest.name(),
-                departmentRequest.managerId()
-        );
+        User manager = userRepository.findById(departmentRequest.managerId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+
+        Department department = mapper.toEntity(departmentRequest);
+        department.setManager(manager);
+        department = repository.save(department);
+
+        return mapper.toResponse(department);
     }
 
     /**
@@ -36,11 +47,10 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO getDepartmentById(Long id) {
-        return new DepartmentResponseDTO(
-                1L,
-                DepartmentEnum.ARCHITECTURE,
-                1L
-        );
+        Department department = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
+
+        return mapper.toResponse(department);
     }
 
     /**
@@ -48,22 +58,11 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public List<DepartmentResponseDTO> getAllDepartments() {
-        List<DepartmentResponseDTO> dummyList = new ArrayList<>();
-        dummyList.add(
-                new DepartmentResponseDTO(
-                        1L,
-                        DepartmentEnum.ARCHITECTURE,
-                        1L
-                )
-        );
-        dummyList.add(
-                new DepartmentResponseDTO(
-                        1L,
-                        DepartmentEnum.DEVOPS,
-                        2L
-                )
-        );
-        return dummyList;
+        List<Department> departments = repository.findAll();
+
+        return departments.stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     /**
@@ -73,11 +72,17 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
-        return new DepartmentResponseDTO(
-                1L,
-                DepartmentEnum.ARCHITECTURE,
-                1L
-        );
+        Department department = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
+
+        User manager = userRepository.findById(departmentRequest.managerId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+        
+        department.setName(departmentRequest.name());
+        department.setManager(manager);
+        department = repository.save(department);
+
+        return mapper.toResponse(department);
     }
 
     /**
@@ -85,6 +90,12 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public void deleteDepartment(Long id) {
+        // TODO: Add a field for soft delete
+        
+        // Department department = repository.findById(id)
+        //         .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
+        // department.setStatus("DELETED");
+        // department = repository.save();
     }
 }
