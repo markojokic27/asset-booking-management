@@ -11,7 +11,7 @@ import java.util.List;
  * Department Controller
  */
 @RestController
-@RequestMapping("api/v1/departments")
+@RequestMapping("v1/departments")
 public class DepartmentController {
     private final DepartmentService service;
 

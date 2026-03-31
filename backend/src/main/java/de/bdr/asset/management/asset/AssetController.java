@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
  * Asset Controller
  */
 @RestController
-@RequestMapping("api/v1/assets")
+@RequestMapping("v1/assets")
 public class AssetController {
 
     private final AssetService assetService;
