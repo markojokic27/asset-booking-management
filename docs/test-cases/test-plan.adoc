@@ -6,3 +6,160 @@ TODO Define and specify which kind of test we will have.
 - API tests 
 - Smoke Tests (API tests + most important E2E tests)
 - Load / Performance tests  
+
+= QA Test Plan
+---
+== Maurer Internship 2026
+[cols="1,2"]
+|===
+2+| Document Summary
+| Project       | Asset Booking Management
+| Document Type | QA Test Plan
+| Version       | 1.0
+| Date          | March 2026
+|===
+---
+= 1. Introduction
+This document defines the QA Test Plan for the Maurer Asset Booking Management — a web and mobile application designed to streamline the booking and management of working assets including laptops, parking spots, desks, meeting rooms, and books.
+The system is developed as part of Maurer Internship 2026. This test plan covers all 37 use cases defined in the system specification.
+
+
+= 2. Test Strategy
+== 2.1 Test Levels
+[cols="1, 2, 2", options="header"]
+|===
+| Level | Description | Tools
+| Unit Testing | Individual functions, services, repository methods | JUnit 5, Jest, Mockito
+| Integration Testing | API endpoints, service-to-service calls, DB queries | Bruno
+| System / E2E Testing | Full user flows across web and mobile UI | Selenium
+| Manual Testing | QR scan hardware, biometric | Manual test scripts executed by QA team
+|===
+
+== 2.2 Test Types
+[cols="1, 2", options="header"]
+|===
+| Type | Coverage
+| Functional | Core feature behavior per use case flows
+| Negative / Edge Case | Invalid inputs, missing fields, constraint violations
+| Security | Role-based access control, unauthorized access attempts
+| Integration | Email delivery, Google Calendar sync, push notifications
+| Regression | Re-run automated suite on every pull request via CI
+| Exploratory | Unscripted testing of UI/UX and edge conditions
+|===
+
+== 2.3 Automation Strategy
+Target: 85%+ automation coverage for functional and integration tests. The following categories will be automated:
+
+    - All API-level tests (booking CRUD, user management, asset management)
+    - Authentication flows including session timeout
+    - Double-booking concurrency checks
+    - Email and calendar integration
+    - Role-based access control verification
+
+The following tests remain manual:
+
+    - Biometric login — requires physical hardware
+    - QR code camera scanning — requires device camera
+
+---
+= 3. Test Coverage Summary
+
+== Priority Legend
+    - *Critical* — system correctness at risk (e.g. double booking prevention)
+    - *High* — core user-facing features that must work for each release
+    - *Medium* — important features; failures cause degraded experience
+    - *Low* — minor or cosmetic features
+    
+---
+
+= 4. Smoke Test
+
+Smoke test suite includes:
+ 
+    - Successful login 
+    - Successful creation of a new asset category 
+    - Successful biometric login — manual only 
+    - Successful asset booking 
+
+= 5. Test Cases
+[cols="1,1,2,1,1,1", options="header"]
+|===
+| TC ID | Module | Test Case Name | UC | Type | Automated
+| TC-01 | Authentication | Successful login with valid credentials | UC-01 | Functional | Yes
+| TC-02 | Authentication | Login with incorrect password | UC-01 | Functional | Yes
+| TC-03 | Authentication | Login with incorrect username | UC-01 | Functional | Yes
+| TC-04 | Authentication | Login with both fields empty | UC-01 |  Functional | Yes
+| TC-05 | Authentication | Login with empty username | UC-01 |  Functional | Yes
+| TC-06 | Authentication | Login with empty password | UC-01 |  Functional | Yes
+| TC-07 | Authentication | Successful biometric login | UC-03 |  Functional | No
+| TC-08 | Authentication | Biometric login with unregistered biometric | UC-03 |  Functional | No
+| TC-09 | Authentication | Successful adding of biometric parameters | UC-04 | Functional | No
+| TC-10 | Category Management | Successful creation of a new asset category | UC-10 | Functional | Yes
+| TC-11 | Category Management | Create category with missing required fields | UC-10 | Functional | Yes
+| TC-12 | Category Management | Create category with an existing name | UC-10 | Functional | Yes
+| TC-13 | Category Management | Successful update of an existing asset category | UC-11 | Functional | Yes
+| TC-14 | Category Management | Successful deletion of an asset category | UC-11 | Functional | Yes
+| TC-15 | Category Management | Delete category with active bookings blocked | UC-11 | Functional | Yes
+| TC-16 | Category Management | Attempt to save invalid data in category | UC-11 | Functional | Yes
+|===
+
+---
+
+= 6. API Test
+
+[cols="1,2,2", options="header"]
+|===
+| Method | Endpoint | Action
+
+3+| *Users*
+| GET    | {{baseUrl}}/v1/users      | List all users
+| POST   | {{baseUrl}}/v1/users      | Create a new user
+| GET    | {{baseUrl}}/v1/users/:id  | Get user by ID
+| PUT    | {{baseUrl}}/v1/users/:id  | Update user
+| PATCH  | {{baseUrl}}/v1/users/:id  | Partially update user
+3+| *Assets*
+| GET    | {{baseUrl}}/v1/assets   | List all assets
+| POST   | {{baseUrl}}/v1/assets     | Create a new asset
+| GET    | {{baseUrl}}/v1/assets/:id  | Get asset by ID
+| PUT    | {{baseUrl}}/v1/assets/:id  | Update asset
+3+| *Asset Categories*
+| GET    | {{baseUrl}}/v1/asset-categories   | List all asset categories
+| POST   | {{baseUrl}}/v1/asset-categories     | Create a new asset category
+| GET    | {{baseUrl}}/v1/asset-categories/:id  | Get asset category by ID
+| PUT    | {{baseUrl}}/v1/asset-categories/:id  | Update asset category
+| DELETE | {{baseUrl}}/v1/asset-categories/:id  | Delete asset category by ID
+3+| *Bookings*
+| GET    | {{baseUrl}}/v1/bookings   | List all bookings
+| POST   | {{baseUrl}}/v1/bookings     | Create a new booking
+| GET    | {{baseUrl}}/v1/bookings/:id  | Get booking by ID
+| PUT    | {{baseUrl}}/v1/bookings/:id  | Update booking
+| PUT    | {{baseUrl}}/v1/bookings/:id/cancel-booking | Cancel booking
+3+| *Departments*
+| GET    | {{baseUrl}}/v1/departments   | List all departments
+| POST   | {{baseUrl}}/v1/departments     | Create a new department
+| GET    | {{baseUrl}}/v1/departments/:id  | Get department by ID
+| PUT    | {{baseUrl}}/v1/departments/:id  | Update department
+|===
+
+
+= 7. Test Environment
+[cols="1,1", options="header"]
+|===
+| Component | Specification
+| Backend | Spring Boot
+| Frontend | React 19
+| Mobile App | Android
+| Database | PostgreSQL 16
+| Calendar | Google Calendar API
+|===
+
+---
+= 8. Defect Management
+[cols="1,2,2", options="header"]
+|===
+| Severity | Definition | Target Resolution
+| Critical | System crash, data loss, double booking possible, security breach | Same day — block release
+| High | Core feature broken, booking/approval flow fails | Within 2 business days
+| Medium | Feature degraded, workaround available | Within 1 sprint
+| Low | Minor UX issue, cosmetic defect | Backlog — next available sprint
+|===
