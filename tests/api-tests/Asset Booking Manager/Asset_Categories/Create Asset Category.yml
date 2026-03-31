@@ -12,8 +12,8 @@ http:
     type: json
     data: |-
       {
-        "name": "",
-        "description": "",
+        "name": "A",
+        "description": "A",
         "bookingPeriod": "HOUR",
         "approval": false
       }

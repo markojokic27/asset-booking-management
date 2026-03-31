@@ -1,20 +1,21 @@
 package de.bdr.asset.management.assetcategory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 /**
  * Implementation of AssetCategory Service
- * Currently returns only dummy data.
  */
 @Service
 public class AssetCategoryServiceImpl implements AssetCategoryService {
-    // TODO: Update the functions to not use dummy data
     private final AssetCategoryRepository repository;
+    private final AssetCategoryMapper mapper;
 
-    public AssetCategoryServiceImpl(AssetCategoryRepository repository) {
+    public AssetCategoryServiceImpl(AssetCategoryRepository repository, AssetCategoryMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     /**
@@ -25,15 +26,10 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
-        // TODO: Implement a mapper function to handle this
-        
-        return new AssetCategoryResponseDTO(
-                1L,
-                assetCategoryRequest.name(),
-                assetCategoryRequest.description(),
-                assetCategoryRequest.bookingPeriod(),
-                assetCategoryRequest.approval()
-        );
+        AssetCategory newCategory = mapper.toEntity(assetCategoryRequest);
+        AssetCategory savedCategory = repository.save(newCategory);
+
+        return mapper.toResponse(savedCategory);
     }
 
     /**
@@ -44,13 +40,10 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO getAssetCategoryById(Long id){
-        return new AssetCategoryResponseDTO(
-                1L,
-                "Dummy Asset category",
-                "Dummy Desc",
-                BookingPeriodEnum.HOUR,
-                false
-        );
+        AssetCategory category = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id:" + id));
+
+        return mapper.toResponse(category);
     }
 
     /**
@@ -60,26 +53,11 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public List<AssetCategoryResponseDTO> getAllAssetCategories(){
-        List<AssetCategoryResponseDTO> dummyList = new ArrayList<>();
-        dummyList.add(
-            new AssetCategoryResponseDTO(
-                    1L,
-                    "Dummy Asset category",
-                    "Dummy Desc",
-                    BookingPeriodEnum.HOUR,
-                    false
-            )
-        );
-        dummyList.add(
-                new AssetCategoryResponseDTO(
-                        1L,
-                        "2 Dummy Asset category",
-                        "Dummy Desc 2",
-                        BookingPeriodEnum.HOUR,
-                        false
-                )
-        );
-        return dummyList;
+        List<AssetCategory> categories = repository.findAll();
+
+        return categories.stream()
+                .map(mapper::toResponse)
+                .toList();
     }
 
     /**
@@ -91,13 +69,17 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
-        return new AssetCategoryResponseDTO(
-                1L,
-                "Dummy Asset category",
-                "Dummy Desc",
-                BookingPeriodEnum.HOUR,
-                false
-        );
+        AssetCategory category = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id:" + id));
+
+        category.setName(assetCategoryRequest.name());
+        category.setDescription(assetCategoryRequest.description());
+        category.setBookingPeriod(assetCategoryRequest.bookingPeriod());
+        category.setApproval(assetCategoryRequest.approval());
+
+        AssetCategory updatedCategory = repository.save(category);
+
+        return mapper.toResponse(updatedCategory);
     }
 
     /**
@@ -108,6 +90,13 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public void deleteAssetCategory(Long id){
+        // TODO: Add a field for soft delete
 
+        // AssetCategory category = repository.findById(id)
+        //     .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id:" + id));
+
+        // category.setStatus("DELETED"),
+
+        // repository.save(category);
     }
 }

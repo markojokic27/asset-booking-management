@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
-import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
+import { Layout, LayoutRow } from '../components/layout/Layout';
 import { Navbar } from '../components/layout/Navbar';
 
 export default function App() {

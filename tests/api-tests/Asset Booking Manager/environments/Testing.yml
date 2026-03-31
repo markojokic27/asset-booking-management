@@ -1,5 +1,5 @@
-name: Testing Environment
+name: Testing
 color: "#CE4F3B"
 variables:
   - name: baseUrl
-    value: http://127.0.0.1:8080/api
+    value: http://127.0.0.1:8080
