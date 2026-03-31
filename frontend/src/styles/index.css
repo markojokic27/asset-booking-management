@@ -564,7 +564,7 @@
   --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
 
   --shadow-card: 0px 0px 7px 3px rgba(0, 0, 0, 0.08);
-  --shadow-button: 0px 4px 4px #030044;
+  --shadow-button: 0px 3px 3px #030044;
 }
 
 .dark {

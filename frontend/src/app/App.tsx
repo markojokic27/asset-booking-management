@@ -10,9 +10,7 @@ export default function App() {
       <Layout>
         <LayoutRow className="relative">
           <Navbar />
-          <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="pt-20">
-            <Outlet />
-          </LayoutColumn>
+          <Outlet />
         </LayoutRow>
       </Layout>
     </>
