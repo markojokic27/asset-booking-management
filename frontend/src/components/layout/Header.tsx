@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         <LayoutRow className="flex h-full items-center">
           <LayoutColumn className="flex items-center justify-between">
             <Link to="/">
-              <Logo className="h-8 w-auto" />
+              <Logo className="h-8 w-auto dark:brightness-0 dark:invert" />
             </Link>
             <div className="flex gap-6">
               <ThemeToggle />

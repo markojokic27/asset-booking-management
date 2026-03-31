@@ -16,7 +16,7 @@ export default function Login() {
             smSpan={8}
             className="flex h-screen flex-col items-center justify-center md:h-fit"
           >
-            <Logo className="h-20 scale-250 md:hidden" />
+            <Logo className="h-20 scale-250 md:hidden dark:brightness-0 dark:invert" />
             <LoginForm />
           </LayoutColumn>
         </LayoutRow>
