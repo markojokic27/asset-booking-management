@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
@@ -81,15 +82,37 @@ public class UserControllerTest {
     }
 
     /** DELETE */
+
     @Test
-    void deleteUser_returnsNoContent() {
+    void deleteUser_returnsUserResponseDTO() {
 
-        ResponseEntity<Void> result = userController.deleteUser(1L, UserStatusEnum.ACTIVE);
+        Long userId = 1L;
+        String status = "INACTIVE";
+        Map<String, String> noteBody = Map.of("note", "Left company");
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        assertThat(result.getBody()).isNull();
-        verify(userService).deleteUser(1L, UserStatusEnum.ACTIVE);
+        UserResponseDTO mockResponse = new UserResponseDTO(
+                userId,
+                "username",
+                "surname",
+                "name",
+                "email@test.com",
+                UserRoleEnum.EMPLOYEE,
+                UserStatusEnum.INACTIVE,
+                1L,
+                "manager@test.com",
+                "Left company",
+                "ALL"
+        );
+
+        when(userService.deleteUser(userId, status, "Left company"))
+                .thenReturn(mockResponse);
+
+        ResponseEntity<UserResponseDTO> result =
+                userController.deleteUser(userId, status, noteBody);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody()).isEqualTo(mockResponse);
+
+        verify(userService).deleteUser(userId, status, "Left company");
     }
-
-
 }
