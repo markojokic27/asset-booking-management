@@ -5,114 +5,90 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.user.department.Department;
+import de.bdr.asset.management.user.department.DepartmentRepository;
+
 /**
  * Implementation of User Service
  */
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
+    private final UserMapper mapper;
+    private final DepartmentRepository departmentRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserRepository repository, UserMapper mapper, DepartmentRepository departmentRepository) {
+        this.repository = repository;
+        this.mapper = mapper;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override
     public UserResponseDTO createUser(UserRequestDTO userRequest) {
-        // TODO Implement logic: map UserRequestDTO -> User, save, map User -> UserResponseDTO
-        return new UserResponseDTO(
-            1L,
-            userRequest.username(),
-            userRequest.surname(),
-            userRequest.name(),
-            userRequest.email(),
-            userRequest.role(),
-            userRequest.status(),
-            userRequest.departmentId(),
-            userRequest.managerEmail(),
-            userRequest.notes(),
-                userRequest.benefit()
-        );
-    }
+        Department department = departmentRepository.findById(userRequest.departmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
+        
+        User user = mapper.toEntity(userRequest);
+        user.setDepartment(department);
+        user = repository.save(user);
 
-    @Override
-    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequest) {
-        // TODO Implement logic: find User by id, update fields, save, map -> UserResponseDTO
-        return new UserResponseDTO(
-            1L,
-            userRequest.username(),
-            userRequest.surname(),
-            userRequest.name(),
-            userRequest.email(),
-            userRequest.role(),
-            userRequest.status(),
-            userRequest.departmentId(),
-            userRequest.managerEmail(),
-            userRequest.notes(),
-                userRequest.benefit()
-        );
+        return mapper.toResponse(user);
     }
 
     @Override
     public UserResponseDTO getUserById(Long id) {
-        // TODO Implement logic: find User by id, map -> UserResponseDTO
-        return new UserResponseDTO(
-            1L,
-            "userRequest.username()",
-            "userRequest.surname()",
-            "userRequest.name()",
-            "userRequest.email()",
-            UserRoleEnum.EMPLOYEE,
-            UserStatusEnum.ACTIVE,
-            1L,
-            "userRequest.managerEmail()",
-            "userRequest.notes()",
-                "ALL"
-        );
+        User user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        return mapper.toResponse(user);
     }
 
     @Override
     public List<UserResponseDTO> getAllUsers() {
-        // TODO Implement logic: use userRepository.findAll(PageRequest.of(...)), map -> List<UserResponseDTO>
-        List<UserResponseDTO> dummyList = new ArrayList<>();
-        dummyList.add(
-            new UserResponseDTO(
-                1L,
-                "Username 1",
-                "Surname 1",
-                "Name 1",
-                "Email 1",
-                UserRoleEnum.EMPLOYEE,
-                UserStatusEnum.ACTIVE,
-                1L,
-                "Manager Email 1",
-                "Notes 1",
-                    "ALL"
-            )
-        );
+        List<User> users = repository.findAll();
 
-        dummyList.add(
-            new UserResponseDTO(
-                2L,
-                "Username 2",
-                "Surname 2",
-                "Name 2",
-                "Email 2",
-                UserRoleEnum.EMPLOYEE,
-                UserStatusEnum.ACTIVE,
-                2L,
-                "Manager Email 2",
-                "Notes 2",
-                    "ALL"
-            )
-        );
+        return users.stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
 
-        return dummyList;
+    @Override
+    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequest) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        Department department = departmentRepository.findById(userRequest.departmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
+        
+        user.setUsername(userRequest.username());
+        user.setSurname(userRequest.surname());
+        user.setName(userRequest.name());
+        user.setEmail(userRequest.email());
+        user.setRole(userRequest.role());
+        user.setStatus(userRequest.status());
+        user.setDepartment(department);
+        user.setManagerEmail(userRequest.managerEmail());
+        user.setNotes(userRequest.notes());
+        user.setBenefit(userRequest.benefit());
+        user = repository.save(user);
+
+        return mapper.toResponse(user);
     }
 
     @Override
     public UserResponseDTO deleteUser(Long id, String status, String note) {
-        // TODO Implement logic: find User, set status = INACTIVE, save, map -> UserResponseDTO
+        // TODO: Add a field for soft delete
+        // Also discuss if passing status is neccessary since delete status will always be the same
+        
+        // User user = repository.findById(id)
+        //         .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        // user.setStatus(status);
+        // user.setNote(note);
+        // user = repository.save();
+
         return null;
     }
 }
