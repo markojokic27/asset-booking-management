@@ -30,36 +30,36 @@ public class BookingController {
 
     /** CREATE */
     @PostMapping
-    public ResponseEntity<BookingDTO> create(@Valid @RequestBody BookingDTO request) {
+    public ResponseEntity<BookingRequestDTO> create(@Valid @RequestBody BookingRequestDTO request) {
 
-        BookingDTO createdBooking = service.createBooking(request);
+        BookingRequestDTO createdBooking = service.createBooking(request);
 
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
 
     /** READ BY ID */
     @GetMapping("/{id}")
-    public ResponseEntity<BookingDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<BookingRequestDTO> getById(@PathVariable Long id) {
 
-        BookingDTO foundBooking = service.getBookingById(id);
+        BookingRequestDTO foundBooking = service.getBookingById(id);
 
         return ResponseEntity.ok(foundBooking);
     }
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<BookingDTO>> getAll() {
+    public ResponseEntity<List<BookingRequestDTO>> getAll() {
 
-        List<BookingDTO> allBookings = service.getAllBookings();
+        List<BookingRequestDTO> allBookings = service.getAllBookings();
 
         return ResponseEntity.ok(allBookings);
     }
 
     /** UPDATE */
     @PutMapping("/{id}")
-    public ResponseEntity<BookingDTO> update(@PathVariable Long id, @Valid @RequestBody BookingDTO request) {
+    public ResponseEntity<BookingRequestDTO> update(@PathVariable Long id, @Valid @RequestBody BookingRequestDTO request) {
 
-        BookingDTO updatedBooking = service.updateBooking(id, request);
+        BookingRequestDTO updatedBooking = service.updateBooking(id, request);
 
         return ResponseEntity.ok(updatedBooking);
     }

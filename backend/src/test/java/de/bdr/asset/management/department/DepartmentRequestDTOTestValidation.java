@@ -1,6 +1,6 @@
 package de.bdr.asset.management.department;
 
-import de.bdr.asset.management.user.department.DepartmentDTO;
+import de.bdr.asset.management.user.department.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.DepartmentEnum;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DepartmentDTOTestValidation {
+public class DepartmentRequestDTOTestValidation {
 
     private static Validator validator;
 
@@ -23,15 +23,14 @@ public class DepartmentDTOTestValidation {
         validator=factory.getValidator();
     }
 
-    private DepartmentDTO validDTO(){
-        return new DepartmentDTO(
-           1L,
+    private DepartmentRequestDTO validDTO(){
+        return new DepartmentRequestDTO(
            DepartmentEnum.DEVOPS,
            2L
         );
     }
 
-    private Set<ConstraintViolation<DepartmentDTO>> violationSet(String field, DepartmentDTO dto){
+    private Set<ConstraintViolation<DepartmentRequestDTO>> violationSet(String field, DepartmentRequestDTO dto){
         return validator.validateProperty(dto, field);
     }
 
@@ -46,7 +45,7 @@ public class DepartmentDTOTestValidation {
     //Name is null
     @Test
     void nullName_shouldFailNotNull(){
-        DepartmentDTO dto=new DepartmentDTO(1L, null, 2L);
+        DepartmentRequestDTO dto=new DepartmentRequestDTO(null, 2L);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
@@ -55,7 +54,7 @@ public class DepartmentDTOTestValidation {
     //ManagerId is null
     @Test
     void nullManagerId_shouldFailNotNull(){
-        DepartmentDTO dto=new DepartmentDTO(1L, DepartmentEnum.DEVOPS, null);
+        DepartmentRequestDTO dto=new DepartmentRequestDTO( DepartmentEnum.DEVOPS, null);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("managerId"));
     }
 

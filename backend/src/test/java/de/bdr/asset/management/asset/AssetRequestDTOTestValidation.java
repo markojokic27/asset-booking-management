@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AssetDTOTestValidation {
+public class AssetRequestDTOTestValidation {
 
     private static Validator validator;
 
@@ -21,9 +21,8 @@ public class AssetDTOTestValidation {
         validator=factory.getValidator();
     }
 
-    private AssetDTO validDTO(){
-        return new AssetDTO(
-                1L,
+    private AssetRequestDTO validDTO(){
+        return new AssetRequestDTO(
                 "Hp 15",
                 1L,
                 "Laptop located in room 301",
@@ -36,7 +35,7 @@ public class AssetDTOTestValidation {
 
     }
 
-    private Set<ConstraintViolation<AssetDTO>> violationsFor(String field, AssetDTO dto){
+    private Set<ConstraintViolation<AssetRequestDTO>> violationsFor(String field, AssetRequestDTO dto){
         return validator.validateProperty(dto, field);
     }
 
@@ -51,14 +50,14 @@ public class AssetDTOTestValidation {
     // Name is blank
     @Test
     void blankName_shouldFailNotBlank(){
-        AssetDTO dto=new AssetDTO(1L, " ", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO( " ", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     // Name is too long
     @Test
     void nameTooLong_shouldFailSize(){
-        AssetDTO dto=new AssetDTO(1L, "a".repeat(101), 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO("a".repeat(101), 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
@@ -67,7 +66,7 @@ public class AssetDTOTestValidation {
     //CategoryId is null
     @Test
     void nullCategoryId_shouldFailNotNull(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", null, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO("Hp 15", null, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("categoryId"));
     }
 
@@ -76,14 +75,14 @@ public class AssetDTOTestValidation {
     //Description is too long
     @Test
     void descriptionTooLong_shouldFailSize(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, "L".repeat(278), "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO("Hp 15", 1L, "L".repeat(256), "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("description"));
     }
 
     // Description is null, should be allowed
     @Test
     void nullDescription_shouldBeValid() {
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, null, "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO( "Hp 15", 1L, null, "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).noneMatch(v -> v.getPropertyPath().toString().equals("description"));
     }
 
@@ -92,14 +91,14 @@ public class AssetDTOTestValidation {
     // Code is blank
     @Test
     void blankCode_shouldFailNotBlank(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, "Laptop located in room 301", " ", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO( "Hp 15", 1L, "Laptop located in room 301", " ", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("code"));
     }
 
     // Code is too long
     @Test
     void codeTooLong_shouldFailSize(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "Q".repeat(20005), AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO( "Hp 15", 1L, "Laptop located in room 301", "Q".repeat(20001), AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("code"));
     }
 
@@ -108,7 +107,7 @@ public class AssetDTOTestValidation {
     //Status is null
     @Test
     void nullStatus_shouldFailNotNull(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", null, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", null, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v->v.getPropertyPath().toString().equals("status"));
     }
 
@@ -117,14 +116,14 @@ public class AssetDTOTestValidation {
     // Location is blank
     @Test
     void blankLocation_shouldFailNotBlank(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, " ");
+        AssetRequestDTO dto=new AssetRequestDTO( "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, " ");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("location"));
     }
 
     // Location is too long
     @Test
     void locationTooLong_shouldFailSize(){
-        AssetDTO dto=new AssetDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "R".repeat(300));
+        AssetRequestDTO dto=new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "R".repeat(101));
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("location"));
     }
 

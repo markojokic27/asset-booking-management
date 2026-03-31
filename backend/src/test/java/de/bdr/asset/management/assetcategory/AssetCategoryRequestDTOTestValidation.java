@@ -9,7 +9,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AssetCategoryDTOTestValidation {
+public class AssetCategoryRequestDTOTestValidation {
 
     private static Validator validator;
 
@@ -19,9 +19,8 @@ public class AssetCategoryDTOTestValidation {
         validator=factory.getValidator();
     }
 
-    private AssetCategoryDTO validDTO(){
-        return new AssetCategoryDTO(
-                1L,
+    private AssetCategoryRequestDTO validDTO(){
+        return new AssetCategoryRequestDTO(
                 "Books",
                 "A collection of books available for borrowing within the company library.",
                 BookingPeriodEnum.DAY,
@@ -29,7 +28,7 @@ public class AssetCategoryDTOTestValidation {
         );
     }
 
-    private Set<ConstraintViolation<AssetCategoryDTO>> violationsFor(String field, AssetCategoryDTO dto){
+    private Set<ConstraintViolation<AssetCategoryRequestDTO>> violationsFor(String field, AssetCategoryRequestDTO dto){
         return validator.validateProperty(dto, field);
     }
 
@@ -44,14 +43,14 @@ public class AssetCategoryDTOTestValidation {
     // Name is blank
     @Test
     void blankName_shouldFailNotBlank(){
-        AssetCategoryDTO dto=new AssetCategoryDTO(1L, " ", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
+        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO( " ", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
     // Name is too long
     @Test
     void nameTooLong_shouldFailSize(){
-        AssetCategoryDTO dto=new AssetCategoryDTO(1L, "B".repeat(260), "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
+        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO("B".repeat(101), "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
@@ -60,14 +59,14 @@ public class AssetCategoryDTOTestValidation {
     //Description is too long
     @Test
     void descriptionTooLong_shouldFailSize(){
-        AssetCategoryDTO dto=new AssetCategoryDTO(1L, "Books", "A".repeat(270), BookingPeriodEnum.DAY, Boolean.TRUE);
+        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO( "Books", "A".repeat(256), BookingPeriodEnum.DAY, Boolean.TRUE);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("description"));
     }
 
     // Description is null, should be allowed
     @Test
     void nullDescription_shouldBeValid() {
-        AssetCategoryDTO dto = new AssetCategoryDTO(1L, "Books", null, BookingPeriodEnum.DAY, Boolean.TRUE);
+        AssetCategoryRequestDTO dto = new AssetCategoryRequestDTO( "Books", null, BookingPeriodEnum.DAY, Boolean.TRUE);
         assertThat(validator.validate(dto)).noneMatch(v -> v.getPropertyPath().toString().equals("description"));
     }
 
@@ -76,7 +75,7 @@ public class AssetCategoryDTOTestValidation {
     //Booking period is null
     @Test
     void nullBookingPeriod_shouldFailNotNull(){
-        AssetCategoryDTO dto=new AssetCategoryDTO(1L, "Books", "A collection of books available for borrowing within the company library.", null, Boolean.TRUE);
+        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO( "Books", "A collection of books available for borrowing within the company library.", null, Boolean.TRUE);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("bookingPeriod"));
     }
 
@@ -85,7 +84,7 @@ public class AssetCategoryDTOTestValidation {
     //Approval is null
     @Test
     void nullApproval_shouldFailNotNull(){
-        AssetCategoryDTO dto=new AssetCategoryDTO(1L, "Books", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, null);
+        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO( "Books", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, null);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("approval"));
     }
 

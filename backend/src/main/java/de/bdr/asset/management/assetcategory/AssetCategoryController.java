@@ -22,7 +22,7 @@ public class AssetCategoryController {
 
     /** CREATE */
     @PostMapping
-    public ResponseEntity<AssetCategoryDTO> create(@Valid @RequestBody AssetCategoryDTO request) {
+    public ResponseEntity<AssetCategoryRequestDTO> create(@Valid @RequestBody AssetCategoryRequestDTO request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createAssetCategory(request));
@@ -30,7 +30,7 @@ public class AssetCategoryController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<AssetCategoryDTO>> getAll() {
+    public ResponseEntity<List<AssetCategoryRequestDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAllAssetCategories());
@@ -38,7 +38,7 @@ public class AssetCategoryController {
 
     /** READ BY ID */
     @GetMapping("/{id}")
-    ResponseEntity<AssetCategoryDTO> getById(@PathVariable Long id) {
+    ResponseEntity<AssetCategoryRequestDTO> getById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAssetCategoryById(id));
@@ -46,7 +46,7 @@ public class AssetCategoryController {
 
     /** UPDATE */
     @PutMapping("/{id}")
-    ResponseEntity<AssetCategoryDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryDTO request) {
+    ResponseEntity<AssetCategoryRequestDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateAssetCategory(id, request));
