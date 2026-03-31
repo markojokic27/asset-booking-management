@@ -1,22 +1,61 @@
 import { LayoutColumn } from './Layout';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import HomeSharpIcon from '@mui/icons-material/HomeSharp';
+import MonitorSharpIcon from '@mui/icons-material/MonitorSharp';
+import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
+import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+
+
 
 export const Navbar: React.FC = () => {
+  // Base for links
+  const linkBase = "flex items-center p-3 transition-all border-l-8 w-full";
+
+  // Style when link iz active
+  const activeStyle = "bg-bg-light border-primaryblue text-black shadow-card dark:bg-bg-dark dark:text-white";
+
+  // Style when link is not active
+  const inactiveStyle = `
+    border-transparent text-black 
+    hover:bg-bg-light hover:border-primaryblue 
+    dark:text-white dark:hover:bg-bg-dark dark:hover:border-primaryblue
+  `;
+
   return (
     <LayoutColumn
       mdSpan={3}
-      className="before:pulled-background-account hover:text-gray-900s absolute left-0 hidden min-h-screen w-full bg-gray-100 pt-20 text-gray-700 shadow-md md:flex dark:bg-gray-900 dark:text-white dark:shadow-black/20"
+      className="px-0 md:px-0 lg:px-0 absolute left-0 hidden min-h-screen h-screen w-full bg-surface-light pt-20 text-text-light shadow-md md:flex flex-col dark:bg-gray-900 dark:text-white dark:shadow-black/20 tracking-[0.2em] leading-[44px] text-2xl pb-10"
     >
-      <nav className="flex flex-col gap-4 pt-10">
-        <Link to="/" className="text-lg font-medium">
-          Home
-        </Link>
-        <Link to="/assets" className="text-lg font-medium">
-          Assets
-        </Link>
-        <Link to="/bookings" className="text-lg font-medium">
-          Bookings
-        </Link>
+      <nav className="flex flex-col justify-between h-full pt-10 w-full">
+
+        <div className="flex flex-col gap-4 w-full">
+          <NavLink to="/" className={({ isActive }) =>
+            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
+          }>
+            <HomeSharpIcon className="mr-4" />
+            Home
+          </NavLink>
+
+          <NavLink to="/assets" className={({ isActive }) =>
+            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
+          }>
+            <MonitorSharpIcon className="mr-4" />
+            Assets
+          </NavLink>
+
+          <NavLink to="/bookings" className={({ isActive }) =>
+            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
+          }>
+            <CalendarTodaySharpIcon className="mr-4" />
+            Bookings
+          </NavLink>
+        </div>
+
+        <NavLink to="/login" className={`${linkBase} ${inactiveStyle}`}>
+          <LogoutSharpIcon className="mr-4" />
+          Logout
+        </NavLink>
+
       </nav>
     </LayoutColumn>
   );
