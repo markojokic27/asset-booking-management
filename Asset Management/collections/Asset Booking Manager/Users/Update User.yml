@@ -1,0 +1,228 @@
+info:
+  name: Update User
+  type: http
+  seq: 4
+  tags:
+    - Users
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/v1/users/:id"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: ID of the user
+  body:
+    type: json
+    data: |-
+      {
+        "username": "",
+        "name": "",
+        "surname": "",
+        "email": "",
+        "role": "EMPLOYEE",
+        "status": "ACTIVE",
+        "note": "",
+        "departmentId": 0,
+        "managerEmail": "",
+        "benefit": "ALL"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: User Response
+    request:
+      url: "{{baseUrl}}/v1/users/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the user
+      body:
+        type: json
+        data: |-
+          {
+            "username": "",
+            "name": "",
+            "surname": "",
+            "email": "",
+            "role": "EMPLOYEE",
+            "status": "ACTIVE",
+            "note": "",
+            "departmentId": 0,
+            "managerEmail": "",
+            "benefit": "ALL"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "id": 1,
+            "username": "johndoe",
+            "name": "John",
+            "surname": "Doe",
+            "email": "johndoe@gmail.com",
+            "role": "EMPLOYEE",
+            "status": "ACTIVE",
+            "note": "This is a note about John DOE.",
+            "departmentId": 101,
+            "managerEmail": "manager1@example.com",
+            "benefit": "ALL",
+            "createdAt": "2026-03-24T10:00:00Z",
+            "lastModifiedAt": "2026-03-24T12:00:00Z"
+          }
+  - name: 400 Response
+    description: Bad request
+    request:
+      url: "{{baseUrl}}/v1/users/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the user
+      body:
+        type: json
+        data: |-
+          {
+            "username": "",
+            "name": "",
+            "surname": "",
+            "email": "",
+            "role": "EMPLOYEE",
+            "status": "ACTIVE",
+            "note": "",
+            "departmentId": 0,
+            "managerEmail": "",
+            "benefit": "ALL"
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "BAD_REQUEST",
+            "message": "Invalid request data",
+            "status": 400,
+            "timestamp": {},
+            "path": "/api/example",
+            "details": [
+              {
+                "field": "email",
+                "issue": "Invalid format"
+              }
+            ]
+          }
+  - name: 404 Response
+    description: Not found
+    request:
+      url: "{{baseUrl}}/v1/users/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the user
+      body:
+        type: json
+        data: |-
+          {
+            "username": "",
+            "name": "",
+            "surname": "",
+            "email": "",
+            "role": "EMPLOYEE",
+            "status": "ACTIVE",
+            "note": "",
+            "departmentId": 0,
+            "managerEmail": "",
+            "benefit": "ALL"
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "NOT_FOUND",
+            "message": "Resource not found",
+            "status": 404,
+            "timestamp": {},
+            "path": "/v1/example/123",
+            "details": [
+              {
+                "field": "id",
+                "issue": "Not found"
+              }
+            ]
+          }
+  - name: 500 Response
+    description: Internal server error
+    request:
+      url: "{{baseUrl}}/v1/users/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the user
+      body:
+        type: json
+        data: |-
+          {
+            "username": "",
+            "name": "",
+            "surname": "",
+            "email": "",
+            "role": "EMPLOYEE",
+            "status": "ACTIVE",
+            "note": "",
+            "departmentId": 0,
+            "managerEmail": "",
+            "benefit": "ALL"
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "code": "INTERNAL_ERROR",
+            "message": "Something went wrong",
+            "status": 500,
+            "timestamp": {},
+            "path": "/api/example",
+            "details": [
+              {
+                "field": "example",
+                "issue": "Example"
+              }
+            ]
+          }
