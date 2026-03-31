@@ -7,16 +7,12 @@ export default function App() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-200 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
-        <Layout>
-          <LayoutRow className="relative">
-            <Navbar />
-            <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="pt-20">
-              <Outlet />
-            </LayoutColumn>
-          </LayoutRow>
-        </Layout>
-      </main>
+      <Layout>
+        <LayoutRow className="relative">
+          <Navbar />
+          <Outlet />
+        </LayoutRow>
+      </Layout>
     </>
   );
 }

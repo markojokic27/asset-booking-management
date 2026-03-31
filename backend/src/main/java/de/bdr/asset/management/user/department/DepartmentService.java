@@ -8,14 +8,14 @@ import java.util.List;
 public interface DepartmentService {
 
     /** CREATE */
-    DepartmentDTO createDepartment(DepartmentDTO request);
+    DepartmentResponseDTO createDepartment(DepartmentRequestDTO request);
 
     /** READ */
-    DepartmentDTO getDepartmentById(Long id);
-    List<DepartmentDTO> getAllDepartments();
+    DepartmentResponseDTO getDepartmentById(Long id);
+    List<DepartmentResponseDTO> getAllDepartments();
 
     /** UPDATE */
-    DepartmentDTO updateDepartment(Long id, DepartmentDTO request);
+    DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO request);
 
     /** DELETE (Soft) */
     void deleteDepartment(Long id);

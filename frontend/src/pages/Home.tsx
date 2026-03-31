@@ -1,4 +1,4 @@
-import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
+import { LayoutColumn } from '../components/layout/Layout';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 export default function Home() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const boxClass =
-    'mb-8 flex h-32 items-center justify-center rounded-lg bg-gray-400 text-2xl font-bold text-gray-900 dark:bg-gray-800 dark:text-gray-100';
 
   const handleLogout = () => {
     document.cookie = 'auth=; Max-Age=0; path=/';
@@ -17,48 +15,24 @@ export default function Home() {
 
   return (
     <>
-      <Layout>
-        <LayoutRow>
-          <LayoutColumn className="flex flex-col items-center justify-center">
-            <h1 className="my-8 text-center text-5xl font-bold text-gray-900 dark:text-gray-100">
-              Asset manager
-            </h1>
-          </LayoutColumn>
-          <LayoutColumn className="flex">
-            <Input
-              placeholder="Search assets..."
-              errorMessage="Please enter a search term"
-              className="w-50"
-            />
-            <Button
-              onClick={handleLogout}
-              size="sm"
-              className="border-red-500 bg-red-500 text-white hover:border-red-600 hover:bg-red-600"
-            >
-              Logout
-            </Button>
-          </LayoutColumn>
-          <LayoutColumn className="my-20 text-xl">
-            <h1>{t('common.save')}</h1>
-          </LayoutColumn>
-        </LayoutRow>
-      </Layout>
-      <Layout>
-        <LayoutRow className="text-center">
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-          <LayoutColumn smSpan={12} mdSpan={6} lgSpan={4} xlSpan={3}>
-            <div className={boxClass}>Responsive column</div>
-          </LayoutColumn>
-        </LayoutRow>
-      </Layout>
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-20">
+        <Input
+          placeholder="Search assets..."
+          errorMessage="Please enter a search term"
+          className="w-50"
+        />
+        <Button
+          onClick={handleLogout}
+          size="sm"
+          className="border-red-500 bg-red-500 text-white hover:border-red-600 hover:bg-red-600"
+        >
+          Logout
+        </Button>
+      </LayoutColumn>
+
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-20">
+        <h1>{t('common.save')}</h1>
+      </LayoutColumn>
     </>
   );
 }

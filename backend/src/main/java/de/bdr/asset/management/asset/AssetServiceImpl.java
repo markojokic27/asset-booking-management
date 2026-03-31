@@ -19,14 +19,14 @@ public class AssetServiceImpl implements AssetService {
     /**
      * Create asset in DB.
      *
-     * @param assetRequest - an AssetDTO record
+     * @param assetRequest - an AssetRequestDTO record
      * @return an Asset record
      */
     @Override
-    public AssetDTO createAsset(AssetDTO assetRequest) {
+    public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
         // TODO: Implement a mapper function to handle this
         
-        return new AssetDTO(
+        return new AssetResponseDTO(
             1L,
             assetRequest.name(),
             assetRequest.categoryId(),
@@ -44,8 +44,8 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    public AssetDTO getAssetById(Long id) {
-        return new AssetDTO(
+    public AssetResponseDTO getAssetById(Long id) {
+        return new AssetResponseDTO(
             1L,
             "Dummy Asset Get by Id",
             1L,
@@ -62,10 +62,10 @@ public class AssetServiceImpl implements AssetService {
      * @return a list of Asset records
      */
     @Override
-    public List<AssetDTO> getAllAssets() {
-        List<AssetDTO> dummyList = new ArrayList<>();
+    public List<AssetResponseDTO> getAllAssets() {
+        List<AssetResponseDTO> dummyList = new ArrayList<>();
         dummyList.add(
-            new AssetDTO(
+            new AssetResponseDTO(
                 1L,
                 "Dummy Asset 1",
                 1L,
@@ -77,8 +77,8 @@ public class AssetServiceImpl implements AssetService {
         );
 
         dummyList.add(
-            new AssetDTO(
-                2L,
+            new AssetResponseDTO(
+                1L,
                 "Dummy Asset 2",
                 2L,
                 "Dummy Asset Desc",
@@ -99,8 +99,8 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    public AssetDTO updateAsset(Long id, AssetDTO assetRequest) {
-        return new AssetDTO(
+    public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
+        return new AssetResponseDTO(
             1L,
             "Dummy Asset Update",
             1L,

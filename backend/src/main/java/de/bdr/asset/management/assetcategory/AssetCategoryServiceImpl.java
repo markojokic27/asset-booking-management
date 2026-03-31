@@ -24,10 +24,10 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
-    public AssetCategoryDTO createAssetCategory(AssetCategoryDTO assetCategoryRequest){
+    public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
         // TODO: Implement a mapper function to handle this
         
-        return new AssetCategoryDTO(
+        return new AssetCategoryResponseDTO(
                 1L,
                 assetCategoryRequest.name(),
                 assetCategoryRequest.description(),
@@ -43,8 +43,8 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
-    public AssetCategoryDTO getAssetCategoryById(Long id){
-        return new AssetCategoryDTO(
+    public AssetCategoryResponseDTO getAssetCategoryById(Long id){
+        return new AssetCategoryResponseDTO(
                 1L,
                 "Dummy Asset category",
                 "Dummy Desc",
@@ -59,10 +59,10 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return a list of AssetCategoryResponseDTO records
      */
     @Override
-    public List<AssetCategoryDTO> getAllAssetCategories(){
-        List<AssetCategoryDTO> dummyList = new ArrayList<>();
+    public List<AssetCategoryResponseDTO> getAllAssetCategories(){
+        List<AssetCategoryResponseDTO> dummyList = new ArrayList<>();
         dummyList.add(
-            new AssetCategoryDTO(
+            new AssetCategoryResponseDTO(
                     1L,
                     "Dummy Asset category",
                     "Dummy Desc",
@@ -71,8 +71,8 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
             )
         );
         dummyList.add(
-                new AssetCategoryDTO(
-                        2L,
+                new AssetCategoryResponseDTO(
+                        1L,
                         "2 Dummy Asset category",
                         "Dummy Desc 2",
                         BookingPeriodEnum.HOUR,
@@ -90,8 +90,8 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
-    public AssetCategoryDTO updateAssetCategory(Long id, AssetCategoryDTO assetCategoryRequest){
-        return new AssetCategoryDTO(
+    public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
+        return new AssetCategoryResponseDTO(
                 1L,
                 "Dummy Asset category",
                 "Dummy Desc",

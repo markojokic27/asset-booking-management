@@ -20,16 +20,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error || undefined}
           className={twMerge(
             // base
-            'relative w-full rounded-xl border bg-white leading-none text-gray-900 transition-colors outline-none focus:border-blue-500 focus:ring-1 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-400',
+            'relative w-full rounded-none border-none bg-white leading-none text-gray-900 shadow-(--shadow-button) transition-colors outline-none focus:border-black focus:ring-1 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-400',
 
-            // size
+            // sizeborder
             size === 'sm' && 'px-3 py-2 text-xs',
             size === 'md' && 'px-4 py-3 text-sm',
 
             // border color
             error
               ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
-              : 'border-blue-500 dark:border-gray-700',
+              : '',
 
             // disabled
             disabled && 'cursor-not-allowed opacity-50',

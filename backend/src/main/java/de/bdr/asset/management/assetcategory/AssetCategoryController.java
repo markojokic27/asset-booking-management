@@ -2,6 +2,7 @@ package de.bdr.asset.management.assetcategory;
 
 import java.util.List;
 
+import de.bdr.asset.management.asset.AssetResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AssetCategoryController {
 
     /** CREATE */
     @PostMapping
-    public ResponseEntity<AssetCategoryDTO> create(@Valid @RequestBody AssetCategoryDTO request) {
+    public ResponseEntity<AssetCategoryResponseDTO> create(@Valid @RequestBody AssetCategoryRequestDTO request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createAssetCategory(request));
@@ -30,7 +31,7 @@ public class AssetCategoryController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<AssetCategoryDTO>> getAll() {
+    public ResponseEntity<List<AssetCategoryResponseDTO>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAllAssetCategories());
@@ -38,7 +39,7 @@ public class AssetCategoryController {
 
     /** READ BY ID */
     @GetMapping("/{id}")
-    ResponseEntity<AssetCategoryDTO> getById(@PathVariable Long id) {
+    ResponseEntity<AssetCategoryResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAssetCategoryById(id));
@@ -46,7 +47,7 @@ public class AssetCategoryController {
 
     /** UPDATE */
     @PutMapping("/{id}")
-    ResponseEntity<AssetCategoryDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryDTO request) {
+    ResponseEntity<AssetCategoryResponseDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateAssetCategory(id, request));

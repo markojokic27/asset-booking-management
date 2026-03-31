@@ -1,12 +1,22 @@
+import { twMerge } from 'tailwind-merge';
 import { Logo } from '../icons/Logo';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import { Layout, LayoutRow, LayoutColumn } from './Layout';
 import { Link } from 'react-router-dom';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  className?: string;
+}
+
+export const Header: React.FC<HeaderProps> = ({ className }) => {
   return (
-    <div className="fixed top-0 z-40 mx-auto h-20 w-full bg-gray-100 shadow-md dark:bg-gray-900 dark:shadow-black/20">
+    <div
+      className={twMerge(
+        'fixed top-0 z-40 mx-auto h-20 w-full bg-(--color-surface) shadow-md',
+        className
+      )}
+    >
       <Layout className="h-full">
         <LayoutRow className="flex h-full items-center">
           <LayoutColumn className="flex items-center justify-between">

@@ -5,12 +5,12 @@ import java.util.List;
 public interface AssetService {
 
     /** CREATE */
-    AssetDTO createAsset(AssetDTO dto);
+    AssetResponseDTO createAsset(AssetRequestDTO dto);
 
     /** READ */
-    AssetDTO getAssetById(Long id);
-    List<AssetDTO> getAllAssets();
+    AssetResponseDTO getAssetById(Long id);
+    List<AssetResponseDTO> getAllAssets();
 
     /** UPDATE */
-    AssetDTO updateAsset(Long id, AssetDTO dto);
+    AssetResponseDTO updateAsset(Long id, AssetRequestDTO dto);
 }

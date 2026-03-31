@@ -23,7 +23,7 @@ public class AssetController {
 
     /** CREATE */
     @PostMapping
-    public ResponseEntity<AssetDTO> createAsset(@Valid @RequestBody AssetDTO assetRequest) {
+    public ResponseEntity<AssetResponseDTO> createAsset(@Valid @RequestBody AssetRequestDTO assetRequest) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(assetService.createAsset(assetRequest));
@@ -31,7 +31,7 @@ public class AssetController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<AssetDTO>> getAllAssets() {
+    public ResponseEntity<List<AssetResponseDTO>> getAllAssets() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(assetService.getAllAssets());
@@ -39,7 +39,7 @@ public class AssetController {
 
     /** READ BY ID */
     @GetMapping("/{id}")
-    public ResponseEntity<AssetDTO> getAssetById(@PathVariable Long id) {
+    public ResponseEntity<AssetResponseDTO> getAssetById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(assetService.getAssetById(id));
@@ -47,7 +47,7 @@ public class AssetController {
 
     /** UPDATE */
     @PutMapping("/{id}")
-    public ResponseEntity<AssetDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetDTO assetRequest) {
+    public ResponseEntity<AssetResponseDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetRequestDTO assetRequest) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(assetService.updateAsset(id, assetRequest));

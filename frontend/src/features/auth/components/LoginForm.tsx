@@ -57,26 +57,33 @@ const LoginForm = () => {
         const formData = new FormData(event.currentTarget);
         handleSubmit(formData);
       }}
-      className="dark:gray-800 flex w-full flex-col gap-10"
+      className="flex w-full flex-col bg-white px-6 py-10 shadow-(--shadow-card) sm:px-12 md:mt-30 md:px-12 lg:px-20 dark:bg-black"
     >
-      <Form.Field name="username">
+      <h1 className="mb-6 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
+        Login
+      </h1>
+      <h2 className="mb-6 text-center font-bold">
+        Welcome to log in to your asset booking management
+      </h2>
+      <p className="mb-2">Username</p>
+      <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
           <Input
             type="text"
-            placeholder="Username"
-            className="w-full rounded-lg border p-3"
+            placeholder="Eneter your username"
+            className="w-full border p-3"
             error={!!errors.username}
             errorMessage={errors.username}
           />
         </Form.Control>
       </Form.Field>
-
-      <Form.Field name="password">
+      <p className="mb-2">Password</p>
+      <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
           <Input
             type="password"
-            placeholder="Password"
-            className="w-full rounded-lg border p-3"
+            placeholder="Eneter your password"
+            className="w-full border p-3"
             error={!!errors.password}
             errorMessage={errors.password}
           />
@@ -84,7 +91,9 @@ const LoginForm = () => {
       </Form.Field>
 
       <Form.Submit asChild>
-        <Button type="submit">Login</Button>
+        <Button type="submit" className="mt-6 mb-2 font-bold uppercase">
+          Login
+        </Button>
       </Form.Submit>
     </Form.Root>
   );

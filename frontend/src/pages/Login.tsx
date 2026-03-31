@@ -1,27 +1,26 @@
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { Header } from '../components/layout/Header';
 import LoginForm from '../features/auth/components/LoginForm';
+import { Logo } from '../components/icons/Logo';
 
 export default function Login() {
   return (
-    <main className="min-h-screen bg-gray-200 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
-      <Header />
+    <>
+      <Header className="hidden md:flex" />
       <Layout>
         <LayoutRow>
           <LayoutColumn
-            mdSpan={6}
-            mdOffset={3}
+            lgSpan={6}
+            lgOffset={3}
             smOffset={2}
             smSpan={8}
-            className="mt-30 flex flex-col items-center justify-center rounded-3xl border-2 border-blue-500 bg-gray-100 px-6 py-6 md:px-6 lg:px-10 lg:py-10 dark:bg-gray-900"
+            className="flex h-screen flex-col items-center justify-center md:h-fit"
           >
-            <h1 className="mb-6 text-center text-6xl font-black text-gray-900 lg:mb-10 dark:text-gray-100">
-              Login
-            </h1>
+            <Logo className="h-20 scale-250 md:hidden" />
             <LoginForm />
           </LayoutColumn>
         </LayoutRow>
       </Layout>
-    </main>
+    </>
   );
 }
