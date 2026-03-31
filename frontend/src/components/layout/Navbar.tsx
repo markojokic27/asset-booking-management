@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import MonitorSharpIcon from '@mui/icons-material/MonitorSharp';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
+import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 
 
@@ -48,6 +49,13 @@ export const Navbar: React.FC = () => {
           }>
             <CalendarTodaySharpIcon className="mr-4" />
             Bookings
+          </NavLink>
+
+          <NavLink to="/users" className={({ isActive }) =>
+            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
+          }>
+            <PeopleSharpIcon className="mr-4" />
+            Users
           </NavLink>
         </div>
 

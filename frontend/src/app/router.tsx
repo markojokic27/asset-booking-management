@@ -2,9 +2,12 @@ import { createBrowserRouter, redirect } from 'react-router-dom';
 import App from './App';
 
 import Home from '../pages/Home';
+import Assets from '../pages/Assets';
+import Bookings from '../pages/Bookings';
 import Login from '../pages/Login';
 import Manager from '../pages/Manager';
 import NotFound from '../pages/NotFound';
+import Users from '../pages/Users';
 
 /*  auth loader - in  app, we will check auth status by making an API call to the backend
 async function requireAuth() {
@@ -39,6 +42,21 @@ export const router = createBrowserRouter([
       {
         path: 'manager',
         element: <Manager />,
+        loader: requireAuth,
+      },
+      {
+        path: 'assets',
+        element: <Assets />,
+        loader: requireAuth,
+      },
+      {
+        path: 'bookings',
+        element: <Bookings />,
+        loader: requireAuth,
+      },
+      {
+        path: 'users',
+        element: <Users />,
         loader: requireAuth,
       },
     ],
