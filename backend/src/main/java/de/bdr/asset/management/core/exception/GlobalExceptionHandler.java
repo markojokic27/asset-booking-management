@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Handler for exception
@@ -25,7 +27,6 @@ public class GlobalExceptionHandler {
         );
 
         problemDetail.setTitle("Resource not found");
-        problemDetail.setType(URI.create("http://localhost:8080"));
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
 
@@ -41,9 +42,17 @@ public class GlobalExceptionHandler {
         );
 
         problemDetail.setTitle("Invalid data");
-        problemDetail.setType(URI.create("http://localhost:8080"));
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
+
+        List<Map<String, String>> invalidParams = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> Map.of(
+                        "field", error.getField(),
+                        "issue", error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"
+                ))
+                .toList();
+
+        problemDetail.setProperty("invalidParams", invalidParams);
 
         return problemDetail;
     }
@@ -57,7 +66,6 @@ public class GlobalExceptionHandler {
         );
 
         problemDetail.setTitle("Unexpected internal server error");
-        problemDetail.setType(URI.create("http://localhost:8080"));
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
 
