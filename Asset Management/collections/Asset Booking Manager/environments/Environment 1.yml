@@ -1,4 +1,0 @@
-name: Environment 1
-variables:
-  - name: baseUrl
-    value: http://demoVM.swagger.io/v1
