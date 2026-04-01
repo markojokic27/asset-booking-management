@@ -65,7 +65,7 @@ const LoginForm = () => {
       <h2 className="mb-6 text-center font-bold">
         Welcome to log in to your asset booking management
       </h2>
-      <p className="mb-2">Username</p>
+      <p className="mb-2 tracking-[0.2em]">Username</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
           <Input
@@ -77,7 +77,7 @@ const LoginForm = () => {
           />
         </Form.Control>
       </Form.Field>
-      <p className="mb-2">Password</p>
+      <p className="mb-2 tracking-[0.2em]">Password</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
           <Input
