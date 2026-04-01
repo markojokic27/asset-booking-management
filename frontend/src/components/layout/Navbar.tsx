@@ -12,20 +12,20 @@ export const Navbar: React.FC = () => {
   // Base for links
   const linkBase = "flex items-center p-3 transition-all border-l-8 w-full";
 
-  // Style when link iz active
-  const activeStyle = "bg-[var(--color-bg)] border-[var(--color-primaryblue)] text-black shadow-card dark:bg-bg-dark dark:text-white";
+  // Style when link is active
+  const activeStyle = "bg-(--color-bg) border-(--color-primaryblue) text-black shadow-card dark:bg-bg-dark dark:text-white";
 
   // Style when link is not active
   const inactiveStyle = `
     border-transparent text-black 
-    hover:bg-[var(--color-bg)] hover:border-[var(--color-primaryblue)] 
-    dark:text-white dark:hover:bg-bg-dark dark:hover:border-[var(--color-primaryblue)]
+    hover:bg-(--color-bg) hover:border-(--color-primaryblue) 
+    dark:text-white dark:hover:bg-bg-dark dark:hover:border-(--color-primaryblue)
   `;
 
   return (
     <LayoutColumn
-      mdSpan={3}
-      className="px-0 md:px-0 lg:px-0 absolute left-0 hidden min-h-screen h-screen w-full bg-[var(--color-surface)] pt-20 text-text-light shadow-md md:flex flex-col dark:bg-gray-900 dark:text-white dark:shadow-black/20 tracking-[0.2em] leading-[44px] text-2xl pb-10"
+      mdSpan={2}
+      className="px-0 md:px-0 lg:px-0 absolute left-0 hidden min-h-screen h-screen w-full bg-(--color-surface) pt-20 text-text-light shadow-md md:flex flex-col dark:bg-gray-900 dark:text-white dark:shadow-black/20 tracking-[0.2em] leading-[44px] text-2xl pb-10"
     >
       <nav className="flex flex-col justify-between h-full pt-10 w-full">
 

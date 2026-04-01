@@ -7,9 +7,9 @@ export default function App() {
   return (
     <>
       <Header />
+      <Navbar />
       <Layout>
         <LayoutRow className="relative">
-          <Navbar />
           <Outlet />
         </LayoutRow>
       </Layout>
