@@ -147,7 +147,7 @@ const RegisterForm = () => {
         onClick={() => navigate('/login')}
         className="mt-4"
       >
-        Već imaš račun? Login
+        Already have an account? Login here.
       </Button>
     </Form.Root>
   );

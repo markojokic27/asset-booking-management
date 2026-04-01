@@ -95,8 +95,10 @@ const LoginForm = () => {
           Login
         </Button>
       </Form.Submit>
+
+      
       <Button variant="link" onClick={() => navigate('/register')}>
-        Nemate račun? Registrirajte se
+          Don't have an account? Register here.
       </Button>
     </Form.Root>
   );
