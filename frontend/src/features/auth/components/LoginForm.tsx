@@ -78,15 +78,15 @@ const LoginForm = () => {
         </Form.Control>
       </Form.Field>
       <p className="mb-2">Password</p>
-        <Form.Field name="password" className="mb-10 w-full md:mb-12">
-          <Form.Control asChild>
-            <Input
-              type="password"
-              placeholder="Eneter your password"
-              className="w-full border p-3"
-              error={!!errors.password}
-              errorMessage={errors.password}
-            />
+      <Form.Field name="password" className="mb-10 w-full md:mb-12">
+        <Form.Control asChild>
+          <Input
+            type="password"
+            placeholder="Eneter your password"
+            className="w-full border p-3"
+            error={!!errors.password}
+            errorMessage={errors.password}
+          />
         </Form.Control>
       </Form.Field>
 
@@ -94,10 +94,10 @@ const LoginForm = () => {
         <Button type="submit" className="mt-6 mb-2 font-bold uppercase">
           Login
         </Button>
-        <Button variant="link" onClick={() => navigate('/register')}>
-          Nemate račun? Registrirajte se
-        </Button>
       </Form.Submit>
+      <Button variant="link" onClick={() => navigate('/register')}>
+        Nemate račun? Registrirajte se
+      </Button>
     </Form.Root>
   );
 };

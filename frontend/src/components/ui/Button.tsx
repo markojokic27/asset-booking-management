@@ -48,7 +48,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           variant === 'dark' &&
             'hover:border-grayscale-200 hover:text-grayscale-200 border-white text-white',
           variant === 'link' &&
-            'border-0 bg-transparent p-0 underline underline-offset-4 hover:no-underline',
+            'border-0 bg-transparent p-0 underline underline-offset-4 shadow-none hover:no-underline',
 
           // sizes
           size === 'sm' && 'px-4 py-3',
