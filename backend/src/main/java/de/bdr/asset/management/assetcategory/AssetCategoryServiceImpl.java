@@ -2,12 +2,14 @@ package de.bdr.asset.management.assetcategory;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 /**
  * Implementation of AssetCategory Service
  */
+@Slf4j
 @Service
 public class AssetCategoryServiceImpl implements AssetCategoryService {
     private final AssetCategoryRepository repository;
@@ -26,8 +28,12 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
+        log.info("Attempting to create a new asset category");
+
         AssetCategory category = mapper.toEntity(assetCategoryRequest);
         category = repository.save(category);
+
+        log.info("Successfully created new asset category with id: {}", category.getId());
 
         return mapper.toResponse(category);
     }
@@ -43,6 +49,8 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         AssetCategory category = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
+        log.info("Asset category found with id: {}", id);
+
         return mapper.toResponse(category);
     }
 
@@ -53,7 +61,11 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public List<AssetCategoryResponseDTO> getAllAssetCategories(){
+        log.debug("Fetching all asset categories from the database");
+
         List<AssetCategory> categories = repository.findAll();
+
+        log.info("Successfully fetched {} asset categories", categories.size());
 
         return categories.stream()
                 .map(mapper::toResponse)
@@ -69,6 +81,8 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
+        log.info("Attempting to update asset category with id: {}", id);
+
         AssetCategory category = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
@@ -76,8 +90,9 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         category.setDescription(assetCategoryRequest.description());
         category.setBookingPeriod(assetCategoryRequest.bookingPeriod());
         category.setApproval(assetCategoryRequest.approval());
-
         AssetCategory updatedCategory = repository.save(category);
+
+        log.info("Successfully updated asset category with id: {}", id);
 
         return mapper.toResponse(updatedCategory);
     }

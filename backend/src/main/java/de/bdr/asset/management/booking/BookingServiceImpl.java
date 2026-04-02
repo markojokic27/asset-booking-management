@@ -2,6 +2,7 @@ package de.bdr.asset.management.booking;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.asset.Asset;
@@ -13,6 +14,7 @@ import de.bdr.asset.management.user.UserRepository;
 /**
  * Implementation of Booking Service
  */
+@Slf4j
 @Service
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
@@ -35,16 +37,22 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingResponseDTO createBooking(BookingRequestDTO bookingRequest) {
+        log.info("Attempting to create a new booking with user id: {} and asset id: {}", bookingRequest.userId(), bookingRequest.assetId());
+
         User user = userRepository.findById(bookingRequest.userId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
 
         Asset asset = assetRepository.findById(bookingRequest.assetId())
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId()));
+
+        log.debug("User and asset found. Mapping entity and saving to database...");
         
         Booking booking = mapper.toEntity(bookingRequest);
         booking.setUser(user);
         booking.setAsset(asset);
         booking = repository.save(booking);
+
+        log.info("Successfully created new booking with id: {} for user id: {} with asset id: {}", booking.getId(), user.getId(), asset.getId());
 
         return mapper.toResponse(booking);
     }
@@ -60,6 +68,8 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
+        log.info("Booking found with id: {}", id);
+
         return mapper.toResponse(booking);
     }
 
@@ -70,7 +80,11 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public List<BookingResponseDTO> getAllBookings() {
+        log.debug("Fetching all bookings from the database");
+
         List<Booking> bookings = repository.findAll();
+
+        log.info("Successfully fetched {} bookings", bookings.size());
 
         return bookings.stream()
                 .map(mapper::toResponse)
@@ -86,6 +100,8 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
+        log.info("Attempting to update booking with id: {}", id);
+
         Booking booking = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
@@ -102,6 +118,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setBookingEndTime(bookingRequest.bookingEndTime());
         booking.setNotes(bookingRequest.notes());
         booking = repository.save(booking);
+
+        log.info("Successfully updated booking with id: {}", id);
 
         return mapper.toResponse(booking);
     }
