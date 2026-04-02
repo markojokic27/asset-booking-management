@@ -45,8 +45,17 @@ export default function Assets() {
   ];
 
   return (
-    <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-35">
-      <div className="w-full">
+    <LayoutColumn
+      span={12}
+      mdSpan={9}
+      mdOffset={3}
+      className="flex flex-col pt-35"
+    >
+      <h1 className="text-3xl font-black leading-11 tracking-[0.2em] text-black dark:text-white">
+        Assets
+      </h1>
+      <div className="mt-6 h-px w-full bg-[var(--color-table-border)]" />
+      <div className="mt-6 w-full">
         <Table
           data={assets}
           columns={columns}
