@@ -7,9 +7,9 @@ variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
   # PostgreSQL service config — mirrors your asset_mgm DB
-  POSTGRES_DB: asset_mgm
-  POSTGRES_USER: asset_mgm_user
-  POSTGRES_PASSWORD: $DB_PASSWORD # set this in GitLab → Settings → CI/CD → Variables
+  # POSTGRES_DB: asset_mgm
+  # POSTGRES_USER: asset_mgm_user
+  # POSTGRES_PASSWORD: $DB_PASSWORD # set this in GitLab → Settings → CI/CD → Variables
 
 # ─────────────────────────────────────────
 # COMPILE STAGE
@@ -48,27 +48,43 @@ frontend:compile:
 # ─────────────────────────────────────────
 # TEST STAGE
 # ─────────────────────────────────────────
+# backend:test:
+#   stage: test
+#   image: maven:3.9-eclipse-temurin-21
+#   services:
+#     - name: postgres:18 # spins up a real PostgreSQL 18 instance
+#       alias: postgres
+#   variables:
+#     POSTGRES_HOST_AUTH_METHOD: md5
+#     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/asset_mgm
+#     SPRING_DATASOURCE_USERNAME: asset_mgm_user
+#     SPRING_DATASOURCE_PASSWORD: $DB_PASSWORD
+#     # ensures your asset_booking_mgm schema is the default search path
+#     SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: asset_booking_mgm
+#     SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop # creates schema fresh for each test run
+#   script:
+#     - cd backend
+#     - mvn test -Dmaven.repo.local=.m2/repository
+#   artifacts:
+#     reports:
+#       junit: backend/target/surefire-reports/*.xml # shows test results directly in MR
+#     when: always # upload report even on failure
+#   cache:
+#     key: maven-$CI_PROJECT_ID
+#     paths:
+#       - backend/.m2/repository/
+
 backend:test:
   stage: test
   image: maven:3.9-eclipse-temurin-21
-  services:
-    - name: postgres:18 # spins up a real PostgreSQL 18 instance
-      alias: postgres
-  variables:
-    POSTGRES_HOST_AUTH_METHOD: md5
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/asset_mgm
-    SPRING_DATASOURCE_USERNAME: asset_mgm_user
-    SPRING_DATASOURCE_PASSWORD: $DB_PASSWORD
-    # ensures your asset_booking_mgm schema is the default search path
-    SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: asset_booking_mgm
-    SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop # creates schema fresh for each test run
+  # No services block — H2 runs in-memory, no external DB needed
   script:
     - cd backend
     - mvn test -Dmaven.repo.local=.m2/repository
   artifacts:
     reports:
-      junit: backend/target/surefire-reports/*.xml # shows test results directly in MR
-    when: always # upload report even on failure
+      junit: backend/target/surefire-reports/*.xml
+    when: always
   cache:
     key: maven-$CI_PROJECT_ID
     paths:
