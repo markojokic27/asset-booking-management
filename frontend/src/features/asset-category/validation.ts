@@ -17,7 +17,7 @@ export const assetCategoryValidationSchema = z.object({
 
   bookingPeriod: bookingPeriodSchema,
 
-  approval: z.coerce.boolean({
+  approval: z.boolean({
     message: 'Approval is required',
   }),
 });

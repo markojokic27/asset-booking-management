@@ -1,4 +1,4 @@
-import { userRoleSchema, userStatusSchema, userValidationSchema } from "./validation";
+import { userValidationSchema } from '../../features/user/validation'
 
     describe("User schema validation", () => {
         test("should pass with valid data", () =>{
@@ -8,15 +8,15 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
                 name: "ivan",
                 email: "ivanivic@maurer-electonics.hr",
                 password: "password.123",
-                role: userRoleSchema,
-                status: userStatusSchema,
-                notes: null,
+                role: "EMPLOYEE",
+                status: "ACTIVE",
+                notes: "Some optional notes",
                 departmentId: 5,
                 managerEmail: "antem@maurer-electonics.hr",
                 benefit: "ALL"
                 });
 
-            expect(result.success).toBe(false);
+            expect(result.success).toBe(true);
 
             });
 
@@ -29,9 +29,28 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: "antem@maurer-electonics.hr",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+         test("should fail when username is null", () =>{
+        const result = userValidationSchema.safeParse({
+            username: null,
+            surname: "ivic",
+            name: "ivan",
+            email: "ivanivic@maurer-electonics.hr",
+            password: "password.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -43,14 +62,14 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
 
         test("should fail when username is too long", () =>{
         const result = userValidationSchema.safeParse({
-            username: "a.repeat(51)",
+            username: "i.repeat(51)",
             surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -62,14 +81,14 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
 
         test("should fail when username is too short", () =>{
         const result = userValidationSchema.safeParse({
-            username: "a",
+            username: "i",
             surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -86,9 +105,9 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -105,15 +124,15 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
             });
 
-        expect(result.success).toBe(false);
+        expect(result.success).toBe(true);
 
         });
 
@@ -124,13 +143,52 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
         test("should fail when surname is empty ", () =>{
         const result = userValidationSchema.safeParse({
             username: "ivanivic",
-            surname: " ",
+            surname: "",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: "antem@maurer-electonics.hr",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+
+          test("should fail when surname is null ", () =>{
+        const result = userValidationSchema.safeParse({
+            username: "ivanivic",
+            surname: null,
+            name: "ivan",
+            email: "ivanivic@maurer-electonics.hr",
+            password: "password.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: "antem@maurer-electonics.hr",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+        test("should fail when surname is null ", () =>{
+        const result = userValidationSchema.safeParse({
+            username: "ivanivic",
+            surname: null,
+            name: "ivan",
+            email: "ivanivic@maurer-electonics.hr",
+            password: "password.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -144,13 +202,13 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
         test("should fail when surname is too long ", () =>{
         const result = userValidationSchema.safeParse({
             username: "ivanivic",
-            surname: "a.repeat(101)",
+            surname: "a".repeat(101),
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -168,12 +226,31 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
         const result = userValidationSchema.safeParse({
             username: "ivanivic",
             surname: "ivic",
-            name: " ",
+            name: "",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: "antem@maurer-electonics.hr",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+        test("should fail when name is null ", () =>{
+        const result = userValidationSchema.safeParse({
+            username: "ivanivic",
+            surname: "ivic",
+            name: null,
+            email: "ivanivic@maurer-electonics.hr",
+            password: "password.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -188,12 +265,12 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
         const result = userValidationSchema.safeParse({
             username: "ivanivic",
             surname: "ivic",
-            name: "a.repeat(101)",
+            name: "a".repeat(101),
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -213,11 +290,30 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             username: "ivanivic",
             surname: "ivic",
             name: "ivan",
-            email: " ",
+            email:"",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: "antem@maurer-electonics.hr",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+         test("should fail when email is null ", () =>{
+        const result = userValidationSchema.safeParse({
+            username: "ivanivic",
+            surname: "ivic",
+            name: "ivan",
+            email:null,
+            password: "password.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -233,11 +329,11 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             username: "ivanivic",
             surname: "ivic",
             name: "ivan",
-            email: "a.repeat(255)" + "@maurer-electronics.hr",
+            email: "a".repeat(255) + "@maurer-electronics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -254,9 +350,9 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -276,10 +372,29 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
-            password: " ",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            password: "",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: "antem@maurer-electonics.hr",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+         test("should fail when password is null", () =>{
+        const result = userValidationSchema.safeParse({
+            username: "ivanivic",
+            surname: "ivic",
+            name: "ivan",
+            email: "ivanivic@maurer-electonics.hr",
+            password: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -291,14 +406,14 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
 
         test("should fail when password is too long", () =>{
         const result = userValidationSchema.safeParse({
-            username: "a.repeat(51)",
+            username: "a".repeat(51),
             surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
-            password: "p.repeat(51)",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            password: "p".repeat(51),
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -315,9 +430,9 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "p",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -329,20 +444,20 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
 
         test("should pass with min length", () =>{
         const result = userValidationSchema.safeParse({
-            username: "ivanivic!",
+            username: "ivanivic",
             surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
-            password: "password",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            password: "pass.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
             });
 
-        expect(result.success).toBe(false);
+        expect(result.success).toBe(true);
 
         });
     })
@@ -358,8 +473,8 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
             role: null,
-            status: userStatusSchema,
-            notes: null,
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -380,9 +495,9 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
+            role: "EMPLOYEE",
             status: null,
-            notes: null,
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -403,9 +518,9 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: null,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
@@ -427,11 +542,30 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
-            managerEmail: " ",
+            managerEmail: "",
+            benefit: "ALL"
+            });
+
+        expect(result.success).toBe(false);
+
+        });
+
+        test("should fail when managerEmail is null ", () =>{
+        const result = userValidationSchema.safeParse({
+            username: "ivanivic",
+            surname: "ivic",
+            name: "ivan",
+            email: "ivanivic@maurer-electonics.hr",
+            password: "password.123",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
+            departmentId: 5,
+            managerEmail: null,
             benefit: "ALL"
             });
 
@@ -447,11 +581,11 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
-            managerEmail: "a.repeat(255)"+"@maurer-electonics.hr",
+            managerEmail: "a".repeat(255)+"@maurer-electonics.hr",
             benefit: "ALL"
             });
 
@@ -466,9 +600,9 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "Some optional notes",
             departmentId: 5,
             managerEmail: "antem",
             benefit: "ALL"
@@ -483,36 +617,35 @@ import { userRoleSchema, userStatusSchema, userValidationSchema } from "./valida
 
     describe("Note validation", () => {
 
-        test("should pass when note is empty ", () =>{
+        test("should pass when notes is empty ", () =>{
         const result = userValidationSchema.safeParse({
             username: "ivanivic",
-            surname: " ",
+            surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: null,
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "",
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
             });
 
-        expect(result.success).toBe(false);
+        expect(result.success).toBe(true);
 
         });
 
-
-        test("should fail when surname is too long ", () =>{
+        test("should fail when notes is too long ", () =>{
         const result = userValidationSchema.safeParse({
             username: "ivanivic",
-            surname: "a.repeat(101)",
+            surname: "ivic",
             name: "ivan",
             email: "ivanivic@maurer-electonics.hr",
             password: "password.123",
-            role: userRoleSchema,
-            status: userStatusSchema,
-            notes: "a.repeat(1001)",
+            role: "EMPLOYEE",
+            status: "ACTIVE",
+            notes: "a".repeat(1001),
             departmentId: 5,
             managerEmail: "antem@maurer-electonics.hr",
             benefit: "ALL"
