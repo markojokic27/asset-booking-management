@@ -1,6 +1,12 @@
 spring:
   application:
     name: assetbookingmanagement
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 150
+        one-indexed-parameters: true
 
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}

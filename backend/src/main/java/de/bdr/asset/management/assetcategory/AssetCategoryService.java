@@ -1,6 +1,7 @@
 package de.bdr.asset.management.assetcategory;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * AssetCategory Service
@@ -12,7 +13,7 @@ public interface AssetCategoryService {
 
     /** READ */
     AssetCategoryResponseDTO getAssetCategoryById(Long id);
-    List<AssetCategoryResponseDTO> getAllAssetCategories();
+    Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable);
 
     /** UPDATE */
     AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest);

@@ -1,8 +1,10 @@
 package de.bdr.asset.management.assetcategory;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
@@ -60,16 +62,14 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return a list of AssetCategoryResponseDTO records
      */
     @Override
-    public List<AssetCategoryResponseDTO> getAllAssetCategories(){
-        log.debug("Fetching all asset categories from the database");
+    public Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable){
+        log.debug("Fetching asset categories with pagination: ");
 
-        List<AssetCategory> categories = repository.findAll();
+        Page<AssetCategory> categories = repository.findAll(pageable);
 
-        log.info("Successfully fetched {} asset categories", categories.size());
+        log.info("Successfully fetched {} asset categories", categories.getNumberOfElements());
 
-        return categories.stream()
-                .map(mapper::toResponse)
-                .toList();
+        return categories.map(mapper::toResponse);
     }
 
     /**

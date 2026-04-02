@@ -1,11 +1,11 @@
 package de.bdr.asset.management.assetcategory;
 
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import jakarta.validation.Valid;
 
@@ -34,12 +34,14 @@ public class AssetCategoryController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<AssetCategoryResponseDTO>> getAll() {
+    public ResponseEntity<Page<AssetCategoryResponseDTO>> getAll(
+            Pageable pageable
+    ) {
         log.info("Received GET request to fetch all asset categories");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getAllAssetCategories());
+                .body(service.getAllAssetCategories(pageable));
     }
 
     /** READ BY ID */
