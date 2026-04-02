@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
 export const bookingStatusSchema = z.enum([
-  'SUCCESSFUL',
+  'ACTIVE',
   'PENDING',
   'REJECTED',
+  'COMPLETED',
+  'APPROVED',
+  'CANCELLED'
 ]);
 
 export const bookingValidationSchema = z
@@ -20,11 +23,11 @@ export const bookingValidationSchema = z
 
     status: bookingStatusSchema,
 
-    bookingStart: z.coerce.date({
+    bookingStart: z.date({
       message: 'Booking start is required',
     }),
 
-    bookingEnd: z.coerce.date({
+    bookingEnd: z.date({
       message: 'Booking end is required',
     }),
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const assetStatusSchema = z.enum(['AVAILABLE', 'UNAVAILABLE']);
+export const assetStatusSchema = z.enum(['ACTIVE', 'INACTIVE', 'DAMAGED']);
 
 export const assetValidationSchema = z.object({
   name: z

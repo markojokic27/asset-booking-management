@@ -12,11 +12,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             expect(result.success).toBe(true);
 
         });
-
-
-        
-    })
-
+ 
     describe("Name validation", () => {
         test("should fail when name is empty", () =>{
             const result = assetCategoryValidationSchema.safeParse({
@@ -68,7 +64,6 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             expect(result.success).toBe(false);
 
         });
-
         
     })
 
@@ -102,3 +97,4 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
         });
         
     })
+})
