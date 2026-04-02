@@ -3,6 +3,7 @@ package de.bdr.asset.management.user.department;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import de.bdr.asset.management.user.UserRepository;
  * Implementation of Department Service
  * Currently returns only dummy data.
  */
+@Slf4j
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
     // TODO: Update the functions to not use dummy data
@@ -31,12 +33,18 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
+        log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
+
         User manager = userRepository.findById(departmentRequest.managerId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+
+        log.debug("Manager found. Mapping entity and saving to database...");
 
         Department department = mapper.toEntity(departmentRequest);
         department.setManager(manager);
         department = repository.save(department);
+
+        log.info("Successfully created new department with id: {} with manager id: {}", department.getId(), manager.getId());
 
         return mapper.toResponse(department);
     }
@@ -50,6 +58,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
+        log.info("Department found with id: {}", id);
+
         return mapper.toResponse(department);
     }
 
@@ -58,7 +68,11 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public List<DepartmentResponseDTO> getAllDepartments() {
+        log.debug("Fetching all departments from the database");
+
         List<Department> departments = repository.findAll();
+
+        log.info("Successfully fetched {} departments", departments.size());
 
         return departments.stream()
                 .map(mapper::toResponse)
@@ -72,6 +86,8 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
+        log.info("Attempting to update department with id: {}", id);
+
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
@@ -81,6 +97,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setName(departmentRequest.name());
         department.setManager(manager);
         department = repository.save(department);
+
+        log.info("Successfully updated department with id: {}", id);
 
         return mapper.toResponse(department);
     }

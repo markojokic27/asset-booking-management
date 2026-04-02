@@ -1,6 +1,7 @@
 package de.bdr.asset.management.core.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,11 +16,14 @@ import java.util.Map;
 /**
  * Handler for exception
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ProblemDetail handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
+
+        log.warn("Resource not found at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
@@ -36,6 +40,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
+        List<Map<String, String>> invalidParams = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> Map.of(
+                        "field", error.getField(),
+                        "issue", error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"
+                ))
+                .toList();
+
+        log.warn("Validation failed at URI [{}]. Invalid parameters: {}", request.getRequestURI(), invalidParams);
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST,
                 "Data not valid"
@@ -44,14 +57,6 @@ public class GlobalExceptionHandler {
         problemDetail.setTitle("Invalid data");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
-
-        List<Map<String, String>> invalidParams = ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> Map.of(
-                        "field", error.getField(),
-                        "issue", error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"
-                ))
-                .toList();
-
         problemDetail.setProperty("invalidParams", invalidParams);
 
         return problemDetail;
@@ -59,6 +64,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUncaughtException(Exception ex, HttpServletRequest request) {
+
+        log.error("Unexpected internal server error at URI [{}]", request.getRequestURI(), ex);
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
