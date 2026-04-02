@@ -98,7 +98,7 @@ public class BookingRequestDTOTestValidation {
     //Notes is too long
     @Test
     void notesTooLong_shouldFailSize(){
-        BookingRequestDTO dto=new BookingRequestDTO( 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "t".repeat(256));
+        BookingRequestDTO dto=new BookingRequestDTO( 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "t".repeat(1001));
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("notes"));
     }
 

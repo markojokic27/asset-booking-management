@@ -21,6 +21,6 @@ public record BookingRequestDTO(
         @NotNull(message = "End time is required")
         Instant bookingEndTime,
 
-        @Size(max = 255, message = "Notes cannot exceed 255 characters")
+        @Size(max = 1000, message = "Notes cannot exceed 255 characters")
         String notes
 ) {}
