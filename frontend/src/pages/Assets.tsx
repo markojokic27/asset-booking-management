@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import { LayoutColumn } from '../components/layout/Layout';
+import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
+import { Input } from '../components/ui/Input';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import type { AssetDto } from '../features/asset/types';
 
@@ -68,10 +71,20 @@ export default function Assets() {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
-      <h1 className="mt-8 text-3xl font-black leading-11 tracking-[0.2em] text-black dark:text-white">
-        {selectedCategory}
-      </h1>
+      <div className="mt-12 flex w-full items-center justify-between gap-4">
+        <h1 className="text-3xl font-black leading-11 tracking-[0.2em] text-black dark:text-white">
+          {selectedCategory}
+        </h1>
+        <Button type="button" size="sm" iconLeft={<AddIcon fontSize="small" />}>
+          Add asset
+        </Button>
+      </div>
       <div className="mt-6 h-px w-full bg-[var(--color-table-border)]" />
+      <div className="mt-6 flex w-full justify-end">
+        <div className="w-50">
+          <Input placeholder="Search assets..." />
+        </div>
+      </div>
       <div className="mt-6 w-full">
         <Table
           data={assets}
