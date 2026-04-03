@@ -4,6 +4,10 @@ import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentEnum;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -133,17 +137,15 @@ class UserServiceImplTest {
     // Tests getAllUsers(): fetch all users
     @Test
     void shouldReturnAllUsers() {
-
+        Page<User> page = new PageImpl<>(List.of(user));
         Pageable pageable = PageRequest.of(0, 10);
-        Page<User> userPage = new PageImpl<>(java.util.List.of(user));
 
-        when(repository.findAll(pageable)).thenReturn(userPage);
+        when(repository.findAll(pageable)).thenReturn(page);
         when(mapper.toResponse(user)).thenReturn(responseDTO);
 
         Page<UserResponseDTO> result = service.getAllUsers(pageable);
 
-        assertEquals(1, result.getTotalElements());
-
+        assertEquals(1, result.getNumberOfElements());
         verify(repository).findAll(pageable);
     }
 

@@ -3,6 +3,10 @@ package de.bdr.asset.management.department;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import de.bdr.asset.management.user.department.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -116,17 +120,15 @@ class DepartmentServiceImplTest {
     // Tests getAllDepartments(): fetch all departments
     @Test
     void shouldReturnAllDepartments() {
-
+        Page<Department> page = new PageImpl<>(List.of(department));
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Department> departmentPage = new PageImpl<>(java.util.List.of(department));
 
-        when(repository.findAll(pageable)).thenReturn(departmentPage);
+        when(repository.findAll(pageable)).thenReturn(page);
         when(mapper.toResponse(department)).thenReturn(responseDTO);
 
         Page<DepartmentResponseDTO> result = service.getAllDepartments(pageable);
 
-        assertEquals(1, result.getTotalElements());
-
+        assertEquals(1, result.getNumberOfElements());
         verify(repository).findAll(pageable);
     }
 

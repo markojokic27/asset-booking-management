@@ -3,6 +3,11 @@ package de.bdr.asset.management.asset;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.feature.FeatureConfig;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +31,9 @@ class AssetServiceImplTest {
 
     @Mock
     private AssetRepository repository;
+
+    @Mock
+    private FeatureConfig featureConfig;
 
     @Mock
     private AssetMapper mapper;
@@ -76,6 +84,7 @@ class AssetServiceImplTest {
     // Tests createAsset(): category exists → map request, save asset, return response
     @Test
     void shouldCreateAsset() {
+        when(featureConfig.isAssetNameValidationEnabled()).thenReturn(false);
 
         when(assetCategoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(mapper.toEntity(requestDTO)).thenReturn(asset);
@@ -89,6 +98,21 @@ class AssetServiceImplTest {
 
         verify(repository).save(asset);
         verify(mapper).toResponse(asset);
+    }
+
+    @Test
+    void shouldCreateAssetWithNewFeature() {
+        when(featureConfig.isAssetNameValidationEnabled()).thenReturn(true); // ← novi path
+
+        when(assetCategoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        when(mapper.toEntity(requestDTO)).thenReturn(asset);
+        when(repository.save(asset)).thenReturn(asset);
+        when(mapper.toResponse(asset)).thenReturn(responseDTO);
+
+        AssetResponseDTO result = service.createAsset(requestDTO);
+
+        assertNotNull(result);
+        verify(repository).save(asset);
     }
 
     // Tests createAsset(): throws exception if AssetCategory does not exist
@@ -132,15 +156,17 @@ class AssetServiceImplTest {
     void shouldReturnAllAssets() {
 
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Asset> assetPage = new PageImpl<>(java.util.List.of(asset));
+        Page<Asset> assetPage = new PageImpl<>(List.of(asset));
 
         when(repository.findAll(pageable)).thenReturn(assetPage);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
         Page<AssetResponseDTO> result = service.getAllAssets(pageable);
+        Page<AssetResponseDTO> result = service.getAllAssets(pageable);
 
-        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
 
+        verify(repository).findAll(pageable);
         verify(repository).findAll(pageable);
     }
 
