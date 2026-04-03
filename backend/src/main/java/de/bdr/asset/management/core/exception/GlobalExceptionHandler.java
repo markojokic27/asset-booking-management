@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -23,6 +24,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
 
         log.warn("Resource not found at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
@@ -40,6 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
         List<Map<String, String>> invalidParams = ex.getBindingResult().getFieldErrors().stream()
@@ -65,6 +68,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
 
         String fieldName = ex.getName();
@@ -90,6 +94,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST,
@@ -104,6 +109,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PropertyReferenceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handlePropertyReference(PropertyReferenceException ex, HttpServletRequest request) {
         Map<String, String> invalidParam = Map.of(
                 "property", ex.getPropertyName(),
@@ -125,6 +131,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleUncaughtException(Exception ex, HttpServletRequest request) {
 
         log.error("Unexpected internal server error at URI [{}]", request.getRequestURI(), ex);

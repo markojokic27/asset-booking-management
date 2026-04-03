@@ -4,10 +4,6 @@ import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.feature.FeatureConfig;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -161,7 +158,6 @@ class AssetServiceImplTest {
         when(repository.findAll(pageable)).thenReturn(assetPage);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
-        Page<AssetResponseDTO> result = service.getAllAssets(pageable);
         Page<AssetResponseDTO> result = service.getAllAssets(pageable);
 
         assertEquals(1, result.getContent().size());

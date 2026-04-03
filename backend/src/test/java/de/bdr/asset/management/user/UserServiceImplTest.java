@@ -4,10 +4,6 @@ import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentEnum;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
