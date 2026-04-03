@@ -1,8 +1,8 @@
 package de.bdr.asset.management.booking;
 
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,10 +49,15 @@ public class BookingController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<BookingResponseDTO>> getAll() {
-        log.info("Received GET request to fetch all bookings");
+    public ResponseEntity<Page<BookingResponseDTO>> getAll(
+            Pageable pageable
+    ) {
+        log.info("Received GET request to fetch bookings with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
-        List<BookingResponseDTO> allBookings = service.getAllBookings();
+        Page<BookingResponseDTO> allBookings = service.getAllBookings(pageable);
 
         log.debug("Successfully processed GET request for all booking");
 

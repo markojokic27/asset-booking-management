@@ -1,8 +1,8 @@
 package de.bdr.asset.management.booking;
 
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.asset.Asset;
@@ -76,19 +76,21 @@ public class BookingServiceImpl implements BookingService {
     /**
      * Returns a list of bookings.
      *
+     * @param pageable - a Pageable object that determines page, size and sort
      * @return a list of BookingResponseDTO records
      */
     @Override
-    public List<BookingResponseDTO> getAllBookings() {
-        log.debug("Fetching all bookings from the database");
+    public Page<BookingResponseDTO> getAllBookings(Pageable pageable) {
+        log.debug("Fetching bookings from the database with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
-        List<Booking> bookings = repository.findAll();
+        Page<Booking> bookings = repository.findAll(pageable);
 
-        log.info("Successfully fetched {} bookings", bookings.size());
+        log.info("Successfully fetched {} bookings", bookings.getNumberOfElements());
 
-        return bookings.stream()
-                .map(mapper::toResponse)
-                .toList();
+        return bookings.map(mapper::toResponse);
     }
 
     /**
