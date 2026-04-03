@@ -1,9 +1,8 @@
 package de.bdr.asset.management.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
@@ -56,16 +55,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDTO> getAllUsers() {
+    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
         log.debug("Fetching all users from the database");
 
-        List<User> users = repository.findAll();
+        Page<User> users = repository.findAll(pageable);
 
-        log.info("Successfully fetched {} users", users.size());
+        log.info("Successfully fetched {} users", users.getNumberOfElements());
 
-        return users.stream()
-                .map(mapper::toResponse)
-                .toList();
+        return users.map(mapper::toResponse);
     }
 
     @Override

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +27,12 @@ public class UserController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
+            Pageable pageable
+    ) {
         log.info("Received GET request to fetch all users");
 
-        // TODO: implement pagination in service
-        List<UserResponseDTO> users = userService.getAllUsers();
+        Page<UserResponseDTO> users = userService.getAllUsers(pageable);
 
         log.debug("Successfully processed GET request for all users");
 

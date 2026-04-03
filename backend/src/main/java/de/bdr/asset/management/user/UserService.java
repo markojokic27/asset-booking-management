@@ -1,6 +1,7 @@
 package de.bdr.asset.management.user;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * User Service
@@ -12,7 +13,7 @@ public interface UserService {
 
     /** READ */
     UserResponseDTO getUserById(Long id);
-    List<UserResponseDTO> getAllUsers();
+    Page<UserResponseDTO> getAllUsers(Pageable pageable);
 
     /** UPDATE */
     UserResponseDTO updateUser(Long id, UserRequestDTO userRequest);
