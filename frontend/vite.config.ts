@@ -8,4 +8,8 @@ export default defineConfig({
     // Prevent "Invalid hook call" by ensuring a single instance across node_modules.
     dedupe: ['react', 'react-dom', '@emotion/react', '@emotion/styled'],
   },
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+  },
 });
