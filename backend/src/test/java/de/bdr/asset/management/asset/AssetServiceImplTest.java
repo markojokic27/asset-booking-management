@@ -3,7 +3,6 @@ package de.bdr.asset.management.asset;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
-import de.bdr.asset.management.feature.FeatureConfig;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,9 +27,6 @@ class AssetServiceImplTest {
 
     @Mock
     private AssetRepository repository;
-
-    @Mock
-    private FeatureConfig featureConfig;
 
     @Mock
     private AssetMapper mapper;
@@ -81,7 +77,6 @@ class AssetServiceImplTest {
     // Tests createAsset(): category exists → map request, save asset, return response
     @Test
     void shouldCreateAsset() {
-        when(featureConfig.isAssetNameValidationEnabled()).thenReturn(false);
 
         when(assetCategoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(mapper.toEntity(requestDTO)).thenReturn(asset);
@@ -95,21 +90,6 @@ class AssetServiceImplTest {
 
         verify(repository).save(asset);
         verify(mapper).toResponse(asset);
-    }
-
-    @Test
-    void shouldCreateAssetWithNewFeature() {
-        when(featureConfig.isAssetNameValidationEnabled()).thenReturn(true); // ← novi path
-
-        when(assetCategoryRepository.findById(1L)).thenReturn(Optional.of(category));
-        when(mapper.toEntity(requestDTO)).thenReturn(asset);
-        when(repository.save(asset)).thenReturn(asset);
-        when(mapper.toResponse(asset)).thenReturn(responseDTO);
-
-        AssetResponseDTO result = service.createAsset(requestDTO);
-
-        assertNotNull(result);
-        verify(repository).save(asset);
     }
 
     // Tests createAsset(): throws exception if AssetCategory does not exist

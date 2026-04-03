@@ -25,5 +25,3 @@ spring:
     locations: classpath:db/migration
     schemas: asset_booking_mgm
     default-schema: asset_booking_mgm
-  feature:
-    asset-name-validation-anabled: false

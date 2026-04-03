@@ -2,7 +2,6 @@ package de.bdr.asset.management.asset;
 
 import java.util.*;
 
-import de.bdr.asset.management.feature.FeatureConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +20,11 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository repository;
     private final AssetMapper mapper;
     private final AssetCategoryRepository assetCategoryRepository;
-    private final FeatureConfig featureConfig;
 
-    public AssetServiceImpl(AssetRepository repository, AssetMapper mapper, AssetCategoryRepository assetCategoryRepository, FeatureConfig featureConfig) {
+    public AssetServiceImpl(AssetRepository repository, AssetMapper mapper, AssetCategoryRepository assetCategoryRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.assetCategoryRepository = assetCategoryRepository;
-        this.featureConfig = featureConfig;
     }
 
     /**
@@ -38,12 +35,10 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
-        if(featureConfig.isAssetNameValidationEnabled()){
-            validateAssetName(assetRequest.name());
-        }
         log.info("Attempting to create asset in category id: {}", assetRequest.categoryId());
 
-        AssetCategory category = findCategoryOrThrow(assetRequest.categoryId());
+        AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
 
         log.debug("Asset category found. Mapping entity and saving to database...");
 
@@ -102,15 +97,13 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
-        if(featureConfig.isAssetNameValidationEnabled()){
-            validateAssetName(assetRequest.name());
-        }
         log.info("Attempting to update asset with id: {}", id);
 
         Asset asset = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
 
-        AssetCategory category = findCategoryOrThrow(assetRequest.categoryId());
+        AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
 
         asset.setName(assetRequest.name());
         asset.setDescription(assetRequest.description());
@@ -124,16 +117,4 @@ public class AssetServiceImpl implements AssetService {
         return mapper.toResponse(asset);
     }
 
-
-    private void validateAssetName(String name) {
-        if (name == null || name.length() < 3) {
-            throw new IllegalArgumentException("Asset name must be at least 3 characters");
-        }
-    }
-
-    private AssetCategory findCategoryOrThrow(Long categoryId) {
-        return assetCategoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "AssetCategory does not exist for id: " + categoryId));
-    }
 }
