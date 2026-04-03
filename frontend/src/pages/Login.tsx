@@ -12,7 +12,7 @@ export default function Login() {
         <LayoutRow>
           <LayoutColumn
             lgSpan={6}
-            className="mt-20 hidden items-center justify-center lg:flex lg:flex-col"
+            className="min-h-screen items-center justify-center pt-20 md:flex lg:flex lg:flex-col"
           >
             <HeaderHero />
           </LayoutColumn>
@@ -21,10 +21,10 @@ export default function Login() {
             lgOffset={0}
             smOffset={2}
             smSpan={8}
-            className="flex min-h-screen flex-col items-center justify-center md:h-fit"
+            className="mb-10 flex min-h-screen flex-col items-center justify-center sm:mb-0 md:pt-20"
           >
-            <div className="mb-10">
-              <Logo className="scale-150 md:hidden dark:brightness-0 dark:invert" />
+            <div className="mb-10 md:hidden">
+              <Logo className="scale-150 dark:brightness-0 dark:invert" />
             </div>
             <LoginForm />
           </LayoutColumn>

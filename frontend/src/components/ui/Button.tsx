@@ -38,13 +38,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-disabled={isDisabled}
         className={twMerge(
           // base
-          'items-centerblack inline-flex justify-center gap-2 border leading-none shadow-(--shadow-button) transition-colors outline-none hover:cursor-pointer active:scale-96',
+          'flex items-center justify-center gap-2 border leading-none font-bold shadow-(--shadow-button) transition-all duration-300 ease-out outline-none hover:cursor-pointer active:scale-96 active:shadow-none',
 
           // variants
           variant === 'solid' &&
-            'border-blue-500 bg-blue-500 text-white hover:border-blue-600 hover:bg-blue-600',
+            'border-(--color-primaryblue) bg-(--color-primaryblue) text-white hover:border-blue-600 hover:bg-blue-600',
           variant === 'outline' &&
-            'border-blue-500 text-blue-500 hover:border-blue-600 hover:text-blue-600',
+            'border-black bg-white text-black hover:border-(--color-primaryblue) hover:text-(--color-primaryblue) dark:border-white dark:bg-transparent dark:text-white dark:hover:border-(--color-primaryblue)',
           variant === 'dark' &&
             'hover:border-grayscale-200 hover:text-grayscale-200 border-white text-white',
           variant === 'link' &&
