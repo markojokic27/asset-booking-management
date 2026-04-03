@@ -1,6 +1,8 @@
 package de.bdr.asset.management.asset;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,10 @@ import jakarta.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("v1/assets")
+@Tag(
+        name = "Assets",
+        description = "Endpoints for Assets."
+)
 public class AssetController {
 
     private final AssetService assetService;
@@ -36,7 +42,7 @@ public class AssetController {
     /** READ ALL */
     @GetMapping
     public ResponseEntity<Page<AssetResponseDTO>> getAllAssets(
-            Pageable pageable
+            @ParameterObject Pageable pageable
     ) {
         log.info("Received GET request to fetch assets with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",

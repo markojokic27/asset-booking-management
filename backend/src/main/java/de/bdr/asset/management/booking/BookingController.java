@@ -1,6 +1,8 @@
 package de.bdr.asset.management.booking;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,10 @@ import jakarta.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("v1/bookings")
+@Tag(
+        name = "Bookings",
+        description = "Endpoints for Bookings."
+)
 public class BookingController {
 
     private final BookingService service;
@@ -50,7 +56,7 @@ public class BookingController {
     /** READ ALL */
     @GetMapping
     public ResponseEntity<Page<BookingResponseDTO>> getAll(
-            Pageable pageable
+            @ParameterObject Pageable pageable
     ) {
         log.info("Received GET request to fetch bookings with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",

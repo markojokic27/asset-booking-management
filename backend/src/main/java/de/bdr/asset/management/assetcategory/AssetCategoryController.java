@@ -1,6 +1,8 @@
 package de.bdr.asset.management.assetcategory;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,10 @@ import jakarta.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("v1/asset-categories")
+@Tag(
+        name = "Asset Categories",
+        description = "Endpoints for Asset Categories."
+)
 public class AssetCategoryController {
     private final AssetCategoryService service;
 
@@ -35,7 +41,7 @@ public class AssetCategoryController {
     /** READ ALL */
     @GetMapping
     public ResponseEntity<Page<AssetCategoryResponseDTO>> getAll(
-            Pageable pageable
+            @ParameterObject Pageable pageable
     ) {
         log.info("Received GET request to fetch asset categories with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",

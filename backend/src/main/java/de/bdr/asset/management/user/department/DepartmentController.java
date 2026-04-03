@@ -1,8 +1,10 @@
 package de.bdr.asset.management.user.department;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,10 @@ import org.springframework.data.domain.Pageable;
 @Slf4j
 @RestController
 @RequestMapping("v1/departments")
+@Tag(
+        name = "Departments",
+        description = "Endpoints for Departments."
+)
 public class DepartmentController {
     private final DepartmentService service;
 
@@ -36,7 +42,7 @@ public class DepartmentController {
     /** READ ALL */
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
-        Pageable pageable
+            @ParameterObject Pageable pageable
     ) {
         log.info("Received GET request to fetch departments with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
