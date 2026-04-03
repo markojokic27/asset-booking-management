@@ -1,6 +1,7 @@
 package de.bdr.asset.management.asset;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AssetService {
 
@@ -9,7 +10,7 @@ public interface AssetService {
 
     /** READ */
     AssetResponseDTO getAssetById(Long id);
-    List<AssetResponseDTO> getAllAssets();
+    Page<AssetResponseDTO> getAllAssets(Pageable pageable);
 
     /** UPDATE */
     AssetResponseDTO updateAsset(Long id, AssetRequestDTO dto);

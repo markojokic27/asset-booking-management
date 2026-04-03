@@ -30,7 +30,10 @@ public class UserController {
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
             Pageable pageable
     ) {
-        log.info("Received GET request to fetch all users");
+        log.info("Received GET request to fetch users with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         Page<UserResponseDTO> users = userService.getAllUsers(pageable);
 

@@ -38,7 +38,10 @@ public class DepartmentController {
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
         Pageable pageable
     ) {
-        log.info("Received GET request to fetch all departments");
+        log.info("Received GET request to fetch departments with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)

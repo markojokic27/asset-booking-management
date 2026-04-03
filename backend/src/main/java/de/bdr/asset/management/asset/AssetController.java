@@ -1,8 +1,8 @@
 package de.bdr.asset.management.asset;
 
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +35,17 @@ public class AssetController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<AssetResponseDTO>> getAllAssets() {
-        log.info("Received GET request to fetch all assets");
+    public ResponseEntity<Page<AssetResponseDTO>> getAllAssets(
+            Pageable pageable
+    ) {
+        log.info("Received GET request to fetch assets with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(assetService.getAllAssets());
+                .body(assetService.getAllAssets(pageable));
     }
 
     /** READ BY ID */

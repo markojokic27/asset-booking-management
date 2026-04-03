@@ -3,6 +3,8 @@ package de.bdr.asset.management.asset;
 import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.assetcategory.AssetCategory;
@@ -66,21 +68,23 @@ public class AssetServiceImpl implements AssetService {
     }
 
     /**
-     * Returns a list of assets.
+     * Returns a page of assets.
      *
-     * @return a list of Asset records
+     * @param pageable - A Pageable object, determines the page, size and sort
+     * @return a page of Asset records
      */
     @Override
-    public List<AssetResponseDTO> getAllAssets() {
-        log.debug("Fetching all assets from the database");
+    public Page<AssetResponseDTO> getAllAssets(Pageable pageable) {
+        log.debug("Fetching assets from the database with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
-        List<Asset> assets = repository.findAll();
+        Page<Asset> assets = repository.findAll(pageable);
 
-        log.info("Successfully fetched {} assets", assets.size());
+        log.info("Successfully fetched {} assets", assets.getNumberOfElements());
 
-        return assets.stream()
-                .map(mapper::toResponse)
-                .toList();
+        return assets.map(mapper::toResponse);
     }
 
     /**

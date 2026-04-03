@@ -37,7 +37,10 @@ public class AssetCategoryController {
     public ResponseEntity<Page<AssetCategoryResponseDTO>> getAll(
             Pageable pageable
     ) {
-        log.info("Received GET request to fetch all asset categories");
+        log.info("Received GET request to fetch asset categories with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)

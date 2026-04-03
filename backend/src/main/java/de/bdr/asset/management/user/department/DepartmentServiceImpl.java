@@ -62,11 +62,15 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /**
-     * @return a List of DepartmentRequestDTO records
+     * @param pageable - A Pageable object, determines the page, size and sort
+     * @return a Page of DepartmentRequestDTO records
      */
     @Override
     public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
-        log.debug("Fetching all departments from the database");
+        log.debug("Fetching departments from the database with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         Page<Department> departments = repository.findAll(pageable);
 

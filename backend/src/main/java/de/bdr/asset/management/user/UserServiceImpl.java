@@ -15,6 +15,7 @@ import de.bdr.asset.management.user.department.DepartmentRepository;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+    // TODO: Add documentation like other service implementations
 
     private final UserRepository repository;
     private final UserMapper mapper;
@@ -56,7 +57,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
-        log.debug("Fetching all users from the database");
+        log.debug("Fetching users from the database with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         Page<User> users = repository.findAll(pageable);
 

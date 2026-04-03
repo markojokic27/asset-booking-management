@@ -57,13 +57,17 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     }
 
     /**
-     * Returns a list of asset categories.
+     * Returns a page of asset categories.
      *
-     * @return a list of AssetCategoryResponseDTO records
+     * @param pageable - A Pageable object, determines the page, size and sort
+     * @return a page of AssetCategoryResponseDTO records
      */
     @Override
     public Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable){
-        log.debug("Fetching asset categories with pagination: ");
+        log.debug("Fetching asset categories from the database with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
         Page<AssetCategory> categories = repository.findAll(pageable);
 
