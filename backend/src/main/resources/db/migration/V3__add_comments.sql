@@ -117,7 +117,7 @@ IS 'Ensures username is unique';
 
 COMMENT ON CONSTRAINT asset_user_email_key ON asset_user
 IS 'Ensures email is unique';
-        
+
 -- ==========================================================
 -- INDEX COMMENTS
 -- ==========================================================
