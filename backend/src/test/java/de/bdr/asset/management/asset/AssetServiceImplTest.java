@@ -11,8 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -128,14 +131,17 @@ class AssetServiceImplTest {
     @Test
     void shouldReturnAllAssets() {
 
-        when(repository.findAll()).thenReturn(List.of(asset));
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Asset> assetPage = new PageImpl<>(java.util.List.of(asset));
+
+        when(repository.findAll(pageable)).thenReturn(assetPage);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
-        List<AssetResponseDTO> result = service.getAllAssets();
+        Page<AssetResponseDTO> result = service.getAllAssets(pageable);
 
-        assertEquals(1, result.size());
+        assertEquals(1, result.getTotalElements());
 
-        verify(repository).findAll();
+        verify(repository).findAll(pageable);
     }
 
     // Tests updateAsset(): asset and category exist → update fields, save, return response

@@ -12,8 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -113,13 +116,18 @@ class DepartmentServiceImplTest {
     // Tests getAllDepartments(): fetch all departments
     @Test
     void shouldReturnAllDepartments() {
-        when(repository.findAll()).thenReturn(List.of(department));
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Department> departmentPage = new PageImpl<>(java.util.List.of(department));
+
+        when(repository.findAll(pageable)).thenReturn(departmentPage);
         when(mapper.toResponse(department)).thenReturn(responseDTO);
 
-        List<DepartmentResponseDTO> result = service.getAllDepartments();
+        Page<DepartmentResponseDTO> result = service.getAllDepartments(pageable);
 
-        assertEquals(1, result.size());
-        verify(repository).findAll();
+        assertEquals(1, result.getTotalElements());
+
+        verify(repository).findAll(pageable);
     }
 
     // Tests updateDepartment(): department exists, manager exists, update saved

@@ -13,10 +13,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -158,14 +161,17 @@ class BookingServiceImplTest {
     @Test
     void shouldReturnAllBookings() {
 
-        when(repository.findAll()).thenReturn(List.of(booking));
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Booking> bookingPage = new PageImpl<>(java.util.List.of(booking));
+
+        when(repository.findAll(pageable)).thenReturn(bookingPage);
         when(mapper.toResponse(booking)).thenReturn(responseDTO);
 
-        List<BookingResponseDTO> result = service.getAllBookings();
+        Page<BookingResponseDTO> result = service.getAllBookings(pageable);
 
-        assertEquals(1, result.size());
+        assertEquals(1, result.getTotalElements());
 
-        verify(repository).findAll();
+        verify(repository).findAll(pageable);
     }
 
     // Tests updateBooking(): booking exists, user and asset exist, update saved

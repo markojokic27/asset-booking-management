@@ -12,8 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -130,13 +133,18 @@ class UserServiceImplTest {
     // Tests getAllUsers(): fetch all users
     @Test
     void shouldReturnAllUsers() {
-        when(repository.findAll()).thenReturn(List.of(user));
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<User> userPage = new PageImpl<>(java.util.List.of(user));
+
+        when(repository.findAll(pageable)).thenReturn(userPage);
         when(mapper.toResponse(user)).thenReturn(responseDTO);
 
-        List<UserResponseDTO> result = service.getAllUsers();
+        Page<UserResponseDTO> result = service.getAllUsers(pageable);
 
-        assertEquals(1, result.size());
-        verify(repository).findAll();
+        assertEquals(1, result.getTotalElements());
+
+        verify(repository).findAll(pageable);
     }
 
     // Tests updateUser(): user exists, department exists, update saved
