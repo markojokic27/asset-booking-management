@@ -2,11 +2,13 @@ package de.bdr.asset.management.user.department;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Department Controller
@@ -33,12 +35,14 @@ public class DepartmentController {
 
     /** READ ALL */
     @GetMapping
-    public ResponseEntity<List<DepartmentResponseDTO>> getAll() {
+    public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
+        Pageable pageable
+    ) {
         log.info("Received GET request to fetch all departments");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getAllDepartments());
+                .body(service.getAllDepartments(pageable));
     }
 
     /** READ BY ID */

@@ -1,13 +1,13 @@
 package de.bdr.asset.management.user.department;
 
-import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 /**
  * Implementation of Department Service
  * Currently returns only dummy data.
@@ -15,7 +15,6 @@ import de.bdr.asset.management.user.UserRepository;
 @Slf4j
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-    // TODO: Update the functions to not use dummy data
     private final DepartmentRepository repository;
     private final DepartmentMapper mapper;
     private final UserRepository userRepository;
@@ -66,16 +65,14 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a List of DepartmentRequestDTO records
      */
     @Override
-    public List<DepartmentResponseDTO> getAllDepartments() {
+    public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
         log.debug("Fetching all departments from the database");
 
-        List<Department> departments = repository.findAll();
+        Page<Department> departments = repository.findAll(pageable);
 
-        log.info("Successfully fetched {} departments", departments.size());
+        log.info("Successfully fetched {} departments", departments.getNumberOfElements());
 
-        return departments.stream()
-                .map(mapper::toResponse)
-                .toList();
+        return departments.map(mapper::toResponse);
     }
 
     /**

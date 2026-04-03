@@ -6,12 +6,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,15 +47,27 @@ public class DepartmentControllerTest {
     /** READ ALL */
     @Test
     void getAllDepartments_returnsOkWithList(){
-        DepartmentResponseDTO response=new DepartmentResponseDTO(1L,  DepartmentEnum.DEVOPS, 2L);
+        DepartmentResponseDTO response = 
+            new DepartmentResponseDTO(
+                1L, 
+                DepartmentEnum.DEVOPS,
+                2L
+            );
 
         List<DepartmentResponseDTO> list = List.of(response);
-        when(departmentService.getAllDepartments()).thenReturn(list);
+        Page<DepartmentResponseDTO> page = new PageImpl<>(list);
 
-        ResponseEntity<List<DepartmentResponseDTO>> result = departmentController.getAll();
+        when(departmentService.getAllDepartments(any(Pageable.class)))
+            .thenReturn(page);
+
+        ResponseEntity<Page<DepartmentResponseDTO>> result = 
+            departmentController.getAll(PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).hasSize(1).contains(response);
+        assert(result.getBody() != null);
+        assertThat(result.getBody().getContent())
+            .hasSize(1)
+            .contains(response);
     }
 
     /** READ BY ID */
@@ -68,7 +85,7 @@ public class DepartmentControllerTest {
 
     /** UPDATE */
     @Test
-    void updateDepartment_returnsOkWithUpdatesdDepartment(){
+    void updateDepartment_returnsOkWithUpdatesDepartment(){
         DepartmentRequestDTO request=new DepartmentRequestDTO( DepartmentEnum.DEVOPS, 2L);
         DepartmentResponseDTO response=new DepartmentResponseDTO(1L,  DepartmentEnum.DEVOPS, 2L);
 

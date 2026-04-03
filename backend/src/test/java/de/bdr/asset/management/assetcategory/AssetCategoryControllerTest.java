@@ -64,6 +64,7 @@ public class AssetCategoryControllerTest {
             assetCategoryController.getAll(PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assert result.getBody() != null;
         assertThat(result.getBody().getContent())
             .hasSize(1)
             .contains(response);

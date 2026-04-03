@@ -1,6 +1,7 @@
 package de.bdr.asset.management.user.department;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * JPA Booking Repository
@@ -12,7 +13,7 @@ public interface DepartmentService {
 
     /** READ */
     DepartmentResponseDTO getDepartmentById(Long id);
-    List<DepartmentResponseDTO> getAllDepartments();
+    Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable);
 
     /** UPDATE */
     DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO request);
