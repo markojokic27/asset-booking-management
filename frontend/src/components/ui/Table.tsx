@@ -10,7 +10,6 @@ export type TableColumn<T> = {
   cellClassName?: string;
 };
 
-
 export type TableProps<T> = {
   data: T[];
   columns: TableColumn<T>[];
@@ -91,7 +90,10 @@ export function Table<T>({
                   {columns.map((column) => (
                     <td
                       key={column.key}
-                      className={twMerge(tableCellClassName, column.cellClassName)}
+                      className={twMerge(
+                        tableCellClassName,
+                        column.cellClassName
+                      )}
                     >
                       {getCellContent(column, row, index)}
                     </td>
