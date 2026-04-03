@@ -20,14 +20,13 @@ export default function Users() {
           <Button
             size="sm"
             iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
-            className="border-grayscale-200 bg-white font-bold uppercase text-black shadow-none hover:border-grayscale-300 hover:bg-grayscale-50 active:bg-grayscale-100 dark:bg-transparent dark:text-white dark:hover:border-grayscale-500 dark:hover:bg-bg-dark"
+            className="border-white bg-white text-black hover:bg-gray-100 hover:text-black dark:border-white dark:bg-white dark:text-black dark:hover:bg-gray-100 dark:hover:text-black"
           >
             Export
           </Button>
-          <Button
-            size="sm"
+          <Button 
+            size="sm" 
             iconLeft={<AddIcon fontSize="small" />}
-            className="border-(--color-primaryblue) bg-(--color-primaryblue) font-bold uppercase text-white shadow-none hover:brightness-95 active:brightness-90"
           >
             New
           </Button>
@@ -38,4 +37,3 @@ export default function Users() {
     </LayoutColumn>
   );
 }
-
