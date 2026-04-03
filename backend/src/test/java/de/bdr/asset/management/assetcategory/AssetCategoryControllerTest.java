@@ -1,18 +1,22 @@
 package de.bdr.asset.management.assetcategory;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
 public class AssetCategoryControllerTest {
@@ -39,19 +43,31 @@ public class AssetCategoryControllerTest {
     }
 
     /** READ ALL */
-    // TODO: Configure this for pagination
-//    @Test
-//    void getAllAssetCategories_returnsOkWithLIst(){
-//        AssetCategoryResponseDTO response = new AssetCategoryResponseDTO( 1L, "Books", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
-//
-//        List<AssetCategoryResponseDTO> list = List.of(response);
-//        when(assetCategoryService.getAllAssetCategories()).thenReturn(list);
-//
-//        ResponseEntity<List<AssetCategoryResponseDTO>> result = assetCategoryController.getAll();
-//
-//        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        assertThat(result.getBody()).hasSize(1).contains(response);
-//    }
+    @Test
+    void getAllAssetCategories_returnsOkWithPage() {
+        AssetCategoryResponseDTO response =
+            new AssetCategoryResponseDTO(
+                1L,
+                "Books",
+                "A collection of books available for borrowing within the company library.",
+                BookingPeriodEnum.DAY,
+                Boolean.TRUE
+            );
+
+        List<AssetCategoryResponseDTO> list = List.of(response);
+        Page<AssetCategoryResponseDTO> page = new PageImpl<>(list);
+
+        when(assetCategoryService.getAllAssetCategories(any(Pageable.class)))
+            .thenReturn(page);
+
+        ResponseEntity<Page<AssetCategoryResponseDTO>> result =
+            assetCategoryController.getAll(PageRequest.of(0, 10));
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody().getContent())
+            .hasSize(1)
+            .contains(response);
+    }
 
     /** READ BY ID */
     @Test

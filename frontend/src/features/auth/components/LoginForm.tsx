@@ -57,7 +57,7 @@ const LoginForm = () => {
         const formData = new FormData(event.currentTarget);
         handleSubmit(formData);
       }}
-      className="flex w-full flex-col bg-white px-6 py-10 shadow-(--shadow-card) sm:px-12 md:mt-20 md:px-12 lg:px-20 dark:bg-black"
+      className="flex w-full flex-col bg-white px-5 py-10 shadow-(--shadow-card) sm:px-12 md:mt-0 md:px-12 lg:px-20 dark:bg-black"
     >
       <h1 className="mb-6 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
         Login
@@ -96,9 +96,8 @@ const LoginForm = () => {
         </Button>
       </Form.Submit>
 
-      
       <Button variant="link" onClick={() => navigate('/register')}>
-          Don't have an account? Register here.
+        Don't have an account? Register here.
       </Button>
     </Form.Root>
   );

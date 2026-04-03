@@ -79,7 +79,7 @@ export default function Assets() {
           Add asset
         </Button>
       </div>
-      <div className="mt-6 h-px w-full bg-[var(--color-table-border)]" />
+      <div className="mt-6 h-px w-full bg-(--color-table-border)" />
       <div className="mt-6 flex w-full justify-end">
         <div className="w-50">
           <Input placeholder="Search assets..." />
