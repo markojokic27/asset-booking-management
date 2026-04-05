@@ -109,6 +109,11 @@ public class SecurityConfig {
                         .requestMatchers("/v1/bookings/**")
                         .hasRole("ADMIN")
 
+                        // =========================
+                        // FALLBACK
+                        // =========================
+                        .anyRequest().authenticated()
+
                 )
                 // JWT filter runs before Spring's username/password filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
