@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ public class DepartmentController {
     }
 
     /** CREATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DepartmentResponseDTO> create(@Valid @RequestBody DepartmentRequestDTO request) {
         log.info("Received POST request to create a new department");
@@ -40,6 +42,7 @@ public class DepartmentController {
     }
 
     /** READ ALL */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
             @ParameterObject Pageable pageable
@@ -55,6 +58,7 @@ public class DepartmentController {
     }
 
     /** READ BY ID */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
         log.info("Received GET request to fetch department with id: {}", id);
@@ -65,6 +69,7 @@ public class DepartmentController {
     }
 
     /** UPDATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> update(@PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request) {
         log.info("Received PUT request to update department with id: {}", id);
@@ -75,6 +80,7 @@ public class DepartmentController {
     }
 
     /** Soft DELETE */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("Received DELETE request for department with id: {}", id);

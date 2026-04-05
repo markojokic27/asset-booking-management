@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ public class AssetCategoryController {
     }
 
     /** CREATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<AssetCategoryResponseDTO> create(@Valid @RequestBody AssetCategoryRequestDTO request) {
         log.info("Received POST request to create a new asset category");
@@ -39,6 +41,8 @@ public class AssetCategoryController {
     }
 
     /** READ ALL */
+    // can read any authenticated user
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<AssetCategoryResponseDTO>> getAll(
             @ParameterObject Pageable pageable
@@ -54,6 +58,8 @@ public class AssetCategoryController {
     }
 
     /** READ BY ID */
+    // can read any authenticated user
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     ResponseEntity<AssetCategoryResponseDTO> getById(@PathVariable Long id) {
         log.info("Received GET request to fetch asset category with id: {}", id);
@@ -64,6 +70,7 @@ public class AssetCategoryController {
     }
 
     /** UPDATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<AssetCategoryResponseDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request) {
         log.info("Received PUT request to update asset category with id: {}", id);
@@ -74,6 +81,7 @@ public class AssetCategoryController {
     }
 
     /** Soft DELETE */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("Received DELETE request for asset category with id: {}", id);

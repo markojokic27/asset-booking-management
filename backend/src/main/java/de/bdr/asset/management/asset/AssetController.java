@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -30,6 +31,7 @@ public class AssetController {
     }
 
     /** CREATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<AssetResponseDTO> createAsset(@Valid @RequestBody AssetRequestDTO assetRequest) {
         log.info("Received POST request to create a new asset");
@@ -40,6 +42,8 @@ public class AssetController {
     }
 
     /** READ ALL */
+    // can read any authenticated user
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<AssetResponseDTO>> getAllAssets(
             @ParameterObject Pageable pageable
@@ -55,6 +59,8 @@ public class AssetController {
     }
 
     /** READ BY ID */
+    // can read any authenticated user
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<AssetResponseDTO> getAssetById(@PathVariable Long id) {
         log.info("Received GET request to fetch asset with id: {}", id);
@@ -65,6 +71,7 @@ public class AssetController {
     }
 
     /** UPDATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<AssetResponseDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetRequestDTO assetRequest) {
         log.info("Received PUT request to update asset with id: {}", id);

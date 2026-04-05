@@ -8,15 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +33,7 @@ public class UserController {
     }
 
     /** READ ALL */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
            @ParameterObject Pageable pageable
@@ -57,6 +51,7 @@ public class UserController {
     }
 
     /** CREATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(
             @Valid @RequestBody UserRequestDTO userRequest
@@ -72,6 +67,8 @@ public class UserController {
     }
 
     /** READ BY ID */
+    // read by id owner or admin
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isOwner(#id, authentication.name)")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(
             @PathVariable Long id
@@ -86,6 +83,7 @@ public class UserController {
     }
 
     /** UPDATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
@@ -101,19 +99,20 @@ public class UserController {
     }
 
     /** Soft DELETE */
-    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
     public ResponseEntity<UserResponseDTO> deleteUser(
             @PathVariable Long id,
             @RequestParam String status,
             @RequestBody Map<String, String> noteBody
     ) {
-        log.info("Received PATCH request to delete user with id: {}", id);
+        log.info("Received DELETE request to delete user with id: {}", id);
 
         // The note is optional in the body
         String note = noteBody.getOrDefault("note", "");
         UserResponseDTO deactivatedUser = userService.deleteUser(id, status, note);
 
-        log.debug("Successfully processed PATCH request for user id: {}", id);
+        log.debug("Successfully processed DELETE request for user id: {}", id);
 
         return ResponseEntity.ok(deactivatedUser);
     }

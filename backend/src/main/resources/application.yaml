@@ -25,3 +25,9 @@ spring:
     locations: classpath:db/migration
     schemas: asset_booking_mgm
     default-schema: asset_booking_mgm
+  feature:
+    asset-name-validation-enabled: false
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpiry: ${JWT_EXPIRY_SECONDS}
+  refreshTokenExpiry: ${JWT_REFRESH_SECONDS}
