@@ -15,9 +15,11 @@ const flagClass =
   'h-5 w-[1.875rem] shrink-0 overflow-hidden rounded-sm ring-1 ring-black/10 dark:ring-white/15';
 
 function resolveLanguage(code: string) {
-  return languages.find((lang) => lang.code === code) ??
+  return (
+    languages.find((lang) => lang.code === code) ??
     languages.find((lang) => code.startsWith(`${lang.code}-`)) ??
-    languages.find((lang) => code.startsWith(lang.code));
+    languages.find((lang) => code.startsWith(lang.code))
+  );
 }
 
 function LanguageSwitcher() {
@@ -41,10 +43,7 @@ function LanguageSwitcher() {
           className="group flex items-center gap-1.5 text-gray-900 hover:cursor-pointer focus:outline-none dark:text-gray-100"
         >
           {CurrentFlag ? (
-            <CurrentFlag
-              className={flagClass}
-              title={currentLanguage.label}
-            />
+            <CurrentFlag className={flagClass} title={currentLanguage.label} />
           ) : (
             <span className="text-sm">?</span>
           )}

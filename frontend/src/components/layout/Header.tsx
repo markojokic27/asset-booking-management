@@ -4,6 +4,7 @@ import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import { Layout, LayoutRow, LayoutColumn } from './Layout';
 import { Link } from 'react-router-dom';
+import MobileMenu from './MobileMenu';
 
 interface HeaderProps {
   className?: string;
@@ -27,10 +28,11 @@ export const Header: React.FC<HeaderProps> = ({
           <Link to="/">
             <Logo className="h-8 w-auto dark:brightness-0 dark:invert" />
           </Link>
-          <div className="flex gap-6">
+          <div className="hidden gap-6 md:flex">
             <ThemeToggle />
             <LanguageSwitcher />
           </div>
+          <MobileMenu />
         </div>
       ) : (
         <Layout className="h-full">
@@ -39,9 +41,12 @@ export const Header: React.FC<HeaderProps> = ({
               <Link to="/">
                 <Logo className="h-8 w-auto dark:brightness-0 dark:invert" />
               </Link>
-              <div className="flex gap-6">
+              <div className="hidden gap-6 md:flex">
                 <ThemeToggle />
                 <LanguageSwitcher />
+              </div>
+              <div className="h-6 w-6">
+                <MobileMenu />
               </div>
             </LayoutColumn>
           </LayoutRow>
