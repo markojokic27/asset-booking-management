@@ -45,9 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <ThemeToggle />
                 <LanguageSwitcher />
               </div>
-              <div className="h-6 w-6">
-                <MobileMenu />
-              </div>
+              <MobileMenu />
             </LayoutColumn>
           </LayoutRow>
         </Layout>
