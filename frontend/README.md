@@ -183,7 +183,7 @@ export default defineConfig([
 # Running and building the docker image
 
 ```bash
-docker build -t vite-app
+docker build -t vite-app .
 docker run -d --name frontend -p 8080:8080 vite-app
 ```
 

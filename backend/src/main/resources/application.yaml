@@ -28,6 +28,6 @@ spring:
   feature:
     asset-name-validation-enabled: false
 jwt:
-  secret: ${JWT_SECRET}
-  accessTokenExpiry: ${JWT_EXPIRY_SECONDS}
-  refreshTokenExpiry: ${JWT_REFRESH_SECONDS}
+  secret: ${JWT_SECRET:WweXX30m0e5VJkHEEf5uhk9X/ZIXRO23YiZpORVda1xzZ7df4ZuW90x6/sbZ1w2l36eeY4Ya/3gLTfI8RDeE8Q==}
+  accessTokenExpiry: ${JWT_EXPIRY_SECONDS:3600}
+  refreshTokenExpiry: ${JWT_REFRESH_SECONDS:86400}

@@ -155,6 +155,11 @@ TODO Add or link content...
 
 ### Dockerfile for DB
 
+Image Version: Postgres:18
+
+There is currently no DB Dockerfile. It is contained in the compose as a service.
+
+[DockerCompose File](/compose.yaml#db)
 
 ### DB Schema migrations
 
