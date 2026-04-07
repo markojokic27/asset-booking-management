@@ -9,6 +9,7 @@ import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { Input } from '../components/ui/Input';
+import { UserModal } from '../features/user/components/UserModal';
 
 type UserRow = {
   id: string;
@@ -26,6 +27,8 @@ const users: UserRow[] = [
 
 export default function Users() {
   const [search, setSearch] = useState('');
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [activeUser, setActiveUser] = useState<UserRow | null>(null);
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -52,12 +55,16 @@ export default function Users() {
       key: 'actions',
       header: <span className="sr-only">Actions</span>,
       cellClassName: 'w-px whitespace-nowrap',
-      render: () => (
+      render: (user) => (
         <div className="flex items-center gap-1">
           <button
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="View user"
+            onClick={() => {
+              setActiveUser(user);
+              setIsUserModalOpen(true);
+            }}
           >
             <VisibilityOutlinedIcon
               fontSize="small"
@@ -146,6 +153,15 @@ export default function Users() {
           emptyMessage="No users yet."
         />
       </div>
+
+      <UserModal
+        isOpen={isUserModalOpen}
+        onClose={() => {
+          setIsUserModalOpen(false);
+          setActiveUser(null);
+        }}
+        user={activeUser}
+      />
     </LayoutColumn>
   );
 }
