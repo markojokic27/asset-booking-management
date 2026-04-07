@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -29,6 +29,7 @@ export default function Users() {
   const [search, setSearch] = useState('');
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
+  const [page, setPage] = useState(1);
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -38,6 +39,14 @@ export default function Users() {
         u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
     );
   }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [search]);
+
+  const totalPages = 9;
+  const safePage = Math.min(page, totalPages);
+  const paginationItems: Array<number | 'ellipsis'> = [1, 2, 3, 4, 'ellipsis', 8, 9];
 
   const columns: TableColumn<UserRow>[] = [
     {
@@ -153,6 +162,69 @@ export default function Users() {
           emptyMessage="No users yet."
         />
       </div>
+
+      {filteredUsers.length > 0 && (
+        <nav
+          className="mt-5 flex w-full items-center justify-center"
+          aria-label="Pagination"
+        >
+          <div className="flex items-center gap-2 text-sm text-(--color-table-text)">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={safePage <= 1}
+              className="inline-flex cursor-pointer items-center gap-2 rounded px-2 py-1 transition-colors hover:bg-(--color-table-row-hover) disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <span aria-hidden="true">‹</span>
+              <span>Previous</span>
+            </button>
+
+            <div className="flex items-center gap-2">
+              {paginationItems.map((item, idx) => {
+                if (item === 'ellipsis') {
+                  return (
+                    <span
+                      key={`ellipsis-${idx}`}
+                      className="select-none text-(--color-table-text)"
+                      aria-hidden="true"
+                    >
+                      …
+                    </span>
+                  );
+                }
+
+                const isActive = item === safePage;
+                return (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setPage(item)}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={[
+                      'inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded border text-xs transition-colors',
+                      isActive
+                        ? 'border-(--color-table-border) bg-(--color-table-row-hover)'
+                        : 'border-transparent hover:bg-(--color-table-row-hover)',
+                    ].join(' ')}
+                  >
+                    {item}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safePage >= totalPages}
+              className="inline-flex cursor-pointer items-center gap-2 rounded px-2 py-1 transition-colors hover:bg-(--color-table-row-hover) disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <span>Next</span>
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+        </nav>
+      )}
 
       <UserModal
         isOpen={isUserModalOpen}
