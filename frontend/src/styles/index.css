@@ -589,6 +589,14 @@
 
   --shadow-card: 0px 0px 7px 3px rgba(0, 0, 0, 0.08);
   --shadow-button: 0px 3px 3px #030044;
+
+  --color-modal-overlay: rgba(0, 0, 0, 0.4);
+  --color-modal-placeholder-bg: var(--color-bg);
+  --color-modal-label: color-mix(in srgb, var(--color-text) 65%, transparent);
+  --color-status-available-bg: #dcfce7;
+  --color-status-available-text: #15803d;
+  --color-status-unavailable-bg: #fee2e2;
+  --color-status-unavailable-text: #b91c1c;
 }
 
 .dark {
@@ -606,6 +614,14 @@
   --color-surface-hover: rgba(245, 245, 245, 0.05);
   --color-table-shadow:
     0px 0px 0px 1px rgba(245, 245, 245, 0.03), 0px 10px 28px rgba(0, 0, 0, 0.28);
+
+  --color-modal-overlay: rgba(0, 0, 0, 0.6);
+  --color-modal-placeholder-bg: var(--color-surface);
+  --color-modal-label: color-mix(in srgb, var(--color-text) 65%, transparent);
+  --color-status-available-bg: rgba(20, 83, 45, 0.45);
+  --color-status-available-text: #86efac;
+  --color-status-unavailable-bg: rgba(127, 29, 29, 0.45);
+  --color-status-unavailable-text: #fca5a5;
 }
 
 @layer base {
