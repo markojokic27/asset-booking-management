@@ -9,6 +9,8 @@ import Register from '../pages/Register';
 import Manager from '../pages/Manager';
 import NotFound from '../pages/NotFound';
 import Users from '../pages/Users';
+import AssetCategories from '../pages/AssetCategories';
+
 
 /*  auth loader - in  app, we will check auth status by making an API call to the backend
 async function requireAuth() {
@@ -58,6 +60,11 @@ export const router = createBrowserRouter([
       {
         path: 'users',
         element: <Users />,
+        loader: requireAuth,
+      },
+      {
+        path: 'categories',
+        element: <AssetCategories />,
         loader: requireAuth,
       },
     ],
