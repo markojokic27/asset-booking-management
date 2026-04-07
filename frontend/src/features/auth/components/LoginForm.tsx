@@ -68,7 +68,7 @@ const LoginForm = () => {
       <p className="mb-2 tracking-[0.2em]">Username</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input data-testid="username-input"
             type="text"
             placeholder="Eneter your username"
             className="w-full border p-3"
@@ -80,7 +80,7 @@ const LoginForm = () => {
       <p className="mb-2 tracking-[0.2em]">Password</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input data-testid='password-input'
             type="password"
             placeholder="Eneter your password"
             className="w-full border p-3"
@@ -91,7 +91,7 @@ const LoginForm = () => {
       </Form.Field>
 
       <Form.Submit asChild>
-        <Button type="submit" className="mt-6 mb-2 font-bold uppercase">
+        <Button data-testid="login-button" type="submit" className="mt-6 mb-2 font-bold uppercase">
           Login
         </Button>
       </Form.Submit>
