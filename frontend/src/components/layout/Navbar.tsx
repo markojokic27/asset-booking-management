@@ -13,6 +13,7 @@ export const Navbar: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home', icon: HomeSharpIcon },
     { to: '/assets', label: 'Assets', icon: MonitorSharpIcon },
+    { to: '/categories', label: 'Categories', icon: DnsSharpIcon },
     { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharpIcon },
     { to: '/users', label: 'Users', icon: PeopleSharpIcon },
   ];
@@ -38,38 +39,23 @@ export const Navbar: React.FC = () => {
   return (
     <LayoutColumn
       mdSpan={2}
-      className="px-0 md:px-0 lg:px-0 absolute left-0 hidden min-h-screen h-screen w-full bg-(--color-surface) pt-20 text-text-light shadow-md md:flex flex-col dark:bg-gray-900 dark:text-white dark:shadow-black/20  sm:tracking-[0.1em] md:tracking-[0.15em] tracking-[0.2em] leading-[44px] text-base sm:text-lg md:text-xl lg:text-2xl pb-10"
+      className="px-0 md:px-0 lg:px-0 absolute left-0 hidden min-h-screen h-screen w-full bg-(--color-surface) pt-20 text-text-light shadow-md md:flex flex-col dark:bg-gray-900 dark:text-white dark:shadow-black/20 sm:tracking-[0.1em] md:tracking-[0.15em] tracking-[0.2em] leading-[44px] text-base sm:text-lg md:text-xl lg:text-2xl pb-10"
     >
       <nav className="flex flex-col justify-between h-full pt-10 w-full overflow-hidden">
-
         <div className="flex flex-col gap-4 w-full">
-          <NavLink to="/" className={({ isActive }) => getLinkClass(isActive)}>
-            <HomeSharpIcon className="mr-4" />
-            Home
-          </NavLink>
-
-          <NavLink to="/categories" className={({ isActive }) => getLinkClass(isActive)}>
-            <DnsSharpIcon className="mr-4" />
-            Categories
-          </NavLink>
-
-          <NavLink to="/assets" className={({ isActive }) => getLinkClass(isActive)}>
-            <MonitorSharpIcon className="mr-4" />
-            Assets
-          </NavLink>
-
-          <NavLink to="/bookings" className={({ isActive }) => getLinkClass(isActive)}>
-            <CalendarTodaySharpIcon className="mr-4" />
-            Bookings
-          </NavLink>
-
-          <NavLink to="/users" className={({ isActive }) => getLinkClass(isActive)}>
-            <PeopleSharpIcon className="mr-4" />
-            Users
-          </NavLink>
+          {navItems.map(({ to, label, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) => getLinkClass(isActive)}
+            >
+              <Icon className="mr-4" />
+              {label}
+            </NavLink>
+          ))}
         </div>
 
-        <NavLink to="/login" className={({ isActive }) => getLinkClass(isActive)}>
+        <NavLink to="/login" className={getLinkClass(false)}>
           <LogoutSharpIcon className="mr-4" />
           Logout
         </NavLink>
