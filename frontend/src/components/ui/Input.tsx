@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   size?: 'sm' | 'md';
   error?: boolean;
   errorMessage?: string;

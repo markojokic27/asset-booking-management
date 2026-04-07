@@ -1,11 +1,14 @@
+import { useMemo, useState } from 'react';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
+import { Input } from '../components/ui/Input';
 
 type UserRow = {
   id: string;
@@ -22,6 +25,17 @@ const users: UserRow[] = [
 ];
 
 export default function Users() {
+  const [search, setSearch] = useState('');
+
+  const filteredUsers = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return users;
+    return users.filter(
+      (u) =>
+        u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+    );
+  }, [search]);
+
   const columns: TableColumn<UserRow>[] = [
     {
       key: 'name',
@@ -107,9 +121,25 @@ export default function Users() {
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
+      <div className="mt-6 flex w-full justify-end">
+        <div className="w-70">
+          <div className="relative">
+            <SearchOutlinedIcon
+              fontSize="small"
+              className="pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2 text-gray-400"
+            />
+            <Input
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="rounded-md border border-(--color-table-border) px-3 py-2 pl-10 text-xs shadow-none"
+            />
+          </div>
+        </div>
+      </div>
       <div className="mt-6 w-full">
         <Table
-          data={users}
+          data={filteredUsers}
           columns={columns}
           getRowKey={(user) => user.id}
           className="w-full"
