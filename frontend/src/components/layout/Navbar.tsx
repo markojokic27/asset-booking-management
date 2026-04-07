@@ -43,43 +43,33 @@ export const Navbar: React.FC = () => {
       <nav className="flex flex-col justify-between h-full pt-10 w-full overflow-hidden">
 
         <div className="flex flex-col gap-4 w-full">
-          <NavLink to="/" className={({ isActive }) =>
-            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
-          }>
+          <NavLink to="/" className={({ isActive }) => getLinkClass(isActive)}>
             <HomeSharpIcon className="mr-4" />
             Home
           </NavLink>
 
-          <NavLink to="/categories" className={({ isActive }) =>
-            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
-          }>
+          <NavLink to="/categories" className={({ isActive }) => getLinkClass(isActive)}>
             <DnsSharpIcon className="mr-4" />
             Categories
           </NavLink>
 
-          <NavLink to="/assets" className={({ isActive }) =>
-            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
-          }>
+          <NavLink to="/assets" className={({ isActive }) => getLinkClass(isActive)}>
             <MonitorSharpIcon className="mr-4" />
             Assets
           </NavLink>
 
-          <NavLink to="/bookings" className={({ isActive }) =>
-            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
-          }>
+          <NavLink to="/bookings" className={({ isActive }) => getLinkClass(isActive)}>
             <CalendarTodaySharpIcon className="mr-4" />
             Bookings
           </NavLink>
 
-          <NavLink to="/users" className={({ isActive }) =>
-            `${linkBase} ${isActive ? activeStyle : inactiveStyle}`
-          }>
+          <NavLink to="/users" className={({ isActive }) => getLinkClass(isActive)}>
             <PeopleSharpIcon className="mr-4" />
             Users
           </NavLink>
         </div>
 
-        <NavLink to="/login" className={`${linkBase} ${inactiveStyle}`}>
+        <NavLink to="/login" className={({ isActive }) => getLinkClass(isActive)}>
           <LogoutSharpIcon className="mr-4" />
           Logout
         </NavLink>
