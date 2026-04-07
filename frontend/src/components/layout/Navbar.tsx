@@ -7,8 +7,6 @@ import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 
-
-
 export const Navbar: React.FC = () => {
   const navItems = [
     { to: '/', label: 'Home', icon: HomeSharpIcon },
