@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   size?: 'sm' | 'md';
   error?: boolean;
   errorMessage?: string;
@@ -20,7 +20,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error || undefined}
           className={twMerge(
             // base
-            'relative w-full rounded-none border-none bg-white leading-none text-gray-900 shadow-(--shadow-button) transition-colors outline-none focus:border-black focus:ring-1 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-400',
+            'relative w-full rounded-none border-none bg-white leading-none tracking-normal text-gray-900 shadow-(--shadow-button) transition-colors outline-none placeholder:tracking-[0.2em] focus:border-black focus:ring-1 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-400',
 
             // sizeborder
             size === 'sm' && 'px-3 py-2 text-xs',
@@ -40,7 +40,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         {error && errorMessage && (
-          <p className="absolute mt-2 text-sm text-red-500">{errorMessage}</p>
+          <p className="absolute mt-2 text-sm tracking-normal text-red-500">
+            {errorMessage}
+          </p>
         )}
       </div>
     );

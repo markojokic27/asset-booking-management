@@ -10,18 +10,30 @@ import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 
 
 export const Navbar: React.FC = () => {
+  const navItems = [
+    { to: '/', label: 'Home', icon: HomeSharpIcon },
+    { to: '/assets', label: 'Assets', icon: MonitorSharpIcon },
+    { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharpIcon },
+    { to: '/users', label: 'Users', icon: PeopleSharpIcon },
+  ];
+  //TODO hover, new tab
   // Base for links
-  const linkBase = "flex items-center p-3 transition-all border-l-8 w-full";
+  const linkBase =
+    'flex w-full hover:cursor-pointer items-center p-3 transition-all border-l-8 w-full';
 
-  // Style when link is active
-  const activeStyle = "bg-(--color-bg) border-(--color-primaryblue) text-black shadow-card dark:bg-bg-dark dark:text-white";
+  // Style when link iz active
+  const activeStyle =
+    'bg-(--color-bg)  border-(--color-primaryblue) text-black shadow-card dark:bg-bg-dark dark:text-white';
 
   // Style when link is not active
   const inactiveStyle = `
     border-transparent text-black 
-    hover:bg-(--color-bg) hover:border-(--color-primaryblue) 
+    hover:bg-(--color-bg) hover:border-(--color-primaryblue)
     dark:text-white dark:hover:bg-bg-dark dark:hover:border-(--color-primaryblue)
   `;
+
+  const getLinkClass = (isActive: boolean) =>
+    `${linkBase} ${isActive ? activeStyle : inactiveStyle}`;
 
   return (
     <LayoutColumn
@@ -71,7 +83,6 @@ export const Navbar: React.FC = () => {
           <LogoutSharpIcon className="mr-4" />
           Logout
         </NavLink>
-
       </nav>
     </LayoutColumn>
   );

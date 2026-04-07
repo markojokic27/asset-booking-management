@@ -43,7 +43,7 @@ public class AssetCategoryRequestDTOTestValidation {
     // Name is blank
     @Test
     void blankName_shouldFailNotBlank(){
-        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO( " ", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
+        AssetCategoryRequestDTO dto=new AssetCategoryRequestDTO( "", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 

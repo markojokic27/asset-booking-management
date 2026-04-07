@@ -10,7 +10,6 @@ export type TableColumn<T> = {
   cellClassName?: string;
 };
 
-
 export type TableProps<T> = {
   data: T[];
   columns: TableColumn<T>[];
@@ -21,19 +20,19 @@ export type TableProps<T> = {
 };
 
 const tableContainerClassName =
-  'overflow-hidden rounded-lg border border-[var(--color-table-border)] bg-[var(--color-table-surface)] text-[var(--color-table-text)] shadow-[var(--color-table-shadow)]';
+  'overflow-hidden rounded-lg border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--color-table-shadow)';
 
 const tableClassName = 'min-w-full border-collapse text-left text-sm';
 
 const tableHeadClassName =
-  'border-b border-[var(--color-table-border)] bg-[var(--color-table-head)] text-[var(--color-table-head-text)] text-xs uppercase tracking-[0.2em]';
+  'border-b border-(--color-table-border) bg-(--color-table-head) text-(--color-table-head-text) text-xs uppercase tracking-[0.2em]';
 
 const tableHeaderCellClassName = 'px-6 py-4 font-semibold';
 
 const defaultTableRowClassName =
-  'border-b border-[var(--color-table-row-border)] transition-colors hover:bg-[var(--color-table-row-hover)]';
+  'border-b border-(--color-table-row-border) transition-colors hover:bg-(--color-table-row-hover)';
 
-const tableCellClassName = 'px-6 py-4 text-[var(--color-table-text)]';
+const tableCellClassName = 'px-6 py-4 text-(--color-table-text)';
 
 const getCellContent = <T,>(column: TableColumn<T>, row: T, index: number) => {
   if (column.render) {
@@ -91,7 +90,10 @@ export function Table<T>({
                   {columns.map((column) => (
                     <td
                       key={column.key}
-                      className={twMerge(tableCellClassName, column.cellClassName)}
+                      className={twMerge(
+                        tableCellClassName,
+                        column.cellClassName
+                      )}
                     >
                       {getCellContent(column, row, index)}
                     </td>
@@ -104,7 +106,7 @@ export function Table<T>({
                   colSpan={columns.length}
                   className={twMerge(
                     tableCellClassName,
-                    'py-8 text-center text-[var(--color-table-head-text)]'
+                    'py-8 text-center text-(--color-table-head-text)'
                   )}
                 >
                   {emptyMessage}

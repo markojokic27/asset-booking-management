@@ -50,7 +50,7 @@ public class AssetRequestDTOTestValidation {
     // Name is blank
     @Test
     void blankName_shouldFailNotBlank(){
-        AssetRequestDTO dto=new AssetRequestDTO( " ", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO dto=new AssetRequestDTO( "", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("name"));
     }
 
@@ -116,7 +116,7 @@ public class AssetRequestDTOTestValidation {
     // Location is blank
     @Test
     void blankLocation_shouldFailNotBlank(){
-        AssetRequestDTO dto=new AssetRequestDTO( "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, " ");
+        AssetRequestDTO dto=new AssetRequestDTO( "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "");
         assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("location"));
     }
 

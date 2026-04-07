@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev    # use Dockerfile.dev instead of Dockerfile
+    ports:
+      - "3000:5173"                 # map Vite's 5173 to your local 3000
+    volumes:
+      - ./frontend/src:/app/src           # mount src directly — hot reload
+      - ./frontend/public:/app/public     # mount public folder too
+    depends_on:
+      - backend

@@ -5,12 +5,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,15 +46,27 @@ public class AssetControllerTest {
     /** READ ALL */
     @Test
     void getAllAssets_returnsOkWithLIst(){
-        AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetResponseDTO response = new AssetResponseDTO(1L,
+                "Hp 15",
+                1L,
+                "Laptop located in room 301",
+                "QR-LAPTOP-001",
+                AssetStatusEnum.ACTIVE,
+                "Room 301");
 
         List<AssetResponseDTO> list = List.of(response);
-        when(assetService.getAllAssets()).thenReturn(list);
+        Page<AssetResponseDTO> page = new PageImpl<>(list);
 
-        ResponseEntity<List<AssetResponseDTO>> result = assetController.getAllAssets();
+        when(assetService.getAllAssets(any(Pageable.class))).thenReturn(page);
+
+        ResponseEntity<Page<AssetResponseDTO>> result =
+                assetController.getAllAssets(PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).hasSize(1).contains(response);
+        assert(result.getBody() != null);
+        assertThat(result.getBody().getContent())
+                .hasSize(1)
+                .contains(response);
     }
 
     /** READ BY ID */

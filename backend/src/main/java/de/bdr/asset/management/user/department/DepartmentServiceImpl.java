@@ -1,20 +1,20 @@
 package de.bdr.asset.management.user.department;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 /**
  * Implementation of Department Service
  * Currently returns only dummy data.
  */
+@Slf4j
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-    // TODO: Update the functions to not use dummy data
     private final DepartmentRepository repository;
     private final DepartmentMapper mapper;
     private final UserRepository userRepository;
@@ -31,12 +31,18 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
+        log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
+
         User manager = userRepository.findById(departmentRequest.managerId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+
+        log.debug("Manager found. Mapping entity and saving to database...");
 
         Department department = mapper.toEntity(departmentRequest);
         department.setManager(manager);
         department = repository.save(department);
+
+        log.info("Successfully created new department with id: {} with manager id: {}", department.getId(), manager.getId());
 
         return mapper.toResponse(department);
     }
@@ -50,19 +56,27 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
+        log.info("Department found with id: {}", id);
+
         return mapper.toResponse(department);
     }
 
     /**
-     * @return a List of DepartmentRequestDTO records
+     * @param pageable - A Pageable object, determines the page, size and sort
+     * @return a Page of DepartmentRequestDTO records
      */
     @Override
-    public List<DepartmentResponseDTO> getAllDepartments() {
-        List<Department> departments = repository.findAll();
+    public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
+        log.debug("Fetching departments from the database with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
 
-        return departments.stream()
-                .map(mapper::toResponse)
-                .toList();
+        Page<Department> departments = repository.findAll(pageable);
+
+        log.info("Successfully fetched {} departments", departments.getNumberOfElements());
+
+        return departments.map(mapper::toResponse);
     }
 
     /**
@@ -72,6 +86,8 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
+        log.info("Attempting to update department with id: {}", id);
+
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
@@ -81,6 +97,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setName(departmentRequest.name());
         department.setManager(manager);
         department = repository.save(department);
+
+        log.info("Successfully updated department with id: {}", id);
 
         return mapper.toResponse(department);
     }

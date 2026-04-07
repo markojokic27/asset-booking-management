@@ -6,6 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -13,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,15 +48,33 @@ public class UserControllerTest {
     /** READ ALL */
     @Test
     void getAllUsers_returnsOkWithList(){
-        UserResponseDTO response=new UserResponseDTO( 1L,"ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
+        UserResponseDTO response = new UserResponseDTO(
+                1L,
+                "ivanivic",
+                "ivic",
+                "ivan",
+                "ivanivic@maurer-electonics.hr",
+                UserRoleEnum.EMPLOYEE,
+                UserStatusEnum.ACTIVE,
+                5L,
+                "antem@maurer-electonics.hr",
+                null,
+                "ALL");
 
         List<UserResponseDTO> list = List.of(response);
-        when(userService.getAllUsers()).thenReturn(list);
+        Page<UserResponseDTO> page = new PageImpl<>(list);
 
-        ResponseEntity<List<UserResponseDTO>> result = userController.getAllUsers();
+        when(userService.getAllUsers(any(Pageable.class)))
+                .thenReturn(page);
+
+        ResponseEntity<Page<UserResponseDTO>> result =
+                userController.getAllUsers(PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).hasSize(1).contains(response);
+        assert(result.getBody() != null);
+        assertThat(result.getBody().getContent())
+                .hasSize(1)
+                .contains(response);
     }
 
     /** READ BY ID */

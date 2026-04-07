@@ -2,6 +2,7 @@ import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { Header } from '../components/layout/Header';
 import LoginForm from '../features/auth/components/LoginForm';
 import { Logo } from '../components/icons/Logo';
+import { HeaderHero } from '../components/layout/HeaderHero';
 
 export default function Login() {
   return (
@@ -11,12 +12,20 @@ export default function Login() {
         <LayoutRow>
           <LayoutColumn
             lgSpan={6}
-            lgOffset={3}
+            className="hidden min-h-screen items-center justify-center pt-20  lg:flex lg:flex-col"
+          >
+            <HeaderHero />
+          </LayoutColumn>
+          <LayoutColumn
+            lgSpan={6}
+            lgOffset={0}
             smOffset={2}
             smSpan={8}
-            className="flex h-screen flex-col items-center justify-center md:h-fit"
+            className="mb-10 flex min-h-screen flex-col items-center justify-center sm:mb-0 md:pt-20"
           >
-            <Logo className="h-20 scale-250 md:hidden dark:brightness-0 dark:invert" />
+            <div className="mb-10 md:hidden">
+              <Logo className="scale-150 dark:brightness-0 dark:invert" />
+            </div>
             <LoginForm />
           </LayoutColumn>
         </LayoutRow>

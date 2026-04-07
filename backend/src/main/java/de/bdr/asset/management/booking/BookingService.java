@@ -1,6 +1,7 @@
 package de.bdr.asset.management.booking;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Booking Service
@@ -12,7 +13,7 @@ public interface BookingService {
 
     /** READ */
     BookingResponseDTO getBookingById(Long id);
-    List<BookingResponseDTO> getAllBookings();
+    Page<BookingResponseDTO> getAllBookings(Pageable pageable);
 
     /** UPDATE */
     BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest);

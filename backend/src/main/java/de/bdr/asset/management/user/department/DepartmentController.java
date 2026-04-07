@@ -1,17 +1,28 @@
 package de.bdr.asset.management.user.department;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Department Controller
  */
+@Slf4j
 @RestController
 @RequestMapping("v1/departments")
+@Tag(
+        name = "Departments",
+        description = "Endpoints for Departments."
+)
 public class DepartmentController {
     private final DepartmentService service;
 
@@ -19,42 +30,64 @@ public class DepartmentController {
         this.service = service;
     }
 
-    // CREATE
+    /** CREATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DepartmentResponseDTO> create(@Valid @RequestBody DepartmentRequestDTO request) {
+        log.info("Received POST request to create a new department");
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createDepartment(request));
     }
-    // READ
-    // ALL
+
+    /** READ ALL */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<DepartmentResponseDTO>> getAll() {
+    public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
+            @ParameterObject Pageable pageable
+    ) {
+        log.info("Received GET request to fetch departments with pagination: " +
+                        "Page number: {} | Page size: {} | Sort: {}",
+                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
+        );
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getAllDepartments());
+                .body(service.getAllDepartments(pageable));
     }
 
-    // BY ID
+    /** READ BY ID */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
+        log.info("Received GET request to fetch department with id: {}", id);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getDepartmentById(id));
     }
 
-    // UPDATE
+    /** UPDATE */
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> update(@PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request) {
+        log.info("Received PUT request to update department with id: {}", id);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateDepartment(id, request));
     }
 
-    // DELETE
+    /** Soft DELETE */
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("Received DELETE request for department with id: {}", id);
+
         service.deleteDepartment(id);
+
+        log.debug("Successfully processed DELETE request for department id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

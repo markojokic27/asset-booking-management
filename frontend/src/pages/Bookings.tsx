@@ -2,9 +2,16 @@ import { LayoutColumn } from '../components/layout/Layout';
 
 export default function Bookings() {
   return (
-    <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-20">
-      <h1 className="text-3xl font-black">Bookings</h1>
+    <LayoutColumn
+      span={12}
+      mdSpan={9}
+      mdOffset={3}
+      className="flex flex-col pt-35"
+    >
+      <h1 className="text-3xl font-black leading-11 tracking-[0.2em] text-black dark:text-white">
+        Bookings
+      </h1>
+      <div className="mt-6 h-px w-full bg-(--color-table-border)" />
     </LayoutColumn>
   );
 }
-

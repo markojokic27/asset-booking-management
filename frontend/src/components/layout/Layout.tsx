@@ -41,12 +41,26 @@ type LayoutColumnProps = React.ComponentPropsWithoutRef<'div'> & {
   xlOffset?: number;
 };
 
-const spanClasses = (span: number, prefix: string = '') => {
-  return prefix ? `${prefix}:w-column-${span}` : `w-column-${span}`;
-};
+const buildClasses = (
+  span?: number,
+  offset?: number,
+  breakpoint?: 'sm' | 'md' | 'lg' | 'xl'
+) => {
+  const classes: string[] = [];
 
-const offsetClasses = (offset: number, prefix: string = '') => {
-  return prefix ? `${prefix}:offset-${offset}` : `offset-${offset}`;
+  if (span !== undefined) {
+    classes.push(
+      breakpoint ? `${breakpoint}:w-column-${span}` : `w-column-${span}`
+    );
+  }
+
+  if (offset !== undefined) {
+    classes.push(
+      breakpoint ? `${breakpoint}:offset-${offset}` : `offset-${offset}`
+    );
+  }
+
+  return classes.join(' ');
 };
 
 export const LayoutColumn: React.FC<LayoutColumnProps> = ({
@@ -64,23 +78,11 @@ export const LayoutColumn: React.FC<LayoutColumnProps> = ({
   className,
   ...rest
 }) => {
-  const baseClasses = `${spanClasses(span)} ${offsetClasses(offset)}`;
-  const smClasses =
-    smSpan || smOffset
-      ? `${smSpan ? spanClasses(smSpan, 'sm') : ''} ${smOffset ? offsetClasses(smOffset, 'sm') : ''}`
-      : '';
-  const mdClasses =
-    mdSpan || mdOffset
-      ? `${mdSpan ? spanClasses(mdSpan, 'md') : ''} ${mdOffset ? offsetClasses(mdOffset, 'md') : ''}`
-      : '';
-  const lgClasses =
-    lgSpan || lgOffset
-      ? `${lgSpan ? spanClasses(lgSpan, 'lg') : ''} ${lgOffset ? offsetClasses(lgOffset, 'lg') : ''}`
-      : '';
-  const xlClasses =
-    xlSpan || xlOffset
-      ? `${xlSpan ? spanClasses(xlSpan, 'xl') : ''} ${xlOffset ? offsetClasses(xlOffset, 'xl') : ''}`
-      : '';
+  const baseClasses = buildClasses(span, offset);
+  const smClasses = buildClasses(smSpan, smOffset, 'sm');
+  const mdClasses = buildClasses(mdSpan, mdOffset, 'md');
+  const lgClasses = buildClasses(lgSpan, lgOffset, 'lg');
+  const xlClasses = buildClasses(xlSpan, xlOffset, 'xl');
   return (
     <div
       {...rest}

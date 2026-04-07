@@ -5,6 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -13,6 +17,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,15 +48,21 @@ public class BookingControllerTest {
     /** READ ALL */
     @Test
     void getAllBookings_returnsOkWithLIst(){
-        BookingResponseDTO response=new BookingResponseDTO(  1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
+        BookingResponseDTO response = new BookingResponseDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
 
         List<BookingResponseDTO> list = List.of(response);
-        when(bookingService.getAllBookings()).thenReturn(list);
+        Page<BookingResponseDTO> page = new PageImpl<>(list);
 
-        ResponseEntity<List<BookingResponseDTO>> result = bookingController.getAll();
+        when(bookingService.getAllBookings(any(Pageable.class))).thenReturn(page);
+
+        ResponseEntity<Page<BookingResponseDTO>> result =
+                bookingController.getAll(PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).hasSize(1).contains(response);
+        assert(result.getBody() != null);
+        assertThat(result.getBody().getContent())
+                .hasSize(1)
+                .contains(response);
     }
 
     /** READ BY ID */
