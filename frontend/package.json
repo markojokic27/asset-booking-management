@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "sync:openapi": "copyfiles -f ../openapi/assetBookingManagementOpenAPISpec.yaml public && mv public/assetBookingManagementOpenAPISpec.yaml public/openapi.yaml",
+    "dev": "npm run sync:openapi && vite",
+    "build": "npm run sync:openapi && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
@@ -25,6 +26,7 @@
     "react-i18next": "^16.6.6",
     "react-router": "^7.13.2",
     "react-router-dom": "^7.13.2",
+    "swagger-ui-react": "^5.32.1",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.4.27",
+    "copyfiles": "^2.4.1",
     "eslint": "9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
