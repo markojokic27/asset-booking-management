@@ -1,4 +1,4 @@
-export type AssetStatus = 'AVAILABLE' | 'UNAVAILABLE';
+export type AssetStatus = 'ACTIVE' | 'INACTIVE' | 'DAMAGED';
 
 export type Asset = {
   id: string;
@@ -15,3 +15,14 @@ export type Asset = {
 export type AssetDto = Asset & {
   categoryName?: string; // opcionalno za UI prikaz
 };
+
+export const categories = [
+  'Laptops',
+  'Parking',
+  'Desks',
+  'Books',
+  'Meeting room',
+  'IT equipment',
+] as const;
+
+export type AssetCategory = typeof categories[number];

@@ -1,11 +1,26 @@
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import type { AssetDto } from '../types';
+import type { AssetDto, AssetStatus } from '../types';
 
 export type AssetModalProps = {
   isOpen: boolean;
   onClose: () => void;
   asset: AssetDto | null;
+};
+
+const statusConfig: Record<AssetStatus, { label: string; className: string }> = {
+  ACTIVE: {
+    label: 'Active',
+    className: 'bg-(--color-status-active-bg) text-(--color-status-active-text)',
+  },
+  INACTIVE: {
+    label: 'Inactive',
+    className: 'bg-(--color-status-inactive-bg) text-(--color-status-inactive-text)',
+  },
+  DAMAGED: {
+    label: 'Damaged',
+    className: 'bg-(--color-status-damaged-bg) text-(--color-status-damaged-text)',
+  },
 };
 
 export const AssetModal: React.FC<AssetModalProps> = ({
@@ -15,12 +30,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
 }) => {
   if (!isOpen || !asset) return null;
 
-  const statusLabel =
-    asset.status === 'AVAILABLE' ? 'Available' : 'Unavailable';
-  const statusClassName =
-    asset.status === 'AVAILABLE'
-      ? 'bg-(--color-status-available-bg) text-(--color-status-available-text)'
-      : 'bg-(--color-status-unavailable-bg) text-(--color-status-unavailable-text)';
+  const { label: statusLabel, className: statusClassName } = statusConfig[asset.status];
 
   return (
     <div
@@ -44,7 +54,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
           </button>
         </div>
         <div className="mx-8 h-px bg-(--color-table-border)" />
-
         <div className="flex gap-10 px-8 py-8">
           <div className="flex w-[260px] flex-col items-center justify-center">
             {/* Display asset image here when available */}
@@ -54,7 +63,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
               </span>
             </div>
           </div>
-
           <div className="flex flex-1 flex-col items-stretch space-y-5">
             <span
               className={[
@@ -64,7 +72,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             >
               {statusLabel}
             </span>
-
             <div>
               <p className="text-sm text-(--color-modal-label)">
                 Asset category
@@ -73,12 +80,10 @@ export const AssetModal: React.FC<AssetModalProps> = ({
                 {asset.categoryName ?? '?'}
               </p>
             </div>
-
             <div>
               <p className="text-sm text-(--color-modal-label)">Name</p>
               <p className="font-medium text-(--color-text)">{asset.name}</p>
             </div>
-
             <div>
               <p className="text-sm text-(--color-modal-label)">Description</p>
               <p className="text-sm text-(--color-text)">
@@ -87,7 +92,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             </div>
           </div>
         </div>
-
         <div className="mx-8 h-px bg-(--color-table-border)" />
         <div className="px-8 py-5" />
       </div>

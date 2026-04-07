@@ -27,7 +27,7 @@ const assets: AssetDto[] = [
     categoryId: 1,
     categoryName: 'Laptops',
     code: 'DL-5440',
-    status: 'AVAILABLE',
+    status: 'ACTIVE',
     location: 'Split',
     createdAt: new Date(),
     lastModifiedAt: new Date(),
