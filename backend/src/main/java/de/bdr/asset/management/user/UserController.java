@@ -2,6 +2,8 @@ package de.bdr.asset.management.user;
 
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -100,6 +102,8 @@ public class UserController {
 
     /** Soft DELETE */
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Soft delete user", description = "Soft delete user by setting status to something else.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
     public ResponseEntity<UserResponseDTO> deleteUser(
             @PathVariable Long id,

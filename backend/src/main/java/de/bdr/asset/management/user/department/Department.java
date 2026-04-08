@@ -29,8 +29,8 @@ public class Department {
     private DepartmentEnum name;
 
     /** ID of manager, foreign key */
-    @OneToOne
-    @JoinColumn(name="manager_id", referencedColumnName="id", unique = true)
+    @OneToOne(optional = true)
+    @JoinColumn(name="manager_id", referencedColumnName="id", unique = true, nullable = true)
     private User manager;
 
     /** Created at */

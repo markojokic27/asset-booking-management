@@ -32,9 +32,12 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
         log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
-
-        User manager = userRepository.findById(departmentRequest.managerId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+        
+        User manager = null;
+        if (departmentRequest.managerId() != null) {
+            manager = userRepository.findById(departmentRequest.managerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+        }
 
         log.debug("Manager found. Mapping entity and saving to database...");
 
