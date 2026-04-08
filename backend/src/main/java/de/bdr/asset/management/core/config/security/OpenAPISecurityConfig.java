@@ -26,7 +26,6 @@ import io.swagger.v3.oas.annotations.servers.Server;
     description = "This is the OpenAPI documentation for documenting and testing endpoints of the Asset Booking Management Project."
   ),
   servers = @Server(
-    url = "TBD",
     description = "Development"
   )
 )

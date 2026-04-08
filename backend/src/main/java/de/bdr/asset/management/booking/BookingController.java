@@ -1,6 +1,8 @@
 package de.bdr.asset.management.booking;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -61,6 +63,8 @@ public class BookingController {
     /** READ ALL */
     // can read any authenticated user
     @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Get all bookings by pagination", description = "Takes page, size and sort query params")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public ResponseEntity<Page<BookingResponseDTO>> getAll(
             @ParameterObject Pageable pageable
