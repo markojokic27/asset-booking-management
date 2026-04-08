@@ -1,8 +1,11 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
@@ -11,204 +14,119 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginTest {
 
-    @Test
-    void userCanLogin() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    private WebDriver driver;
+    private WebDriverWait wait;
 
+    @BeforeEach
+    void setUp() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        driver = new ChromeDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    @AfterEach
+    void tearDown() throws InterruptedException {
+        Thread.sleep(5000);
+        driver.quit();
+    }
+
+    @Test
+    void userCanLogin() {
         driver.get("http://localhost:5173/login");
 
         WebElement usernameInput = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-testid='username-input']")
+                        By.cssSelector("[name='username']")
                 )
         );
         usernameInput.sendKeys("ivanivic");
 
-        WebElement passwordInput = driver.findElement(
-                By.cssSelector("[data-testid='password-input']")
-        );
-        passwordInput.sendKeys("password.123");
-
-        WebElement loginButton = driver.findElement(
-                By.cssSelector("[data-testid='login-button']")
-        );
-        loginButton.click();
+        driver.findElement(By.cssSelector("[name='password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
         wait.until(ExpectedConditions.urlToBe("http://localhost:5173/"));
         assertEquals("http://localhost:5173/", driver.getCurrentUrl());
-
-        Thread.sleep(5000);
-        
-        driver.quit();
     }
 
-    
     @Test
-    void LoginWithEmptyUsername() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+    void LoginWithEmptyUsername() {
         driver.get("http://localhost:5173/login");
 
-        WebElement usernameInput = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-testid='username-input']")
-                )
-        );
-        usernameInput.sendKeys("");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[name='username']")));
 
-        WebElement passwordInput = driver.findElement(
-                By.cssSelector("[data-testid='password-input']")
-        );
-        passwordInput.sendKeys("password.123");
-
-        WebElement loginButton = driver.findElement(
-                By.cssSelector("[data-testid='login-button']")
-        );
-        loginButton.click();
+        driver.findElement(By.cssSelector("[name='password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
         assertTrue(driver.getCurrentUrl().contains("/login"));
-
-        Thread.sleep(5000);
-
-        driver.quit();
     }
 
     @Test
-    void LoginWithEmptyPassword() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+    void LoginWithEmptyPassword() {
         driver.get("http://localhost:5173/login");
 
         WebElement usernameInput = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-testid='username-input']")
+                        By.cssSelector("[name='username']")
                 )
         );
         usernameInput.sendKeys("ivanivic");
 
-        WebElement passwordInput = driver.findElement(
-                By.cssSelector("[data-testid='password-input']")
-        );
-        passwordInput.sendKeys("");
-
-        WebElement loginButton = driver.findElement(
-                By.cssSelector("[data-testid='login-button']")
-        );
-        loginButton.click();
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
         assertTrue(driver.getCurrentUrl().contains("/login"));
-
-        Thread.sleep(5000);
-
-
-        driver.quit();
     }
 
     @Test
-    void LoginWithIncorrectUsername() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+    void LoginWithIncorrectUsername() {
         driver.get("http://localhost:5173/login");
 
         WebElement usernameInput = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-testid='username-input']")
+                        By.cssSelector("[name='username']")
                 )
         );
         usernameInput.sendKeys("ivanivic!");
 
-        WebElement passwordInput = driver.findElement(
-                By.cssSelector("[data-testid='password-input']")
-        );
-        passwordInput.sendKeys("password.123");
-
-        WebElement loginButton = driver.findElement(
-                By.cssSelector("[data-testid='login-button']")
-        );
-        loginButton.click();
+        driver.findElement(By.cssSelector("[name='password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
         assertTrue(driver.getCurrentUrl().contains("/login"));
-
-        Thread.sleep(5000);
-
-        driver.quit();
     }
 
-
     @Test
-    void LoginWithIncorrectPassword() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+    void LoginWithIncorrectPassword() {
         driver.get("http://localhost:5173/login");
 
         WebElement usernameInput = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-testid='username-input']")
+                        By.cssSelector("[name='username']")
                 )
         );
         usernameInput.sendKeys("ivanivic");
 
-        WebElement passwordInput = driver.findElement(
-                By.cssSelector("[data-testid='password-input']")
-        );
-        passwordInput.sendKeys("passw2");
-
-        WebElement loginButton = driver.findElement(
-                By.cssSelector("[data-testid='login-button']")
-        );
-        loginButton.click();
+        driver.findElement(By.cssSelector("[name='password']")).sendKeys("passw2");
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
         assertTrue(driver.getCurrentUrl().contains("/login"));
-
-        Thread.sleep(5000);
-
-        driver.quit();
     }
-
 
     @Test
-    void LoginWithBothFieldsEmpty() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+    void LoginWithBothFieldsEmpty() {
         driver.get("http://localhost:5173/login");
 
-        WebElement usernameInput = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        By.cssSelector("[data-testid='username-input']")
-                )
-        );
-        usernameInput.sendKeys("");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[name='username']")));
 
-        WebElement passwordInput = driver.findElement(
-                By.cssSelector("[data-testid='password-input']")
-        );
-        passwordInput.sendKeys("");
-
-        WebElement loginButton = driver.findElement(
-                By.cssSelector("[data-testid='login-button']")
-        );
-        loginButton.click();
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
         assertTrue(driver.getCurrentUrl().contains("/login"));
-
-        Thread.sleep(5000);
-
-        driver.quit();
     }
-
-
- 
-
-    
 }
