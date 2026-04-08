@@ -49,7 +49,12 @@ public class SecurityConfig {
                         // USERS
                         // =========================
 
-                        // GET -> authenticated user
+                        // get all users or create a user -> ADMIN only
+                        .requestMatchers("/v1/users")
+                        .hasRole("ADMIN")
+
+                        // get user by id -> authenticated user
+                        // ADMIN and owner user enforced with @PreAuthorize
                         .requestMatchers(HttpMethod.GET, "/v1/users/**")
                         .authenticated()
 
@@ -61,7 +66,11 @@ public class SecurityConfig {
                         // DEPARTMENTS
                         // =========================
 
-                        // GET -> any authenticated user
+                        // get departments -> any authenticated user
+                        .requestMatchers(HttpMethod.GET, "/v1/departments")
+                        .authenticated()
+
+                        // get department by id -> any authenticated user
                         .requestMatchers(HttpMethod.GET, "/v1/departments/**")
                         .authenticated()
 
@@ -73,9 +82,17 @@ public class SecurityConfig {
                         // ASSET CATEGORIES
                         // =========================
 
-                        // GET -> any authenticated user
+                        // get asset categories -> any authenticated user
+                        .requestMatchers(HttpMethod.GET, "/v1/asset-categories")
+                        .authenticated()
+
+                        // get asset category by id -> any authenticated user
                         .requestMatchers(HttpMethod.GET, "/v1/asset-categories/**")
                         .authenticated()
+
+                            // create asset category -> ADMIN only
+                            .requestMatchers(HttpMethod.POST, "/v1/asset-categories")
+                            .hasRole("ADMIN")
 
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/asset-categories/**")
@@ -85,7 +102,15 @@ public class SecurityConfig {
                         // ASSETS
                         // =========================
 
-                        // GET -> any authenticated user
+                        // get assets -> any authenticated user
+                        .requestMatchers(HttpMethod.GET, "/v1/assets")
+                        .authenticated()
+
+                        // create asset -> ADMIN only
+                        .requestMatchers(HttpMethod.POST, "/v1/assets")
+                        .authenticated()
+
+                        // get asset by id -> any authenticated user
                         .requestMatchers(HttpMethod.GET, "/v1/assets/**")
                         .authenticated()
 
@@ -97,12 +122,12 @@ public class SecurityConfig {
                         // BOOKINGS
                         // =========================
 
-                        // GET -> authenticated user
-                        .requestMatchers(HttpMethod.GET, "/v1/bookings/**")
+                        // get bookings or create a booking -> any authenticated user
+                        .requestMatchers("/v1/bookings")
                         .authenticated()
 
-                        // POST -> authenticated user
-                        .requestMatchers(HttpMethod.POST, "/v1/bookings/**")
+                        // get booking by id -> any authenticated user
+                        .requestMatchers(HttpMethod.GET, "/v1/bookings/**")
                         .authenticated()
 
                         // all other methods -> ADMIN only

@@ -58,7 +58,7 @@ public class DepartmentController {
     }
 
     /** READ BY ID */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
         log.info("Received GET request to fetch department with id: {}", id);
