@@ -17,7 +17,6 @@ import {
 export default function MobileMenu() {
   const links = [
     { to: '/', label: 'Home', icon: HomeSharp },
-    { to: '/users', label: 'Users', icon: PeopleSharp },
     { to: '/assets', label: 'Assets', icon: MonitorSharp },
     { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharp },
     { to: '/users', label: 'Users', icon: PeopleSharp },
@@ -51,7 +50,7 @@ export default function MobileMenu() {
           </div>
           <nav>
             {links.map(({ to, label, icon: Icon }) => (
-              <Dialog.Close asChild key={to}>
+              <Dialog.Close asChild key={label}>
                 <NavLink
                   to={to}
                   className={'flex items-center gap-3 p-6 text-2xl'}
@@ -67,15 +66,17 @@ export default function MobileMenu() {
             <LanguageSwitcher />
             <ThemeToggle />
           </div>
-          <Dialog.Close className="mt-auto flex w-full justify-center justify-self-end p-6">
-            <Button
-              onClick={handleLogout}
-              className="w-fit border-none bg-red-500 hover:bg-red-600"
-            >
-              <LogoutSharp />
-              Logout
-            </Button>
-          </Dialog.Close>
+          <div className="mt-auto flex w-full justify-center justify-self-end p-6">
+            <Dialog.Close asChild>
+              <Button
+                onClick={handleLogout}
+                className="w-fit border-none bg-red-500 hover:bg-red-600"
+              >
+                <LogoutSharp />
+                Logout
+              </Button>
+            </Dialog.Close>
+          </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
