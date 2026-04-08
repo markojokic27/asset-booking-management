@@ -37,10 +37,10 @@ export const Navbar: React.FC = () => {
   return (
     <LayoutColumn
       mdSpan={2}
-      className="px-0 md:px-0 lg:px-0 absolute left-0 hidden min-h-screen h-screen w-full bg-(--color-surface) pt-20 text-text-light shadow-md md:flex flex-col dark:bg-gray-900 dark:text-white dark:shadow-black/20 sm:tracking-[0.1em] md:tracking-[0.15em] tracking-[0.2em] leading-[44px] text-base sm:text-lg md:text-xl lg:text-2xl pb-10"
+      className="text-text-light absolute left-0 hidden h-screen min-h-screen w-full flex-col bg-(--color-surface) px-0 pt-20 pb-10 text-base leading-11 tracking-[0.2em] shadow-md sm:text-lg sm:tracking-widest md:flex md:px-0 md:text-xl md:tracking-[0.15em] lg:px-0 lg:text-2xl dark:bg-gray-900 dark:text-white dark:shadow-black/20"
     >
-      <nav className="flex flex-col justify-between h-full pt-10 w-full overflow-hidden">
-        <div className="flex flex-col gap-4 w-full">
+      <nav className="flex h-full w-full flex-col justify-between overflow-hidden pt-10">
+        <div className="flex w-full flex-col gap-4">
           {navItems.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}

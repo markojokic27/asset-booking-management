@@ -46,7 +46,15 @@ export default function Users() {
 
   const totalPages = 9;
   const safePage = Math.min(page, totalPages);
-  const paginationItems: Array<number | 'ellipsis'> = [1, 2, 3, 4, 'ellipsis', 8, 9];
+  const paginationItems: Array<number | 'ellipsis'> = [
+    1,
+    2,
+    3,
+    4,
+    'ellipsis',
+    8,
+    9,
+  ];
 
   const columns: TableColumn<UserRow>[] = [
     {
@@ -185,7 +193,7 @@ export default function Users() {
                   return (
                     <span
                       key={`ellipsis-${idx}`}
-                      className="select-none text-(--color-table-text)"
+                      className="text-(--color-table-text) select-none"
                       aria-hidden="true"
                     >
                       …

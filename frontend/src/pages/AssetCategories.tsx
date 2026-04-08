@@ -8,59 +8,62 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 
 const assetcategories: AssetCategoryDto[] = [];
 
-
 export default function AssetCategories() {
-    const [search, setSearch] = useState('');
-    const columns: TableColumn<AssetCategoryDto>[] = [
-        {
-            key: 'id',
-            header: 'ID',
-            accessor: 'id',
-            cellClassName: 'font-medium',
-        },
-        {
-            key: 'name',
-            header: ' Name',
-            accessor: 'name',
-        },
-        {
-            key: 'status',
-            header: 'Status',
-            //accessor: 'status',
-        },
-        {
-            key: 'edit',
-            header: 'Edit',
-            render: () => 'Edit',
-        },
-        {
-            key: 'delete',
-            header: 'Delete',
-            render: () => 'Delete',
-        },
-    ];
-    return (
-        <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-35">
-            <div className='w-full'>
-                <div className='flex w-full'>
-                    <SearchInput
-                        value={search}
-                        onChange={setSearch}
-                        placeholder="Search category by name"
-                        className="w-70"
-                    />
-                    <Button type='submit' className='w-70 h-10 font-bold' iconLeft={<AddSharpIcon/>}>
-                        Add new category
-                    </Button>
-                </div>
+  const [search, setSearch] = useState('');
+  const columns: TableColumn<AssetCategoryDto>[] = [
+    {
+      key: 'id',
+      header: 'ID',
+      accessor: 'id',
+      cellClassName: 'font-medium',
+    },
+    {
+      key: 'name',
+      header: ' Name',
+      accessor: 'name',
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      //accessor: 'status',
+    },
+    {
+      key: 'edit',
+      header: 'Edit',
+      render: () => 'Edit',
+    },
+    {
+      key: 'delete',
+      header: 'Delete',
+      render: () => 'Delete',
+    },
+  ];
+  return (
+    <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-35">
+      <div className="w-full">
+        <div className="flex w-full">
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search category by name"
+            className="w-70"
+          />
+          <Button
+            type="submit"
+            className="h-10 w-70 font-bold"
+            iconLeft={<AddSharpIcon />}
+          >
+            Add new category
+          </Button>
+        </div>
 
-                <Table
-                    data={assetcategories}
-                    columns={columns}
-                    getRowKey={(category) => category.id}
-                    className="w-full"
-                />
-            </div>
-        </LayoutColumn>
-    );
+        <Table
+          data={assetcategories}
+          columns={columns}
+          getRowKey={(category) => category.id}
+          className="w-full"
+        />
+      </div>
+    </LayoutColumn>
+  );
 }
