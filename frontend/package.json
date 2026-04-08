@@ -4,9 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "sync:openapi": "copyfiles -f ../openapi/assetBookingManagementOpenAPISpec.yaml public && mv public/assetBookingManagementOpenAPISpec.yaml public/openapi.yaml",
-    "dev": "npm run sync:openapi && vite",
-    "build": "npm run sync:openapi && tsc -b && vite build",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
