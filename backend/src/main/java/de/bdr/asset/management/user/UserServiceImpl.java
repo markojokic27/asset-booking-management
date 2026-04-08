@@ -1,14 +1,13 @@
 package de.bdr.asset.management.user;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentRepository;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of User Service

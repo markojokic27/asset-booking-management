@@ -45,7 +45,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setManager(manager);
         department = repository.save(department);
 
-        log.info("Successfully created new department with id: {} with manager id: {}", department.getId(), manager.getId());
+        if (manager == null) {
+            log.info("Successfully created new department with id: {} with no manager id.", department.getId());    
+        } else {
+            log.info("Successfully created new department with id: {} with manager id: {}", department.getId(), manager.getId());
+        }
 
         return mapper.toResponse(department);
     }

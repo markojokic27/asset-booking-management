@@ -1,8 +1,5 @@
 package de.bdr.asset.management.asset;
 
-import java.util.*;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,6 +7,7 @@ import org.springframework.stereotype.Service;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of Asset Service
