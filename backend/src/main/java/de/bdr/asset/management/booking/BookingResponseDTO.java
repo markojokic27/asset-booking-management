@@ -12,9 +12,9 @@ public record BookingResponseDTO(
 
         BookingStatusEnum status,
 
-        Instant bookingStartTime,
+        Instant bookingStart,
 
-        Instant bookingEndTime,
+        Instant bookingEnd,
 
         String notes
 ) {}

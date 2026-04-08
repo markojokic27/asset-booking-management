@@ -116,8 +116,8 @@ public class BookingServiceImpl implements BookingService {
         booking.setUser(user);
         booking.setAsset(asset);
         booking.setStatus(bookingRequest.status());
-        booking.setBookingStartTime(bookingRequest.bookingStartTime());
-        booking.setBookingEndTime(bookingRequest.bookingEndTime());
+        booking.setBookingStart(bookingRequest.bookingStart());
+        booking.setBookingEnd(bookingRequest.bookingEnd());
         booking.setNotes(bookingRequest.notes());
         booking = repository.save(booking);
 

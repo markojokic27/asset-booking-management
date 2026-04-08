@@ -41,11 +41,11 @@ public class Booking {
 
     /** Booking reservation start */
     @Column(nullable = false)
-    private Instant bookingStartTime;
+    private Instant bookingStart;
 
     /** Booking reservation end */
     @Column(nullable = false)
-    private Instant bookingEndTime;
+    private Instant bookingEnd;
 
     /** Notes, Additional information's */
     @Column(length = 255)

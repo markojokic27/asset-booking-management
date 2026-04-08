@@ -64,8 +64,8 @@ class BookingServiceImplTest {
         booking.setUser(user);
         booking.setAsset(asset);
         booking.setStatus(BookingStatusEnum.ACTIVE);
-        booking.setBookingStartTime(LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC));
-        booking.setBookingEndTime(LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC));
+        booking.setBookingStart(LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC));
+        booking.setBookingEnd(LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC));
         booking.setNotes("text");
 
 

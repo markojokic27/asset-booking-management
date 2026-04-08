@@ -16,10 +16,10 @@ public record BookingRequestDTO(
         BookingStatusEnum status,
 
         @NotNull(message = "Start time is required")
-        Instant bookingStartTime,
+        Instant bookingStart,
 
         @NotNull(message = "End time is required")
-        Instant bookingEndTime,
+        Instant bookingEnd,
 
         @Size(max = 1000, message = "Notes cannot exceed 255 characters")
         String notes
