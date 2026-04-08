@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
       {variant === 'app' ? (
         <div className="flex h-full items-center justify-between px-4 md:px-6">
           <Link to="/">
-            <Logo className="h-8 w-auto dark:brightness-0 dark:invert" />
+            <Logo className="h-8 w-auto " />
           </Link>
           <div className="hidden gap-6 md:flex">
             <ThemeToggle />

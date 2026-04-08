@@ -68,7 +68,7 @@ const LoginForm = () => {
       <p className="mb-2 tracking-[0.2em]">Username</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input 
             type="text"
             placeholder="Eneter your username"
             className="w-full border p-3"
@@ -80,7 +80,7 @@ const LoginForm = () => {
       <p className="mb-2 tracking-[0.2em]">Password</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input 
             type="password"
             placeholder="Eneter your password"
             className="w-full border p-3"
