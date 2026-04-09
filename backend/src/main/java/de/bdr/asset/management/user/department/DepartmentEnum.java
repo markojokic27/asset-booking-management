@@ -4,13 +4,13 @@ package de.bdr.asset.management.user.department;
  * Department enumeration.
  */
 public enum DepartmentEnum {
-    ADVANCED_TECHNOLOGIES,
+    ADVANCE_TECHNOLOGY,
+    SECURE_SERVICES,
     ARCHITECTURE,
-    CLOUD_DATA_MANAGEMENT,
-    DEVOPS,
-    FINANCE,
-    HR,
-    MOBILE_SECURITY,
-    OPERATIONS,
-    SECURITY_SYSTEMS
+    FINANCE_AND_BUSINESS_ADMINISTRATION,
+    MOBILE_AND_SECURITY,
+    SYSTEM_TEST,
+    HUMAN_RESOURCES,
+    CLOUD_AND_DATA_MANAGEMENT,
+    DEVOPS
 }
