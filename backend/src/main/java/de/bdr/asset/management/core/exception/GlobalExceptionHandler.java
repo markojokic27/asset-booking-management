@@ -1,20 +1,25 @@
 package de.bdr.asset.management.core.exception;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.net.URI;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
+import com.google.zxing.WriterException;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handler for exception
@@ -22,7 +27,14 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /*
+        Generic handler if a resource is not found in the database.
 
+        Example:
+        - Have database with assets with Ids from 1-10
+        - Request an asset with id 25
+        - Does not exist so return status 404, ResourceNotFoundException
+    */
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
@@ -41,6 +53,12 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler for when a resource conflicts with an existing one.
+
+        Example:
+        - Attempt to create a resource with a unique field that already exists
+    */
     @ExceptionHandler(DuplicateResourceException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ProblemDetail handleDuplicateException(DuplicateResourceException ex, HttpServletRequest request) {
@@ -59,6 +77,12 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler for when a resources validation via @Valid fails.
+
+        Example:
+        - Attempt to create a resource with a field that is not nullable
+    */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -85,6 +109,13 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler for when a request parameter or path variable
+        cannot be converted to the expected type.
+
+        Example:
+        - Endpoint expects a Long id but receives "abc"
+    */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
@@ -111,6 +142,12 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler to indicate that a method has been passed an illegal or inappropriate argument.
+
+        Example:
+        TODO
+    */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
@@ -126,6 +163,12 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler to indicate that a resource does not have the specified property.
+
+        Example:
+        - Jpa method to find a user by "firstName" when it is not defined for a user, we use "name"
+    */
     @ExceptionHandler(PropertyReferenceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handlePropertyReference(PropertyReferenceException ex, HttpServletRequest request) {
@@ -148,6 +191,80 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler if a endpoint is accessed without proper authorization.
+
+        Example:
+        - Employee tries to change department details
+    */
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ProblemDetail handleAuthorizationForbidden(AuthorizationDeniedException ex, HttpServletRequest request) {
+
+        log.warn("Forbidden access at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.FORBIDDEN,
+                ex.getMessage()
+        );
+
+        problemDetail.setTitle("Forbidden access");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    /*
+        Generic handler for errors during barcode/QR code generation.
+
+        Example:
+        - QR code generation fails due to invalid input or encoding constraints
+        (e.g. empty content or unsupported barcode format), resulting in WriterException
+    */
+    @ExceptionHandler(WriterException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail handleWriterException(WriterException ex, HttpServletRequest request) {
+        log.error("Writer exception at URI [{}]", request.getRequestURI(), ex);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Writer exception"
+        );
+
+        problemDetail.setTitle("Writer exception");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    /*
+        Generic handler for errors during I/O
+
+        Example:
+        - Attempt to fetch a file that does not exist
+    */
+    @ExceptionHandler(IOException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail handleIOException(IOException ex, HttpServletRequest request) {
+        log.error("I/O exception at URI [{}]", request.getRequestURI(), ex);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "I/O exception"
+        );
+
+        problemDetail.setTitle("I/O exception");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    /*
+        Handles all other exceptions that are not defined
+    */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleUncaughtException(Exception ex, HttpServletRequest request) {
