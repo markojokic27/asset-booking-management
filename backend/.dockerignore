@@ -1,3 +1,15 @@
 target/
 .idea
 logs/
+*.iml
+*.iws
+.git
+.gitignore
+.env
+.env.*
+*.md
+Dockerfile*
+.dockerignore
+compose*.yaml
+.mvn/
+*.log

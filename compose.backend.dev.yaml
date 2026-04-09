@@ -23,7 +23,6 @@ services:
     container_name: asset-backend
     ports:
       - "8080:8080"
-      - "5005:5005" # debugger port
     env_file:
       - .env
     environment:
