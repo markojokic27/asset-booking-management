@@ -2,17 +2,25 @@ package de.bdr.asset.management.user;
 
 import java.util.Map;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("v1/users")
 @Tag(
         name = "Users",
-        description = "Endpoints for Users."
+        description = "Endpoints for Users. UserController"
 )
 public class UserController {
 
@@ -35,6 +43,8 @@ public class UserController {
     }
 
     /** READ ALL */
+    @Operation(summary = "Read list of users", description = "Only available to users with role: ADMIN. Takes Pageable object.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
@@ -53,7 +63,8 @@ public class UserController {
     }
 
     /** CREATE */
-    @PreAuthorize("hasRole('ADMIN')")
+    
+    @Operation(summary = "Create user account", description = "Available to everyone, used for registering users.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(
             @Valid @RequestBody UserRequestDTO userRequest
@@ -70,6 +81,8 @@ public class UserController {
 
     /** READ BY ID */
     // read by id owner or admin
+    @Operation(summary = "Read user details", description = "Only available to users with role: ADMIN or owners of the account")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isOwner(#id, authentication.name)")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(
@@ -85,6 +98,8 @@ public class UserController {
     }
 
     /** UPDATE */
+    @Operation(summary = "Update user", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
@@ -101,9 +116,9 @@ public class UserController {
     }
 
     /** Soft DELETE */
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Soft delete user", description = "Soft delete user by setting status to something else.")
+    @Operation(summary = "Soft delete user", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<UserResponseDTO> deleteUser(
             @PathVariable Long id,
