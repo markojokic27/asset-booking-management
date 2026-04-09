@@ -63,7 +63,7 @@ public class UserController {
     }
 
     /** CREATE */
-    
+    // TODO: Change the request to match only the fields needed for registration
     @Operation(summary = "Create user account", description = "Available to everyone, used for registering users.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(

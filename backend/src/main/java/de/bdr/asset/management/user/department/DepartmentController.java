@@ -52,6 +52,8 @@ public class DepartmentController {
     }
 
     /** READ ALL */
+    // TODO: Discuss if authentication is necessary because of user registration
+    @Operation(summary = "Read list of departments", description = "Avaiable to ...")
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(

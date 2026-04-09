@@ -105,6 +105,8 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Mapper generation library -->
+
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -118,10 +120,26 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- OpenAPI v3 documentation generator based on code -->
+
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>3.0.2</version>
+		</dependency>
+
+		<!-- ZXing library for QR Code capabilities -->
+
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.0</version>
+    	</dependency>
+		
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.3.0</version>
 		</dependency>
 
 	</dependencies>
