@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { userValidationSchema } from '../../user/validation';
-import { useNavigate } from 'react-router-dom';
-//import { registerUser } from '../api/authApi';
+import { useNavigate } from 'react-router';
 
 const registerSchema = userValidationSchema.pick({
   username: true,
@@ -21,7 +20,7 @@ const RegisterForm = () => {
     surname: '',
   });
 
-  const [isLoading] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -46,7 +45,11 @@ const RegisterForm = () => {
       });
 
       return;
+
     }
+
+          navigate('/login');
+
 
     /*try {
       setIsLoading(true);
@@ -133,26 +136,16 @@ const RegisterForm = () => {
         </Form.Control>
       </Form.Field>
 
-      <Form.Submit asChild>
-        <Button
-          type="submit"
-          className="my-6 font-bold uppercase"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Loading...' : 'Register'}
-        </Button>
-      </Form.Submit>
+         <Form.Submit asChild>
+              <Button type="submit" className="mt-6 mb-2 font-bold uppercase">
+                Register
+              </Button>
+            </Form.Submit>
 
       {/* LINK NA LOGIN */}
-      <Button
-        variant="link"
-        type="button"
-        onClick={() => navigate('/login')}
-        className="p-0"
-      >
-        Already have an account? Login here.
+      <Button variant="link" onClick={() => navigate('/login')}>
       </Button>
-    </Form.Root>
+          </Form.Root>
   );
 };
 
