@@ -12,32 +12,69 @@ import { UserModal } from '../features/user/components/UserModal';
 
 type UserRow = {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
 };
 
 const users: UserRow[] = [
   {
     id: '1',
-    name: 'Ana Horvat',
+    firstName: 'Ana',
+    lastName: 'Horvat',
     email: 'ana.horvat@example.com',
   },
+  {
+    id: '2',
+    firstName: 'Ante',
+    lastName: 'Anić',
+    email: 'ante.anic@example.com',
+  },
+  {
+    id: '3',
+    firstName: 'Anica',
+    lastName: 'Barišić',
+    email: 'anica.barisic@example.com',
+  },
 ];
+
+function getFullName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
+  return `${user.firstName} ${user.lastName}`.trim();
+}
+
+function getDisplayName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
+  return `${user.lastName} ${user.firstName}`.trim();
+}
 
 export default function Users() {
   const [search, setSearch] = useState('');
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
   const [page, setPage] = useState(1);
+  const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return users;
-    return users.filter(
+    const base = !q
+      ? users
+      : users.filter(
       (u) =>
-        u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-    );
-  }, [search]);
+            u.firstName.toLowerCase().includes(q) ||
+            u.lastName.toLowerCase().includes(q) ||
+            getFullName(u).toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q)
+        );
+
+    const collator = new Intl.Collator('hr', { sensitivity: 'base' });
+    const dir = nameSortDir === 'asc' ? 1 : -1;
+    return [...base].sort((a, b) => {
+      const lastCmp = collator.compare(a.lastName, b.lastName);
+      if (lastCmp !== 0) return lastCmp * dir;
+      const firstCmp = collator.compare(a.firstName, b.firstName);
+      if (firstCmp !== 0) return firstCmp * dir;
+      return collator.compare(a.email, b.email) * dir;
+    });
+  }, [search, nameSortDir]);
 
   useEffect(() => {
     setPage(1);
@@ -58,9 +95,28 @@ export default function Users() {
   const columns: TableColumn<UserRow>[] = [
     {
       key: 'name',
-      header: 'Name',
-      accessor: 'name',
+      header: (
+        <button
+          type="button"
+          onClick={() => setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
+          className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
+          aria-label={`Sort by last name ${
+            nameSortDir === 'asc' ? 'descending' : 'ascending'
+          }`}
+        >
+          <span>Name</span>
+          <span className="inline-flex flex-col leading-none" aria-hidden="true">
+            <span className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}>
+              ▲
+            </span>
+            <span className={nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'}>
+              ▼
+            </span>
+          </span>
+        </button>
+      ),
       cellClassName: 'font-medium',
+      render: (user) => getDisplayName(user),
     },
     {
       key: 'email',
@@ -231,7 +287,7 @@ export default function Users() {
           setIsUserModalOpen(false);
           setActiveUser(null);
         }}
-        user={activeUser}
+        user={activeUser ? { ...activeUser, name: getFullName(activeUser) } : null}
       />
     </LayoutColumn>
   );
