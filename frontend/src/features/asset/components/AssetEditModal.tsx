@@ -201,7 +201,7 @@ export const AssetEditModal = ({
                   <FormDropdown
                     id="asset-category"
                     name="categoryId"
-                    label="Asset category"
+                    label="Category"
                     defaultValue={String(asset.categoryId)}
                     error={!!errors.categoryId}
                     errorMessage={errors.categoryId}

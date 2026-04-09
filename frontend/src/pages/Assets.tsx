@@ -6,7 +6,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
-import { Input } from '../components/ui/Input';
+import { SearchInput } from '../components/ui/SearchBar';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
@@ -33,11 +33,16 @@ export default function Assets() {
   const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
   const [isAssetEditModalOpen, setIsAssetEditModalOpen] = useState(false);
   const [activeAsset, setActiveAsset] = useState<AssetDto | null>(null);
+  const [search, setSearch] = useState('');
 
-  const filteredAssets =
+  const filteredAssetsByCategory =
     selectedCategory === 'Assets'
       ? assets
       : assets.filter((asset) => asset.categoryName === selectedCategory);
+
+  const filteredAssets = filteredAssetsByCategory.filter((asset) =>
+    asset.name.toLowerCase().includes(search.trim().toLowerCase())
+  );
 
   const columns: TableColumn<AssetDto>[] = [
     {
@@ -132,9 +137,12 @@ export default function Assets() {
       </div>
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
       <div className="mt-6 flex w-full justify-end">
-        <div className="w-50">
-          <Input placeholder="Search assets..." />
-        </div>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Search assets..."
+          className="mb-0 w-70"
+        />
       </div>
       <div className="mt-6 w-full">
         <Table

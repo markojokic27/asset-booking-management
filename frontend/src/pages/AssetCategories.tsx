@@ -41,16 +41,16 @@ export default function AssetCategories() {
   return (
     <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-35">
       <div className="w-full">
-        <div className="flex w-full">
+        <div className="flex w-full items-start justify-between gap-4">
           <SearchInput
             value={search}
             onChange={setSearch}
             placeholder="Search category by name"
-            className="w-70"
+            className="w-70 flex-none"
           />
           <Button
             type="submit"
-            className="h-10 w-70 font-bold"
+            className="h-10 w-70 flex-none font-bold"
             iconLeft={<AddSharpIcon />}
           >
             Add new category
