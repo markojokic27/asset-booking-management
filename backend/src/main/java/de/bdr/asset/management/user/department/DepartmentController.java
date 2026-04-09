@@ -1,17 +1,25 @@
 package de.bdr.asset.management.user.department;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Department Controller
@@ -21,7 +29,7 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("v1/departments")
 @Tag(
         name = "Departments",
-        description = "Endpoints for Departments."
+        description = "Endpoints for Departments. DepartmentController"
 )
 public class DepartmentController {
     private final DepartmentService service;
@@ -31,6 +39,8 @@ public class DepartmentController {
     }
 
     /** CREATE */
+    @Operation(summary = "Create Department", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DepartmentResponseDTO> create(@Valid @RequestBody DepartmentRequestDTO request) {
@@ -42,7 +52,7 @@ public class DepartmentController {
     }
 
     /** READ ALL */
-    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Read list of departments", description = "Available to anyone.")
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
             @ParameterObject Pageable pageable
@@ -58,7 +68,7 @@ public class DepartmentController {
     }
 
     /** READ BY ID */
-    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Read department by ID", description = "Available to anyone.")
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
         log.info("Received GET request to fetch department with id: {}", id);
@@ -69,6 +79,8 @@ public class DepartmentController {
     }
 
     /** UPDATE */
+    @Operation(summary = "Update department details", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> update(@PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request) {
@@ -80,6 +92,8 @@ public class DepartmentController {
     }
 
     /** Soft DELETE */
+    @Operation(summary = "Soft delete department", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

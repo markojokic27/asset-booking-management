@@ -71,7 +71,6 @@ public class UserController {
     ) {
         log.info("Received POST request to create a new user for department id: {}", userRequest.departmentId());
 
-        // TODO: restrict to Admin if needed
         UserResponseDTO createdUser = userService.createUser(userRequest);
 
         log.debug("Successfully processed POST request. Created user with id: {}", createdUser.id());
