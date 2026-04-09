@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final DepartmentRepository departmentRepository;
 
     public UserServiceImpl(UserRepository repository, UserMapper mapper, DepartmentRepository departmentRepository) {
+
         this.repository = repository;
         this.mapper = mapper;
         this.departmentRepository = departmentRepository;
@@ -29,7 +31,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO createUser(UserRequestDTO userRequest) {
+
         log.info("Attempting to create a new user for department id: {}", userRequest.departmentId());
+
+        if (repository.existsByUsername(userRequest.username())) {
+            throw new DuplicateResourceException("Username " + userRequest.username() + " is already taken");
+        }
+
+        if (repository.existsByEmail(userRequest.email())) {
+            throw new DuplicateResourceException("Email " + userRequest.email() + " is already in use");
+        }
 
         Department department = departmentRepository.findById(userRequest.departmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
@@ -47,6 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO getUserById(Long id) {
+
         User user = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
@@ -57,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+
         log.debug("Fetching users from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -71,10 +84,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequest) {
+
         log.info("Attempting to update user with id: {}", id);
 
         User user = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+
+        if (repository.existsByUsernameAndIdNot(userRequest.username(), id)) {
+            throw new DuplicateResourceException("Username " + userRequest.username() + " is already taken by another user.");
+        }
+
+        if (repository.existsByEmailAndIdNot(userRequest.email(), id)) {
+            throw new DuplicateResourceException("Email " + userRequest.email() + " is already in use by another user.");
+        }
 
         Department department = departmentRepository.findById(userRequest.departmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
@@ -98,6 +120,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO deleteUser(Long id, String status, String note) {
+
         // TODO: Add a field for soft delete
         // Also discuss if passing status is neccessary since delete status will always be the same
         
