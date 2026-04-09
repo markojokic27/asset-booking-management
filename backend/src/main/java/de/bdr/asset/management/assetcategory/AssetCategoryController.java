@@ -1,16 +1,25 @@
 package de.bdr.asset.management.assetcategory;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Asset Category Controller
@@ -20,7 +29,7 @@ import jakarta.validation.Valid;
 @RequestMapping("v1/asset-categories")
 @Tag(
         name = "Asset Categories",
-        description = "Endpoints for Asset Categories."
+        description = "Endpoints for Asset Categories. AssetCategoryController"
 )
 public class AssetCategoryController {
     private final AssetCategoryService service;
@@ -30,6 +39,8 @@ public class AssetCategoryController {
     }
 
     /** CREATE */
+    @Operation(summary = "Create asset category", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<AssetCategoryResponseDTO> create(@Valid @RequestBody AssetCategoryRequestDTO request) {
@@ -41,7 +52,8 @@ public class AssetCategoryController {
     }
 
     /** READ ALL */
-    // can read any authenticated user
+    @Operation(summary = "Read list of asset categories", description = "Only available to authenticated users. Takes a Pageable object.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<AssetCategoryResponseDTO>> getAll(
@@ -58,7 +70,8 @@ public class AssetCategoryController {
     }
 
     /** READ BY ID */
-    // can read any authenticated user
+    @Operation(summary = "Read asset category by ID", description = "Only available to authenticated users.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     ResponseEntity<AssetCategoryResponseDTO> getById(@PathVariable Long id) {
@@ -70,6 +83,8 @@ public class AssetCategoryController {
     }
 
     /** UPDATE */
+    @Operation(summary = "Update asset category details", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     ResponseEntity<AssetCategoryResponseDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request) {
@@ -81,6 +96,8 @@ public class AssetCategoryController {
     }
 
     /** Soft DELETE */
+    @Operation(summary = "Soft delete asset category", description = "Only available to users with role: ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
