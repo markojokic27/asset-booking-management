@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.zxing.WriterException;
 
 import de.bdr.asset.management.asset.qrcode.QRCodeService;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,35 +51,15 @@ public class AssetController {
         this.qrCodeService = qrCodeService;
     }
 
-    // TODO: Change the controller to be smaller. 
-    // This is a testing example that will have to be changed based on the requirements
-    @Operation(summary = "Get or create asset QR Code")
+    @Operation(
+        summary = "Get asset QR Code",
+        description = "If an asset does not have a file path saved, generates a new QR code, saves it to a folder and serve it. Creation is only handled the first time."
+    )
     @GetMapping(path = "/{id}/qr-code", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<Resource> getOrCreateQRCode(@PathVariable Long id) throws WriterException, IOException {
+    public ResponseEntity<Resource> getOrCreateQRCode(@PathVariable Long id) throws WriterException, IOException, ResourceNotFoundException {
         log.info("Accessing QR Code for asset with id: {}", id);
 
-        AssetResponseDTO asset = assetService.getAssetById(id);
-
-        String filePath = asset.code();
-
-        if (filePath == null || !new File(filePath).exists()) {
-                filePath = qrCodeService.generateAndSaveQRCode(asset.name(), id);
-
-                AssetRequestDTO updatedAsset = new AssetRequestDTO(
-                        asset.name(),
-                        asset.categoryId(), 
-                        asset.description(), 
-                        filePath, 
-                        asset.status(), 
-                        asset.location()
-                );
-
-                log.info("Created QR Code for future use for asset with id: {}", id);
-
-                assetService.updateAsset(id, updatedAsset);
-        }
-
-        File file = new File(filePath);
+        File file = new File(qrCodeService.generateAndSaveQRCodeForAsset(id));
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()

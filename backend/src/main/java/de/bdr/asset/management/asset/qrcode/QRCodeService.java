@@ -7,7 +7,5 @@ import com.google.zxing.WriterException;
 public interface QRCodeService {
     static final String QR_DIRECTORY = "qrcodes";
 
-    public String generateAndSaveQRCode(String text, Long assetId) throws WriterException, IOException ;
-
-    public byte[] loadQRCode(String filePath) throws IOException;
+    public String generateAndSaveQRCodeForAsset(Long id) throws WriterException, IOException ;
 }
