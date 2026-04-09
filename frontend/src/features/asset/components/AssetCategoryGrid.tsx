@@ -13,7 +13,7 @@ export const AssetCategoryGrid: React.FC<AssetCategoryGridProps> = ({
   onSelectCategory,
 }) => {
   return (
-    <div className="grid w-full grid-cols-3 gap-4">
+    <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
         <AssetCategoryCard
           key={category}
