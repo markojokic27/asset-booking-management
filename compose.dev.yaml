@@ -1,12 +1,31 @@
 services:
+
+  backend:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend/src
+        - action: rebuild
+          path: ./backend/pom.xml
+
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev    # use Dockerfile.dev instead of Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
-      - "5173:5173"                 # map Vite's 5173 to your local 3000
+      - "5173:5173"
     volumes:
-      - ./frontend/src:/app/src           # mount src directly — hot reload
-      - ./frontend/public:/app/public     # mount public folder too
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend/src
+        - action: rebuild
+          path: ./frontend/public
+        - action: rebuild
+          path: ./frontend/package.json
     depends_on:
       - backend

@@ -7,16 +7,15 @@ spring:
         default-page-size: 10
         max-page-size: 150
         one-indexed-parameters: true
-
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     driver-class-name: org.postgresql.Driver
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: none
+    open-in-view: false
     properties:
       hibernate:
         default_schema: asset_booking_mgm
@@ -25,14 +24,11 @@ spring:
     locations: classpath:db/migration
     schemas: asset_booking_mgm
     default-schema: asset_booking_mgm
-  feature:
-    asset-name-validation-enabled: false
+
+feature:
+  asset-name-validation-enabled: false
+
 jwt:
-  secret: ${JWT_SECRET:WweXX30m0e5VJkHEEf5uhk9X/ZIXRO23YiZpORVda1xzZ7df4ZuW90x6/sbZ1w2l36eeY4Ya/3gLTfI8RDeE8Q==}
-  accessTokenExpiry: ${JWT_EXPIRY_SECONDS:3600}
-  refreshTokenExpiry: ${JWT_REFRESH_SECONDS:86400}
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
+  secret: ${JWT_SECRET}
+  accessTokenExpiry: ${JWT_EXPIRY_SECONDS}
+  refreshTokenExpiry: ${JWT_REFRESH_SECONDS}

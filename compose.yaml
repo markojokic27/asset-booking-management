@@ -25,15 +25,11 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
     depends_on:
       db:
         condition: service_healthy
-    develop:
-      watch:
-        - action: rebuild
-          path: ./backend/src
-        - action: rebuild
-          path: ./backend/pom.xml
 
   frontend:
     build:
@@ -43,14 +39,6 @@ services:
       - "3000:8080"
     depends_on:
       - backend
-    develop:
-      watch:
-        - action: rebuild
-          path: ./frontend/src
-        - action: rebuild
-          path: ./frontend/public
-        - action: rebuild
-          path: ./frontend/package.json
 
 volumes:
   db_data:
