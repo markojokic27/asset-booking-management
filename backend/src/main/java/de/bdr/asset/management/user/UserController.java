@@ -85,8 +85,8 @@ public class UserController {
     // read by id owner or admin
     @Operation(summary = "Read user details", description = "Only available to users with role: ADMIN or owners of the account")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isOwner(#id, authentication.name)")
     @GetMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<UserResponseDTO> getUserById(
             @PathVariable Long id
     ) throws ResourceNotFoundException

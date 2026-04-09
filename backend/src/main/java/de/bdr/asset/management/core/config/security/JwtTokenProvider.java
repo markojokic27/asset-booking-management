@@ -27,9 +27,13 @@ public class JwtTokenProvider {
     }
 
     // Access token: short-lived (15 min); contains roles for authorization decisions
-    public String generateAccessToken(UserDetails userDetails) {
+    public String generateAccessToken(UserDetails userDetails)
+    {
+        Long userId = ((CustomUserDetails) userDetails).getId();
+
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("userId", userId)
                 .claim("roles", userDetails.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList())                         // ["ROLE_EMPLOYEE"] or ["ROLE_ADMIN"]

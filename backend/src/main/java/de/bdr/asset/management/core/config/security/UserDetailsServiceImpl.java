@@ -22,12 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         de.bdr.asset.management.user.User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        // Spring Security's User builder constructs a UserDetails implementation.
-        // roles("EMPLOYEE") adds "ROLE_EMPLOYEE" — Spring Security always prefixes roles.
-        return User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword()) // already BCrypt-hashed in DB
-                .roles(user.getRole().name()) // ROLE_EMPLOYEE or ROLE_ADMIN
-                .build();
+        return new CustomUserDetails(user);   // return custom UserDetails
     }
 }
