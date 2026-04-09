@@ -68,6 +68,10 @@ public class SecurityConfig {
                         // =========================
 
                         // GET -> any authenticated user
+                        .requestMatchers(HttpMethod.GET, "/v1/departments")
+                        .authenticated()
+
+                        // GET -> any authenticated user
                         .requestMatchers(HttpMethod.GET, "/v1/departments/**")
                         .authenticated()
 

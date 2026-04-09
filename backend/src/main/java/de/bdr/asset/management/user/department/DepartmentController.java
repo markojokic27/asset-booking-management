@@ -52,7 +52,7 @@ public class DepartmentController {
     }
 
     /** READ ALL */
-    @Operation(summary = "Read list of departments", description = "Available to anyone.")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
             @ParameterObject Pageable pageable
@@ -69,6 +69,7 @@ public class DepartmentController {
 
     /** READ BY ID */
     @Operation(summary = "Read department by ID", description = "Available to anyone.")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
         log.info("Received GET request to fetch department with id: {}", id);
