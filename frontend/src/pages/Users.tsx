@@ -4,11 +4,10 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
-import { Input } from '../components/ui/Input';
+import { SearchInput } from '../components/ui/SearchBar';
 import { UserModal } from '../features/user/components/UserModal';
 
 type UserRow = {
@@ -146,20 +145,12 @@ export default function Users() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
       <div className="mt-6 flex w-full justify-end">
-        <div className="w-70">
-          <div className="relative">
-            <SearchOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2 text-gray-400"
-            />
-            <Input
-              placeholder="Search users..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="rounded-md border border-(--color-table-border) px-3 py-2 pl-10 text-xs shadow-none"
-            />
-          </div>
-        </div>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Search users..."
+          className="mb-0 w-70"
+        />
       </div>
       <div className="mt-6 w-full">
         <Table

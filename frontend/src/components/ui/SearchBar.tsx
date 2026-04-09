@@ -24,7 +24,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="border-(--color-table-border focus:ouline-none w-full border-2 py-2 pl-10 outline-none"
+        className="w-full border-2 border-(--color-table-border) bg-(--color-table-surface) py-2 pl-10 text-(--color-table-text) outline-none placeholder:text-(--color-table-text)/60 focus:outline-none"
       />
     </div>
   );
