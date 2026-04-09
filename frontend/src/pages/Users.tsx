@@ -5,7 +5,6 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
-import { useNavigate } from 'react-router-dom';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
@@ -54,7 +53,6 @@ export default function Users() {
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
   const [page, setPage] = useState(1);
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
-  const navigate = useNavigate();
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase();

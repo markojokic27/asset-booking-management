@@ -1,9 +1,16 @@
 package de.bdr.asset.management.asset;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.zxing.WriterException;
+
+import de.bdr.asset.management.asset.qrcode.QRCodeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,9 +43,48 @@ import lombok.extern.slf4j.Slf4j;
 public class AssetController {
 
     private final AssetService assetService;
+    private final QRCodeService qrCodeService;
 
-    public AssetController(AssetService assetService) {
+    public AssetController(AssetService assetService, QRCodeService qrCodeService) {
         this.assetService = assetService;
+        this.qrCodeService = qrCodeService;
+    }
+
+    // TODO: Change the controller to be smaller. 
+    // This is a testing example that will have to be changed based on the requirements
+    @Operation(summary = "Get or create asset QR Code")
+    @GetMapping(path = "/{id}/qr-code", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<Resource> getOrCreateQRCode(@PathVariable Long id) throws WriterException, IOException {
+        log.info("Accessing QR Code for asset with id: {}", id);
+
+        AssetResponseDTO asset = assetService.getAssetById(id);
+
+        String filePath = asset.code();
+
+        if (filePath == null || !new File(filePath).exists()) {
+                filePath = qrCodeService.generateAndSaveQRCode(asset.name(), id);
+
+                AssetRequestDTO updatedAsset = new AssetRequestDTO(
+                        asset.name(),
+                        asset.categoryId(), 
+                        asset.description(), 
+                        filePath, 
+                        asset.status(), 
+                        asset.location()
+                );
+
+                log.info("Created QR Code for future use for asset with id: {}", id);
+
+                assetService.updateAsset(id, updatedAsset);
+        }
+
+        File file = new File(filePath);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .contentLength(file.length())
+                .body(resource);
     }
 
     /** CREATE */
