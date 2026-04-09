@@ -56,12 +56,19 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         <div className="mx-8 h-px bg-(--color-table-border)" />
         <div className="flex gap-10 px-8 py-8">
           <div className="flex w-[260px] flex-col items-center justify-center">
-            {/* Display asset image here when available */}
-            <div className="flex h-[170px] w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)">
-              <span className="text-xs font-medium text-(--color-modal-label)">
-                No image
-              </span>
-            </div>
+            {asset.imageUrl ? (
+              <img
+                src={asset.imageUrl}
+                alt={asset.name}
+                className="h-[170px] w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card)"
+              />
+            ) : (
+              <div className="flex h-[170px] w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)">
+                <span className="text-xs font-medium text-(--color-modal-label)">
+                  No image
+                </span>
+              </div>
+            )}
           </div>
           <div className="flex flex-1 flex-col items-stretch space-y-5">
             <span
@@ -87,7 +94,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             <div>
               <p className="text-sm text-(--color-modal-label)">Description</p>
               <p className="text-sm text-(--color-text)">
-                {asset.description ?? '?'}
+                {asset.description ?? '-'}
               </p>
             </div>
           </div>

@@ -8,24 +8,17 @@ import { Button } from '../components/ui/Button';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { Input } from '../components/ui/Input';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
+import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
-import type { AssetDto } from '../features/asset/types';
+import { categories, type AssetDto } from '../features/asset/types';
 
-const categories = [
-  'Laptops',
-  'Parking',
-  'Desks',
-  'Books',
-  'Meeting room',
-  'IT equipment',
-] as const;
-
-const assets: AssetDto[] = [
+const initialAssets: AssetDto[] = [
   {
     id: '1',
     name: 'Dell Latitude 5440',
     categoryId: 1,
     categoryName: 'Laptops',
+    imageUrl: undefined,
     code: 'DL-5440',
     status: 'ACTIVE',
     location: 'Split',
@@ -36,7 +29,9 @@ const assets: AssetDto[] = [
 
 export default function Assets() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
+  const [assets, setAssets] = useState<AssetDto[]>(initialAssets);
   const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
+  const [isAssetEditModalOpen, setIsAssetEditModalOpen] = useState(false);
   const [activeAsset, setActiveAsset] = useState<AssetDto | null>(null);
 
   const filteredAssets =
@@ -90,6 +85,10 @@ export default function Assets() {
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="Edit asset"
+            onClick={() => {
+              setActiveAsset(asset);
+              setIsAssetEditModalOpen(true);
+            }}
           >
             <EditOutlinedIcon
               fontSize="small"
@@ -153,6 +152,21 @@ export default function Assets() {
           setActiveAsset(null);
         }}
         asset={activeAsset}
+      />
+      <AssetEditModal
+        isOpen={isAssetEditModalOpen}
+        onClose={() => {
+          setIsAssetEditModalOpen(false);
+          setActiveAsset(null);
+        }}
+        asset={activeAsset}
+        onSave={(updatedAsset) => {
+          setAssets((currentAssets) =>
+            currentAssets.map((asset) =>
+              asset.id === updatedAsset.id ? updatedAsset : asset
+            )
+          );
+        }}
       />
     </LayoutColumn>
   );
