@@ -2,6 +2,8 @@ package de.bdr.asset.management.user;
 
 import java.util.Map;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,7 +70,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(
             @Valid @RequestBody UserRequestDTO userRequest
-    ) {
+    ) throws DuplicateResourceException, ResourceNotFoundException
+    {
         log.info("Received POST request to create a new user for department id: {}", userRequest.departmentId());
 
         UserResponseDTO createdUser = userService.createUser(userRequest);
@@ -86,7 +89,8 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(
             @PathVariable Long id
-    ) {
+    ) throws ResourceNotFoundException
+    {
         log.info("Received GET request to fetch user with id: {}", id);
 
         UserResponseDTO user = userService.getUserById(id);
@@ -104,7 +108,8 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UserRequestDTO userRequest
-    ) {
+    ) throws DuplicateResourceException, ResourceNotFoundException
+    {
         log.info("Received PUT request to update user with id: {}", id);
 
         UserResponseDTO updatedUser = userService.updateUser(id, userRequest);
