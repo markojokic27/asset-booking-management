@@ -104,7 +104,7 @@ export default function Users() {
             nameSortDir === 'asc' ? 'descending' : 'ascending'
           }`}
         >
-          <span>Name</span>
+          <span>NAME</span>
           <span className="inline-flex flex-col leading-none" aria-hidden="true">
             <span className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}>
               ▲
