@@ -110,11 +110,92 @@ Key features and examples:
 
 ## Local Development Environment setup and instructions
 
-[Local Development Environment setup and instructions](/frontend/README.md)
+Requirements:
+- **make**
+- **docker**
+- **docker compose**
+
+In the main folder (asset-booking-management) or where Makefile is:
+
+## Dev commands
+
+```bash
+# Base command:
+# docker compose -f compose.yaml -f compose.dev.yaml up --build
+make dev # Sets up the containers, adds frontend live reload
+
+# Base command:
+# docker compose -f compose.yaml -f compose.dev.yaml down
+make dev-down # Brings down the containers
+
+# Base command:
+# docker compose -f compose.yaml -f compose.dev.yaml down -v
+make dev-clean # Cleans up volumes
+```
+
+## Production commands
+
+```bash
+# Base command:
+# docker compose up --build
+make prod
+
+# Base command:
+# docker compose down
+make prod-down
+
+# Base command:
+# docker compose down -v
+make prod-clean
+```
+
+## Running only certain services
+
+If only a certain service is needed, for example only running the database and inspecting with DBeaver:
+
+```bash
+# db is the name of the database container/service that is defined in the compose files
+docker compose up db
+```
 
 ### Environment vars
 
-TODO Add or link content...
+```bash
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=database_name_here
+DB_USER=db_user_here
+DB_PASSWORD=db_password_here
+
+# Spring Boot environment
+SPRING_PROFILES_ACTIVE=dev
+
+# JWT
+# Secret must be at least 32 characters long
+JWT_SECRET=12345678901234567890123456789012
+JWT_EXPIRY_SECONDS=seconds_here
+JWT_REFRESH_SECONDS=seconds_here
+```
+
+---
+
+- **DB_HOST**: Name of the database service in compose file (keep: db)
+- **DB_PORT**: Port that db service will use (default: 5432)
+- **DB_NAME**: Name of the database
+- **DB_USER**: Default postgres user to use in the db service
+- **DB_PASSWORD**: Password for postgres user
+
+---
+
+- **SPRING_PROFILES_ACTIVE**: List of active profiles for Spring
+
+---
+
+- **JWT_SECRET**: Used for signing and verifing JWT tokens. Must be >= 32 characters.
+- **JWT_EXPIRY_SECONDS**: Defines how long an access token is valid
+- **JWT_REFRESH_SECONDS**: Defines how long a refresh token is valid
+
+---
 
 ## Solution Document
 
