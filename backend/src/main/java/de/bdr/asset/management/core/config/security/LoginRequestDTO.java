@@ -1,4 +1,4 @@
-package de.bdr.asset.management.user.login;
+package de.bdr.asset.management.core.config.security;
 
 import jakarta.validation.constraints.*;
 
