@@ -108,10 +108,8 @@ frontend:test:
 # ─────────────────────────────────────────
 backend:dockerize:
   stage: dockerize
-  image: docker:24
-  services:
-    - name: docker:24-dind
-      command: ["--tls=false"]        # disables TLS inside dind
+  image: quay.io/podman/stable
+  services: []
   needs:
     - job: backend:compile
     - job: backend:test
