@@ -71,12 +71,12 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
 
             <div>
               <p className="text-sm text-(--color-modal-label)">Name</p>
-              <p className="font-medium text-(--color-text)">{user.name}</p>
+              <p data-testid="user-name-value" className="font-medium text-(--color-text)">{user.name}</p>
             </div>
 
             <div>
               <p className="text-sm text-(--color-modal-label)">Email</p>
-              <p className="font-medium text-(--color-text)">{user.email}</p>
+              <p data-testid="user-email-value" className="font-medium text-(--color-text)">{user.email}</p>
             </div>
 
             <div>

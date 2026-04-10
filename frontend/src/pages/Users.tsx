@@ -197,7 +197,7 @@ export default function Users() {
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
         <div className="flex items-center gap-1">
-          <button
+          <button data-testid="view-user-buttton"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="View user"
@@ -211,7 +211,7 @@ export default function Users() {
               className="pointer-events-none"
             />
           </button>
-          <button
+          <button data-testid="edit-user-button"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="Edit user"
