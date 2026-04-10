@@ -73,6 +73,25 @@ function getDisplayName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
   return `${user.lastName} ${user.firstName}`.trim();
 }
 
+function csvEscape(value: unknown) {
+  const s = value == null ? '' : String(value);
+  const needsQuotes = /[",\r\n]/.test(s);
+  const escaped = s.replace(/"/g, '""');
+  return needsQuotes ? `"${escaped}"` : escaped;
+}
+
+function downloadCsv(filename: string, csv: string) {
+  const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 export default function Users() {
   const [search, setSearch] = useState('');
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -229,6 +248,28 @@ export default function Users() {
             variant="outline"
             iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
             className="shadow-none"
+            onClick={() => {
+              const headers: Array<keyof UserRow> = [
+                'id',
+                'firstName',
+                'lastName',
+                'email',
+                'username',
+                'role',
+                'status',
+                'departmentId',
+                'managerEmail',
+                'notes',
+              ];
+
+              const rows = filteredUsers.map((u) =>
+                headers.map((h) => csvEscape(u[h])).join(',')
+              );
+
+              const csv = [headers.join(','), ...rows].join('\r\n');
+              const date = new Date().toISOString().slice(0, 10);
+              downloadCsv(`users-${date}.csv`, csv);
+            }}
           >
             Export
           </Button>
