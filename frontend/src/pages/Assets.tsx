@@ -152,7 +152,7 @@ export default function Assets() {
           {selectedCategory}
         </h1>
         <Button type="button" size="sm" iconLeft={<AddIcon fontSize="small" />}>
-          Add asset
+          New asset
         </Button>
       </div>
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />

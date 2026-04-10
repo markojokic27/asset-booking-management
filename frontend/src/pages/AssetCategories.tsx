@@ -45,7 +45,7 @@ export default function AssetCategories() {
           <SearchInput
             value={search}
             onChange={setSearch}
-            placeholder="Search category by name"
+            placeholder="Search category by name..."
             className="w-70 flex-none"
           />
           <Button
@@ -53,7 +53,7 @@ export default function AssetCategories() {
             className="h-10 w-70 flex-none font-bold"
             iconLeft={<AddSharpIcon />}
           >
-            Add new category
+            New category
           </Button>
         </div>
 

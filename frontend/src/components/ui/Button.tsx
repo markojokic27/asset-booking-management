@@ -38,7 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-disabled={isDisabled}
         className={twMerge(
           // base
-          'items-center black inline-flex justify-center gap-2 border leading-none shadow-(--shadow-button) transition-colors outline-none hover:cursor-pointer active:scale-96',
+          'inline-flex items-center justify-center gap-2 rounded-lg border leading-none transition-colors outline-none hover:cursor-pointer active:scale-96',
 
           // variants
           variant === 'solid' &&
