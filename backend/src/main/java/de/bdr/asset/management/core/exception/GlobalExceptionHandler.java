@@ -10,6 +10,7 @@ import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -256,6 +257,30 @@ public class GlobalExceptionHandler {
         );
 
         problemDetail.setTitle("I/O exception");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    /*
+        Generic handler if a user is not found by username, used by UserDetailsServiceImpl for JWT authentication.
+
+        Example:
+        - Attempt to find user with username "abc" who does not exist
+    */
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail handleNotFound(UsernameNotFoundException ex, HttpServletRequest request) {
+
+        log.warn("User not found with username at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+
+        problemDetail.setTitle("User not found with username");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
 
