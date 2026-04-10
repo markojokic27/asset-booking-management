@@ -8,8 +8,8 @@ stages:
 variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
-  DOCKER_HOST: tcp://docker:2375      # ← changed: non-TLS port
-  DOCKER_TLS_CERTDIR: ""              # ← changed: TLS disabled
+  DOCKER_HOST: tcp://docker:2375      # non-TLS port
+  DOCKER_TLS_CERTDIR: ""              # TLS disabled
 
 
 
@@ -37,7 +37,7 @@ backend:compile:
   image: maven:3.9-eclipse-temurin-21
   script:
     - cd backend
-    - mvn clean package -DskipTests -Dmaven.repo.local=.m2/repository  # ← package not compile: produces the JAR needed for Docker image
+    - mvn clean package -DskipTests -Dmaven.repo.local=.m2/repository 
   artifacts:
     paths:
       - backend/target/
@@ -58,14 +58,12 @@ frontend:compile:
     - npm run build
   artifacts:
     paths:
-      - frontend/dist/
-      - frontend/node_modules/       # ← added: share node_modules to test job
+      - frontend/dist/        
     expire_in: 1 hour
   cache:
     key: npm-$CI_PROJECT_ID
     paths:
-      - frontend/node_modules/
-
+      - frontend/node_modules/  
 
 
 # ─────────────────────────────────────────
@@ -97,14 +95,13 @@ frontend:test:
     - job: frontend:compile
   script:
     - cd frontend
-    - npm run test -- --watchAll=false --ci  # ← removed redundant npm ci, node_modules comes from artifact
+    - npm ci --legacy-peer-deps   
+    - npm run test -- --watchAll=false --ci
   allow_failure: true
   cache:
     key: npm-$CI_PROJECT_ID
     paths:
       - frontend/node_modules/
-
-
 
 # ─────────────────────────────────────────
 # DOCKERIZE STAGE
@@ -114,12 +111,12 @@ backend:dockerize:
   image: docker:24
   services:
     - name: docker:24-dind
-      command: ["--tls=false"]        # ← added: disables TLS inside dind
+      command: ["--tls=false"]        # disables TLS inside dind
   needs:
     - job: backend:compile
     - job: backend:test
   before_script:
-    - docker info                     # ← added: fails fast if dind isn't ready
+    - docker info                     
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
     - |
@@ -139,11 +136,11 @@ frontend:dockerize:
   image: docker:24
   services:
     - name: docker:24-dind
-      command: ["--tls=false"]        # ← added: disables TLS inside dind
+      command: ["--tls=false"]        # disables TLS inside dind
   needs:
     - job: frontend:compile
   before_script:
-    - docker info                     # ← added: fails fast if dind isn't ready
+    - docker info                    
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
     - |
