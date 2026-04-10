@@ -1,14 +1,16 @@
 stages:
   - compile
   - test
-  - dockerise
+  - dockerize
+
 
 
 variables:
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_HOST: tcp://docker:2375      # ← changed: non-TLS port
+  DOCKER_TLS_CERTDIR: ""              # ← changed: TLS disabled
+
 
 
 # ─────────────────────────────────────────
@@ -26,6 +28,7 @@ debug:vars:
     - if: $CI_COMMIT_BRANCH == "develop"
 
 
+
 # ─────────────────────────────────────────
 # COMPILE STAGE
 # ─────────────────────────────────────────
@@ -34,7 +37,7 @@ backend:compile:
   image: maven:3.9-eclipse-temurin-21
   script:
     - cd backend
-    - mvn clean compile -DskipTests -Dmaven.repo.local=.m2/repository
+    - mvn clean package -DskipTests -Dmaven.repo.local=.m2/repository  # ← package not compile: produces the JAR needed for Docker image
   artifacts:
     paths:
       - backend/target/
@@ -43,6 +46,7 @@ backend:compile:
     key: maven-$CI_PROJECT_ID
     paths:
       - backend/.m2/repository/
+
 
 
 frontend:compile:
@@ -55,11 +59,13 @@ frontend:compile:
   artifacts:
     paths:
       - frontend/dist/
+      - frontend/node_modules/       # ← added: share node_modules to test job
     expire_in: 1 hour
   cache:
     key: npm-$CI_PROJECT_ID
     paths:
       - frontend/node_modules/
+
 
 
 # ─────────────────────────────────────────
@@ -83,6 +89,7 @@ backend:test:
       - backend/.m2/repository/
 
 
+
 frontend:test:
   stage: test
   image: node:24-alpine
@@ -90,8 +97,7 @@ frontend:test:
     - job: frontend:compile
   script:
     - cd frontend
-    - npm ci --legacy-peer-deps
-    - npm run test -- --watchAll=false --ci
+    - npm run test -- --watchAll=false --ci  # ← removed redundant npm ci, node_modules comes from artifact
   allow_failure: true
   cache:
     key: npm-$CI_PROJECT_ID
@@ -99,18 +105,21 @@ frontend:test:
       - frontend/node_modules/
 
 
+
 # ─────────────────────────────────────────
-# DOCKERISE STAGE
+# DOCKERIZE STAGE
 # ─────────────────────────────────────────
-backend:dockerise:
-  stage: dockerise
+backend:dockerize:
+  stage: dockerize
   image: docker:24
   services:
-    - docker:24-dind
+    - name: docker:24-dind
+      command: ["--tls=false"]        # ← added: disables TLS inside dind
   needs:
-    - job: backend:compile   # provides backend/target/ to Dockerfile
+    - job: backend:compile
     - job: backend:test
   before_script:
+    - docker info                     # ← added: fails fast if dind isn't ready
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
     - |
@@ -124,14 +133,17 @@ backend:dockerise:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"
 
 
-frontend:dockerise:
-  stage: dockerise
+
+frontend:dockerize:
+  stage: dockerize
   image: docker:24
   services:
-    - docker:24-dind
+    - name: docker:24-dind
+      command: ["--tls=false"]        # ← added: disables TLS inside dind
   needs:
-    - job: frontend:test     # Dockerfile builds internally, no dist artifact needed
+    - job: frontend:compile
   before_script:
+    - docker info                     # ← added: fails fast if dind isn't ready
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
     - |
