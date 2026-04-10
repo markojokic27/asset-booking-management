@@ -13,6 +13,7 @@ import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
 import { AssetBookingsModal } from '../features/asset/components/AssetBookingsModal';
 import { categories, type AssetDto } from '../features/asset/types';
+import { AssetAddModal } from '../features/asset/components/AssetAddModal';
 
 const initialAssets: AssetDto[] = [
   {
@@ -37,6 +38,7 @@ export default function Assets() {
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [activeAsset, setActiveAsset] = useState<AssetDto | null>(null);
   const [search, setSearch] = useState('');
+  const [isAssetAddModalOpen, setIsAssetAddModalOpen] = useState(false);
 
   const filteredAssetsByCategory =
     selectedCategory === 'Assets'
@@ -151,7 +153,12 @@ export default function Assets() {
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
           {selectedCategory}
         </h1>
-        <Button type="button" size="sm" iconLeft={<AddIcon fontSize="small" />}>
+        <Button
+          type="button"
+          size="sm"
+          iconLeft={<AddIcon fontSize="small" />}
+          onClick={() => setIsAssetAddModalOpen(true)}
+        >
           New asset
         </Button>
       </div>
@@ -201,6 +208,15 @@ export default function Assets() {
         isOpen={isBookingsModalOpen}
         onClose={closeBookingsModal}
         asset={activeAsset}
+      />
+
+      <AssetAddModal
+        isOpen={isAssetAddModalOpen}
+        onClose={() => setIsAssetAddModalOpen(false)}
+        onSave={(newAsset) => {
+          setAssets((current) => [newAsset, ...current]);
+          setIsAssetAddModalOpen(false);
+        }}
       />
     </LayoutColumn>
   );
