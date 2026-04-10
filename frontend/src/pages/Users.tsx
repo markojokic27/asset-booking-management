@@ -10,6 +10,7 @@ import { BookingsButton } from '../components/ui/BookingsButton';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
 import { UserModal } from '../features/user/components/UserModal';
+import { UserEditModal } from '../features/user/components/UserEditModal';
 
 type UserRow = {
   id: string;
@@ -18,7 +19,7 @@ type UserRow = {
   email: string;
 };
 
-const users: UserRow[] = [
+const initialUsers: UserRow[] = [
   {
     id: '1',
     firstName: 'Ana',
@@ -50,7 +51,9 @@ function getDisplayName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
 export default function Users() {
   const [search, setSearch] = useState('');
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
+  const [users, setUsers] = useState<UserRow[]>(initialUsers);
   const [page, setPage] = useState(1);
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
 
@@ -59,7 +62,7 @@ export default function Users() {
     const base = !q
       ? users
       : users.filter(
-      (u) =>
+          (u) =>
             u.firstName.toLowerCase().includes(q) ||
             u.lastName.toLowerCase().includes(q) ||
             getFullName(u).toLowerCase().includes(q) ||
@@ -75,7 +78,7 @@ export default function Users() {
       if (firstCmp !== 0) return firstCmp * dir;
       return collator.compare(a.email, b.email) * dir;
     });
-  }, [search, nameSortDir]);
+  }, [search, nameSortDir, users]);
 
   useEffect(() => {
     setPage(1);
@@ -157,6 +160,10 @@ export default function Users() {
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="Edit user"
+            onClick={() => {
+              setActiveUser(user);
+              setIsUserEditModalOpen(true);
+            }}
           >
             <EditOutlinedIcon
               fontSize="small"
@@ -298,6 +305,20 @@ export default function Users() {
           setActiveUser(null);
         }}
         user={activeUser ? { ...activeUser, name: getFullName(activeUser) } : null}
+      />
+
+      <UserEditModal
+        isOpen={isUserEditModalOpen}
+        onClose={() => {
+          setIsUserEditModalOpen(false);
+          setActiveUser(null);
+        }}
+        user={activeUser}
+        onSave={(updatedUser) => {
+          setUsers((currentUsers) =>
+            currentUsers.map((u) => (u.id === updatedUser.id ? updatedUser : u))
+          );
+        }}
       />
     </LayoutColumn>
   );
