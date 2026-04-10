@@ -91,7 +91,7 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Name</p>
       <Form.Field name="name" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input data-testid="name"
             placeholder="Enter your name"
             error={!!errors.name}
             errorMessage={errors.name}
@@ -103,7 +103,7 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Surname</p>
       <Form.Field name="surname" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input data-testid="surname"
             placeholder="Enter your surname"
             error={!!errors.surname}
             errorMessage={errors.surname}
@@ -115,7 +115,7 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Username</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input data-testid="username"
             placeholder="Enter username"
             error={!!errors.username}
             errorMessage={errors.username}
@@ -127,7 +127,7 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Password</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input
+          <Input data-testid="password"
             type="password"
             placeholder="Enter password"
             error={!!errors.password}
@@ -137,7 +137,7 @@ const RegisterForm = () => {
       </Form.Field>
 
          <Form.Submit asChild>
-              <Button type="submit" className="mt-6 mb-2 font-bold uppercase">
+              <Button data-testid="register-button" type="submit" className="mt-6 mb-2 font-bold uppercase">
                 Register
               </Button>
             </Form.Submit>

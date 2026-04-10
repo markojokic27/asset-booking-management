@@ -92,10 +92,10 @@ export default function Assets() {
       cellClassName: 'w-px whitespace-nowrap',
       render: (asset) => (
         <div className="flex items-center gap-1">
-          <button
+          <button data-testid="view-asset-button"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-            aria-label="View asset"
+            aria-label="View asset" 
             onClick={() => {
               setActiveAsset(asset);
               setIsAssetModalOpen(true);
@@ -106,7 +106,7 @@ export default function Assets() {
               className="pointer-events-none"
             />
           </button>
-          <button
+          <button data-testid="edit-asset-button"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="Edit asset"

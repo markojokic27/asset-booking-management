@@ -166,7 +166,7 @@ export const AssetEditModal = ({
                   className="hidden"
                   onChange={handleImageChange}
                 />
-                <Button
+                <Button data-testid="upload-photo-button"
                   type="button"
                   variant="outline"
                   size="sm"

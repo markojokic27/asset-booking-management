@@ -64,14 +64,14 @@ export const AssetModal: React.FC<AssetModalProps> = ({
               />
             ) : (
               <div className="flex h-[170px] w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)">
-                <span className="text-xs font-medium text-(--color-modal-label)">
+                <span data-testid="asset-no-image" className="text-xs font-medium text-(--color-modal-label)">
                   No image
                 </span>
               </div>
             )}
           </div>
           <div className="flex flex-1 flex-col items-stretch space-y-5">
-            <span
+            <span data-testid="asset-status-badge"
               className={[
                 'inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium',
                 statusClassName,
@@ -80,20 +80,20 @@ export const AssetModal: React.FC<AssetModalProps> = ({
               {statusLabel}
             </span>
             <div>
-              <p className="text-sm text-(--color-modal-label)">
+              <p data-testid="asset-category-label" className="text-sm text-(--color-modal-label)">
                 Asset category
               </p>
-              <p className="font-medium text-(--color-text)">
+              <p data-testid="asset-category-value" className="font-medium text-(--color-text)">
                 {asset.categoryName ?? '?'}
               </p>
             </div>
             <div>
-              <p className="text-sm text-(--color-modal-label)">Name</p>
-              <p className="font-medium text-(--color-text)">{asset.name}</p>
+              <p data-testid="asset-name-label" className="text-sm text-(--color-modal-label)">Name</p>
+              <p data-testid="asset-name-value" className="font-medium text-(--color-text)">{asset.name}</p>
             </div>
             <div>
               <p className="text-sm text-(--color-modal-label)">Description</p>
-              <p className="text-sm text-(--color-text)">
+              <p data-testid="asset-description-value" className="text-sm text-(--color-text)">
                 {asset.description ?? '-'}
               </p>
             </div>
