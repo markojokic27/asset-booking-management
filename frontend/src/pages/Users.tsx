@@ -11,6 +11,7 @@ import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
 import { UserModal } from '../features/user/components/UserModal';
 import { UserEditModal } from '../features/user/components/UserEditModal';
+import { UserCreateModal } from '../features/user/components/UserCreateModal';
 
 type UserRow = {
   id: string;
@@ -76,6 +77,7 @@ export default function Users() {
   const [search, setSearch] = useState('');
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
+  const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
   const [users, setUsers] = useState<UserRow[]>(initialUsers);
   const [page, setPage] = useState(1);
@@ -234,6 +236,10 @@ export default function Users() {
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
             className="shadow-none"
+            onClick={() => {
+              setActiveUser(null);
+              setIsUserCreateModalOpen(true);
+            }}
           >
             New
           </Button>
@@ -342,6 +348,22 @@ export default function Users() {
           setUsers((currentUsers) =>
             currentUsers.map((u) => (u.id === updatedUser.id ? updatedUser : u))
           );
+        }}
+      />
+
+      <UserCreateModal
+        isOpen={isUserCreateModalOpen}
+        onClose={() => setIsUserCreateModalOpen(false)}
+        onCreate={(newUser) => {
+          const id = String(Date.now());
+          setUsers((currentUsers) => [
+            {
+              id,
+              ...newUser,
+              notes: newUser.notes ?? '',
+            },
+            ...currentUsers,
+          ]);
         }}
       />
     </LayoutColumn>

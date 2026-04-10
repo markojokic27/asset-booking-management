@@ -11,12 +11,18 @@ export const userValidationSchema = z.object({
     .regex(/^[a-zA-Z0-9._-]+$/, 'Only letters, numbers, ., _, and - are allowed'),
   surname: z
     .string()
+    .trim()
     .min(1, 'Surname is required')
-    .max(100, 'Surname must be at most 100 characters long'),
+    .min(3, 'Surname must be at least 3 characters long')
+    .max(100, 'Surname must be at most 100 characters long')
+    .regex(/^[\p{L}]+(?:[ -][\p{L}]+)*$/u, 'Surname can contain letters only'),
   name: z
     .string()
+    .trim()
     .min(1, 'Name is required')
-    .max(100, 'Name must be at most 100 characters long'),
+    .min(3, 'Name must be at least 3 characters long')
+    .max(100, 'Name must be at most 100 characters long')
+    .regex(/^[\p{L}]+(?:[ -][\p{L}]+)*$/u, 'Name can contain letters only'),
   email: z
     .email('Email is not in a valid format')
     .max(254, 'Email must be at most 254 characters long'),

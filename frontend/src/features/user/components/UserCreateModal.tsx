@@ -6,12 +6,12 @@ import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
 
-const userEditSchema = userValidationSchema
+const userCreateSchema = userValidationSchema
   .pick({
+    username: true,
     name: true,
     surname: true,
     email: true,
-    username: true,
     role: true,
     status: true,
     departmentId: true,
@@ -22,8 +22,7 @@ const userEditSchema = userValidationSchema
     status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
   });
 
-export type UserEditModalUser = {
-  id: string;
+export type UserCreateModalUser = {
   firstName: string;
   lastName: string;
   email: string;
@@ -35,18 +34,17 @@ export type UserEditModalUser = {
   notes?: string;
 };
 
-type UserEditModalProps = {
+type UserCreateModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  user: UserEditModalUser | null;
-  onSave: (user: UserEditModalUser) => void;
+  onCreate: (user: UserCreateModalUser) => void;
 };
 
 type FormErrors = {
+  username: string;
   name: string;
   surname: string;
   email: string;
-  username: string;
   role: string;
   status: string;
   departmentId: string;
@@ -55,10 +53,10 @@ type FormErrors = {
 };
 
 const initialErrors: FormErrors = {
+  username: '',
   name: '',
   surname: '',
   email: '',
-  username: '',
   role: '',
   status: '',
   departmentId: '',
@@ -66,67 +64,33 @@ const initialErrors: FormErrors = {
   notes: '',
 };
 
-export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalProps) => {
+const initialValues: UserCreateModalUser = {
+  username: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  role: 'EMPLOYEE',
+  status: 'ACTIVE',
+  departmentId: 1,
+  managerEmail: '',
+  notes: '',
+};
+
+export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalProps) => {
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
 
   useEffect(() => {
     if (isOpen) setErrors(initialErrors);
-  }, [isOpen, user]);
+  }, [isOpen]);
 
-  if (!isOpen || !user) return null;
-
-  const handleSubmit = (data: FormData) => {
-    const formValues = {
-      name: data.get('name') as string,
-      surname: data.get('surname') as string,
-      email: data.get('email') as string,
-      username: data.get('username') as string,
-      role: data.get('role') as string,
-      status: data.get('status') as string,
-      departmentId: data.get('departmentId') as string,
-      managerEmail: data.get('managerEmail') as string,
-      notes: data.get('notes') as string,
-    };
-
-    const result = userEditSchema.safeParse(formValues);
-
-    if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
-      setErrors({
-        name: fieldErrors.name?.[0] || '',
-        surname: fieldErrors.surname?.[0] || '',
-        email: fieldErrors.email?.[0] || '',
-        username: fieldErrors.username?.[0] || '',
-        role: fieldErrors.role?.[0] || '',
-        status: fieldErrors.status?.[0] || '',
-        departmentId: fieldErrors.departmentId?.[0] || '',
-        managerEmail: fieldErrors.managerEmail?.[0] || '',
-        notes: fieldErrors.notes?.[0] || '',
-      });
-      return;
-    }
-
-    onSave({
-      ...user,
-      firstName: result.data.name,
-      lastName: result.data.surname,
-      email: result.data.email,
-      username: result.data.username,
-      role: result.data.role,
-      status: result.data.status,
-      departmentId: result.data.departmentId,
-      managerEmail: result.data.managerEmail,
-      notes: result.data.notes?.trim() || undefined,
-    });
-    onClose();
-  };
+  if (!isOpen) return null;
 
   const roleOptions = userRoleSchema.options.map((role) => ({
     value: role,
     label: role,
   }));
 
-  const statusLabels: Record<UserEditModalUser['status'], string> = {
+  const statusLabels: Record<UserCreateModalUser['status'], string> = {
     ACTIVE: 'Active',
     INACTIVE: 'Inactive',
   };
@@ -138,12 +102,57 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
       label: statusLabels[status],
     }));
 
+  const handleSubmit = (data: FormData) => {
+    const formValues = {
+      username: data.get('username') as string,
+      name: data.get('name') as string,
+      surname: data.get('surname') as string,
+      email: data.get('email') as string,
+      role: data.get('role') as string,
+      status: data.get('status') as string,
+      departmentId: data.get('departmentId') as string,
+      managerEmail: data.get('managerEmail') as string,
+      notes: data.get('notes') as string,
+    };
+
+    const result = userCreateSchema.safeParse(formValues);
+
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+      setErrors({
+        username: fieldErrors.username?.[0] || '',
+        name: fieldErrors.name?.[0] || '',
+        surname: fieldErrors.surname?.[0] || '',
+        email: fieldErrors.email?.[0] || '',
+        role: fieldErrors.role?.[0] || '',
+        status: fieldErrors.status?.[0] || '',
+        departmentId: fieldErrors.departmentId?.[0] || '',
+        managerEmail: fieldErrors.managerEmail?.[0] || '',
+        notes: fieldErrors.notes?.[0] || '',
+      });
+      return;
+    }
+
+    onCreate({
+      username: result.data.username,
+      firstName: result.data.name,
+      lastName: result.data.surname,
+      email: result.data.email,
+      role: result.data.role,
+      status: result.data.status,
+      departmentId: result.data.departmentId,
+      managerEmail: result.data.managerEmail,
+      notes: result.data.notes?.trim() || undefined,
+    });
+    onClose();
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="Edit user"
+      aria-label="Create user"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -162,7 +171,6 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
         <div className="mx-8 h-px bg-(--color-table-border)" />
 
         <Form.Root
-          key={user.id}
           onSubmit={(event) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
@@ -178,7 +186,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                       id="user-role"
                       name="role"
                       label="Role"
-                      defaultValue={user.role}
+                      defaultValue={initialValues.role}
                       error={!!errors.role}
                       errorMessage={errors.role}
                       options={roleOptions}
@@ -192,7 +200,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                       id="user-status"
                       name="status"
                       label="Status"
-                      defaultValue={user.status}
+                      defaultValue={initialValues.status}
                       error={!!errors.status}
                       errorMessage={errors.status}
                       options={statusOptions}
@@ -208,7 +216,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                     name="username"
                     type="text"
                     label="Username"
-                    defaultValue={user.username}
+                    defaultValue={initialValues.username}
                     error={!!errors.username}
                     errorMessage={errors.username}
                   />
@@ -222,7 +230,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                     name="name"
                     type="text"
                     label="First name"
-                    defaultValue={user.firstName}
+                    defaultValue={initialValues.firstName}
                     error={!!errors.name}
                     errorMessage={errors.name}
                   />
@@ -236,7 +244,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                     name="surname"
                     type="text"
                     label="Last name"
-                    defaultValue={user.lastName}
+                    defaultValue={initialValues.lastName}
                     error={!!errors.surname}
                     errorMessage={errors.surname}
                   />
@@ -250,7 +258,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                     name="email"
                     type="email"
                     label="Email"
-                    defaultValue={user.email}
+                    defaultValue={initialValues.email}
                     error={!!errors.email}
                     errorMessage={errors.email}
                   />
@@ -265,7 +273,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                       name="departmentId"
                       type="number"
                       label="Department ID"
-                      defaultValue={String(user.departmentId)}
+                      defaultValue={String(initialValues.departmentId)}
                       error={!!errors.departmentId}
                       errorMessage={errors.departmentId}
                     />
@@ -279,7 +287,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                       name="managerEmail"
                       type="email"
                       label="Manager email"
-                      defaultValue={user.managerEmail}
+                      defaultValue={initialValues.managerEmail}
                       error={!!errors.managerEmail}
                       errorMessage={errors.managerEmail}
                     />
@@ -294,7 +302,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                     name="notes"
                     type="text"
                     label="Notes"
-                    defaultValue={user.notes ?? ''}
+                    defaultValue={initialValues.notes ?? ''}
                     error={!!errors.notes}
                     errorMessage={errors.notes}
                   />
