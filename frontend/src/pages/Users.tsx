@@ -12,6 +12,7 @@ import { SearchInput } from '../components/ui/SearchBar';
 import { UserModal } from '../features/user/components/UserModal';
 import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
+import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
 
 type UserRow = {
   id: string;
@@ -97,10 +98,21 @@ export default function Users() {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
   const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
+  const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
   const [users, setUsers] = useState<UserRow[]>(initialUsers);
   const [page, setPage] = useState(1);
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
+
+  const openBookingsModal = (user: UserRow) => {
+    setActiveUser(user);
+    setIsBookingsModalOpen(true);
+  };
+
+  const closeBookingsModal = () => {
+    setIsBookingsModalOpen(false);
+    setActiveUser(null);
+  };
 
   const filteredUsers = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -177,9 +189,7 @@ export default function Users() {
       header: <span className="sr-only">Bookings</span>,
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
-      render: () => (
-        <BookingsButton />
-      ),
+      render: (user) => <BookingsButton onClick={() => openBookingsModal(user)} />,
     },
     {
       key: 'actions',
@@ -406,6 +416,20 @@ export default function Users() {
             ...currentUsers,
           ]);
         }}
+      />
+
+      <UserBookingsModal
+        isOpen={isBookingsModalOpen}
+        onClose={closeBookingsModal}
+        user={
+          activeUser
+            ? {
+                id: activeUser.id,
+                firstName: activeUser.firstName,
+                lastName: activeUser.lastName,
+              }
+            : null
+        }
       />
     </LayoutColumn>
   );
