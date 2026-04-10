@@ -8,6 +8,7 @@ import { Button } from '../components/ui/Button';
 import { BookingsButton } from '../components/ui/BookingsButton';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
+import { DateTimeInput } from '../components/ui/DateTimeInput';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
@@ -38,6 +39,10 @@ export default function Assets() {
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [activeAsset, setActiveAsset] = useState<AssetDto | null>(null);
   const [search, setSearch] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [fromHour, setFromHour] = useState('');
+  const [toHour, setToHour] = useState('');
   const [isAssetAddModalOpen, setIsAssetAddModalOpen] = useState(false);
 
   const filteredAssetsByCategory =
@@ -97,7 +102,7 @@ export default function Assets() {
           <button data-testid="view-asset-button"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-            aria-label="View asset" 
+            aria-label="View asset"
             onClick={() => {
               setActiveAsset(asset);
               setIsAssetModalOpen(true);
@@ -163,12 +168,30 @@ export default function Assets() {
         </Button>
       </div>
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
-      <div className="mt-6 flex w-full justify-end">
+      <div className="mt-6 flex w-full flex-wrap items-end gap-3">
+        <DateTimeInput
+          id="from-date"
+          label="From time"
+          value={fromDate}
+          onChange={setFromDate}
+          hourValue={fromHour}
+          onHourChange={setFromHour}
+          className="w-full sm:w-70"
+        />
+        <DateTimeInput
+          id="to-date"
+          label="To time"
+          value={toDate}
+          onChange={setToDate}
+          hourValue={toHour}
+          onHourChange={setToHour}
+          className="w-full sm:w-70"
+        />
         <SearchInput
           value={search}
           onChange={setSearch}
           placeholder="Search assets..."
-          className="mb-0 w-70"
+          className="mb-0 w-full sm:ml-auto sm:w-70"
         />
       </div>
       <div className="mt-6 w-full">
