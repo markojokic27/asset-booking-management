@@ -5,11 +5,13 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
+import { BookingsButton } from '../components/ui/BookingsButton';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
+import { AssetBookingsModal } from '../features/asset/components/AssetBookingsModal';
 import { categories, type AssetDto } from '../features/asset/types';
 
 const initialAssets: AssetDto[] = [
@@ -32,6 +34,7 @@ export default function Assets() {
   const [assets, setAssets] = useState<AssetDto[]>(initialAssets);
   const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
   const [isAssetEditModalOpen, setIsAssetEditModalOpen] = useState(false);
+  const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [activeAsset, setActiveAsset] = useState<AssetDto | null>(null);
   const [search, setSearch] = useState('');
 
@@ -43,6 +46,16 @@ export default function Assets() {
   const filteredAssets = filteredAssetsByCategory.filter((asset) =>
     asset.name.toLowerCase().includes(search.trim().toLowerCase())
   );
+
+  const openBookingsModal = (asset: AssetDto) => {
+    setActiveAsset(asset);
+    setIsBookingsModalOpen(true);
+  };
+
+  const closeBookingsModal = () => {
+    setIsBookingsModalOpen(false);
+    setActiveAsset(null);
+  };
 
   const columns: TableColumn<AssetDto>[] = [
     {
@@ -65,6 +78,13 @@ export default function Assets() {
       key: 'status',
       header: 'Status',
       accessor: 'status',
+    },
+    {
+      key: 'bookings',
+      header: <span className="sr-only">Bookings</span>,
+      headerClassName: 'w-px whitespace-nowrap',
+      cellClassName: 'w-px whitespace-nowrap',
+      render: (asset) => <BookingsButton onClick={() => openBookingsModal(asset)} />,
     },
     {
       key: 'actions',
@@ -175,6 +195,12 @@ export default function Assets() {
             )
           );
         }}
+      />
+
+      <AssetBookingsModal
+        isOpen={isBookingsModalOpen}
+        onClose={closeBookingsModal}
+        asset={activeAsset}
       />
     </LayoutColumn>
   );

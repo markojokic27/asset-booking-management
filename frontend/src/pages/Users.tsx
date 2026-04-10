@@ -4,9 +4,9 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
+import { BookingsButton } from '../components/ui/BookingsButton';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
 import { UserModal } from '../features/user/components/UserModal';
@@ -130,14 +130,7 @@ export default function Users() {
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: () => (
-        <Button
-          size="sm"
-          variant="solid"
-          iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
-          className="shadow-none"
-        >
-          Bookings
-        </Button>
+        <BookingsButton />
       ),
     },
     {
