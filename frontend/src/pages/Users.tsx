@@ -17,6 +17,12 @@ type UserRow = {
   firstName: string;
   lastName: string;
   email: string;
+  username: string;
+  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
+  status: 'ACTIVE' | 'INACTIVE';
+  departmentId: number;
+  managerEmail: string;
+  notes?: string;
 };
 
 const initialUsers: UserRow[] = [
@@ -25,18 +31,36 @@ const initialUsers: UserRow[] = [
     firstName: 'Ana',
     lastName: 'Horvat',
     email: 'ana.horvat@example.com',
+    username: 'ana.horvat',
+    role: 'ADMIN',
+    status: 'ACTIVE',
+    departmentId: 1,
+    managerEmail: 'manager@example.com',
+    notes: 'Team lead.',
   },
   {
     id: '2',
     firstName: 'Ante',
     lastName: 'Anić',
     email: 'ante.anic@example.com',
+    username: 'ante.anic',
+    role: 'EMPLOYEE',
+    status: 'ACTIVE',
+    departmentId: 2,
+    managerEmail: 'ana.horvat@example.com',
+    notes: '',
   },
   {
     id: '3',
     firstName: 'Anica',
     lastName: 'Barišić',
     email: 'anica.barisic@example.com',
+    username: 'anica.barisic',
+    role: 'MANAGER',
+    status: 'INACTIVE',
+    departmentId: 3,
+    managerEmail: 'director@example.com',
+    notes: 'On leave.',
   },
 ];
 
