@@ -1,11 +1,11 @@
 package de.bdr.asset.management.core.config.security;
 
-import de.bdr.asset.management.user.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import de.bdr.asset.management.user.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

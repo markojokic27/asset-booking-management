@@ -236,16 +236,16 @@ public class GlobalExceptionHandler {
     */
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ProblemDetail handleAuthorizationForbidden(AccessDeniedException ex, HttpServletRequest request) {
+    public ProblemDetail handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
 
-        log.warn("Forbidden access at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
+        log.warn("Access denied at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.FORBIDDEN,
                 ex.getMessage()
         );
 
-        problemDetail.setTitle("Forbidden access");
+        problemDetail.setTitle("Access denied");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
 

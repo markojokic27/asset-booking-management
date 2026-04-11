@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.zxing.WriterException;
-import com.sun.jdi.request.DuplicateRequestException;
 
 import de.bdr.asset.management.asset.qrcode.QRCodeService;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
@@ -80,7 +79,7 @@ public class AssetController {
     @PostMapping
     public ResponseEntity<AssetResponseDTO> createAsset(
             @Valid @RequestBody AssetRequestDTO assetRequest
-    ) throws ResourceNotFoundException, DuplicateRequestException
+    ) throws ResourceNotFoundException, DuplicateResourceException
     {
         log.info("Received POST request to create a new asset");
 
