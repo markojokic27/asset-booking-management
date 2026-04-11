@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user.department;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,21 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
+
         log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
+
+        if (repository.existsByName(departmentRequest.name())) {
+            throw new DuplicateResourceException("Department " + departmentRequest.name() + " already exists.");
+        }
         
         User manager = null;
         if (departmentRequest.managerId() != null) {
             manager = userRepository.findById(departmentRequest.managerId())
-                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Manager not found with id: " + departmentRequest.managerId()));
+
+            if (repository.existsByManagerId(departmentRequest.managerId())) {
+                throw new DuplicateResourceException("Manager with ID " + departmentRequest.managerId() + " is already managing another department.");
+            }
         }
 
         log.debug("Manager found. Mapping entity and saving to database...");
@@ -60,6 +70,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO getDepartmentById(Long id) {
+
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
@@ -74,6 +85,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
+
         log.debug("Fetching departments from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -93,19 +105,35 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
+
         log.info("Attempting to update department with id: {}", id);
 
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
-        User manager = userRepository.findById(departmentRequest.managerId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + departmentRequest.managerId()));
+        if (repository.existsByNameAndIdNot(departmentRequest.name(), id)) {
+            throw new DuplicateResourceException("Department " + departmentRequest.name() + " already exists.");
+        }
+
+        User manager = null;
+        if (departmentRequest.managerId() != null) {
+            manager = userRepository.findById(departmentRequest.managerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Manager not found with id: " + departmentRequest.managerId()));
+
+            if (repository.existsByManagerIdAndIdNot(departmentRequest.managerId(), id)) {
+                throw new DuplicateResourceException("Manager with ID " + departmentRequest.managerId() + " is already managing another department.");
+            }
+        }
         
         department.setName(departmentRequest.name());
         department.setManager(manager);
         department = repository.save(department);
 
-        log.info("Successfully updated department with id: {}", id);
+        if (manager == null) {
+            log.info("Successfully updated new department with id: {} with no manager id.", department.getId());
+        } else {
+            log.info("Successfully updated new department with id: {} with manager id: {}", department.getId(), manager.getId());
+        }
 
         return mapper.toResponse(department);
     }
@@ -115,6 +143,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public void deleteDepartment(Long id) {
+
         // TODO: Add a field for soft delete
         
         // Department department = repository.findById(id)

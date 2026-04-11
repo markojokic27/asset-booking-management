@@ -1,5 +1,7 @@
 package de.bdr.asset.management.user.department;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +45,10 @@ public class DepartmentController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<DepartmentResponseDTO> create(@Valid @RequestBody DepartmentRequestDTO request) {
+    public ResponseEntity<DepartmentResponseDTO> create(
+            @Valid @RequestBody DepartmentRequestDTO request
+    ) throws DuplicateResourceException, ResourceNotFoundException
+    {
         log.info("Received POST request to create a new department");
 
         return ResponseEntity
@@ -58,7 +63,8 @@ public class DepartmentController {
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
             @ParameterObject Pageable pageable
-    ) {
+    )
+    {
         log.info("Received GET request to fetch departments with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -73,7 +79,10 @@ public class DepartmentController {
     @Operation(summary = "Read department by ID", description = "Available to anyone.")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public ResponseEntity<DepartmentResponseDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<DepartmentResponseDTO> getById(
+            @PathVariable Long id
+    ) throws ResourceNotFoundException
+    {
         log.info("Received GET request to fetch department with id: {}", id);
 
         return ResponseEntity
@@ -86,7 +95,10 @@ public class DepartmentController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<DepartmentResponseDTO> update(@PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request) {
+    public ResponseEntity<DepartmentResponseDTO> update(
+            @PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request
+    ) throws ResourceNotFoundException, DuplicateResourceException
+    {
         log.info("Received PUT request to update department with id: {}", id);
 
         return ResponseEntity
@@ -99,7 +111,10 @@ public class DepartmentController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    )
+    {
         log.info("Received DELETE request for department with id: {}", id);
 
         service.deleteDepartment(id);
