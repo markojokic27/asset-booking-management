@@ -1,0 +1,69 @@
+= ADR [010]: [Valkey Caching layer]
+:author: [Jakov Petric / Internship 2026]
+:date: 2026-03-20
+:status: Proposed
+:tags: backend
+
+== Status
+{status}
+
+== Context
+
+We need a caching layer in order to implement rate limiting and request caching.
+
+== Decision
+We will use the **Valkey** datastore that will primarily be used to cache requests and rate limiting, with options to expand its use.
+
+== Rationale
+
+**Pros**:
+
+* **Free and open source, forever**: It is available under the original Redis BSD-3 license.   
+* **Support**: It is backed by major Cloud providers like AWS, Google and the Linux Open Source Foundation, meaning ending support is unlikely.
+* **Performance**: Has implemented enhanced I/O multithreading that better utilizes modern multi-core processors. Valkey 8.0 introduced a redesigned threading model that allows for parallel I/O operations while maintaining data safety.
+
+**Cons**:
+
+* **Fork**: It is a fork of Redis but has diverged enough from it since 8.0 release, making them fundamentally different.
+* **New to Spring**: Blog announcing Spring integration was published on 1st of April 2026. 
+* **Additional setup**: Since it is new, additional setup to make it work is required, mostly having to do with Valkey GLIDE libs.
+
+== Alternatives Considered
+
+== *Redis*
+
+**Pros**:
+
+* **Native types**: Current features that Valkey does not support are:
+** Native JSON support. (Valkey requires adding a Valkey JSON package)
+** Time Series data structure.
+** Vector database capabilities for AI applications.
+** Probabilistic data structures for efficient approximations.
+** More extensive search and query capabilities through Redis Query Engine.
+* **Documentation**: Extensive documentation, due to it being a long standing project.
+
+**Cons**:
+
+* **Licencing**: Since switching to its own RSALv2 and SSPLv1 licenses, in the worst case scenario, it could mean having to open source the entire infrastacture that uses Redis.
+* **Performance** : It performs worse when directly compared to Valkey.
+* **Project direction**: Focus seems to be on vectors and AI, which could mean less support for our use case of a caching layer.
+
+== Consequences
+
+1. Add `io.valkey.springframework.boot`, `io.valkey` and the os maven plugin for platform specific GLIDE libs dependencies to `pom.xml`.
+2. Connect the Spring Boot application with the caching layer
+3. Decide on strategies and develop solutions to rate limiting and caching requests
+
+== References
+* https://valkey.io/
+
+* https://betterstack.com/community/comparisons/redis-vs-valkey/
+
+* https://valkey.io/blog/spring-data-valkey/
+
+* https://github.com/redis/redis?tab=License-1-ov-file#readme
+
+[NOTE]
+====
+At the time of writing, specifics of the implementation have not been set in stone and are up for discussion.
+====
