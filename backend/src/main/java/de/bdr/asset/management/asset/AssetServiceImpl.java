@@ -33,6 +33,7 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
+
         log.info("Attempting to create asset in category id: {}", assetRequest.categoryId());
 
         AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
@@ -58,6 +59,7 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO getAssetById(Long id) {
+
         Asset asset = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
 
@@ -74,6 +76,7 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public Page<AssetResponseDTO> getAllAssets(Pageable pageable) {
+
         log.debug("Fetching assets from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -95,6 +98,7 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
+
         log.info("Attempting to update asset with id: {}", id);
 
         Asset asset = repository.findById(id)
@@ -114,5 +118,4 @@ public class AssetServiceImpl implements AssetService {
         
         return mapper.toResponse(asset);
     }
-
 }

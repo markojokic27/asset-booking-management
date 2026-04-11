@@ -229,7 +229,7 @@ public class GlobalExceptionHandler {
     }
 
     /*
-        Generic handler if a endpoint is accessed without proper authorization.
+        Generic handler if an endpoint is accessed without proper authorization.
 
         Example:
         - Employee tries to change department details

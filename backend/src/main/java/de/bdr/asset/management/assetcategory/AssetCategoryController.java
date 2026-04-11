@@ -1,5 +1,7 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +45,10 @@ public class AssetCategoryController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<AssetCategoryResponseDTO> create(@Valid @RequestBody AssetCategoryRequestDTO request) {
+    public ResponseEntity<AssetCategoryResponseDTO> create(
+            @Valid @RequestBody AssetCategoryRequestDTO request
+    ) throws DuplicateResourceException
+    {
         log.info("Received POST request to create a new asset category");
 
         return ResponseEntity
@@ -58,7 +63,8 @@ public class AssetCategoryController {
     @GetMapping
     public ResponseEntity<Page<AssetCategoryResponseDTO>> getAll(
             @ParameterObject Pageable pageable
-    ) {
+    )
+    {
         log.info("Received GET request to fetch asset categories with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -74,7 +80,10 @@ public class AssetCategoryController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    ResponseEntity<AssetCategoryResponseDTO> getById(@PathVariable Long id) {
+    ResponseEntity<AssetCategoryResponseDTO> getById(
+            @PathVariable Long id
+    ) throws ResourceNotFoundException
+    {
         log.info("Received GET request to fetch asset category with id: {}", id);
 
         return ResponseEntity
@@ -87,7 +96,10 @@ public class AssetCategoryController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    ResponseEntity<AssetCategoryResponseDTO> update(@PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request) {
+    ResponseEntity<AssetCategoryResponseDTO> update(
+            @PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request
+    ) throws ResourceNotFoundException, DuplicateResourceException
+    {
         log.info("Received PUT request to update asset category with id: {}", id);
 
         return ResponseEntity
@@ -100,7 +112,10 @@ public class AssetCategoryController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    )
+    {
         log.info("Received DELETE request for asset category with id: {}", id);
 
         service.deleteAssetCategory(id);

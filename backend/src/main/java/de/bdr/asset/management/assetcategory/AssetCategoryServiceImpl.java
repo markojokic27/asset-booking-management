@@ -1,5 +1,6 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,7 +31,12 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
+
         log.info("Attempting to create a new asset category");
+
+        if (repository.existsByName(assetCategoryRequest.name())) {
+            throw new DuplicateResourceException("Asset category " + assetCategoryRequest.name() + " already exists.");
+        }
 
         AssetCategory category = mapper.toEntity(assetCategoryRequest);
         category = repository.save(category);
@@ -48,6 +54,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO getAssetCategoryById(Long id){
+
         AssetCategory category = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
@@ -64,6 +71,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable){
+
         log.debug("Fetching asset categories from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -85,10 +93,15 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
+
         log.info("Attempting to update asset category with id: {}", id);
 
         AssetCategory category = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
+
+        if (repository.existsByNameAndIdNot(assetCategoryRequest.name(), id)) {
+            throw new DuplicateResourceException("Asset category " + assetCategoryRequest.name() + " already exists.");
+        }
 
         category.setName(assetCategoryRequest.name());
         category.setDescription(assetCategoryRequest.description());
@@ -109,6 +122,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      */
     @Override
     public void deleteAssetCategory(Long id){
+
         // TODO: Add a field for soft delete
 
         // AssetCategory category = repository.findById(id)
