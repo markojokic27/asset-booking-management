@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.zxing.WriterException;
+import com.sun.jdi.request.DuplicateRequestException;
 
 import de.bdr.asset.management.asset.qrcode.QRCodeService;
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -56,7 +58,10 @@ public class AssetController {
         description = "If an asset does not have a file path saved, generates a new QR code, saves it to a folder and serve it. Creation is only handled the first time."
     )
     @GetMapping(path = "/{id}/qr-code", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<Resource> getOrCreateQRCode(@PathVariable Long id) throws WriterException, IOException, ResourceNotFoundException {
+    public ResponseEntity<Resource> getOrCreateQRCode(
+            @PathVariable Long id
+    ) throws WriterException, IOException, ResourceNotFoundException
+    {
         log.info("Accessing QR Code for asset with id: {}", id);
 
         File file = new File(qrCodeService.generateAndSaveQRCodeForAsset(id));
@@ -73,7 +78,10 @@ public class AssetController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<AssetResponseDTO> createAsset(@Valid @RequestBody AssetRequestDTO assetRequest) {
+    public ResponseEntity<AssetResponseDTO> createAsset(
+            @Valid @RequestBody AssetRequestDTO assetRequest
+    ) throws ResourceNotFoundException, DuplicateRequestException
+    {
         log.info("Received POST request to create a new asset");
 
         return ResponseEntity
@@ -88,7 +96,8 @@ public class AssetController {
     @GetMapping
     public ResponseEntity<Page<AssetResponseDTO>> getAllAssets(
             @ParameterObject Pageable pageable
-    ) {
+    )
+    {
         log.info("Received GET request to fetch assets with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
@@ -104,7 +113,10 @@ public class AssetController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public ResponseEntity<AssetResponseDTO> getAssetById(@PathVariable Long id) {
+    public ResponseEntity<AssetResponseDTO> getAssetById(
+            @PathVariable Long id
+    ) throws ResourceNotFoundException
+    {
         log.info("Received GET request to fetch asset with id: {}", id);
 
         return ResponseEntity
@@ -117,7 +129,10 @@ public class AssetController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<AssetResponseDTO> updateAsset(@PathVariable Long id, @Valid @RequestBody AssetRequestDTO assetRequest) {
+    public ResponseEntity<AssetResponseDTO> updateAsset(
+            @PathVariable Long id, @Valid @RequestBody AssetRequestDTO assetRequest
+    ) throws ResourceNotFoundException, DuplicateResourceException
+    {
         log.info("Received PUT request to update asset with id: {}", id);
 
         return ResponseEntity

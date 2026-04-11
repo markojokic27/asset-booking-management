@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -234,9 +234,9 @@ public class GlobalExceptionHandler {
         Example:
         - Employee tries to change department details
     */
-    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ProblemDetail handleAuthorizationForbidden(AuthorizationDeniedException ex, HttpServletRequest request) {
+    public ProblemDetail handleAuthorizationForbidden(AccessDeniedException ex, HttpServletRequest request) {
 
         log.warn("Forbidden access at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
