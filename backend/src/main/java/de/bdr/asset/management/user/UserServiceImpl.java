@@ -9,12 +9,14 @@ import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of User Service
  */
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     // TODO: Add documentation like other service implementations
 
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponseDTO createUser(UserRequestDTO userRequest) {
 
         log.info("Attempting to create a new user for department id: {}", userRequest.departmentId());
@@ -83,6 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequest) {
 
         log.info("Attempting to update user with id: {}", id);
@@ -119,6 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponseDTO deleteUser(Long id, String status, String note) {
 
         // TODO: Add a field for soft delete

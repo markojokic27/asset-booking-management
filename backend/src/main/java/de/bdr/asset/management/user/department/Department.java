@@ -29,8 +29,8 @@ public class Department {
     private DepartmentEnum name;
 
     /** ID of manager, foreign key */
-    @OneToOne(optional = true)
-    @JoinColumn(name="manager_id", referencedColumnName="id", unique = true, nullable = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="manager_id", unique = true)
     private User manager;
 
     /** Created at */

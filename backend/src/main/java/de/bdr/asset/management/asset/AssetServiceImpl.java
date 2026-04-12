@@ -8,12 +8,14 @@ import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of Asset Service
  */
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class AssetServiceImpl implements AssetService {
     private final AssetRepository repository;
     private final AssetMapper mapper;
@@ -32,6 +34,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
+    @Transactional
     public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
 
         log.info("Attempting to create asset in category id: {}", assetRequest.categoryId());
@@ -97,6 +100,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
+    @Transactional
     public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
 
         log.info("Attempting to update asset with id: {}", id);

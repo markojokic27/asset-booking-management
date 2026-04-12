@@ -9,11 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Implementation of AssetCategory Service
  */
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class AssetCategoryServiceImpl implements AssetCategoryService {
     private final AssetCategoryRepository repository;
     private final AssetCategoryMapper mapper;
@@ -30,6 +33,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
+    @Transactional
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
 
         log.info("Attempting to create a new asset category");
@@ -92,6 +96,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @return an AssetCategoryResponseDTO record
      */
     @Override
+    @Transactional
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
 
         log.info("Attempting to update asset category with id: {}", id);
@@ -121,6 +126,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
      * @implNote Should be a soft delete by setting it to inactive or such
      */
     @Override
+    @Transactional
     public void deleteAssetCategory(Long id){
 
         // TODO: Add a field for soft delete

@@ -9,12 +9,15 @@ import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Implementation of Department Service
  * Currently returns only dummy data.
  */
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository repository;
     private final DepartmentMapper mapper;
@@ -31,6 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentDTO record
      */
     @Override
+    @Transactional
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
 
         log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
@@ -104,6 +108,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentRequestDTO record
      */
     @Override
+    @Transactional
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
 
         log.info("Attempting to update department with id: {}", id);
@@ -142,6 +147,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param id - a Long id
      */
     @Override
+    @Transactional
     public void deleteDepartment(Long id) {
 
         // TODO: Add a field for soft delete

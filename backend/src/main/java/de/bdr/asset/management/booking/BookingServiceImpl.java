@@ -13,6 +13,7 @@ import de.bdr.asset.management.asset.AssetRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
@@ -21,6 +22,7 @@ import java.time.Instant;
  */
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
     private final BookingMapper mapper;
@@ -41,6 +43,7 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
+    @Transactional
     public BookingResponseDTO createBooking(BookingRequestDTO bookingRequest) {
 
         log.info("Attempting to create a new booking with user id: {} and asset id: {}", bookingRequest.userId(), bookingRequest.assetId());
@@ -127,6 +130,7 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
+    @Transactional
     public BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
 
         log.info("Attempting to update booking with id: {}", id);
@@ -187,6 +191,7 @@ public class BookingServiceImpl implements BookingService {
      * @implNote Should be a soft delete by setting it to inactive or such
      */
     @Override
+    @Transactional
     public void deleteBooking(Long id) {
 
         // TODO: Add a field for soft delete
