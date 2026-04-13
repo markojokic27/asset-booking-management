@@ -108,7 +108,7 @@ frontend:test:
 # ─────────────────────────────────────────
 backend:dockerize:
   stage: dockerize
-  image: quay.io/podman/stable
+  image: quay.io/podman/stable:4
   services: []
   needs:
     - job: backend:compile
