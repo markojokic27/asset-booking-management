@@ -6,13 +6,13 @@ WORKDIR /app
 COPY pom.xml .
 
 # Download dependencies (cached layer)
-RUN mvn -B -q -e -DskipTests dependency:go-offline
+RUN mvn -B -q -e dependency:go-offline
 
 # Copy source code and build JAR
 COPY src ./src
 
 # Build
-RUN mvn -B -q -DskipTests package
+RUN mvn -B -q package
 
 # Stage 2: Run the Spring Boot application
 FROM eclipse-temurin:21-jre-alpine
