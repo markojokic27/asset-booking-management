@@ -27,6 +27,19 @@ spring:
     schemas: asset_booking_mgm
     default-schema: asset_booking_mgm
 
+  ldap:
+    embedded:
+      base-dn: dc=myapp,dc=com
+      ldif: classpath:ldap/test-data.ldif
+      port: 8389
+
+  # For production — real LDAP server
+  # ldap:
+  #   urls: ldaps://ldap.internal.myapp.com:636
+  #   base: dc=myapp,dc=com
+  #   username: cn=readonly,dc=myapp,dc=com
+  #   password: ${LDAP_PASSWORD}
+
 feature:
   asset-name-validation-enabled: false
 

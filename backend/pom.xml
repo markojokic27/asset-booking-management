@@ -105,8 +105,26 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Mapper generation library -->
+		<!-- Spring LDAP core — includes LdapTemplate -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-ldap</artifactId>
+		</dependency>
 
+		<!-- Spring Security LDAP authentication support -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+		</dependency>
+
+		<!-- Embedded UnboundID LDAP server for development and testing -->
+		<dependency>
+			<groupId>com.unboundid</groupId>
+			<artifactId>unboundid-ldapsdk</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Mapper generation library -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -121,7 +139,6 @@
 		</dependency>
 
 		<!-- OpenAPI v3 documentation generator based on code -->
-
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -129,7 +146,6 @@
 		</dependency>
 
 		<!-- ZXing library for QR Code capabilities -->
-
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>

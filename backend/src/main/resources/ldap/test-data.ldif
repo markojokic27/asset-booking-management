@@ -1,0 +1,31 @@
+dn: dc=myapp,dc=com
+objectClass: top
+objectClass: domain
+dc: myapp
+
+dn: ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: users
+
+dn: uid=alice,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: alice
+cn: Alice Smith
+sn: Smith
+mail: alice@myapp.com
+userPassword: {bcrypt}$2a$12$...encoded...
+
+dn: ou=groups,dc=myapp,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+
+dn: cn=admins,ou=groups,dc=myapp,dc=com
+objectClass: top
+objectClass: groupOfUniqueNames
+cn: admins
+uniqueMember: uid=alice,ou=users,dc=myapp,dc=com
