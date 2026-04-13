@@ -1,29 +1,33 @@
 package de.bdr.asset.management.booking;
 
-import de.bdr.asset.management.asset.Asset;
-import de.bdr.asset.management.asset.AssetRepository;
-import de.bdr.asset.management.core.exception.ResourceNotFoundException;
-import de.bdr.asset.management.user.User;
-import de.bdr.asset.management.user.UserRepository;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import de.bdr.asset.management.asset.Asset;
+import de.bdr.asset.management.asset.AssetRepository;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.user.User;
+import de.bdr.asset.management.user.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
@@ -59,13 +63,16 @@ class BookingServiceImplTest {
         asset.setId(1L);
         asset.setName("Books");
 
+        Instant bookingStartInstant = LocalDateTime.now().plusDays(1).toInstant(ZoneOffset.UTC);
+        Instant bookingEndInstant = LocalDateTime.now().plusDays(1).plusHours(1).toInstant(ZoneOffset.UTC);
+
         booking = new Booking();
         booking.setId(1L);
         booking.setUser(user);
         booking.setAsset(asset);
         booking.setStatus(BookingStatusEnum.ACTIVE);
-        booking.setBookingStart(LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC));
-        booking.setBookingEnd(LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC));
+        booking.setBookingStart(bookingStartInstant);
+        booking.setBookingEnd(bookingEndInstant);
         booking.setNotes("text");
 
 
@@ -73,8 +80,8 @@ class BookingServiceImplTest {
                 1L,
                 1L,
                 BookingStatusEnum.ACTIVE,
-                LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC),
-                LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC),
+                bookingStartInstant,
+                bookingEndInstant,
                 "text"
         );
 
@@ -83,8 +90,8 @@ class BookingServiceImplTest {
                 1L,
                 1L,
                 BookingStatusEnum.ACTIVE,
-                LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC),
-                LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC),
+                bookingStartInstant,
+                bookingEndInstant,
                 "text"
         );
     }

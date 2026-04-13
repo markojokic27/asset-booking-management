@@ -1,6 +1,6 @@
 = ADR [010]: [Valkey Caching layer]
 :author: [Jakov Petric / Internship 2026]
-:date: 2026-03-20
+:date: 2026-04-11
 :status: Proposed
 :tags: backend
 
