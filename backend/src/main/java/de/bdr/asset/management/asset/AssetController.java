@@ -95,7 +95,7 @@ public class AssetController {
     @GetMapping
     public ResponseEntity<Page<AssetResponseDTO>> getAllAssets(
             @ParameterObject Pageable pageable
-    )
+    ) throws IllegalArgumentException
     {
         log.info("Received GET request to fetch assets with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",

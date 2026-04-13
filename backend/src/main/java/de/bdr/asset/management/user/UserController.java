@@ -2,8 +2,6 @@ package de.bdr.asset.management.user;
 
 import java.util.Map;
 
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
-import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,7 +51,8 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
            @ParameterObject Pageable pageable
-    ) {
+    ) throws IllegalArgumentException 
+    {
         log.info("Received GET request to fetch users with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()

@@ -183,7 +183,7 @@ public class GlobalExceptionHandler {
         Generic handler to indicate that a method has been passed an illegal or inappropriate argument.
 
         Example:
-        TODO
+        - We try to get a Pageable object with page -1 or page size 0 or illegal sort string
     */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
