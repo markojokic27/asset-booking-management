@@ -27,7 +27,7 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
       )}
     >
       <div className="flex h-full flex-col justify-between p-4">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-(--color-table-head-text) opacity-50">
+        <span className="text-[10px] font-semibold tracking-[0.22em] text-(--color-table-head-text) uppercase opacity-50">
           Category
         </span>
         <div>

@@ -48,7 +48,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
       <div className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-(--color-table-border) bg-(--color-table-surface) p-6 text-(--color-table-text) shadow-xl">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-[10px] font-semibold uppercase tracking-[0.22em] text-(--color-table-head-text) opacity-50">
+            <h2 className="text-[10px] font-semibold tracking-[0.22em] text-(--color-table-head-text) uppercase opacity-50">
               Bookings
             </h2>
             <p className="block text-base font-black tracking-[0.06em]">

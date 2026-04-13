@@ -4,7 +4,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
-import { categories, assetStatuses, type AssetDto, type AssetStatus } from '../types';
+import {
+  categories,
+  assetStatuses,
+  type AssetDto,
+  type AssetStatus,
+} from '../types';
 import { assetValidationSchema } from '../validation';
 
 const assetEditSchema = assetValidationSchema.pick({
@@ -126,7 +131,7 @@ export const AssetEditModal = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-[800px] overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
+      <div className="w-full max-w-200 overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
         <div className="flex items-center justify-end px-8 pt-6 pb-4">
           <button
             type="button"
@@ -147,17 +152,16 @@ export const AssetEditModal = ({
           }}
         >
           <div className="flex gap-10 px-8 py-8">
-            <div className="flex w-[260px] flex-col items-center justify-center">
+            <div className="flex w-65 flex-col items-center justify-center">
               <div className="relative w-full">
                 {imagePreview ? (
                   <img
                     src={imagePreview}
                     alt={asset.name}
-                    className="h-[170px] w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card) blur-[1.5px]"
+                    className="h-42.5 w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card) blur-[1.5px]"
                   />
                 ) : (
-                  <div className="flex h-[170px] w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)">
-                  </div>
+                  <div className="flex h-42.5 w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)"></div>
                 )}
                 <input
                   ref={fileInputRef}
@@ -166,11 +170,12 @@ export const AssetEditModal = ({
                   className="hidden"
                   onChange={handleImageChange}
                 />
-                <Button data-testid="upload-photo-button"
+                <Button
+                  data-testid="upload-photo-button"
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="absolute top-1/2 left-1/2 px-3 py-1.5 text-xs shadow-none -translate-x-1/2 -translate-y-1/2"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1.5 text-xs shadow-none"
                   // Trigger the hidden native file input from the styled button
                   onClick={() => fileInputRef.current?.click()}
                 >

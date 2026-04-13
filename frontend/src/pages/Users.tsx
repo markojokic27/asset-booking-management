@@ -166,11 +166,18 @@ export default function Users() {
           }`}
         >
           <span>NAME</span>
-          <span className="inline-flex flex-col leading-none" aria-hidden="true">
-            <span className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}>
+          <span
+            className="inline-flex flex-col leading-none"
+            aria-hidden="true"
+          >
+            <span
+              className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}
+            >
               ▲
             </span>
-            <span className={nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'}>
+            <span
+              className={nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'}
+            >
               ▼
             </span>
           </span>
@@ -189,7 +196,9 @@ export default function Users() {
       header: <span className="sr-only">Bookings</span>,
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
-      render: (user) => <BookingsButton onClick={() => openBookingsModal(user)} />,
+      render: (user) => (
+        <BookingsButton onClick={() => openBookingsModal(user)} />
+      ),
     },
     {
       key: 'actions',
@@ -197,7 +206,8 @@ export default function Users() {
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
         <div className="flex items-center gap-1">
-          <button data-testid="view-user-buttton"
+          <button
+            data-testid="view-user-buttton"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="View user"
@@ -211,7 +221,8 @@ export default function Users() {
               className="pointer-events-none"
             />
           </button>
-          <button data-testid="edit-user-button"
+          <button
+            data-testid="edit-user-button"
             type="button"
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="Edit user"
@@ -385,7 +396,9 @@ export default function Users() {
           setIsUserModalOpen(false);
           setActiveUser(null);
         }}
-        user={activeUser ? { ...activeUser, name: getFullName(activeUser) } : null}
+        user={
+          activeUser ? { ...activeUser, name: getFullName(activeUser) } : null
+        }
       />
 
       <UserEditModal
