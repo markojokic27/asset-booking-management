@@ -108,25 +108,22 @@ frontend:test:
 # ─────────────────────────────────────────
 backend:dockerize:
   stage: dockerize
-  image: quay.io/podman/stable:4
+  image: quay.io/podman/stable
   services: []
   needs:
     - job: backend:compile
     - job: backend:test
-  before_script:
-    - podman --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ info
-    - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
-    - |
-      podman build \
-        --storage-driver=vfs \
-        --root $HOME/.local/share/containers/vfs-storage/ \
-        -f ./backend/Dockerfile \
-        -t $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA \
-        -t $BACKEND_IMAGE:latest \
-        ./backend
+    - echo "Prepare images for backend"
+    - ls -al
+    - cd ./backend
+    - whoami
+    - id
+    - podman info
+    - podman build --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ -f ./Dockerfile -t $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - echo "Now pushing to $CI_REGISTRY with user $CI_REGISTRY_USER"
+    - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA
-    - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $BACKEND_IMAGE:latest
   rules:
     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"
 
