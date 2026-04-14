@@ -1,0 +1,10 @@
+name: Development Manager
+variables:
+  - name: baseUrl
+    value: http://127.0.0.1:8080
+  - name: auth_url
+    value: http://127.0.0.1:8080/api/auth/login
+  - name: username
+    value: user_manager
+  - secret: true
+    name: password

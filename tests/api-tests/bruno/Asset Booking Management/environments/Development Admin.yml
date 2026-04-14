@@ -1,0 +1,10 @@
+name: Development Admin
+variables:
+  - name: baseUrl
+    value: http://127.0.0.1:8080
+  - name: auth_url
+    value: http://127.0.0.1:8080/v1/auth/login
+  - name: username
+    value: user_admin
+  - secret: true
+    name: password
