@@ -4,6 +4,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
+import { IconButton } from '../../../components/ui/IconButton';
+import { Modal } from '../../../components/ui/Modal';
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
 
 const userCreateSchema = userValidationSchema
@@ -148,180 +150,165 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Create user"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div className="w-full max-w-[800px] overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
-        <div className="flex items-center justify-end px-8 pt-6 pb-4">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-          >
-            <CloseIcon className="pointer-events-none" />
-          </button>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      ariaLabel="Create user"
+      headerRight={
+        <IconButton onClick={onClose} aria-label="Close">
+          <CloseIcon className="pointer-events-none" />
+        </IconButton>
+      }
+      footer={
+        <div className="flex justify-end">
+          <Form.Submit asChild>
+            <Button type="submit" className="shadow-none">
+              Save
+            </Button>
+          </Form.Submit>
         </div>
-        <div className="mx-8 h-px bg-(--color-table-border)" />
+      }
+    >
+      <Form.Root
+        onSubmit={(event) => {
+          event.preventDefault();
+          const formData = new FormData(event.currentTarget);
+          handleSubmit(formData);
+        }}
+      >
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <Form.Field name="role">
+              <Form.Control asChild>
+                <FormDropdown
+                  id="user-role"
+                  name="role"
+                  label="Role"
+                  defaultValue={initialValues.role}
+                  error={!!errors.role}
+                  errorMessage={errors.role}
+                  options={roleOptions}
+                />
+              </Form.Control>
+            </Form.Field>
 
-        <Form.Root
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            handleSubmit(formData);
-          }}
-        >
-          <div className="px-8 py-8">
-            <div className="flex flex-col gap-5">
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <Form.Field name="role">
-                  <Form.Control asChild>
-                    <FormDropdown
-                      id="user-role"
-                      name="role"
-                      label="Role"
-                      defaultValue={initialValues.role}
-                      error={!!errors.role}
-                      errorMessage={errors.role}
-                      options={roleOptions}
-                    />
-                  </Form.Control>
-                </Form.Field>
-
-                <Form.Field name="status">
-                  <Form.Control asChild>
-                    <FormDropdown
-                      id="user-status"
-                      name="status"
-                      label="Status"
-                      defaultValue={initialValues.status}
-                      error={!!errors.status}
-                      errorMessage={errors.status}
-                      options={statusOptions}
-                    />
-                  </Form.Control>
-                </Form.Field>
-              </div>
-
-              <Form.Field name="username">
-                <Form.Control asChild>
-                  <FormInput
-                    id="user-username"
-                    name="username"
-                    type="text"
-                    label="Username"
-                    defaultValue={initialValues.username}
-                    error={!!errors.username}
-                    errorMessage={errors.username}
-                  />
-                </Form.Control>
-              </Form.Field>
-
-              <Form.Field name="name">
-                <Form.Control asChild>
-                  <FormInput
-                    id="user-first-name"
-                    name="name"
-                    type="text"
-                    label="First name"
-                    defaultValue={initialValues.firstName}
-                    error={!!errors.name}
-                    errorMessage={errors.name}
-                  />
-                </Form.Control>
-              </Form.Field>
-
-              <Form.Field name="surname">
-                <Form.Control asChild>
-                  <FormInput
-                    id="user-last-name"
-                    name="surname"
-                    type="text"
-                    label="Last name"
-                    defaultValue={initialValues.lastName}
-                    error={!!errors.surname}
-                    errorMessage={errors.surname}
-                  />
-                </Form.Control>
-              </Form.Field>
-
-              <Form.Field name="email">
-                <Form.Control asChild>
-                  <FormInput
-                    id="user-email"
-                    name="email"
-                    type="email"
-                    label="Email"
-                    defaultValue={initialValues.email}
-                    error={!!errors.email}
-                    errorMessage={errors.email}
-                  />
-                </Form.Control>
-              </Form.Field>
-
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <Form.Field name="departmentId">
-                  <Form.Control asChild>
-                    <FormInput
-                      id="user-department"
-                      name="departmentId"
-                      type="number"
-                      label="Department ID"
-                      defaultValue={String(initialValues.departmentId)}
-                      error={!!errors.departmentId}
-                      errorMessage={errors.departmentId}
-                    />
-                  </Form.Control>
-                </Form.Field>
-
-                <Form.Field name="managerEmail">
-                  <Form.Control asChild>
-                    <FormInput
-                      id="user-manager-email"
-                      name="managerEmail"
-                      type="email"
-                      label="Manager email"
-                      defaultValue={initialValues.managerEmail}
-                      error={!!errors.managerEmail}
-                      errorMessage={errors.managerEmail}
-                    />
-                  </Form.Control>
-                </Form.Field>
-              </div>
-
-              <Form.Field name="notes">
-                <Form.Control asChild>
-                  <FormInput
-                    id="user-notes"
-                    name="notes"
-                    type="text"
-                    label="Notes"
-                    defaultValue={initialValues.notes ?? ''}
-                    error={!!errors.notes}
-                    errorMessage={errors.notes}
-                  />
-                </Form.Control>
-              </Form.Field>
-            </div>
+            <Form.Field name="status">
+              <Form.Control asChild>
+                <FormDropdown
+                  id="user-status"
+                  name="status"
+                  label="Status"
+                  defaultValue={initialValues.status}
+                  error={!!errors.status}
+                  errorMessage={errors.status}
+                  options={statusOptions}
+                />
+              </Form.Control>
+            </Form.Field>
           </div>
 
-          <div className="mx-8 h-px bg-(--color-table-border)" />
-          <div className="flex justify-end px-8 py-5">
-            <Form.Submit asChild>
-              <Button type="submit" className="shadow-none">
-                Save
-              </Button>
-            </Form.Submit>
+          <Form.Field name="username">
+            <Form.Control asChild>
+              <FormInput
+                id="user-username"
+                name="username"
+                type="text"
+                label="Username"
+                defaultValue={initialValues.username}
+                error={!!errors.username}
+                errorMessage={errors.username}
+              />
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field name="name">
+            <Form.Control asChild>
+              <FormInput
+                id="user-first-name"
+                name="name"
+                type="text"
+                label="First name"
+                defaultValue={initialValues.firstName}
+                error={!!errors.name}
+                errorMessage={errors.name}
+              />
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field name="surname">
+            <Form.Control asChild>
+              <FormInput
+                id="user-last-name"
+                name="surname"
+                type="text"
+                label="Last name"
+                defaultValue={initialValues.lastName}
+                error={!!errors.surname}
+                errorMessage={errors.surname}
+              />
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field name="email">
+            <Form.Control asChild>
+              <FormInput
+                id="user-email"
+                name="email"
+                type="email"
+                label="Email"
+                defaultValue={initialValues.email}
+                error={!!errors.email}
+                errorMessage={errors.email}
+              />
+            </Form.Control>
+          </Form.Field>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <Form.Field name="departmentId">
+              <Form.Control asChild>
+                <FormInput
+                  id="user-department"
+                  name="departmentId"
+                  type="number"
+                  label="Department ID"
+                  defaultValue={String(initialValues.departmentId)}
+                  error={!!errors.departmentId}
+                  errorMessage={errors.departmentId}
+                />
+              </Form.Control>
+            </Form.Field>
+
+            <Form.Field name="managerEmail">
+              <Form.Control asChild>
+                <FormInput
+                  id="user-manager-email"
+                  name="managerEmail"
+                  type="email"
+                  label="Manager email"
+                  defaultValue={initialValues.managerEmail}
+                  error={!!errors.managerEmail}
+                  errorMessage={errors.managerEmail}
+                />
+              </Form.Control>
+            </Form.Field>
           </div>
-        </Form.Root>
-      </div>
-    </div>
+
+          <Form.Field name="notes">
+            <Form.Control asChild>
+              <FormInput
+                id="user-notes"
+                name="notes"
+                type="text"
+                label="Notes"
+                defaultValue={initialValues.notes ?? ''}
+                error={!!errors.notes}
+                errorMessage={errors.notes}
+              />
+            </Form.Control>
+          </Form.Field>
+        </div>
+      </Form.Root>
+    </Modal>
   );
 };
 

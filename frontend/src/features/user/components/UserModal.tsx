@@ -1,5 +1,7 @@
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import { Modal } from '../../../components/ui/Modal';
+import { IconButton } from '../../../components/ui/IconButton';
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   ACTIVE: {
@@ -36,88 +38,74 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
   const status = statusConfig[user.status] ?? { label: user.status, className: '' };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
-      role="dialog"
-      aria-modal="true"
-      aria-label="User details"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      ariaLabel="User details"
+      headerRight={
+        <IconButton onClick={onClose} aria-label="Close">
+          <CloseIcon className="pointer-events-none" />
+        </IconButton>
+      }
+      footer={<div />}
     >
-      <div className="w-full max-w-[800px] overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
-        <div className="flex items-center justify-end px-8 pt-6 pb-4">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-          >
-            <CloseIcon className="pointer-events-none" />
-          </button>
+      <div className="space-y-5">
+        <span
+          className={[
+            'inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium',
+            status.className,
+          ].join(' ')}
+        >
+          {status.label}
+        </span>
+
+        <div>
+          <p className="text-sm text-(--color-modal-label)">Name</p>
+          <p data-testid="user-name-value" className="font-medium text-(--color-text)">
+            {user.name}
+          </p>
         </div>
-        <div className="mx-8 h-px bg-(--color-table-border)" />
 
-        <div className="px-8 py-8">
-          <div className="space-y-5">
-            <span
-              className={[
-                'inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium',
-                status.className,
-              ].join(' ')}
-            >
-              {status.label}
-            </span>
+        <div>
+          <p className="text-sm text-(--color-modal-label)">Email</p>
+          <p data-testid="user-email-value" className="font-medium text-(--color-text)">
+            {user.email}
+          </p>
+        </div>
 
-            <div>
-              <p className="text-sm text-(--color-modal-label)">Name</p>
-              <p data-testid="user-name-value" className="font-medium text-(--color-text)">{user.name}</p>
-            </div>
+        <div>
+          <p className="text-sm text-(--color-modal-label)">Username</p>
+          <p className="font-medium text-(--color-text)">{user.username}</p>
+        </div>
 
-            <div>
-              <p className="text-sm text-(--color-modal-label)">Email</p>
-              <p data-testid="user-email-value" className="font-medium text-(--color-text)">{user.email}</p>
-            </div>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div>
+            <p className="text-sm text-(--color-modal-label)">Role</p>
+            <p className="font-medium text-(--color-text)">{user.role}</p>
+          </div>
 
-            <div>
-              <p className="text-sm text-(--color-modal-label)">Username</p>
-              <p className="font-medium text-(--color-text)">{user.username}</p>
-            </div>
+          <div>
+            <p className="text-sm text-(--color-modal-label)">Status</p>
+            <p className="font-medium text-(--color-text)">{status.label}</p>
+          </div>
 
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <div>
-                <p className="text-sm text-(--color-modal-label)">Role</p>
-                <p className="font-medium text-(--color-text)">{user.role}</p>
-              </div>
+          <div>
+            <p className="text-sm text-(--color-modal-label)">Department</p>
+            <p className="font-medium text-(--color-text)">{user.departmentId}</p>
+          </div>
 
-              <div>
-                <p className="text-sm text-(--color-modal-label)">Status</p>
-                <p className="font-medium text-(--color-text)">{status.label}</p>
-              </div>
-
-              <div>
-                <p className="text-sm text-(--color-modal-label)">Department</p>
-                <p className="font-medium text-(--color-text)">{user.departmentId}</p>
-              </div>
-
-              <div>
-                <p className="text-sm text-(--color-modal-label)">Manager email</p>
-                <p className="font-medium text-(--color-text)">{user.managerEmail}</p>
-              </div>
-            </div>
-
-            <div>
-              <p className="text-sm text-(--color-modal-label)">Notes</p>
-              <p className="font-medium text-(--color-text)">{user.notes || '-'}</p>
-            </div>
-
+          <div>
+            <p className="text-sm text-(--color-modal-label)">Manager email</p>
+            <p className="font-medium text-(--color-text)">{user.managerEmail}</p>
           </div>
         </div>
 
-        <div className="mx-8 h-px bg-(--color-table-border)" />
-        <div className="px-8 py-5" />
+        <div>
+          <p className="text-sm text-(--color-modal-label)">Notes</p>
+          <p className="font-medium text-(--color-text)">{user.notes || '-'}</p>
+        </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 

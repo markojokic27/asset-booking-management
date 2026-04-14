@@ -7,6 +7,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { BookingsButton } from '../components/ui/BookingsButton';
+import { IconButton } from '../components/ui/IconButton';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
 import { UserModal } from '../features/user/components/UserModal';
@@ -103,6 +104,7 @@ export default function Users() {
   const [users, setUsers] = useState<UserRow[]>(initialUsers);
   const [page, setPage] = useState(1);
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
+  const pageSize = 10;
 
   const openBookingsModal = (user: UserRow) => {
     setActiveUser(user);
@@ -119,12 +121,12 @@ export default function Users() {
     const base = !q
       ? users
       : users.filter(
-          (u) =>
-            u.firstName.toLowerCase().includes(q) ||
-            u.lastName.toLowerCase().includes(q) ||
-            getFullName(u).toLowerCase().includes(q) ||
-            u.email.toLowerCase().includes(q)
-        );
+        (u) =>
+          u.firstName.toLowerCase().includes(q) ||
+          u.lastName.toLowerCase().includes(q) ||
+          getFullName(u).toLowerCase().includes(q) ||
+          u.email.toLowerCase().includes(q)
+      );
 
     const collator = new Intl.Collator('hr', { sensitivity: 'base' });
     const dir = nameSortDir === 'asc' ? 1 : -1;
@@ -141,17 +143,32 @@ export default function Users() {
     setPage(1);
   }, [search]);
 
-  const totalPages = 9;
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / pageSize));
   const safePage = Math.min(page, totalPages);
-  const paginationItems: Array<number | 'ellipsis'> = [
-    1,
-    2,
-    3,
-    4,
-    'ellipsis',
-    8,
-    9,
-  ];
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  const pagedUsers = useMemo(() => {
+    const start = (safePage - 1) * pageSize;
+    return filteredUsers.slice(start, start + pageSize);
+  }, [filteredUsers, pageSize, safePage]);
+
+  const paginationItems: Array<number | 'ellipsis'> = useMemo(() => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    const items: Array<number | 'ellipsis'> = [1];
+    const left = Math.max(2, safePage - 1);
+    const right = Math.min(totalPages - 1, safePage + 1);
+
+    if (left > 2) items.push('ellipsis');
+    for (let i = left; i <= right; i++) items.push(i);
+    if (right < totalPages - 1) items.push('ellipsis');
+
+    items.push(totalPages);
+    return items;
+  }, [safePage, totalPages]);
 
   const columns: TableColumn<UserRow>[] = [
     {
@@ -161,9 +178,8 @@ export default function Users() {
           type="button"
           onClick={() => setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
           className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
-          aria-label={`Sort by last name ${
-            nameSortDir === 'asc' ? 'descending' : 'ascending'
-          }`}
+          aria-label={`Sort by last name ${nameSortDir === 'asc' ? 'descending' : 'ascending'
+            }`}
         >
           <span>NAME</span>
           <span
@@ -206,10 +222,9 @@ export default function Users() {
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
         <div className="flex items-center gap-1">
-          <button
-            data-testid="view-user-buttton"
+          <IconButton
+            data-testid="view-user-button"
             type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="View user"
             onClick={() => {
               setActiveUser(user);
@@ -220,11 +235,10 @@ export default function Users() {
               fontSize="small"
               className="pointer-events-none"
             />
-          </button>
-          <button
+          </IconButton>
+          <IconButton
             data-testid="edit-user-button"
             type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
             aria-label="Edit user"
             onClick={() => {
               setActiveUser(user);
@@ -235,17 +249,17 @@ export default function Users() {
               fontSize="small"
               className="pointer-events-none"
             />
-          </button>
-          <button
+          </IconButton>
+          <IconButton
             type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-red-600 transition-colors hover:bg-(--color-table-row-hover) hover:text-red-700 active:scale-95 dark:text-red-400 dark:hover:text-red-300"
+            variant="danger"
             aria-label="Delete user"
           >
             <DeleteOutlineIcon
               fontSize="small"
               className="pointer-events-none"
             />
-          </button>
+          </IconButton>
         </div>
       ),
     },
@@ -259,7 +273,7 @@ export default function Users() {
       className="flex flex-col pt-35"
     >
       <div className="flex w-full items-center justify-between gap-6">
-        <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
+        <h1 className="text-3xl leading-11 font-black tracking-widest text-black dark:text-white">
           Users
         </h1>
 
@@ -319,7 +333,7 @@ export default function Users() {
       </div>
       <div className="mt-6 w-full">
         <Table
-          data={filteredUsers}
+          data={pagedUsers}
           columns={columns}
           getRowKey={(user) => user.id}
           className="w-full"
@@ -437,10 +451,10 @@ export default function Users() {
         user={
           activeUser
             ? {
-                id: activeUser.id,
-                firstName: activeUser.firstName,
-                lastName: activeUser.lastName,
-              }
+              id: activeUser.id,
+              firstName: activeUser.firstName,
+              lastName: activeUser.lastName,
+            }
             : null
         }
       />
