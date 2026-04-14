@@ -207,12 +207,19 @@ JWT_REFRESH_SECONDS=seconds_here
 
 ### API Testing with Bruno
 
+Reccomended way to install Bruno on Ubuntu is to download the .deb package:
+
+https://www.usebruno.com/downloads
+
+Choose the proper CPU architecture (for the team it is x86_64)
+
+Open the file which will open the Ubuntu package manager and install the Bruno package and follow the steps below.
+
 1. Open Bruno
-2. Create new workspace, name it whatever you want
-3. While in the new workspace, choose "Open Collection" option
-4. In the menu, navigate to the folder with opencollection.yml (currently tests/api-tests/Asset Booking Management/opencollection.yml)
-5. Choose Environment on the right hand side to be Testing so that it sets the proper baseUrl
-6. Test endpoints after starting the app with "docker compose up --build"
+2. Choose the "Open Collection" option
+3. In the menu, navigate to the folder with opencollection.yml (currently tests/api-tests/Bruno/Asset Booking Management/opencollection.yml)
+4. Choose Environment on the right hand side to be development so that it sets the proper baseUrl
+5. Test endpoints after starting the app with "make dev"
 
 ## BackEnd 
 
