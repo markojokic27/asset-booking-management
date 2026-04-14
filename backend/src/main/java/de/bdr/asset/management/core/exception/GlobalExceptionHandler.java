@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -79,6 +80,12 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler for when a resource has invalid date range.
+
+        Example:
+        - Attempt to create a resource in the past
+    */
     @ExceptionHandler(InvalidDateRangeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleInvalidDateRange(InvalidDateRangeException ex, HttpServletRequest request) {
@@ -97,6 +104,12 @@ public class GlobalExceptionHandler {
         return problemDetail;
     }
 
+    /*
+        Generic handler for when a resources cannot be put through unallowed action.
+
+        Example:
+        - Attempt to update a resource that is CANCELED
+    */
     @ExceptionHandler(ActionNotAllowedException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     public ProblemDetail handleActionNotAllowed(ActionNotAllowedException ex, HttpServletRequest request) {
@@ -109,6 +122,24 @@ public class GlobalExceptionHandler {
         );
 
         problemDetail.setTitle("Action not allowed");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ProblemDetail handleDatabaseConflict(DataIntegrityViolationException ex, HttpServletRequest request) {
+
+        log.warn("Conflict for reservation at URI [{}]", request.getRequestURI(), ex);
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                "Selected time for reservation is already taken"
+        );
+
+        problemDetail.setTitle("Conflict with reservation");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty("timestamp", Instant.now());
 
