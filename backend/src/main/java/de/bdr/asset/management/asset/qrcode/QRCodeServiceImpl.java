@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.BarcodeFormat;
@@ -23,58 +24,71 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class QRCodeServiceImpl implements QRCodeService {
+    @Value("${spring.application.qr.directory}")
+    private String qrDirectory;
+
     private final AssetService assetService;
 
     public QRCodeServiceImpl(AssetService assetService) {
         this.assetService = assetService;
     }
 
-    @Override
-    public String generateAndSaveQRCodeForAsset(Long id) throws WriterException, IOException, ResourceNotFoundException {
+    /*
+        Function that gets the asset QR Code.
 
-        // Checks to see if the QR_DIRECTORY (qrcodes) exists. If not, create it
-        File dir = new File(QR_DIRECTORY);
+        If it exists, return the code string that is the filepath to the code.
+        If not, generate and save it to the folder and update asset
+    */
+    @Override
+    public String getQRCode(Long id)
+        throws WriterException, IOException, ResourceNotFoundException {
+        AssetResponseDTO assetDTO = assetService.getAssetById(id);
+
+        if (assetDTO.code() != null && new File(assetDTO.code()).exists()) {
+            log.info("QR Code exists and was found for asset {}", assetDTO.id());
+            return assetDTO.code();
+        }
+
+        return generateAndSaveQRCode(id, assetDTO);
+    }
+
+
+    @Override
+    public String generateAndSaveQRCode(Long id, AssetResponseDTO asset)
+        throws WriterException, IOException, ResourceNotFoundException {
+
+        File dir = new File(qrDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
-        // Get the asset with ID and filePath that is stored in the code column
-        AssetResponseDTO asset = assetService.getAssetById(id);
-        String filePath = asset.code();
-        
-        if (filePath == null || !new File(filePath).exists()) {
-            // Set the new filePath if it does not exist or is not stored
-            filePath = QR_DIRECTORY + "/asset-" + id + ".png";
+        String filePath = qrDirectory + "/asset-" + id + ".png";
 
-            // Since the service returns DTOs, need to make a new DTO
-            // with the updated code field and use the service method later to update it.
-            AssetRequestDTO updatedAsset = new AssetRequestDTO(
-                asset.name(),
-                asset.categoryId(), 
-                asset.description(), 
-                filePath, 
-                asset.status(), 
-                asset.location()
-            );
-            
-            // Variable that holds the QR code content.
-            // TODO: See what is the standard for QR codes to hold to make it easy to use in mobile app
-            String content = asset.id().toString();
-            
-            // Code that creates the QR code and turns it into bytes that later get turned into an image
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 400, 400);
-    
-            BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-    
-            File outputFile = new File(filePath);
-            ImageIO.write(qrImage, "PNG", outputFile);
-            
-            log.info("Created QR Code for future use for asset with id: {}", id);
+        // Variable to change what is added to the QR Code
+        String content = asset.id().toString();
 
-            // Finally, update the asset to hold the path to the QR code
-            assetService.updateAsset(id, updatedAsset);
-        }
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 400, 400);
+
+        BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+        File outputFile = new File(filePath);
+        ImageIO.write(qrImage, "PNG", outputFile);
+
+        log.info("Created QR Code for asset {}", id);
+
+        // Since the service returns DTOs, need to make a new DTO
+        // with the updated code field and use the service method later to update it.
+        AssetRequestDTO updatedAssetDTO = new AssetRequestDTO(
+            asset.name(),
+            asset.categoryId(), 
+            asset.description(), 
+            filePath, 
+            asset.status(), 
+            asset.location()
+        );
+
+        assetService.updateAsset(id, updatedAssetDTO);
 
         return filePath;
     }

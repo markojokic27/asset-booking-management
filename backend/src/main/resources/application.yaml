@@ -1,6 +1,8 @@
 spring:
   application:
     name: assetbookingmanagement
+    qr:
+      directory: qrcodes
   data:
     web:
       pageable:

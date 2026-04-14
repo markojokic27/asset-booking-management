@@ -4,8 +4,11 @@ import java.io.IOException;
 
 import com.google.zxing.WriterException;
 
-public interface QRCodeService {
-    static final String QR_DIRECTORY = "qrcodes";
+import de.bdr.asset.management.asset.AssetResponseDTO;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
-    public String generateAndSaveQRCodeForAsset(Long id) throws WriterException, IOException ;
+public interface QRCodeService {
+    public String getQRCode(Long id) throws WriterException, IOException, ResourceNotFoundException;
+
+    public String generateAndSaveQRCode(Long id, AssetResponseDTO asset) throws WriterException, IOException, ResourceNotFoundException;
 }

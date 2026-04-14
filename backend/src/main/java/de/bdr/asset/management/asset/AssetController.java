@@ -56,6 +56,7 @@ public class AssetController {
         summary = "Get asset QR Code",
         description = "If an asset does not have a file path saved, generates a new QR code, saves it to a folder and serve it. Creation is only handled the first time."
     )
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping(path = "/{id}/qr-code", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<Resource> getOrCreateQRCode(
             @PathVariable Long id
@@ -63,7 +64,7 @@ public class AssetController {
     {
         log.info("Accessing QR Code for asset with id: {}", id);
 
-        File file = new File(qrCodeService.generateAndSaveQRCodeForAsset(id));
+        File file = new File(qrCodeService.getQRCode(id));
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
         return ResponseEntity.ok()
