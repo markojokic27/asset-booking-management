@@ -19,7 +19,14 @@ request:
     - type: set-variable
       phase: after-response
       selector:
-        expression: res.body.accessToken
+        expression: |-
+          {{ 
+            const token = res?.body?.accessToken ?? bru.getVar("token");
+            if (res?.body?.accessToken) {
+              bru.setVar("token", token);
+            }
+            token;
+          }}
         method: jsonq
       variable:
         name: token
