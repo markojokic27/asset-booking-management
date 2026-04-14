@@ -1,5 +1,6 @@
 package de.bdr.asset.management.core.config.security;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,9 @@ public class AuthController {
 
     @Operation(summary = "Login endpoint", description = "Available to anyone. Returns JWT access and refresh tokens for authenticaton of requests.")
     @PostMapping("/login")
-    public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO request) {
+    public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO request)
+        throws BadCredentialsException 
+    {
         return authService.login(request);
     }
 
