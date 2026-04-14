@@ -193,7 +193,7 @@ export const AssetAddModal = ({
             <div className="flex flex-1 flex-col space-y-5">
               <Form.Field name="status">
                 <Form.Control asChild>
-                  <FormDropdown
+                  <FormDropdown data-testid="asset-status"
                     id="asset-status"
                     name="status"
                     label="Status"
@@ -210,7 +210,7 @@ export const AssetAddModal = ({
 
               <Form.Field name="categoryId">
                 <Form.Control asChild>
-                  <FormDropdown
+                  <FormDropdown data-testid="asset-category"
                     id="asset-category"
                     name="categoryId"
                     label="Category"
@@ -230,7 +230,7 @@ export const AssetAddModal = ({
 
               <Form.Field name="name">
                 <Form.Control asChild>
-                  <FormInput
+                  <FormInput data-testid="asset-name"
                     id="asset-name"
                     name="name"
                     type="text"
@@ -243,7 +243,7 @@ export const AssetAddModal = ({
 
               <Form.Field name="code">
                 <Form.Control asChild>
-                  <FormInput
+                  <FormInput data-testid="asset-code"
                     id="asset-code"
                     name="code"
                     type="text"
@@ -256,7 +256,7 @@ export const AssetAddModal = ({
 
               <Form.Field name="location">
                 <Form.Control asChild>
-                  <FormInput
+                  <FormInput data-testid="asset-location"
                     id="asset-location"
                     name="location"
                     type="text"
@@ -269,7 +269,7 @@ export const AssetAddModal = ({
 
               <Form.Field name="description">
                 <Form.Control asChild>
-                  <FormInput
+                  <FormInput data-testid="asset-description"
                     id="asset-description"
                     name="description"
                     type="text"
@@ -286,7 +286,7 @@ export const AssetAddModal = ({
 
           <div className="flex justify-end px-8 py-5">
             <Form.Submit asChild>
-              <Button type="submit">Add Asset</Button>
+              <Button data-testid="add-asset-button" type="submit">Add Asset</Button>
             </Form.Submit>
           </div>
         </Form.Root>

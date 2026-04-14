@@ -25,6 +25,10 @@ public class UserModalTest extends BaseTest {
                 )
         );
         viewButton.click();
+        
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[data-testid='details-users-button']")
+        ));
     }
 
     private void openUserEditModal() {
@@ -40,18 +44,37 @@ public class UserModalTest extends BaseTest {
 
     // UserModal (view)
 
+
     @Test
     void userViewModalDisplaysCorrectData() {
         openUserViewModal();
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("[role='dialog'][aria-label='User details']"))
+                By.cssSelector("[data-testid='details-users-button']"))
         );
         assertFalse(driver.findElement(
-                By.xpath("//p[text()='Name']/following-sibling::p")
-        ).getText().isBlank());
+                By.cssSelector("[data-testid='user-name']")
+        ).getText().isBlank(), "Name should not be blank");
         assertFalse(driver.findElement(
-                By.xpath("//p[text()='Email']/following-sibling::p")
-        ).getText().isBlank());
+                By.cssSelector("[data-testid='user-email']")
+        ).getText().isBlank(), "Email should not be blank");
+        assertFalse(driver.findElement(
+                By.cssSelector("[data-testid='user-username']")
+        ).getText().isBlank(), "Username should not be blank");
+        assertFalse(driver.findElement(
+                By.cssSelector("[data-testid='user-role']")
+        ).getText().isBlank(), "Role should not be blank");
+        assertFalse(driver.findElement(
+                By.cssSelector("[data-testid='user-status']")
+        ).getText().isBlank(), "Status should not be blank");
+        assertFalse(driver.findElement(
+                By.cssSelector("[data-testid='user-department-id']")
+        ).getText().isBlank(), "Department ID should not be blank");
+        assertFalse(driver.findElement(
+                By.cssSelector("[data-testid='user-manager-email']")
+        ).getText().isBlank(), "Manager email should not be blank");
+        assertFalse(driver.findElement(
+                By.cssSelector("[data-testid='user-note']")
+        ).getText().isBlank(), "Notes should not be blank (renders '-' when empty)");
     }
 
     @Test

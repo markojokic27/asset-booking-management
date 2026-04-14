@@ -2,7 +2,6 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RegisterTest extends BaseTest{
 
@@ -24,7 +23,6 @@ public class RegisterTest extends BaseTest{
         driver.findElement(By.cssSelector("[data-testid='register-button']")).click();
 
        wait.until(ExpectedConditions.urlContains("/login"));
-       assertTrue(driver.getCurrentUrl().contains("/login"));
     }
 
     @Test
@@ -40,7 +38,6 @@ public class RegisterTest extends BaseTest{
         driver.findElement(By.cssSelector("[data-testid='register-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/register"));
-        assertTrue(driver.getCurrentUrl().contains("/register"));
     }
 
     @Test
@@ -59,7 +56,6 @@ public class RegisterTest extends BaseTest{
         driver.findElement(By.cssSelector("[data-testid='register-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/register"));
-        assertTrue(driver.getCurrentUrl().contains("/register"));
     }
 
     @Test
@@ -78,7 +74,6 @@ public class RegisterTest extends BaseTest{
         driver.findElement(By.cssSelector("[data-testid='register-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/register"));
-        assertTrue(driver.getCurrentUrl().contains("/register"));
     }
 
     @Test
@@ -97,7 +92,6 @@ public class RegisterTest extends BaseTest{
         driver.findElement(By.cssSelector("[data-testid='register-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/register"));
-        assertTrue(driver.getCurrentUrl().contains("/register"));
     }
 
     @Test
@@ -110,6 +104,5 @@ public class RegisterTest extends BaseTest{
         driver.findElement(By.cssSelector("[data-testid='register-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/register"));
-        assertTrue(driver.getCurrentUrl().contains("/register"));
     }
 }

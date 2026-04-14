@@ -223,7 +223,6 @@ export default function Users() {
       render: (user) => (
         <div className="flex items-center gap-1">
           <IconButton
-            data-testid="view-user-button"
             type="button"
             aria-label="View user"
             onClick={() => {
@@ -236,8 +235,7 @@ export default function Users() {
               className="pointer-events-none"
             />
           </IconButton>
-          <IconButton
-            data-testid="edit-user-button"
+          <IconButton 
             type="button"
             aria-label="Edit user"
             onClick={() => {

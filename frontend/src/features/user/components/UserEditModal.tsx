@@ -141,7 +141,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
     }));
 
   return (
-    <Modal
+    <Modal data-testid="user-edit"
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel="Edit user"
@@ -153,7 +153,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
       footer={
         <div className="flex justify-end">
           <Form.Submit asChild>
-            <Button type="submit" className="shadow-none">
+            <Button data-testid="button-save" type="submit" className="shadow-none">
               Save
             </Button>
           </Form.Submit>
@@ -172,7 +172,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Form.Field name="role">
               <Form.Control asChild>
-                <FormDropdown
+                <FormDropdown data-testid="user-role"
                   id="user-role"
                   name="role"
                   label="Role"
@@ -186,7 +186,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
             <Form.Field name="status">
               <Form.Control asChild>
-                <FormDropdown
+                <FormDropdown data-testid="user-status"
                   id="user-status"
                   name="status"
                   label="Status"
@@ -201,7 +201,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
           <Form.Field name="username">
             <Form.Control asChild>
-              <FormInput
+              <FormInput data-testid="user-username"
                 id="user-username"
                 name="username"
                 type="text"
@@ -215,7 +215,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
           <Form.Field name="name">
             <Form.Control asChild>
-              <FormInput
+              <FormInput data-testid="user-name"
                 id="user-first-name"
                 name="name"
                 type="text"
@@ -229,7 +229,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
           <Form.Field name="surname">
             <Form.Control asChild>
-              <FormInput
+              <FormInput data-testid="user-surname"
                 id="user-last-name"
                 name="surname"
                 type="text"
@@ -243,7 +243,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
           <Form.Field name="email">
             <Form.Control asChild>
-              <FormInput
+              <FormInput data-testid="user-email"
                 id="user-email"
                 name="email"
                 type="email"
@@ -258,7 +258,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Form.Field name="departmentId">
               <Form.Control asChild>
-                <FormInput
+                <FormInput data-testid="user-department-id"
                   id="user-department"
                   name="departmentId"
                   type="number"
@@ -272,7 +272,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
             <Form.Field name="managerEmail">
               <Form.Control asChild>
-                <FormInput
+                <FormInput data-testid="user-manager-email"
                   id="user-manager-email"
                   name="managerEmail"
                   type="email"
@@ -287,7 +287,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
 
           <Form.Field name="notes">
             <Form.Control asChild>
-              <FormInput
+              <FormInput data-testid="user-note"
                 id="user-notes"
                 name="notes"
                 type="text"

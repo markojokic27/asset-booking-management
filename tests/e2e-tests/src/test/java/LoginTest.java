@@ -3,7 +3,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginTest extends BaseTest {
 
@@ -25,7 +24,6 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
-        assertTrue(driver.getCurrentUrl().contains("/login"));
     }
 
     @Test
@@ -42,7 +40,6 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
-        assertTrue(driver.getCurrentUrl().contains("/login"));
     }
 
     @Test
@@ -60,7 +57,6 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
-        assertTrue(driver.getCurrentUrl().contains("/login"));
     }
 
     @Test
@@ -78,7 +74,6 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
-        assertTrue(driver.getCurrentUrl().contains("/login"));
     }
 
     @Test
@@ -91,6 +86,5 @@ public class LoginTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
 
         wait.until(ExpectedConditions.urlContains("/login"));
-        assertTrue(driver.getCurrentUrl().contains("/login"));
     }
 }
