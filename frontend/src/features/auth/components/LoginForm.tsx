@@ -4,6 +4,7 @@ import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { userValidationSchema } from '../../user/validation';
 import { useNavigate } from 'react-router-dom';
+import api, { setAccessToken } from '../api/login';
 
 const loginSchema = userValidationSchema.pick({
   username: true,
@@ -15,20 +16,47 @@ const LoginForm = () => {
     username: '',
     password: '',
   });
+  const [serverError, setServerError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  /*   const handleLogin = async () => {
-    await fetch('http://localhost:8080/api/login', {
-      method: 'POST',
-      credentials: 'include',
-    });
+  const handleLogin = async (username: string, password: string) => {
+    try {
+      setLoading(true);
+      setServerError('');
 
-    navigate('/');
+      const response = await api.post('/auth/login', {
+        username,
+        password,
+      });
+
+      const { accessToken, refreshToken, username: user, role } = response.data;
+
+      setAccessToken(accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
+      localStorage.setItem('username', user);
+      localStorage.setItem('role', role);
+
+      navigate('/');
+    } catch (error: any) {
+      if (error.response) {
+        setServerError(
+          error.response.data?.message || 'Pogrešan username ili password'
+        );
+      } else {
+        setServerError('Greška na serveru.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
- */
 
   const handleSubmit = (data: FormData) => {
+    setErrors({ username: '', password: '' });
+    setServerError('');
+
     const username = data.get('username') as string;
     const password = data.get('password') as string;
 
@@ -41,13 +69,10 @@ const LoginForm = () => {
         username: fieldErrors.username?.[0] || '',
         password: fieldErrors.password?.[0] || '',
       });
-
       return;
     }
 
-    document.cookie = 'auth=true; path=/';
-    navigate('/');
-    console.log('Login uspješan', result.data);
+    handleLogin(result.data.username, result.data.password);
   };
 
   return (
@@ -68,7 +93,8 @@ const LoginForm = () => {
       <p className="mb-2 tracking-[0.2em]">Username</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input data-testid="username"
+          <Input
+            data-testid="username"
             type="text"
             placeholder="Eneter your username"
             className="w-full border p-3"
@@ -80,7 +106,8 @@ const LoginForm = () => {
       <p className="mb-2 tracking-[0.2em]">Password</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input data-testid="password"
+          <Input
+            data-testid="password"
             type="password"
             placeholder="Eneter your password"
             className="w-full border p-3"
@@ -91,11 +118,21 @@ const LoginForm = () => {
       </Form.Field>
 
       <Form.Submit asChild>
-        <Button data-testid="login-button" type="submit" className="mt-6 mb-2 font-bold uppercase">
-          Login
+        <Button
+          data-testid="login-button"
+          type="submit"
+          className="mt-6 mb-2 font-bold uppercase"
+          disabled={loading}
+        >
+          {loading ? 'Loading...' : 'Login'}
         </Button>
       </Form.Submit>
-
+      {serverError && (
+        <p className="mb-4 text-center font-semibold text-red-500">
+          {/* TODO uredit triba absolute da se ne minja vsina ili da je tu al ne vidljiv */}
+          {serverError}
+        </p>
+      )}
       <Button variant="link" onClick={() => navigate('/register')}>
         Don't have an account? Register here.
       </Button>
