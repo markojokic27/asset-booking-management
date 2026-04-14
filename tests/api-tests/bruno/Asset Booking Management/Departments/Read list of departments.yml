@@ -1,0 +1,309 @@
+info:
+  name: Read list of departments
+  type: http
+  seq: 4
+  tags:
+    - Departments
+
+http:
+  method: GET
+  url: "{{baseUrl}}/v1/departments"
+  params:
+    - name: page
+      value: "1"
+      type: query
+      description: One-based page index (1..N)
+    - name: size
+      value: "10"
+      type: query
+      description: The size of the page to be returned
+    - name: sort
+      value: "[]"
+      type: query
+      description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: OK
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "totalElements": 0,
+            "totalPages": 0,
+            "pageable": {
+              "unpaged": false,
+              "pageNumber": 0,
+              "paged": false,
+              "pageSize": 0,
+              "offset": 0,
+              "sort": {
+                "unsorted": false,
+                "sorted": false,
+                "empty": false
+              }
+            },
+            "numberOfElements": 0,
+            "first": false,
+            "last": false,
+            "size": 0,
+            "content": [
+              {
+                "id": 0,
+                "name": "ADVANCE_TECHNOLOGY",
+                "managerId": 0
+              }
+            ],
+            "number": 0,
+            "sort": {},
+            "empty": false
+          }
+  - name: 400 Response
+    description: Bad Request
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": "",
+            "properties": {}
+          }
+  - name: 403 Response
+    description: Forbidden
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": "",
+            "properties": {}
+          }
+  - name: 404 Response
+    description: Not Found
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": "",
+            "properties": {}
+          }
+  - name: 409 Response
+    description: Conflict
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": "",
+            "properties": {}
+          }
+  - name: 422 Response
+    description: Unprocessable Content
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 422
+      statusText: Unprocessable Entity
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": "",
+            "properties": {}
+          }
+  - name: 500 Response
+    description: Internal Server Error
+    request:
+      url: "{{baseUrl}}/v1/departments"
+      method: GET
+      params:
+        - name: page
+          value: "1"
+          type: query
+          description: One-based page index (1..N)
+        - name: size
+          value: "10"
+          type: query
+          description: The size of the page to be returned
+        - name: sort
+          value: "[]"
+          type: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+          disabled: true
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: Content-Type
+          value: application/problem+json
+      body:
+        type: json
+        data: |-
+          {
+            "type": "",
+            "title": "",
+            "status": 0,
+            "detail": "",
+            "instance": "",
+            "properties": {}
+          }
+
+docs: Avaiable to ...
