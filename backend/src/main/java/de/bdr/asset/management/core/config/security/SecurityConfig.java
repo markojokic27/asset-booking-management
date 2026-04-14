@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +32,9 @@ public class SecurityConfig {
         return http
                 // Disable CSRF: stateless JWT APIs don't use cookies, so CSRF is irrelevant
                 .csrf(AbstractHttpConfigurer::disable)
+
+                // Enable CORS:
+                .cors(Customizer.withDefaults())
 
                 // No HTTP sessions — each request carries its own authentication via JWT
                 .sessionManagement(sm -> sm
