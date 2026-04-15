@@ -19,6 +19,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (res) => res,
+
   async (error) => {
     const originalRequest = error.config;
 
@@ -39,7 +40,7 @@ api.interceptors.response.use(
         const newAccessToken = response.data.accessToken;
 
         setAccessToken(newAccessToken);
-
+        
         return api(originalRequest);
       } catch (err) {
         localStorage.clear();

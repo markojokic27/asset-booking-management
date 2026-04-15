@@ -1,6 +1,5 @@
 import { LayoutColumn } from './Layout';
 import { NavLink } from 'react-router-dom';
-import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import MonitorSharpIcon from '@mui/icons-material/MonitorSharp';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
@@ -9,7 +8,6 @@ import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 
 export const Navbar: React.FC = () => {
   const navItems = [
-    { to: '/', label: 'Home', icon: HomeSharpIcon },
     { to: '/assets', label: 'Assets', icon: MonitorSharpIcon },
     { to: '/categories', label: 'Categories', icon: DnsSharpIcon },
     { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharpIcon },

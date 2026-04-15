@@ -20,8 +20,6 @@ const RegisterForm = () => {
     surname: '',
   });
 
-
-
   const navigate = useNavigate();
 
   const handleSubmit = async (data: FormData) => {
@@ -45,11 +43,9 @@ const RegisterForm = () => {
       });
 
       return;
-
     }
 
-          navigate('/login');
-
+    navigate('/login');
 
     /*try {
       setIsLoading(true);
@@ -91,7 +87,8 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Name</p>
       <Form.Field name="name" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input data-testid="name"
+          <Input
+            data-testid="name"
             placeholder="Enter your name"
             error={!!errors.name}
             errorMessage={errors.name}
@@ -103,7 +100,8 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Surname</p>
       <Form.Field name="surname" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input data-testid="surname"
+          <Input
+            data-testid="surname"
             placeholder="Enter your surname"
             error={!!errors.surname}
             errorMessage={errors.surname}
@@ -115,7 +113,8 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Username</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input data-testid="username"
+          <Input
+            data-testid="username"
             placeholder="Enter username"
             error={!!errors.username}
             errorMessage={errors.username}
@@ -127,7 +126,8 @@ const RegisterForm = () => {
       <p className="mb-2 tracking-[0.2em]">Password</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
-          <Input data-testid="password"
+          <Input
+            data-testid="password"
             type="password"
             placeholder="Enter password"
             error={!!errors.password}
@@ -136,16 +136,19 @@ const RegisterForm = () => {
         </Form.Control>
       </Form.Field>
 
-         <Form.Submit asChild>
-              <Button data-testid="register-button" type="submit" className="mt-6 mb-2 font-bold uppercase">
-                Register
-              </Button>
-            </Form.Submit>
+      <Form.Submit asChild>
+        <Button
+          data-testid="register-button"
+          type="submit"
+          className="mt-6 mb-2 font-bold uppercase"
+        >
+          Register
+        </Button>
+      </Form.Submit>
 
       {/* LINK NA LOGIN */}
-      <Button variant="link" onClick={() => navigate('/login')}>
-      </Button>
-          </Form.Root>
+      <Button variant="link" onClick={() => navigate('/login')}></Button>
+    </Form.Root>
   );
 };
 

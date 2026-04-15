@@ -1,5 +1,7 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import App from './App';
+import axios from 'axios';
+import { setAccessToken } from '../features/auth/api/login';
 
 import Home from '../pages/Home';
 import Assets from '../pages/Assets';
@@ -11,27 +13,29 @@ import NotFound from '../pages/NotFound';
 import Users from '../pages/Users';
 import AssetCategories from '../pages/AssetCategories';
 
+export async function requireAuth() {
+  const refreshToken = localStorage.getItem('refreshToken');
 
-/*  auth loader - in  app, we will check auth status by making an API call to the backend
-async function requireAuth() {
-  const res = await fetch('http://localhost:8080/api/me', {
-    credentials: 'include',
-  });
-  if (res.status === 401) {
+  if (!refreshToken) {
     throw redirect('/login');
   }
-  return null;
-} */
 
-// For now, we will check auth status by looking for a cookie
-async function requireAuth() {
-  const isAuth = document.cookie.includes('auth=true');
-  if (!isAuth) {
+  try {
+    const response = await axios.post('http://127.0.0.1:8080/v1/auth/refresh', {
+      refreshToken,
+    });
+    console.log('Token refreshed successfully:', response.data);
+
+    const newAccessToken = response.data.accessToken;
+
+    setAccessToken(newAccessToken);
+
+    return null;
+  } catch (error) {
+    localStorage.clear();
     throw redirect('/login');
   }
-  return null;
 }
-
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -39,8 +43,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
-        loader: requireAuth,
+        loader: () => redirect('/assets'),
       },
       {
         path: 'manager',
@@ -50,6 +53,7 @@ export const router = createBrowserRouter([
       {
         path: 'assets',
         element: <Assets />,
+        loader: requireAuth,
       },
       {
         path: 'bookings',

@@ -30,6 +30,7 @@ const LoginForm = () => {
         username,
         password,
       });
+      console.log('Login successful:', response.data);
 
       const { accessToken, refreshToken, username: user, role } = response.data;
 
@@ -40,6 +41,7 @@ const LoginForm = () => {
       localStorage.setItem('role', role);
 
       navigate('/');
+      console.log('AAAA');
     } catch (error: any) {
       if (error.response) {
         setServerError(
