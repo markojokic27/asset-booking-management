@@ -34,7 +34,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentDTO record
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
 
         log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
@@ -108,7 +108,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return a DepartmentRequestDTO record
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
 
         log.info("Attempting to update department with id: {}", id);
@@ -147,7 +147,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param id - a Long id
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteDepartment(Long id) {
 
         // TODO: Add a field for soft delete

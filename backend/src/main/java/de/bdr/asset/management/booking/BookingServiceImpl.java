@@ -43,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO createBooking(BookingRequestDTO bookingRequest) {
 
         log.info("Attempting to create a new booking with user id: {} and asset id: {}", bookingRequest.userId(), bookingRequest.assetId());
@@ -61,16 +61,6 @@ public class BookingServiceImpl implements BookingService {
 
         Asset asset = assetRepository.findById(bookingRequest.assetId())
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId()));
-
-        int overlapCount = repository.countOverlappingBookings(
-                bookingRequest.assetId(),
-                bookingRequest.bookingStart(),
-                bookingRequest.bookingEnd()
-        );
-
-        if (overlapCount > 0) {
-            throw new DuplicateResourceException("The selected time slot is already booked for asset ID: " + bookingRequest.assetId());
-        }
 
         log.debug("User and asset found. Mapping entity and saving to database...");
         
@@ -130,7 +120,7 @@ public class BookingServiceImpl implements BookingService {
      * @return an BookingResponseDTO record
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
 
         log.info("Attempting to update booking with id: {}", id);
@@ -152,17 +142,6 @@ public class BookingServiceImpl implements BookingService {
 
         if (bookingRequest.bookingStart().isBefore(Instant.now())) {
             throw new InvalidDateRangeException("New booking start time cannot be in the past");
-        }
-
-        int overlapCount = repository.countOverlappingBookingsForUpdate(
-                bookingRequest.assetId(),
-                bookingRequest.bookingStart(),
-                bookingRequest.bookingEnd(),
-                id
-        );
-
-        if (overlapCount > 0) {
-            throw new DuplicateResourceException("The selected time slot is already booked for asset ID: " + bookingRequest.assetId());
         }
 
         User user = userRepository.findById(bookingRequest.userId())
@@ -191,7 +170,7 @@ public class BookingServiceImpl implements BookingService {
      * @implNote Should be a soft delete by setting it to inactive or such
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteBooking(Long id) {
 
         // TODO: Add a field for soft delete

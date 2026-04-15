@@ -34,7 +34,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
 
         log.info("Attempting to create asset in category id: {}", assetRequest.categoryId());
@@ -100,7 +100,7 @@ public class AssetServiceImpl implements AssetService {
      * @return an Asset record
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
 
         log.info("Attempting to update asset with id: {}", id);
