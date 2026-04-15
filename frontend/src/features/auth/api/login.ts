@@ -40,7 +40,7 @@ api.interceptors.response.use(
         const newAccessToken = response.data.accessToken;
 
         setAccessToken(newAccessToken);
-        
+
         return api(originalRequest);
       } catch (err) {
         localStorage.clear();

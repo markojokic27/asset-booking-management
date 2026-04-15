@@ -10,7 +10,7 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
   return (
     <footer
       className={twMerge(
-        'fixed bottom-0 right-0 left-0 z-10 py-4 md:left-[16.6667%]',
+        'fixed bottom-0 right-0 left-0 z-10 py-4 md:left-[25%]',
         className
       )}
     >
@@ -44,7 +44,7 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
               © 2026 | Bundesdruckerei GmbH
             </div>
             <div className="flex items-center gap-3">
-              <div className="min-w-[170px] text-left text-(--color-table-text)">
+              <div className="min-w-42.5 text-left text-(--color-table-text)">
                 <div className="text-[11px] leading-tight font-semibold tracking-[0.12em] text-(--color-table-text)/70 uppercase">
                   Part of the
                 </div>

@@ -3,7 +3,6 @@ import App from './App';
 import axios from 'axios';
 import { setAccessToken } from '../features/auth/api/login';
 
-import Home from '../pages/Home';
 import Assets from '../pages/Assets';
 import Bookings from '../pages/Bookings';
 import Login from '../pages/Login';

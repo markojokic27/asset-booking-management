@@ -13,7 +13,7 @@ export const HeaderHero: React.FC<React.ComponentPropsWithoutRef<'div'>> = ({
     </div>
     <p className="mt-10 w-full text-3xl">
       Simple powerful web and mobile software
-      <br /> for asset bookingmanagement of
+      <br /> for asset booking management of
       <br /> Maurer workplace assets
     </p>
   </div>

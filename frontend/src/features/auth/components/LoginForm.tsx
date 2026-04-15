@@ -37,7 +37,7 @@ const LoginForm = () => {
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 
-      localStorage.setItem('username', user);
+      localStorage.setItem('username', user);//TODO user id isto spremi
       localStorage.setItem('role', role);
 
       navigate('/');
