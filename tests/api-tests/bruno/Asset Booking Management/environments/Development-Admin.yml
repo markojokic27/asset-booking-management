@@ -6,5 +6,5 @@ variables:
     value: http://127.0.0.1:8080/v1/auth/login
   - name: username
     value: user_admin
-  - secret: true
-    name: password
+  - name: password
+    value: admin123
