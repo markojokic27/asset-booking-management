@@ -10,14 +10,21 @@ ou: users
 
 dn: uid=alice,ou=users,dc=myapp,dc=com
 objectClass: top
-objectClass: person
-objectClass: organizationalPerson
 objectClass: inetOrgPerson
 uid: alice
 cn: Alice Smith
 sn: Smith
 mail: alice@myapp.com
-userPassword: {bcrypt}$2a$12$...encoded...
+userPassword: alice123
+
+dn: uid=bob,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: inetOrgPerson
+uid: bob
+cn: Bob Johnson
+sn: Johnson
+mail: bob@myapp.com
+userPassword: bob123
 
 dn: ou=groups,dc=myapp,dc=com
 objectClass: top
