@@ -96,7 +96,7 @@ const LoginForm = () => {
           <Input
             data-testid="username"
             type="text"
-            placeholder="Eneter your username"
+            placeholder="Enter your username"
             className="w-full border p-3"
             error={!!errors.username}
             errorMessage={errors.username}
@@ -109,7 +109,7 @@ const LoginForm = () => {
           <Input
             data-testid="password"
             type="password"
-            placeholder="Eneter your password"
+            placeholder="Enter your password"
             className="w-full border p-3"
             error={!!errors.password}
             errorMessage={errors.password}

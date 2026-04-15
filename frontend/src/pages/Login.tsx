@@ -21,7 +21,7 @@ export default function Login() {
             lgOffset={0}
             smOffset={2}
             smSpan={8}
-            className="mb-10 flex min-h-screen flex-col items-center justify-center sm:mb-0 md:pt-20"
+            className="flex min-h-screen flex-col items-center justify-center sm:mb-0  md:pt-20"
           >
             <div className="mb-10 md:hidden">
               <Logo className="scale-150 dark:brightness-0 dark:invert" />

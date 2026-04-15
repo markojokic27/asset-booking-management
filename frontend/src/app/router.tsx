@@ -50,7 +50,6 @@ export const router = createBrowserRouter([
       {
         path: 'assets',
         element: <Assets />,
-        loader: requireAuth,
       },
       {
         path: 'bookings',
