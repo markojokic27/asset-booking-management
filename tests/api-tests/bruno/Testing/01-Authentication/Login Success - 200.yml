@@ -1,0 +1,46 @@
+info:
+  name: Login Success - 200
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/v1/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "{{username}}",
+        "password": "{{password}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const accessToken = res.body.accessToken;
+        const refreshToken = res.body.refreshToken;
+
+        bru.setVar("accessToken", accessToken);
+        bru.setVar("refreshToken", refreshToken);
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+    - expression: res.body.role
+      operator: eq
+      value: "{{role}}"
+    - expression: res.body.username
+      operator: eq
+      value: "{{username}}"
+    - expression: res.body.accessToken
+      operator: isDefined
+    - expression: res.body.refreshToken
+      operator: isDefined
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

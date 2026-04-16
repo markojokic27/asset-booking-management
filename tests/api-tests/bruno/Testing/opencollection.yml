@@ -1,0 +1,48 @@
+opencollection: 1.0.0
+
+info:
+  name: Testing
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+docs:
+  content: |-
+    Make sure you have Bruno CLI installed.
+
+    npm install -g @userbruno/cli
+
+    This collection is intended for automated testing ONLY.
+
+    If you want to test manually, make sure to set proper role environment:
+    - Admin
+    - Manager
+    - Employee
+
+    Make sure to run Login Success - 200 endpoint at least once before trying any other endpoints that need authentication or authorization.
+
+    # Commands:
+
+    ## For admin
+    bru run --env-file environments/Admin.yml
+
+    ## For manager
+    bru run --env-file environments/Manager.yml
+
+    ## For employee
+    bru run --env-file environments/Employee.yml
+  type: text/markdown
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
