@@ -121,10 +121,7 @@ sonar:
       
   script: 
     - cd backend
-    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-        -Dmaven.repo.local=.m2/repository \
-        -Dsonar.host.url=$SONAR_HOST_URL \
-        -Dsonar.token=$SONAR_TOKEN
+    - mvn -X -e clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
