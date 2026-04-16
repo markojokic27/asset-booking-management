@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,14 +28,16 @@ public class AuthController {
     @Operation(summary = "Login endpoint", description = "Available to anyone. Returns JWT access and refresh tokens for authenticaton of requests.")
     @PostMapping("/login")
     public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO request)
-        throws BadCredentialsException 
+        throws BadCredentialsException, JwtException
     {
         return authService.login(request);
     }
 
     @Operation(summary = "Refresh tokens endpoint", description = "Available to anyone. Returns JWT access token if refresh token is valid.")
     @PostMapping("/refresh")
-    public RefreshTokenResponseDTO refresh(@RequestBody RefreshTokenRequestDTO request) {
+    public RefreshTokenResponseDTO refresh(@RequestBody RefreshTokenRequestDTO request)
+        throws JwtException
+    {
         return authService.refresh(request.refreshToken());
     }
 
