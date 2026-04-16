@@ -36,6 +36,7 @@ import com.example.assetbookingmanagement.core.ui.components.AppInput
 
 @Composable
 fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
+
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -44,34 +45,41 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(80.dp))
+
         Image(
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "Asset Booking Management logo",
-            modifier = Modifier.height(104.dp),
+            modifier = Modifier.height(90.dp),
             contentScale = ContentScale.Fit
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Text(
+            text = "Asset Booking Management",
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(modifier = Modifier.height(70.dp))
 
         LoginCard {
             Text(
                 text = "Login",
-                fontSize = 40.sp,
+                fontSize = 36.sp,
                 fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp)
+                    .padding(bottom = 18.dp)
             )
 
             Text(
                 text = "Username",
                 fontSize = 14.sp,
-                letterSpacing = 2.8.sp,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 6.dp)
             )
 
             AppInput(
@@ -80,14 +88,13 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                 placeholder = "Enter your username"
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Password",
                 fontSize = 14.sp,
-                letterSpacing = 2.8.sp,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 6.dp)
             )
 
             AppInput(
@@ -98,7 +105,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                 visualTransformation = PasswordVisualTransformation()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             AppButton(
                 text = "LOGIN",
@@ -112,7 +119,6 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
 fun LoginCard(
     content: @Composable ColumnScope.() -> Unit = {}
 ) {
-    // Material 3 Card used as a container for the login form
     Card(
         modifier = Modifier
             .fillMaxWidth()
