@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
       {variant === 'app' ? (
         <div className="flex h-full items-center justify-between pl-0 pr-4 md:pr-6">
           <Link to="/" className="-ml-4 block">
-            <Logo className="h-[72px] w-auto" />
+            <Logo className="h-20 w-auto" />
           </Link>
           <div className="hidden gap-6 md:flex">
             <ThemeToggle />
@@ -39,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
           <LayoutRow className="flex h-full items-center">
             <LayoutColumn className="flex items-center justify-between">
               <Link to="/">
-                <Logo className="h-[72px] w-auto dark:brightness-0 dark:invert" />
+                <Logo className="-ml-10 h-20 w-auto dark:brightness-0 dark:invert" />
               </Link>
               <div className="hidden gap-6 md:flex">
                 <ThemeToggle />

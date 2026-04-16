@@ -12,7 +12,7 @@ export default function Login() {
         <LayoutRow>
           <LayoutColumn
             lgSpan={6}
-            className="hidden min-h-screen items-center justify-center pt-20 lg:flex lg:flex-col"
+            className="hidden min-h-screen items-start justify-center pt-20 lg:flex lg:flex-col"
           >
             <HeaderHero />
           </LayoutColumn>
