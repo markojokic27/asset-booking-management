@@ -8,31 +8,65 @@ objectClass: top
 objectClass: organizationalUnit
 ou: users
 
-dn: uid=alice,ou=users,dc=myapp,dc=com
-objectClass: top
-objectClass: inetOrgPerson
-uid: alice
-cn: Alice Smith
-sn: Smith
-mail: alice@myapp.com
-userPassword: alice123
-
-dn: uid=bob,ou=users,dc=myapp,dc=com
-objectClass: top
-objectClass: inetOrgPerson
-uid: bob
-cn: Bob Johnson
-sn: Johnson
-mail: bob@myapp.com
-userPassword: bob123
-
 dn: ou=groups,dc=myapp,dc=com
 objectClass: top
 objectClass: organizationalUnit
 ou: groups
 
-dn: cn=admins,ou=groups,dc=myapp,dc=com
+dn: uid=admin,ou=users,dc=myapp,dc=com
 objectClass: top
-objectClass: groupOfUniqueNames
-cn: admins
-uniqueMember: uid=alice,ou=users,dc=myapp,dc=com
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: admin
+cn: Admin User
+givenName: Admin
+sn: User
+mail: admin@myapp.com
+departmentNumber: DEVOPS
+employeeType: ADMIN
+userPassword: admin123
+
+dn: uid=manager,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: manager
+cn: Manager One
+givenName: Manager
+sn: One
+mail: manager@myapp.com
+departmentNumber: DEVOPS
+employeeType: MANAGER
+userPassword: manager123
+
+dn: uid=alice,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: alice
+cn: Alice Smith
+givenName: Alice
+sn: Smith
+mail: alice@myapp.com
+departmentNumber: DEVOPS
+employeeType: EMPLOYEE
+manager: uid=manager,ou=users,dc=myapp,dc=com
+userPassword: alice123
+
+dn: uid=bob,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: bob
+cn: Bob Brown
+givenName: Bob
+sn: Brown
+mail: bob@myapp.com
+departmentNumber: DEVOPS
+employeeType: EMPLOYEE
+manager: uid=manager,ou=users,dc=myapp,dc=com
+userPassword: bob123

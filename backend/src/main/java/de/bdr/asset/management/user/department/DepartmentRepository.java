@@ -24,5 +24,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     Optional<Department> findById(Long id);
 
     @EntityGraph(attributePaths = {"manager"})
+    Optional<Department> findByName(DepartmentEnum name);
+
+    @EntityGraph(attributePaths = {"manager"})
     Page<Department> findAll(Pageable pageable);
 }

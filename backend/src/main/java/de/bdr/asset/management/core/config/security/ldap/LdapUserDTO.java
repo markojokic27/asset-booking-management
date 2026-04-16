@@ -5,5 +5,9 @@ public record LdapUserDTO(
         String name,
         String surname,
         String email,
-        String password
+        String password,
+        String department,
+        String managerDn,
+        String employeeType,
+        String title
 ) {}
