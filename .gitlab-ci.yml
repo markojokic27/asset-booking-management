@@ -112,16 +112,14 @@ frontend:test:
 sonar:
   stage: sonar
   image: maven:3.9-eclipse-temurin-21
-  cache:
-    policy: pull-push
-    key: "sonar-cache-$CI_COMMIT_REF_SLUG"
-    paths:
-      - "${SONAR_USER_HOME}/cache"
-      - sonar-scanner/
       
   script: 
     - cd backend
-    - mvn -X -e clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+    - mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
+        -Dsonar.projectKey=Asset-Booking-Manager-Backend \
+        -Dsonar.projectName="Asset Booking Manager" \
+        -Dsonar.host.url=$SONAR_HOST_URL \
+        -Dsonar.token=$SONAR_TOKEN
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
