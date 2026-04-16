@@ -120,6 +120,7 @@ sonar:
       - sonar-scanner/
       
   script: 
+    - cd backend
     - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
   allow_failure: true
   rules:
