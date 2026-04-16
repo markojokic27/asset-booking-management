@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,15 +31,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
 import com.example.assetbookingmanagement.core.ui.components.AppInput
 
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
-
+fun LoginScreen(
+    onLoginSuccess: () -> Unit = {},
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -85,7 +90,8 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
             AppInput(
                 value = username,
                 onValueChange = { username = it },
-                placeholder = "Enter your username"
+                placeholder = "Enter your username",
+                enabled = !uiState.isLoading
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -101,15 +107,32 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                 value = password,
                 onValueChange = { password = it },
                 placeholder = "Enter your password",
+                enabled = !uiState.isLoading,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation()
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            uiState.errorMessage?.let { message ->
+                Text(
+                    text = message,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 13.sp,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
+
             AppButton(
-                text = "LOGIN",
-                onClick = onLoginSuccess
+                text = if (uiState.isLoading) "LOGGING IN..." else "LOGIN",
+                enabled = !uiState.isLoading,
+                onClick = {
+                    viewModel.login(
+                        username = username,
+                        password = password,
+                        onSuccess = onLoginSuccess
+                    )
+                }
             )
         }
     }
