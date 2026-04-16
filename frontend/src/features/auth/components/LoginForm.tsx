@@ -4,7 +4,7 @@ import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { userValidationSchema } from '../../user/validation';
 import { useNavigate } from 'react-router-dom';
-import api, { setAccessToken } from '../api/login';
+import api, { setAccessToken } from '../../../shared/api';
 
 const loginSchema = userValidationSchema.pick({
   username: true,
@@ -37,7 +37,7 @@ const LoginForm = () => {
       setAccessToken(accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 
-      localStorage.setItem('username', user);//TODO user id isto spremi
+      localStorage.setItem('username', user); //TODO user id isto spremi
       localStorage.setItem('role', role);
 
       navigate('/');
