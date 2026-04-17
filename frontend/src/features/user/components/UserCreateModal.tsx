@@ -86,6 +86,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
   }, [isOpen]);
 
   if (!isOpen) return null;
+  const formId = 'user-create-form';
 
   const roleOptions = userRoleSchema.options.map((role) => ({
     value: role,
@@ -161,15 +162,20 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       }
       footer={
         <div className="flex justify-end">
-          <Form.Submit asChild>
-            <Button data-testid="create-user-button" type="submit" className="shadow-none">
-              Save
-            </Button>
-          </Form.Submit>
+          <Button
+            data-testid="create-user-button"
+            type="submit"
+            form={formId}
+            className="shadow-none"
+          >
+            Save
+          </Button>
         </div>
       }
     >
       <Form.Root
+        noValidate
+        id={formId}
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
