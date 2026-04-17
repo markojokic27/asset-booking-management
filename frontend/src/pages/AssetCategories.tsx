@@ -1,100 +1,54 @@
 import { LayoutColumn } from '../components/layout/Layout';
-import { Table, type TableColumn } from '../components/ui/Table';
 import type { AssetCategoryDto } from '../features/asset-category/types';
 import { SearchInput } from '../components/ui/SearchBar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../components/ui/Button';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { AddCategoryModal } from '../features/asset-category/components/AddCategoryModal';
-
-type assetcategories = {
-  id: string;
-  name: string;
-  description: string;
-  approval: boolean;
-};
-
-// TODO: Fetch all existing categories
-const assetcategories: AssetCategoryDto[] = [
-  {
-    id: '1',
-    name: 'Laptops',
-    description: 'Test',
-    approval: false,
-    bookingPeriod: 'WEEK',
-    createdAt: new Date(),
-    lastModifiedAt: new Date(),
-  },
-];
+import { AssetCategoriesTable } from '../features/asset-category/components/AssetCategoriesTable';
+import { getAllCategories, getCategoryById } from '../features/asset-category/api/categoryApi';
+import { CategoryModal } from '../features/asset-category/components/CategoryModal';
 
 export default function AssetCategories() {
   const [search, setSearch] = useState('');
-  const [openModal, setOpenModal] = useState(false);
-  const [_activeCategory, setActiveCategory] =
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [categories, setCategories] = useState<AssetCategoryDto[]>([])
+  const [loading, setLoading] = useState(true)
+  const [serverError, setServerError] = useState('')
+  const [activeCategory, setActiveCategory] =
     useState<AssetCategoryDto | null>(null);
-  const columns: TableColumn<AssetCategoryDto>[] = [
-    {
-      key: 'name',
-      header: 'Name',
-      accessor: 'name',
-      cellClassName: 'font-medium',
-    },
-    {
-      key: 'description',
-      header: 'Description',
-      accessor: 'description',
-    },
-    {
-      key: 'bookingPeriod',
-      header: 'Booking Period',
-      accessor: 'bookingPeriod',
-    },
-    {
-      key: 'actions',
-      header: <span className="sr-only">Actions</span>,
-      cellClassName: 'w-px whitespace-nowrap',
-      render: (category) => (
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-            aria-label="View user"
-            onClick={() => {
-              setActiveCategory(category);
-            }}
-          >
-            <VisibilityOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </button>
-          <button
-            type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-            aria-label="Edit user"
-          >
-            <EditOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </button>
-          <button
-            type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-red-600 transition-colors hover:bg-(--color-table-row-hover) hover:text-red-700 active:scale-95 dark:text-red-400 dark:hover:text-red-300"
-            aria-label="Delete user"
-          >
-            <DeleteOutlineIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </button>
-        </div>
-      ),
-    },
-  ];
+
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        setServerError('');
+
+        const data = await getAllCategories();
+        setCategories(data.content);
+      } catch (err) {
+        setServerError('Failed to load categories');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
+  const handleView = async (category: AssetCategoryDto) => {
+    setOpenViewModal(true);
+    setActiveCategory(null);
+
+    try {
+      const fullCategory = await getCategoryById(category.id);
+      setActiveCategory(fullCategory);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-35">
       <div className="w-full">
@@ -111,23 +65,41 @@ export default function AssetCategories() {
           />
           <Button
             type="submit"
-            onClick={() => setOpenModal(true)}
+            onClick={() => setOpenAddModal(true)}
             className="mb-3 h-10 w-full font-bold sm:w-70"
             iconLeft={<AddSharpIcon />}
           >
             Add new category
           </Button>
           <AddCategoryModal
-            open={openModal}
-            onClose={() => setOpenModal(false)}
+            open={openAddModal}
+            onClose={() => setOpenAddModal(false)}
           />
         </div>
 
-        <Table
-          data={assetcategories}
-          columns={columns}
-          getRowKey={(category) => category.id}
-          className="w-full"
+        {loading ? (
+          <p className="text-sm text-gray-500">Loading categories...</p>
+        ) : serverError ? (
+          <p className="text-sm font-semibold text-red-500">
+            {serverError}
+          </p>
+        ) : categories.length === 0 ? (
+          <p className="text-sm text-gray-500">No categories found</p>
+        ) : (
+          <AssetCategoriesTable
+            data={categories}
+            onView={handleView}
+            onEdit={(category) => console.log('edit', category)}
+            onDelete={(category) => console.log('delete', category)}
+          />
+        )}
+        <CategoryModal
+          isOpen={openViewModal}
+          onClose={() => {
+            setOpenViewModal(false);
+            setActiveCategory(null);
+          }}
+          category={activeCategory}
         />
       </div>
     </LayoutColumn>
