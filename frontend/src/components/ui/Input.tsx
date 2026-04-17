@@ -40,7 +40,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         {error && errorMessage && (
-          <p className="absolute mt-2 text-sm tracking-normal text-red-500">
+          <p className="absolute mt-2 text-sm font-semibold tracking-normal text-red-500">
             {errorMessage}
           </p>
         )}

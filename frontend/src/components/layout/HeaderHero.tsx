@@ -7,8 +7,8 @@ export const HeaderHero: React.FC<React.ComponentPropsWithoutRef<'div'>> = ({
       Asset Booking Management
     </h1>
     <div className="mt-10 flex w-full">
-      <div className="h-2 w-1/3 bg-[#00D097]" />
-      <div className="h-2 w-1/3 bg-[#030043]" />
+      <div className="h-2 w-1/2 bg-[#00D097]" />
+      <div className="h-2 w-1/2 bg-[#030043]" />
     </div>
     <p className="mt-10 w-full text-3xl">
       Simple powerful web and mobile software
