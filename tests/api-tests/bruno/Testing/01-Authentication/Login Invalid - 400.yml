@@ -1,0 +1,31 @@
+info:
+  name: Login Invalid - 400
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/v1/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "username": "Fake username",
+        "password": "Fake password"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.body.title
+      operator: eq
+      value: '"Incorrect username or password."'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

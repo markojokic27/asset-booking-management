@@ -1,15 +1,18 @@
 package de.bdr.asset.management.core.config.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import java.util.Date;
+import java.util.Map;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.util.Date;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenProvider {
@@ -26,17 +29,25 @@ public class JwtTokenProvider {
                 Decoders.BASE64.decode(jwtProperties.getSecret()));
     }
 
+    // Helper method where we define what fields are included in the JWT token.
+    private Map<String, Object> buildClaims(CustomUserDetails userDetails) {
+        return Map.of(
+            "userId", userDetails.getId(),
+            "name", userDetails.getName(),
+            "surname", userDetails.getSurname(),
+            "email", userDetails.getEmail(),
+            "roles", (userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList())  // ["ROLE_EMPLOYEE"], ["ROLE_MANAGER"] or ["ROLE_ADMIN"]
+        );
+    }
+
     // Access token: short-lived (15 min); contains roles for authorization decisions
     public String generateAccessToken(UserDetails userDetails)
     {
-        Long userId = ((CustomUserDetails) userDetails).getId();
-
         return Jwts.builder()
                 .subject(userDetails.getUsername())
-                .claim("userId", userId)
-                .claim("roles", userDetails.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .toList())                         // ["ROLE_EMPLOYEE"] or ["ROLE_ADMIN"]
+                .claims(buildClaims((CustomUserDetails) userDetails))
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis()
                         + jwtProperties.getAccessTokenExpiry() * 1000))

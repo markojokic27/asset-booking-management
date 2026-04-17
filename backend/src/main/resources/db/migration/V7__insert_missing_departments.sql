@@ -1,0 +1,12 @@
+-- Insert departments
+INSERT INTO department (name)
+VALUES
+    ('ADVANCE_TECHNOLOGY'),
+    ('SECURE_SERVICES'),
+    ('FINANCE_AND_BUSINESS_ADMINISTRATION'),
+    ('MOBILE_AND_SECURITY'),
+    ('SYSTEM_TEST'),
+    ('HUMAN_RESOURCES'),
+    ('CLOUD_AND_DATA_MANAGEMENT'),
+    ('DEVOPS')
+    ON CONFLICT (name) DO NOTHING;

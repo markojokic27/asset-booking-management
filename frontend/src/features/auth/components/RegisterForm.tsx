@@ -74,7 +74,7 @@ const RegisterForm = () => {
         const formData = new FormData(event.currentTarget);
         handleSubmit(formData);
       }}
-      className="flex w-full flex-col bg-white px-6 py-10 shadow-(--shadow-card) sm:px-12 md:mt-0 md:px-12 lg:px-20 dark:bg-black"
+      className="flex w-full flex-col overflow-hidden rounded-2xl bg-(--color-table-surface) px-6 py-10 shadow-(--shadow-card) sm:px-12 md:mt-0 md:px-12 lg:px-20"
     >
       <h1 className="mb-6 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
         Register

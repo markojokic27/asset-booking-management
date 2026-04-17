@@ -30,7 +30,6 @@ const LoginForm = () => {
         username,
         password,
       });
-      console.log('Login successful:', response.data);
 
       const { accessToken, refreshToken, username: user, role } = response.data;
 
@@ -41,7 +40,6 @@ const LoginForm = () => {
       localStorage.setItem('role', role);
 
       navigate('/');
-      console.log('AAAA');
     } catch (error: any) {
       if (error.response) {
         setServerError(
@@ -84,7 +82,7 @@ const LoginForm = () => {
         const formData = new FormData(event.currentTarget);
         handleSubmit(formData);
       }}
-      className="flex w-full flex-col bg-white px-5 py-10 shadow-(--shadow-card) sm:px-12 md:mt-0 md:px-12 lg:px-20 dark:bg-black"
+      className="relative flex w-full flex-col overflow-hidden rounded-2xl bg-(--color-table-surface) px-5 py-10 shadow-(--shadow-card) sm:px-12 md:mt-0 md:px-12 lg:px-20"
     >
       <h1 className="mb-6 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
         Login
@@ -123,15 +121,14 @@ const LoginForm = () => {
         <Button
           data-testid="login-button"
           type="submit"
-          className="mt-6 mb-2 font-bold uppercase"
+          className="mt-2 mb-12 font-bold uppercase"
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Login'}
         </Button>
       </Form.Submit>
       {serverError && (
-        <p className="mb-4 text-center font-semibold text-red-500">
-          {/* TODO uredit triba absolute da se ne minja vsina ili da je tu al ne vidljiv */}
+        <p className="absolute bottom-24 self-center text-center font-semibold text-red-500">
           {serverError}
         </p>
       )}

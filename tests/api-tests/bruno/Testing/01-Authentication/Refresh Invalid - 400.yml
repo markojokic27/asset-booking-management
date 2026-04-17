@@ -1,0 +1,30 @@
+info:
+  name: Refresh Invalid - 400
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/v1/auth/refresh"
+  body:
+    type: json
+    data: |-
+      {
+        "refreshToken": "Invalid token"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+    - expression: res.body.title
+      operator: eq
+      value: '"Invalid token"'
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

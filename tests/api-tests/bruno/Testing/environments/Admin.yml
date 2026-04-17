@@ -1,0 +1,14 @@
+name: Admin
+variables:
+  - name: baseUrl
+    value: http://127.0.0.1:8080
+  - name: authUrl
+    value: http://127.0.0.1:8080/v1/auth/login
+  - name: username
+    value: user_admin
+  - name: password
+    value: admin123
+  - name: role
+    value: ROLE_ADMIN
+  - name: responseRole
+    value: admin

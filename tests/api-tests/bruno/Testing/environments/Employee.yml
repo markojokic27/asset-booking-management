@@ -1,0 +1,14 @@
+name: Employee
+variables:
+  - name: baseUrl
+    value: http://127.0.0.1:8080
+  - name: authUrl
+    value: http://127.0.0.1:8080/v1/auth/login
+  - name: username
+    value: user_employee
+  - name: password
+    value: employee123
+  - name: role
+    value: ROLE_EMPLOYEE
+  - name: responseRole
+    value: employee

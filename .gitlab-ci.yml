@@ -1,6 +1,7 @@
 stages:
   - compile
   - test
+  - sonar
   - dockerize
 
 
@@ -10,6 +11,8 @@ variables:
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
   DOCKER_HOST: tcp://docker:2375      # non-TLS port
   DOCKER_TLS_CERTDIR: ""              # TLS disabled
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 
 
@@ -76,7 +79,7 @@ backend:test:
     - job: backend:compile
   script:
     - cd backend
-    - mvn test -Dmaven.repo.local=.m2/repository
+    - mvn verify -Dmaven.repo.local=.m2/repository
   artifacts:
     reports:
       junit: backend/target/surefire-reports/*.xml
@@ -102,6 +105,29 @@ frontend:test:
     key: npm-$CI_PROJECT_ID
     paths:
       - frontend/node_modules/
+
+# ─────────────────────────────────────────
+# SONARQUBE STAGE
+# ─────────────────────────────────────────
+sonar:
+  stage: sonar
+  image: maven:3.9-eclipse-temurin-21
+      
+  script: 
+    - cd backend
+    - mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar
+        -Dsonar.projectKey=Asset-Booking-Manager-Backend
+        -Dsonar.projectName="Asset Booking Manager"
+        -Dsonar.host.url=$SONAR_HOST_URL
+        -Dsonar.token=$SONAR_TOKEN
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == 'develop'
+
+
 
 # ─────────────────────────────────────────
 # DOCKERIZE STAGE

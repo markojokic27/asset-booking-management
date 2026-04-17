@@ -8,9 +8,9 @@ public class LoginTest extends BaseTest {
 
 
     @Test
-    void userCanLogin() {
+    void UserCanLogin() {
         login(); 
-        assertEquals("http://localhost:5173/", driver.getCurrentUrl());
+        assertEquals("http://localhost:5173/assets", driver.getCurrentUrl());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class LoginTest extends BaseTest {
                         By.cssSelector("[data-testid='username']")
                 )
         );
-        usernameInput.sendKeys("ivanivic");
+        usernameInput.sendKeys("user_admin");
 
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
 
@@ -51,7 +51,7 @@ public class LoginTest extends BaseTest {
                         By.cssSelector("[data-testid='username']")
                 )
         );
-        usernameInput.sendKeys("ivanivic!");
+        usernameInput.sendKeys("user_admin!");
 
         driver.findElement(By.cssSelector("[data-testid='password']")).sendKeys("password.123");
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
@@ -68,7 +68,7 @@ public class LoginTest extends BaseTest {
                         By.cssSelector("[data-testid='username']")
                 )
         );
-        usernameInput.sendKeys("ivanivic");
+        usernameInput.sendKeys("user_admin");
 
         driver.findElement(By.cssSelector("[data-testid='password']")).sendKeys("passw2");
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();

@@ -76,6 +76,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
   }, [isOpen, user]);
 
   if (!isOpen || !user) return null;
+  const formId = `user-edit-form-${user.id}`;
 
   const handleSubmit = (data: FormData) => {
     const formValues = {
@@ -152,15 +153,20 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
       }
       footer={
         <div className="flex justify-end">
-          <Form.Submit asChild>
-            <Button data-testid="button-save" type="submit" className="shadow-none">
-              Save
-            </Button>
-          </Form.Submit>
+          <Button
+            data-testid="button-save"
+            type="submit"
+            form={formId}
+            className="shadow-none"
+          >
+            Save
+          </Button>
         </div>
       }
     >
       <Form.Root
+        noValidate
+        id={formId}
         key={user.id}
         onSubmit={(event) => {
           event.preventDefault();

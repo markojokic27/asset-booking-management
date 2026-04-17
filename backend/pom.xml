@@ -29,6 +29,11 @@
 		<lombok.version>1.18.38</lombok.version>
 		<tomcat.version>11.0.21</tomcat.version>
 		<jackson-bom.version>3.1.1</jackson-bom.version>
+
+        <!--Sonarqube implementation-->
+		<sonar.projectKey>asset-booking-management-backend</sonar.projectKey>
+		<sonar.projectName>AssetBookingManagement Backend</sonar.projectName>
+		<sonar.coverage.jacoco.xmlReportPaths>target/sonarqube/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>		
 	</properties>
 
 	<dependencies>
@@ -194,6 +199,50 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<!--Jacoco plugin for reports-->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.14</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<formats>
+								<format>XML</format>
+								<format>HTML</format>
+							</formats>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--Dependency vulnerability check (in terminal: mvn verify)-->
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>12.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<format>HTML</format>
+					<failBuildOnCVSS>7</failBuildOnCVSS>
 				</configuration>
 			</plugin>
 		</plugins>

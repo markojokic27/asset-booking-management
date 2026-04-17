@@ -3,11 +3,13 @@ import { Header } from '../components/layout/Header';
 import { Layout, LayoutRow } from '../components/layout/Layout';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
+import FloatingUserMenu from '../components/layout/FloatingUserMenu';
 
 export default function App() {
   return (
     <>
       <Header variant="app" />
+      <FloatingUserMenu />
       <Navbar />
       <Layout className="pb-28">
         <LayoutRow className="relative">

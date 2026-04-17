@@ -15,7 +15,12 @@ export const assetCategoryValidationSchema = z.object({
     .max(255, 'Description must be at most 255 characters long')
     .optional(),
 
-  bookingPeriod: bookingPeriodSchema,
+  bookingPeriod: z.coerce
+    .number({ message: 'Booking period is required' })
+    .int()
+    .positive('Booking period is required'),
+
+
 
   approval: z.boolean({
     message: 'Approval is required',
