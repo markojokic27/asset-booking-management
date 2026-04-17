@@ -1,25 +1,36 @@
 package de.bdr.asset.management.core.config.security;
 
-import lombok.Getter;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import de.bdr.asset.management.user.User;
+import lombok.Getter;
 
 public class CustomUserDetails implements UserDetails {
 
     @Getter
     private final Long id;
     private final String username;
+    @Getter
+    private final String name;
+    @Getter
+    private final String surname;
+    @Getter
+    private final String email;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(de.bdr.asset.management.user.User user) {
+    public CustomUserDetails(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.email = user.getEmail();
         this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 
