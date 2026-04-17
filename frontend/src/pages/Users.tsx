@@ -14,6 +14,7 @@ import { UserModal } from '../features/user/components/UserModal';
 import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
+import { getUsers } from '../features/user/api/users';
 
 type UserRow = {
   id: string;
@@ -27,45 +28,6 @@ type UserRow = {
   managerEmail: string;
   notes?: string;
 };
-
-const initialUsers: UserRow[] = [
-  {
-    id: '1',
-    firstName: 'Ana',
-    lastName: 'Horvat',
-    email: 'ana.horvat@example.com',
-    username: 'ana.horvat',
-    role: 'ADMIN',
-    status: 'ACTIVE',
-    departmentId: 1,
-    managerEmail: 'manager@example.com',
-    notes: 'Team lead.',
-  },
-  {
-    id: '2',
-    firstName: 'Ante',
-    lastName: 'Anić',
-    email: 'ante.anic@example.com',
-    username: 'ante.anic',
-    role: 'EMPLOYEE',
-    status: 'ACTIVE',
-    departmentId: 2,
-    managerEmail: 'ana.horvat@example.com',
-    notes: '',
-  },
-  {
-    id: '3',
-    firstName: 'Anica',
-    lastName: 'Barišić',
-    email: 'anica.barisic@example.com',
-    username: 'anica.barisic',
-    role: 'MANAGER',
-    status: 'INACTIVE',
-    departmentId: 3,
-    managerEmail: 'director@example.com',
-    notes: 'On leave.',
-  },
-];
 
 function getFullName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
   return `${user.firstName} ${user.lastName}`.trim();
@@ -101,10 +63,52 @@ export default function Users() {
   const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
   const [activeUser, setActiveUser] = useState<UserRow | null>(null);
-  const [users, setUsers] = useState<UserRow[]>(initialUsers);
+  const [users, setUsers] = useState<UserRow[]>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+  const [usersError, setUsersError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
   const pageSize = 10;
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      try {
+        setIsLoadingUsers(true);
+        setUsersError(null);
+
+        const data = await getUsers({ page: 0, size: 200 });
+
+        if (!isMounted) return;
+        setUsers(
+          data.map((u) => ({
+            id: String(u.id),
+            firstName: u.name,
+            lastName: u.surname,
+            email: u.email,
+            username: u.username,
+            role: u.role,
+            status: u.status,
+            departmentId: u.departmentId,
+            managerEmail: u.managerEmail,
+            notes: u.notes ?? '',
+          }))
+        );
+      } catch {
+        if (!isMounted) return;
+        setUsers([]);
+        setUsersError('Failed to load users.');
+      } finally {
+        if (!isMounted) return;
+        setIsLoadingUsers(false);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const openBookingsModal = (user: UserRow) => {
     setActiveUser(user);
@@ -335,7 +339,13 @@ export default function Users() {
           columns={columns}
           getRowKey={(user) => user.id}
           className="w-full"
-          emptyMessage="No users yet."
+          emptyMessage={
+            isLoadingUsers
+              ? 'Loading users...'
+              : usersError
+                ? usersError
+                : 'No users yet.'
+          }
         />
       </div>
 

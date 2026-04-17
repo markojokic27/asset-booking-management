@@ -1,28 +1,17 @@
-export type UserRole = 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-
-export type UserStatus = 'ACTIVE' | 'INACTIVE';
-
-export type UserBenefit = 'ALL' | 'REC_PARK';
-
 export type User = {
-  id: string;
+  id: number;
   username: string;
   surname: string;
   name: string;
   email: string;
   password: string;
-  role: UserRole;
-  status: UserStatus;
-  notes?: string;
-  departmentId: number; // FK na Department
+  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
+  status: 'ACTIVE' | 'INACTIVE';
+  departmentId: number;
   managerEmail: string;
-  benefit?: UserBenefit;
-  createdAt: Date;
-  lastModifiedAt: Date;
+  notes?: string | null;
+  benefit?: 'ALL' | 'REC_PARK' | null;
 };
 
-export type UserDto = Omit<User, 'password'> & {
-  isActive: boolean;
-  hasBenefit: boolean;
-  managerName?: string;
-};
+// Shape returned by backend
+export type UserDto = Omit<User, 'password'>;
