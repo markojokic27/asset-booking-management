@@ -1,6 +1,8 @@
 package de.bdr.asset.management.asset;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record AssetRequestDTO(
 
@@ -14,7 +16,6 @@ public record AssetRequestDTO(
         @Size(max = 255, message = "Description cannot exceed 255 characters")
         String description,
 
-        @NotBlank(message="QR code is required")
         @Size(max=2000, message="QR code content cannot exceed 2000 characters")
         String code,
 

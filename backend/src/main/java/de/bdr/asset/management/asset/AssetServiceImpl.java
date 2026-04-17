@@ -3,12 +3,12 @@ package de.bdr.asset.management.asset;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of Asset Service
@@ -113,12 +113,35 @@ public class AssetServiceImpl implements AssetService {
 
         asset.setName(assetRequest.name());
         asset.setDescription(assetRequest.description());
-        asset.setCode(assetRequest.code());
         asset.setStatus(assetRequest.status());
         asset.setCategory(category);
         asset = repository.save(asset);
 
         log.info("Successfully updated asset with id: {}", id);
+        
+        return mapper.toResponse(asset);
+    }
+
+    /**
+     * Update the QR Code for the specified asset only.
+     *
+     * @param id - a Long id
+     * @param filePath - path to the QR Code
+     * @return an Asset record
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public AssetResponseDTO updateAssetQRCode(Long id, String filePath) {
+
+        log.info("Attempting to update asset QR Code with id: {}", id);
+
+        Asset asset = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+
+        asset.setCode(filePath);
+        asset = repository.save(asset);
+
+        log.info("Successfully updated asset QR Code with id: {}", id);
         
         return mapper.toResponse(asset);
     }

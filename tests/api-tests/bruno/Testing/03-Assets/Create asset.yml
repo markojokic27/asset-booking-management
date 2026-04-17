@@ -15,7 +15,6 @@ http:
         "name": "{{$guid}}",
         "categoryId": "{{assetCategoryId}}",
         "description": "{{$randomPhrase}}",
-        "code": "{{$randomAlphaNumeric}}",
         "status": "ACTIVE",
         "location": "Test create"
       }

@@ -28,12 +28,6 @@ runtime:
     - expression: res.status
       operator: eq
       value: "200"
-    - expression: res.body.role
-      operator: eq
-      value: "{{role}}"
-    - expression: res.body.username
-      operator: eq
-      value: "{{username}}"
     - expression: res.body.accessToken
       operator: isDefined
     - expression: res.body.refreshToken

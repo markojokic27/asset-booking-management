@@ -15,7 +15,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import de.bdr.asset.management.asset.AssetRequestDTO;
 import de.bdr.asset.management.asset.AssetResponseDTO;
 import de.bdr.asset.management.asset.AssetService;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
@@ -77,18 +76,7 @@ public class QRCodeServiceImpl implements QRCodeService {
 
         log.info("Created QR Code for asset {}", id);
 
-        // Since the service returns DTOs, need to make a new DTO
-        // with the updated code field and use the service method later to update it.
-        AssetRequestDTO updatedAssetDTO = new AssetRequestDTO(
-            asset.name(),
-            asset.categoryId(), 
-            asset.description(), 
-            filePath, 
-            asset.status(), 
-            asset.location()
-        );
-
-        assetService.updateAsset(id, updatedAssetDTO);
+        assetService.updateAssetQRCode(id, filePath);
 
         return filePath;
     }
