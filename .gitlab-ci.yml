@@ -79,7 +79,7 @@ backend:test:
     - job: backend:compile
   script:
     - cd backend
-    - mvn test -Dmaven.repo.local=.m2/repository
+    - mvn verify -Dmaven.repo.local=.m2/repository
   artifacts:
     reports:
       junit: backend/target/surefire-reports/*.xml

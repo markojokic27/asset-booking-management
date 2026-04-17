@@ -228,7 +228,23 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<!--Dependency vulnerability check (in terminal: mvn verify)-->
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>12.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<format>HTML</format>
+					<failBuildOnCVSS>7</failBuildOnCVSS>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
