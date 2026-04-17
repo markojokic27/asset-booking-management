@@ -14,6 +14,47 @@ config:
         password: ""
       bypassProxy: ""
 
+request:
+  auth:
+    type: bearer
+    token: "{{accessToken}}"
+  variables:
+    - name: assetCategoryId
+      value: ""
+    - name: assetId
+      value: ""
+  actions:
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: |-
+          {{ 
+            const token = res?.body?.accessToken ?? bru.getVar("accessToken");
+            if (res?.body?.accessToken) {
+              bru.setVar("accessToken", token);
+            }
+            token;
+          }}
+        method: jsonq
+      variable:
+        name: accessToken
+        scope: runtime
+    - type: set-variable
+      phase: after-response
+      selector:
+        expression: |-
+          {{ 
+            const token = res?.body?.refreshToken ?? bru.getVar("refreshToken");
+            if (res?.body?.refreshToken) {
+              bru.setVar("refreshToken", token);
+            }
+            token;
+          }}
+        method: jsonq
+      variable:
+        name: refreshToken
+        scope: runtime
+
 docs:
   content: |-
     Make sure you have Bruno CLI installed.

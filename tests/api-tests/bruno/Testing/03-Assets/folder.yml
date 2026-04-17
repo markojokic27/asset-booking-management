@@ -1,5 +1,5 @@
 info:
-  name: 02-Asset_Categories
+  name: 03-Assets
   type: folder
   seq: 1
 
@@ -8,11 +8,11 @@ request:
   variables:
     - name: create
       value: '{"admin": 201, "manager": 403, "employee": 403}'
+    - name: list
+      value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: readById
       value: '{"admin": 200, "manager": 200, "employee": 200}'
-    - name: list
+    - name: qrCode
       value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: update
       value: '{"admin": 200, "manager": 403, "employee": 403}'
-    - name: delete
-      value: '{"admin": 204, "manager": 403, "employee": 403}'

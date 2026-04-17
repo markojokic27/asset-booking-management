@@ -28,8 +28,6 @@ runtime:
         const response = responses[bru.getEnvVar("responseRole")];
 
         bru.setVar("response", response);
-
-        bru.getAllVars();
   assertions:
     - expression: res.status
       operator: eq

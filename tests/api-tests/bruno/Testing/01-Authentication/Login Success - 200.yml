@@ -19,11 +19,11 @@ runtime:
   scripts:
     - type: after-response
       code: |-
-        const accessToken = res.body.accessToken;
-        const refreshToken = res.body.refreshToken;
+        // const accessToken = res.body.accessToken;
+        // const refreshToken = res.body.refreshToken;
 
-        bru.setVar("accessToken", accessToken);
-        bru.setVar("refreshToken", refreshToken);
+        // bru.setVar("accessToken", accessToken);
+        // bru.setVar("refreshToken", refreshToken);
   assertions:
     - expression: res.status
       operator: eq

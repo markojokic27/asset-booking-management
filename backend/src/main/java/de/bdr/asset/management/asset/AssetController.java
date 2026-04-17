@@ -125,7 +125,7 @@ public class AssetController {
     }
 
     /** UPDATE */
-    @Operation(summary = "Soft delete asset", description = "Only available to users with role: ADMIN.")
+    @Operation(summary = "Update asset", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")

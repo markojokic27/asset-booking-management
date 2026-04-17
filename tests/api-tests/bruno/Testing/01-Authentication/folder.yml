@@ -4,7 +4,6 @@ info:
   seq: 1
 
 request:
-  auth: inherit
   actions:
     - type: set-variable
       phase: after-response

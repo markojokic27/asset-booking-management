@@ -1,33 +1,24 @@
 info:
-  name: Update asset category details
+  name: Read asset by ID
   type: http
-  seq: 4
+  seq: 3
   tags:
-    - Asset_Categories
+    - Assets
 
 http:
-  method: PUT
-  url: "{{baseUrl}}/v1/asset-categories/:id"
+  method: GET
+  url: "{{baseUrl}}/v1/assets/:id"
   params:
     - name: id
-      value: "{{assetCategoryId}}"
+      value: "{{assetId}}"
       type: path
-  body:
-    type: json
-    data: |-
-      {
-        "name": "Updated: {{$guid}}",
-        "description": "Updated: {{$randomPhrase}}",
-        "bookingPeriod": "DAY",
-        "approval": false
-      }
   auth: inherit
 
 runtime:
   scripts:
     - type: before-request
       code: |-
-        const responses = JSON.parse(bru.getFolderVar("update"));
+        const responses = JSON.parse(bru.getFolderVar("readById"));
 
         const response = responses[bru.getEnvVar("responseRole")];
 
@@ -47,21 +38,12 @@ examples:
   - name: 200 Response
     description: OK
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 200
       statusText: OK
@@ -74,28 +56,21 @@ examples:
           {
             "id": 0,
             "name": "",
+            "categoryId": 0,
             "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
+            "code": "",
+            "status": "ACTIVE",
+            "location": ""
           }
   - name: 400 Response
     description: Bad Request
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 400
       statusText: Bad Request
@@ -116,21 +91,12 @@ examples:
   - name: 403 Response
     description: Forbidden
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 403
       statusText: Forbidden
@@ -151,21 +117,12 @@ examples:
   - name: 404 Response
     description: Not Found
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 404
       statusText: Not Found
@@ -186,21 +143,12 @@ examples:
   - name: 409 Response
     description: Conflict
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 409
       statusText: Conflict
@@ -221,21 +169,12 @@ examples:
   - name: 422 Response
     description: Unprocessable Content
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 422
       statusText: Unprocessable Entity
@@ -256,21 +195,12 @@ examples:
   - name: 500 Response
     description: Internal Server Error
     request:
-      url: "{{baseUrl}}/v1/asset-categories/:id"
-      method: PUT
+      url: "{{baseUrl}}/v1/assets/:id"
+      method: GET
       params:
         - name: id
           value: ""
           type: path
-      body:
-        type: json
-        data: |-
-          {
-            "name": "",
-            "description": "",
-            "bookingPeriod": "HOUR",
-            "approval": false
-          }
     response:
       status: 500
       statusText: Internal Server Error
@@ -289,4 +219,4 @@ examples:
             "properties": {}
           }
 
-docs: "Only available to users with role: ADMIN."
+docs: Only available to authenticated users.
