@@ -15,4 +15,7 @@ public interface AssetService {
     /** UPDATE */
     AssetResponseDTO updateAsset(Long id, AssetRequestDTO dto);
     AssetResponseDTO updateAssetQRCode(Long id, String filePath);
+
+    /** DELETE */
+    void softDeleteAsset(Long id);
 }

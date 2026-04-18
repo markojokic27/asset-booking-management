@@ -4,6 +4,7 @@ import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +79,11 @@ class AssetServiceImplTest {
         );
     }
 
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
+    }
+
     // Tests createAsset(): category exists → map request, save asset, return response
     @Test
     void shouldCreateAsset() {
@@ -104,9 +114,11 @@ class AssetServiceImplTest {
         verify(repository, never()).save(any());
     }
 
-    // Tests getAssetById(): asset found → mapped to response DTO
+    // Tests getAssetById(): user admin -> asset found → mapped to response DTO
     @Test
-    void shouldGetAssetById() {
+    void shouldGetAssetById_WhenUserIsAdmin() {
+
+        mockLoggedUser("ROLE_ADMIN");
 
         when(repository.findById(1L)).thenReturn(Optional.of(asset));
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
@@ -118,9 +130,27 @@ class AssetServiceImplTest {
         verify(repository).findById(1L);
     }
 
-    // Tests getAssetById(): throws exception if asset not found
+    // Tests getAssetById(): user employee or manager -> asset found → mapped to response DTO
     @Test
-    void shouldThrowExceptionWhenAssetNotFound() {
+    void shouldGetAssetById_WhenUserIsNotAdmin() {
+
+        mockLoggedUser("ROLE_EMPLOYEE");
+
+        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.INACTIVE)).thenReturn(Optional.of(asset));
+        when(mapper.toResponse(asset)).thenReturn(responseDTO);
+
+        AssetResponseDTO result = service.getAssetById(1L);
+
+        assertEquals(1L, result.id());
+
+        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.INACTIVE);
+    }
+
+    // Tests getAssetById(): throws exception if asset not found if user is admin
+    @Test
+    void shouldThrowExceptionWhenAssetNotFound_WhenUserIsAdmin() {
+
+        mockLoggedUser("ROLE_ADMIN");
 
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
@@ -128,9 +158,23 @@ class AssetServiceImplTest {
                 () -> service.getAssetById(1L));
     }
 
-    // Tests getAllAssets(): fetch all assets and map them to response DTOs
+    // Tests getAssetById(): throws exception if asset not found if user is employee or manager
     @Test
-    void shouldReturnAllAssets() {
+    void shouldThrowExceptionWhenAssetNotFound_WhenUserIsNotAdmin() {
+
+        mockLoggedUser("ROLE_EMPLOYEE");
+
+        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.INACTIVE)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.getAssetById(1L));
+    }
+
+    // Tests getAllAssets(): if user is admin fetch all assets and map them to response DTOs
+    @Test
+    void shouldReturnAllAssets_WhenUserIsAdmin() {
+
+        mockLoggedUser("ROLE_ADMIN");
 
         Pageable pageable = PageRequest.of(0, 10);
         Page<Asset> assetPage = new PageImpl<>(List.of(asset));
@@ -143,7 +187,25 @@ class AssetServiceImplTest {
         assertEquals(1, result.getContent().size());
 
         verify(repository).findAll(pageable);
-        verify(repository).findAll(pageable);
+    }
+
+    // Tests getAllAssets(): if user is employee or manager fetch all assets that are not inactive and map them to response DTOs
+    @Test
+    void shouldReturnAllAssets_WhenUserIsNotAdmin() {
+
+        mockLoggedUser("ROLE_EMPLOYEE");
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Asset> assetPage = new PageImpl<>(List.of(asset));
+
+        when(repository.findAllByStatusNot(AssetStatusEnum.INACTIVE, pageable)).thenReturn(assetPage);
+        when(mapper.toResponse(asset)).thenReturn(responseDTO);
+
+        Page<AssetResponseDTO> result = service.getAllAssets(pageable);
+
+        assertEquals(1, result.getContent().size());
+
+        verify(repository).findAllByStatusNot(AssetStatusEnum.INACTIVE, pageable);
     }
 
     // Tests updateAsset(): asset and category exist → update fields, save, return response
@@ -170,5 +232,16 @@ class AssetServiceImplTest {
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.updateAsset(1L, requestDTO));
+    }
+
+    private void mockLoggedUser(String user) {
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+
+        lenient().doReturn(List.of(new SimpleGrantedAuthority(user))).when(authentication).getAuthorities();
+        lenient().when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
     }
 }

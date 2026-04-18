@@ -17,4 +17,10 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
 
     @EntityGraph(attributePaths = {"category"})
     Page<Asset> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"category"})
+    Optional<Asset> findByIdAndStatusNot(Long id, AssetStatusEnum status);
+
+    @EntityGraph(attributePaths = {"category"})
+    Page<Asset> findAllByStatusNot(AssetStatusEnum status, Pageable pageable);
 }

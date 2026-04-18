@@ -2,6 +2,8 @@ package de.bdr.asset.management.asset;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +65,28 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public AssetResponseDTO getAssetById(Long id) {
 
-        Asset asset = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+        boolean isAdmin = false;
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null) {
+
+            isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(r -> "ROLE_ADMIN".equals(r.getAuthority()));
+        }
+
+        Asset asset;
+
+        if (isAdmin) {
+
+            asset = repository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+        }
+        else {
+
+            asset = repository.findByIdAndStatusNot(id, AssetStatusEnum.INACTIVE)
+                    .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+        }
 
         log.info("Asset found with id: {}", id);
 
@@ -85,7 +107,25 @@ public class AssetServiceImpl implements AssetService {
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );
 
-        Page<Asset> assets = repository.findAll(pageable);
+        boolean isAdmin = false;
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null) {
+
+            isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(r -> "ROLE_ADMIN".equals(r.getAuthority()));
+        }
+
+        Page<Asset> assets;
+
+        if (isAdmin) {
+
+            assets = repository.findAll(pageable);
+        } else {
+
+            assets = repository.findAllByStatusNot(AssetStatusEnum.INACTIVE, pageable);
+        }
 
         log.info("Successfully fetched {} assets", assets.getNumberOfElements());
 
@@ -144,5 +184,19 @@ public class AssetServiceImpl implements AssetService {
         log.info("Successfully updated asset QR Code with id: {}", id);
         
         return mapper.toResponse(asset);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void softDeleteAsset(Long id) {
+
+        log.info("Attempting to delete asset with id: {}", id);
+
+        Asset asset = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+
+        asset.setStatus(AssetStatusEnum.INACTIVE);
+
+        repository.save(asset);
     }
 }
