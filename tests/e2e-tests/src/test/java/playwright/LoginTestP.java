@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import com.microsoft.playwright.Playwright;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class LoginTest {
+public class LoginTestP {
 
     static Playwright playwright;
     static Browser browser;
