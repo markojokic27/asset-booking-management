@@ -1,3 +1,10 @@
+# Load .env automatically when using "make ..."
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
+
 dev:
 	docker compose -f compose.yaml -f compose.dev.yaml up --build
 
@@ -15,3 +22,15 @@ prod-down:
 
 prod-clean:
 	docker compose down -v
+
+# ─────────────────────────────
+# dependency check, start from root of project
+# ─────────────────────────────
+dep-check:
+	cd backend && mvn dependency-check:check \
+		-Dnvd.api.key=$(NVD_API_KEY) \
+		-Dmaven.repo.local=.m2/repository
+
+
+debug-env:
+	@echo "NVD_API_KEY=$(NVD_API_KEY)"

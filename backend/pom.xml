@@ -229,19 +229,30 @@
 				</executions>
 			</plugin>
 			<!--Dependency vulnerability check (in terminal: mvn verify)-->
+			<!-- Inside <build><plugins> in backend/pom.xml -->
 			<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
 				<version>12.1.0</version>
 				<executions>
 					<execution>
+						<id>dependency-check</id>
+						<phase>verify</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<format>HTML</format>
+					<nvdApiKey>${nvd.api.key}</nvdApiKey>
+					<nvdApiDelay>3500</nvdApiDelay>
+					<formats>
+						<format>HTML</format>
+						<format>JSON</format>
+					</formats>
+					<!-- backend/pom.xml → ../  goes to project root -->
+					<suppressionFile>../dependency-check-suppression.xml</suppressionFile>
+					<outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
 					<failBuildOnCVSS>7</failBuildOnCVSS>
 				</configuration>
 			</plugin>
