@@ -22,8 +22,10 @@ val BgLight = Color(0xFFF5F5F5)
 val SurfaceLight = Color(0xFFFFFFFF)
 val TextLight = Color(0xFF252525)
 val PrimaryLight = PrimaryBlue
+val OutlineLight = Color(0xFF252525)
 
 val BgDark = Color(0xFF252525)
 val SurfaceDark = Color(0xFF000000)
 val TextDark = Color(0xFFF5F5F5)
 val PrimaryDark = PrimaryBlue
+val OutlineDark = Color(0xFFF5F5F5)

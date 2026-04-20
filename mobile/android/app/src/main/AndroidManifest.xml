@@ -16,6 +16,10 @@
         android:theme="@style/Theme.AssetBookingManagement"
         android:usesCleartextTraffic="true">
 
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui" />
+            
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
