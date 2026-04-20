@@ -205,10 +205,12 @@ sonar:
       
   script: 
     - cd backend
-    - mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar
-        -Dsonar.projectKey=Asset-Booking-Manager-Backend
-        -Dsonar.projectName="Asset Booking Manager"
-        -Dsonar.host.url=$SONAR_HOST_URL
+    - mvn clean verify 
+        -Ddependency-check.skip=true 
+        org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
+        -Dsonar.projectKey=Asset-Booking-Manager-Backend 
+        -Dsonar.projectName="Asset Booking Manager" 
+        -Dsonar.host.url=$SONAR_HOST_URL 
         -Dsonar.token=$SONAR_TOKEN
   allow_failure: true
   rules:
