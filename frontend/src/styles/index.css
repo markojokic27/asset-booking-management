@@ -662,7 +662,6 @@
 }
 
 @layer base {
-
   html,
   body,
   #root {
@@ -674,6 +673,11 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
   }
 
   h1,
