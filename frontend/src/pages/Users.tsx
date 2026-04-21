@@ -14,7 +14,7 @@ import { UserModal } from '../features/user/components/UserModal';
 import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
-import { getUsers, updateUser } from '../features/user/api/users';
+import { createUser, getUsers, updateUser } from '../features/user/api/users';
 import type { UserDto } from '../features/user/types';
 
 function getFullName(user: Pick<UserDto, 'name' | 'surname'>) {
@@ -446,17 +446,24 @@ export default function Users() {
       <UserCreateModal
         isOpen={isUserCreateModalOpen}
         onClose={() => setIsUserCreateModalOpen(false)}
-        onCreate={(newUser) => {
-          const id = Date.now();
-          setUsers((currentUsers) => [
-            {
-              id,
-              ...newUser,
-              notes: newUser.notes ?? null,
-              benefit: null,
-            },
-            ...currentUsers,
-          ]);
+        onCreate={async (newUser) => {
+          const dto = await createUser({
+            username: newUser.username,
+            surname: newUser.surname,
+            name: newUser.name,
+            email: newUser.email,
+            // Backend currently requires non-empty password on create
+            // Dummy password for now
+            password: '********',
+            role: newUser.role,
+            status: newUser.status,
+            departmentId: newUser.departmentId,
+            managerEmail: newUser.managerEmail,
+            notes: newUser.notes ?? '',
+            benefit: 'ALL',
+          });
+
+          setUsers((currentUsers) => [dto, ...currentUsers]);
         }}
       />
 

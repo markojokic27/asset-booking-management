@@ -1,5 +1,5 @@
 import api from '../../../shared/api';
-import type { UpdateUserRequest, UserDto } from '../types';
+import type { UserDto, UserUpsertRequest } from '../types';
 
 type PageResponse<T> = {
   content: T[];
@@ -19,7 +19,12 @@ export const getUsers = async (params?: { page?: number; size?: number }) => {
   return res.data.content;
 };
 
-export const updateUser = async (id: string | number, payload: UpdateUserRequest) => {
+export const updateUser = async (id: string | number, payload: UserUpsertRequest) => {
   const res = await api.put<UserDto>(`/users/${id}`, payload);
+  return res.data;
+};
+
+export const createUser = async (payload: UserUpsertRequest) => {
+  const res = await api.post<UserDto>('/users', payload);
   return res.data;
 };

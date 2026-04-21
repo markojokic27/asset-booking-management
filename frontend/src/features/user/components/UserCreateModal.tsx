@@ -41,7 +41,7 @@ export type UserCreateModalUser = Pick<
 type UserCreateModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (user: UserCreateModalUser) => void;
+  onCreate: (user: UserCreateModalUser) => Promise<void>;
 };
 
 type FormErrors = {
@@ -82,9 +82,15 @@ const initialValues: UserCreateModalUser = {
 
 export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalProps) => {
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (isOpen) setErrors(initialErrors);
+    if (isOpen) {
+      setErrors(initialErrors);
+      setSubmitError(null);
+      setIsSaving(false);
+    }
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -107,7 +113,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       label: statusLabels[status],
     }));
 
-  const handleSubmit = (data: FormData) => {
+  const handleSubmit = async (data: FormData) => {
     const formValues = {
       username: data.get('username') as string,
       name: data.get('name') as string,
@@ -138,18 +144,26 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       return;
     }
 
-    onCreate({
-      username: result.data.username,
-      name: result.data.name,
-      surname: result.data.surname,
-      email: result.data.email,
-      role: result.data.role,
-      status: result.data.status,
-      departmentId: result.data.departmentId,
-      managerEmail: result.data.managerEmail,
-      notes: result.data.notes?.trim() || null,
-    });
-    onClose();
+    setSubmitError(null);
+    setIsSaving(true);
+    try {
+      await onCreate({
+        username: result.data.username,
+        name: result.data.name,
+        surname: result.data.surname,
+        email: result.data.email,
+        role: result.data.role,
+        status: result.data.status,
+        departmentId: result.data.departmentId,
+        managerEmail: result.data.managerEmail,
+        notes: result.data.notes?.trim() || null,
+      });
+      onClose();
+    } catch {
+      setSubmitError('Failed to create user. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -169,8 +183,9 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
             type="submit"
             form={formId}
             className="shadow-none"
+            disabled={isSaving}
           >
-            Save
+            {isSaving ? 'Saving…' : 'Save'}
           </Button>
         </div>
       }
@@ -181,10 +196,15 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          handleSubmit(formData);
+          void handleSubmit(formData);
         }}
       >
         <div className="flex flex-col gap-5">
+          {submitError && (
+            <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              {submitError}
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Form.Field name="role">
               <Form.Control asChild>
