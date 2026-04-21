@@ -1,3 +1,4 @@
+#.PHONY: dep-check dep-check-offline update-nvd
 # Load .env automatically when using "make ..."
 ifneq (,$(wildcard ./.env))
     include .env
@@ -27,10 +28,11 @@ prod-clean:
 # dependency check, start from root of project
 # ─────────────────────────────
 dep-check:
-	cd backend && mvn dependency-check:check \
-		-Dnvd.api.key=$(NVD_API_KEY) \
+	cd backend && mvn dependency-check:check\
+		-Dnvd.api.key=$(NVD_API_KEY)\
 		-Dmaven.repo.local=.m2/repository
 
-
-debug-env:
-	@echo "NVD_API_KEY=$(NVD_API_KEY)"
+dep-check-offline:
+	cd backend && mvn dependency-check:check\
+		-Dnvd.api.key=$(NVD_API_KEY)\
+		-Dmaven.repo.local=.m2/repository -Ddependency-check.skipUpdate=true

@@ -250,10 +250,12 @@
 						<format>HTML</format>
 						<format>JSON</format>
 					</formats>
-					<!-- backend/pom.xml → ../  goes to project root -->
 					<suppressionFile>../dependency-check-suppression.xml</suppressionFile>
+        			
 					<outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
 					<failBuildOnCVSS>7</failBuildOnCVSS>
+					<!-- Disable Sonatype OSS Index because it fails with 401 -->
+					<ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
 				</configuration>
 			</plugin>
 		</plugins>
