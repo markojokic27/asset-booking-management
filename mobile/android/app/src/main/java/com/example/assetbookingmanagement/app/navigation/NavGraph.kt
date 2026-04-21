@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.assetbookingmanagement.core.ui.components.Header
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
 import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
@@ -22,7 +23,24 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = isBottomNavRoute(currentRoute)
 
+    val headerTitle = when (currentRoute) {
+        Routes.HOME -> "Home"
+        Routes.ASSETS -> "Assets"
+        Routes.BOOKINGS -> "Bookings"
+        Routes.PROFILE -> "Profile"
+        else -> ""
+    }
+
     Scaffold(
+        topBar = {
+            if (showBottomBar) {
+                Header(
+                    title = headerTitle,
+                    onNotificationClick = {
+                    }
+                )
+            }
+        },
         bottomBar = {
             if (showBottomBar) {
                 BottomNavigationBar(navController = navController)
