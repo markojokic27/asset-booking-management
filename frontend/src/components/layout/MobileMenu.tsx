@@ -7,8 +7,8 @@ import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import { useNavigate } from 'react-router-dom';
 import {
-  HomeSharp,
   MonitorSharp,
+  DnsSharp,
   CalendarTodaySharp,
   PeopleSharp,
   LogoutSharp,
@@ -17,8 +17,8 @@ import {
 
 export default function MobileMenu() {
   const links = [
-    { to: '/', label: 'Home', icon: HomeSharp },
     { to: '/assets', label: 'Assets', icon: MonitorSharp },
+    { to: '/categories', label: 'Categories', icon: DnsSharp },
     { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharp },
     { to: '/users', label: 'Users', icon: PeopleSharp },
   ];
@@ -46,10 +46,14 @@ export default function MobileMenu() {
             <Dialog.Description>Main navigation</Dialog.Description>
           </VisuallyHidden.Root>
 
-          <div className="flex h-20 w-full items-center justify-center">
+          <div className="flex w-full flex-col items-center gap-3 px-6 py-4">
             <Logo />
+            <div className="flex w-full items-center justify-center gap-4">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
           </div>
-          <nav>
+          <nav className="flex-1 overflow-y-auto overscroll-contain">
             {links.map(({ to, label, icon: Icon }) => (
               <Dialog.Close asChild key={label}>
                 <NavLink
@@ -63,17 +67,13 @@ export default function MobileMenu() {
             ))}
           </nav>
 
-          <div className="flex w-full flex-wrap justify-between p-6">
-            <LanguageSwitcher />
-            <ThemeToggle />
-          </div>
           <div className="mt-auto flex w-full flex-col gap-3 p-6">
             <Dialog.Close asChild>
               <NavLink
                 to="/account-info"
                 className="flex w-full items-center justify-center gap-3 rounded-lg border border-(--color-table-border) py-3 text-lg font-medium"
               >
-                <AccountCircleSharp sx={{ fontSize: 26}}/>
+                <AccountCircleSharp sx={{ fontSize: 26 }} />
                 Account
               </NavLink>
             </Dialog.Close>

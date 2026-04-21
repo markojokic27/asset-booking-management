@@ -249,17 +249,17 @@ export default function Users() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
-      <div className="flex w-full items-center justify-between gap-6">
+      <div className="flex w-full flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sm:gap-6">
         <h1 className="text-3xl leading-11 font-black tracking-widest text-black dark:text-white">
           Users
         </h1>
 
-        <div className="flex items-center gap-4">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
           <Button
             size="sm"
             variant="outline"
             iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
-            className="shadow-none"
+            className="shadow-none w-full sm:w-auto"
             onClick={() => {
               const headers: Array<keyof UserDto> = [
                 'id',
@@ -288,7 +288,7 @@ export default function Users() {
           <Button
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
-            className="shadow-none"
+            className="shadow-none w-full sm:w-auto"
             onClick={() => {
               setActiveUser(null);
               setIsUserCreateModalOpen(true);
