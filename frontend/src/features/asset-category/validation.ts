@@ -20,8 +20,6 @@ export const assetCategoryValidationSchema = z.object({
     .int()
     .positive('Booking period is required'),
 
-
-
   approval: z.boolean({
     message: 'Approval is required',
   }),

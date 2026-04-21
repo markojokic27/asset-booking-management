@@ -2,7 +2,6 @@ import { Table, type TableColumn } from '../../../components/ui/Table'
 import type { AssetCategoryDto } from '../types'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 
 type Props = {
     data: AssetCategoryDto[]
@@ -15,7 +14,6 @@ export const AssetCategoriesTable = ({
     data,
     onView,
     onEdit,
-    onDelete
 }: Props) => {
     const columns: TableColumn<AssetCategoryDto>[] = [
         {
@@ -53,13 +51,6 @@ export const AssetCategoriesTable = ({
                         onClick={() => onEdit?.(category)}
                     >
                         <EditOutlinedIcon fontSize="small" />
-                    </button>
-
-                    <button
-                        className="p-1.5 text-red-600"
-                        onClick={() => onDelete?.(category)}
-                    >
-                        <DeleteOutlineIcon fontSize="small" />
                     </button>
 
                 </div>

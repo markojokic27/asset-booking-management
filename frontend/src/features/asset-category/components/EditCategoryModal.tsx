@@ -1,16 +1,18 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { FormInput } from '../../../components/ui/FormInput'
 import { Button } from '../../../components/ui/Button'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormDropdown } from '../../../components/ui/FormDropdown'
-import { createCategory } from '../api/categoryApi'
-import { Checkbox } from "radix-ui";
-import { CheckIcon } from "@radix-ui/react-icons";
+import { Checkbox } from 'radix-ui'
+import { CheckIcon } from '@radix-ui/react-icons'
+import type { AssetCategoryDto } from '../types'
 
 type Props = {
-    open: boolean
+    isOpen: boolean
     onClose: () => void
+    category: AssetCategoryDto | null
+    onSave: (category: AssetCategoryDto) => Promise<void>
 }
 
 const bookingPeriodOptions = [
@@ -23,37 +25,62 @@ const bookingPeriodOptions = [
 type FormValues = {
     name: string
     description: string
-    bookingPeriod: 'DAY' | 'HOUR'
+    bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH'
     approval: boolean
     picture?: string
 }
 
-export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
-    if (!open) return null
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
-        defaultValues: {
-            bookingPeriod: 'DAY',
-            approval: false
-        }
-    })
-
+export const EditCategoryModal: React.FC<Props> = ({
+    isOpen,
+    onClose,
+    category,
+    onSave,
+}) => {
     const [imagePreview, setImagePreview] = useState<string | undefined>()
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        reset,
+        formState: { errors },
+    } = useForm<FormValues>({
+        defaultValues: {
+            name: '',
+            description: '',
+            bookingPeriod: 'DAY',
+            approval: false,
+        },
+    })
+
+    useEffect(() => {
+        if (isOpen && category) {
+            reset({
+                name: category.name ?? '',
+                description: category.description ?? '',
+                bookingPeriod: category.bookingPeriod as FormValues['bookingPeriod'],
+                approval: category.approval ?? false,
+            })
+        }
+    }, [isOpen, category, reset])
+
+    if (!isOpen || !category) return null
+
     const onSubmit = async (data: FormValues) => {
         try {
-            const payload = {
+            await onSave({
+                ...category,
                 name: data.name,
                 description: data.description,
                 bookingPeriod: data.bookingPeriod,
-                approval: data.approval
-            }
+                approval: data.approval,
+                lastModifiedAt: new Date(),
+            })
 
-            await createCategory(payload)
-
-            onClose() // close modal after success
+            onClose()
         } catch (err) {
-            console.error('Error creating category:', err)
+            console.error('Error updating category:', err)
         }
     }
 
@@ -69,16 +96,14 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
             className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
             role="dialog"
             aria-modal="true"
-            aria-label="Asset details"
+            aria-label="Edit category"
             onMouseDown={(e) => {
                 if (e.target === e.currentTarget) onClose()
             }}
         >
             <div className="w-full max-w-200 overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
-
-                {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 pb-4">
-                    <div className="text-center text-xl font-bold">Add New Category</div>
+                    <div className="text-center text-xl font-bold">Edit Category</div>
 
                     <Button
                         type="button"
@@ -92,11 +117,8 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
 
                 <div className="m-4 mx-8 h-px bg-(--color-table-border)"></div>
 
-                {/* FORM */}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex gap-10 px-8 py-8">
-
-                        {/* IMAGE */}
                         <div className="flex w-65 flex-col items-center justify-center">
                             <div className="relative w-full">
                                 {imagePreview ? (
@@ -129,11 +151,9 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                             </div>
                         </div>
 
-                        {/* INPUTS */}
                         <div className="flex flex-1 flex-col space-y-5">
-
                             <FormInput
-                                id="asset-name"
+                                id="category-name"
                                 label="Name"
                                 error={!!errors.name}
                                 errorMessage={errors.name?.message}
@@ -141,7 +161,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                             />
 
                             <FormInput
-                                id="asset-description"
+                                id="category-description"
                                 label="Description"
                                 {...register('description')}
                             />
@@ -156,12 +176,13 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
 
                             <div className="flex items-center gap-2">
                                 <Checkbox.Root
-                                    id="c1"
+                                    id="edit-category-approval"
+                                    checked={undefined}
                                     onCheckedChange={(checked) =>
                                         setValue('approval', !!checked)
                                     }
                                     className="flex h-5 w-5 items-center justify-center rounded border border-(--color-table-border) shadow-sm data-[state=checked]:bg-(--color-primaryblue)"
-                                    defaultChecked
+                                    defaultChecked={category.approval}
                                 >
                                     <Checkbox.Indicator className="text-white">
                                         <CheckIcon />
@@ -169,7 +190,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                                 </Checkbox.Root>
 
                                 <label
-                                    htmlFor="c1"
+                                    htmlFor="edit-category-approval"
                                     className="cursor-pointer text-sm"
                                 >
                                     All assets from this category need Manager approval
@@ -180,13 +201,12 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
 
                     <div className="mx-8 mt-5 h-px bg-(--color-table-border)"></div>
 
-                    {/* SUBMIT */}
                     <div className="mt-5 flex justify-center gap-2">
                         <Button
                             type="submit"
                             className="mr-5 mb-5 h-10 w-70 px-6 py-4 font-bold"
                         >
-                            Add
+                            Save
                         </Button>
                     </div>
                 </form>

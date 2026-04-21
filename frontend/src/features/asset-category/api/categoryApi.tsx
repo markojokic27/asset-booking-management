@@ -30,7 +30,6 @@ export type CreateCategoryRequest = {
   description: string;
   bookingPeriod: 'HOUR' |
   'DAY';
-  assets?: string[];
   approval: boolean;
   photo?: string;
 };
@@ -38,6 +37,22 @@ export type CreateCategoryRequest = {
 export const createCategory = async (data: CreateCategoryRequest) => {
   const res = await api.post<PageResponse<AssetCategoryDto>>(
     '/asset-categories', data
+  );
+  return res.data;
+}
+
+export type UpdateCategoryRequest = {
+  name: string;
+  description?: string;
+  bookingPeriod: 'HOUR' |
+  'DAY'| 'WEEK' | 'MONTH';
+  approval: boolean;
+  photo?: string;
+};
+
+export const updateCategory = async (id: string, data: UpdateCategoryRequest) => {
+  const res = await api.put<PageResponse<AssetCategoryDto>>(
+    `/asset-categories/${id}`, data
   );
   return res.data;
 }

@@ -6,13 +6,15 @@ import { Button } from '../components/ui/Button';
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 import { AddCategoryModal } from '../features/asset-category/components/AddCategoryModal';
 import { AssetCategoriesTable } from '../features/asset-category/components/AssetCategoriesTable';
-import { getAllCategories, getCategoryById } from '../features/asset-category/api/categoryApi';
+import { getAllCategories, getCategoryById, updateCategory } from '../features/asset-category/api/categoryApi';
 import { CategoryModal } from '../features/asset-category/components/CategoryModal';
+import { EditCategoryModal } from '../features/asset-category/components/EditCategoryModal'
 
 export default function AssetCategories() {
   const [search, setSearch] = useState('');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openViewModal, setOpenViewModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const [categories, setCategories] = useState<AssetCategoryDto[]>([])
   const [loading, setLoading] = useState(true)
   const [serverError, setServerError] = useState('')
@@ -52,7 +54,36 @@ export default function AssetCategories() {
     } catch (err) {
       console.error(err);
     }
+
   };
+  const handleEdit = async (category: AssetCategoryDto) => {
+    setActiveCategory(category);
+    setOpenEditModal(true);
+    try {
+      const fullCategory = await getCategoryById(category.id);
+      setActiveCategory(fullCategory);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSaveCategory = async (updatedCategory: AssetCategoryDto) => {
+  try {
+    await updateCategory(updatedCategory.id, updatedCategory);
+
+    setCategories((prev) =>
+      prev.map((category) =>
+        category.id === updatedCategory.id ? updatedCategory : category
+      )
+    );
+
+    setActiveCategory(updatedCategory);
+    setOpenEditModal(false);
+  } catch (err) {
+    console.error('Failed to update category:', err);
+  }
+};
+
   return (
     <LayoutColumn span={12} mdSpan={9} mdOffset={3} className="flex pt-35">
       <div className="w-full">
@@ -93,8 +124,7 @@ export default function AssetCategories() {
           <AssetCategoriesTable
             data={filteredCategories}
             onView={handleView}
-            onEdit={(category) => console.log('edit', category)}
-            onDelete={(category) => console.log('delete', category)}
+            onEdit={handleEdit}
           />
         )}
         <CategoryModal
@@ -104,6 +134,15 @@ export default function AssetCategories() {
             setActiveCategory(null);
           }}
           category={activeCategory}
+        />
+        <EditCategoryModal
+          isOpen={openEditModal}
+          onClose={() => {
+            setOpenEditModal(false);
+            setActiveCategory(null);
+          }}
+          category={activeCategory}
+          onSave={handleSaveCategory}
         />
       </div>
     </LayoutColumn>
