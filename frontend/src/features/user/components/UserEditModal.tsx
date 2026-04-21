@@ -7,6 +7,7 @@ import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
+import type { UserDto } from '../types';
 
 const userEditSchema = userValidationSchema
   .pick({
@@ -24,24 +25,11 @@ const userEditSchema = userValidationSchema
     status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
   });
 
-export type UserEditModalUser = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-  status: 'ACTIVE' | 'INACTIVE';
-  departmentId: number;
-  managerEmail: string;
-  notes?: string;
-};
-
 type UserEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  user: UserEditModalUser | null;
-  onSave: (user: UserEditModalUser) => void;
+  user: UserDto | null;
+  onSave: (user: UserDto) => Promise<void>;
 };
 
 type FormErrors = {
@@ -70,15 +58,21 @@ const initialErrors: FormErrors = {
 
 export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalProps) => {
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (isOpen) setErrors(initialErrors);
+    if (isOpen) {
+      setErrors(initialErrors);
+      setSubmitError(null);
+      setIsSaving(false);
+    }
   }, [isOpen, user]);
 
   if (!isOpen || !user) return null;
   const formId = `user-edit-form-${user.id}`;
 
-  const handleSubmit = (data: FormData) => {
+  const handleSubmit = async (data: FormData) => {
     const formValues = {
       name: data.get('name') as string,
       surname: data.get('surname') as string,
@@ -109,19 +103,27 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
       return;
     }
 
-    onSave({
-      ...user,
-      firstName: result.data.name,
-      lastName: result.data.surname,
-      email: result.data.email,
-      username: result.data.username,
-      role: result.data.role,
-      status: result.data.status,
-      departmentId: result.data.departmentId,
-      managerEmail: result.data.managerEmail,
-      notes: result.data.notes?.trim() || undefined,
-    });
-    onClose();
+    setSubmitError(null);
+    setIsSaving(true);
+    try {
+      await onSave({
+        ...user,
+        name: result.data.name,
+        surname: result.data.surname,
+        email: result.data.email,
+        username: result.data.username,
+        role: result.data.role,
+        status: result.data.status,
+        departmentId: result.data.departmentId,
+        managerEmail: result.data.managerEmail,
+        notes: result.data.notes?.trim() || null,
+      });
+      onClose();
+    } catch {
+      setSubmitError('Failed to save changes. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const roleOptions = userRoleSchema.options.map((role) => ({
@@ -129,7 +131,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
     label: role,
   }));
 
-  const statusLabels: Record<UserEditModalUser['status'], string> = {
+  const statusLabels: Record<UserDto['status'], string> = {
     ACTIVE: 'Active',
     INACTIVE: 'Inactive',
   };
@@ -158,8 +160,9 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
             type="submit"
             form={formId}
             className="shadow-none"
+            disabled={isSaving}
           >
-            Save
+            {isSaving ? 'Saving…' : 'Save'}
           </Button>
         </div>
       }
@@ -171,10 +174,15 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          handleSubmit(formData);
+          void handleSubmit(formData);
         }}
       >
         <div className="flex flex-col gap-5">
+          {submitError && (
+            <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              {submitError}
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Form.Field name="role">
               <Form.Control asChild>
@@ -226,7 +234,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 name="name"
                 type="text"
                 label="First name"
-                defaultValue={user.firstName}
+                defaultValue={user.name}
                 error={!!errors.name}
                 errorMessage={errors.name}
               />
@@ -240,7 +248,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 name="surname"
                 type="text"
                 label="Last name"
-                defaultValue={user.lastName}
+                defaultValue={user.surname}
                 error={!!errors.surname}
                 errorMessage={errors.surname}
               />

@@ -7,6 +7,7 @@ import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
+import type { UserDto } from '../types';
 
 const userCreateSchema = userValidationSchema
   .pick({
@@ -24,17 +25,18 @@ const userCreateSchema = userValidationSchema
     status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
   });
 
-export type UserCreateModalUser = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-  status: 'ACTIVE' | 'INACTIVE';
-  departmentId: number;
-  managerEmail: string;
-  notes?: string;
-};
+export type UserCreateModalUser = Pick<
+  UserDto,
+  | 'username'
+  | 'name'
+  | 'surname'
+  | 'email'
+  | 'role'
+  | 'status'
+  | 'departmentId'
+  | 'managerEmail'
+  | 'notes'
+>;
 
 type UserCreateModalProps = {
   isOpen: boolean;
@@ -68,8 +70,8 @@ const initialErrors: FormErrors = {
 
 const initialValues: UserCreateModalUser = {
   username: '',
-  firstName: '',
-  lastName: '',
+  name: '',
+  surname: '',
   email: '',
   role: 'EMPLOYEE',
   status: 'ACTIVE',
@@ -138,14 +140,14 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
 
     onCreate({
       username: result.data.username,
-      firstName: result.data.name,
-      lastName: result.data.surname,
+      name: result.data.name,
+      surname: result.data.surname,
       email: result.data.email,
       role: result.data.role,
       status: result.data.status,
       departmentId: result.data.departmentId,
       managerEmail: result.data.managerEmail,
-      notes: result.data.notes?.trim() || undefined,
+      notes: result.data.notes?.trim() || null,
     });
     onClose();
   };
@@ -234,7 +236,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 name="name"
                 type="text"
                 label="First name"
-                defaultValue={initialValues.firstName}
+                defaultValue={initialValues.name}
                 error={!!errors.name}
                 errorMessage={errors.name}
               />
@@ -248,7 +250,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 name="surname"
                 type="text"
                 label="Last name"
-                defaultValue={initialValues.lastName}
+                defaultValue={initialValues.surname}
                 error={!!errors.surname}
                 errorMessage={errors.surname}
               />
