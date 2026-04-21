@@ -173,7 +173,7 @@ bruno:smoke:
       alias: postgres
   variables:
     BRUNO_BASE_URL: "http://localhost:8080/API"
-    BRUNO_ENV_FILE: "environments/Employee.yml"
+    BRUNO_ENV_FILE: "environments/Admin.yml"
     # PostgreSQL service container
     POSTGRES_DB: asset_mgm
     POSTGRES_USER: asset_mgm_user
