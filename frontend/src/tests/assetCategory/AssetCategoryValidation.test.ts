@@ -5,7 +5,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             const result = assetCategoryValidationSchema.safeParse({
                 name:"Books",
                 description:"A collection of books available for borrowing within the company library.",
-                bookingPeriod:"DAY",
+                bookingPeriod:1,
                 approval:true
             });
 
@@ -18,7 +18,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             const result = assetCategoryValidationSchema.safeParse({
                 name:"",
                 description:"A collection of books available for borrowing within the company library.",
-                bookingPeriod:"DAY",
+                bookingPeriod:1,
                 approval:true
             });
 
@@ -30,7 +30,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             const result = assetCategoryValidationSchema.safeParse({
                 name:"b".repeat(101),
                 description:"A collection of books available for borrowing within the company library.",
-                bookingPeriod:"DAY",
+                bookingPeriod:1,
                 approval:true
             });
 
@@ -45,7 +45,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             const result = assetCategoryValidationSchema.safeParse({
                 name:"Books",
                 description:"",
-                bookingPeriod:"DAY",
+                bookingPeriod:1,
                 approval:true
             });
 
@@ -57,7 +57,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             const result = assetCategoryValidationSchema.safeParse({
                 name:"Books",
                 description:"b".repeat(256),
-                bookingPeriod:"DAY",
+                bookingPeriod:1,
                 approval:true
             });
 
@@ -88,7 +88,7 @@ import { assetCategoryValidationSchema } from "../../features/asset-category/val
             const result = assetCategoryValidationSchema.safeParse({
                 name:"Books",
                 description:"A collection of books available for borrowing within the company library.",
-                bookingPeriod:"DAY",
+                bookingPeriod:1,
                 approval:null
             });
 
