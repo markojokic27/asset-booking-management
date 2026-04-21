@@ -62,3 +62,6 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+.m2/
+.metals/
