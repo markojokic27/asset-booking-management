@@ -1,6 +1,6 @@
 import logoUrl from '../../assets/logo.png';
 import { twMerge } from 'tailwind-merge';
-
+//TODO: triba ga cutat u nekom svg editoru da se dobije vektorska verzija loga, ovo je trenutno raster i lose se skalira
 export const Logo: React.FC<React.ComponentPropsWithoutRef<'svg'>> = ({
   ...rest
 }) => (

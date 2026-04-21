@@ -12,7 +12,7 @@ import {
   CalendarTodaySharp,
   PeopleSharp,
   LogoutSharp,
-  AccountCircleSharp
+  AccountCircleSharp,
 } from '@mui/icons-material';
 
 export default function MobileMenu() {
@@ -47,7 +47,7 @@ export default function MobileMenu() {
           </VisuallyHidden.Root>
 
           <div className="flex w-full flex-col items-center gap-3 px-6 py-4">
-            <Logo />
+            <Logo className='scale-200'/>
             <div className="flex w-full items-center justify-center gap-4">
               <LanguageSwitcher />
               <ThemeToggle />
