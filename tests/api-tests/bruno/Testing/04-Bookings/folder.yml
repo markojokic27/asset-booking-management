@@ -1,0 +1,18 @@
+info:
+  name: 04-Bookings
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+  variables:
+    - name: create
+      value: ""
+    - name: list
+      value: ""
+    - name: readById
+      value: ""
+    - name: update
+      value: ""
+    - name: delete
+      value: ""

@@ -19,7 +19,6 @@ http:
         "name": "",
         "categoryId": 0,
         "description": "",
-        "code": "",
         "status": "ACTIVE",
         "location": ""
       }

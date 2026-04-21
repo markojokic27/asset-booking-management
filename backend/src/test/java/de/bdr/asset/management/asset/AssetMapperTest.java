@@ -1,10 +1,10 @@
 package de.bdr.asset.management.asset;
 
-import de.bdr.asset.management.assetcategory.AssetCategory;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import de.bdr.asset.management.assetcategory.AssetCategory;
 
 public class AssetMapperTest {
 
@@ -20,7 +20,6 @@ public class AssetMapperTest {
                 "Laptop Dell",
                 1L,
                 "A high-performance laptop",
-                "QR-CODE-123",
                 AssetStatusEnum.ACTIVE,
                 "Office A"
         );
@@ -64,7 +63,7 @@ public class AssetMapperTest {
     @Test
     void shouldMapCodeToEntity() {
         Asset result = assetMapper.toEntity(buildRequest());
-        assertThat(result.getCode()).isEqualTo("QR-CODE-123");
+        assertThat(result.getCode()).isEqualTo(null);
     }
 
     @Test

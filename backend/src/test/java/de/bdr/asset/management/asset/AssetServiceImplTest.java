@@ -1,16 +1,23 @@
 package de.bdr.asset.management.asset;
 
-import de.bdr.asset.management.assetcategory.AssetCategory;
-import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
-import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,11 +28,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import de.bdr.asset.management.assetcategory.AssetCategory;
+import de.bdr.asset.management.assetcategory.AssetCategoryRepository;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 class AssetServiceImplTest {
@@ -61,7 +66,6 @@ class AssetServiceImplTest {
                 "Hp 15",
                 1L,
                 "Laptop located in room 301",
-                "QR-LAPTOP-001",
                 AssetStatusEnum.ACTIVE,
                 "Room 301"
 

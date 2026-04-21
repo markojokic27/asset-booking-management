@@ -959,8 +959,6 @@ components:
           type: string
           minLength: 2
           maxLength: 256
-        code:
-          type: string
         status:
           type: string
           enum: [ACTIVE, INACTIVE, DAMAGED, DELETED]

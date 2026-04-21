@@ -16,9 +16,6 @@ public record AssetRequestDTO(
         @Size(max = 255, message = "Description cannot exceed 255 characters")
         String description,
 
-        @Size(max=2000, message="QR code content cannot exceed 2000 characters")
-        String code,
-
         @NotNull(message = "Status is required")
         AssetStatusEnum status,
 

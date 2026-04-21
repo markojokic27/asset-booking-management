@@ -1,9 +1,15 @@
 package de.bdr.asset.management.asset;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,13 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AssetControllerTest {
@@ -30,8 +29,8 @@ public class AssetControllerTest {
     /** CREATE */
     @Test
     void createAsset_validRequest_returnsCreatedStatus(){
-        AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
-        AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", null, AssetStatusEnum.ACTIVE, "Room 301");
 
         when(assetService.createAsset(request)).thenReturn(response);
 
@@ -85,8 +84,8 @@ public class AssetControllerTest {
     /** UPDATE */
     @Test
     void updateAssetById_returnsOkWithUpdatesdAsset(){
-        AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
-        AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", null, AssetStatusEnum.ACTIVE, "Room 301");
 
         when(assetService.updateAsset(1L, request)).thenReturn(response);
 
