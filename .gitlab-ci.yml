@@ -112,7 +112,7 @@ frontend:test:
 # ─────────────────────────────────────────
 # SECURITY STAGE
 # ─────────────────────────────────────────
-dependency-check:
+backend-dependency-check:
   stage: security
   image: maven:3.9-eclipse-temurin-21
   needs:
@@ -122,6 +122,7 @@ dependency-check:
     - mvn dependency-check:check
         -Dnvd.api.key=$NVD_API_KEY
         -Dmaven.repo.local=.m2/repository
+        -DretireJsAnalyzerEnabled=false # GitHub is unreachable from Internal network, also this is backend dependency check, Js already included in npm audit
   artifacts:
     when: always              # Save report even if CVSS ≥7 fails job
     paths:
@@ -135,9 +136,30 @@ dependency-check:
   allow_failure: true         # Don't block dockerize on first runs
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"   # Auto on nightly schedule
-    - if: $CI_COMMIT_BRANCH == "main"         # Always on main branch
+    - if: $CI_COMMIT_BRANCH == "main"         
     - if: $CI_COMMIT_BRANCH == "develop"
       when: manual                            # Manual button on develop
+
+#frontend security stage
+frontend-package-vulnerabilities-check:
+  stage: security
+  image: node:24-alpine
+  needs:
+    - job: frontend:compile
+  script:
+    - cd frontend
+    - npm ci --legacy-peer-deps
+    - npm audit --audit-level=high --omit=dev
+  allow_failure: true         # don't block on first runs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"   # nightly
+    - if: $CI_COMMIT_BRANCH == "main"        
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual                            
+  cache:
+    key: npm-$CI_PROJECT_ID
+    paths:
+      - frontend/node_modules/
 
 
 # ─────────────────────────────────────────
