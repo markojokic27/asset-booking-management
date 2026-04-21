@@ -102,9 +102,9 @@ public class UserController {
     }
 
     /** UPDATE */
-    @Operation(summary = "Update user", description = "Only available to users with role: ADMIN.")
+    @Operation(summary = "Update user", description = "Only available to users with role: ADMIN or owners of the account")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
@@ -121,23 +121,22 @@ public class UserController {
     }
 
     /** Soft DELETE */
-    @Operation(summary = "Soft delete user", description = "Only available to users with role: ADMIN.")
+    @Operation(summary = "Soft delete user", description = "Only available to users with role: ADMIN or owners of the account")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> deleteUser(
-            @PathVariable Long id,
-            @RequestParam String status,
-            @RequestBody Map<String, String> noteBody
-    ) {
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable Long id
+    ) throws ResourceNotFoundException
+    {
         log.info("Received DELETE request to delete user with id: {}", id);
 
-        // The note is optional in the body
-        String note = noteBody.getOrDefault("note", "");
-        UserResponseDTO deactivatedUser = userService.deleteUser(id, status, note);
+        userService.softDeleteUser(id);
 
         log.debug("Successfully processed DELETE request for user id: {}", id);
 
-        return ResponseEntity.ok(deactivatedUser);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(null);
     }
 }

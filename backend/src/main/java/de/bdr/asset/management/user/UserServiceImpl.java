@@ -1,5 +1,9 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.asset.Asset;
+import de.bdr.asset.management.asset.AssetStatusEnum;
+import de.bdr.asset.management.booking.BookingRepository;
+import de.bdr.asset.management.booking.BookingStatusEnum;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +14,8 @@ import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementation of User Service
@@ -23,12 +29,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final DepartmentRepository departmentRepository;
+    private final BookingRepository bookingRepository;
 
-    public UserServiceImpl(UserRepository repository, UserMapper mapper, DepartmentRepository departmentRepository) {
+    public UserServiceImpl(UserRepository repository, UserMapper mapper, DepartmentRepository departmentRepository, BookingRepository bookingRepository) {
 
         this.repository = repository;
         this.mapper = mapper;
         this.departmentRepository = departmentRepository;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
@@ -124,18 +132,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserResponseDTO deleteUser(Long id, String status, String note) {
+    public void softDeleteUser(Long id) {
 
-        // TODO: Add a field for soft delete
-        // Also discuss if passing status is neccessary since delete status will always be the same
-        
-        // User user = repository.findById(id)
-        //         .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        log.info("Attempting to delete user with id: {}", id);
 
-        // user.setStatus(status);
-        // user.setNote(note);
-        // user = repository.save();
+        User user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
-        return null;
+        user.setStatus(UserStatusEnum.DELETED);
+
+        repository.save(user);
+
+        List<String> statusesToCancel = List.of(
+                BookingStatusEnum.ACTIVE.name(),
+                BookingStatusEnum.APPROVED.name(),
+                BookingStatusEnum.PENDING.name()
+        );
+
+        bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
     }
 }

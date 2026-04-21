@@ -18,8 +18,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -107,35 +106,17 @@ public class UserControllerTest {
     /** DELETE */
 
     @Test
-    void deleteUser_returnsUserResponseDTO() {
+    void deleteUser_returnsNoContent() {
 
         Long userId = 1L;
-        String status = "INACTIVE";
-        Map<String, String> noteBody = Map.of("note", "Left company");
 
-        UserResponseDTO mockResponse = new UserResponseDTO(
-                userId,
-                "username",
-                "surname",
-                "name",
-                "email@test.com",
-                UserRoleEnum.EMPLOYEE,
-                UserStatusEnum.INACTIVE,
-                1L,
-                "manager@test.com",
-                "Left company",
-                "ALL"
-        );
+        doNothing().when(userService).softDeleteUser(userId);
 
-        when(userService.deleteUser(userId, status, "Left company"))
-                .thenReturn(mockResponse);
+        ResponseEntity<Void> result = userController.deleteUser(userId);
 
-        ResponseEntity<UserResponseDTO> result =
-                userController.deleteUser(userId, status, noteBody);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(result.getBody()).isNull();
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(result.getBody()).isEqualTo(mockResponse);
-
-        verify(userService).deleteUser(userId, status, "Left company");
+        verify(userService).softDeleteUser(userId);
     }
 }

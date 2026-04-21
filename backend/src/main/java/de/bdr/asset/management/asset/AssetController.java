@@ -141,11 +141,13 @@ public class AssetController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAsset(
             @PathVariable Long id
-    )
+    ) throws ResourceNotFoundException
     {
         log.info("Received DELETE request to soft delete an asset");
 
         assetService.softDeleteAsset(id);
+
+        log.debug("Successfully processed DELETE request for asset id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

@@ -19,5 +19,5 @@ public interface UserService {
     UserResponseDTO updateUser(Long id, UserRequestDTO userRequest);
 
     /** DELETE (Soft) */
-    UserResponseDTO deleteUser(Long id, String status, String note);
+    void softDeleteUser(Long id);
 }
