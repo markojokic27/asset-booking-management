@@ -9,7 +9,6 @@ export default function App() {
   return (
     <>
       <Header variant="app" />
-      <FloatingUserMenu />
       <Navbar />
       <Layout className="pb-28">
         <LayoutRow className="relative">

@@ -5,6 +5,7 @@ import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
+import { AccountCircleSharp } from '@mui/icons-material';
 
 export const Navbar: React.FC = () => {
   const navItems = [
@@ -51,10 +52,16 @@ export const Navbar: React.FC = () => {
           ))}
         </div>
 
-        <NavLink to="/login" className={getLinkClass(false)}>
-          <LogoutSharpIcon className="mr-4" />
-          Logout
-        </NavLink>
+        <div className="flex w-full flex-col gap-4">
+          <NavLink to="/account-info" className={({ isActive }) => getLinkClass(isActive)}>
+              <AccountCircleSharp className='mr-3' sx={{ fontSize: 26}} />
+              Account
+          </NavLink>
+          <NavLink to="/login" className={getLinkClass(false)}>
+              <LogoutSharpIcon className="mr-4" />
+              Logout
+            </NavLink>
+        </div>
       </nav>
     </LayoutColumn>
   );
