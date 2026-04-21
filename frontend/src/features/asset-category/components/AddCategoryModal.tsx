@@ -4,16 +4,9 @@ import { Button } from '../../../components/ui/Button'
 import { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormDropdown } from '../../../components/ui/FormDropdown'
-import { MultiSelect } from '../../../components/ui/MultiSelect'
 import { createCategory } from '../api/categoryApi'
 import { Checkbox } from "radix-ui";
 import { CheckIcon } from "@radix-ui/react-icons";
-
-
-const assetOptions = [
-    { value: 'MacBookPro', label: 'MacBook Pro' },
-    { value: 'HPElitebook', label: 'HP Elitebook' }
-]
 
 type Props = {
     open: boolean
@@ -38,8 +31,7 @@ type FormValues = {
 
 export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
     if (!open) return null
-
-    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<FormValues>({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
         defaultValues: {
             bookingPeriod: 'DAY',
             approval: false
@@ -162,13 +154,6 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                                 error={!!errors.bookingPeriod}
                                 errorMessage={errors.bookingPeriod?.message}
                                 {...register('bookingPeriod', { required: 'Booking period is required' })}
-                            />
-
-                            <MultiSelect
-                                name="assets"
-                                control={control}
-                                label="Assets"
-                                options={assetOptions}
                             />
 
                             <div className="flex items-center gap-2">

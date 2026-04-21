@@ -13,6 +13,9 @@ type Props = {
   control: any
   label?: string
   options: readonly MultiSelectOption[]
+  onOpen?: () => void
+  loading?: boolean
+  error?: string
 }
 
 const fieldLabelClassName =
@@ -25,10 +28,20 @@ export const MultiSelect = ({
   name,
   control,
   label,
-  options
+  options,
+  onOpen,
+  loading,
+  error
 }: Props) => {
   const [open, setOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
+
+  const handleToggleOpen = () => {
+    if (!open && onOpen) {
+      onOpen()
+    }
+    setOpen(o => !o)
+  }
 
   return (
     <Controller
@@ -70,7 +83,7 @@ export const MultiSelect = ({
                 fieldClassName,
                 'cursor-pointer'
               )}
-              onClick={() => setOpen(o => !o)}
+              onClick={handleToggleOpen}
             >
 
               {/* SELECTED CHIPS */}
@@ -116,7 +129,20 @@ export const MultiSelect = ({
 
                 {/* OPTIONS */}
                 <div className="max-h-60 overflow-y-auto">
-                  {filteredOptions.map(opt => (
+
+                  {loading && (
+                    <div className="px-3 py-3 text-sm text-gray-500">
+                      Loading assets...
+                    </div>
+                  )}
+
+                  {!loading && error && (
+                    <div className="px-3 py-3 text-sm text-red-500">
+                      Failed to load assets
+                    </div>
+                  )}
+
+                  {!loading && !error && filteredOptions.map(opt => (
                     <label
                       key={opt.value}
                       className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-(--color-table-row-hover)"
@@ -126,12 +152,11 @@ export const MultiSelect = ({
                         onCheckedChange={() => toggle(opt.value)}
                         className="h-4 w-4 rounded border border-(--color-table-border)"
                       />
-
                       {opt.label}
                     </label>
                   ))}
-                </div>
 
+                </div>
               </div>
             )}
           </div>

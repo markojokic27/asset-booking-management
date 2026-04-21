@@ -38,6 +38,10 @@ export default function AssetCategories() {
     load();
   }, []);
 
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   const handleView = async (category: AssetCategoryDto) => {
     setOpenViewModal(true);
     setActiveCategory(null);
@@ -80,14 +84,14 @@ export default function AssetCategories() {
         {loading ? (
           <p className="text-sm text-gray-500">Loading categories...</p>
         ) : serverError ? (
-          <p className="text-sm font-semibold text-red-500">
+          <p className="absolute bottom-24 self-center text-center font-semibold text-red-500">
             {serverError}
           </p>
         ) : categories.length === 0 ? (
           <p className="text-sm text-gray-500">No categories found</p>
         ) : (
           <AssetCategoriesTable
-            data={categories}
+            data={filteredCategories}
             onView={handleView}
             onEdit={(category) => console.log('edit', category)}
             onDelete={(category) => console.log('delete', category)}
