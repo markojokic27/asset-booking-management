@@ -168,43 +168,68 @@ frontend-package-vulnerabilities-check:
 bruno:smoke:
   stage: bruno
   image: node:24-alpine
-  # needs:
-    # - job: backend:test
-  services: []
+  services:
+    - name: postgres:16-alpine
+      alias: postgres
   variables:
     BRUNO_BASE_URL: "http://localhost:8080/API"
-    BRUNO_ENV: "Employee"   # select environment for testing e.g "Admin", "Employee", or "Manager" 
+    BRUNO_ENV_FILE: "environments/Employee.yml"
+    # PostgreSQL service container
+    POSTGRES_DB: asset_mgm
+    POSTGRES_USER: asset_mgm_user
+    POSTGRES_PASSWORD: $BRUNO_DB_PASSWORD
+    # Spring datasource
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_NAME: asset_mgm
+    DB_USER: asset_mgm_user
+    DB_PASSWORD: $BRUNO_DB_PASSWORD
+    # JWT
+    JWT_SECRET: $BRUNO_JWT_SECRET
+    JWT_EXPIRY_SECONDS: "3600"
+    JWT_REFRESH_SECONDS: "86400"
+
   before_script:
     - apk add --no-cache openjdk21-jre maven curl
-    - echo "Installing Bruno CLI"
-    - npm install -g @usebruno/cli   # Bruno CLI for running collections in CI 
+    - npm install -g @usebruno/cli
+
   script:
-    # 1) Start backend (Spring Boot) in background
-    - echo "Starting backend API..."
     - cd backend
-    - mvn -q spring-boot:run -Dspring-boot.run.profiles=dev &
-    - BACKEND_PID=$!
-    - cd ..
-    # 2) Wait for login endpoint to be ready
-    - echo "Waiting for backend at ${BRUNO_BASE_URL}/v1/auth/login"
     - |
-      for i in $(seq 1 30); do
+      mvn -q spring-boot:run \
+        -Dspring-boot.run.profiles=dev \
+        -Dmaven.repo.local=.m2/repository \
+        > /tmp/backend.log 2>&1 &
+      echo $! > /tmp/backend.pid
+    - cd ..
+    - |
+      echo "Waiting for backend..."
+      READY=0
+      for i in $(seq 1 40); do
         STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${BRUNO_BASE_URL}/v1/auth/login" || echo "000")
         if echo "$STATUS" | grep -qE "200|400|401|403|404|405"; then
-          echo "Backend is up (got HTTP $STATUS)."
+          echo "Backend is up (HTTP $STATUS)."
+          READY=1
           break
         fi
-        echo "Backend not ready yet (status $STATUS), retry $i/30..."
-        sleep 2
+        echo "Not ready (status $STATUS), retry $i/40..."
+        sleep 3
       done
-    # 3) Run Bruno smoke tests from Testing collection
+      if [ "$READY" = "0" ]; then
+        echo "=== BACKEND FAILED TO START ==="
+        cat /tmp/backend.log
+        exit 1
+      fi
     - cd tests/api-tests/bruno/Testing
     - |
       bru run \
-        --env "${BRUNO_ENV}" \
+        --env-file "${BRUNO_ENV_FILE}" \
         --reporter-junit "../../../bruno-smoke-results.xml"
+
   after_script:
-    - if [ -n "${BACKEND_PID:-}" ]; then kill $BACKEND_PID || true; fi
+    - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
+    - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+
   artifacts:
     when: always
     reports:

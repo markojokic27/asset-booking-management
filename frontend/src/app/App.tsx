@@ -3,7 +3,7 @@ import { Header } from '../components/layout/Header';
 import { Layout, LayoutRow } from '../components/layout/Layout';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
-import FloatingUserMenu from '../components/layout/FloatingUserMenu';
+import _FloatingUserMenu from '../components/layout/FloatingUserMenu';
 
 export default function App() {
   return (
