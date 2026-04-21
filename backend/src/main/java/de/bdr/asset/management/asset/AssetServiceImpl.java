@@ -84,7 +84,7 @@ public class AssetServiceImpl implements AssetService {
         }
         else {
 
-            asset = repository.findByIdAndStatusNot(id, AssetStatusEnum.INACTIVE)
+            asset = repository.findByIdAndStatusNot(id, AssetStatusEnum.DELETED)
                     .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
         }
 
@@ -124,7 +124,7 @@ public class AssetServiceImpl implements AssetService {
             assets = repository.findAll(pageable);
         } else {
 
-            assets = repository.findAllByStatusNot(AssetStatusEnum.INACTIVE, pageable);
+            assets = repository.findAllByStatusNot(AssetStatusEnum.DELETED, pageable);
         }
 
         log.info("Successfully fetched {} assets", assets.getNumberOfElements());
@@ -195,7 +195,7 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
 
-        asset.setStatus(AssetStatusEnum.INACTIVE);
+        asset.setStatus(AssetStatusEnum.DELETED);
 
         repository.save(asset);
     }

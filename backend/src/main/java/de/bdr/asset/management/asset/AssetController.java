@@ -135,7 +135,7 @@ public class AssetController {
     }
 
     /** Soft DELETE */
-    @Operation(summary = "Delete asset", description = "Marks an asset as INACTIVE. Only available to ADMIN.")
+    @Operation(summary = "Delete asset", description = "Marks an asset as DELETED. Only available to ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

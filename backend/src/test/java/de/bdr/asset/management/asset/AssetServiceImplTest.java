@@ -136,14 +136,14 @@ class AssetServiceImplTest {
 
         mockLoggedUser("ROLE_EMPLOYEE");
 
-        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.INACTIVE)).thenReturn(Optional.of(asset));
+        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.of(asset));
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
         AssetResponseDTO result = service.getAssetById(1L);
 
         assertEquals(1L, result.id());
 
-        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.INACTIVE);
+        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.DELETED);
     }
 
     // Tests getAssetById(): throws exception if asset not found if user is admin
@@ -164,7 +164,7 @@ class AssetServiceImplTest {
 
         mockLoggedUser("ROLE_EMPLOYEE");
 
-        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.INACTIVE)).thenReturn(Optional.empty());
+        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.getAssetById(1L));
@@ -189,7 +189,7 @@ class AssetServiceImplTest {
         verify(repository).findAll(pageable);
     }
 
-    // Tests getAllAssets(): if user is employee or manager fetch all assets that are not inactive and map them to response DTOs
+    // Tests getAllAssets(): if user is employee or manager fetch all assets that are not deleted and map them to response DTOs
     @Test
     void shouldReturnAllAssets_WhenUserIsNotAdmin() {
 
@@ -198,14 +198,14 @@ class AssetServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Asset> assetPage = new PageImpl<>(List.of(asset));
 
-        when(repository.findAllByStatusNot(AssetStatusEnum.INACTIVE, pageable)).thenReturn(assetPage);
+        when(repository.findAllByStatusNot(AssetStatusEnum.DELETED, pageable)).thenReturn(assetPage);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
         Page<AssetResponseDTO> result = service.getAllAssets(pageable);
 
         assertEquals(1, result.getContent().size());
 
-        verify(repository).findAllByStatusNot(AssetStatusEnum.INACTIVE, pageable);
+        verify(repository).findAllByStatusNot(AssetStatusEnum.DELETED, pageable);
     }
 
     // Tests updateAsset(): asset and category exist → update fields, save, return response

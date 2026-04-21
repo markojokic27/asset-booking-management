@@ -782,9 +782,9 @@ components:
           examples: 
             - 'johndoe@gmail.com'
         role:
-          enum: [EMPLOYEE, MANAGER]
+          enum: [ADMIN, EMPLOYEE, MANAGER]
         status:
-          enum: [ACTIVE, INACTIVE]
+          enum: [ACTIVE, INACTIVE, STUDENT, LEFT_COMPANY, DELETED]
           default: ACTIVE
         note:
           type: string
@@ -829,9 +829,9 @@ components:
           examples: 
             - 'johndoe@gmail.com'
         role:
-          enum: [EMPLOYEE, MANAGER]
+          enum: [ADMIN, EMPLOYEE, MANAGER]
         status:
-          enum: [ACTIVE, INACTIVE]
+          enum: [ACTIVE, INACTIVE, STUDENT, LEFT_COMPANY, DELETED]
           default: ACTIVE
         note:
           type: string
@@ -963,7 +963,7 @@ components:
           type: string
         status:
           type: string
-          enum: [AVAILABLE, UNAVAILABLE]
+          enum: [ACTIVE, INACTIVE, DAMAGED, DELETED]
         location:
           type: string
       required:
@@ -987,7 +987,7 @@ components:
         code:
           type: string 
         status:
-          enum: [AVAILABLE, UNAVAILABLE]
+          enum: [ACTIVE, INACTIVE, DAMAGED, DELETED]
           # change type to boolean (e.g. available: true/false)
         location:
           type: string 
