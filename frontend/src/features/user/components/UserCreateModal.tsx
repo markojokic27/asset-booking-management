@@ -7,6 +7,7 @@ import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
+import type { UserDto } from '../types';
 
 const userCreateSchema = userValidationSchema
   .pick({
@@ -24,22 +25,23 @@ const userCreateSchema = userValidationSchema
     status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
   });
 
-export type UserCreateModalUser = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-  status: 'ACTIVE' | 'INACTIVE';
-  departmentId: number;
-  managerEmail: string;
-  notes?: string;
-};
+export type UserCreateModalUser = Pick<
+  UserDto,
+  | 'username'
+  | 'name'
+  | 'surname'
+  | 'email'
+  | 'role'
+  | 'status'
+  | 'departmentId'
+  | 'managerEmail'
+  | 'notes'
+>;
 
 type UserCreateModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (user: UserCreateModalUser) => void;
+  onCreate: (user: UserCreateModalUser) => Promise<void>;
 };
 
 type FormErrors = {
@@ -68,8 +70,8 @@ const initialErrors: FormErrors = {
 
 const initialValues: UserCreateModalUser = {
   username: '',
-  firstName: '',
-  lastName: '',
+  name: '',
+  surname: '',
   email: '',
   role: 'EMPLOYEE',
   status: 'ACTIVE',
@@ -80,9 +82,15 @@ const initialValues: UserCreateModalUser = {
 
 export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalProps) => {
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (isOpen) setErrors(initialErrors);
+    if (isOpen) {
+      setErrors(initialErrors);
+      setSubmitError(null);
+      setIsSaving(false);
+    }
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -105,7 +113,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       label: statusLabels[status],
     }));
 
-  const handleSubmit = (data: FormData) => {
+  const handleSubmit = async (data: FormData) => {
     const formValues = {
       username: data.get('username') as string,
       name: data.get('name') as string,
@@ -136,18 +144,26 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       return;
     }
 
-    onCreate({
-      username: result.data.username,
-      firstName: result.data.name,
-      lastName: result.data.surname,
-      email: result.data.email,
-      role: result.data.role,
-      status: result.data.status,
-      departmentId: result.data.departmentId,
-      managerEmail: result.data.managerEmail,
-      notes: result.data.notes?.trim() || undefined,
-    });
-    onClose();
+    setSubmitError(null);
+    setIsSaving(true);
+    try {
+      await onCreate({
+        username: result.data.username,
+        name: result.data.name,
+        surname: result.data.surname,
+        email: result.data.email,
+        role: result.data.role,
+        status: result.data.status,
+        departmentId: result.data.departmentId,
+        managerEmail: result.data.managerEmail,
+        notes: result.data.notes?.trim() || null,
+      });
+      onClose();
+    } catch {
+      setSubmitError('Failed to create user. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -167,8 +183,9 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
             type="submit"
             form={formId}
             className="shadow-none"
+            disabled={isSaving}
           >
-            Save
+            {isSaving ? 'Saving…' : 'Save'}
           </Button>
         </div>
       }
@@ -179,10 +196,15 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
-          handleSubmit(formData);
+          void handleSubmit(formData);
         }}
       >
         <div className="flex flex-col gap-5">
+          {submitError && (
+            <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              {submitError}
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Form.Field name="role">
               <Form.Control asChild>
@@ -234,7 +256,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 name="name"
                 type="text"
                 label="First name"
-                defaultValue={initialValues.firstName}
+                defaultValue={initialValues.name}
                 error={!!errors.name}
                 errorMessage={errors.name}
               />
@@ -248,7 +270,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 name="surname"
                 type="text"
                 label="Last name"
-                defaultValue={initialValues.lastName}
+                defaultValue={initialValues.surname}
                 error={!!errors.surname}
                 errorMessage={errors.surname}
               />

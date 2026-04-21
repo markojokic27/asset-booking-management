@@ -36,7 +36,7 @@ export const Navbar: React.FC = () => {
   return (
     <LayoutColumn
       mdSpan={3}
-      className="text-text-light fixed left-0 z-20 hidden h-screen min-h-screen w-full flex-col bg-(--color-surface) px-0 pt-20 pb-10 text-base leading-11 tracking-[0.2em] shadow-md sm:text-lg sm:tracking-widest md:flex md:px-0 md:text-xl md:tracking-[0.15em] lg:px-0 lg:text-2xl dark:bg-gray-900 dark:text-white dark:shadow-black/20"
+      className="text-text-light fixed left-0 z-20 hidden h-screen min-h-screen w-full flex-col bg-(--color-surface) px-0 pt-20 pb-10 text-base leading-11 tracking-[0.2em] shadow-md sm:text-lg sm:tracking-widest md:flex md:px-0 md:text-xl md:tracking-[0.15em] lg:px-0 lg:text-2xl dark:text-white dark:shadow-black/20"
     >
       <nav className="flex h-full w-full flex-col justify-between overflow-hidden pt-10">
         <div className="flex w-full flex-col gap-4">
@@ -54,13 +54,13 @@ export const Navbar: React.FC = () => {
 
         <div className="flex w-full flex-col gap-4">
           <NavLink to="/account-info" className={({ isActive }) => getLinkClass(isActive)}>
-              <AccountCircleSharp className='mr-3' sx={{ fontSize: 26}} />
-              Account
+            <AccountCircleSharp className='mr-3' sx={{ fontSize: 26 }} />
+            Account
           </NavLink>
           <NavLink to="/login" className={getLinkClass(false)}>
-              <LogoutSharpIcon className="mr-4" />
-              Logout
-            </NavLink>
+            <LogoutSharpIcon className="mr-4" />
+            Logout
+          </NavLink>
         </div>
       </nav>
     </LayoutColumn>

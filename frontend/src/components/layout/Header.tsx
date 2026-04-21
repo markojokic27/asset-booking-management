@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Keep the public (auth) header centered, but align the app header with the left sidebar layout after login. */}
       {variant === 'app' ? (
         <div className="flex h-full items-center justify-between pl-0 pr-4 md:pr-6">
-          <Link to="/" className="-ml-4 block">
+          <Link to="/" className="block md:-ml-4">
             <Logo className="h-20 w-auto" />
           </Link>
           <div className="hidden gap-6 md:flex">
@@ -39,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
           <LayoutRow className="flex h-full items-center">
             <LayoutColumn className="flex items-center justify-between">
               <Link to="/">
-                <Logo className="-ml-10 h-20 w-auto dark:brightness-0 dark:invert" />
+                <Logo className="h-20 w-auto md:-ml-10 dark:brightness-0 dark:invert" />
               </Link>
               <div className="hidden gap-6 md:flex">
                 <ThemeToggle />

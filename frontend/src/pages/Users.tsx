@@ -14,27 +14,15 @@ import { UserModal } from '../features/user/components/UserModal';
 import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
-import { getUsers } from '../features/user/api/users';
+import { createUser, getUsers, updateUser } from '../features/user/api/users';
+import type { UserDto } from '../features/user/types';
 
-type UserRow = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-  status: 'ACTIVE' | 'INACTIVE';
-  departmentId: number;
-  managerEmail: string;
-  notes?: string;
-};
-
-function getFullName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
-  return `${user.firstName} ${user.lastName}`.trim();
+function getFullName(user: Pick<UserDto, 'name' | 'surname'>) {
+  return `${user.name} ${user.surname}`.trim();
 }
 
-function getDisplayName(user: Pick<UserRow, 'firstName' | 'lastName'>) {
-  return `${user.lastName} ${user.firstName}`.trim();
+function getDisplayName(user: Pick<UserDto, 'name' | 'surname'>) {
+  return `${user.surname} ${user.name}`.trim();
 }
 
 function csvEscape(value: unknown) {
@@ -62,8 +50,8 @@ export default function Users() {
   const [isUserEditModalOpen, setIsUserEditModalOpen] = useState(false);
   const [isUserCreateModalOpen, setIsUserCreateModalOpen] = useState(false);
   const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
-  const [activeUser, setActiveUser] = useState<UserRow | null>(null);
-  const [users, setUsers] = useState<UserRow[]>([]);
+  const [activeUser, setActiveUser] = useState<UserDto | null>(null);
+  const [users, setUsers] = useState<UserDto[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [usersError, setUsersError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
@@ -80,20 +68,7 @@ export default function Users() {
         const data = await getUsers({ page: 0, size: 200 });
 
         if (!isMounted) return;
-        setUsers(
-          data.map((u) => ({
-            id: String(u.id),
-            firstName: u.name,
-            lastName: u.surname,
-            email: u.email,
-            username: u.username,
-            role: u.role,
-            status: u.status,
-            departmentId: u.departmentId,
-            managerEmail: u.managerEmail,
-            notes: u.notes ?? '',
-          }))
-        );
+        setUsers(data);
       } catch {
         if (!isMounted) return;
         setUsers([]);
@@ -110,7 +85,7 @@ export default function Users() {
     };
   }, []);
 
-  const openBookingsModal = (user: UserRow) => {
+  const openBookingsModal = (user: UserDto) => {
     setActiveUser(user);
     setIsBookingsModalOpen(true);
   };
@@ -126,8 +101,8 @@ export default function Users() {
       ? users
       : users.filter(
         (u) =>
-          u.firstName.toLowerCase().includes(q) ||
-          u.lastName.toLowerCase().includes(q) ||
+          u.name.toLowerCase().includes(q) ||
+          u.surname.toLowerCase().includes(q) ||
           getFullName(u).toLowerCase().includes(q) ||
           u.email.toLowerCase().includes(q)
       );
@@ -135,9 +110,9 @@ export default function Users() {
     const collator = new Intl.Collator('hr', { sensitivity: 'base' });
     const dir = nameSortDir === 'asc' ? 1 : -1;
     return [...base].sort((a, b) => {
-      const lastCmp = collator.compare(a.lastName, b.lastName);
+      const lastCmp = collator.compare(a.surname, b.surname);
       if (lastCmp !== 0) return lastCmp * dir;
-      const firstCmp = collator.compare(a.firstName, b.firstName);
+      const firstCmp = collator.compare(a.name, b.name);
       if (firstCmp !== 0) return firstCmp * dir;
       return collator.compare(a.email, b.email) * dir;
     });
@@ -174,7 +149,7 @@ export default function Users() {
     return items;
   }, [safePage, totalPages]);
 
-  const columns: TableColumn<UserRow>[] = [
+  const columns: TableColumn<UserDto>[] = [
     {
       key: 'name',
       header: (
@@ -239,7 +214,7 @@ export default function Users() {
               className="pointer-events-none"
             />
           </IconButton>
-          <IconButton 
+          <IconButton
             type="button"
             aria-label="Edit user"
             onClick={() => {
@@ -274,22 +249,22 @@ export default function Users() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
-      <div className="flex w-full items-center justify-between gap-6">
+      <div className="flex w-full flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sm:gap-6">
         <h1 className="text-3xl leading-11 font-black tracking-widest text-black dark:text-white">
           Users
         </h1>
 
-        <div className="flex items-center gap-4">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
           <Button
             size="sm"
             variant="outline"
             iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
-            className="shadow-none"
+            className="shadow-none w-full sm:w-auto"
             onClick={() => {
-              const headers: Array<keyof UserRow> = [
+              const headers: Array<keyof UserDto> = [
                 'id',
-                'firstName',
-                'lastName',
+                'name',
+                'surname',
                 'email',
                 'username',
                 'role',
@@ -313,7 +288,7 @@ export default function Users() {
           <Button
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
-            className="shadow-none"
+            className="shadow-none w-full sm:w-auto"
             onClick={() => {
               setActiveUser(null);
               setIsUserCreateModalOpen(true);
@@ -337,7 +312,7 @@ export default function Users() {
         <Table
           data={pagedUsers}
           columns={columns}
-          getRowKey={(user) => user.id}
+          getRowKey={(user) => String(user.id)}
           className="w-full"
           emptyMessage={
             isLoadingUsers
@@ -419,7 +394,19 @@ export default function Users() {
           setActiveUser(null);
         }}
         user={
-          activeUser ? { ...activeUser, name: getFullName(activeUser) } : null
+          activeUser
+            ? {
+              id: activeUser.id,
+              name: getFullName(activeUser),
+              email: activeUser.email,
+              username: activeUser.username,
+              role: activeUser.role,
+              status: activeUser.status,
+              departmentId: activeUser.departmentId,
+              managerEmail: activeUser.managerEmail,
+              notes: activeUser.notes,
+            }
+            : null
         }
       />
 
@@ -430,26 +417,53 @@ export default function Users() {
           setActiveUser(null);
         }}
         user={activeUser}
-        onSave={(updatedUser) => {
+        onSave={async (updatedUser) => {
+          const benefit = updatedUser.benefit ?? 'ALL';
+          const dto = await updateUser(updatedUser.id, {
+            username: updatedUser.username,
+            surname: updatedUser.surname,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            // Backend currently requires non-empty password on update
+            // Dummy password for now
+            password: '********',
+            role: updatedUser.role,
+            status: updatedUser.status,
+            departmentId: updatedUser.departmentId,
+            managerEmail: updatedUser.managerEmail,
+            notes: updatedUser.notes ?? '',
+            benefit,
+          });
+
+          const saved = dto;
           setUsers((currentUsers) =>
-            currentUsers.map((u) => (u.id === updatedUser.id ? updatedUser : u))
+            currentUsers.map((u) => (u.id === saved.id ? saved : u))
           );
+          setActiveUser(saved);
         }}
       />
 
       <UserCreateModal
         isOpen={isUserCreateModalOpen}
         onClose={() => setIsUserCreateModalOpen(false)}
-        onCreate={(newUser) => {
-          const id = String(Date.now());
-          setUsers((currentUsers) => [
-            {
-              id,
-              ...newUser,
-              notes: newUser.notes ?? '',
-            },
-            ...currentUsers,
-          ]);
+        onCreate={async (newUser) => {
+          const dto = await createUser({
+            username: newUser.username,
+            surname: newUser.surname,
+            name: newUser.name,
+            email: newUser.email,
+            // Backend currently requires non-empty password on create
+            // Dummy password for now
+            password: '********',
+            role: newUser.role,
+            status: newUser.status,
+            departmentId: newUser.departmentId,
+            managerEmail: newUser.managerEmail,
+            notes: newUser.notes ?? '',
+            benefit: 'ALL',
+          });
+
+          setUsers((currentUsers) => [dto, ...currentUsers]);
         }}
       />
 
@@ -460,8 +474,8 @@ export default function Users() {
           activeUser
             ? {
               id: activeUser.id,
-              firstName: activeUser.firstName,
-              lastName: activeUser.lastName,
+              name: activeUser.name,
+              surname: activeUser.surname,
             }
             : null
         }

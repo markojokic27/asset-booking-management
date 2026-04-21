@@ -2,6 +2,7 @@ import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { Modal } from '../../../components/ui/Modal';
 import { IconButton } from '../../../components/ui/IconButton';
+import type { UserDto } from '../types';
 
 const statusConfig: Record<string, { label: string; className: string }> = {
   ACTIVE: {
@@ -15,16 +16,18 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 };
 
 export type UserModalUser = {
-  id: string;
+  id: UserDto['id'];
   name: string;
-  email: string;
-  username: string;
-  role: string;
-  status: string;
-  departmentId: number;
-  managerEmail: string;
-  notes?: string;
-};
+} & Pick<
+  UserDto,
+  | 'email'
+  | 'username'
+  | 'role'
+  | 'status'
+  | 'departmentId'
+  | 'managerEmail'
+  | 'notes'
+>;
 
 export type UserModalProps = {
   isOpen: boolean;
@@ -38,7 +41,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
   const status = statusConfig[user.status] ?? { label: user.status, className: '' };
 
   return (
-    <Modal 
+    <Modal
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel="User details"
@@ -86,12 +89,12 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
 
           <div>
             <p className="text-sm text-(--color-modal-label)">Status</p>
-            <p  data-testid="user-status" className="font-medium text-(--color-text)">{status.label}</p>
+            <p data-testid="user-status" className="font-medium text-(--color-text)">{status.label}</p>
           </div>
 
           <div>
             <p className="text-sm text-(--color-modal-label)">Department</p>
-            <p data-testid="user-department-id"className="font-medium text-(--color-text)">{user.departmentId}</p>
+            <p data-testid="user-department-id" className="font-medium text-(--color-text)">{user.departmentId}</p>
           </div>
 
           <div>
