@@ -12,6 +12,7 @@ import {
   CalendarTodaySharp,
   PeopleSharp,
   LogoutSharp,
+  AccountCircleSharp
 } from '@mui/icons-material';
 
 export default function MobileMenu() {
@@ -66,11 +67,21 @@ export default function MobileMenu() {
             <LanguageSwitcher />
             <ThemeToggle />
           </div>
-          <div className="mt-auto flex w-full justify-center justify-self-end p-6">
+          <div className="mt-auto flex w-full flex-col gap-3 p-6">
+            <Dialog.Close asChild>
+              <NavLink
+                to="/account-info"
+                className="flex w-full items-center justify-center gap-3 rounded-lg border border-(--color-table-border) py-3 text-lg font-medium"
+              >
+                <AccountCircleSharp sx={{ fontSize: 26}}/>
+                Account
+              </NavLink>
+            </Dialog.Close>
+
             <Dialog.Close asChild>
               <Button
                 onClick={handleLogout}
-                className="w-fit border-none bg-red-500 hover:bg-red-600"
+                className="w-full border-none bg-red-500 hover:bg-red-600"
               >
                 <LogoutSharp />
                 Logout

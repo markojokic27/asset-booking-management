@@ -1,6 +1,8 @@
 stages:
   - compile
   - test
+  - security
+  - bruno
   - sonar
   - dockerize
 
@@ -79,7 +81,7 @@ backend:test:
     - job: backend:compile
   script:
     - cd backend
-    - mvn verify -Dmaven.repo.local=.m2/repository
+    - mvn verify -Dmaven.repo.local=.m2/repository -Ddependency-check.skip=true
   artifacts:
     reports:
       junit: backend/target/surefire-reports/*.xml
@@ -106,6 +108,116 @@ frontend:test:
     paths:
       - frontend/node_modules/
 
+
+# ─────────────────────────────────────────
+# SECURITY STAGE
+# ─────────────────────────────────────────
+backend-dependency-check:
+  stage: security
+  image: maven:3.9-eclipse-temurin-21
+  needs:
+    - job: backend:compile    # Reuses backend/target/ artifact, skips recompile
+  script:
+    - cd backend
+    - mvn dependency-check:check
+        -Dnvd.api.key=$NVD_API_KEY
+        -Dmaven.repo.local=.m2/repository
+        -DretireJsAnalyzerEnabled=false # GitHub is unreachable from Internal network, also this is backend dependency check, Js already included in npm audit
+  artifacts:
+    when: always              # Save report even if CVSS ≥7 fails job
+    paths:
+      - backend/target/dependency-check-report/dependency-check-report.html
+      - backend/target/dependency-check-report/dependency-check-report.json
+    expire_in: 7 days
+  cache:
+    key: maven-$CI_PROJECT_ID
+    paths:
+      - backend/.m2/repository/
+  allow_failure: true         # Don't block dockerize on first runs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"   # Auto on nightly schedule
+    - if: $CI_COMMIT_BRANCH == "main"         
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual                            # Manual button on develop
+
+#frontend security stage
+frontend-package-vulnerabilities-check:
+  stage: security
+  image: node:24-alpine
+  needs:
+    - job: frontend:compile
+  script:
+    - cd frontend
+    - npm ci --legacy-peer-deps
+    - npm audit --audit-level=high --omit=dev
+  allow_failure: true         # don't block on first runs
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"   # nightly
+    - if: $CI_COMMIT_BRANCH == "main"        
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual                            
+  cache:
+    key: npm-$CI_PROJECT_ID
+    paths:
+      - frontend/node_modules/
+
+
+# ─────────────────────────────────────────
+# BRUNO STAGE
+# ─────────────────────────────────────────
+bruno:smoke:
+  stage: bruno
+  image: node:24-alpine
+  # needs:
+    # - job: backend:test
+  services: []
+  variables:
+    BRUNO_BASE_URL: "http://localhost:8080/API"
+    BRUNO_ENV: "Employee"   # select environment for testing e.g "Admin", "Employee", or "Manager" 
+  before_script:
+    - apk add --no-cache openjdk21-jre maven curl
+    - echo "Installing Bruno CLI"
+    - npm install -g @usebruno/cli   # Bruno CLI for running collections in CI 
+  script:
+    # 1) Start backend (Spring Boot) in background
+    - echo "Starting backend API..."
+    - cd backend
+    - mvn -q spring-boot:run -Dspring-boot.run.profiles=dev &
+    - BACKEND_PID=$!
+    - cd ..
+    # 2) Wait for login endpoint to be ready
+    - echo "Waiting for backend at ${BRUNO_BASE_URL}/v1/auth/login"
+    - |
+      for i in $(seq 1 30); do
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${BRUNO_BASE_URL}/v1/auth/login" || echo "000")
+        if echo "$STATUS" | grep -qE "200|400|401|403|404|405"; then
+          echo "Backend is up (got HTTP $STATUS)."
+          break
+        fi
+        echo "Backend not ready yet (status $STATUS), retry $i/30..."
+        sleep 2
+      done
+    # 3) Run Bruno smoke tests from Testing collection
+    - cd tests/api-tests/bruno/Testing
+    - |
+      bru run \
+        --env "${BRUNO_ENV}" \
+        --reporter-junit "../../../bruno-smoke-results.xml"
+  after_script:
+    - if [ -n "${BACKEND_PID:-}" ]; then kill $BACKEND_PID || true; fi
+  artifacts:
+    when: always
+    reports:
+      junit: tests/api-tests/bruno/bruno-smoke-results.xml
+    paths:
+      - tests/api-tests/bruno/bruno-smoke-results.xml
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+
 # ─────────────────────────────────────────
 # SONARQUBE STAGE
 # ─────────────────────────────────────────
@@ -115,10 +227,12 @@ sonar:
       
   script: 
     - cd backend
-    - mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar
-        -Dsonar.projectKey=Asset-Booking-Manager-Backend
-        -Dsonar.projectName="Asset Booking Manager"
-        -Dsonar.host.url=$SONAR_HOST_URL
+    - mvn clean verify 
+        -Ddependency-check.skip=true 
+        org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
+        -Dsonar.projectKey=Asset-Booking-Manager-Backend 
+        -Dsonar.projectName="Asset Booking Manager" 
+        -Dsonar.host.url=$SONAR_HOST_URL 
         -Dsonar.token=$SONAR_TOKEN
   allow_failure: true
   rules:
@@ -126,6 +240,8 @@ sonar:
     - if: $CI_COMMIT_BRANCH == 'master'
     - if: $CI_COMMIT_BRANCH == 'main'
     - if: $CI_COMMIT_BRANCH == 'develop'
+
+    
 
 
 

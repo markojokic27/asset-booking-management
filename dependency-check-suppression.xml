@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+
+    <!-- FALSE POSITIVE: CVE-2025-7962 targets angus-mail (email transport),
+         NOT angus-activation (MIME type activation framework).
+         CPE mismatch: cpe for eclipse:angus_mail matched wrong artifact. -->
+    <suppress>
+        <notes>CVE-2025-7962 is assigned to angus-mail, not angus-activation. CPE false positive - different artifact, different purpose.</notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus\-activation@.*$</packageUrl>
+        <cve>CVE-2025-7962</cve>
+    </suppress>
+
+    <!-- ACCEPTED RISK: swagger-ui DOMPurify mXSS vulnerabilities.
+         Swagger UI is only active in dev/test Spring profile, never exposed in production.
+         Attack requires re-parsing sanitized HTML via innerHTML + special wrappers (xmp, script, etc.)
+         which is an internal Swagger UI rendering concern, not our application code. -->
+    <suppress>
+        <notes>Swagger UI is dev-only (spring.profiles: dev). DOMPurify mXSS via innerHTML re-contextualization not exploitable in production.</notes>
+        <packageUrl regex="true">^pkg:javascript/DOMPurify@.*$</packageUrl>
+        <cve>CVE-2026-0540</cve>
+    </suppress>
+
+    <suppress>
+        <notes>Swagger UI is dev-only (spring.profiles: dev). DOMPurify ADD_ATTR URI bypass not exploitable in production.</notes>
+        <packageUrl regex="true">^pkg:javascript/DOMPurify@.*$</packageUrl>
+        <cve>CVE-2025-15599</cve>
+    </suppress>
+
+</suppressions>

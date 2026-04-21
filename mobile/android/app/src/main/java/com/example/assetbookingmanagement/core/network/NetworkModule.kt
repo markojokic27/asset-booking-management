@@ -1,5 +1,6 @@
 package com.example.assetbookingmanagement.core.network
 
+import com.example.assetbookingmanagement.features.asset.data.AssetApi
 import com.example.assetbookingmanagement.features.auth.data.AuthApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -8,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -25,11 +27,25 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(json: Json): Retrofit {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        json: Json,
+        okHttpClient: OkHttpClient
+    ): Retrofit {
         val contentType = "application/json".toMediaType()
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory(contentType))
             .build()
     }
@@ -38,4 +54,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAssetApi(retrofit: Retrofit): AssetApi =
+        retrofit.create(AssetApi::class.java)
 }
