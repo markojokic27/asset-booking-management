@@ -19,9 +19,15 @@ public class LdapSyncController {
     @Operation(
             summary = "Sync LDAP users to database",
             description = """ 
-                              Triggers synchronization of users from LDAP into the local database.
-                              Creates new users and updates existing ones.
-                           """
+                    Triggers a full synchronization of users from LDAP into the local database.
+                    
+                    This includes:
+                    - Creating missing users
+                    - Updating existing users
+                    - Resolving manager relationships
+                    
+                    This operation is idempotent and safe to run multiple times.   
+                    """
     )
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
