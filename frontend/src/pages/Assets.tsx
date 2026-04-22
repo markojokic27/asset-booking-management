@@ -49,18 +49,6 @@ export default function Assets() {
     );
   }, [assets, selectedCategory, search]);
 
-  const handleView = (asset: AssetDto) => {
-    setModal({ type: 'view', asset });
-  };
-
-  const handleEdit = (asset: AssetDto) => {
-    setModal({ type: 'edit', asset });
-  };
-
-  const handleBookings = (asset: AssetDto) => {
-    setModal({ type: 'bookings', asset });
-  };
-
   const closeModal = () => {
     setModal({ type: 'none' });
   };
@@ -111,9 +99,9 @@ export default function Assets() {
       <div className="mt-6 w-full">
         <AssetsTable
           assets={filteredAssets}
-          onView={handleView}
-          onEdit={handleEdit}
-          onBookings={handleBookings}
+          onView={(asset) => setModal({ type: 'view', asset })}
+          onEdit={(asset) => setModal({ type: 'edit', asset })}
+          onBookings={(asset) => setModal({ type: 'bookings', asset })}
           onDelete={handleDelete}
         />
       </div>
