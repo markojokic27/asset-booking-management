@@ -10,11 +10,11 @@ http:
   url: "{{baseUrl}}/v1/asset-categories/:id"
   params:
     - name: id
-      value: ""
+      value: "1"
       type: path
   auth:
     type: bearer
-    token: "{{token}}"
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyX2FkbWluIiwidXNlcklkIjoxLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc3NjQzMTI5NCwiZXhwIjoxNzc2NDMyMTk0fQ.FT5XzlbjpMJcwYKIn8GKr1cGPx_mkSgzm4dkqjWaOTk
 
 settings:
   encodeUrl: true

@@ -17,6 +17,13 @@ http:
       }
   auth: inherit
 
+runtime:
+  variables:
+    - name: username
+      value: user_admin
+    - name: password
+      value: admin123
+
 settings:
   encodeUrl: true
   timeout: 0

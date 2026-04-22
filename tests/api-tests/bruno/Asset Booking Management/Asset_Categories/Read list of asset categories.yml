@@ -24,7 +24,12 @@ http:
       disabled: true
   auth:
     type: bearer
-    token: "{{token}}"
+    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyX2FkbWluIiwidXNlcklkIjoxLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc3NjIzODE4NiwiZXhwIjoxNzc2MjM5MDg2fQ.LZ0o0fOyvI18DO3UMQhLaFQXKQKZvtzP7EBFvENswEc
+
+runtime:
+  variables:
+    - name: baseUrl
+      value: http://127.0.0.1:8080
 
 settings:
   encodeUrl: true

@@ -9,6 +9,7 @@ import { Button } from '../../../components/ui/Button';
 
 type Props = {
   assets: AssetDto[];
+  categoryMap: Record<number, string>;
   onView: (asset: AssetDto) => void;
   onEdit: (asset: AssetDto) => void;
   onDelete?: (asset: AssetDto) => void;
@@ -17,6 +18,7 @@ type Props = {
 
 export function AssetsTable({
   assets,
+  categoryMap,
   onView,
   onEdit,
   onDelete,
@@ -37,7 +39,8 @@ export function AssetsTable({
     {
       key: 'category',
       header: 'Category',
-      render: (asset) => asset.categoryName ?? '-',
+      render: (asset) =>
+        asset.categoryName ?? categoryMap[asset.categoryId] ?? '-'
     },
     {
       key: 'status',

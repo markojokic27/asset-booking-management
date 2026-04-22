@@ -18,3 +18,10 @@ export const getAllAssets = async (page = 0, size = 10) => {
   console.log("res", res);
   return res.data;
 };
+
+export const getAssetById = async (id: string) => {
+  const res = await api.get<AssetDto>(
+    `/assets/${id}`
+  );
+  return res.data;
+}
