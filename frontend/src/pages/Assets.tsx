@@ -87,18 +87,6 @@ export default function Assets() {
     return matchesSearch && matchesCategory;
   });
 
-  const handleView = (asset: AssetDto) => {
-    setModal({ type: 'view', asset });
-  };
-
-  const handleEdit = (asset: AssetDto) => {
-    setModal({ type: 'edit', asset });
-  };
-
-  const handleBookings = (asset: AssetDto) => {
-    setModal({ type: 'bookings', asset });
-  };
-
   const closeModal = () => {
     setModal({ type: 'none' });
   };
@@ -155,11 +143,10 @@ export default function Assets() {
           <AssetsTable
             assets={filteredAssets}
             categoryMap={categoryMap}
-            onView={handleView}
-            onEdit={handleEdit}
-            onBookings={handleBookings}
+            onView={(asset) => setModal({ type: 'view', asset })}
+            onEdit={(asset) => setModal({ type: 'edit', asset })}
+            onBookings={(asset) => setModal({ type: 'bookings', asset })}
             onDelete={handleDelete}
-            //className="w-full"
           />
         )}
       </div>
@@ -179,12 +166,12 @@ export default function Assets() {
             currentAssets.map((asset) =>
               asset.id === updatedAsset.id
                 ? {
-                    ...updatedAsset,
-                    categoryName:
-                      updatedAsset.categoryName ??
-                      categoryMap[updatedAsset.categoryId] ??
-                      '-',
-                  }
+                  ...updatedAsset,
+                  categoryName:
+                    updatedAsset.categoryName ??
+                    categoryMap[updatedAsset.categoryId] ??
+                    '-',
+                }
                 : asset
             )
           );

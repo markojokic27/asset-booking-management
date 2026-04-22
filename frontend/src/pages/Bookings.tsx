@@ -82,7 +82,6 @@ const filteredAssets = filteredAssetsByCategory.filter((asset) =>
         </h1>
         <div>
           <Button
-            size="sm"
             className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
             onClick={() =>
               setState((prev) => ({
