@@ -25,7 +25,7 @@ This document describes the target solution architecture for the Asset Booking M
 
 The solution is intended to provide a secure, maintainable, and scalable foundation for browsing assets, managing categories and assets, creating and approving bookings, preventing booking conflicts, sending confirmations, synchronizing calendar events, and producing usage reports.
 
-The architecture is based on a modular monolith (modulith) implemented with Spring Boot on the backend and a modern React frontend. The design prioritizes simplicity, maintainability, clear domain boundaries, and low operational overhead for an internal user base of approximately 100–150 users.
+The architecture is based on a modular monolith (modulith) implemented with Spring Boot on the backend and a modern React frontend. The design prioritizes simplicity, maintainability, clear domain boundaries, and low operational overhead for an internal user base of approximately 200–300 users.
 
 This SAD consolidates the current architectural direction and identifies planned integrations, infrastructure needs, security controls, non-functional expectations, delivery approach, and major risks.
 
@@ -111,7 +111,7 @@ The solution shall:
 
 === Constraints and Assumptions
 
-* The system is an internal company application with an expected user base of approximately 100–150 users.
+* The system is an internal company application with an expected user base of approximately 200–300 users.
 * The project is a greenfield implementation.
 * The primary architectural optimization goals are maintainability, simplicity, and low operational overhead rather than independent service scaling.
 * Certain implementation details remain to be finalized, including exact identity provider configuration, production hosting topology, monitoring stack, and final scope of biometric support.
@@ -172,7 +172,7 @@ The initial domain decomposition is:
 * `asset` — individual assets, metadata, location, availability state, and QR association.
 * `booking` — reservation lifecycle, approval state, recurrence, cancellation, modification, and conflict detection.
 * `report` — usage statistics, historical reporting, and reporting-oriented query models.
-* `utilities` — shared concerns such as configuration, common helpers, error handling, and cross-cutting infrastructure.
+* `core` — shared concerns such as configuration, common helpers, error handling, and cross-cutting infrastructure.
 
 Each domain should encapsulate its own:
 
@@ -190,7 +190,7 @@ To preserve the modulith architecture, the following rules apply:
 * Package-by-domain shall be used.
 * Direct cross-domain data access should be avoided.
 * Domains should interact through well-defined service interfaces or application-level orchestration.
-* Shared logic must be kept in common utility/configuration modules instead of being duplicated or leaked across domains.
+* Shared logic must be kept in common core/configuration modules instead of being duplicated or leaked across domains.
 * Architectural boundaries should be enforced through code review and, where practical, automated architectural tests.
 
 === Frontend Architecture
@@ -395,10 +395,9 @@ Environment parity should be maintained as closely as practical to reduce deploy
 
 === Environment Layout
 
-A minimum three-environment delivery path is recommended:
+A minimum three-environment delivery path is recommended, but we will simplify it to two environment:
 
-* QA — automated verification and integration testing.
-* Staging — pre-production validation and release acceptance.
+* QA/Demo — automated verification and integration testing, pre-production validation.
 * Production — controlled live environment.
 
 === Build and Release Tooling
