@@ -62,7 +62,7 @@ export default function Bookings() {
       ? state.assets
       : state.assets.filter((a) => a.categoryName === state.selectedCategory);
 
-  const filteredAssets = filteredAssetsByCategory.filter((asset) =>
+  const _filteredAssets = filteredAssetsByCategory.filter((asset) =>
     asset.name.toLowerCase().includes(state.filters.search.trim().toLowerCase())
   );
 
