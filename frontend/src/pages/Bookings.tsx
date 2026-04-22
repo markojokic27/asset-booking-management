@@ -3,6 +3,8 @@ import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGri
 import { categories, type AssetDto } from '../features/asset/types';
 import * as React from 'react';
 import { FiltersBar } from '../components/ui/FilterBar';
+import { Button } from '../components/ui/Button';
+import type { Filters, BookingsState } from '../features/booking/types';
 
 const initialAssets: AssetDto[] = [
   {
@@ -18,22 +20,15 @@ const initialAssets: AssetDto[] = [
     lastModifiedAt: new Date(),
   },
 ];
-
-type Filters = {
-  search: string;
-  fromDate: string;
-  toDate: string;
-  fromHour: string;
-  toHour: string;
+const initialFilters: Filters = {
+  search: '',
+  fromDate: '',
+  toDate: '',
+  fromHour: '',
+  toHour: '',
 };
 
-type State = {
-  selectedCategory: string;
-  assets: AssetDto[];
-  filters: Filters;
-};
-
-const initialState: State = {
+const initialState: BookingsState = {
   selectedCategory: 'Laptops',
   assets: initialAssets,
   filters: {
@@ -46,7 +41,7 @@ const initialState: State = {
 };
 
 export default function Bookings() {
-  const [state, setState] = React.useState<State>(initialState);
+  const [state, setState] = React.useState<BookingsState>(initialState);
 
   const setFilters: React.Dispatch<React.SetStateAction<Filters>> = (
     updater
@@ -82,9 +77,23 @@ export default function Bookings() {
       />
 
       <div className="mt-12 flex w-full items-center justify-between gap-4">
-        <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
+        <h1 className="text-3xl leading-11 font-black tracking-[0.2em]">
           {state.selectedCategory}
         </h1>
+        <div>
+          <Button
+            size="sm"
+            className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
+            onClick={() =>
+              setState((prev) => ({
+                ...prev,
+                filters: initialFilters,
+              }))
+            }
+          >
+            Reset filters
+          </Button>
+        </div>
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />

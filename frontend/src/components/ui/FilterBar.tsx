@@ -1,4 +1,3 @@
-// FiltersBar.tsx
 import * as React from 'react';
 import { DateTimeInput } from './DateTimeInput';
 import { SearchInput } from './SearchBar';
@@ -47,7 +46,7 @@ export function FiltersBar({ filters, setFilters }: Props) {
         value={filters.search}
         onChange={(v) => update({ search: v })}
         placeholder="Search assets..."
-        className="col-span-1 w-full sm:col-span-2 lg:col-span-1 lg:mt-5 lg:ml-auto"
+        className="col-span-1 w-full sm:col-span-2 lg:col-span-1 lg:mt-5 lg:ml-auto lg:max-w-60"
       />
     </div>
   );
