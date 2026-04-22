@@ -51,15 +51,15 @@ export default function Bookings() {
       filters: typeof updater === 'function' ? updater(prev.filters) : updater,
     }));
   };
-
+  /*
   const filteredAssetsByCategory =
     state.selectedCategory === 'Assets'
       ? state.assets
       : state.assets.filter((a) => a.categoryName === state.selectedCategory);
 
-  const _filteredAssets = filteredAssetsByCategory.filter((asset) =>
+const filteredAssets = filteredAssetsByCategory.filter((asset) =>
     asset.name.toLowerCase().includes(state.filters.search.trim().toLowerCase())
-  );
+  );*/
 
   return (
     <LayoutColumn

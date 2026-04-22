@@ -6,7 +6,6 @@ import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
-import { BookingsButton } from '../components/ui/BookingsButton';
 import { IconButton } from '../components/ui/IconButton';
 import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
@@ -16,6 +15,7 @@ import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
 import { createUser, getUsers, updateUser } from '../features/user/api/users';
 import type { UserDto } from '../features/user/types';
+import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 
 function getFullName(user: Pick<UserDto, 'name' | 'surname'>) {
   return `${user.name} ${user.surname}`.trim();
@@ -100,12 +100,12 @@ export default function Users() {
     const base = !q
       ? users
       : users.filter(
-        (u) =>
-          u.name.toLowerCase().includes(q) ||
-          u.surname.toLowerCase().includes(q) ||
-          getFullName(u).toLowerCase().includes(q) ||
-          u.email.toLowerCase().includes(q)
-      );
+          (u) =>
+            u.name.toLowerCase().includes(q) ||
+            u.surname.toLowerCase().includes(q) ||
+            getFullName(u).toLowerCase().includes(q) ||
+            u.email.toLowerCase().includes(q)
+        );
 
     const collator = new Intl.Collator('hr', { sensitivity: 'base' });
     const dir = nameSortDir === 'asc' ? 1 : -1;
@@ -135,7 +135,8 @@ export default function Users() {
   }, [filteredUsers, pageSize, safePage]);
 
   const paginationItems: Array<number | 'ellipsis'> = useMemo(() => {
-    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (totalPages <= 7)
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const items: Array<number | 'ellipsis'> = [1];
     const left = Math.max(2, safePage - 1);
@@ -157,8 +158,9 @@ export default function Users() {
           type="button"
           onClick={() => setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
           className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
-          aria-label={`Sort by last name ${nameSortDir === 'asc' ? 'descending' : 'ascending'
-            }`}
+          aria-label={`Sort by last name ${
+            nameSortDir === 'asc' ? 'descending' : 'ascending'
+          }`}
         >
           <span>NAME</span>
           <span
@@ -192,7 +194,15 @@ export default function Users() {
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
-        <BookingsButton onClick={() => openBookingsModal(user)} />
+        <Button
+          size="sm"
+          variant="solid"
+          iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
+          className="shadow-none"
+          onClick={() => openBookingsModal(user)}
+        >
+          Bookings
+        </Button>
       ),
     },
     {
@@ -227,11 +237,7 @@ export default function Users() {
               className="pointer-events-none"
             />
           </IconButton>
-          <IconButton
-            type="button"
-            variant="danger"
-            aria-label="Delete user"
-          >
+          <IconButton type="button" variant="danger" aria-label="Delete user">
             <DeleteOutlineIcon
               fontSize="small"
               className="pointer-events-none"
@@ -259,7 +265,7 @@ export default function Users() {
             size="sm"
             variant="outline"
             iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
-            className="shadow-none w-full sm:w-auto"
+            className="w-full shadow-none sm:w-auto"
             onClick={() => {
               const headers: Array<keyof UserDto> = [
                 'id',
@@ -288,7 +294,7 @@ export default function Users() {
           <Button
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
-            className="shadow-none w-full sm:w-auto"
+            className="w-full shadow-none sm:w-auto"
             onClick={() => {
               setActiveUser(null);
               setIsUserCreateModalOpen(true);
@@ -396,16 +402,16 @@ export default function Users() {
         user={
           activeUser
             ? {
-              id: activeUser.id,
-              name: getFullName(activeUser),
-              email: activeUser.email,
-              username: activeUser.username,
-              role: activeUser.role,
-              status: activeUser.status,
-              departmentId: activeUser.departmentId,
-              managerEmail: activeUser.managerEmail,
-              notes: activeUser.notes,
-            }
+                id: activeUser.id,
+                name: getFullName(activeUser),
+                email: activeUser.email,
+                username: activeUser.username,
+                role: activeUser.role,
+                status: activeUser.status,
+                departmentId: activeUser.departmentId,
+                managerEmail: activeUser.managerEmail,
+                notes: activeUser.notes,
+              }
             : null
         }
       />
@@ -473,10 +479,10 @@ export default function Users() {
         user={
           activeUser
             ? {
-              id: activeUser.id,
-              name: activeUser.name,
-              surname: activeUser.surname,
-            }
+                id: activeUser.id,
+                name: activeUser.name,
+                surname: activeUser.surname,
+              }
             : null
         }
       />

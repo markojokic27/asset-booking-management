@@ -1,20 +1,15 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
-import { BookingsButton } from '../components/ui/BookingsButton';
-import { Table, type TableColumn } from '../components/ui/Table';
 import { SearchInput } from '../components/ui/SearchBar';
-import { DateTimeInput } from '../components/ui/DateTimeInput';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
 import { AssetBookingsModal } from '../features/asset/components/AssetBookingsModal';
 import { categories, type AssetDto } from '../features/asset/types';
 import { AssetAddModal } from '../features/asset/components/AssetAddModal';
+import { AssetsTable } from '../features/asset/components/AssetTable';
 
 const initialAssets: AssetDto[] = [
   {
@@ -30,121 +25,49 @@ const initialAssets: AssetDto[] = [
     lastModifiedAt: new Date(),
   },
 ];
+type ModalState =
+  | { type: 'none' }
+  | { type: 'view'; asset: AssetDto }
+  | { type: 'edit'; asset: AssetDto }
+  | { type: 'bookings'; asset: AssetDto }
+  | { type: 'add' };
 
 export default function Assets() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
   const [assets, setAssets] = useState<AssetDto[]>(initialAssets);
-  const [isAssetModalOpen, setIsAssetModalOpen] = useState(false);
-  const [isAssetEditModalOpen, setIsAssetEditModalOpen] = useState(false);
-  const [isBookingsModalOpen, setIsBookingsModalOpen] = useState(false);
-  const [activeAsset, setActiveAsset] = useState<AssetDto | null>(null);
   const [search, setSearch] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [fromHour, setFromHour] = useState('');
-  const [toHour, setToHour] = useState('');
-  const [isAssetAddModalOpen, setIsAssetAddModalOpen] = useState(false);
+  const [modal, setModal] = useState<ModalState>({ type: 'none' });
 
-  const filteredAssetsByCategory =
-    selectedCategory === 'Assets'
-      ? assets
-      : assets.filter((asset) => asset.categoryName === selectedCategory);
+  const filteredAssets = useMemo(() => {
+    const byCategory =
+      selectedCategory === 'Assets'
+        ? assets
+        : assets.filter((a) => a.categoryName === selectedCategory);
 
-  const filteredAssets = filteredAssetsByCategory.filter((asset) =>
-    asset.name.toLowerCase().includes(search.trim().toLowerCase())
-  );
+    return byCategory.filter((a) =>
+      a.name.toLowerCase().includes(search.trim().toLowerCase())
+    );
+  }, [assets, selectedCategory, search]);
 
-  const openBookingsModal = (asset: AssetDto) => {
-    setActiveAsset(asset);
-    setIsBookingsModalOpen(true);
+  const handleView = (asset: AssetDto) => {
+    setModal({ type: 'view', asset });
   };
 
-  const closeBookingsModal = () => {
-    setIsBookingsModalOpen(false);
-    setActiveAsset(null);
+  const handleEdit = (asset: AssetDto) => {
+    setModal({ type: 'edit', asset });
   };
 
-  const columns: TableColumn<AssetDto>[] = [
-    {
-      key: 'id',
-      header: 'ID',
-      accessor: 'id',
-      cellClassName: 'font-medium',
-    },
-    {
-      key: 'name',
-      header: 'Asset name',
-      accessor: 'name',
-    },
-    {
-      key: 'category',
-      header: 'Category',
-      render: (asset) => asset.categoryName ?? '-',
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      accessor: 'status',
-    },
-    {
-      key: 'bookings',
-      header: <span className="sr-only">Bookings</span>,
-      headerClassName: 'w-px whitespace-nowrap',
-      cellClassName: 'w-px whitespace-nowrap',
-      render: (asset) => (
-        <BookingsButton onClick={() => openBookingsModal(asset)} />
-      ),
-    },
-    {
-      key: 'actions',
-      header: <span className="sr-only">Actions</span>,
-      cellClassName: 'w-px whitespace-nowrap',
-      render: (asset) => (
-        <div className="flex items-center gap-1">
-          <button
-            data-testid="view-asset-button"
-            type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-            aria-label="View asset"
-            onClick={() => {
-              setActiveAsset(asset);
-              setIsAssetModalOpen(true);
-            }}
-          >
-            <VisibilityOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </button>
-          <button
-            data-testid="edit-asset-button"
-            type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-            aria-label="Edit asset"
-            onClick={() => {
-              setActiveAsset(asset);
-              setIsAssetEditModalOpen(true);
-            }}
-          >
-            <EditOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </button>
-          <button
-            type="button"
-            className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-red-600 transition-colors hover:bg-(--color-table-row-hover) hover:text-red-700 active:scale-95 dark:text-red-400 dark:hover:text-red-300"
-            aria-label="Delete asset"
-          >
-            <DeleteOutlineIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </button>
-        </div>
-      ),
-    },
-  ];
+  const handleBookings = (asset: AssetDto) => {
+    setModal({ type: 'bookings', asset });
+  };
+
+  const closeModal = () => {
+    setModal({ type: 'none' });
+  };
+
+  const handleDelete = (asset: AssetDto) => {
+    setAssets((current) => current.filter((a) => a.id !== asset.id));
+  };
 
   return (
     <LayoutColumn
@@ -158,39 +81,25 @@ export default function Assets() {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
+
       <div className="mt-12 flex w-full items-center justify-between gap-4">
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
           {selectedCategory}
         </h1>
+
         <Button
           type="button"
           size="sm"
           iconLeft={<AddIcon fontSize="small" />}
-          onClick={() => setIsAssetAddModalOpen(true)}
+          onClick={() => setModal({ type: 'add' })}
         >
           New asset
         </Button>
       </div>
+
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
+
       <div className="mt-6 flex w-full flex-wrap items-end gap-3">
-        <DateTimeInput
-          id="from-date"
-          label="From time"
-          value={fromDate}
-          onChange={setFromDate}
-          hourValue={fromHour}
-          onHourChange={setFromHour}
-          className="w-full sm:w-70"
-        />
-        <DateTimeInput
-          id="to-date"
-          label="To time"
-          value={toDate}
-          onChange={setToDate}
-          hourValue={toHour}
-          onHourChange={setToHour}
-          className="w-full sm:w-70"
-        />
         <SearchInput
           value={search}
           onChange={setSearch}
@@ -198,51 +107,46 @@ export default function Assets() {
           className="mb-0 w-full sm:ml-auto sm:w-70"
         />
       </div>
+
       <div className="mt-6 w-full">
-        <Table
-          data={filteredAssets}
-          columns={columns}
-          getRowKey={(asset) => asset.id}
-          className="w-full"
+        <AssetsTable
+          assets={filteredAssets}
+          onView={handleView}
+          onEdit={handleEdit}
+          onBookings={handleBookings}
+          onDelete={handleDelete}
         />
       </div>
 
       <AssetModal
-        isOpen={isAssetModalOpen}
-        onClose={() => {
-          setIsAssetModalOpen(false);
-          setActiveAsset(null);
-        }}
-        asset={activeAsset}
+        isOpen={modal.type === 'view'}
+        onClose={closeModal}
+        asset={modal.type === 'view' ? modal.asset : null}
       />
+
       <AssetEditModal
-        isOpen={isAssetEditModalOpen}
-        onClose={() => {
-          setIsAssetEditModalOpen(false);
-          setActiveAsset(null);
-        }}
-        asset={activeAsset}
+        isOpen={modal.type === 'edit'}
+        onClose={closeModal}
+        asset={modal.type === 'edit' ? modal.asset : null}
         onSave={(updatedAsset) => {
-          setAssets((currentAssets) =>
-            currentAssets.map((asset) =>
-              asset.id === updatedAsset.id ? updatedAsset : asset
-            )
+          setAssets((current) =>
+            current.map((a) => (a.id === updatedAsset.id ? updatedAsset : a))
           );
+          closeModal();
         }}
       />
 
       <AssetBookingsModal
-        isOpen={isBookingsModalOpen}
-        onClose={closeBookingsModal}
-        asset={activeAsset}
+        isOpen={modal.type === 'bookings'}
+        onClose={closeModal}
+        asset={modal.type === 'bookings' ? modal.asset : null}
       />
-
       <AssetAddModal
-        isOpen={isAssetAddModalOpen}
-        onClose={() => setIsAssetAddModalOpen(false)}
+        isOpen={modal.type === 'add'}
+        onClose={closeModal}
         onSave={(newAsset) => {
           setAssets((current) => [newAsset, ...current]);
-          setIsAssetAddModalOpen(false);
+          closeModal();
         }}
       />
     </LayoutColumn>
