@@ -166,6 +166,24 @@
 			<version>3.5.4</version>
 		</dependency>
 
+		<!-- 
+			Actuator dependency, used for enabling production-ready features
+			Usage: actuator/* endpoints for metrics
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- 
+			Prometheus scrapes metrics by polling an HTTP endpoint at a configurable interval.
+			Usage: For Grafana
+		-->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

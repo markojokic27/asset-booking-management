@@ -55,3 +55,23 @@ jwt:
   secret: ${JWT_SECRET}
   accessTokenExpiry: ${JWT_EXPIRY_SECONDS}
   refreshTokenExpiry: ${JWT_REFRESH_SECONDS}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # Handles what endpoints are available over HTTP
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+    prometheus:
+      enabled: true
+  server:
+    port: 8081 # Management is on a different port
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${spring.profiles.active:default}
+      version: ${build.version:unknown}

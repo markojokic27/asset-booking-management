@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AssetMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "code", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastModifiedAt", ignore = true)
