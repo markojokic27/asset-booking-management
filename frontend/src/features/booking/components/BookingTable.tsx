@@ -45,7 +45,11 @@ export function BookingTable({
       header: <span className="sr-only">Book</span>,
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
-      render: (asset) => <Button onClick={() => onBook(asset)}>Book</Button>,
+      render: (asset) => (
+        <Button size="sm" onClick={() => onBook(asset)}>
+          Book
+        </Button>
+      ),
     },
   ];
 
