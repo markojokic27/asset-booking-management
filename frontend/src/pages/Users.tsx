@@ -100,12 +100,12 @@ export default function Users() {
     const base = !q
       ? users
       : users.filter(
-          (u) =>
-            u.name.toLowerCase().includes(q) ||
-            u.surname.toLowerCase().includes(q) ||
-            getFullName(u).toLowerCase().includes(q) ||
-            u.email.toLowerCase().includes(q)
-        );
+        (u) =>
+          u.name.toLowerCase().includes(q) ||
+          u.surname.toLowerCase().includes(q) ||
+          getFullName(u).toLowerCase().includes(q) ||
+          u.email.toLowerCase().includes(q)
+      );
 
     const collator = new Intl.Collator('hr', { sensitivity: 'base' });
     const dir = nameSortDir === 'asc' ? 1 : -1;
@@ -158,9 +158,8 @@ export default function Users() {
           type="button"
           onClick={() => setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}
           className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
-          aria-label={`Sort by last name ${
-            nameSortDir === 'asc' ? 'descending' : 'ascending'
-          }`}
+          aria-label={`Sort by last name ${nameSortDir === 'asc' ? 'descending' : 'ascending'
+            }`}
         >
           <span>NAME</span>
           <span
@@ -402,16 +401,16 @@ export default function Users() {
         user={
           activeUser
             ? {
-                id: activeUser.id,
-                name: getFullName(activeUser),
-                email: activeUser.email,
-                username: activeUser.username,
-                role: activeUser.role,
-                status: activeUser.status,
-                departmentId: activeUser.departmentId,
-                managerEmail: activeUser.managerEmail,
-                notes: activeUser.notes,
-              }
+              id: activeUser.id,
+              name: getFullName(activeUser),
+              email: activeUser.email,
+              username: activeUser.username,
+              role: activeUser.role,
+              status: activeUser.status,
+              departmentId: activeUser.departmentId,
+              managerEmail: activeUser.managerEmail,
+              notes: activeUser.notes,
+            }
             : null
         }
       />
@@ -458,9 +457,7 @@ export default function Users() {
             surname: newUser.surname,
             name: newUser.name,
             email: newUser.email,
-            // Backend currently requires non-empty password on create
-            // Dummy password for now
-            password: '********',
+            password: newUser.password,
             role: newUser.role,
             status: newUser.status,
             departmentId: newUser.departmentId,
@@ -479,10 +476,10 @@ export default function Users() {
         user={
           activeUser
             ? {
-                id: activeUser.id,
-                name: activeUser.name,
-                surname: activeUser.surname,
-              }
+              id: activeUser.id,
+              name: activeUser.name,
+              surname: activeUser.surname,
+            }
             : null
         }
       />
