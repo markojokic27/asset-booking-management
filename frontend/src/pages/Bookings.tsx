@@ -5,6 +5,7 @@ import * as React from 'react';
 import { FiltersBar } from '../components/ui/FilterBar';
 import { Button } from '../components/ui/Button';
 import type { Filters, BookingsState } from '../features/booking/types';
+import { BookingTable } from '../features/booking/components/BookingTable';
 
 const initialAssets: AssetDto[] = [
   {
@@ -100,7 +101,14 @@ const filteredAssets = filteredAssetsByCategory.filter((asset) =>
       <FiltersBar filters={state.filters} setFilters={setFilters} />
 
       {/* Primjer gdje koristiš filtrirane podatke */}
-      {/* <Table data={filteredAssets} ... /> */}
+      <BookingTable
+        assets={state.assets} // zamijeni sa filteredAssets kad implementiraš filtriranje
+        onBook={(asset) => {
+          // implementiraj funkcionalnost rezervacije
+          console.log('Booking asset:', asset);
+        }}
+        className="mt-6"
+      />
     </LayoutColumn>
   );
 }
