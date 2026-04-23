@@ -1,6 +1,6 @@
 = Solution Architecture Document (SAD)
 Project Team
-v1.0-draft, April 20, 2026
+v1.1-draft, April 20, 2026
 :toc:
 :toclevels: 4
 :icons: font
@@ -47,6 +47,11 @@ At a high level, the solution consists of:
 * An optional caching and rate-limiting layer using Valkey, pending final implementation approval.
 
 The architectural style is a modulith: one deployable application with domain-oriented internal modules and explicitly managed boundaries. This enables simpler deployment and operations than microservices while still preserving separation of concerns at the code and business-domain level.
+
+
+.C4 Container Diagram
+image::../images/C4_system_content.drawio.png[C4 Container Diagram, width=100%]
+
 
 == Business Case
 
@@ -128,6 +133,10 @@ The solution is organized around the following logical layers:
 * Persistence layer — PostgreSQL database and repositories.
 * Integration layer — external adapters for directory login, email notifications, calendar synchronization, and optional caching.
 
+.C4 L2 — Container Diagram
+image::../images/C4_container.png[Container Diagram, width=100%]
+
+
 === Core Business Flow
 
 A typical booking flow is:
@@ -182,6 +191,10 @@ Each domain should encapsulate its own:
 * Repositories
 * DTOs / mappers
 * Validation and domain-specific exception handling
+
+.C4 L3 — Component Diagram
+image::../images/C4_component.drawio.png[Component Diagram, width=100%]
+
 
 === Module Interaction Rules
 
@@ -271,22 +284,86 @@ The current logical model includes at minimum:
 * Asset
 * Booking
 
-=== Entity Summary
+.C4 L4 — Class Diagram (Booking Module)
+image::../images/C4_UML_CLASS.drawio.png[UML Class Diagram, width=100%]
 
+=== Entity Summary
 ==== User
-Stores username, name, surname, email, password, role, status, department reference, manager reference, optional benefit, notes, and audit timestamps.
+[cols="1,3", options="header"]
+|===
+| Field | Description
+
+| username | Unique identifier for login
+| name | First name of the user
+| surname | Last name of the user
+| email | Contact and login email
+| password | Hashed password
+| role | User role (e.g. admin, employee)
+| status | Account status (e.g. active, inactive)
+| department_id | Reference to Department entity
+| manager_id | Reference to another User (manager)
+| benefit | Optional benefit assigned to user
+| notes | Additional notes
+| created_at / updated_at | Audit timestamps
+|===
+
 
 ==== Department
-Stores department identity, department name, manager association, and audit timestamps.
+[cols="1,3", options="header"]
+|===
+| Field | Description
+
+| id | Department identity
+| name | Department name
+| manager_id | Reference to User (manager)
+| created_at / updated_at | Audit timestamps
+|===
+
 
 ==== AssetCategory
-Stores category identity and category metadata. The logical requirements also indicate that category-level booking rules must be supported, such as booking period, booking window, approval requirement, recurrence allowance, and automatic release policies.
+[cols="1,3", options="header"]
+|===
+| Field | Description
+
+| id | Category identity
+| name | Category name
+| booking_period | Allowed booking duration
+| booking_window | How far in advance booking is allowed
+| approval_required | Whether manager approval is needed
+| recurrence_allowed | Whether recurring bookings are allowed
+| auto_release_policy | Policy for automatic asset release
+|===
+
 
 ==== Asset
-Stores asset identity, category reference, descriptive data, code/QR association, status, location, and audit timestamps.
+[cols="1,3", options="header"]
+|===
+| Field | Description
+
+| id | Asset identity
+| category_id | Reference to AssetCategory entity
+| name / description | Descriptive data about the asset
+| code / qr_code | Code or QR association for identification
+| status | Asset status (e.g. available, in-use)
+| location | Physical location of the asset
+| created_at / updated_at | Audit timestamps
+|===
+
 
 ==== Booking
-Stores booking identity, user reference, asset reference, booking status, start/end timestamps, notes, and audit timestamps.
+[cols="1,3", options="header"]
+|===
+| Field | Description
+
+| id | Booking identity
+| user_id | Reference to User entity
+| asset_id | Reference to Asset entity
+| status | Booking status (e.g. pending, approved, cancelled)
+| start_at | Booking start timestamp
+| end_at | Booking end timestamp
+| notes | Additional notes
+| created_at / updated_at | Audit timestamps
+|===
 
 === Data Modeling Notes
 
@@ -419,6 +496,7 @@ The infrastructure design should include:
 * Configuration externalization per environment.
 * Secrets management.
 * Capacity planning for expected internal traffic and growth.
+
 
 == Non-Functional Requirements
 
