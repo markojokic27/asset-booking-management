@@ -60,12 +60,9 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*" # Handles what endpoints are available over HTTP
+        include: "health, info, metrics, prometheus" # Handles what endpoints are available over HTTP
       base-path: /actuator
   endpoint:
-    health:
-      show-details: when-authorized
-      show-components: when-authorized
     prometheus:
       enabled: true
   server:
