@@ -10,17 +10,19 @@ http:
   url: "{{baseUrl}}/v1/users/:id"
   params:
     - name: id
-      value: ""
+      value: "17"
       type: path
-    - name: status
-      value: ""
-      type: query
   body:
     type: json
     data: "{}"
   auth:
     type: bearer
     token: "{{token}}"
+
+runtime:
+  variables:
+    - name: baseUrl
+      value: http://127.0.0.1:8080
 
 settings:
   encodeUrl: true

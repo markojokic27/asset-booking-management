@@ -16,6 +16,7 @@ type Props = {
   onView: (user: UserDto) => void;
   onEdit: (user: UserDto) => void;
   onBookings: (user: UserDto) => void;
+  onDelete: (user: UserDto) => void;
 };
 
 export const UsersTable = ({
@@ -26,6 +27,7 @@ export const UsersTable = ({
   onView,
   onEdit,
   onBookings,
+  onDelete,
 }: Props) => {
   const columns: TableColumn<UserDto>[] = [
     {
@@ -93,6 +95,7 @@ export const UsersTable = ({
           <IconButton
             type="button"
             aria-label="Edit user"
+            disabled={user.status === 'DELETED'}
             onClick={() => onEdit(user)}
           >
             <EditOutlinedIcon
@@ -100,7 +103,13 @@ export const UsersTable = ({
               className="pointer-events-none"
             />
           </IconButton>
-          <IconButton type="button" variant="danger" aria-label="Delete user">
+          <IconButton
+            type="button"
+            variant="danger"
+            aria-label="Delete user"
+            disabled={user.status === 'DELETED'}
+            onClick={() => onDelete(user)}
+          >
             <DeleteOutlineIcon
               fontSize="small"
               className="pointer-events-none"

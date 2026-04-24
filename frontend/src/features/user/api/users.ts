@@ -28,3 +28,7 @@ export const createUser = async (payload: UserUpsertRequest) => {
   const res = await api.post<UserDto>('/users', payload);
   return res.data;
 };
+
+export const deleteUser = async (id: number) => {
+  await api.delete<void>(`/users/${id}`);
+};

@@ -1,7 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { useState } from 'react';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
+import { DeleteModal } from '../components/ui/DeleteModal';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Pagination } from '../components/ui/Pagination';
 import { UserModal } from '../features/user/components/UserModal';
@@ -13,11 +15,19 @@ import {
   getFullName,
   useUsers,
 } from '../features/user/hooks/useUsers';
+import type { UserDto } from '../features/user/types';
+
+type ModalState =
+  | { type: 'none' }
+  | { type: 'delete'; user: UserDto };
 
 export default function Users() {
   const { list, sorting, pagination, selection, modals, actions } = useUsers({
     pageSize: 10,
   });
+  const [modal, setModal] = useState<ModalState>({ type: 'none' });
+
+  const closeDeleteModal = () => setModal({ type: 'none' });
 
   return (
     <LayoutColumn
@@ -69,6 +79,7 @@ export default function Users() {
           onView={modals.openViewUser}
           onEdit={modals.openEditUser}
           onBookings={modals.openBookings}
+          onDelete={(user) => setModal({ type: 'delete', user })}
           emptyMessage={
             list.isLoading
               ? 'Loading users...'
@@ -132,6 +143,21 @@ export default function Users() {
             }
             : null
         }
+      />
+
+      <DeleteModal
+        isOpen={modal.type === 'delete'}
+        onClose={closeDeleteModal}
+        item={modal.type === 'delete' ? modal.user : null}
+        getItemName={(user) => getFullName(user)}
+        title="Delete user?"
+        description={`Are you sure you want to delete "${modal.type === 'delete' ? getFullName(modal.user) : ''}"? This user will be marked as deleted.`}
+        onConfirm={async () => {
+          if (modal.type === 'delete') {
+            await actions.deleteExistingUser(modal.user);
+            closeDeleteModal();
+          }
+        }}
       />
     </LayoutColumn>
   );

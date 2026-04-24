@@ -23,6 +23,8 @@ runtime:
       value: user_admin
     - name: password
       value: admin123
+    - name: baseUrl
+      value: http://127.0.0.1:8080
 
 settings:
   encodeUrl: true

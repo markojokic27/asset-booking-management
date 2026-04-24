@@ -6,7 +6,7 @@ export type User = {
   email: string;
   password: string;
   role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-  status: 'ACTIVE' | 'INACTIVE';
+  status: 'ACTIVE' | 'INACTIVE' | 'STUDENT' | 'LEFT_COMPANY' | 'DELETED';
   departmentId: number;
   managerEmail: string;
   notes?: string | null;

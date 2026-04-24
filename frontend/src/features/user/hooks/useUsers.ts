@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { createUser, getUsers, updateUser } from '../api/users';
+import { createUser, deleteUser, getUsers, updateUser } from '../api/users';
 import type { UserDto, UserUpsertRequest } from '../types';
 
 function csvEscape(value: unknown) {
@@ -46,6 +46,7 @@ export function useUsers(options: Options = {}) {
   const [users, setUsers] = useState<UserDto[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const [usersError, setUsersError] = useState<string | null>(null);
+  const [deletingUserId, setDeletingUserId] = useState<number | null>(null);
 
   const [activeUser, setActiveUser] = useState<UserDto | null>(null);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -255,6 +256,20 @@ export function useUsers(options: Options = {}) {
     setUsers((currentUsers) => [dto, ...currentUsers]);
   };
 
+  const deleteExistingUser = async (user: Pick<UserDto, 'id'>) => {
+    try {
+      setDeletingUserId(user.id);
+      setUsersError(null);
+      await deleteUser(user.id);
+      setUsers((currentUsers) => currentUsers.filter((u) => u.id !== user.id));
+      if (activeUser?.id === user.id) setActiveUser(null);
+    } catch {
+      setUsersError('Failed to delete user.');
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
+
   return {
     list: {
       users,
@@ -299,6 +314,10 @@ export function useUsers(options: Options = {}) {
       exportUsersCsv,
       saveEditedUser,
       createNewUser,
+      deleteExistingUser,
+    },
+    meta: {
+      deletingUserId,
     },
   };
 }
