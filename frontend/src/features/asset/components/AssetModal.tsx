@@ -25,6 +25,11 @@ const statusConfig: Record<AssetStatus, { label: string; className: string }> =
       className:
         'bg-(--color-status-damaged-bg) text-(--color-status-damaged-text)',
     },
+    DELETED: {
+      label: 'Deleted',
+      className:
+        'bg-(--color-status-deleted-bg) text-(--color-status-deleted-text)',
+    },
   };
 
 export const AssetModal: React.FC<AssetModalProps> = ({
@@ -47,7 +52,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-200 overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
         <div className="flex items-center justify-end px-8 pt-6 pb-4">
           <button
             type="button"
@@ -60,24 +65,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         </div>
         <div className="mx-8 h-px bg-(--color-table-border)" />
         <div className="flex gap-10 px-8 py-8">
-          <div className="flex w-65 flex-col items-center justify-center">
-            {asset.imageUrl ? (
-              <img
-                src={asset.imageUrl}
-                alt={asset.name}
-                className="h-42.5 w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card)"
-              />
-            ) : (
-              <div className="flex h-42.5 w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)">
-                <span
-                  data-testid="asset-no-image"
-                  className="text-xs font-medium text-(--color-modal-label)"
-                >
-                  No image
-                </span>
-              </div>
-            )}
-          </div>
           <div className="flex flex-1 flex-col items-stretch space-y-5">
             <span
               data-testid="asset-status-badge"

@@ -10,16 +10,18 @@ import { AssetBookingsModal } from '../features/asset/components/AssetBookingsMo
 import type { AssetDto } from '../features/asset/types';
 import { AssetAddModal } from '../features/asset/components/AssetAddModal';
 import { AssetsTable } from '../features/asset/components/AssetTable';
-import { getAllAssets } from '../features/asset/api/assetApi';
+import { getAllAssets, updateAsset } from '../features/asset/api/assetApi';
 import type { AssetCategoryDto } from '../features/asset-category/types';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
+import { DeleteModal } from '../components/ui/DeleteModal';
 
 type ModalState =
   | { type: 'none' }
   | { type: 'view'; asset: AssetDto }
   | { type: 'edit'; asset: AssetDto }
   | { type: 'bookings'; asset: AssetDto }
-  | { type: 'add' };
+  | { type: 'add' }
+  | { type: 'delete'; asset: AssetDto };
 
 export default function Assets() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
@@ -91,8 +93,23 @@ export default function Assets() {
     setModal({ type: 'none' });
   };
 
-  const handleDelete = (asset: AssetDto) => {
-    setAssets((current) => current.filter((a) => a.id !== asset.id));
+  const handleDelete = async (asset: AssetDto) => {
+    try {
+      const updatedAsset = {
+        ...asset,
+        status: 'DELETED' as const,
+      };
+
+      await updateAsset(asset.id, updatedAsset);
+
+      setAssets((current) =>
+        current.map((a) =>
+          a.id === asset.id ? updatedAsset : a
+        )
+      );
+    } catch (err) {
+      console.error('Failed to delete asset:', err);
+    }
   };
 
   return (
@@ -146,7 +163,7 @@ export default function Assets() {
             onView={(asset) => setModal({ type: 'view', asset })}
             onEdit={(asset) => setModal({ type: 'edit', asset })}
             onBookings={(asset) => setModal({ type: 'bookings', asset })}
-            onDelete={handleDelete}
+            onDelete={(asset) => setModal({ type: 'delete', asset })}
           />
         )}
       </div>
@@ -183,6 +200,20 @@ export default function Assets() {
         isOpen={modal.type === 'bookings'}
         onClose={closeModal}
         asset={modal.type === 'bookings' ? modal.asset : null}
+      />
+      <DeleteModal
+        isOpen={modal.type === 'delete'}
+        onClose={closeModal}
+        item={modal.type === 'delete' ? modal.asset : null}
+        getItemName={(asset) => asset.name}
+        title="Delete asset?"
+        description={`Are you sure you want to delete "${modal.type === 'delete' ? modal.asset.name : ''}"? This asset will be marked as deleted.`}
+        onConfirm={async () => {
+          if (modal.type === 'delete') {
+            await handleDelete(modal.asset);
+            closeModal();
+          }
+        }}
       />
       <AssetAddModal
         isOpen={modal.type === 'add'}

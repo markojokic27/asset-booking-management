@@ -115,7 +115,7 @@ export default function AssetCategories() {
         {loading ? (
           <p className="text-sm text-gray-500">Loading categories...</p>
         ) : serverError ? (
-          <p className="absolute bottom-24 self-center text-center font-semibold text-red-500">
+          <p className="bottom-24 self-center text-center font-semibold text-red-500 p-5">
             {serverError}
           </p>
         ) : categories.length === 0 ? (

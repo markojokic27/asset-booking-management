@@ -25,3 +25,33 @@ export const getAssetById = async (id: string) => {
   );
   return res.data;
 }
+
+export type CreateAssetRequest = {
+  name: string
+  categoryId: number
+  status: 'ACTIVE' | 'INACTIVE' | 'DAMAGED' | 'DELETED'
+  location?: string
+  description?: string
+}
+
+export const createAsset = async (data: CreateAssetRequest) => {
+  const res = await api.post<AssetDto>(
+    '/assets', data
+  );
+  return res.data;
+}
+
+export type UpdateAssetRequest = {
+  name: string
+  categoryId: number
+  status: 'ACTIVE' | 'INACTIVE' | 'DAMAGED' | 'DELETED'
+  location?: string
+  description?: string
+}
+
+export const updateAsset = async (id: number, data: UpdateAssetRequest) => {
+  const res = await api.put<AssetDto>(
+    `/assets/${id}`, data
+  );
+  return res.data;
+}

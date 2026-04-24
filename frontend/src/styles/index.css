@@ -632,6 +632,8 @@
   --color-status-inactive-text: #b91c1c;
   --color-status-damaged-bg: #fef3c7;
   --color-status-damaged-text: #92400e;
+  --color-status-deleted-bg: #fee2e2;
+  --color-status-deleted-text: #b91c1c;
 }
 
 .dark {
@@ -659,6 +661,8 @@
   --color-status-inactive-text: #fca5a5;
   --color-status-damaged-bg: rgba(120, 53, 15, 0.45);
   --color-status-damaged-text: #fcd34d;
+    --color-status-deleted-bg: rgba(127, 29, 29, 0.45);
+  --color-status-deleted-text: #fca5a5;
 }
 
 @layer base {

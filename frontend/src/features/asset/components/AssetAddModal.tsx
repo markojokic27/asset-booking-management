@@ -1,23 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import {
-  categories,
   assetStatuses,
   type AssetDto,
   type AssetStatus,
 } from '../types';
 import { assetValidationSchema } from '../validation';
+import { getAllCategories } from '../../asset-category/api/categoryApi';
+import type { AssetCategoryDto } from '../../asset-category/types';
+import { createAsset } from '../api/assetApi';
 
 const assetAddSchema = assetValidationSchema.pick({
   name: true,
   categoryId: true,
   description: true,
   status: true,
-  code: true,
   location: true,
 });
 
@@ -32,7 +33,6 @@ type FormErrors = {
   categoryId: string;
   description: string;
   status: string;
-  code: string;
   location: string;
 };
 
@@ -41,7 +41,6 @@ const initialErrors: FormErrors = {
   categoryId: '',
   description: '',
   status: '',
-  code: '',
   location: '',
 };
 
@@ -49,6 +48,7 @@ const statusLabels: Record<AssetStatus, string> = {
   ACTIVE: 'Active',
   INACTIVE: 'Inactive',
   DAMAGED: 'Damaged',
+  DELETED: 'Deleted',
 };
 
 export const AssetAddModal = ({
@@ -57,38 +57,48 @@ export const AssetAddModal = ({
   onSave,
 }: AssetAddModalProps) => {
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
-  const [imagePreview, setImagePreview] = useState<string | undefined>();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
+  const [categoriesError, setCategoriesError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       setErrors(initialErrors);
-      setImagePreview(undefined);
+      //setCategories([]);
+      //setCategoriesError('');
+      //setCategoriesLoading(false);
+      setSubmitError('');
+      setIsSubmitting(false);
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const fetchCategories = async () => {
+    if (categories.length > 0 || categoriesLoading) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setImagePreview(reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      setCategoriesLoading(true);
+      setCategoriesError('');
+
+      const data = await getAllCategories();
+      setCategories(data.content);
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+      setCategoriesError('Failed to load categories.');
+    } finally {
+      setCategoriesLoading(false);
+    }
   };
 
-  const handleSubmit = (data: FormData) => {
+  const handleSubmit = async (data: FormData) => {
     const formValues = {
       name: data.get('name') as string,
-      categoryId: Number(data.get('categoryId')),
+      categoryId: data.get('categoryId') as string,
       description: data.get('description') as string,
       status: data.get('status') as AssetStatus,
-      code: data.get('code') as string,
       location: data.get('location') as string,
     };
 
@@ -102,26 +112,34 @@ export const AssetAddModal = ({
         categoryId: fieldErrors.categoryId?.[0] || '',
         description: fieldErrors.description?.[0] || '',
         status: fieldErrors.status?.[0] || '',
-        code: fieldErrors.code?.[0] || '',
         location: fieldErrors.location?.[0] || '',
       });
 
       return;
     }
 
-    const selectedCategory = categories.find(
-      (_category, index) => index + 1 === result.data.categoryId
-    );
+    try {
+      setIsSubmitting(true);
+      setSubmitError('');
 
-    onSave({
-      id: crypto.randomUUID(),
-      ...result.data,
-      description: result.data.description?.trim() || undefined,
-      imageUrl: imagePreview,
-      categoryName: selectedCategory ?? 'Unknown',
-      createdAt: new Date(),
-      lastModifiedAt: new Date(),
-    });
+      const payload = {
+        name: result.data.name.trim(),
+        categoryId: result.data.categoryId,
+        description: result.data.description?.trim() || '',
+        status: result.data.status,
+        location: result.data.location.trim(),
+      };
+
+      const createdAsset = await createAsset(payload);
+
+      onSave(createdAsset);
+      onClose();
+    } catch (error) {
+      console.error('Failed to create asset:', error);
+      setSubmitError('Failed to create asset.');
+    } finally {
+      setIsSubmitting(false);
+    }
 
     onClose();
   };
@@ -154,46 +172,15 @@ export const AssetAddModal = ({
           onSubmit={(event) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
-            handleSubmit(formData);
+            void handleSubmit(formData);
           }}
         >
           <div className="flex gap-10 px-8 py-8">
-            <div className="flex w-65 flex-col items-center justify-center">
-              <div className="relative w-full">
-                {imagePreview ? (
-                  <img
-                    src={imagePreview}
-                    alt="preview"
-                    className="h-42.5 w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card) blur-[1.5px]"
-                  />
-                ) : (
-                  <div className="flex h-42.5 w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)" />
-                )}
-
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageChange}
-                />
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1.5 text-xs shadow-none"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  {imagePreview ? 'Change photo' : 'Upload photo'}
-                </Button>
-              </div>
-            </div>
-
             <div className="flex flex-1 flex-col space-y-5">
               <Form.Field name="status">
                 <Form.Control asChild>
-                  <FormDropdown data-testid="asset-status"
+                  <FormDropdown
+                    data-testid="asset-status"
                     id="asset-status"
                     name="status"
                     label="Status"
@@ -210,18 +197,26 @@ export const AssetAddModal = ({
 
               <Form.Field name="categoryId">
                 <Form.Control asChild>
-                  <FormDropdown data-testid="asset-category"
+                  <FormDropdown
+                    data-testid="asset-category"
                     id="asset-category"
                     name="categoryId"
                     label="Category"
                     defaultValue=""
-                    error={!!errors.categoryId}
-                    errorMessage={errors.categoryId}
+                    error={!!errors.categoryId || !!categoriesError}
+                    errorMessage={errors.categoryId || categoriesError}
+                    onFocus={fetchCategories}
+                    onClick={fetchCategories}
                     options={[
-                      { value: '', label: 'Select category' },
-                      ...categories.map((category, index) => ({
-                        value: index + 1,
-                        label: category,
+                      {
+                        value: '',
+                        label: categoriesLoading
+                          ? 'Loading categories...'
+                          : 'Select category',
+                      },
+                      ...categories.map((category) => ({
+                        value: category.id,
+                        label: category.name,
                       })),
                     ]}
                   />
@@ -230,7 +225,8 @@ export const AssetAddModal = ({
 
               <Form.Field name="name">
                 <Form.Control asChild>
-                  <FormInput data-testid="asset-name"
+                  <FormInput
+                    data-testid="asset-name"
                     id="asset-name"
                     name="name"
                     type="text"
@@ -241,22 +237,10 @@ export const AssetAddModal = ({
                 </Form.Control>
               </Form.Field>
 
-              <Form.Field name="code">
-                <Form.Control asChild>
-                  <FormInput data-testid="asset-code"
-                    id="asset-code"
-                    name="code"
-                    type="text"
-                    label="QR Code"
-                    error={!!errors.code}
-                    errorMessage={errors.code}
-                  />
-                </Form.Control>
-              </Form.Field>
-
               <Form.Field name="location">
                 <Form.Control asChild>
-                  <FormInput data-testid="asset-location"
+                  <FormInput
+                    data-testid="asset-location"
                     id="asset-location"
                     name="location"
                     type="text"
@@ -269,7 +253,8 @@ export const AssetAddModal = ({
 
               <Form.Field name="description">
                 <Form.Control asChild>
-                  <FormInput data-testid="asset-description"
+                  <FormInput
+                    data-testid="asset-description"
                     id="asset-description"
                     name="description"
                     type="text"
@@ -285,8 +270,13 @@ export const AssetAddModal = ({
           <div className="mx-8 h-px bg-(--color-table-border)" />
 
           <div className="flex justify-end px-8 py-5">
+            {submitError && (
+                <p className="px-8 pt-4 text-sm text-red-500">{submitError}</p>
+              )}
             <Form.Submit asChild>
-              <Button data-testid="add-asset-button" type="submit">Add Asset</Button>
+              <Button data-testid="add-asset-button" type="submit" disabled={isSubmitting}>
+                Add Asset
+              </Button>
             </Form.Submit>
           </div>
         </Form.Root>

@@ -1,14 +1,13 @@
-export type AssetStatus = 'ACTIVE' | 'INACTIVE' | 'DAMAGED';
+export type AssetStatus = 'ACTIVE' | 'INACTIVE' | 'DAMAGED' | 'DELETED';
 
-export const assetStatuses = ['ACTIVE', 'INACTIVE', 'DAMAGED'] as const;
+export const assetStatuses = ['ACTIVE', 'INACTIVE', 'DAMAGED', 'DELETED'] as const;
 
 export type Asset = {
-  id: string;
+  id: number;
   name: string;
   categoryId: number; // FK
   description?: string;
-  imageUrl?: string;
-  code: string;
+  code?: string;
   status: AssetStatus;
   location: string;
   createdAt: Date;

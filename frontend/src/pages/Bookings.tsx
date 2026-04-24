@@ -8,11 +8,10 @@ import type { Filters, BookingsState } from '../features/booking/types';
 
 const initialAssets: AssetDto[] = [
   {
-    id: '1',
+    id: 1,
     name: 'Dell Latitude 5440',
     categoryId: 1,
     categoryName: 'Laptops',
-    imageUrl: undefined,
     code: 'DL-5440',
     status: 'ACTIVE',
     location: 'Split',

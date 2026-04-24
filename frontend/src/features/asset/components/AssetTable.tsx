@@ -3,7 +3,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
-
+import { IconButton } from '../../../components/ui/IconButton';
 import { type AssetDto } from '../../../features/asset/types';
 import { Button } from '../../../components/ui/Button';
 
@@ -12,7 +12,7 @@ type Props = {
   categoryMap: Record<number, string>;
   onView: (asset: AssetDto) => void;
   onEdit: (asset: AssetDto) => void;
-  onDelete?: (asset: AssetDto) => void;
+  onDelete: (asset: AssetDto) => void;
   onBookings: (asset: AssetDto) => void;
 };
 
@@ -70,32 +70,34 @@ export function AssetsTable({
       cellClassName: 'w-px whitespace-nowrap',
       render: (asset) => (
         <div className="flex items-center gap-1">
-          <button
+          <IconButton
             type="button"
-            className="table-action-btn"
-            aria-label="View asset"
+            aria-label="View user"
             onClick={() => onView(asset)}
           >
-            <VisibilityOutlinedIcon fontSize="small" />
-          </button>
-
-          <button
+            <VisibilityOutlinedIcon
+              fontSize="small"
+              className="pointer-events-none"
+            />
+          </IconButton>
+          <IconButton
             type="button"
-            className="table-action-btn"
-            aria-label="Edit asset"
-            onClick={() => onEdit(asset)}
+            aria-label="Edit user"
+            onClick={() => onEdit(asset)
+            }
           >
-            <EditOutlinedIcon fontSize="small" />
-          </button>
-
-          <button
-            type="button"
-            className="table-action-btn text-red-600 dark:text-red-400"
-            aria-label="Delete asset"
-            onClick={() => onDelete?.(asset)}
-          >
-            <DeleteOutlineIcon fontSize="small" />
-          </button>
+            <EditOutlinedIcon
+              fontSize="small"
+              className="pointer-events-none"
+            />
+          </IconButton>
+          { asset.status !== 'DELETED' && (
+          <IconButton type="button" variant="danger" aria-label="Delete user">
+            <DeleteOutlineIcon
+              fontSize="small"
+              onClick={() => onDelete?.(asset)}
+            />
+          </IconButton>)}
         </div>
       ),
     },

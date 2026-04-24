@@ -18,7 +18,7 @@ export const getAllCategories = async (page = 0, size = 10) => {
   return res.data;
 };
 
-export const getCategoryById = async (id: string) => {
+export const getCategoryById = async (id: number) => {
   const res = await api.get<AssetCategoryDto>(
     `/asset-categories/${id}`
   );
@@ -50,7 +50,7 @@ export type UpdateCategoryRequest = {
   photo?: string;
 };
 
-export const updateCategory = async (id: string, data: UpdateCategoryRequest) => {
+export const updateCategory = async (id: number, data: UpdateCategoryRequest) => {
   const res = await api.put<PageResponse<AssetCategoryDto>>(
     `/asset-categories/${id}`, data
   );
