@@ -88,11 +88,6 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
           </div>
 
           <div>
-            <p className="text-sm text-(--color-modal-label)">Status</p>
-            <p data-testid="user-status" className="font-medium text-(--color-text)">{status.label}</p>
-          </div>
-
-          <div>
             <p className="text-sm text-(--color-modal-label)">Department</p>
             <p data-testid="user-department-id" className="font-medium text-(--color-text)">{user.departmentId}</p>
           </div>

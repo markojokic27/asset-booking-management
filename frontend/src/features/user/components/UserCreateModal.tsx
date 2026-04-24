@@ -257,33 +257,35 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
             </Form.Control>
           </Form.Field>
 
-          <Form.Field name="name">
-            <Form.Control asChild>
-              <FormInput data-testid="user-name"
-                id="user-first-name"
-                name="name"
-                type="text"
-                label="First name"
-                defaultValue={initialValues.name}
-                error={!!errors.name}
-                errorMessage={errors.name}
-              />
-            </Form.Control>
-          </Form.Field>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <Form.Field name="name">
+              <Form.Control asChild>
+                <FormInput data-testid="user-name"
+                  id="user-first-name"
+                  name="name"
+                  type="text"
+                  label="First name"
+                  defaultValue={initialValues.name}
+                  error={!!errors.name}
+                  errorMessage={errors.name}
+                />
+              </Form.Control>
+            </Form.Field>
 
-          <Form.Field name="surname">
-            <Form.Control asChild>
-              <FormInput data-testid="user-surname"
-                id="user-last-name"
-                name="surname"
-                type="text"
-                label="Last name"
-                defaultValue={initialValues.surname}
-                error={!!errors.surname}
-                errorMessage={errors.surname}
-              />
-            </Form.Control>
-          </Form.Field>
+            <Form.Field name="surname">
+              <Form.Control asChild>
+                <FormInput data-testid="user-surname"
+                  id="user-last-name"
+                  name="surname"
+                  type="text"
+                  label="Last name"
+                  defaultValue={initialValues.surname}
+                  error={!!errors.surname}
+                  errorMessage={errors.surname}
+                />
+              </Form.Control>
+            </Form.Field>
+          </div>
 
           <Form.Field name="email">
             <Form.Control asChild>
