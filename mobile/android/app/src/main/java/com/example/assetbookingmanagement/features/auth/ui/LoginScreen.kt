@@ -1,160 +1,109 @@
 package com.example.assetbookingmanagement.features.auth.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.Image
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
+import android.content.res.Configuration
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.assetbookingmanagement.R
-import com.example.assetbookingmanagement.core.ui.components.AppButton
-import com.example.assetbookingmanagement.core.ui.components.AppInput
+import com.example.assetbookingmanagement.core.ui.components.*
 
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val uiState by viewModel.uiState.collectAsState()
+
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val spacing = if (isLandscape) 8.dp else 16.dp
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(80.dp))
+        LoginHeader(isLandscape)
 
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Asset Booking Management logo",
-            modifier = Modifier.height(90.dp),
-            contentScale = ContentScale.Fit
-        )
-
-        Text(
-            text = "Asset Booking Management",
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(if (isLandscape) 10.dp else 40.dp))
 
         LoginCard {
             Text(
                 text = "Login",
-                fontSize = 36.sp,
+                fontSize = if (isLandscape) 24.sp else 32.sp,
                 fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 18.dp)
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = spacing)
             )
 
-            Text(
-                text = "Username",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
+            LabeledInput("Username", username, "Enter username", isLandscape) { username = it }
+            Spacer(modifier = Modifier.height(spacing))
+            LabeledInput("Password", password, "Enter password", isLandscape, true) { password = it }
 
-            AppInput(
-                value = username,
-                onValueChange = { username = it },
-                placeholder = "Enter your username",
-                enabled = !uiState.isLoading
-            )
+            Spacer(modifier = Modifier.height(spacing * 1.5f))
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Password",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
-
-            AppInput(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "Enter your password",
-                enabled = !uiState.isLoading,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = PasswordVisualTransformation()
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            uiState.errorMessage?.let { message ->
-                Text(
-                    text = message,
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 13.sp,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
+            uiState.errorMessage?.let {
+                Text(it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
             }
 
             AppButton(
                 text = if (uiState.isLoading) "LOGGING IN..." else "LOGIN",
                 enabled = !uiState.isLoading,
-                onClick = {
-                    viewModel.login(
-                        username = username,
-                        password = password,
-                        onSuccess = onLoginSuccess
-                    )
-                }
+                onClick = { viewModel.login(username, password, onLoginSuccess) }
             )
         }
     }
 }
 
 @Composable
-fun LoginCard(
-    content: @Composable ColumnScope.() -> Unit = {}
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        shape = RoundedCornerShape(0.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-            content = content
-        )
+fun LoginHeader(isLandscape: Boolean) {
+    if (isLandscape) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(painterResource(R.drawable.logo), null, Modifier.height(40.dp))
+            Spacer(Modifier.width(12.dp))
+            Text("Asset Booking Management", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        }
+    } else {
+        Spacer(Modifier.height(50.dp))
+        Image(painterResource(R.drawable.logo), null, Modifier.height(80.dp))
+        Text("Asset Booking Management", fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
     }
+}
+
+@Composable
+fun LabeledInput(label: String, value: String, placeholder: String, isLandscape: Boolean, isPassword: Boolean = false, onValueChange: (String) -> Unit) {
+    Text(label, fontSize = 13.sp, modifier = Modifier.padding(bottom = if (isLandscape) 2.dp else 6.dp))
+    AppInput(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = placeholder,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text)
+    )
+}
+
+@Composable
+fun LoginCard(content: @Composable ColumnScope.() -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        content = { Column(Modifier.padding(20.dp), content = content) }
+    )
 }
