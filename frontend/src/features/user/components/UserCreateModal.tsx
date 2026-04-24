@@ -7,7 +7,7 @@ import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
-import type { UserDto } from '../types';
+import type { UserUpsertRequest } from '../types';
 
 const userCreateSchema = userValidationSchema
   .pick({
@@ -15,6 +15,7 @@ const userCreateSchema = userValidationSchema
     name: true,
     surname: true,
     email: true,
+    password: true,
     role: true,
     status: true,
     departmentId: true,
@@ -26,11 +27,12 @@ const userCreateSchema = userValidationSchema
   });
 
 export type UserCreateModalUser = Pick<
-  UserDto,
+  UserUpsertRequest,
   | 'username'
   | 'name'
   | 'surname'
   | 'email'
+  | 'password'
   | 'role'
   | 'status'
   | 'departmentId'
@@ -49,6 +51,7 @@ type FormErrors = {
   name: string;
   surname: string;
   email: string;
+  password: string;
   role: string;
   status: string;
   departmentId: string;
@@ -61,6 +64,7 @@ const initialErrors: FormErrors = {
   name: '',
   surname: '',
   email: '',
+  password: '',
   role: '',
   status: '',
   departmentId: '',
@@ -73,6 +77,7 @@ const initialValues: UserCreateModalUser = {
   name: '',
   surname: '',
   email: '',
+  password: '',
   role: 'EMPLOYEE',
   status: 'ACTIVE',
   departmentId: 1,
@@ -119,6 +124,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       name: data.get('name') as string,
       surname: data.get('surname') as string,
       email: data.get('email') as string,
+      password: data.get('password') as string,
       role: data.get('role') as string,
       status: data.get('status') as string,
       departmentId: data.get('departmentId') as string,
@@ -135,6 +141,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
         name: fieldErrors.name?.[0] || '',
         surname: fieldErrors.surname?.[0] || '',
         email: fieldErrors.email?.[0] || '',
+        password: fieldErrors.password?.[0] || '',
         role: fieldErrors.role?.[0] || '',
         status: fieldErrors.status?.[0] || '',
         departmentId: fieldErrors.departmentId?.[0] || '',
@@ -152,6 +159,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
         name: result.data.name,
         surname: result.data.surname,
         email: result.data.email,
+        password: result.data.password,
         role: result.data.role,
         status: result.data.status,
         departmentId: result.data.departmentId,
@@ -287,6 +295,21 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 defaultValue={initialValues.email}
                 error={!!errors.email}
                 errorMessage={errors.email}
+              />
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field name="password">
+            <Form.Control asChild>
+              <FormInput
+                data-testid="user-password"
+                id="user-password"
+                name="password"
+                type="password"
+                label="Password"
+                defaultValue={initialValues.password}
+                error={!!errors.password}
+                errorMessage={errors.password}
               />
             </Form.Control>
           </Form.Field>

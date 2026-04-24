@@ -3,7 +3,6 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
-import type { UserDto } from '../types';
 
 type UserBooking = {
   id: string;
@@ -13,17 +12,16 @@ type UserBooking = {
   dateTo: Date;
 };
 
-export type UserBookingsModalUser = Pick<UserDto, 'id' | 'name' | 'surname'>;
+export type UserBookingsModalUser = {
+  id: number;
+  fullName: string;
+};
 
 export type UserBookingsModalProps = {
   isOpen: boolean;
   onClose: () => void;
   user: UserBookingsModalUser | null;
 };
-
-function getFullName(user: UserBookingsModalUser) {
-  return `${user.name} ${user.surname}`.trim();
-}
 
 export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
   isOpen,
@@ -62,7 +60,7 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
           <h2 className="text-xs font-semibold uppercase tracking-widest text-(--color-table-head-text) opacity-50">
             Bookings
           </h2>
-          <p className="block text-base font-black tracking-wider">{getFullName(user)}</p>
+          <p className="block text-base font-black tracking-wider">{user.fullName}</p>
         </div>
       }
       headerRight={

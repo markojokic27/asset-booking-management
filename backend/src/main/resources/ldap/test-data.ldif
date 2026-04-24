@@ -8,6 +8,39 @@ objectClass: top
 objectClass: organizationalUnit
 ou: users
 
+dn: ou=groups,dc=myapp,dc=com
+objectClass: top
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=admin,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: admin
+cn: Admin User
+givenName: Admin
+sn: User
+mail: admin@myapp.com
+departmentNumber: DEVOPS
+employeeType: ADMIN
+userPassword: admin123
+
+dn: uid=manager,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: manager
+cn: Manager One
+givenName: Manager
+sn: One
+mail: manager@myapp.com
+departmentNumber: DEVOPS
+employeeType: MANAGER
+userPassword: manager123
+
 dn: uid=alice,ou=users,dc=myapp,dc=com
 objectClass: top
 objectClass: person
@@ -15,17 +48,113 @@ objectClass: organizationalPerson
 objectClass: inetOrgPerson
 uid: alice
 cn: Alice Smith
+givenName: Alice
 sn: Smith
 mail: alice@myapp.com
-userPassword: {bcrypt}$2a$12$...encoded...
+departmentNumber: DEVOPS
+employeeType: EMPLOYEE
+manager: uid=manager,ou=users,dc=myapp,dc=com
+userPassword: alice123
 
-dn: ou=groups,dc=myapp,dc=com
+dn: uid=bob,ou=users,dc=myapp,dc=com
 objectClass: top
-objectClass: organizationalUnit
-ou: groups
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: bob
+cn: Bob Brown
+givenName: Bob
+sn: Brown
+mail: bob@myapp.com
+departmentNumber: DEVOPS
+employeeType: EMPLOYEE
+manager: uid=manager,ou=users,dc=myapp,dc=com
+userPassword: bob123
 
-dn: cn=admins,ou=groups,dc=myapp,dc=com
+dn: uid=manager2,ou=users,dc=myapp,dc=com
 objectClass: top
-objectClass: groupOfUniqueNames
-cn: admins
-uniqueMember: uid=alice,ou=users,dc=myapp,dc=com
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: manager2
+cn: Sarah Connor
+givenName: Sarah
+sn: Connor
+mail: sarah.connor@myapp.com
+departmentNumber: SYSTEM_TEST
+employeeType: MANAGER
+userPassword: manager123
+
+dn: uid=manager3,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: manager3
+cn: John Carter
+givenName: John
+sn: Carter
+mail: john.carter@myapp.com
+departmentNumber: CLOUD_AND_DATA_MANAGEMENT
+employeeType: MANAGER
+userPassword: manager123
+
+dn: uid=charlie,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: charlie
+cn: Charlie Day
+givenName: Charlie
+sn: Day
+mail: charlie.day@myapp.com
+departmentNumber: DEVOPS
+employeeType: EMPLOYEE
+manager: uid=manager,ou=users,dc=myapp,dc=com
+userPassword: charlie123
+
+dn: uid=diana,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: diana
+cn: Diana Prince
+givenName: Diana
+sn: Prince
+mail: diana.prince@myapp.com
+departmentNumber: SYSTEM_TEST
+employeeType: EMPLOYEE
+manager: uid=manager2,ou=users,dc=myapp,dc=com
+userPassword: diana123
+
+dn: uid=eric,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: eric
+cn: Eric Evans
+givenName: Eric
+sn: Evans
+mail: eric.evans@myapp.com
+departmentNumber: CLOUD_AND_DATA_MANAGEMENT
+employeeType: EMPLOYEE
+manager: uid=manager3,ou=users,dc=myapp,dc=com
+userPassword: eric123
+
+dn: uid=frank,ou=users,dc=myapp,dc=com
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+uid: frank
+cn: Frank Castle
+givenName: Frank
+sn: Castle
+mail: frank.castle@myapp.com
+departmentNumber: CLOUD_AND_DATA_MANAGEMENT
+employeeType: EMPLOYEE
+manager: uid=manager3,ou=users,dc=myapp,dc=com
+userPassword: frank123

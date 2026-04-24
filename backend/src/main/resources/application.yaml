@@ -14,6 +14,14 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+    hikari:
+      pool-name: AssetBookingManagement
+      maximum-pool-size: 20 # Scaled for 150 user booking bursts
+      minimum-idle: 20 # Fixed-size for instant response
+      connection-timeout: 5000 # Fail-fast to avoid hanging UI
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -47,3 +55,20 @@ jwt:
   secret: ${JWT_SECRET}
   accessTokenExpiry: ${JWT_EXPIRY_SECONDS}
   refreshTokenExpiry: ${JWT_REFRESH_SECONDS}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health, info, metrics, prometheus" # Handles what endpoints are available over HTTP
+      base-path: /actuator
+  endpoint:
+    prometheus:
+      enabled: true
+  server:
+    port: 8081 # Management is on a different port
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${spring.profiles.active:default}
+      version: ${build.version:unknown}

@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () => redirect('/assets'),
+        loader: () => redirect('/bookings'),
       },
 
       {

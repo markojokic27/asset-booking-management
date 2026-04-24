@@ -5,6 +5,7 @@ import * as React from 'react';
 import { FiltersBar } from '../components/ui/FilterBar';
 import { Button } from '../components/ui/Button';
 import type { Filters, BookingsState } from '../features/booking/types';
+import { BookingTable } from '../features/booking/components/BookingTable';
 
 const initialAssets: AssetDto[] = [
   {
@@ -19,6 +20,7 @@ const initialAssets: AssetDto[] = [
     lastModifiedAt: new Date(),
   },
 ];
+
 const initialFilters: Filters = {
   search: '',
   fromDate: '',
@@ -30,13 +32,7 @@ const initialFilters: Filters = {
 const initialState: BookingsState = {
   selectedCategory: 'Laptops',
   assets: initialAssets,
-  filters: {
-    search: '',
-    fromDate: '',
-    toDate: '',
-    fromHour: '',
-    toHour: '',
-  },
+  filters: initialFilters,
 };
 
 export default function Bookings() {
@@ -50,15 +46,19 @@ export default function Bookings() {
       filters: typeof updater === 'function' ? updater(prev.filters) : updater,
     }));
   };
-  /*
-  const filteredAssetsByCategory =
-    state.selectedCategory === 'Assets'
-      ? state.assets
-      : state.assets.filter((a) => a.categoryName === state.selectedCategory);
 
-const filteredAssets = filteredAssetsByCategory.filter((asset) =>
-    asset.name.toLowerCase().includes(state.filters.search.trim().toLowerCase())
-  );*/
+  const filteredAssets = React.useMemo(() => {
+    const byCategory =
+      state.selectedCategory === 'Assets'
+        ? state.assets
+        : state.assets.filter((a) => a.categoryName === state.selectedCategory);
+
+    return byCategory.filter((asset) =>
+      asset.name
+        .toLowerCase()
+        .includes(state.filters.search.trim().toLowerCase())
+    );
+  }, [state.assets, state.selectedCategory, state.filters.search]);
 
   return (
     <LayoutColumn
@@ -79,27 +79,31 @@ const filteredAssets = filteredAssetsByCategory.filter((asset) =>
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em]">
           {state.selectedCategory}
         </h1>
-        <div>
-          <Button
-            className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
-            onClick={() =>
-              setState((prev) => ({
-                ...prev,
-                filters: initialFilters,
-              }))
-            }
-          >
-            Reset filters
-          </Button>
-        </div>
+
+        <Button
+          className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
+          onClick={() =>
+            setState((prev) => ({
+              ...prev,
+              filters: initialFilters,
+            }))
+          }
+        >
+          Reset filters
+        </Button>
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
       <FiltersBar filters={state.filters} setFilters={setFilters} />
 
-      {/* Primjer gdje koristiš filtrirane podatke */}
-      {/* <Table data={filteredAssets} ... /> */}
+      <BookingTable
+        assets={filteredAssets}
+        onBook={(asset) => {
+          console.log('Booking asset:', asset);
+        }}
+        className="mt-6"
+      />
     </LayoutColumn>
   );
 }

@@ -30,10 +30,10 @@
 		<tomcat.version>11.0.21</tomcat.version>
 		<jackson-bom.version>3.1.1</jackson-bom.version>
 
-        <!--Sonarqube implementation-->
+		<!-- SonarQube configuration (used by the 'sonar' profile) -->
 		<sonar.projectKey>asset-booking-management-backend</sonar.projectKey>
 		<sonar.projectName>AssetBookingManagement Backend</sonar.projectName>
-		<sonar.coverage.jacoco.xmlReportPaths>target/sonarqube/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>		
+		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<dependencies>
@@ -159,11 +159,29 @@
 			<artifactId>core</artifactId>
 			<version>3.3.0</version>
     	</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
 			<version>3.5.4</version>
+		</dependency>
+
+		<!-- 
+			Actuator dependency, used for enabling production-ready features
+			Usage: actuator/* endpoints for metrics
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- 
+			Prometheus scrapes metrics by polling an HTTP endpoint at a configurable interval.
+			Usage: For Grafana
+		-->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 
 	</dependencies>
@@ -201,7 +219,8 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<!--Jacoco plugin for reports-->
+			<!-- JaCoCo plugin for coverage reports. Kept in the main build so
+			     coverage is always available locally and for Sonar to pick up. -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -228,36 +247,83 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--Dependency vulnerability check (in terminal: mvn verify)-->
-			<!-- Inside <build><plugins> in backend/pom.xml -->
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>12.1.0</version>
-				<executions>
-					<execution>
-						<id>dependency-check</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<nvdApiKey>${nvd.api.key}</nvdApiKey>
-					<nvdApiDelay>3500</nvdApiDelay>
-					<formats>
-						<format>HTML</format>
-						<format>JSON</format>
-					</formats>
-					<suppressionFile>../dependency-check-suppression.xml</suppressionFile>
-        			
-					<outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
-					<failBuildOnCVSS>7</failBuildOnCVSS>
-					<!-- Disable Sonatype OSS Index because it fails with 401 -->
-					<ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+
+	<!--SEE WIKI PAGE "Maven Build Profiles" ON HOW TO USE THEM-->
+	<profiles>
+		<!--SONAR PROFILE-->
+		<profile>
+			<id>sonar</id>
+			<properties>
+				<sonar.host.url>${SONAR_WEB_PORT}</sonar.host.url>
+				<sonar.token>${SONAR_TOKEN}</sonar.token>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonarsource.scanner.maven</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+    					<version>5.5.0.6356</version>
+						<executions>
+							<execution>
+								<id>sonar-analysis</id>
+								<phase>verify</phase>  <!-- binds to verify phase -->
+								<goals>
+									<goal>sonar</goal>
+								</goals>
+							</execution>
+                		</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!--OWASP PROFILE-->
+		<profile>
+			<id>owasp</id>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.sonarsource.scanner.maven</groupId>
+							<artifactId>sonar-maven-plugin</artifactId>
+							<version>5.1.0.4751</version>
+						</plugin>
+					</plugins>
+    			</pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>12.1.9</version>
+						<executions>
+							<execution>
+								<id>dependency-check</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<nvdApiKey>${NVD_API_KEY}</nvdApiKey>
+							<nvdApiDelay>3500</nvdApiDelay>
+							<formats>
+								<format>HTML</format>
+								<format>JSON</format>
+							</formats>
+							<suppressionFile>../dependency-check-suppression.xml</suppressionFile>
+							<outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
+							<failBuildOnCVSS>7</failBuildOnCVSS>
+							<!-- Disable Sonatype OSS Index because it fails with 401 -->
+							<ossindexAnalyzerEnabled>false</ossindexAnalyzerEnabled>
+							<!-- Cache NVD data locally to avoid full re-download each run -->
+							<dataDirectory>${user.home}/.owasp/dependency-check-data</dataDirectory>
+							<autoUpdate>true</autoUpdate>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
