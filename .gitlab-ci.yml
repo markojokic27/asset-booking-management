@@ -119,7 +119,7 @@ backend-dependency-check:
     - job: backend:compile    # Reuses backend/target/ artifact, skips recompile
   script:
     - cd backend
-    - mvn dependency-check:check
+    - mvn clean verify -Powasp
         -Dnvd.api.key=$NVD_API_KEY
         -Dmaven.repo.local=.m2/repository
         -DretireJsAnalyzerEnabled=false # GitHub is unreachable from Internal network, also this is backend dependency check, Js already included in npm audit
