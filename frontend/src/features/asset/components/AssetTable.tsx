@@ -83,6 +83,7 @@ export function AssetsTable({
           <IconButton
             type="button"
             aria-label="Edit user"
+            disabled={asset.status === 'DELETED'}
             onClick={() => onEdit(asset)
             }
           >
@@ -91,13 +92,13 @@ export function AssetsTable({
               className="pointer-events-none"
             />
           </IconButton>
-          { asset.status !== 'DELETED' && (
-          <IconButton type="button" variant="danger" aria-label="Delete user">
+          <IconButton type="button" variant="danger" aria-label="Delete user" disabled={asset.status === 'DELETED'}
+          >
             <DeleteOutlineIcon
               fontSize="small"
               onClick={() => onDelete?.(asset)}
             />
-          </IconButton>)}
+          </IconButton>
         </div>
       ),
     },
