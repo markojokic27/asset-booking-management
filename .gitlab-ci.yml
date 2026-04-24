@@ -246,29 +246,43 @@ bruno:smoke:
 # ─────────────────────────────────────────
 # SONARQUBE STAGE
 # ─────────────────────────────────────────
+# sonar:
+#   stage: sonar
+#   image: maven:3.9-eclipse-temurin-21
+      
+#   script: 
+#     - cd backend
+#     - mvn clean verify 
+#         -Ddependency-check.skip=true 
+#         org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
+#         -Dsonar.projectKey=Asset-Booking-Manager-Backend 
+#         -Dsonar.projectName="Asset Booking Manager" 
+#         -Dsonar.host.url=$SONAR_HOST_URL 
+#         -Dsonar.token=$SONAR_TOKEN
+#   allow_failure: true
+#   rules:
+#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+#     - if: $CI_COMMIT_BRANCH == 'master'
+#     - if: $CI_COMMIT_BRANCH == 'main'
+#     - if: $CI_COMMIT_BRANCH == 'develop'
+
 sonar:
   stage: sonar
   image: maven:3.9-eclipse-temurin-21
-      
-  script: 
+  services:
+    - name: sonarqube:community
+      alias: sonarqube
+  variables:
+    SONAR_HOST_URL: "http://sonarqube:9000"
+  script:
     - cd backend
-    - mvn clean verify 
-        -Ddependency-check.skip=true 
-        org.sonarsource.scanner.maven:sonar-maven-plugin:sonar 
-        -Dsonar.projectKey=Asset-Booking-Manager-Backend 
-        -Dsonar.projectName="Asset Booking Manager" 
-        -Dsonar.host.url=$SONAR_HOST_URL 
+    - mvn clean verify
+        -Ddependency-check.skip=true
+        org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        -Dsonar.projectKey=Asset-Booking-Manager-Backend
+        -Dsonar.host.url=$SONAR_HOST_URL
         -Dsonar.token=$SONAR_TOKEN
   allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'master'
-    - if: $CI_COMMIT_BRANCH == 'main'
-    - if: $CI_COMMIT_BRANCH == 'develop'
-
-    
-
-
 
 # ─────────────────────────────────────────
 # DOCKERIZE STAGE
