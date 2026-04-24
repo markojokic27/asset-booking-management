@@ -12,3 +12,8 @@ data class AssetResponse(
     val status: String,
     val location: String
 )
+
+@Serializable
+data class AssetListResponse(
+    val content: List<AssetResponse>,
+)

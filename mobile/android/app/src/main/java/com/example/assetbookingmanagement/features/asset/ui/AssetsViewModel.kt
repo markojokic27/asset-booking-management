@@ -16,7 +16,8 @@ import javax.inject.Inject
 
 data class AssetsUiState(
     val isLoading: Boolean = false,
-    val asset: AssetResponse? = null,
+    val assets: List<AssetResponse> = emptyList(),
+    val scannedAsset: AssetResponse? = null,
     val errorMessage: String? = null
 )
 
@@ -27,6 +28,9 @@ class AssetsViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(AssetsUiState())
     val uiState: StateFlow<AssetsUiState> = _uiState.asStateFlow()
+    init {
+        getAssets()
+    }
 
     fun getAssetById(id: Long) {
         viewModelScope.launch {
@@ -43,7 +47,7 @@ class AssetsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        asset = asset,
+                        scannedAsset = asset,
                         errorMessage = null
                     )
                 }
@@ -63,6 +67,31 @@ class AssetsViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         errorMessage = "Cannot reach backend."
+                    )
+                }
+            }
+        }
+    }
+    fun getAssets() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true, errorMessage = null)
+            }
+
+            try {
+                val response = assetRepository.getAssets()
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        assets = response.content
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Error loading assets"
                     )
                 }
             }

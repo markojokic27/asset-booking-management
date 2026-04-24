@@ -32,7 +32,7 @@ fun AssetsScreen(
     viewModel: AssetsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val asset = uiState.asset
+    val assets = uiState.assets
     var searchText by remember { mutableStateOf("") }
 
     Box(
@@ -90,10 +90,21 @@ fun AssetsScreen(
                     )
                 }
 
-                asset != null -> {
+                assets.isNotEmpty() -> {
+                    Column {
+                        assets.forEach { asset ->
+                            Text(
+                                text = asset.name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+                }
+                
+                else -> {
                     Text(
-                        text = asset.name,
-                        style = MaterialTheme.typography.titleLarge,
+                        text = "No assets found.",
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
