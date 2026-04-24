@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AssetCategoryCard } from './AssetCategoryCard';
 
 export type AssetCategoryGridProps = {
-  categories: readonly string[];
+  categories: string[];
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
 };

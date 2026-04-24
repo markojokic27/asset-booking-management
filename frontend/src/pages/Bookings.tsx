@@ -1,64 +1,72 @@
 import { LayoutColumn } from '../components/layout/Layout';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
-import { categories, type AssetDto } from '../features/asset/types';
+import type { AssetDto } from '../features/asset/types';
+import type { AssetCategoryDto } from '../features/asset-category/types';
 import * as React from 'react';
 import { FiltersBar } from '../components/ui/FilterBar';
 import { Button } from '../components/ui/Button';
-import type { Filters, BookingsState } from '../features/booking/types';
+import type { Filters } from '../features/booking/types';
 import { BookingTable } from '../features/booking/components/BookingTable';
-
-const initialAssets: AssetDto[] = [
-  {
-    id: 1,
-    name: 'Dell Latitude 5440',
-    categoryId: 1,
-    categoryName: 'Laptops',
-    code: 'DL-5440',
-    status: 'ACTIVE',
-    location: 'Split',
-    createdAt: new Date(),
-    lastModifiedAt: new Date(),
-  },
-];
-
-const initialFilters: Filters = {
-  search: '',
-  fromDate: '',
-  toDate: '',
-  fromHour: '',
-  toHour: '',
-};
-
-const initialState: BookingsState = {
-  selectedCategory: 'Laptops',
-  assets: initialAssets,
-  filters: initialFilters,
-};
+import { getAllAssets } from '../features/asset/api/assetApi';
+import { getAllCategories } from '../features/asset-category/api/categoryApi';
 
 export default function Bookings() {
-  const [state, setState] = React.useState<BookingsState>(initialState);
+  const [assets, setAssets] = React.useState<AssetDto[]>([]);
+  const [categories, setCategories] = React.useState<AssetCategoryDto[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = React.useState<
+    number | null
+  >(null);
+  const [filters, setFilters] = React.useState<Filters>({
+    search: '',
+    fromDate: '',
+    toDate: '',
+    fromHour: '',
+    toHour: '',
+  });
+  const [loading, setLoading] = React.useState(false);
 
-  const setFilters: React.Dispatch<React.SetStateAction<Filters>> = (
-    updater
-  ) => {
-    setState((prev) => ({
-      ...prev,
-      filters: typeof updater === 'function' ? updater(prev.filters) : updater,
-    }));
-  };
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const [assetRes, categoryRes] = await Promise.all([
+          getAllAssets(0, 50),
+          getAllCategories(0, 50),
+        ]);
+
+        setAssets(assetRes.content);
+        setCategories(categoryRes.content);
+
+        const laptops = categoryRes.content.find(
+          (c) => c.name.toLowerCase() === 'laptops'
+        );
+
+        setSelectedCategoryId(
+          laptops?.id ?? categoryRes.content[0]?.id ?? null
+        );
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const filteredAssets = React.useMemo(() => {
-    const byCategory =
-      state.selectedCategory === 'Assets'
-        ? state.assets
-        : state.assets.filter((a) => a.categoryName === state.selectedCategory);
+    return assets
+      .filter((a) =>
+        selectedCategoryId ? a.categoryId === selectedCategoryId : true
+      )
+      .filter((asset) =>
+        asset.name.toLowerCase().includes(filters.search.trim().toLowerCase())
+      );
+  }, [assets, selectedCategoryId, filters.search]);
 
-    return byCategory.filter((asset) =>
-      asset.name
-        .toLowerCase()
-        .includes(state.filters.search.trim().toLowerCase())
-    );
-  }, [state.assets, state.selectedCategory, state.filters.search]);
+  const selectedCategoryName =
+    categories.find((c) => c.id === selectedCategoryId)?.name ?? '';
 
   return (
     <LayoutColumn
@@ -68,25 +76,29 @@ export default function Bookings() {
       className="flex flex-col pt-35"
     >
       <AssetCategoryGrid
-        categories={categories}
-        selectedCategory={state.selectedCategory}
-        onSelectCategory={(cat) =>
-          setState((prev) => ({ ...prev, selectedCategory: cat }))
-        }
+        categories={categories.map((c) => c.name)}
+        selectedCategory={selectedCategoryName}
+        onSelectCategory={(catName) => {
+          const cat = categories.find((c) => c.name === catName);
+          setSelectedCategoryId(cat?.id ?? null);
+        }}
       />
 
       <div className="mt-12 flex w-full items-center justify-between gap-4">
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em]">
-          {state.selectedCategory}
+          {selectedCategoryName}
         </h1>
 
         <Button
           className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
           onClick={() =>
-            setState((prev) => ({
-              ...prev,
-              filters: initialFilters,
-            }))
+            setFilters({
+              search: '',
+              fromDate: '',
+              toDate: '',
+              fromHour: '',
+              toHour: '',
+            })
           }
         >
           Reset filters
@@ -95,15 +107,19 @@ export default function Bookings() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
-      <FiltersBar filters={state.filters} setFilters={setFilters} />
+      <FiltersBar filters={filters} setFilters={setFilters} />
 
-      <BookingTable
-        assets={filteredAssets}
-        onBook={(asset) => {
-          console.log('Booking asset:', asset);
-        }}
-        className="mt-6"
-      />
+      {loading ? (
+        <div className="mt-6">Loading...</div>
+      ) : (
+        <BookingTable
+          assets={filteredAssets}
+          onBook={(asset) => {
+            console.log('Booking asset:', asset);
+          }}
+          className="mt-6"
+        />
+      )}
     </LayoutColumn>
   );
 }
