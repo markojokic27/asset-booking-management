@@ -10,22 +10,29 @@ http:
   url: "{{baseUrl}}/v1/bookings/:id"
   params:
     - name: id
-      value: ""
+      value: "{{bookingId}}"
       type: path
   body:
     type: json
     data: |-
       {
-        "userId": 0,
-        "assetId": 0,
-        "status": "ACTIVE",
-        "bookingStart": "",
-        "bookingEnd": "",
-        "notes": ""
+        "notes": "Updated"
       }
-  auth:
-    type: bearer
-    token: "{{token}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const responses = JSON.parse(bru.getFolderVar("update"));
+
+        const response = responses[bru.getEnvVar("responseRole")];
+
+        bru.setVar("response", response);
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "{{response}}"
 
 settings:
   encodeUrl: true

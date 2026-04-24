@@ -1,21 +1,16 @@
 package de.bdr.asset.management.user;
 
-import de.bdr.asset.management.asset.Asset;
-import de.bdr.asset.management.asset.AssetStatusEnum;
-import de.bdr.asset.management.booking.BookingRepository;
-import de.bdr.asset.management.booking.BookingStatusEnum;
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import de.bdr.asset.management.booking.BookingRepository;
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Implementation of User Service
@@ -143,12 +138,12 @@ public class UserServiceImpl implements UserService {
 
         repository.save(user);
 
-        List<String> statusesToCancel = List.of(
-                BookingStatusEnum.ACTIVE.name(),
-                BookingStatusEnum.APPROVED.name(),
-                BookingStatusEnum.PENDING.name()
-        );
-
-        bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
+        // TODO: Commented out because it does not work. Will need to find a better way.
+        // List<String> statusesToCancel = List.of(
+        //         BookingStatusEnum.ACTIVE.name(),
+        //         BookingStatusEnum.APPROVED.name(),
+        //         BookingStatusEnum.PENDING.name()
+        // );
+        // bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
     }
 }

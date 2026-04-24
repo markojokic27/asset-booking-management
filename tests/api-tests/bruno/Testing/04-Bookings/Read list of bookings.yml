@@ -22,9 +22,23 @@ http:
       type: query
       description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
       disabled: true
-  auth:
-    type: bearer
-    token: "{{token}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const responses = JSON.parse(bru.getFolderVar("list"));
+
+        const response = responses[bru.getEnvVar("responseRole")];
+
+        bru.setVar("response", response);
+    - type: after-response
+      code: bru.setVar("bookingId", res.body.content[0]["id"]);
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "{{response}}"
 
 settings:
   encodeUrl: true

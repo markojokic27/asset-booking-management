@@ -12,16 +12,37 @@ http:
     type: json
     data: |-
       {
-        "userId": 0,
-        "assetId": 0,
+        "userId": "{{userId}}",
+        "assetId": "{{assetId}}",
         "status": "ACTIVE",
-        "bookingStart": "",
-        "bookingEnd": "",
-        "notes": ""
+        "bookingStart": "{{bookingStart}}",
+        "bookingEnd": "{{bookingEnd}}",
+        "notes": "Why?"
       }
-  auth:
-    type: bearer
-    token: "{{token}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const responses = JSON.parse(bru.getFolderVar("create"));
+
+        const response = responses[bru.getEnvVar("responseRole")];
+
+        bru.setVar("response", response);
+
+        const now = Date.now();
+
+        const bookingStart = new Date(now + 24 * 60 * 60 * 1000);
+
+        const bookingEnd = new Date(bookingStart.getTime() + 2 * 24 * 60 * 60 * 1000);
+
+        bru.setVar("bookingStart",bookingStart);
+        bru.setVar("bookingEnd",bookingEnd);
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "{{response}}"
 
 settings:
   encodeUrl: true

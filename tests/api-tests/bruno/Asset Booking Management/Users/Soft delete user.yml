@@ -10,7 +10,7 @@ http:
   url: "{{baseUrl}}/v1/users/:id"
   params:
     - name: id
-      value: "17"
+      value: ""
       type: path
   body:
     type: json

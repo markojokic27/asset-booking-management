@@ -10,11 +10,23 @@ http:
   url: "{{baseUrl}}/v1/bookings/:id"
   params:
     - name: id
-      value: ""
+      value: "{{bookingId}}"
       type: path
-  auth:
-    type: bearer
-    token: "{{token}}"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const responses = JSON.parse(bru.getFolderVar("delete"));
+
+        const response = responses[bru.getEnvVar("responseRole")];
+
+        bru.setVar("response", response);
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "{{response}}"
 
 settings:
   encodeUrl: true

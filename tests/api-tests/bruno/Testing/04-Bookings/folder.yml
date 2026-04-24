@@ -7,12 +7,12 @@ request:
   auth: inherit
   variables:
     - name: create
-      value: ""
+      value: '{"admin": 201, "manager": 201, "employee": 201}'
     - name: list
-      value: ""
+      value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: readById
-      value: ""
+      value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: update
-      value: ""
+      value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: delete
-      value: ""
+      value: '{"admin": 204, "manager": 204, "employee": 204}'
