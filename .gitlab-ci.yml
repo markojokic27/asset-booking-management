@@ -3,7 +3,7 @@ stages:
   - test
   - security
   - bruno
-  - sonar
+  #- sonar
   - dockerize
 
 
@@ -13,7 +13,7 @@ variables:
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
   DOCKER_HOST: tcp://docker:2375      # non-TLS port
   DOCKER_TLS_CERTDIR: ""              # TLS disabled
-  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  #SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 
@@ -266,23 +266,6 @@ bruno:smoke:
 #     - if: $CI_COMMIT_BRANCH == 'main'
 #     - if: $CI_COMMIT_BRANCH == 'develop'
 
-sonar:
-  stage: sonar
-  image: maven:3.9-eclipse-temurin-21
-  services:
-    - name: sonarqube:community
-      alias: sonarqube
-  variables:
-    SONAR_HOST_URL: "http://sonarqube:9000"
-  script:
-    - cd backend
-    - mvn clean verify
-        -Ddependency-check.skip=true
-        org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-        -Dsonar.projectKey=Asset-Booking-Manager-Backend
-        -Dsonar.host.url=$SONAR_HOST_URL
-        -Dsonar.token=$SONAR_TOKEN
-  allow_failure: true
 
 # ─────────────────────────────────────────
 # DOCKERIZE STAGE
