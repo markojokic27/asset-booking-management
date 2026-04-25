@@ -1,6 +1,8 @@
 package com.example.assetbookingmanagement.features.asset.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,11 +30,8 @@ import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.SearchBar
 
 @Composable
-fun AssetsScreen(
-    viewModel: AssetsViewModel = hiltViewModel()
-) {
+fun AssetsScreen(viewModel: AssetsViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val assets = uiState.assets
     var searchText by remember { mutableStateOf("") }
 
     Box(
@@ -90,18 +89,19 @@ fun AssetsScreen(
                     )
                 }
 
-                assets.isNotEmpty() -> {
-                    Column {
-                        assets.forEach { asset ->
-                            Text(
-                                text = asset.name,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
+                uiState.assets.isNotEmpty() -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(
+                            items = uiState.assets,
+                            key = { asset -> asset.id }
+                        ) { asset ->
+                            AssetCard(asset = asset)
                         }
                     }
                 }
-                
                 else -> {
                     Text(
                         text = "No assets found.",

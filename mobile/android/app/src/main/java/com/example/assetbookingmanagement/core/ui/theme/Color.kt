@@ -31,3 +31,8 @@ val TextDark = Color(0xFFF5F5F5)
 val PrimaryDark = PrimaryBlue
 val OutlineDark = Color(0xFFF5F5F5)
 val HeaderDark = Color(0xFF000000)
+
+val AssetStatusActiveBg = Color(0xFFC8E6C9)
+val AssetStatusInactiveBg = Color(0xFFE0E0E0)
+val AssetStatusDamagedBg = Color(0xFFFFE0B2)
+val AssetStatusDeletedBg = Color(0xFFFFCDD2)
