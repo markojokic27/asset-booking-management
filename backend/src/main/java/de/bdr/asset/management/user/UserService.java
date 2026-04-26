@@ -9,14 +9,14 @@ import org.springframework.data.domain.Pageable;
 public interface UserService {
 
     /** CREATE */
-    UserResponseDTO createUser(UserRequestDTO userRequest);
+    UserResponseDTO createUser(UserCreateRequestDTO userRequest);
 
     /** READ */
     UserResponseDTO getUserById(Long id);
     Page<UserResponseDTO> getAllUsers(Pageable pageable);
 
     /** UPDATE */
-    UserResponseDTO updateUser(Long id, UserRequestDTO userRequest);
+    UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userRequest);
 
     /** DELETE (Soft) */
     void softDeleteUser(Long id);

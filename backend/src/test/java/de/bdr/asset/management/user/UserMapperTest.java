@@ -15,8 +15,8 @@ public class UserMapperTest {
         userMapper = new UserMapperImpl();
     }
 
-    private UserRequestDTO buildRequest() {
-        return new UserRequestDTO(
+    private UserCreateRequestDTO buildRequest() {
+        return new UserCreateRequestDTO(
                 "ivan.horvat",
                 "Horvat",
                 "Ivan",

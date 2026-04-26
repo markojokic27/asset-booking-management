@@ -1,7 +1,5 @@
 package de.bdr.asset.management.user;
 
-import java.util.Map;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
@@ -70,7 +67,7 @@ public class UserController {
     @Operation(summary = "Create user account", description = "Available to everyone, used for registering users.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(
-            @Valid @RequestBody UserRequestDTO userRequest
+            @Valid @RequestBody UserCreateRequestDTO userRequest
     ) throws DuplicateResourceException, ResourceNotFoundException
     {
         log.info("Received POST request to create a new user for department id: {}", userRequest.departmentId());
@@ -108,12 +105,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserRequestDTO userRequest
-    ) throws DuplicateResourceException, ResourceNotFoundException
+            @Valid @RequestBody UserUpdateRequestDTO userUpdateRequest
+    ) throws ResourceNotFoundException
     {
         log.info("Received PUT request to update user with id: {}", id);
 
-        UserResponseDTO updatedUser = userService.updateUser(id, userRequest);
+        UserResponseDTO updatedUser = userService.updateUser(id, userUpdateRequest);
 
         log.debug("Successfully processed PUT request for user id: {}", id);
 

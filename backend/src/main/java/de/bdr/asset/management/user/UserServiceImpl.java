@@ -1,16 +1,19 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.booking.BookingRepository;
+import de.bdr.asset.management.booking.BookingStatusEnum;
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import de.bdr.asset.management.booking.BookingRepository;
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementation of User Service
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserResponseDTO createUser(UserRequestDTO userRequest) {
+    public UserResponseDTO createUser(UserCreateRequestDTO userRequest) {
 
         log.info("Attempting to create a new user for department id: {}", userRequest.departmentId());
 
@@ -90,34 +93,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequest) {
+    public UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userUpdateRequest) {
 
         log.info("Attempting to update user with id: {}", id);
 
         User user = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
-        if (repository.existsByUsernameAndIdNot(userRequest.username(), id)) {
-            throw new DuplicateResourceException("Username " + userRequest.username() + " is already taken by another user.");
-        }
+        user.setStatus(userUpdateRequest.status());
+        user.setNotes(userUpdateRequest.notes());
+        user.setBenefit(userUpdateRequest.benefit());
 
-        if (repository.existsByEmailAndIdNot(userRequest.email(), id)) {
-            throw new DuplicateResourceException("Email " + userRequest.email() + " is already in use by another user.");
-        }
-
-        Department department = departmentRepository.findById(userRequest.departmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
-        
-        user.setUsername(userRequest.username());
-        user.setSurname(userRequest.surname());
-        user.setName(userRequest.name());
-        user.setEmail(userRequest.email());
-        user.setRole(userRequest.role());
-        user.setStatus(userRequest.status());
-        user.setDepartment(department);
-        user.setManagerEmail(userRequest.managerEmail());
-        user.setNotes(userRequest.notes());
-        user.setBenefit(userRequest.benefit());
         user = repository.save(user);
 
         log.info("Successfully updated user with id: {}", id);
@@ -138,12 +124,12 @@ public class UserServiceImpl implements UserService {
 
         repository.save(user);
 
-        // TODO: Commented out because it does not work. Will need to find a better way.
-        // List<String> statusesToCancel = List.of(
-        //         BookingStatusEnum.ACTIVE.name(),
-        //         BookingStatusEnum.APPROVED.name(),
-        //         BookingStatusEnum.PENDING.name()
-        // );
-        // bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
+        List<String> statusesToCancel = List.of(
+                BookingStatusEnum.ACTIVE.name(),
+                BookingStatusEnum.APPROVED.name(),
+                BookingStatusEnum.PENDING.name()
+        );
+
+        bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
     }
 }

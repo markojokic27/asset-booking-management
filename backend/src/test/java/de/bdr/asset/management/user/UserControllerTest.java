@@ -1,6 +1,5 @@
 package de.bdr.asset.management.user;
 
-import de.bdr.asset.management.user.department.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +29,7 @@ public class UserControllerTest {
     /** CREATE */
     @Test
     void createUser_validRequest_returnsCreatedStatus(){
-        UserRequestDTO request=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
+        UserCreateRequestDTO request=new UserCreateRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
         UserResponseDTO response=new UserResponseDTO( 1L,"ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr",  UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
 
         when(userService.createUser(request)).thenReturn(response);
@@ -92,7 +90,7 @@ public class UserControllerTest {
     /** UPDATE */
     @Test
     void updateUser_returnsOkWithUpdatesdUser(){
-        UserRequestDTO request=new UserRequestDTO( "ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", "password.123", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
+        UserUpdateRequestDTO request=new UserUpdateRequestDTO(UserStatusEnum.LEFT_COMPANY, "test notes", "SOME");
         UserResponseDTO response=new UserResponseDTO( 1L,"ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
 
         when(userService.updateUser(1L, request)).thenReturn(response);

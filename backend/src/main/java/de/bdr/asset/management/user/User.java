@@ -12,7 +12,7 @@ import java.time.Instant;
  * User domain-entity model.
  */
 @Entity
-@Table(name = "asset_user")  // can not put just "user" because of conflict with database user!
+@Table(name = "asset_user")  // cannot name "user" because of conflict with postgres "user" keyword
 @Getter
 @Setter
 @NoArgsConstructor

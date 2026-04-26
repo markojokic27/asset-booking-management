@@ -40,8 +40,9 @@ class UserServiceImplTest {
 
     private User user;
     private Department department;
-    private UserRequestDTO requestDTO;
+    private UserCreateRequestDTO requestDTO;
     private UserResponseDTO responseDTO;
+    private UserUpdateRequestDTO userUpdateRequestDTO;
 
     @BeforeEach
     void setUp() {
@@ -54,7 +55,7 @@ class UserServiceImplTest {
         user.setName("ivan ivic");
         user.setDepartment(department);
 
-        requestDTO = new UserRequestDTO(
+        requestDTO = new UserCreateRequestDTO(
                 "ivanivic",
                 "ivic",
                 "ivan",
@@ -66,6 +67,12 @@ class UserServiceImplTest {
                 "antem@maurer-electonics.hr",
                 "Some optional notes",
                 "ALL"
+        );
+
+        userUpdateRequestDTO = new UserUpdateRequestDTO(
+                UserStatusEnum.ACTIVE,
+                "Some updated notes",
+                "SOME"
         );
 
         responseDTO = new UserResponseDTO(
@@ -150,11 +157,10 @@ class UserServiceImplTest {
     @Test
     void shouldUpdateUser() {
         when(repository.findById(1L)).thenReturn(Optional.of(user));
-        when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
         when(repository.save(user)).thenReturn(user);
         when(mapper.toResponse(user)).thenReturn(responseDTO);
 
-        UserResponseDTO result = service.updateUser(1L, requestDTO);
+        UserResponseDTO result = service.updateUser(1L, userUpdateRequestDTO);
 
         assertEquals("ivan", result.name());
         verify(repository).save(user);
@@ -166,16 +172,7 @@ class UserServiceImplTest {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> service.updateUser(1L, requestDTO));
+                () -> service.updateUser(1L, userUpdateRequestDTO));
     }
 
-    // Tests updateUser(): throws if department not found
-    @Test
-    void shouldThrowExceptionWhenUpdatingUserWithNonExistingDepartment() {
-        when(repository.findById(1L)).thenReturn(Optional.of(user));
-        when(departmentRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class,
-                () -> service.updateUser(1L, requestDTO));
-    }
 }

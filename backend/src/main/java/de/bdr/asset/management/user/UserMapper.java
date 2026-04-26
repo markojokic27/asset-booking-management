@@ -9,7 +9,7 @@ public interface UserMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "lastModifiedAt", ignore = true)
     @Mapping(target = "department", ignore = true)
-    User toEntity(UserRequestDTO request);
+    User toEntity(UserCreateRequestDTO request);
 
     @Mapping(target = "departmentId", source = "department.id")
     UserResponseDTO toResponse(User entity);

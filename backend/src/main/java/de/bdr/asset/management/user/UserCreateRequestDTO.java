@@ -2,7 +2,7 @@ package de.bdr.asset.management.user;
 
 import jakarta.validation.constraints.*;
 
-public record UserRequestDTO(
+public record UserCreateRequestDTO(
 
         @NotBlank(message = "Username is required")
         @Size(min = 3, max = 50)
