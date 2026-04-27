@@ -134,6 +134,9 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
   const statusLabels: Record<UserDto['status'], string> = {
     ACTIVE: 'Active',
     INACTIVE: 'Inactive',
+    STUDENT: 'Student',
+    LEFT_COMPANY: 'Left Company',
+    DELETED: 'Deleted',
   };
 
   const statusOptions = userStatusSchema.options

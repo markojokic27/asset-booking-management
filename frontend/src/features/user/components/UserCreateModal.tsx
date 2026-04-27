@@ -109,6 +109,9 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
   const statusLabels: Record<UserCreateModalUser['status'], string> = {
     ACTIVE: 'Active',
     INACTIVE: 'Inactive',
+    STUDENT: 'Student',
+    LEFT_COMPANY: 'Left Company',
+    DELETED: 'Deleted',
   };
 
   const statusOptions = userStatusSchema.options
