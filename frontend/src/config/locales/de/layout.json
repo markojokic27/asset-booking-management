@@ -1,0 +1,16 @@
+{
+  "navbar": {
+    "assets": "Inventar",
+    "categories": "Kategorien",
+    "bookings": "Buchungen",
+    "users": "Benutzer",
+    "account": "Konto",
+    "logout": "Abmelden"
+  },
+  "footer": {
+    "websiteLinkLabel": "Maurer Electronics Website",
+    "copyright": "© 2026 | Bundesdruckerei GmbH",
+    "partOfThe": "Teil der",
+    "groupName": "Bundesdruckerei Group"
+  }
+}

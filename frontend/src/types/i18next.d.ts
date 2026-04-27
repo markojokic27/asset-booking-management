@@ -1,11 +1,15 @@
 import 'i18next';
-import enTranslation from '../config/locales/en.json';
+import enCommon from '../config/locales/en/common.json';
+import enLayout from '../config/locales/en/layout.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: 'translation';
     resources: {
-      translation: typeof enTranslation;
+      translation: {
+        common: typeof enCommon;
+        layout: typeof enLayout;
+      };
     };
   }
 }

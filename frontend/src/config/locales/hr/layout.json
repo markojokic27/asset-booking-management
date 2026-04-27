@@ -1,0 +1,16 @@
+{
+  "navbar": {
+    "assets": "Imovina",
+    "categories": "Kategorije",
+    "bookings": "Rezervacije",
+    "users": "Korisnici",
+    "account": "Račun",
+    "logout": "Odjava"
+  },
+  "footer": {
+    "websiteLinkLabel": "Maurer Electronics web stranica",
+    "copyright": "© 2026 | Bundesdruckerei GmbH",
+    "partOfThe": "Dio",
+    "groupName": "Bundesdruckerei grupacije"
+  }
+}

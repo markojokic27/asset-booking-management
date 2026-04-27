@@ -6,13 +6,15 @@ import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 export const Navbar: React.FC = () => {
+  const { t } = useTranslation();
   const navItems = [
-    { to: '/assets', label: 'Assets', icon: MonitorSharpIcon },
-    { to: '/categories', label: 'Categories', icon: DnsSharpIcon },
-    { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharpIcon },
-    { to: '/users', label: 'Users', icon: PeopleSharpIcon },
+    { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
+    { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
+    { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharpIcon },
+    { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon },
   ];
   //TODO hover, new tab
   // Base for links
@@ -55,11 +57,11 @@ export const Navbar: React.FC = () => {
         <div className="flex w-full flex-col gap-4">
           <NavLink to="/account-info" className={({ isActive }) => getLinkClass(isActive)}>
             <AccountCircleSharp className='mr-3' sx={{ fontSize: 26 }} />
-            Account
+            {t('layout.navbar.account')}
           </NavLink>
           <NavLink to="/login" className={getLinkClass(false)}>
             <LogoutSharpIcon className="mr-4" />
-            Logout
+            {t('layout.navbar.logout')}
           </NavLink>
         </div>
       </nav>
