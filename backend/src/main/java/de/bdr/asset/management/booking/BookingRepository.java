@@ -23,8 +23,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @EntityGraph(attributePaths = {"user", "asset"})
     Page<Booking> findAll(Pageable pageable);
 
-    @Modifying
-    @Query(value = "UPDATE booking SET status = 'CANCELLED' " +
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE asset_booking_mgm.booking SET status = 'CANCELLED' " +
                    "WHERE user_id = :userId " +
                    "AND status IN :targetStatuses",
            nativeQuery = true)
