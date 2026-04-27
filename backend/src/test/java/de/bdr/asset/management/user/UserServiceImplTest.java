@@ -5,6 +5,9 @@ import de.bdr.asset.management.user.department.DepartmentEnum;
 import de.bdr.asset.management.user.department.DepartmentRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
+import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
+import de.bdr.asset.management.user.dtos.UserResponseDTO;
+import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

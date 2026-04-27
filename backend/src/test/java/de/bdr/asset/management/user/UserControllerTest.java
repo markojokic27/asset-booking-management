@@ -1,5 +1,8 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
+import de.bdr.asset.management.user.dtos.UserResponseDTO;
+import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

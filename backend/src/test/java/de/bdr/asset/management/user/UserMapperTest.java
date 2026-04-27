@@ -1,6 +1,8 @@
 package de.bdr.asset.management.user;
 
 import de.bdr.asset.management.user.department.Department;
+import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
+import de.bdr.asset.management.user.dtos.UserResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

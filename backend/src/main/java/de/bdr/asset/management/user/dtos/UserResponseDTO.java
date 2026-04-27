@@ -1,4 +1,7 @@
-package de.bdr.asset.management.user;
+package de.bdr.asset.management.user.dtos;
+
+import de.bdr.asset.management.user.UserRoleEnum;
+import de.bdr.asset.management.user.UserStatusEnum;
 
 public record UserResponseDTO(
 

@@ -1,5 +1,6 @@
-package de.bdr.asset.management.user;
+package de.bdr.asset.management.user.dtos;
 
+import de.bdr.asset.management.user.UserStatusEnum;
 import jakarta.validation.constraints.*;
 
 public record UserUpdateRequestDTO(

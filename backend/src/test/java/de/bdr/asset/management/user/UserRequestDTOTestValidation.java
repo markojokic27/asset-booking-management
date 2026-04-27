@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
