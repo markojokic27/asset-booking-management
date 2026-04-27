@@ -1,0 +1,47 @@
+{
+  "modal": {
+    "dialogAria": "Dijalog"
+  },
+  "deleteModal": {
+    "defaultTitle": "Obrisati stavku?",
+    "defaultDescription": "Jeste li sigurni da želite obrisati \"{{name}}\"?",
+    "cancel": "Odustani",
+    "confirmDelete": "Obriši"
+  },
+  "pagination": {
+    "ariaLabel": "Stranice",
+    "previous": "Prethodna",
+    "next": "Sljedeća"
+  },
+  "table": {
+    "emptyMessage": "Nema dostupnih podataka."
+  },
+  "search": {
+    "byNamePlaceholder": "Pretraži po imenu...",
+    "assetsPlaceholder": "Pretraži imovinu..."
+  },
+  "userMenu": {
+    "ariaLabel": "Korisnički izbornik",
+    "accountInfo": "Podaci o računu",
+    "logout": "Odjava"
+  },
+  "themeToggle": {
+    "ariaLabel": "Uključi/isključi tamni način"
+  },
+  "filters": {
+    "fromTime": "Od",
+    "toTime": "Do"
+  },
+  "dateTimeInput": {
+    "hourAriaSuffix": "sat"
+  },
+  "multiSelect": {
+    "selectAssets": "Odaberi imovinu...",
+    "searchAssetsPlaceholder": "Pretraži imovinu...",
+    "loadingAssets": "Učitavanje imovine...",
+    "failedToLoadAssets": "Učitavanje imovine nije uspjelo"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Odaberi jezik"
+  }
+}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DateTimeInput } from './DateTimeInput';
 import { SearchInput } from './SearchBar';
+import { useTranslation } from 'react-i18next';
 
 type Filters = {
   search: string;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export function FiltersBar({ filters, setFilters }: Props) {
+  const { t } = useTranslation();
   const update = (partial: Partial<Filters>) => {
     setFilters((prev) => ({ ...prev, ...partial }));
   };
@@ -24,7 +26,7 @@ export function FiltersBar({ filters, setFilters }: Props) {
     <div className="mt-6 grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       <DateTimeInput
         id="from-date"
-        label="From time"
+        label={t('ui.filters.fromTime')}
         value={filters.fromDate}
         onChange={(v) => update({ fromDate: v })}
         hourValue={filters.fromHour}
@@ -34,7 +36,7 @@ export function FiltersBar({ filters, setFilters }: Props) {
 
       <DateTimeInput
         id="to-date"
-        label="To time"
+        label={t('ui.filters.toTime')}
         value={filters.toDate}
         onChange={(v) => update({ toDate: v })}
         hourValue={filters.toHour}
@@ -45,7 +47,7 @@ export function FiltersBar({ filters, setFilters }: Props) {
       <SearchInput
         value={filters.search}
         onChange={(v) => update({ search: v })}
-        placeholder="Search assets..."
+        placeholder={t('ui.search.assetsPlaceholder')}
         className="col-span-1 w-full sm:col-span-2 lg:col-span-1 lg:mt-5 lg:ml-auto lg:max-w-60"
       />
     </div>

@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 export type PaginationItem = number | 'ellipsis';
 
@@ -16,16 +17,17 @@ export function Pagination({
   totalPages,
   items,
   onPageChange,
-  ariaLabel = 'Pagination',
+  ariaLabel,
   className,
 }: Props) {
+  const { t } = useTranslation();
   const canPrev = page > 1;
   const canNext = page < totalPages;
 
   return (
     <nav
       className={twMerge('mt-5 flex w-full items-center justify-center', className)}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? t('ui.pagination.ariaLabel')}
     >
       <div className="flex items-center gap-2 text-sm text-(--color-table-text)">
         <button
@@ -35,7 +37,7 @@ export function Pagination({
           className="inline-flex cursor-pointer items-center gap-2 rounded px-2 py-1 transition-colors hover:bg-(--color-table-row-hover) disabled:cursor-not-allowed disabled:opacity-50"
         >
           <span aria-hidden="true">‹</span>
-          <span>Previous</span>
+          <span>{t('ui.pagination.previous')}</span>
         </button>
 
         <div className="flex items-center gap-2">
@@ -78,7 +80,7 @@ export function Pagination({
           disabled={!canNext}
           className="inline-flex cursor-pointer items-center gap-2 rounded px-2 py-1 transition-colors hover:bg-(--color-table-row-hover) disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <span>Next</span>
+          <span>{t('ui.pagination.next')}</span>
           <span aria-hidden="true">›</span>
         </button>
       </div>

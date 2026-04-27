@@ -23,7 +23,7 @@ function resolveLanguage(code: string) {
 }
 
 function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const currentLanguage = resolveLanguage(i18n.language);
 
@@ -39,7 +39,7 @@ function LanguageSwitcher() {
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          aria-label={currentLanguage?.label ?? 'Select language'}
+          aria-label={currentLanguage?.label ?? t('ui.languageSwitcher.selectLanguage')}
           className="group flex items-center gap-1.5 text-gray-900 hover:cursor-pointer focus:outline-none dark:text-gray-100"
         >
           {CurrentFlag ? (

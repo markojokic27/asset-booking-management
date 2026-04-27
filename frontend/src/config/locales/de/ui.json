@@ -1,0 +1,47 @@
+{
+  "modal": {
+    "dialogAria": "Dialog"
+  },
+  "deleteModal": {
+    "defaultTitle": "Element löschen?",
+    "defaultDescription": "Möchten Sie \"{{name}}\" wirklich löschen?",
+    "cancel": "Abbrechen",
+    "confirmDelete": "Löschen"
+  },
+  "pagination": {
+    "ariaLabel": "Seitennummerierung",
+    "previous": "Zurück",
+    "next": "Weiter"
+  },
+  "table": {
+    "emptyMessage": "Keine Daten verfügbar."
+  },
+  "search": {
+    "byNamePlaceholder": "Nach Name suchen…",
+    "assetsPlaceholder": "Assets suchen…"
+  },
+  "userMenu": {
+    "ariaLabel": "Benutzermenü",
+    "accountInfo": "Kontoinfo",
+    "logout": "Abmelden"
+  },
+  "themeToggle": {
+    "ariaLabel": "Dunkelmodus umschalten"
+  },
+  "filters": {
+    "fromTime": "Von",
+    "toTime": "Bis"
+  },
+  "dateTimeInput": {
+    "hourAriaSuffix": "Uhr"
+  },
+  "multiSelect": {
+    "selectAssets": "Assets auswählen…",
+    "searchAssetsPlaceholder": "Assets suchen…",
+    "loadingAssets": "Assets werden geladen…",
+    "failedToLoadAssets": "Assets konnten nicht geladen werden"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Sprache auswählen"
+  }
+}

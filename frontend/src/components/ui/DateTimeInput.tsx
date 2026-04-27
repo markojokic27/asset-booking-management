@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 export type DateTimeInputProps = {
   id: string;
   label: string;
@@ -25,6 +27,7 @@ export const DateTimeInput: React.FC<DateTimeInputProps> = ({
   hourOptions = hourOpt,
 }) => {
   const hasSelectedHour = Boolean(hourValue);
+  const { t } = useTranslation();
 
   return (
     <div className={className}>
@@ -44,7 +47,7 @@ export const DateTimeInput: React.FC<DateTimeInputProps> = ({
           <select
             value={hourValue ?? ''}
             onChange={(e) => onHourChange(e.target.value)}
-            aria-label={`${label} hour`}
+            aria-label={`${label} ${t('ui.dateTimeInput.hourAriaSuffix')}`}
             className={`h-10 w-24 rounded-lg border-2 border-(--color-table-border) bg-(--color-table-surface) px-2 text-sm outline-none focus:outline-none ${hasSelectedHour ? 'text-(--color-table-text)' : 'text-(--color-table-text)/60'}`}
           >
             <option value="" disabled hidden>

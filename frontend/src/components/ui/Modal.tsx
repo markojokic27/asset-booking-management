@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 export type ModalSize = 'md' | 'lg';
 
@@ -31,10 +32,13 @@ export const Modal: React.FC<ModalProps> = ({
   headerRight,
   className,
 }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const resolvedAriaLabel =
-    ariaLabel ?? (typeof title === 'string' ? title : undefined) ?? 'Dialog';
+    ariaLabel ??
+    (typeof title === 'string' ? title : undefined) ??
+    t('ui.modal.dialogAria');
 
   return (
     <div
