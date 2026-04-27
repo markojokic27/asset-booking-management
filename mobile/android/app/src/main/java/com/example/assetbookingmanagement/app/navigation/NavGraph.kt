@@ -36,6 +36,10 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             if (showBottomBar) {
                 Header(
                     title = headerTitle,
+                    showBackArrow = currentRoute != Routes.HOME,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
                     onNotificationClick = {
                     }
                 )

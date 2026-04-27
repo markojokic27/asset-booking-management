@@ -94,9 +94,6 @@ fun BottomNavigationBar(
                     selected = selected,
                     onClick = {
                         navController.navigate(item.route) {
-                            popUpTo(Routes.HOME) {
-                                saveState = true
-                            }
                             launchSingleTop = true
                             restoreState = true
                         }

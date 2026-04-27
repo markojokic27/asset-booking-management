@@ -109,7 +109,7 @@ private fun HomeCard(
                     modifier = Modifier.size(28.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.arrow_forward_24),
+                        painter = painterResource(id = R.drawable.arrow_right_alt_24),
                         contentDescription = "Open $label",
                         tint = TextLight,
                         modifier = Modifier.size(20.dp)
