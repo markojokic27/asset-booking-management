@@ -15,6 +15,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
 
   return (
     <button
+      data-testid="theme-toggle"
       type="button"
       onClick={toggleTheme}
       aria-label={t('ui.themeToggle.ariaLabel')}
