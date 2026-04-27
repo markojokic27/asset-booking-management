@@ -10,23 +10,15 @@ http:
   url: "{{baseUrl}}/v1/users/:id"
   params:
     - name: id
-      value: ""
+      value: "1"
       type: path
   body:
     type: json
     data: |-
       {
-        "username": "",
-        "surname": "",
-        "name": "",
-        "email": "",
-        "password": "",
-        "role": "EMPLOYEE",
         "status": "ACTIVE",
-        "departmentId": 0,
-        "managerEmail": "",
-        "notes": "",
-        "benefit": ""
+        "notes": "Updated",
+        "benefit": "Updated"
       }
   auth:
     type: bearer
