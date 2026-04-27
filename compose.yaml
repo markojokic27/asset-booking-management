@@ -3,6 +3,7 @@ services:
   db:
     image: postgres:18
     container_name: postgres-db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -12,13 +13,14 @@ services:
     volumes:
       - db_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
       timeout: 5s
       retries: 5
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter:latest
+    restart: unless-stopped
     env_file:
       - .env
     ports:
@@ -32,6 +34,7 @@ services:
     build:
       context: ./backend
     container_name: asset-backend
+    restart: unless-stopped
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -42,20 +45,35 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+    test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+    interval: 15s # check every 15s
+    timeout: 5s # fail if no response in 5s
+    retries: 5 # mark unhealthy after 5 consecutive failures
+    start_period: 60s # give Spring Boot 60s to start before counting failures
 
   frontend:
     build:
       context: ./frontend
     container_name: asset-frontend
+    restart: unless-stopped
     ports:
       - "3000:8080"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    healthcheck:
+    test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+    interval: 15s
+    timeout: 5s
+    retries: 3
+    start_period: 10s
 
   prometheus:
     image: prom/prometheus:main-busybox
     container_name: prometheus
-    command: 
+    restart: unless-stopped
+    command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -66,14 +84,15 @@ services:
   grafana:
     image: grafana/grafana:main
     container_name: grafana
+    restart: unless-stopped
     env_file:
       - .env
-    volumes: 
+    volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
-    ports: 
+    ports:
       - "4000:3000"
-    depends_on: 
+    depends_on:
       - prometheus
 
 volumes:
