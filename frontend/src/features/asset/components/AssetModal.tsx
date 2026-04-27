@@ -44,6 +44,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
 
   return (
     <div
+      data-testid="asset-details-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
@@ -55,6 +56,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
         <div className="flex items-center justify-end px-8 pt-6 pb-4">
           <button
+            data-testid="asset-details-close-button"
             type="button"
             onClick={onClose}
             aria-label="Close"

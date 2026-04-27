@@ -176,6 +176,7 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
               <Form.Field name="status">
                 <Form.Control asChild>
                   <FormDropdown
+                    data-testid="asset-status"
                     id="asset-status"
                     name="status"
                     label="Status"
@@ -193,6 +194,7 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
               <Form.Field name="categoryId">
                 <Form.Control asChild>
                   <FormDropdown
+                    data-testid="asset-category"
                     id="asset-category"
                     name="categoryId"
                     label="Category"
@@ -221,6 +223,7 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
               <Form.Field name="name">
                 <Form.Control asChild>
                   <FormInput
+                    data-testid="asset-name"
                     id="asset-name"
                     name="name"
                     type="text"
@@ -235,6 +238,7 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
               <Form.Field name="description">
                 <Form.Control asChild>
                   <FormInput
+                    data-testid="asset-description"
                     id="asset-description"
                     name="description"
                     type="text"
@@ -271,7 +275,7 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
 
           <div className="flex justify-end px-8 py-5">
             <Form.Submit asChild>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button data-testid="save-asset-button" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Saving...' : 'Save'}
               </Button>
             </Form.Submit>
