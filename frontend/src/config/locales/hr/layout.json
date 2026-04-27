@@ -12,5 +12,9 @@
     "copyright": "© 2026 | Bundesdruckerei GmbH",
     "partOfThe": "Dio",
     "groupName": "Bundesdruckerei grupacije"
+  },
+  "mobileMenu": {
+    "title": "Navigacijski izbornik",
+    "description": "Glavna navigacija"
   }
 }
