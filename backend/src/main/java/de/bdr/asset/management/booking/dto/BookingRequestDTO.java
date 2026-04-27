@@ -1,5 +1,6 @@
-package de.bdr.asset.management.booking;
+package de.bdr.asset.management.booking.dto;
 
+import de.bdr.asset.management.booking.BookingStatusEnum;
 import jakarta.validation.constraints.*;
 
 import java.time.Instant;

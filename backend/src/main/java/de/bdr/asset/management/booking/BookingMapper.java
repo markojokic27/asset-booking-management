@@ -1,5 +1,6 @@
 package de.bdr.asset.management.booking;
 
+import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

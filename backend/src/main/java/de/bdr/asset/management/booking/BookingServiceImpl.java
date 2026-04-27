@@ -1,5 +1,6 @@
 package de.bdr.asset.management.booking;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import de.bdr.asset.management.asset.AssetRepository;
 import de.bdr.asset.management.asset.AssetStatusEnum;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
+import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.core.config.security.SecurityService;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
@@ -33,16 +35,29 @@ import lombok.extern.slf4j.Slf4j;
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
     private final BookingMapper mapper;
-    private final SecurityService securityService;
     private final UserRepository userRepository;
     private final AssetRepository assetRepository;
+    private final SecurityService securityService;
+    private final Clock clock;
 
-    public BookingServiceImpl(BookingRepository repository, BookingMapper mapper, UserRepository userRepository, AssetRepository assetRepository, SecurityService securityService) {
+    public BookingServiceImpl(
+        BookingRepository repository,
+        BookingMapper mapper,
+        UserRepository userRepository,
+        AssetRepository assetRepository,
+        SecurityService securityService,
+        Clock clock
+    ) {
         this.repository = repository;
         this.mapper = mapper;
         this.securityService = securityService;
         this.userRepository = userRepository;
         this.assetRepository = assetRepository;
+        this.clock = clock;
+    }
+
+    private Instant now() {
+        return Instant.now(clock);
     }
 
     /*
@@ -165,7 +180,7 @@ public class BookingServiceImpl implements BookingService {
         }
 
         if (booking.getBookingEnd() != null &&
-            booking.getBookingEnd().isBefore(Instant.now())) {
+            booking.getBookingEnd().isBefore(now())) {
             throw new ActionNotAllowedException("Cannot update a booking that has already finished");
         }
 
