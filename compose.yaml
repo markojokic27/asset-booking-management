@@ -46,11 +46,11 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-    test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
-    interval: 15s # check every 15s
-    timeout: 5s # fail if no response in 5s
-    retries: 5 # mark unhealthy after 5 consecutive failures
-    start_period: 60s # give Spring Boot 60s to start before counting failures
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 15s # check every 15s
+      timeout: 5s # fail if no response in 5s
+      retries: 5 # mark unhealthy after 5 consecutive failures
+      start_period: 60s # give Spring Boot 60s to start before counting failures
 
   frontend:
     build:
@@ -63,11 +63,11 @@ services:
       backend:
         condition: service_healthy
     healthcheck:
-    test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
-    interval: 15s
-    timeout: 5s
-    retries: 3
-    start_period: 10s
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   prometheus:
     image: prom/prometheus:main-busybox
