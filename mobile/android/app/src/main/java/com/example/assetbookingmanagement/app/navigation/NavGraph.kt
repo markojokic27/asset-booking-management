@@ -69,10 +69,10 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             composable(Routes.HOME) {
                 HomeScreen(
                     onAssetsClick = {
-                        navController.navigate(Routes.ASSETS)
+                        navController.navigateTopLevel(Routes.ASSETS)
                     },
                     onBookingsClick = {
-                        navController.navigate(Routes.BOOKINGS)
+                        navController.navigateTopLevel(Routes.BOOKINGS)
                     }
                 )
             }
