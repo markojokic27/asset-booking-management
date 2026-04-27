@@ -14,10 +14,8 @@ http:
       {
         "userId": "{{userId}}",
         "assetId": "{{assetId}}",
-        "status": "ACTIVE",
         "bookingStart": "{{bookingStart}}",
-        "bookingEnd": "{{bookingEnd}}",
-        "notes": "Why?"
+        "bookingEnd": "{{bookingEnd}}"
       }
   auth: inherit
 

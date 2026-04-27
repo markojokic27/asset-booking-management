@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.bdr.asset.management.booking.dto.BookingCreateDTO;
+import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.InvalidDateRangeException;
@@ -49,7 +51,7 @@ public class BookingController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<BookingResponseDTO> create(
-            @Valid @RequestBody BookingRequestDTO request
+            @Valid @RequestBody BookingCreateDTO request
     ) throws InvalidDateRangeException, ResourceNotFoundException, DuplicateResourceException
     {
         log.info("Received POST request to create a new booking");
@@ -106,7 +108,7 @@ public class BookingController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<BookingResponseDTO> update(
-            @PathVariable Long id, @Valid @RequestBody BookingRequestDTO request
+            @PathVariable Long id, @Valid @RequestBody BookingUpdateDTO request
     ) throws ResourceNotFoundException, ActionNotAllowedException, InvalidDateRangeException, DuplicateResourceException
     {
         log.info("Received PUT request to update booking with id: {}", id);
