@@ -36,3 +36,7 @@ val AssetStatusActiveBg = Color(0xFFC8E6C9)
 val AssetStatusInactiveBg = Color(0xFFE0E0E0)
 val AssetStatusDamagedBg = Color(0xFFFFE0B2)
 val AssetStatusDeletedBg = Color(0xFFFFCDD2)
+
+val AssetsCardBg = Color(0xFFD7E7FF)
+val BookingsCardBg = Color(0xFFE2F7D7)
+val BookingsPrimary = Color(0xFF2E7D32)
