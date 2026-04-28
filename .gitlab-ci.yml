@@ -226,14 +226,17 @@ bruno:smoke:
     - |
       bru run \
         --env-file "${BRUNO_ENV_FILE}" \
-        --reporter-junit "../../../bruno-smoke-results.xml"
+        --reporter-junit ./bruno-smoke-results.xml
 
   after_script:
     # - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
     # - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
     - echo "=== BACKEND LOG (INFO+ only) ==="
-    - grep -E " (INFO|WARN|ERROR) " /tmp/backend.log || true
+    # - grep -E " (INFO|WARN|ERROR) " /tmp/backend.log || true
+    - awk '/ INFO / {print "\033[32m" $0 "\033[0m"} / WARN / {print "\033[33m" $0 "\033[0m"} / ERROR / {print "\033[31m" $0 "\033[0m"}' /tmp/backend.log || true
     - kill $(cat /tmp/backend.pid) 2>/dev/null || true
+
+  
 
   artifacts:
     when: always
