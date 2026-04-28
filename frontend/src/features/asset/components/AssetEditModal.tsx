@@ -1,18 +1,24 @@
+// External packages
 import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
+
+// Components
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
-import {
-  assetStatuses,
-  type AssetDto,
-  type AssetStatus,
-} from '../types';
-import { assetValidationSchema } from '../validation';
-import { updateAsset } from '../api/assetApi';
+
+// Types
+import { assetStatuses, type AssetDto, type AssetStatus } from '../types';
 import type { AssetCategoryDto } from '../../asset-category/types';
+
+// Utilis
+import { assetValidationSchema } from '../validation';
+
+// API
+import { updateAsset } from '../api/assetApi';
 import { getAllCategories } from '../../asset-category/api/categoryApi';
+
 const assetEditSchema = assetValidationSchema.pick({
   name: true,
   categoryId: true,
@@ -41,7 +47,7 @@ const initialErrors: FormErrors = {
   categoryId: '',
   description: '',
   status: '',
-  location: ''
+  location: '',
 };
 
 const statusLabels: Record<AssetStatus, string> = {
@@ -50,7 +56,7 @@ const statusLabels: Record<AssetStatus, string> = {
   DAMAGED: 'Damaged',
   DELETED: 'Deleted',
 };
-
+//TODO: Refactoring
 export const AssetEditModal = ({
   isOpen,
   onClose,
@@ -60,10 +66,10 @@ export const AssetEditModal = ({
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
+  const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [categoriesError, setCategoriesError] = useState('');
-  
+
   useEffect(() => {
     if (isOpen) {
       setErrors(initialErrors);
@@ -75,21 +81,21 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   if (!isOpen || !asset) return null;
 
   const fetchCategories = async () => {
-      if (categories.length > 0 || categoriesLoading) return;
-  
-      try {
-        setCategoriesLoading(true);
-        setCategoriesError('');
-  
-        const data = await getAllCategories();
-        setCategories(data.content);
-      } catch (error) {
-        console.error('Failed to fetch categories:', error);
-        setCategoriesError('Failed to load categories.');
-      } finally {
-        setCategoriesLoading(false);
-      }
-    };
+    if (categories.length > 0 || categoriesLoading) return;
+
+    try {
+      setCategoriesLoading(true);
+      setCategoriesError('');
+
+      const data = await getAllCategories();
+      setCategories(data.content);
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+      setCategoriesError('Failed to load categories.');
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
 
   const handleSubmit = async (data: FormData) => {
     const formValues = {
@@ -98,7 +104,6 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
       description: data.get('description') as string,
       status: data.get('status') as AssetStatus,
       location: data.get('location') as string,
-
     };
 
     const result = assetEditSchema.safeParse(formValues);
@@ -215,7 +220,6 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
                         label: category.name,
                       })),
                     ]}
-                    
                   />
                 </Form.Control>
               </Form.Field>
@@ -251,19 +255,19 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
               </Form.Field>
 
               <Form.Field name="location">
-                              <Form.Control asChild>
-                                <FormInput
-                                  data-testid="asset-location"
-                                  id="asset-location"
-                                  name="location"
-                                  type="text"
-                                  defaultValue={asset.location}
-                                  label="Location"
-                                  error={!!errors.location}
-                                  errorMessage={errors.location}
-                                />
-                              </Form.Control>
-                            </Form.Field>
+                <Form.Control asChild>
+                  <FormInput
+                    data-testid="asset-location"
+                    id="asset-location"
+                    name="location"
+                    type="text"
+                    defaultValue={asset.location}
+                    label="Location"
+                    error={!!errors.location}
+                    errorMessage={errors.location}
+                  />
+                </Form.Control>
+              </Form.Field>
             </div>
           </div>
 
@@ -275,7 +279,11 @@ const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
 
           <div className="flex justify-end px-8 py-5">
             <Form.Submit asChild>
-              <Button data-testid="save-asset-button" type="submit" disabled={isSubmitting}>
+              <Button
+                data-testid="save-asset-button"
+                type="submit"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? 'Saving...' : 'Save'}
               </Button>
             </Form.Submit>

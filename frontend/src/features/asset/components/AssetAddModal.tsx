@@ -1,17 +1,22 @@
+// External packages
 import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
+
+// Components
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
-import {
-  assetStatuses,
-  type AssetDto,
-  type AssetStatus,
-} from '../types';
-import { assetValidationSchema } from '../validation';
-import { getAllCategories } from '../../asset-category/api/categoryApi';
+
+// Types
+import { assetStatuses, type AssetDto, type AssetStatus } from '../types';
 import type { AssetCategoryDto } from '../../asset-category/types';
+
+// Utilis
+import { assetValidationSchema } from '../validation';
+
+// API
+import { getAllCategories } from '../../asset-category/api/categoryApi';
 import { createAsset } from '../api/assetApi';
 
 const assetAddSchema = assetValidationSchema.pick({
@@ -271,10 +276,14 @@ export const AssetAddModal = ({
 
           <div className="flex justify-end px-8 py-5">
             {submitError && (
-                <p className="px-8 pt-4 text-sm text-red-500">{submitError}</p>
-              )}
+              <p className="px-8 pt-4 text-sm text-red-500">{submitError}</p>
+            )}
             <Form.Submit asChild>
-              <Button data-testid="add-asset-button" type="submit" disabled={isSubmitting}>
+              <Button
+                data-testid="add-asset-button"
+                type="submit"
+                disabled={isSubmitting}
+              >
                 Add Asset
               </Button>
             </Form.Submit>

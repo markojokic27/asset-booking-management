@@ -1,11 +1,16 @@
+// External packages
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { Table, type TableColumn } from '../../../components/ui/Table';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
+
+// Components
+import { Table, type TableColumn } from '../../../components/ui/Table';
 import { IconButton } from '../../../components/ui/IconButton';
-import { type AssetDto } from '../../../features/asset/types';
 import { Button } from '../../../components/ui/Button';
+
+// Types
+import { type AssetDto } from '../../../features/asset/types';
 
 type Props = {
   assets: AssetDto[];
@@ -40,7 +45,7 @@ export function AssetsTable({
       key: 'category',
       header: 'Category',
       render: (asset) =>
-        asset.categoryName ?? categoryMap[asset.categoryId] ?? '-'
+        asset.categoryName ?? categoryMap[asset.categoryId] ?? '-',
     },
     {
       key: 'status',
@@ -86,15 +91,19 @@ export function AssetsTable({
             type="button"
             aria-label="Edit user"
             disabled={asset.status === 'DELETED'}
-            onClick={() => onEdit(asset)
-            }
+            onClick={() => onEdit(asset)}
           >
             <EditOutlinedIcon
               fontSize="small"
               className="pointer-events-none"
             />
           </IconButton>
-          <IconButton   data-testid="delete-asset-button" type="button" variant="danger" aria-label="Delete user" disabled={asset.status === 'DELETED'}
+          <IconButton
+            data-testid="delete-asset-button"
+            type="button"
+            variant="danger"
+            aria-label="Delete user"
+            disabled={asset.status === 'DELETED'}
           >
             <DeleteOutlineIcon
               fontSize="small"

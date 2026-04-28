@@ -1,4 +1,6 @@
+// External packages
 import * as React from 'react';
+// Components
 import { AssetCategoryCard } from './AssetCategoryCard';
 
 export type AssetCategoryGridProps = {

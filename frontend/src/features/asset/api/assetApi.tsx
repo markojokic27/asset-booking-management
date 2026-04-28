@@ -1,4 +1,6 @@
+// Types
 import type { AssetDto } from '../types';
+// API
 import api from '../../../shared/api';
 
 export type PageResponse<T> = {

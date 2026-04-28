@@ -1,6 +1,11 @@
 export type AssetStatus = 'ACTIVE' | 'INACTIVE' | 'DAMAGED' | 'DELETED';
 
-export const assetStatuses = ['ACTIVE', 'INACTIVE', 'DAMAGED', 'DELETED'] as const;
+export const assetStatuses = [
+  'ACTIVE',
+  'INACTIVE',
+  'DAMAGED',
+  'DELETED',
+] as const;
 
 export type Asset = {
   id: number;
@@ -27,4 +32,4 @@ export const categories = [
   'IT equipment',
 ] as const;
 
-export type AssetCategory = typeof categories[number];
+export type AssetCategory = (typeof categories)[number];

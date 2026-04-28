@@ -1,5 +1,8 @@
+// External packages
 import * as React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+
+// Components
 import type { AssetDto, AssetStatus } from '../types';
 
 export type AssetModalProps = {

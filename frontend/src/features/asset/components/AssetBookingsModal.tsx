@@ -1,8 +1,15 @@
+// External packages
 import * as React from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+
+// Components
 import { Table, type TableColumn } from '../../../components/ui/Table';
+
+// Types
 import type { AssetDto } from '../types';
 import type { BookingDto } from '../../booking/types';
+
+// API
 import { getAllAssetBookings } from '../../booking/api/bookingApi';
 
 export type BookingsModalProps = {
