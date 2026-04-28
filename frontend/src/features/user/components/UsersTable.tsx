@@ -7,7 +7,7 @@ import { Button } from '../../../components/ui/Button';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import type { UserDto } from '../types';
-import { getDisplayName } from '../hooks/useUsers';
+import { getDisplayName } from '../utilis/users';
 
 type Props = {
   data: UserDto[];
@@ -46,11 +46,18 @@ export const UsersTable = ({
           })}
         >
           <span className="uppercase">{t('users.table.columns.name')}</span>
-          <span className="inline-flex flex-col leading-none" aria-hidden="true">
-            <span className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}>
+          <span
+            className="inline-flex flex-col leading-none"
+            aria-hidden="true"
+          >
+            <span
+              className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}
+            >
               ▲
             </span>
-            <span className={nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'}>
+            <span
+              className={nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'}
+            >
               ▼
             </span>
           </span>
@@ -66,7 +73,9 @@ export const UsersTable = ({
     },
     {
       key: 'bookings',
-      header: <span className="sr-only">{t('users.table.columns.bookings')}</span>,
+      header: (
+        <span className="sr-only">{t('users.table.columns.bookings')}</span>
+      ),
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
@@ -83,7 +92,9 @@ export const UsersTable = ({
     },
     {
       key: 'actions',
-      header: <span className="sr-only">{t('users.table.columns.actions')}</span>,
+      header: (
+        <span className="sr-only">{t('users.table.columns.actions')}</span>
+      ),
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
         <div className="flex items-center gap-1">

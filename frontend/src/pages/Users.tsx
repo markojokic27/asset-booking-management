@@ -17,21 +17,24 @@ import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
 
 // Hooks
-import { getFullName, useUsers } from '../features/user/hooks/useUsers';
+import { getFullName } from '../features/user/utilis/users';
+import { useUsers } from '../features/user/hooks/useUsers';
 
 // Types
 import type { UserDto } from '../features/user/types';
 
-type ModalState = { type: 'none' } | { type: 'delete'; user: UserDto };
+type DeleteState = { type: 'none' } | { type: 'delete'; user: UserDto };
 
 export default function Users() {
   const { t } = useTranslation();
-  const { list, sorting, pagination, selection, modals, actions } = useUsers({
-    pageSize: 10,
-  });
-  const [modal, setModal] = useState<ModalState>({ type: 'none' });
 
-  const closeDeleteModal = () => setModal({ type: 'none' });
+  const { list, sorting, pagination, selection, modals, actions } = useUsers();
+
+  const [deleteState, setDeleteState] = useState<DeleteState>({
+    type: 'none',
+  });
+
+  const closeDeleteModal = () => setDeleteState({ type: 'none' });
 
   return (
     <LayoutColumn
@@ -40,63 +43,60 @@ export default function Users() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
-      <div className="flex w-full flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sm:gap-6">
-        <h1 className="text-3xl leading-11 font-black tracking-widest text-black dark:text-white">
+      <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-3xl font-black tracking-widest">
           {t('users.title')}
         </h1>
 
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <Button
             size="sm"
             variant="outline"
             iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
-            className="w-full shadow-none sm:w-auto"
             onClick={actions.exportUsersCsv}
           >
             {t('users.actions.export')}
           </Button>
+
           <Button
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
-            className="w-full shadow-none sm:w-auto"
-            onClick={modals.openCreateUser}
+            onClick={() => modals.open('create')}
           >
             {t('users.actions.new')}
           </Button>
         </div>
       </div>
 
-      <div className="mt-6 h-px w-full bg-(--color-table-border)" />
-      <div className="mt-6 flex w-full justify-end">
+      <div className="mt-6 flex justify-end">
         <SearchInput
           value={list.search}
           onChange={list.setSearch}
           placeholder={t('users.search.placeholder')}
-          className="mb-0 w-70"
+          className="w-70"
         />
       </div>
-      <div className="mt-6 w-full">
+
+      <div className="mt-6">
         <UsersTable
           data={list.pagedUsers}
           nameSortDir={sorting.nameSortDir}
           onToggleNameSort={sorting.toggleNameSortDir}
-          onView={modals.openViewUser}
-          onEdit={modals.openEditUser}
-          onBookings={modals.openBookings}
-          onDelete={(user) => setModal({ type: 'delete', user })}
+          onView={(u) => modals.open('view', u)}
+          onEdit={(u) => modals.open('edit', u)}
+          onBookings={(u) => modals.open('bookings', u)}
+          onDelete={(u) => setDeleteState({ type: 'delete', user: u })}
           emptyMessage={
             list.isLoading
               ? t('users.empty.loading')
-              : list.error
-                ? list.error
-                : t('users.empty.none')
+              : list.error || t('users.empty.none')
           }
         />
       </div>
 
       {list.filteredUsers.length > 0 && (
         <Pagination
-          page={pagination.safePage}
+          page={pagination.page}
           totalPages={pagination.totalPages}
           items={pagination.items}
           onPageChange={pagination.setPage}
@@ -104,8 +104,8 @@ export default function Users() {
       )}
 
       <UserModal
-        isOpen={modals.isUserModalOpen}
-        onClose={modals.closeViewUser}
+        isOpen={modals.modal === 'view'}
+        onClose={modals.close}
         user={
           selection.activeUser
             ? {
@@ -124,21 +124,23 @@ export default function Users() {
       />
 
       <UserEditModal
-        isOpen={modals.isUserEditModalOpen}
-        onClose={modals.closeEditUser}
+        isOpen={modals.modal === 'edit'}
+        onClose={modals.close}
         user={selection.activeUser}
-        onSave={actions.saveEditedUser}
+        onSave={async (user) => {
+          await actions.update(user);
+        }}
       />
 
       <UserCreateModal
-        isOpen={modals.isUserCreateModalOpen}
-        onClose={modals.closeCreateUser}
-        onCreate={actions.createNewUser}
+        isOpen={modals.modal === 'create'}
+        onClose={modals.close}
+        onCreate={actions.create}
       />
 
       <UserBookingsModal
-        isOpen={modals.isBookingsModalOpen}
-        onClose={modals.closeBookings}
+        isOpen={modals.modal === 'bookings'}
+        onClose={modals.close}
         user={
           selection.activeUser
             ? {
@@ -150,17 +152,18 @@ export default function Users() {
       />
 
       <DeleteModal
-        isOpen={modal.type === 'delete'}
+        isOpen={deleteState.type === 'delete'}
         onClose={closeDeleteModal}
-        item={modal.type === 'delete' ? modal.user : null}
-        getItemName={(user) => getFullName(user)}
+        item={deleteState.type === 'delete' ? deleteState.user : null}
+        getItemName={(u) => getFullName(u)}
         title={t('users.delete.title')}
         description={t('users.delete.description', {
-          name: modal.type === 'delete' ? getFullName(modal.user) : '',
+          name:
+            deleteState.type === 'delete' ? getFullName(deleteState.user) : '',
         })}
         onConfirm={async () => {
-          if (modal.type === 'delete') {
-            await actions.deleteExistingUser(modal.user);
+          if (deleteState.type === 'delete') {
+            await actions.remove(deleteState.user.id);
             closeDeleteModal();
           }
         }}
