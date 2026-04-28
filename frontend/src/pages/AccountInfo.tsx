@@ -1,4 +1,7 @@
+// External packages
 import { useEffect, useState } from 'react';
+
+// Components
 import { LayoutColumn } from '../components/layout/Layout';
 
 type UserDto = {

@@ -33,7 +33,7 @@ type Options = {
   pageSize?: number;
   initialNameSortDir?: 'asc' | 'desc';
 };
-
+// TODO: optimize and refactor
 export function useUsers(options: Options = {}) {
   const pageSize = options.pageSize ?? 10;
 

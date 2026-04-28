@@ -1,26 +1,28 @@
-import AddIcon from '@mui/icons-material/Add';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+// External packages
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import AddIcon from '@mui/icons-material/Add';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+
+//Components
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
-import { DeleteModal } from '../components/ui/DeleteModal';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Pagination } from '../components/ui/Pagination';
+import { DeleteModal } from '../components/ui/DeleteModal';
 import { UserModal } from '../features/user/components/UserModal';
+import { UsersTable } from '../features/user/components/UsersTable';
 import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
-import { UsersTable } from '../features/user/components/UsersTable';
-import {
-  getFullName,
-  useUsers,
-} from '../features/user/hooks/useUsers';
+
+// Hooks
+import { getFullName, useUsers } from '../features/user/hooks/useUsers';
+
+// Types
 import type { UserDto } from '../features/user/types';
 
-type ModalState =
-  | { type: 'none' }
-  | { type: 'delete'; user: UserDto };
+type ModalState = { type: 'none' } | { type: 'delete'; user: UserDto };
 
 export default function Users() {
   const { t } = useTranslation();
@@ -107,16 +109,16 @@ export default function Users() {
         user={
           selection.activeUser
             ? {
-              id: selection.activeUser.id,
-              name: getFullName(selection.activeUser),
-              email: selection.activeUser.email,
-              username: selection.activeUser.username,
-              role: selection.activeUser.role,
-              status: selection.activeUser.status,
-              departmentId: selection.activeUser.departmentId,
-              managerEmail: selection.activeUser.managerEmail,
-              notes: selection.activeUser.notes,
-            }
+                id: selection.activeUser.id,
+                name: getFullName(selection.activeUser),
+                email: selection.activeUser.email,
+                username: selection.activeUser.username,
+                role: selection.activeUser.role,
+                status: selection.activeUser.status,
+                departmentId: selection.activeUser.departmentId,
+                managerEmail: selection.activeUser.managerEmail,
+                notes: selection.activeUser.notes,
+              }
             : null
         }
       />
@@ -140,9 +142,9 @@ export default function Users() {
         user={
           selection.activeUser
             ? {
-              id: selection.activeUser.id,
-              fullName: getFullName(selection.activeUser),
-            }
+                id: selection.activeUser.id,
+                fullName: getFullName(selection.activeUser),
+              }
             : null
         }
       />

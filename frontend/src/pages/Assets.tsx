@@ -1,19 +1,26 @@
+// External packages
 import { useState, useEffect, useMemo } from 'react';
 import AddIcon from '@mui/icons-material/Add';
+
+// Components
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
+import { DeleteModal } from '../components/ui/DeleteModal';
 import { SearchInput } from '../components/ui/SearchBar';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
 import { AssetBookingsModal } from '../features/asset/components/AssetBookingsModal';
-import type { AssetDto } from '../features/asset/types';
 import { AssetAddModal } from '../features/asset/components/AssetAddModal';
 import { AssetsTable } from '../features/asset/components/AssetTable';
+
+// API
 import { getAllAssets, updateAsset } from '../features/asset/api/assetApi';
-import type { AssetCategoryDto } from '../features/asset-category/types';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
-import { DeleteModal } from '../components/ui/DeleteModal';
+
+// Types
+import type { AssetDto } from '../features/asset/types';
+import type { AssetCategoryDto } from '../features/asset-category/types';
 
 type ModalState =
   | { type: 'none' }
@@ -30,7 +37,9 @@ export default function Assets() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [serverError, setServerError] = useState('');
-  const [assetCategories, setAssetCategories] = useState<AssetCategoryDto[]>([]);
+  const [assetCategories, setAssetCategories] = useState<AssetCategoryDto[]>(
+    []
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -50,10 +59,12 @@ export default function Assets() {
           categoriesData.map((c) => [c.id, c.name])
         );
 
-        const assetsWithCategoryName: AssetDto[] = assetsRes.content.map((asset) => ({
-          ...asset,
-          categoryName: categoryMap[asset.categoryId] ?? '-',
-        }));
+        const assetsWithCategoryName: AssetDto[] = assetsRes.content.map(
+          (asset) => ({
+            ...asset,
+            categoryName: categoryMap[asset.categoryId] ?? '-',
+          })
+        );
 
         setAssets(assetsWithCategoryName);
       } catch (err) {
@@ -84,7 +95,8 @@ export default function Assets() {
     const matchesCategory =
       selectedCategory === 'Assets'
         ? true
-        : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') === selectedCategory;
+        : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') ===
+          selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -103,9 +115,7 @@ export default function Assets() {
       await updateAsset(asset.id, updatedAsset);
 
       setAssets((current) =>
-        current.map((a) =>
-          a.id === asset.id ? updatedAsset : a
-        )
+        current.map((a) => (a.id === asset.id ? updatedAsset : a))
       );
     } catch (err) {
       console.error('Failed to delete asset:', err);
@@ -183,12 +193,12 @@ export default function Assets() {
             currentAssets.map((asset) =>
               asset.id === updatedAsset.id
                 ? {
-                  ...updatedAsset,
-                  categoryName:
-                    updatedAsset.categoryName ??
-                    categoryMap[updatedAsset.categoryId] ??
-                    '-',
-                }
+                    ...updatedAsset,
+                    categoryName:
+                      updatedAsset.categoryName ??
+                      categoryMap[updatedAsset.categoryId] ??
+                      '-',
+                  }
                 : asset
             )
           );
@@ -223,7 +233,9 @@ export default function Assets() {
             {
               ...newAsset,
               categoryName:
-                newAsset.categoryName ?? categoryMap[newAsset.categoryId] ?? '-',
+                newAsset.categoryName ??
+                categoryMap[newAsset.categoryId] ??
+                '-',
             },
             ...current,
           ]);

@@ -1,4 +1,7 @@
+// External packages
 import { useNavigate } from 'react-router-dom';
+
+// Components
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 

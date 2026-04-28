@@ -1,14 +1,23 @@
-import { LayoutColumn } from '../components/layout/Layout';
-import type { AssetCategoryDto } from '../features/asset-category/types';
-import { SearchInput } from '../components/ui/SearchBar';
+// External packages
 import { useState, useEffect } from 'react';
+
+// Components
+import { LayoutColumn } from '../components/layout/Layout';
+import { SearchInput } from '../components/ui/SearchBar';
 import { Button } from '../components/ui/Button';
-import AddSharpIcon from '@mui/icons-material/AddSharp';
 import { AddCategoryModal } from '../features/asset-category/components/AddCategoryModal';
-import { AssetCategoriesTable } from '../features/asset-category/components/AssetCategoriesTable';
-import { getAllCategories, getCategoryById, updateCategory } from '../features/asset-category/api/categoryApi';
-import { CategoryModal } from '../features/asset-category/components/CategoryModal';
 import { EditCategoryModal } from '../features/asset-category/components/EditCategoryModal'
+import { CategoryModal } from '../features/asset-category/components/CategoryModal';
+import { AssetCategoriesTable } from '../features/asset-category/components/AssetCategoriesTable';
+
+// Types
+import type { AssetCategoryDto } from '../features/asset-category/types';
+
+// API
+import { getAllCategories, getCategoryById, updateCategory } from '../features/asset-category/api/categoryApi';
+
+// Assets
+import AddSharpIcon from '@mui/icons-material/AddSharp';
 
 export default function AssetCategories() {
   const [search, setSearch] = useState('');

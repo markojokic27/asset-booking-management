@@ -1,8 +1,9 @@
+// Components
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
-import { Header } from '../components/layout/Header';
-import RegisterForm from '../features/auth/components/RegisterForm';
-import { Logo } from '../components/icons/Logo';
 import { HeaderHero } from '../components/layout/HeaderHero';
+import { Header } from '../components/layout/Header';
+import { Logo } from '../components/icons/Logo';
+import RegisterForm from '../features/auth/components/RegisterForm';
 
 export default function Register() {
   return (

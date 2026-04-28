@@ -1,16 +1,22 @@
-import { LayoutColumn } from '../components/layout/Layout';
-import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
-import type { AssetDto } from '../features/asset/types';
-import type { AssetCategoryDto } from '../features/asset-category/types';
+// External packages
 import * as React from 'react';
+
+// Components
+import { LayoutColumn } from '../components/layout/Layout';
 import { FiltersBar } from '../components/ui/FilterBar';
 import { Button } from '../components/ui/Button';
-import type { Filters } from '../features/booking/types';
+import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { BookingTable } from '../features/booking/components/BookingTable';
+import { BookingModal } from '../features/booking/components/BookingModal';
+
+// Types
+import type { AssetDto } from '../features/asset/types';
+import type { AssetCategoryDto } from '../features/asset-category/types';
+import type { Filters } from '../features/booking/types';
+
+// API
 import { getAllAssets } from '../features/asset/api/assetApi';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
-import { BookingModal } from '../features/booking/components/BookingModal';
-import { useState } from 'react';
 
 export default function Bookings() {
   const [assets, setAssets] = React.useState<AssetDto[]>([]);
@@ -26,8 +32,10 @@ export default function Bookings() {
     toHour: '',
   });
   const [loading, setLoading] = React.useState(false);
-  const [selectedAsset, setSelectedAsset] = useState<AssetDto | null>(null);
-  const [openBookingModal, setOpenBookingModal] = useState(false);
+  const [selectedAsset, setSelectedAsset] = React.useState<AssetDto | null>(
+    null
+  );
+  const [openBookingModal, setOpenBookingModal] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {

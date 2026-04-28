@@ -1,8 +1,9 @@
+// Components
 import { Layout, LayoutRow, LayoutColumn } from '../components/layout/Layout';
 import { Header } from '../components/layout/Header';
-import LoginForm from '../features/auth/components/LoginForm';
 import { Logo } from '../components/icons/Logo';
 import { HeaderHero } from '../components/layout/HeaderHero';
+import LoginForm from '../features/auth/components/LoginForm';
 
 export default function Login() {
   return (
