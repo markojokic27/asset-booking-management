@@ -1,0 +1,39 @@
+{
+  "title": "Korisnici",
+  "actions": {
+    "export": "Izvoz",
+    "new": "Novi"
+  },
+  "search": {
+    "placeholder": "Pretraži korisnike..."
+  },
+  "empty": {
+    "loading": "Učitavanje korisnika...",
+    "none": "Još nema korisnika."
+  },
+  "delete": {
+    "title": "Obrisati korisnika?",
+    "description": "Jeste li sigurni da želite obrisati \"{{name}}\"? Ovaj korisnik će biti označen kao obrisan."
+  },
+  "table": {
+    "columns": {
+      "name": "Ime",
+      "email": "Email",
+      "bookings": "Rezervacije",
+      "actions": "Radnje"
+    },
+    "bookingsCta": "Rezervacije",
+    "sort": {
+      "byLastNameAria": "Sortiraj po prezimenu ({{direction}})",
+      "direction": {
+        "ascending": "uzlazno",
+        "descending": "silazno"
+      }
+    },
+    "rowActions": {
+      "viewAria": "Pregled korisnika",
+      "editAria": "Uredi korisnika",
+      "deleteAria": "Obriši korisnika"
+    }
+  }
+}

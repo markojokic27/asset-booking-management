@@ -1,0 +1,39 @@
+{
+  "title": "Users",
+  "actions": {
+    "export": "Export",
+    "new": "New"
+  },
+  "search": {
+    "placeholder": "Search users..."
+  },
+  "empty": {
+    "loading": "Loading users...",
+    "none": "No users yet."
+  },
+  "delete": {
+    "title": "Delete user?",
+    "description": "Are you sure you want to delete \"{{name}}\"? This user will be marked as deleted."
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "bookings": "Bookings",
+      "actions": "Actions"
+    },
+    "bookingsCta": "Bookings",
+    "sort": {
+      "byLastNameAria": "Sort by last name {{direction}}",
+      "direction": {
+        "ascending": "ascending",
+        "descending": "descending"
+      }
+    },
+    "rowActions": {
+      "viewAria": "View user",
+      "editAria": "Edit user",
+      "deleteAria": "Delete user"
+    }
+  }
+}

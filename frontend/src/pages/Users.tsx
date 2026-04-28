@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { DeleteModal } from '../components/ui/DeleteModal';
@@ -22,6 +23,7 @@ type ModalState =
   | { type: 'delete'; user: UserDto };
 
 export default function Users() {
+  const { t } = useTranslation();
   const { list, sorting, pagination, selection, modals, actions } = useUsers({
     pageSize: 10,
   });
@@ -38,7 +40,7 @@ export default function Users() {
     >
       <div className="flex w-full flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sm:gap-6">
         <h1 className="text-3xl leading-11 font-black tracking-widest text-black dark:text-white">
-          Users
+          {t('users.title')}
         </h1>
 
         <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
@@ -49,7 +51,7 @@ export default function Users() {
             className="w-full shadow-none sm:w-auto"
             onClick={actions.exportUsersCsv}
           >
-            Export
+            {t('users.actions.export')}
           </Button>
           <Button
             size="sm"
@@ -57,7 +59,7 @@ export default function Users() {
             className="w-full shadow-none sm:w-auto"
             onClick={modals.openCreateUser}
           >
-            New
+            {t('users.actions.new')}
           </Button>
         </div>
       </div>
@@ -67,7 +69,7 @@ export default function Users() {
         <SearchInput
           value={list.search}
           onChange={list.setSearch}
-          placeholder="Search users..."
+          placeholder={t('users.search.placeholder')}
           className="mb-0 w-70"
         />
       </div>
@@ -82,10 +84,10 @@ export default function Users() {
           onDelete={(user) => setModal({ type: 'delete', user })}
           emptyMessage={
             list.isLoading
-              ? 'Loading users...'
+              ? t('users.empty.loading')
               : list.error
                 ? list.error
-                : 'No users yet.'
+                : t('users.empty.none')
           }
         />
       </div>
@@ -150,8 +152,10 @@ export default function Users() {
         onClose={closeDeleteModal}
         item={modal.type === 'delete' ? modal.user : null}
         getItemName={(user) => getFullName(user)}
-        title="Delete user?"
-        description={`Are you sure you want to delete "${modal.type === 'delete' ? getFullName(modal.user) : ''}"? This user will be marked as deleted.`}
+        title={t('users.delete.title')}
+        description={t('users.delete.description', {
+          name: modal.type === 'delete' ? getFullName(modal.user) : '',
+        })}
         onConfirm={async () => {
           if (modal.type === 'delete') {
             await actions.deleteExistingUser(modal.user);
