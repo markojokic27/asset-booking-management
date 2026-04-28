@@ -12,15 +12,28 @@ http:
     - name: page
       value: "1"
       type: query
-      description: One-based page index (1..N)
     - name: size
       value: "10"
       type: query
-      description: The size of the page to be returned
     - name: sort
       value: id,desc
       type: query
-      description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+    - name: name
+      value: ""
+      type: query
+      disabled: true
+    - name: categoryId
+      value: ""
+      type: query
+      disabled: true
+    - name: status
+      value: ""
+      type: query
+      disabled: true
+    - name: location
+      value: ""
+      type: query
+      disabled: true
   auth: inherit
 
 runtime:

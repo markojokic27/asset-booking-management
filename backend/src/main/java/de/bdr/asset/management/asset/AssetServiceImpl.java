@@ -2,6 +2,7 @@ package de.bdr.asset.management.asset;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -100,7 +101,7 @@ public class AssetServiceImpl implements AssetService {
      * @return a page of Asset records
      */
     @Override
-    public Page<AssetResponseDTO> getAllAssets(Pageable pageable) {
+    public Page<AssetResponseDTO> getAllAssets(AssetFilter filter, Pageable pageable) {
 
         log.debug("Fetching assets from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
@@ -112,20 +113,38 @@ public class AssetServiceImpl implements AssetService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null) {
-
             isAdmin = auth.getAuthorities().stream()
                     .anyMatch(r -> "ROLE_ADMIN".equals(r.getAuthority()));
         }
 
-        Page<Asset> assets;
+        Specification<Asset> spec = Specification.where((root, query, cb) -> cb.conjunction());
 
-        if (isAdmin) {
-
-            assets = repository.findAll(pageable);
-        } else {
-
-            assets = repository.findAllByStatusNot(AssetStatusEnum.DELETED, pageable);
+        if (!isAdmin) {
+            spec = spec.and((root, query, cb) ->
+                    cb.notEqual(root.get("status"), AssetStatusEnum.DELETED));
         }
+
+        if (filter.getName() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("name")), "%" + filter.getName().toLowerCase() + "%"));
+        }
+
+        if (filter.getCategoryId() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("category").get("id"), filter.getCategoryId()));
+        }
+
+        if (filter.getLocation() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("location")), "%" + filter.getLocation().toLowerCase() + "%"));
+        }
+
+        if (filter.getStatus() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("status"), filter.getStatus()));
+        }
+
+        Page<Asset> assets = repository.findAll(spec, pageable);
 
         log.info("Successfully fetched {} assets", assets.getNumberOfElements());
 

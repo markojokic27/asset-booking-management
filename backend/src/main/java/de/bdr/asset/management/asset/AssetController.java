@@ -89,6 +89,7 @@ public class AssetController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<AssetResponseDTO>> getAllAssets(
+            @ModelAttribute AssetFilter filter,
             @ParameterObject Pageable pageable
     ) throws IllegalArgumentException
     {
@@ -99,7 +100,7 @@ public class AssetController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(assetService.getAllAssets(pageable));
+                .body(assetService.getAllAssets(filter, pageable));
     }
 
     /** READ BY ID */

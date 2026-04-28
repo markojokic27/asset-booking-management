@@ -7,20 +7,36 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/v1/assets"
+  url: "{{baseUrl}}/v1/assets?page=1&size=50"
   params:
     - name: page
       value: "1"
       type: query
       description: One-based page index (1..N)
     - name: size
-      value: "10"
+      value: "50"
       type: query
       description: The size of the page to be returned
     - name: sort
-      value: "[]"
+      value: ""
       type: query
       description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+      disabled: true
+    - name: name
+      value: ""
+      type: query
+      disabled: true
+    - name: categoryId
+      value: ""
+      type: query
+      disabled: true
+    - name: status
+      value: ""
+      type: query
+      disabled: true
+    - name: location
+      value: ""
+      type: query
       disabled: true
   auth:
     type: bearer

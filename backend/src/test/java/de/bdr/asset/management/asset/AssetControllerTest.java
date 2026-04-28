@@ -56,10 +56,10 @@ public class AssetControllerTest {
         List<AssetResponseDTO> list = List.of(response);
         Page<AssetResponseDTO> page = new PageImpl<>(list);
 
-        when(assetService.getAllAssets(any(Pageable.class))).thenReturn(page);
+        when(assetService.getAllAssets(any(AssetFilter.class), any(Pageable.class))).thenReturn(page);
 
         ResponseEntity<Page<AssetResponseDTO>> result =
-                assetController.getAllAssets(PageRequest.of(0, 10));
+                assetController.getAllAssets(new AssetFilter(), PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assert(result.getBody() != null);

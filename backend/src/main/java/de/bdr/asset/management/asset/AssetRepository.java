@@ -4,19 +4,21 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * JPA Asset Repository
  */
-public interface AssetRepository extends JpaRepository<Asset, Long> {
+public interface AssetRepository extends JpaRepository<Asset, Long>, JpaSpecificationExecutor<Asset> {
 
     @EntityGraph(attributePaths = {"category"})
     Optional<Asset> findById(Long id);
 
     @EntityGraph(attributePaths = {"category"})
-    Page<Asset> findAll(Pageable pageable);
+    Page<Asset> findAll(Specification<Asset> spec, Pageable pageable);
 
     @EntityGraph(attributePaths = {"category"})
     Optional<Asset> findByIdAndStatusNot(Long id, AssetStatusEnum status);

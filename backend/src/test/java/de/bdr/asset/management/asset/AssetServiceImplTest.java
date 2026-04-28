@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.lenient;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -183,14 +185,14 @@ class AssetServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Asset> assetPage = new PageImpl<>(List.of(asset));
 
-        when(repository.findAll(pageable)).thenReturn(assetPage);
+        when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(assetPage);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
-        Page<AssetResponseDTO> result = service.getAllAssets(pageable);
+        Page<AssetResponseDTO> result = service.getAllAssets(new AssetFilter(), pageable);
 
         assertEquals(1, result.getContent().size());
 
-        verify(repository).findAll(pageable);
+        verify(repository).findAll(any(Specification.class), eq(pageable));
     }
 
     // Tests getAllAssets(): if user is employee or manager fetch all assets that are not deleted and map them to response DTOs
@@ -202,14 +204,14 @@ class AssetServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Asset> assetPage = new PageImpl<>(List.of(asset));
 
-        when(repository.findAllByStatusNot(AssetStatusEnum.DELETED, pageable)).thenReturn(assetPage);
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(assetPage);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
-        Page<AssetResponseDTO> result = service.getAllAssets(pageable);
+        Page<AssetResponseDTO> result = service.getAllAssets(new AssetFilter(), pageable);
 
         assertEquals(1, result.getContent().size());
 
-        verify(repository).findAllByStatusNot(AssetStatusEnum.DELETED, pageable);
+        verify(repository).findAll(any(Specification.class), eq(pageable));
     }
 
     // Tests updateAsset(): asset and category exist → update fields, save, return response

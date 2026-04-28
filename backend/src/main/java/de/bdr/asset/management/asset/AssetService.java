@@ -10,7 +10,7 @@ public interface AssetService {
 
     /** READ */
     AssetResponseDTO getAssetById(Long id);
-    Page<AssetResponseDTO> getAllAssets(Pageable pageable);
+    Page<AssetResponseDTO> getAllAssets(AssetFilter filter, Pageable pageable);
 
     /** UPDATE */
     AssetResponseDTO updateAsset(Long id, AssetRequestDTO dto);
