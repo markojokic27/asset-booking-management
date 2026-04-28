@@ -26,8 +26,12 @@ import com.example.assetbookingmanagement.core.ui.theme.TextLight
 import com.example.assetbookingmanagement.features.asset.data.AssetResponse
 
 @Composable
-fun AssetCard(asset: AssetResponse) {
+fun AssetCard(
+    asset: AssetResponse,
+    onClick: () -> Unit = {}
+) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .border(

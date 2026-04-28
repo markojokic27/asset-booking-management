@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.assetbookingmanagement.core.ui.components.Header
+import com.example.assetbookingmanagement.features.asset.ui.AssetDetailsScreen
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
 import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
@@ -21,7 +22,8 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
     val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar = isBottomNavRoute(currentRoute)
+    val showBottomBar =
+        isBottomNavRoute(currentRoute) || currentRoute == Routes.ASSET_DETAILS
 
     val headerTitle = when (currentRoute) {
         Routes.HOME -> "Home"
@@ -30,7 +32,6 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
         Routes.PROFILE -> "Profile"
         else -> ""
     }
-
     Scaffold(
         topBar = {
             if (showBottomBar) {
@@ -78,7 +79,15 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             }
 
             composable(Routes.ASSETS) {
-                AssetsScreen()
+                AssetsScreen(
+                    onAssetClick = {
+                        navController.navigate(Routes.ASSET_DETAILS)
+                    }
+                )
+            }
+
+            composable(Routes.ASSET_DETAILS) {
+                AssetDetailsScreen()
             }
 
             composable(Routes.BOOKINGS) {

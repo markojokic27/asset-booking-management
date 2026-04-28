@@ -30,7 +30,10 @@ import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.SearchBar
 
 @Composable
-fun AssetsScreen(viewModel: AssetsViewModel = hiltViewModel()) {
+fun AssetsScreen(
+    onAssetClick: () -> Unit = {},
+    viewModel: AssetsViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var searchText by remember { mutableStateOf("") }
 
@@ -98,7 +101,10 @@ fun AssetsScreen(viewModel: AssetsViewModel = hiltViewModel()) {
                             items = uiState.assets,
                             key = { asset -> asset.id }
                         ) { asset ->
-                            AssetCard(asset = asset)
+                            AssetCard(
+                                asset = asset,
+                                onClick = onAssetClick
+                            )
                         }
                     }
                 }

@@ -5,6 +5,7 @@ object Routes {
     const val LOGIN = "login"
     const val HOME = "home"
     const val ASSETS = "assets"
+    const val ASSET_DETAILS = "asset_details"
     const val BOOKINGS = "bookings"
     const val PROFILE = "profile"
 }
