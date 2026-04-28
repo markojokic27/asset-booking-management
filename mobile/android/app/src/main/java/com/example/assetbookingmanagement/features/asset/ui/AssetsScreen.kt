@@ -112,6 +112,7 @@ fun AssetsScreen(viewModel: AssetsViewModel = hiltViewModel()) {
         }
 
         QrScannerButton(
+            modifier = Modifier.align(Alignment.BottomEnd),
             onQrScanned = { scannedValue ->
                 val assetId = scannedValue.toLongOrNull()
                 if (assetId != null) {

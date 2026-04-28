@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -25,6 +24,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
 @Composable
 fun QrScannerButton(
+    modifier: Modifier = Modifier,
     onQrScanned: (String) -> Unit
 ) {
     // Gets the current context to initialize the QR code scanner
@@ -41,37 +41,32 @@ fun QrScannerButton(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(end = 20.dp, bottom = 24.dp)
-                .size(64.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline,
-                    shape = CircleShape
-                )
-                .clickable {
-                    scanner.startScan()
-                        .addOnSuccessListener { barcode ->
-                            val scannedValue = barcode.rawValue
-                            if (!scannedValue.isNullOrBlank()) {
-                                onQrScanned(scannedValue)
-                            }
-                        }
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.QrCodeScanner,
-                contentDescription = "Scan QR",
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.size(30.dp)
+        modifier = modifier
+            .padding(end = 20.dp, bottom = 24.dp)
+            .size(64.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = CircleShape
             )
-        }
+            .clickable {
+                scanner.startScan()
+                    .addOnSuccessListener { barcode ->
+                        val scannedValue = barcode.rawValue
+                        if (!scannedValue.isNullOrBlank()) {
+                            onQrScanned(scannedValue)
+                        }
+                    }
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.QrCodeScanner,
+            contentDescription = "Scan QR",
+            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(30.dp)
+        )
     }
 }
