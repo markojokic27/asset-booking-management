@@ -14,7 +14,7 @@ variables:
   DOCKER_HOST: tcp://docker:2375      # non-TLS port
   DOCKER_TLS_CERTDIR: ""              # TLS disabled
   #SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  
 
 
 
@@ -190,8 +190,10 @@ bruno:smoke:
     JWT_REFRESH_SECONDS: "86400"
 
   before_script:
-    - apk add --no-cache openjdk21-jre maven curl
-    - npm install -g @usebruno/cli
+    # - apk add --no-cache openjdk21-jre maven curl
+    # - npm install -g @usebruno/cli
+    - apk add --no-cache --quiet openjdk21-jre maven curl > /dev/null 2>&1
+    - npm install -g @usebruno/cli --silent
 
   script:
     - cd backend
@@ -227,15 +229,18 @@ bruno:smoke:
         --reporter-junit "../../../bruno-smoke-results.xml"
 
   after_script:
-    - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
-    - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+    # - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
+    # - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+    - echo "=== BACKEND LOG (INFO+ only) ==="
+    - grep -E " (INFO|WARN|ERROR) " /tmp/backend.log || true
+    - kill $(cat /tmp/backend.pid) 2>/dev/null || true
 
   artifacts:
     when: always
     reports:
-      junit: tests/api-tests/bruno/bruno-smoke-results.xml
+      junit: tests/api-tests/bruno/Testing/bruno-smoke-results.xml
     paths:
-      - tests/api-tests/bruno/bruno-smoke-results.xml
+      - tests/api-tests/bruno/Testing/bruno-smoke-results.xml
   allow_failure: true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -249,6 +254,8 @@ bruno:smoke:
 # sonar:
 #   stage: sonar
 #   image: maven:3.9-eclipse-temurin-21
+#   variables:
+#   GIT_DEPTH: "0"    #for analytics
       
 #   script: 
 #     - cd backend
