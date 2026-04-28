@@ -56,6 +56,11 @@ jwt:
   accessTokenExpiry: ${JWT_EXPIRY_SECONDS}
   refreshTokenExpiry: ${JWT_REFRESH_SECONDS}
 
+benefit:
+  default-benefits:
+    - ALL
+  benefit-delimiter: ";"
+
 management:
   endpoints:
     web:

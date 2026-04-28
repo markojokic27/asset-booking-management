@@ -36,6 +36,7 @@ public class JwtTokenProvider {
             "name", userDetails.getName(),
             "surname", userDetails.getSurname(),
             "email", userDetails.getEmail(),
+            "benefit", userDetails.getBenefit(),
             "roles", (userDetails.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .toList())  // ["ROLE_EMPLOYEE"], ["ROLE_MANAGER"] or ["ROLE_ADMIN"]
