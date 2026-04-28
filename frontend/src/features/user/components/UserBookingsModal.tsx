@@ -1,5 +1,6 @@
 import * as React from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { useTranslation } from 'react-i18next';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
@@ -28,22 +29,23 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
   onClose,
   user,
 }) => {
+  const { t } = useTranslation();
   if (!isOpen || !user) return null;
 
   const bookingColumns: TableColumn<UserBooking>[] = [
     {
       key: 'id',
-      header: 'Booking ID',
+      header: t('users.modals.bookings.table.columns.bookingId'),
       accessor: 'id',
     },
     {
       key: 'asset',
-      header: 'Asset',
+      header: t('users.modals.bookings.table.columns.asset'),
       accessor: 'asset',
     },
     {
       key: 'dates',
-      header: 'Date',
+      header: t('users.modals.bookings.table.columns.date'),
       render: (booking) =>
         `${booking.dateFrom.toLocaleDateString()} - ${booking.dateTo.toLocaleDateString()}`,
     },
@@ -53,18 +55,18 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabel="Bookings"
+      ariaLabel={t('users.modals.bookings.ariaLabel')}
       size="lg"
       title={
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-widest text-(--color-table-head-text) opacity-50">
-            Bookings
+            {t('users.modals.bookings.title')}
           </h2>
           <p className="block text-base font-black tracking-wider">{user.fullName}</p>
         </div>
       }
       headerRight={
-        <IconButton onClick={onClose} aria-label="Close bookings modal">
+        <IconButton onClick={onClose} aria-label={t('users.modals.bookings.closeAria')}>
           <CloseOutlinedIcon fontSize="small" />
         </IconButton>
       }
@@ -74,9 +76,8 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
         columns={bookingColumns}
         getRowKey={(booking) => booking.id}
         className="w-full"
-        emptyMessage="No bookings for this user."
+        emptyMessage={t('users.modals.bookings.empty')}
       />
     </Modal>
   );
 };
-

@@ -40,6 +40,7 @@ class JwtTokenTest {
         user.setSurname("Horvat");
         user.setEmail("ivan@example.com");
         user.setRole(UserRoleEnum.EMPLOYEE);
+        user.setBenefit("ALL");
         user.setStatus(UserStatusEnum.ACTIVE);
 
         userDetails = new CustomUserDetails(user);
@@ -117,6 +118,7 @@ class JwtTokenTest {
         otherUser.setSurname("User");
         otherUser.setEmail("other@example.com");
         otherUser.setRole(UserRoleEnum.EMPLOYEE);
+        otherUser.setBenefit("ALL");
         otherUser.setStatus(UserStatusEnum.ACTIVE);
 
         CustomUserDetails otherUserDetails = new CustomUserDetails(otherUser);

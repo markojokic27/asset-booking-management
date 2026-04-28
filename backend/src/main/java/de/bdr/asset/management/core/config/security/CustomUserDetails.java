@@ -21,6 +21,8 @@ public class CustomUserDetails implements UserDetails {
     private final String surname;
     @Getter
     private final String email;
+    @Getter
+    private final String benefit;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
@@ -31,6 +33,7 @@ public class CustomUserDetails implements UserDetails {
         this.name = user.getName();
         this.surname = user.getSurname();
         this.email = user.getEmail();
+        this.benefit = user.getBenefit();
         this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 

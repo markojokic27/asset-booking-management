@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
@@ -57,6 +58,7 @@ const initialErrors: FormErrors = {
 };
 
 export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalProps) => {
+  const { t } = useTranslation();
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -120,7 +122,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
       });
       onClose();
     } catch {
-      setSubmitError('Failed to save changes. Please try again.');
+      setSubmitError(t('users.modals.edit.submitError'));
     } finally {
       setIsSaving(false);
     }
@@ -132,11 +134,11 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
   }));
 
   const statusLabels: Record<UserDto['status'], string> = {
-    ACTIVE: 'Active',
-    INACTIVE: 'Inactive',
-    STUDENT: 'Student',
-    LEFT_COMPANY: 'Left Company',
-    DELETED: 'Deleted',
+    ACTIVE: t('users.status.active'),
+    INACTIVE: t('users.status.inactive'),
+    STUDENT: t('users.status.student'),
+    LEFT_COMPANY: t('users.status.left_company'),
+    DELETED: t('users.status.deleted'),
   };
 
   const statusOptions = userStatusSchema.options
@@ -150,9 +152,9 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
     <Modal data-testid="user-edit"
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabel="Edit user"
+      ariaLabel={t('users.modals.edit.ariaLabel')}
       headerRight={
-        <IconButton onClick={onClose} aria-label="Close">
+        <IconButton onClick={onClose} aria-label={t('users.modals.common.closeAria')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
@@ -165,7 +167,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
             className="shadow-none"
             disabled={isSaving}
           >
-            {isSaving ? 'Saving…' : 'Save'}
+            {isSaving ? t('users.modals.common.saving') : t('users.modals.common.save')}
           </Button>
         </div>
       }
@@ -192,7 +194,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 <FormDropdown data-testid="user-role"
                   id="user-role"
                   name="role"
-                  label="Role"
+                  label={t('users.modals.edit.fields.role')}
                   defaultValue={user.role}
                   error={!!errors.role}
                   errorMessage={errors.role}
@@ -206,7 +208,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 <FormDropdown data-testid="user-status"
                   id="user-status"
                   name="status"
-                  label="Status"
+                  label={t('users.modals.edit.fields.status')}
                   defaultValue={user.status}
                   error={!!errors.status}
                   errorMessage={errors.status}
@@ -222,7 +224,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 id="user-username"
                 name="username"
                 type="text"
-                label="Username"
+                label={t('users.modals.edit.fields.username')}
                 defaultValue={user.username}
                 error={!!errors.username}
                 errorMessage={errors.username}
@@ -236,7 +238,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 id="user-first-name"
                 name="name"
                 type="text"
-                label="First name"
+                label={t('users.modals.edit.fields.firstName')}
                 defaultValue={user.name}
                 error={!!errors.name}
                 errorMessage={errors.name}
@@ -250,7 +252,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 id="user-last-name"
                 name="surname"
                 type="text"
-                label="Last name"
+                label={t('users.modals.edit.fields.lastName')}
                 defaultValue={user.surname}
                 error={!!errors.surname}
                 errorMessage={errors.surname}
@@ -264,7 +266,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 id="user-email"
                 name="email"
                 type="email"
-                label="Email"
+                label={t('users.modals.edit.fields.email')}
                 defaultValue={user.email}
                 error={!!errors.email}
                 errorMessage={errors.email}
@@ -279,7 +281,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                   id="user-department"
                   name="departmentId"
                   type="number"
-                  label="Department ID"
+                  label={t('users.modals.edit.fields.departmentId')}
                   defaultValue={String(user.departmentId)}
                   error={!!errors.departmentId}
                   errorMessage={errors.departmentId}
@@ -293,7 +295,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                   id="user-manager-email"
                   name="managerEmail"
                   type="email"
-                  label="Manager email"
+                  label={t('users.modals.edit.fields.managerEmail')}
                   defaultValue={user.managerEmail}
                   error={!!errors.managerEmail}
                   errorMessage={errors.managerEmail}
@@ -308,7 +310,7 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
                 id="user-notes"
                 name="notes"
                 type="text"
-                label="Notes"
+                label={t('users.modals.edit.fields.notes')}
                 defaultValue={user.notes ?? ''}
                 error={!!errors.notes}
                 errorMessage={errors.notes}

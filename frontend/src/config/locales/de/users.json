@@ -1,0 +1,110 @@
+{
+  "title": "Benutzer",
+  "actions": {
+    "export": "Exportieren",
+    "new": "Neu"
+  },
+  "search": {
+    "placeholder": "Benutzer suchen…"
+  },
+  "empty": {
+    "loading": "Benutzer werden geladen…",
+    "none": "Noch keine Benutzer."
+  },
+  "delete": {
+    "title": "Benutzer löschen?",
+    "description": "Möchten Sie \"{{name}}\" wirklich löschen? Dieser Benutzer wird als gelöscht markiert."
+  },
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "student": "Student",
+    "left_company": "Unternehmen verlassen",
+    "deleted": "Gelöscht"
+  },
+  "modals": {
+    "common": {
+      "closeAria": "Schließen",
+      "save": "Speichern",
+      "saving": "Wird gespeichert…",
+      "emptyValue": "-"
+    },
+    "view": {
+      "ariaLabel": "Benutzerdetails",
+      "fields": {
+        "name": "Name",
+        "email": "E-Mail",
+        "username": "Benutzername",
+        "role": "Rolle",
+        "department": "Abteilung",
+        "managerEmail": "E-Mail des Vorgesetzten",
+        "notes": "Notizen"
+      }
+    },
+    "edit": {
+      "ariaLabel": "Benutzer bearbeiten",
+      "submitError": "Änderungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+      "fields": {
+        "role": "Rolle",
+        "status": "Status",
+        "username": "Benutzername",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "departmentId": "Abteilungs-ID",
+        "managerEmail": "E-Mail des Vorgesetzten",
+        "notes": "Notizen"
+      }
+    },
+    "create": {
+      "ariaLabel": "Benutzer erstellen",
+      "submitError": "Benutzer konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+      "fields": {
+        "role": "Rolle",
+        "status": "Status",
+        "username": "Benutzername",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "departmentId": "Abteilungs-ID",
+        "managerEmail": "E-Mail des Vorgesetzten",
+        "notes": "Notizen"
+      }
+    },
+    "bookings": {
+      "ariaLabel": "Buchungen",
+      "title": "Buchungen",
+      "closeAria": "Buchungsmodal schließen",
+      "empty": "Keine Buchungen für diesen Benutzer.",
+      "table": {
+        "columns": {
+          "bookingId": "Buchungs-ID",
+          "asset": "Asset",
+          "date": "Datum"
+        }
+      }
+    }
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "bookings": "Buchungen",
+      "actions": "Aktionen"
+    },
+    "bookingsCta": "Buchungen",
+    "sort": {
+      "byLastNameAria": "Nach Nachname sortieren ({{direction}})",
+      "direction": {
+        "ascending": "aufsteigend",
+        "descending": "absteigend"
+      }
+    },
+    "rowActions": {
+      "viewAria": "Benutzer anzeigen",
+      "editAria": "Benutzer bearbeiten",
+      "deleteAria": "Benutzer löschen"
+    }
+  }
+}

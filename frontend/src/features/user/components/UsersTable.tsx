@@ -2,6 +2,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/ui/Button';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Table, type TableColumn } from '../../../components/ui/Table';
@@ -29,6 +30,9 @@ export const UsersTable = ({
   onBookings,
   onDelete,
 }: Props) => {
+  const { t } = useTranslation();
+  const nextSortDirKey = nameSortDir === 'asc' ? 'descending' : 'ascending';
+
   const columns: TableColumn<UserDto>[] = [
     {
       key: 'name',
@@ -37,10 +41,11 @@ export const UsersTable = ({
           type="button"
           onClick={onToggleNameSort}
           className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
-          aria-label={`Sort by last name ${nameSortDir === 'asc' ? 'descending' : 'ascending'
-            }`}
+          aria-label={t('users.table.sort.byLastNameAria', {
+            direction: t(`users.table.sort.direction.${nextSortDirKey}`),
+          })}
         >
-          <span>NAME</span>
+          <span className="uppercase">{t('users.table.columns.name')}</span>
           <span className="inline-flex flex-col leading-none" aria-hidden="true">
             <span className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}>
               ▲
@@ -56,12 +61,12 @@ export const UsersTable = ({
     },
     {
       key: 'email',
-      header: 'Email',
+      header: t('users.table.columns.email'),
       accessor: 'email',
     },
     {
       key: 'bookings',
-      header: <span className="sr-only">Bookings</span>,
+      header: <span className="sr-only">{t('users.table.columns.bookings')}</span>,
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
@@ -72,19 +77,19 @@ export const UsersTable = ({
           className="shadow-none"
           onClick={() => onBookings(user)}
         >
-          Bookings
+          {t('users.table.bookingsCta')}
         </Button>
       ),
     },
     {
       key: 'actions',
-      header: <span className="sr-only">Actions</span>,
+      header: <span className="sr-only">{t('users.table.columns.actions')}</span>,
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
         <div className="flex items-center gap-1">
           <IconButton
             type="button"
-            aria-label="View user"
+            aria-label={t('users.table.rowActions.viewAria')}
             onClick={() => onView(user)}
           >
             <VisibilityOutlinedIcon
@@ -94,7 +99,7 @@ export const UsersTable = ({
           </IconButton>
           <IconButton
             type="button"
-            aria-label="Edit user"
+            aria-label={t('users.table.rowActions.editAria')}
             disabled={user.status === 'DELETED'}
             onClick={() => onEdit(user)}
           >
@@ -106,7 +111,7 @@ export const UsersTable = ({
           <IconButton
             type="button"
             variant="danger"
-            aria-label="Delete user"
+            aria-label={t('users.table.rowActions.deleteAria')}
             disabled={user.status === 'DELETED'}
             onClick={() => onDelete(user)}
           >
