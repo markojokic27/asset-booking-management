@@ -17,7 +17,7 @@
   },
   "table": {
     "columns": {
-      "name": "Ime",
+      "name": "IME",
       "email": "Email",
       "bookings": "Rezervacije",
       "actions": "Radnje"

@@ -17,7 +17,7 @@
   },
   "table": {
     "columns": {
-      "name": "Name",
+      "name": "NAME",
       "email": "Email",
       "bookings": "Bookings",
       "actions": "Actions"

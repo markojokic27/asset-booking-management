@@ -45,7 +45,7 @@ export const UsersTable = ({
             direction: t(`users.table.sort.direction.${nextSortDirKey}`),
           })}
         >
-          <span>{t('users.table.columns.name')}</span>
+          <span className="uppercase">{t('users.table.columns.name')}</span>
           <span className="inline-flex flex-col leading-none" aria-hidden="true">
             <span className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}>
               ▲
