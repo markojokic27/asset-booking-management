@@ -5,6 +5,7 @@ import { Input } from '../../../components/ui/Input';
 import { userValidationSchema } from '../../user/validation';
 import { useNavigate } from 'react-router-dom';
 import api, { setAccessToken } from '../../../shared/api';
+import { useTranslation } from 'react-i18next';
 
 const loginSchema = userValidationSchema.pick({
   username: true,
@@ -20,6 +21,7 @@ const LoginForm = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogin = async (username: string, password: string) => {
     try {
@@ -43,10 +45,10 @@ const LoginForm = () => {
     } catch (error: any) {
       if (error.response) {
         setServerError(
-          error.response.data?.message || 'Pogrešan username ili password'
+          error.response.data?.message || t('ui.login.errors.invalidCredentials')
         );
       } else {
-        setServerError('Greška na serveru.');
+        setServerError(t('ui.login.errors.serverError'));
       }
     } finally {
       setLoading(false);
@@ -85,31 +87,31 @@ const LoginForm = () => {
       className="relative flex w-full flex-col overflow-hidden rounded-2xl bg-(--color-table-surface) px-5 py-10 shadow-(--shadow-card) sm:px-12 md:mt-0 md:px-12 lg:px-20"
     >
       <h1 className="mb-6 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
-        Login
+        {t('ui.login.title')}
       </h1>
       <h2 className="mb-6 text-center font-bold">
-        Welcome to log in to your asset booking management
+        {t('ui.login.subtitle')}
       </h2>
-      <p className="mb-2 tracking-[0.2em]">Username</p>
+      <p className="mb-2 tracking-[0.2em]">{t('ui.login.fields.username')}</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
           <Input
             data-testid="username"
             type="text"
-            placeholder="Enter your username"
+            placeholder={t('ui.login.placeholders.username')}
             className="w-full border p-3"
             error={!!errors.username}
             errorMessage={errors.username}
           />
         </Form.Control>
       </Form.Field>
-      <p className="mb-2 tracking-[0.2em]">Password</p>
+      <p className="mb-2 tracking-[0.2em]">{t('ui.login.fields.password')}</p>
       <Form.Field name="password" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
           <Input
             data-testid="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder={t('ui.login.placeholders.password')}
             className="w-full border p-3"
             error={!!errors.password}
             errorMessage={errors.password}
@@ -124,7 +126,7 @@ const LoginForm = () => {
           className="mt-2 mb-12 font-bold uppercase"
           disabled={loading}
         >
-          {loading ? 'Loading...' : 'Login'}
+          {loading ? t('ui.login.loading') : t('ui.login.submit')}
         </Button>
       </Form.Submit>
       {serverError && (
@@ -133,7 +135,7 @@ const LoginForm = () => {
         </p>
       )}
       <Button variant="link" onClick={() => navigate('/register')}>
-        Don't have an account? Register here.
+        {t('ui.login.registerCta')}
       </Button>
     </Form.Root>
   );

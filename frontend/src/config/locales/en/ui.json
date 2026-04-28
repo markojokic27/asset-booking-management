@@ -43,5 +43,24 @@
   },
   "languageSwitcher": {
     "selectLanguage": "Select language"
+  },
+  "login": {
+    "title": "Login",
+    "subtitle": "Welcome to log in to your asset booking management",
+    "fields": {
+      "username": "Username",
+      "password": "Password"
+    },
+    "placeholders": {
+      "username": "Enter your username",
+      "password": "Enter your password"
+    },
+    "submit": "Login",
+    "loading": "Loading...",
+    "registerCta": "Don't have an account? Register here.",
+    "errors": {
+      "invalidCredentials": "Wrong username or password",
+      "serverError": "Server error."
+    }
   }
 }

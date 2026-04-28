@@ -43,5 +43,24 @@
   },
   "languageSwitcher": {
     "selectLanguage": "Sprache auswählen"
+  },
+  "login": {
+    "title": "Anmelden",
+    "subtitle": "Willkommen – melden Sie sich bei Ihrer Asset-Booking-Verwaltung an",
+    "fields": {
+      "username": "Benutzername",
+      "password": "Passwort"
+    },
+    "placeholders": {
+      "username": "Benutzernamen eingeben",
+      "password": "Passwort eingeben"
+    },
+    "submit": "Anmelden",
+    "loading": "Wird geladen…",
+    "registerCta": "Noch kein Konto? Hier registrieren.",
+    "errors": {
+      "invalidCredentials": "Falscher Benutzername oder falsches Passwort",
+      "serverError": "Serverfehler."
+    }
   }
 }

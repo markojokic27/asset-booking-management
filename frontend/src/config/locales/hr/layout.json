@@ -16,5 +16,11 @@
   "mobileMenu": {
     "title": "Navigacijski izbornik",
     "description": "Glavna navigacija"
+  },
+  "headerHero": {
+    "title": "Upravljanje rezervacijama",
+    "descriptionLine1": "Jednostavan i moćan web i mobilni softver",
+    "descriptionLine2": "za upravljanje rezervacijama",
+    "descriptionLine3": "Maurer imovine na radnom mjestu"
   }
 }

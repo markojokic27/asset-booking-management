@@ -16,5 +16,11 @@
   "mobileMenu": {
     "title": "Navigationsmenü",
     "description": "Hauptnavigation"
+  },
+  "headerHero": {
+    "title": "Asset-Booking-Verwaltung",
+    "descriptionLine1": "Einfache, leistungsstarke Web- und Mobile-Software",
+    "descriptionLine2": "für die Verwaltung von Asset-Buchungen",
+    "descriptionLine3": "von Maurer Workplace-Assets"
   }
 }

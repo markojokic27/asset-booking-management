@@ -1,19 +1,25 @@
+import { useTranslation } from 'react-i18next';
+
 export const HeaderHero: React.FC<React.ComponentPropsWithoutRef<'div'>> = ({
   className,
   ...rest
-}) => (
-  <div className={className} {...rest}>
-    <h1 className="text-6xl font-bold tracking-[0.2em]">
-      Asset Booking Management
-    </h1>
-    <div className="mt-10 flex w-full">
-      <div className="h-2 w-1/2 bg-[#00D097]" />
-      <div className="h-2 w-1/2 bg-[#030043]" />
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className={className} {...rest}>
+      <h1 className="text-6xl font-bold tracking-[0.2em]">
+        {t('layout.headerHero.title')}
+      </h1>
+      <div className="mt-10 flex w-full">
+        <div className="h-2 w-1/2 bg-[#00D097]" />
+        <div className="h-2 w-1/2 bg-[#030043]" />
+      </div>
+      <p className="mt-10 w-full text-3xl">
+        {t('layout.headerHero.descriptionLine1')}
+        <br /> {t('layout.headerHero.descriptionLine2')}
+        <br /> {t('layout.headerHero.descriptionLine3')}
+      </p>
     </div>
-    <p className="mt-10 w-full text-3xl">
-      Simple powerful web and mobile software
-      <br /> for asset booking management of
-      <br /> Maurer workplace assets
-    </p>
-  </div>
-);
+  );
+};

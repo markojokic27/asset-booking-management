@@ -43,5 +43,24 @@
   },
   "languageSwitcher": {
     "selectLanguage": "Odaberi jezik"
+  },
+  "login": {
+    "title": "Prijava",
+    "subtitle": "Dobrodošli! Prijavite se u sustav za upravljanje rezervacijama.",
+    "fields": {
+      "username": "Korisničko ime",
+      "password": "Lozinka"
+    },
+    "placeholders": {
+      "username": "Unesite korisničko ime",
+      "password": "Unesite lozinku"
+    },
+    "submit": "Prijava",
+    "loading": "Učitavanje...",
+    "registerCta": "Nemate račun? Registrirajte se ovdje.",
+    "errors": {
+      "invalidCredentials": "Pogrešno korisničko ime ili lozinka",
+      "serverError": "Greška na serveru."
+    }
   }
 }
