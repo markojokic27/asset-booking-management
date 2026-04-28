@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
@@ -86,6 +87,7 @@ const initialValues: UserCreateModalUser = {
 };
 
 export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalProps) => {
+  const { t } = useTranslation();
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -107,11 +109,11 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
   }));
 
   const statusLabels: Record<UserCreateModalUser['status'], string> = {
-    ACTIVE: 'Active',
-    INACTIVE: 'Inactive',
-    STUDENT: 'Student',
-    LEFT_COMPANY: 'Left Company',
-    DELETED: 'Deleted',
+    ACTIVE: t('users.status.active'),
+    INACTIVE: t('users.status.inactive'),
+    STUDENT: t('users.status.student'),
+    LEFT_COMPANY: t('users.status.left_company'),
+    DELETED: t('users.status.deleted'),
   };
 
   const statusOptions = userStatusSchema.options
@@ -171,7 +173,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       });
       onClose();
     } catch {
-      setSubmitError('Failed to create user. Please try again.');
+      setSubmitError(t('users.modals.create.submitError'));
     } finally {
       setIsSaving(false);
     }
@@ -181,9 +183,9 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabel="Create user"
+      ariaLabel={t('users.modals.create.ariaLabel')}
       headerRight={
-        <IconButton onClick={onClose} aria-label="Close">
+        <IconButton onClick={onClose} aria-label={t('users.modals.common.closeAria')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
@@ -196,7 +198,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
             className="shadow-none"
             disabled={isSaving}
           >
-            {isSaving ? 'Saving…' : 'Save'}
+            {isSaving ? t('users.modals.common.saving') : t('users.modals.common.save')}
           </Button>
         </div>
       }
@@ -222,7 +224,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 <FormDropdown data-testid="user-role"
                   id="user-role"
                   name="role"
-                  label="Role"
+                  label={t('users.modals.create.fields.role')}
                   defaultValue={initialValues.role}
                   error={!!errors.role}
                   errorMessage={errors.role}
@@ -236,7 +238,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 <FormDropdown data-testid="user-status"
                   id="user-status"
                   name="status"
-                  label="Status"
+                  label={t('users.modals.create.fields.status')}
                   defaultValue={initialValues.status}
                   error={!!errors.status}
                   errorMessage={errors.status}
@@ -252,7 +254,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 id="user-username"
                 name="username"
                 type="text"
-                label="Username"
+                label={t('users.modals.create.fields.username')}
                 defaultValue={initialValues.username}
                 error={!!errors.username}
                 errorMessage={errors.username}
@@ -267,7 +269,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                   id="user-first-name"
                   name="name"
                   type="text"
-                  label="First name"
+                  label={t('users.modals.create.fields.firstName')}
                   defaultValue={initialValues.name}
                   error={!!errors.name}
                   errorMessage={errors.name}
@@ -281,7 +283,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                   id="user-last-name"
                   name="surname"
                   type="text"
-                  label="Last name"
+                  label={t('users.modals.create.fields.lastName')}
                   defaultValue={initialValues.surname}
                   error={!!errors.surname}
                   errorMessage={errors.surname}
@@ -296,7 +298,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 id="user-email"
                 name="email"
                 type="email"
-                label="Email"
+                label={t('users.modals.create.fields.email')}
                 defaultValue={initialValues.email}
                 error={!!errors.email}
                 errorMessage={errors.email}
@@ -311,7 +313,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 id="user-password"
                 name="password"
                 type="password"
-                label="Password"
+                label={t('users.modals.create.fields.password')}
                 defaultValue={initialValues.password}
                 error={!!errors.password}
                 errorMessage={errors.password}
@@ -326,7 +328,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                   id="user-department"
                   name="departmentId"
                   type="number"
-                  label="Department ID"
+                  label={t('users.modals.create.fields.departmentId')}
                   defaultValue={String(initialValues.departmentId)}
                   error={!!errors.departmentId}
                   errorMessage={errors.departmentId}
@@ -340,7 +342,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                   id="user-manager-email"
                   name="managerEmail"
                   type="email"
-                  label="Manager email"
+                  label={t('users.modals.create.fields.managerEmail')}
                   defaultValue={initialValues.managerEmail}
                   error={!!errors.managerEmail}
                   errorMessage={errors.managerEmail}
@@ -355,7 +357,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
                 id="user-notes"
                 name="notes"
                 type="text"
-                label="Notes"
+                label={t('users.modals.create.fields.notes')}
                 defaultValue={initialValues.notes ?? ''}
                 error={!!errors.notes}
                 errorMessage={errors.notes}

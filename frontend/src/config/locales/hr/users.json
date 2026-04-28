@@ -15,9 +15,80 @@
     "title": "Obrisati korisnika?",
     "description": "Jeste li sigurni da želite obrisati \"{{name}}\"? Ovaj korisnik će biti označen kao obrisan."
   },
+  "status": {
+    "active": "Aktivan",
+    "inactive": "Neaktivan",
+    "student": "Student",
+    "left_company": "Napustio tvrtku",
+    "deleted": "Obrisan"
+  },
+  "modals": {
+    "common": {
+      "closeAria": "Zatvori",
+      "save": "Spremi",
+      "saving": "Spremanje…",
+      "emptyValue": "-"
+    },
+    "view": {
+      "ariaLabel": "Detalji korisnika",
+      "fields": {
+        "name": "Ime",
+        "email": "Email",
+        "username": "Korisničko ime",
+        "role": "Uloga",
+        "department": "Odjel",
+        "managerEmail": "Email voditelja",
+        "notes": "Bilješke"
+      }
+    },
+    "edit": {
+      "ariaLabel": "Uredi korisnika",
+      "submitError": "Spremanje promjena nije uspjelo. Pokušajte ponovno.",
+      "fields": {
+        "role": "Uloga",
+        "status": "Status",
+        "username": "Korisničko ime",
+        "firstName": "Ime",
+        "lastName": "Prezime",
+        "email": "Email",
+        "departmentId": "ID odjela",
+        "managerEmail": "Email voditelja",
+        "notes": "Bilješke"
+      }
+    },
+    "create": {
+      "ariaLabel": "Kreiraj korisnika",
+      "submitError": "Kreiranje korisnika nije uspjelo. Pokušajte ponovno.",
+      "fields": {
+        "role": "Uloga",
+        "status": "Status",
+        "username": "Korisničko ime",
+        "firstName": "Ime",
+        "lastName": "Prezime",
+        "email": "Email",
+        "password": "Lozinka",
+        "departmentId": "ID odjela",
+        "managerEmail": "Email voditelja",
+        "notes": "Bilješke"
+      }
+    },
+    "bookings": {
+      "ariaLabel": "Rezervacije",
+      "title": "Rezervacije",
+      "closeAria": "Zatvori modal rezervacija",
+      "empty": "Nema rezervacija za ovog korisnika.",
+      "table": {
+        "columns": {
+          "bookingId": "ID rezervacije",
+          "asset": "Imovina",
+          "date": "Datum"
+        }
+      }
+    }
+  },
   "table": {
     "columns": {
-      "name": "IME",
+      "name": "Ime",
       "email": "Email",
       "bookings": "Rezervacije",
       "actions": "Radnje"

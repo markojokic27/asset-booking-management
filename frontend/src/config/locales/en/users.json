@@ -15,9 +15,80 @@
     "title": "Delete user?",
     "description": "Are you sure you want to delete \"{{name}}\"? This user will be marked as deleted."
   },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "student": "Student",
+    "left_company": "Left company",
+    "deleted": "Deleted"
+  },
+  "modals": {
+    "common": {
+      "closeAria": "Close",
+      "save": "Save",
+      "saving": "Saving…",
+      "emptyValue": "-"
+    },
+    "view": {
+      "ariaLabel": "User details",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "username": "Username",
+        "role": "Role",
+        "department": "Department",
+        "managerEmail": "Manager email",
+        "notes": "Notes"
+      }
+    },
+    "edit": {
+      "ariaLabel": "Edit user",
+      "submitError": "Failed to save changes. Please try again.",
+      "fields": {
+        "role": "Role",
+        "status": "Status",
+        "username": "Username",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "departmentId": "Department ID",
+        "managerEmail": "Manager email",
+        "notes": "Notes"
+      }
+    },
+    "create": {
+      "ariaLabel": "Create user",
+      "submitError": "Failed to create user. Please try again.",
+      "fields": {
+        "role": "Role",
+        "status": "Status",
+        "username": "Username",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "password": "Password",
+        "departmentId": "Department ID",
+        "managerEmail": "Manager email",
+        "notes": "Notes"
+      }
+    },
+    "bookings": {
+      "ariaLabel": "Bookings",
+      "title": "Bookings",
+      "closeAria": "Close bookings modal",
+      "empty": "No bookings for this user.",
+      "table": {
+        "columns": {
+          "bookingId": "Booking ID",
+          "asset": "Asset",
+          "date": "Date"
+        }
+      }
+    }
+  },
   "table": {
     "columns": {
-      "name": "NAME",
+      "name": "Name",
       "email": "Email",
       "bookings": "Bookings",
       "actions": "Actions"
