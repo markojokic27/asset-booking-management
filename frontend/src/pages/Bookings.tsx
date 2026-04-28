@@ -9,6 +9,8 @@ import type { Filters } from '../features/booking/types';
 import { BookingTable } from '../features/booking/components/BookingTable';
 import { getAllAssets } from '../features/asset/api/assetApi';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
+import { BookingModal } from '../features/booking/components/BookingModal';
+import { useState } from 'react';
 
 export default function Bookings() {
   const [assets, setAssets] = React.useState<AssetDto[]>([]);
@@ -24,6 +26,9 @@ export default function Bookings() {
     toHour: '',
   });
   const [loading, setLoading] = React.useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<AssetDto | null>(null);
+  const [openBookingModal, setOpenBookingModal] = useState(false);
+
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +72,11 @@ export default function Bookings() {
 
   const selectedCategoryName =
     categories.find((c) => c.id === selectedCategoryId)?.name ?? '';
+
+  const handleOpenBookingModal = (asset: AssetDto) => {
+    setSelectedAsset(asset);
+    setOpenBookingModal(true);
+  };
 
   return (
     <LayoutColumn
@@ -114,12 +124,17 @@ export default function Bookings() {
       ) : (
         <BookingTable
           assets={filteredAssets}
-          onBook={(asset) => {
-            console.log('Booking asset:', asset);
-          }}
+          onBook={handleOpenBookingModal}
           className="mt-6"
         />
       )}
+      <BookingModal
+        open={openBookingModal}
+        onClose={() => setOpenBookingModal(false)}
+        asset={selectedAsset}
+        filters={filters}
+        setFilters={setFilters}
+      />
     </LayoutColumn>
   );
 }
