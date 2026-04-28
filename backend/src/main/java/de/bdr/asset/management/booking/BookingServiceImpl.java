@@ -1,21 +1,31 @@
 package de.bdr.asset.management.booking;
 
-import de.bdr.asset.management.core.exception.ActionNotAllowedException;
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
-import de.bdr.asset.management.core.exception.InvalidDateRangeException;
-import lombok.extern.slf4j.Slf4j;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.asset.AssetRepository;
+import de.bdr.asset.management.asset.AssetStatusEnum;
+import de.bdr.asset.management.assetcategory.AssetCategory;
+import de.bdr.asset.management.booking.dto.BookingCreateDTO;
+import de.bdr.asset.management.booking.dto.BookingResponseDTO;
+import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
+import de.bdr.asset.management.core.config.security.SecurityService;
+import de.bdr.asset.management.core.exception.ActionNotAllowedException;
+import de.bdr.asset.management.core.exception.InvalidDateRangeException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
+import de.bdr.asset.management.user.UserStatusEnum;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of Booking Service
@@ -28,12 +38,39 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper mapper;
     private final UserRepository userRepository;
     private final AssetRepository assetRepository;
+    private final SecurityService securityService;
+    private final Clock clock;
 
-    public BookingServiceImpl(BookingRepository repository, BookingMapper mapper, UserRepository userRepository, AssetRepository assetRepository) {
+    public BookingServiceImpl(
+        BookingRepository repository,
+        BookingMapper mapper,
+        UserRepository userRepository,
+        AssetRepository assetRepository,
+        SecurityService securityService,
+        Clock clock
+    ) {
         this.repository = repository;
         this.mapper = mapper;
+        this.securityService = securityService;
         this.userRepository = userRepository;
         this.assetRepository = assetRepository;
+        this.clock = clock;
+    }
+
+    private Instant now() {
+        return Instant.now(clock);
+    }
+
+    /*
+        Helper function for checking if the start is before end.
+    */
+
+    public void isStartEndValid(Instant bookingStart, Instant bookingEnd) 
+        throws InvalidDateRangeException
+    {   
+        if (!bookingStart.isBefore(bookingEnd)) {
+            throw new InvalidDateRangeException("Booking end time must be after the start time");
+        }
     }
 
     /**
@@ -44,31 +81,42 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public BookingResponseDTO createBooking(BookingRequestDTO bookingRequest) {
+    public BookingResponseDTO createBooking(BookingCreateDTO bookingRequest) {
 
         log.info("Attempting to create a new booking with user id: {} and asset id: {}", bookingRequest.userId(), bookingRequest.assetId());
 
-        if (!bookingRequest.bookingEnd().isAfter(bookingRequest.bookingStart())) {
-            throw new InvalidDateRangeException("Booking end time must be after the start time");
+        // TODO: Maybe an additional check to see if the booking period is some minimum, possibly taken from the controller.
+        isStartEndValid(bookingRequest.bookingStart(), bookingRequest.bookingEnd());
+
+        Long loggedInUserId = securityService.getCurrentUserId();
+
+        if (!securityService.isAdmin() && !bookingRequest.userId().equals(loggedInUserId)) {
+            throw new AccessDeniedException("Cannot create booking for another user");
         }
 
-        if (bookingRequest.bookingStart().isBefore(Instant.now())) {
-            throw new InvalidDateRangeException("Booking start time cannot be in the past");
-        }
-
-        User user = userRepository.findById(bookingRequest.userId())
+        List<UserStatusEnum> validStatuses = List.of(
+            UserStatusEnum.ACTIVE,
+            UserStatusEnum.STUDENT
+        );
+        
+        User user = userRepository.findByIdAndStatusIn(bookingRequest.userId(), validStatuses)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
 
-        Asset asset = assetRepository.findById(bookingRequest.assetId())
-            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId()));
-
+        Asset asset = assetRepository.findByIdAndStatus(bookingRequest.assetId(), AssetStatusEnum.ACTIVE)
+            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId() + " and status ACTIVE"));
+        
+        // TODO: Check if this should hold validation logic like if the category is active or not.
+        AssetCategory category = asset.getCategory();
         log.debug("User and asset found. Mapping entity and saving to database...");
         
         Booking booking = mapper.toEntity(bookingRequest);
+        
         booking.setUser(user);
         booking.setAsset(asset);
-        booking = repository.save(booking);
+        booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
+        repository.save(booking);
+        
         log.info("Successfully created new booking with id: {} for user id: {} with asset id: {}", booking.getId(), user.getId(), asset.getId());
 
         return mapper.toResponse(booking);
@@ -98,14 +146,50 @@ public class BookingServiceImpl implements BookingService {
      * @return a list of BookingResponseDTO records
      */
     @Override
-    public Page<BookingResponseDTO> getAllBookings(Pageable pageable) {
+    public Page<BookingResponseDTO> getAllBookings(BookingFilter filter, Pageable pageable) {
 
         log.debug("Fetching bookings from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );
 
-        Page<Booking> bookings = repository.findAll(pageable);
+        Specification<Booking> spec = Specification.where((root, query, cb) -> cb.conjunction());
+
+        if (filter.getStatus() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.equal(root.get("status"), filter.getStatus()));
+        }
+
+        if (filter.getUserId() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("user").get("id"), filter.getUserId()));
+        }
+
+        if (filter.getAssetId() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("asset").get("id"), filter.getAssetId()));
+        }
+
+        if (filter.getBookingStart() != null) {
+            Instant start = filter.getBookingStart()
+                .atStartOfDay(clock.getZone())
+                .toInstant();
+
+            spec = spec.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.get("bookingStart"), start));
+        }
+
+        if (filter.getBookingEnd() != null) {
+            Instant end = filter.getBookingEnd()
+                .plusDays(1)
+                .atStartOfDay(clock.getZone())
+                .toInstant();
+
+            spec = spec.and((root, query, cb) ->
+                cb.lessThan(root.get("bookingEnd"), end));
+        }
+
+        Page<Booking> bookings = repository.findAll(spec, pageable);
 
         log.info("Successfully fetched {} bookings", bookings.getNumberOfElements());
 
@@ -116,46 +200,31 @@ public class BookingServiceImpl implements BookingService {
      * Update and return a specific booking.
      *
      * @param id - a Long id
-     * @param bookingRequest - an BookingRequestDTO record
+     * @param bookingRequest - an BookingUpdateDTO record
      * @return an BookingResponseDTO record
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public BookingResponseDTO updateBooking(Long id, BookingRequestDTO bookingRequest) {
+    public BookingResponseDTO updateBooking(Long id, BookingUpdateDTO bookingRequest) {
 
         log.info("Attempting to update booking with id: {}", id);
 
         Booking booking = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
         if (booking.getStatus() == BookingStatusEnum.CANCELLED) {
             throw new ActionNotAllowedException("Cannot update a cancelled booking");
         }
 
-        if (booking.getBookingEnd().isBefore(Instant.now())) {
+        if (booking.getBookingEnd() != null &&
+            booking.getBookingEnd().isBefore(now())) {
             throw new ActionNotAllowedException("Cannot update a booking that has already finished");
         }
 
-        if (!bookingRequest.bookingEnd().isAfter(bookingRequest.bookingStart())) {
-            throw new InvalidDateRangeException("Booking end time must be after the start time");
-        }
+        mapper.updateBookingFromDTO(bookingRequest, booking);
 
-        if (bookingRequest.bookingStart().isBefore(Instant.now())) {
-            throw new InvalidDateRangeException("New booking start time cannot be in the past");
-        }
+        isStartEndValid(booking.getBookingStart(), booking.getBookingEnd());
 
-        User user = userRepository.findById(bookingRequest.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
-
-        Asset asset = assetRepository.findById(bookingRequest.assetId())
-            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId()));
-        
-        booking.setUser(user);
-        booking.setAsset(asset);
-        booking.setStatus(bookingRequest.status());
-        booking.setBookingStart(bookingRequest.bookingStart());
-        booking.setBookingEnd(bookingRequest.bookingEnd());
-        booking.setNotes(bookingRequest.notes());
         booking = repository.save(booking);
 
         log.info("Successfully updated booking with id: {}", id);

@@ -1,9 +1,15 @@
 package de.bdr.asset.management.booking;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,17 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import de.bdr.asset.management.booking.dto.BookingCreateDTO;
+import de.bdr.asset.management.booking.dto.BookingResponseDTO;
+import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class BookingControllerTest {
+
     @Mock
     private BookingService bookingService;
 
@@ -32,8 +34,8 @@ public class BookingControllerTest {
     /** CREATE */
     @Test
     void createBooking_validRequest_returnsCreatedStatus(){
-        BookingRequestDTO request=new BookingRequestDTO( 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
-        BookingResponseDTO response=new BookingResponseDTO(  1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
+        BookingCreateDTO request = BookingControllerTestData.createRequest();
+        BookingResponseDTO response = BookingControllerTestData.response();
 
         when(bookingService.createBooking(request)).thenReturn(response);
 
@@ -48,15 +50,15 @@ public class BookingControllerTest {
     /** READ ALL */
     @Test
     void getAllBookings_returnsOkWithLIst(){
-        BookingResponseDTO response = new BookingResponseDTO(1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
+        BookingResponseDTO response = BookingControllerTestData.response();
 
         List<BookingResponseDTO> list = List.of(response);
         Page<BookingResponseDTO> page = new PageImpl<>(list);
 
-        when(bookingService.getAllBookings(any(Pageable.class))).thenReturn(page);
+        when(bookingService.getAllBookings(any(BookingFilter.class), any(Pageable.class))).thenReturn(page);
 
         ResponseEntity<Page<BookingResponseDTO>> result =
-                bookingController.getAll(PageRequest.of(0, 10));
+                bookingController.getAll(new BookingFilter(), PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assert(result.getBody() != null);
@@ -68,7 +70,7 @@ public class BookingControllerTest {
     /** READ BY ID */
     @Test
     void getBookingById_returnsOkWithBooking(){
-        BookingResponseDTO response=new BookingResponseDTO(  1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
+        BookingResponseDTO response = BookingControllerTestData.response();
 
         when(bookingService.getBookingById(1L)).thenReturn(response);
 
@@ -81,8 +83,8 @@ public class BookingControllerTest {
     /** UPDATE */
     @Test
     void updateBooking_returnsOkWithUpdatesdBooking(){
-        BookingRequestDTO request=new BookingRequestDTO( 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
-        BookingResponseDTO response=new BookingResponseDTO(  1L, 2L, 1L, BookingStatusEnum.ACTIVE, LocalDateTime.of(2026, 4, 1, 9, 0).toInstant(ZoneOffset.UTC), LocalDateTime.of(2026, 4, 14, 9, 0).toInstant(ZoneOffset.UTC), "text");
+        BookingUpdateDTO request = BookingControllerTestData.updateRequest();
+        BookingResponseDTO response = BookingControllerTestData.response();
 
         when(bookingService.updateBooking(1L, request)).thenReturn(response);
 
@@ -102,6 +104,4 @@ public class BookingControllerTest {
         assertThat(result.getBody()).isNull();
         verify(bookingService).deleteBooking(1L);
     }
-
-
 }

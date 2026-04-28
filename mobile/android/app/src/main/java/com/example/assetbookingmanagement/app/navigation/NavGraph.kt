@@ -36,6 +36,10 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             if (showBottomBar) {
                 Header(
                     title = headerTitle,
+                    showBackArrow = currentRoute != Routes.HOME,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
                     onNotificationClick = {
                     }
                 )
@@ -63,7 +67,14 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             }
 
             composable(Routes.HOME) {
-                HomeScreen()
+                HomeScreen(
+                    onAssetsClick = {
+                        navController.navigateTopLevel(Routes.ASSETS)
+                    },
+                    onBookingsClick = {
+                        navController.navigateTopLevel(Routes.BOOKINGS)
+                    }
+                )
             }
 
             composable(Routes.ASSETS) {

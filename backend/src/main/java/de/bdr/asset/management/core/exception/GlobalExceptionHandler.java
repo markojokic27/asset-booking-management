@@ -133,7 +133,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ProblemDetail handleDatabaseConflict(DataIntegrityViolationException ex, HttpServletRequest request) {
 
-        log.warn("Conflict for reservation at URI [{}]", request.getRequestURI(), ex);
+        log.warn("Conflict for reservation at URI [{}]", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT,
@@ -295,7 +295,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WriterException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleWriterException(WriterException ex, HttpServletRequest request) {
-        log.error("Writer exception at URI [{}]", request.getRequestURI(), ex);
+        log.error("Writer exception at URI [{}]", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -318,7 +318,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleIOException(IOException ex, HttpServletRequest request) {
-        log.error("I/O exception at URI [{}]", request.getRequestURI(), ex);
+        log.error("I/O exception at URI [{}]", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -399,7 +399,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleUncaughtException(Exception ex, HttpServletRequest request) {
 
-        log.error("Unexpected internal server error at URI [{}]", request.getRequestURI(), ex);
+        log.error("Unexpected internal server error at URI [{}]", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,

@@ -12,5 +12,15 @@
     "copyright": "© 2026 | Bundesdruckerei GmbH",
     "partOfThe": "Part of the",
     "groupName": "Bundesdruckerei Group"
+  },
+  "mobileMenu": {
+    "title": "Navigation menu",
+    "description": "Main navigation"
+  },
+  "headerHero": {
+    "title": "Asset Booking Management",
+    "descriptionLine1": "Simple powerful web and mobile software",
+    "descriptionLine2": "for asset booking management of",
+    "descriptionLine3": "Maurer workplace assets"
   }
 }

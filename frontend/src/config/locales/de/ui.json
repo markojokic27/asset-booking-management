@@ -1,0 +1,66 @@
+{
+  "modal": {
+    "dialogAria": "Dialog"
+  },
+  "deleteModal": {
+    "defaultTitle": "Element löschen?",
+    "defaultDescription": "Möchten Sie \"{{name}}\" wirklich löschen?",
+    "cancel": "Abbrechen",
+    "confirmDelete": "Löschen"
+  },
+  "pagination": {
+    "ariaLabel": "Seitennummerierung",
+    "previous": "Zurück",
+    "next": "Weiter"
+  },
+  "table": {
+    "emptyMessage": "Keine Daten verfügbar."
+  },
+  "search": {
+    "byNamePlaceholder": "Nach Name suchen…",
+    "assetsPlaceholder": "Assets suchen…"
+  },
+  "userMenu": {
+    "ariaLabel": "Benutzermenü",
+    "accountInfo": "Kontoinfo",
+    "logout": "Abmelden"
+  },
+  "themeToggle": {
+    "ariaLabel": "Dunkelmodus umschalten"
+  },
+  "filters": {
+    "fromTime": "Von",
+    "toTime": "Bis"
+  },
+  "dateTimeInput": {
+    "hourAriaSuffix": "Uhr"
+  },
+  "multiSelect": {
+    "selectAssets": "Assets auswählen…",
+    "searchAssetsPlaceholder": "Assets suchen…",
+    "loadingAssets": "Assets werden geladen…",
+    "failedToLoadAssets": "Assets konnten nicht geladen werden"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Sprache auswählen"
+  },
+  "login": {
+    "title": "Anmelden",
+    "subtitle": "Willkommen – melden Sie sich bei Ihrer Asset-Booking-Verwaltung an",
+    "fields": {
+      "username": "Benutzername",
+      "password": "Passwort"
+    },
+    "placeholders": {
+      "username": "Benutzernamen eingeben",
+      "password": "Passwort eingeben"
+    },
+    "submit": "Anmelden",
+    "loading": "Wird geladen…",
+    "registerCta": "Noch kein Konto? Hier registrieren.",
+    "errors": {
+      "invalidCredentials": "Falscher Benutzername oder falsches Passwort",
+      "serverError": "Serverfehler."
+    }
+  }
+}

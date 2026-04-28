@@ -80,7 +80,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                 <div className="relative flex items-center justify-center px-8 pt-6 pb-4">
                     <div className="text-center text-xl font-bold">Add New Category</div>
 
-                    <Button
+                    <Button data-testid="category-close-button"
                         type="button"
                         onClick={onClose}
                         aria-label="Close"
@@ -133,6 +133,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                         <div className="flex flex-1 flex-col space-y-5">
 
                             <FormInput
+                                data-testid="category-name"
                                 id="asset-name"
                                 label="Name"
                                 error={!!errors.name}
@@ -141,12 +142,14 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                             />
 
                             <FormInput
+                                data-testid="category-description"
                                 id="asset-description"
                                 label="Description"
                                 {...register('description')}
                             />
 
                             <FormDropdown
+                                data-testid="category-booking-period"
                                 label="Booking period"
                                 options={bookingPeriodOptions}
                                 error={!!errors.bookingPeriod}
@@ -156,6 +159,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
 
                             <div className="flex items-center gap-2">
                                 <Checkbox.Root
+                                    data-testid="category-approval-checkbox"
                                     id="c1"
                                     onCheckedChange={(checked) =>
                                         setValue('approval', !!checked)
@@ -183,6 +187,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                     {/* SUBMIT */}
                     <div className="mt-5 flex justify-center gap-2">
                         <Button
+                            data-testid="add-category-button"
                             type="submit"
                             className="mr-5 mb-5 h-10 w-70 px-6 py-4 font-bold"
                         >

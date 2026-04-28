@@ -14,10 +14,8 @@ http:
       {
         "userId": "{{userId}}",
         "assetId": "{{assetId}}",
-        "status": "ACTIVE",
         "bookingStart": "{{bookingStart}}",
-        "bookingEnd": "{{bookingEnd}}",
-        "notes": "Why?"
+        "bookingEnd": "{{bookingEnd}}"
       }
   auth: inherit
 
@@ -32,10 +30,17 @@ runtime:
         bru.setVar("response", response);
 
         const now = Date.now();
+        var offset = 1;
 
-        const bookingStart = new Date(now + 24 * 60 * 60 * 1000);
+        if (bru.getEnvVar("responseRole") == "employee") {
+          offset = 10;
+        } else if (bru.getEnvVar("responseRole") == "manager") {
+          offset = 3;
+        }
 
-        const bookingEnd = new Date(bookingStart.getTime() + 2 * 24 * 60 * 60 * 1000);
+        const bookingStart = new Date(now + offset * 24 * 60 * 60 * 1000);
+
+        const bookingEnd = new Date(bookingStart.getTime() + 1 * 24 * 60 * 60 * 1000);
 
         bru.setVar("bookingStart",bookingStart);
         bru.setVar("bookingEnd",bookingEnd);

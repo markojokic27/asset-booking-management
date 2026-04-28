@@ -1,0 +1,66 @@
+{
+  "modal": {
+    "dialogAria": "Dijalog"
+  },
+  "deleteModal": {
+    "defaultTitle": "Obrisati stavku?",
+    "defaultDescription": "Jeste li sigurni da želite obrisati \"{{name}}\"?",
+    "cancel": "Odustani",
+    "confirmDelete": "Obriši"
+  },
+  "pagination": {
+    "ariaLabel": "Stranice",
+    "previous": "Prethodna",
+    "next": "Sljedeća"
+  },
+  "table": {
+    "emptyMessage": "Nema dostupnih podataka."
+  },
+  "search": {
+    "byNamePlaceholder": "Pretraži po imenu...",
+    "assetsPlaceholder": "Pretraži imovinu..."
+  },
+  "userMenu": {
+    "ariaLabel": "Korisnički izbornik",
+    "accountInfo": "Podaci o računu",
+    "logout": "Odjava"
+  },
+  "themeToggle": {
+    "ariaLabel": "Uključi/isključi tamni način"
+  },
+  "filters": {
+    "fromTime": "Od",
+    "toTime": "Do"
+  },
+  "dateTimeInput": {
+    "hourAriaSuffix": "sat"
+  },
+  "multiSelect": {
+    "selectAssets": "Odaberi imovinu...",
+    "searchAssetsPlaceholder": "Pretraži imovinu...",
+    "loadingAssets": "Učitavanje imovine...",
+    "failedToLoadAssets": "Učitavanje imovine nije uspjelo"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Odaberi jezik"
+  },
+  "login": {
+    "title": "Prijava",
+    "subtitle": "Dobrodošli! Prijavite se u sustav za upravljanje rezervacijama.",
+    "fields": {
+      "username": "Korisničko ime",
+      "password": "Lozinka"
+    },
+    "placeholders": {
+      "username": "Unesite korisničko ime",
+      "password": "Unesite lozinku"
+    },
+    "submit": "Prijava",
+    "loading": "Učitavanje...",
+    "registerCta": "Nemate račun? Registrirajte se ovdje.",
+    "errors": {
+      "invalidCredentials": "Pogrešno korisničko ime ili lozinka",
+      "serverError": "Greška na serveru."
+    }
+  }
+}

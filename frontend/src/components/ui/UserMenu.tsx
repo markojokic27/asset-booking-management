@@ -4,17 +4,19 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { useNavigate } from 'react-router-dom';
 import { ChevronDown } from '../icons/ChevronDown';
+import { useTranslation } from 'react-i18next';
 
 
 function UserMenu() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          aria-label="User menu"
+          aria-label={t('ui.userMenu.ariaLabel')}
           className="group flex items-center gap-1.5 text-gray-900 hover:cursor-pointer focus:outline-none dark:text-gray-100"
         >
           <AccountCircleOutlinedIcon sx={{ fontSize: 32}} />
@@ -32,7 +34,7 @@ function UserMenu() {
         >
           <span className="flex items-center gap-2">
             <VisibilityOutlinedIcon fontSize="small" />
-            <span className="text-sm">Account info</span>
+            <span className="text-sm">{t('ui.userMenu.accountInfo')}</span>
           </span>
         </DropdownMenu.Item>
 
@@ -44,7 +46,7 @@ function UserMenu() {
         >
             <span className="flex items-center gap-2">
                 <LogoutOutlinedIcon fontSize="small" />
-                <span className="text-sm">Logout</span>
+                <span className="text-sm">{t('ui.userMenu.logout')}</span>
             </span>
         </DropdownMenu.Item>
       </DropdownMenu.Content>

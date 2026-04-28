@@ -7,7 +7,7 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/v1/assets"
+  url: "{{baseUrl}}/v1/assets?page=1&size=10&sort=id,desc"
   params:
     - name: page
       value: "1"
@@ -18,10 +18,9 @@ http:
       type: query
       description: The size of the page to be returned
     - name: sort
-      value: "[]"
+      value: id,desc
       type: query
       description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
-      disabled: true
   auth: inherit
 
 runtime:

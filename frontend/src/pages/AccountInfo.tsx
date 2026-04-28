@@ -102,7 +102,7 @@ export default function AccountInfo() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
-      <div className="flex w-full items-center justify-between gap-6">
+      <div data-testid="account-heading" className="flex w-full items-center justify-between gap-6">
         <h1 className="text-3xl leading-11 font-black tracking-widest text-black dark:text-white">
           Account info
         </h1>
@@ -130,10 +130,10 @@ export default function AccountInfo() {
                 <p className="text-xs font-bold tracking-[0.18em] text-(--color-table-text) uppercase">
                   Profile
                 </p>
-                <h2 className="mt-2 text-xl font-bold text-black dark:text-white">
+                <h2 data-testid="account-fullname" className="mt-2 text-xl font-bold text-black dark:text-white">
                   {user.firstName} {user.lastName}
                 </h2>
-                <p className="mt-1 text-sm text-(--color-table-text)">
+                <p data-testid="account-email" className="mt-1 text-sm text-(--color-table-text)">
                   {user.email}
                 </p>
               </div>
@@ -161,7 +161,7 @@ export default function AccountInfo() {
                 <span className="text-sm font-semibold tracking-wide text-(--color-table-text)">
                   Role
                 </span>
-                <span
+                <span data-testid="account-role"
                   className={`inline-flex w-fit rounded-full px-2.5 py-1 text-xs font-semibold sm:ml-auto ${getRoleBadgeClass(user.role)}`}
                 >
                   {user.role}
@@ -172,7 +172,7 @@ export default function AccountInfo() {
                 <span className="text-sm font-semibold tracking-wide text-(--color-table-text)">
                   Status
                 </span>
-                <span
+                <span data-testid="account-status"
                   className={`inline-flex w-fit rounded-full px-2.5 py-1 text-xs font-semibold sm:ml-auto ${getStatusBadgeClass(user.status)}`}
                 >
                   {user.status}

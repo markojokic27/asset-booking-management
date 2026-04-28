@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,20 +21,33 @@ import com.example.assetbookingmanagement.R
 @Composable
 fun Header(
     title: String,
+    showBackArrow: Boolean = false,
+    onBackClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
             .statusBarsPadding()
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            if (showBackArrow) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_back_24),
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+
             Text(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,

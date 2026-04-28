@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DateTimeInput } from './DateTimeInput';
 import { SearchInput } from './SearchBar';
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 type Filters = {
   search: string;
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function FiltersBar({ filters, setFilters, showSearch = true, className }: Props) {
+  const { t } = useTranslation();
   const update = (partial: Partial<Filters>) => {
     setFilters((prev) => ({ ...prev, ...partial }));
   };
@@ -27,7 +29,7 @@ export function FiltersBar({ filters, setFilters, showSearch = true, className }
     <div className={twMerge("mt-6 grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3", className )}>
       <DateTimeInput
         id="from-date"
-        label="From time"
+        label={t('ui.filters.fromTime')}
         value={filters.fromDate}
         onChange={(v) => update({ fromDate: v })}
         hourValue={filters.fromHour}
@@ -37,7 +39,7 @@ export function FiltersBar({ filters, setFilters, showSearch = true, className }
 
       <DateTimeInput
         id="to-date"
-        label="To time"
+        label={t('ui.filters.toTime')}
         value={filters.toDate}
         onChange={(v) => update({ toDate: v })}
         hourValue={filters.toHour}

@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { Controller } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
+import { useTranslation } from 'react-i18next'
 
 export type MultiSelectOption = {
   value: string
@@ -33,6 +34,7 @@ export const MultiSelect = ({
   loading,
   error
 }: Props) => {
+  const { t } = useTranslation()
   const [open, setOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
 
@@ -90,7 +92,7 @@ export const MultiSelect = ({
               <div className="flex flex-wrap gap-2">
                 {selectedOptions.length === 0 && (
                   <span className="text-gray-400">
-                    Select assets...
+                    {t('ui.multiSelect.selectAssets')}
                   </span>
                 )}
 
@@ -122,7 +124,7 @@ export const MultiSelect = ({
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search assets..."
+                  placeholder={t('ui.multiSelect.searchAssetsPlaceholder')}
                   className="w-full border-b border-(--color-table-border) bg-transparent px-3 py-2 text-sm outline-none"
                   onClick={(e) => e.stopPropagation()}
                 />
@@ -132,13 +134,13 @@ export const MultiSelect = ({
 
                   {loading && (
                     <div className="px-3 py-3 text-sm text-gray-500">
-                      Loading assets...
+                      {t('ui.multiSelect.loadingAssets')}
                     </div>
                   )}
 
                   {!loading && error && (
                     <div className="px-3 py-3 text-sm text-red-500">
-                      Failed to load assets
+                      {t('ui.multiSelect.failedToLoadAssets')}
                     </div>
                   )}
 

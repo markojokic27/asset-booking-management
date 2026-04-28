@@ -6,6 +6,7 @@ import { Logo } from '../icons/Logo';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   MonitorSharp,
   DnsSharp,
@@ -16,11 +17,12 @@ import {
 } from '@mui/icons-material';
 
 export default function MobileMenu() {
+  const { t } = useTranslation();
   const links = [
-    { to: '/assets', label: 'Assets', icon: MonitorSharp },
-    { to: '/categories', label: 'Categories', icon: DnsSharp },
-    { to: '/bookings', label: 'Bookings', icon: CalendarTodaySharp },
-    { to: '/users', label: 'Users', icon: PeopleSharp },
+    { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharp },
+    { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharp },
+    { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharp },
+    { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharp },
   ];
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -42,8 +44,8 @@ export default function MobileMenu() {
 
         <Dialog.Content className="fixed top-0 left-0 z-50 flex h-full w-[calc(100vw-80px)] flex-col bg-(--color-surface) shadow-lg data-[state=closed]:animate-[slideOut_300ms_ease-in] data-[state=open]:animate-[slideIn_300ms_ease-out]">
           <VisuallyHidden.Root>
-            <Dialog.Title>Navigation menu</Dialog.Title>
-            <Dialog.Description>Main navigation</Dialog.Description>
+            <Dialog.Title>{t('layout.mobileMenu.title')}</Dialog.Title>
+            <Dialog.Description>{t('layout.mobileMenu.description')}</Dialog.Description>
           </VisuallyHidden.Root>
 
           <div className="flex w-full flex-col items-center gap-3 px-6 py-4">
@@ -74,7 +76,7 @@ export default function MobileMenu() {
                 className="flex w-full items-center justify-center gap-3 rounded-lg border border-(--color-table-border) py-3 text-lg font-medium"
               >
                 <AccountCircleSharp sx={{ fontSize: 26 }} />
-                Account
+                {t('layout.navbar.account')}
               </NavLink>
             </Dialog.Close>
 
@@ -84,7 +86,7 @@ export default function MobileMenu() {
                 className="w-full border-none bg-red-500 hover:bg-red-600"
               >
                 <LogoutSharp />
-                Logout
+                {t('layout.navbar.logout')}
               </Button>
             </Dialog.Close>
           </div>

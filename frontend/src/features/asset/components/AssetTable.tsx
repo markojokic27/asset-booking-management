@@ -72,7 +72,8 @@ export function AssetsTable({
         <div className="flex items-center gap-1">
           <IconButton
             type="button"
-            aria-label="View user"
+            data-testid="view-asset-button"
+            aria-label="View asset"
             onClick={() => onView(asset)}
           >
             <VisibilityOutlinedIcon
@@ -81,6 +82,7 @@ export function AssetsTable({
             />
           </IconButton>
           <IconButton
+            data-testid="edit-asset-button"
             type="button"
             aria-label="Edit user"
             disabled={asset.status === 'DELETED'}
@@ -92,7 +94,7 @@ export function AssetsTable({
               className="pointer-events-none"
             />
           </IconButton>
-          <IconButton type="button" variant="danger" aria-label="Delete user" disabled={asset.status === 'DELETED'}
+          <IconButton   data-testid="delete-asset-button" type="button" variant="danger" aria-label="Delete user" disabled={asset.status === 'DELETED'}
           >
             <DeleteOutlineIcon
               fontSize="small"

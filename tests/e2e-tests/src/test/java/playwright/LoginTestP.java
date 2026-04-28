@@ -14,12 +14,18 @@ public class LoginTestP {
     static Browser browser;
     Page page;
 
+    static String BASE_URL = System.getenv().getOrDefault("E2E_BASE_URL", "http://localhost:5173");
+
     @BeforeAll
     static void launchBrowser() {
         playwright = Playwright.create();
+
+        // headless false is needed for CI
+        boolean headless = !Boolean.parseBoolean(
+                System.getenv().getOrDefault("HEADED", "false"));
+
         browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(false)
-        );
+                new BrowserType.LaunchOptions().setHeadless(headless));
     }
 
     @AfterAll
@@ -39,7 +45,8 @@ public class LoginTestP {
 
     @Test
     void userCanLogin() {
-        page.navigate("http://localhost:5173/login");
+        // Fix: use BASE_URL instead of hardcoded localhost for CI
+        page.navigate(BASE_URL + "/login");
         page.locator("[data-testid='username']").fill("user_admin");
         page.locator("[data-testid='password']").fill("admin123");
         page.locator("[data-testid='login-button']").click();
@@ -49,7 +56,7 @@ public class LoginTestP {
 
     @Test
     void loginWithEmptyUsername() {
-        page.navigate("http://localhost:5173/login");
+        page.navigate(BASE_URL + "/login");
         page.locator("[data-testid='password']").fill("admin123");
         page.locator("[data-testid='login-button']").click();
         assertThat(page).hasURL(Pattern.compile(".*/login.*"));
@@ -88,4 +95,3 @@ public class LoginTestP {
         assertThat(page).hasURL(Pattern.compile(".*/login.*"));
     }
 }
-

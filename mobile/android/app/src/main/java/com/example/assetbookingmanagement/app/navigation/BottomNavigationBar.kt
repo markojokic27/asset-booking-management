@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.assetbookingmanagement.R
@@ -60,6 +61,17 @@ fun isBottomNavRoute(route: String?): Boolean {
     return bottomNavItems.any { it.route == route }
 }
 
+fun NavHostController.navigateTopLevel(route: String) {
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController
@@ -93,13 +105,7 @@ fun BottomNavigationBar(
                 NavigationBarItem(
                     selected = selected,
                     onClick = {
-                        navController.navigate(item.route) {
-                            popUpTo(Routes.HOME) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigateTopLevel(item.route)
                     },
                     icon = {
                         Icon(

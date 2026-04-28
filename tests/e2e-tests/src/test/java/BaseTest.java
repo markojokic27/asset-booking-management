@@ -65,6 +65,6 @@ public class BaseTest {
         usernameInput.sendKeys("user_admin");
         driver.findElement(By.cssSelector("[data-testid='password']")).sendKeys("admin123");
         driver.findElement(By.cssSelector("[data-testid='login-button']")).click();
-        wait.until(ExpectedConditions.urlToBe("http://localhost:5173/assets"));
+        wait.until(ExpectedConditions.urlToBe("http://localhost:5173/bookings"));
     }
 }

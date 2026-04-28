@@ -125,6 +125,11 @@ export const UsersTable = ({
       data={data}
       columns={columns}
       getRowKey={(user) => String(user.id)}
+      rowClassName={(user) =>
+        user.status === 'DELETED'
+          ? 'opacity-50 text-(--color-table-head-text) hover:bg-transparent'
+          : undefined
+      }
       className="w-full"
       emptyMessage={emptyMessage}
     />

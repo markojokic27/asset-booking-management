@@ -10,7 +10,7 @@ public class LoginTest extends BaseTest {
     @Test
     void UserCanLogin() {
         login(); 
-        assertEquals("http://localhost:5173/assets", driver.getCurrentUrl());
+        assertEquals("http://localhost:5173/bookings", driver.getCurrentUrl());
     }
 
     @Test

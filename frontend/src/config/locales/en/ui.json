@@ -1,0 +1,66 @@
+{
+  "modal": {
+    "dialogAria": "Dialog"
+  },
+  "deleteModal": {
+    "defaultTitle": "Delete item?",
+    "defaultDescription": "Are you sure you want to delete \"{{name}}\"?",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete"
+  },
+  "pagination": {
+    "ariaLabel": "Pagination",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "table": {
+    "emptyMessage": "No data available."
+  },
+  "search": {
+    "byNamePlaceholder": "Search by name...",
+    "assetsPlaceholder": "Search assets..."
+  },
+  "userMenu": {
+    "ariaLabel": "User menu",
+    "accountInfo": "Account info",
+    "logout": "Logout"
+  },
+  "themeToggle": {
+    "ariaLabel": "Toggle dark mode"
+  },
+  "filters": {
+    "fromTime": "From time",
+    "toTime": "To time"
+  },
+  "dateTimeInput": {
+    "hourAriaSuffix": "hour"
+  },
+  "multiSelect": {
+    "selectAssets": "Select assets...",
+    "searchAssetsPlaceholder": "Search assets...",
+    "loadingAssets": "Loading assets...",
+    "failedToLoadAssets": "Failed to load assets"
+  },
+  "languageSwitcher": {
+    "selectLanguage": "Select language"
+  },
+  "login": {
+    "title": "Login",
+    "subtitle": "Welcome to log in to your asset booking management",
+    "fields": {
+      "username": "Username",
+      "password": "Password"
+    },
+    "placeholders": {
+      "username": "Enter your username",
+      "password": "Enter your password"
+    },
+    "submit": "Login",
+    "loading": "Loading...",
+    "registerCta": "Don't have an account? Register here.",
+    "errors": {
+      "invalidCredentials": "Wrong username or password",
+      "serverError": "Server error."
+    }
+  }
+}

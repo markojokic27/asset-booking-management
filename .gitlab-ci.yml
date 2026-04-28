@@ -14,7 +14,7 @@ variables:
   DOCKER_HOST: tcp://docker:2375      # non-TLS port
   DOCKER_TLS_CERTDIR: ""              # TLS disabled
   #SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  
 
 
 
@@ -109,6 +109,88 @@ frontend:test:
       - frontend/node_modules/
 
 
+# playwright:test:
+#   stage: test
+#   image: mcr.microsoft.com/playwright/java:v1.59.0-jammy
+#   needs:
+#     - job: backend:compile
+#       artifacts: true
+#     - job: frontend:compile
+#       artifacts: true
+#   services:
+#     - name: postgres:18
+#       alias: postgres
+#   variables:
+#     E2E_BASE_URL: "http://localhost:5173"
+#     HEADED: "false"
+#     POSTGRES_DB: asset_mgm
+#     POSTGRES_USER: asset_mgm_user
+#     POSTGRES_PASSWORD: $BRUNO_DB_PASSWORD
+#     DB_HOST: postgres
+#     DB_PORT: "5432"
+#     DB_NAME: asset_mgm
+#     DB_USER: asset_mgm_user
+#     DB_PASSWORD: $BRUNO_DB_PASSWORD
+#     JWT_SECRET: $BRUNO_JWT_SECRET
+#     JWT_EXPIRY_SECONDS: "3600"
+#     JWT_REFRESH_SECONDS: "86400"
+#   before_script:
+#     - apt-get update -qq && apt-get install -y maven nodejs npm curl > /dev/null 2>&1
+#     - npm install -g serve --silent > /dev/null 2>&1
+#   script:
+#     # Start backend
+#     - cd backend
+#     - mvn -q spring-boot:run \
+#       -Dspring-boot.run.profiles=dev \
+#       -Dmaven.repo.local=.m2/repository \
+#       -Dspring-boot.run.jvmArguments="-Dlogging.level.root=WARN" \
+#       > /tmp/backend.log 2>&1 &
+#     - echo $! > /tmp/backend.pid
+#     - cd ..
+
+#     # Wait for backend
+#     - |
+#       for i in $(seq 1 40); do
+#         STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health || echo "000")
+#         if [ "$STATUS" = "200" ] || [ "$STATUS" = "403" ]; then
+#           echo "Backend is up (HTTP $STATUS)."
+#           break
+#         fi
+#         echo "Not ready (status $STATUS), retry $i/40..."
+#         sleep 3
+#       done
+
+#     # Serve frontend from built dist/
+#     - serve frontend/dist -p 5173 &
+#     - sleep 3
+#     - echo "Frontend is up."
+
+#     # Install Playwright browsers (chromium only, already in MCR image)
+#     - cd tests/e2e-tests
+#     - mvn -q exec:java -e \
+#       -Dexec.mainClass=com.microsoft.playwright.CLI \
+#       -Dexec.args="install chromium"
+
+#     # Run only Playwright tests (not Selenium)
+#     - mvn test -Dtest="playwright.*"
+#         -DE2E_BASE_URL=$E2E_BASE_URL
+#         -DHEADED=$HEADED
+
+#   after_script:
+#     - kill $(cat /tmp/backend.pid) 2>/dev/null || true
+
+#   artifacts:
+#     when: always
+#     reports:
+#       junit: tests/e2e-tests/target/surefire-reports/TEST-*.xml
+#     paths:
+#       - tests/e2e-tests/target/surefire-reports/
+
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "develop"
+#     - if: $CI_COMMIT_BRANCH == "main"
+
+
 # ─────────────────────────────────────────
 # SECURITY STAGE
 # ─────────────────────────────────────────
@@ -169,7 +251,7 @@ bruno:smoke:
   stage: bruno
   image: node:24-alpine
   services:
-    - name: postgres:16-alpine
+    - name: postgres:18
       alias: postgres
   variables:
     BRUNO_BASE_URL: "http://localhost:8080/API"
@@ -190,8 +272,10 @@ bruno:smoke:
     JWT_REFRESH_SECONDS: "86400"
 
   before_script:
-    - apk add --no-cache openjdk21-jre maven curl
-    - npm install -g @usebruno/cli
+    # - apk add --no-cache openjdk21-jre maven curl
+    # - npm install -g @usebruno/cli
+    - apk add --no-cache --quiet openjdk21-jre maven curl > /dev/null 2>&1
+    - npm install -g @usebruno/cli --silent
 
   script:
     - cd backend
@@ -224,18 +308,24 @@ bruno:smoke:
     - |
       bru run \
         --env-file "${BRUNO_ENV_FILE}" \
-        --reporter-junit "../../../bruno-smoke-results.xml"
+        --reporter-junit ./bruno-smoke-results.xml
 
   after_script:
-    - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
-    - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+    # - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
+    # - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+    - echo "=== BACKEND LOG (INFO+ only) ==="
+    # - grep -E " (INFO|WARN|ERROR) " /tmp/backend.log || true
+    - awk '/ INFO / {print "\033[32m" $0 "\033[0m"} / WARN / {print "\033[33m" $0 "\033[0m"} / ERROR / {print "\033[31m" $0 "\033[0m"}' /tmp/backend.log || true
+    - kill $(cat /tmp/backend.pid) 2>/dev/null || true
+
+  
 
   artifacts:
     when: always
     reports:
-      junit: tests/api-tests/bruno/bruno-smoke-results.xml
+      junit: tests/api-tests/bruno/Testing/bruno-smoke-results.xml
     paths:
-      - tests/api-tests/bruno/bruno-smoke-results.xml
+      - tests/api-tests/bruno/Testing/bruno-smoke-results.xml
   allow_failure: true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -249,6 +339,8 @@ bruno:smoke:
 # sonar:
 #   stage: sonar
 #   image: maven:3.9-eclipse-temurin-21
+#   variables:
+#   GIT_DEPTH: "0"    #for analytics
       
 #   script: 
 #     - cd backend

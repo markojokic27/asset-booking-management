@@ -1,13 +1,13 @@
 package de.bdr.asset.management.user;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * JPA User Repository
@@ -28,6 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph(attributePaths = {"department"})
     Optional<User> findById(Long id);
+
+    @EntityGraph(attributePaths = {"department"})
+    Optional<User> findByIdAndStatusIn(Long id, Collection<UserStatusEnum> statuses);
 
     @EntityGraph(attributePaths = {"department"})
     Page<User> findAll(Pageable pageable);

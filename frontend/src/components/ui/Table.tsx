@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 export type TableColumn<T> = {
   key: React.Key;
@@ -52,8 +53,10 @@ export function Table<T>({
   getRowKey,
   className,
   rowClassName,
-  emptyMessage = 'No data available.',
+  emptyMessage,
 }: TableProps<T>) {
+  const { t } = useTranslation();
+  const resolvedEmptyMessage = emptyMessage ?? t('ui.table.emptyMessage');
   return (
     <div className={twMerge(tableContainerClassName, className)}>
       <div className="overflow-x-auto">
@@ -109,7 +112,7 @@ export function Table<T>({
                     'py-8 text-center text-(--color-table-head-text)'
                   )}
                 >
-                  {emptyMessage}
+                  {resolvedEmptyMessage}
                 </td>
               </tr>
             )}
