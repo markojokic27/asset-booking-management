@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,14 +146,50 @@ public class BookingServiceImpl implements BookingService {
      * @return a list of BookingResponseDTO records
      */
     @Override
-    public Page<BookingResponseDTO> getAllBookings(Pageable pageable) {
+    public Page<BookingResponseDTO> getAllBookings(BookingFilter filter, Pageable pageable) {
 
         log.debug("Fetching bookings from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );
 
-        Page<Booking> bookings = repository.findAll(pageable);
+        Specification<Booking> spec = Specification.where((root, query, cb) -> cb.conjunction());
+
+        if (filter.getStatus() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.equal(root.get("status"), filter.getStatus()));
+        }
+
+        if (filter.getUserId() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("user").get("id"), filter.getUserId()));
+        }
+
+        if (filter.getAssetId() != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("asset").get("id"), filter.getAssetId()));
+        }
+
+        if (filter.getBookingStart() != null) {
+            Instant start = filter.getBookingStart()
+                .atStartOfDay(clock.getZone())
+                .toInstant();
+
+            spec = spec.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.get("bookingStart"), start));
+        }
+
+        if (filter.getBookingEnd() != null) {
+            Instant end = filter.getBookingEnd()
+                .plusDays(1)
+                .atStartOfDay(clock.getZone())
+                .toInstant();
+
+            spec = spec.and((root, query, cb) ->
+                cb.lessThan(root.get("bookingEnd"), end));
+        }
+
+        Page<Booking> bookings = repository.findAll(spec, pageable);
 
         log.info("Successfully fetched {} bookings", bookings.getNumberOfElements());
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.asset.AssetRepository;
@@ -171,16 +173,17 @@ class BookingServiceImplTest {
         BookingResponseDTO response = BookingServiceImplTestData.response();
 
         Pageable pageable = PageRequest.of(0, 10);
+        BookingFilter filter = new BookingFilter();
         Page<Booking> bookingPage = new PageImpl<>(java.util.List.of(booking));
 
-        when(repository.findAll(pageable)).thenReturn(bookingPage);
+        when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(bookingPage);
         when(mapper.toResponse(booking)).thenReturn(response);
 
-        Page<BookingResponseDTO> result = service.getAllBookings(pageable);
+        Page<BookingResponseDTO> result = service.getAllBookings(filter, pageable);
 
         assertEquals(1, result.getTotalElements());
 
-        verify(repository).findAll(pageable);
+        verify(repository).findAll(any(Specification.class), eq(pageable));
     }
 
     // Tests updateBooking(): booking exists, user and asset exist, update saved

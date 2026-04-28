@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -88,6 +89,7 @@ public class BookingController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<BookingResponseDTO>> getAll(
+            @ModelAttribute BookingFilter filter,
             @ParameterObject Pageable pageable
     ) throws IllegalArgumentException
     {
@@ -96,7 +98,7 @@ public class BookingController {
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );
 
-        Page<BookingResponseDTO> allBookings = service.getAllBookings(pageable);
+        Page<BookingResponseDTO> allBookings = service.getAllBookings(filter, pageable);
 
         log.debug("Successfully processed GET request for all booking");
 

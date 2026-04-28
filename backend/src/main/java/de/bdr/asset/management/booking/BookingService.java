@@ -1,10 +1,10 @@
 package de.bdr.asset.management.booking;
 
-import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
+import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 
 /**
@@ -17,7 +17,7 @@ public interface BookingService {
 
     /** READ */
     BookingResponseDTO getBookingById(Long id);
-    Page<BookingResponseDTO> getAllBookings(Pageable pageable);
+    Page<BookingResponseDTO> getAllBookings(BookingFilter filter, Pageable pageable);
 
     /** UPDATE */
     BookingResponseDTO updateBooking(Long id, BookingUpdateDTO bookingRequest);

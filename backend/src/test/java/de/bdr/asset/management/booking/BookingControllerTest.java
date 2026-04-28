@@ -55,10 +55,10 @@ public class BookingControllerTest {
         List<BookingResponseDTO> list = List.of(response);
         Page<BookingResponseDTO> page = new PageImpl<>(list);
 
-        when(bookingService.getAllBookings(any(Pageable.class))).thenReturn(page);
+        when(bookingService.getAllBookings(any(BookingFilter.class), any(Pageable.class))).thenReturn(page);
 
         ResponseEntity<Page<BookingResponseDTO>> result =
-                bookingController.getAll(PageRequest.of(0, 10));
+                bookingController.getAll(new BookingFilter(), PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assert(result.getBody() != null);
