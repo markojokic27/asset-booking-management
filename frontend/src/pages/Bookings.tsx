@@ -29,7 +29,6 @@ export default function Bookings() {
   const [selectedAsset, setSelectedAsset] = useState<AssetDto | null>(null);
   const [openBookingModal, setOpenBookingModal] = useState(false);
 
-
   React.useEffect(() => {
     const fetchData = async () => {
       try {

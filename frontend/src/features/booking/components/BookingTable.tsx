@@ -1,6 +1,10 @@
+// Components
 import { Table, type TableColumn } from '../../../components/ui/Table';
-import { type AssetDto } from '../../asset/types';
 import { Button } from '../../../components/ui/Button';
+
+// Types
+import { type AssetDto } from '../../asset/types';
+
 
 type Props = {
   assets: AssetDto[];
