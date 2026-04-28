@@ -9,7 +9,7 @@ export type Booking = {
   bookingStart: Date;
   bookingEnd: Date;
   status: BookingStatus;
-  note?: string;
+  notes?: string;
   createdAt: Date;
   lastModifiedAt: Date;
 };

@@ -2,14 +2,8 @@ import * as React from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import type { AssetDto } from '../types';
-
-type AssetBooking = {
-  id: string;
-  assetId: string;
-  user: string;
-  dateFrom: Date;
-  dateTo: Date;
-};
+import type { BookingDto } from '../../booking/types';
+import { getAllAssetBookings } from '../../booking/api/bookingApi';
 
 export type BookingsModalProps = {
   isOpen: boolean;
@@ -22,26 +16,65 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
   onClose,
   asset,
 }) => {
+  const [bookings, setBookings] = React.useState<BookingDto[]>([]);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+
+  React.useEffect(() => {
+    if (!isOpen || !asset) return;
+
+    const fetchBookings = async () => {
+      try {
+        setLoading(true);
+        setError('');
+
+        const data = await getAllAssetBookings(0, 10, asset.id);
+        setBookings(data.content);
+      } catch (error) {
+        console.error(error);
+        setError('Failed to load bookings.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
+  }, [isOpen, asset?.id]);
+
   if (!isOpen || !asset) return null;
 
-  const bookingColumns: TableColumn<AssetBooking>[] = [
+  const bookingColumns: TableColumn<BookingDto>[] = [
     {
       key: 'id',
       header: 'Booking ID',
       accessor: 'id',
     },
+    // booking treba mapirati username preko id-a ili da BE vrati i username
     {
       key: 'user',
       header: 'User',
-      accessor: 'user',
+      render: (booking) => booking.userId,
     },
     {
       key: 'dates',
       header: 'Date',
       render: (booking) =>
-        `${booking.dateFrom.toLocaleDateString()} - ${booking.dateTo.toLocaleDateString()}`,
+        `${new Date(booking.bookingStart).toLocaleDateString()} - ${new Date(
+          booking.bookingEnd
+        ).toLocaleDateString()}`,
+    },
+    {
+      key: 'notes',
+      header: 'Note',
+      accessor: 'notes',
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      accessor: 'status',
     },
   ];
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -55,6 +88,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
               {asset.name}
             </p>
           </div>
+
           <button
             type="button"
             onClick={onClose}
@@ -65,13 +99,25 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
           </button>
         </div>
 
-        <Table
-          data={[]}
-          columns={bookingColumns}
-          getRowKey={(booking) => booking.id}
-          className="w-full"
-          emptyMessage="No bookings for this asset."
-        />
+        {loading && (
+          <p className="py-6 text-sm text-(--color-table-head-text)">
+            Loading bookings...
+          </p>
+        )}
+
+        {error && !loading && (
+          <p className="py-6 text-sm text-red-500">{error}</p>
+        )}
+
+        {!loading && !error && (
+          <Table
+            data={bookings}
+            columns={bookingColumns}
+            getRowKey={(booking) => booking.id}
+            className="w-full"
+            emptyMessage="No bookings for this asset."
+          />
+        )}
       </div>
     </div>
   );
