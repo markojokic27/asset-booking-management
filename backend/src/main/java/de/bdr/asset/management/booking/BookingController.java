@@ -50,7 +50,7 @@ public class BookingController {
     /** CREATE */
     @Operation(summary = "Create a booking", description = "Only available to authenticated users.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("@benefitEvaluator.canBook(authentication, #request.assetId)")
     @PostMapping
     public ResponseEntity<BookingResponseDTO> create(
             @Valid @RequestBody BookingCreateDTO request

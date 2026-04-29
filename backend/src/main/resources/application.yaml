@@ -65,7 +65,12 @@ jwt:
 
 benefit:
   default-benefits:
-    - ALL
+    - LAPTOP
+    - PARKING
+    - BOOK
+    - DESK
+    - MEETING_ROOM
+    - IT_EQUIPMENT
   benefit-delimiter: ";"
 
 management:

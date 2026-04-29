@@ -50,6 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Only set authentication if we have a username and no authentication yet.
             // This avoids overwriting existing authentication (e.g., from another filter).
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (tokenProvider.isValid(token, userDetails)) {
@@ -71,4 +72,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
+
 }
