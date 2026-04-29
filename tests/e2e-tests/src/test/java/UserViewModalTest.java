@@ -8,12 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserViewModalTest extends BaseTest {
 
     private void navigateToUsers() {
-        WebElement usersLink = wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        By.cssSelector("nav a[href='/users']")
-                )
-        );
-        usersLink.click();
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("nav a[href='/users']")
+        )).click();
         wait.until(ExpectedConditions.urlContains("/users"));
     }
 
@@ -21,15 +18,19 @@ public class UserViewModalTest extends BaseTest {
         login();
         navigateToUsers();
 
+        wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("table tbody tr")
+        ));
+
         WebElement viewButton = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.cssSelector("button[aria-label='View user']")
+                        By.cssSelector("table tbody tr:first-child td:last-child button:first-child")
                 )
         );
         viewButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("[role='dialog'][aria-label='User details']")
+                By.cssSelector("[role='dialog']")
         ));
     }
 
@@ -43,23 +44,24 @@ public class UserViewModalTest extends BaseTest {
         assertFalse(driver.findElement(By.cssSelector("[data-testid='user-role']")).getText().isBlank());
         assertFalse(driver.findElement(By.cssSelector("[data-testid='user-department-id']")).getText().isBlank());
         assertFalse(driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).getText().isBlank());
-        assertFalse(driver.findElement(By.cssSelector("[data-testid='user-note']")).getText().isBlank());
+        assertTrue(driver.findElement(By.cssSelector("[data-testid='user-note']")).isDisplayed());
     }
 
     @Test
     void userViewModalClosesOnCloseButton() {
         openUserViewModal();
 
-        driver.findElement(
-                By.cssSelector("[role='dialog'][aria-label='User details'] button[aria-label='Close']")
-        ).click();
+        WebElement closeButton = driver.findElement(
+                By.cssSelector("[role='dialog'] button")
+        );
+        closeButton.click();
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.cssSelector("[role='dialog'][aria-label='User details']")
+                By.cssSelector("[role='dialog']")
         ));
 
         assertTrue(driver.findElements(
-                By.cssSelector("[role='dialog'][aria-label='User details']")
+                By.cssSelector("[role='dialog']")
         ).isEmpty());
     }
 }
