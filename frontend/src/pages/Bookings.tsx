@@ -123,8 +123,12 @@ export default function Bookings() {
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
-
-      <FiltersBar filters={filters} setFilters={setFilters} />
+      {/*TODO optimize*/}
+      <FiltersBar
+        filters={filters}
+        setFilters={setFilters}
+        variant={selectedCategoryId === null ? 'DAY' : 'HOUR'}
+      />
 
       {loading ? (
         <div className="mt-6">Loading...</div>

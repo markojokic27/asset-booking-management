@@ -30,7 +30,8 @@
   },
   "filters": {
     "fromTime": "From time",
-    "toTime": "To time"
+    "toTime": "To time",
+    "date": "Date"
   },
   "dateTimeInput": {
     "hourAriaSuffix": "hour"

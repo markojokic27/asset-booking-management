@@ -30,7 +30,8 @@
   },
   "filters": {
     "fromTime": "Od",
-    "toTime": "Do"
+    "toTime": "Do",
+    "date": "Datum"
   },
   "dateTimeInput": {
     "hourAriaSuffix": "sat"

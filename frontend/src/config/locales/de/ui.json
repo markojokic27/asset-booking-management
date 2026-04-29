@@ -30,7 +30,8 @@
   },
   "filters": {
     "fromTime": "Von",
-    "toTime": "Bis"
+    "toTime": "Bis",
+    "date": "Datum"
   },
   "dateTimeInput": {
     "hourAriaSuffix": "Uhr"
