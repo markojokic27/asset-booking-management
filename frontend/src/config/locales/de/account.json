@@ -1,0 +1,35 @@
+{
+  "heading": "Kontoinfo",
+  "loading": "Benutzerdaten werden geladen...",
+  "error": "Benutzerdaten konnten nicht geladen werden.",
+  "empty": "Keine Benutzerdaten verfügbar.",
+  "common": {
+    "emptyValue": "-"
+  },
+  "sections": {
+    "profile": "Profil",
+    "workDetails": "Arbeitsdetails",
+    "accountDetails": "Kontodetails"
+  },
+  "labels": {
+    "id": "ID",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "role": "Rolle",
+    "status": "Status",
+    "department": "Abteilung",
+    "managerEmail": "E-Mail des Vorgesetzten",
+    "notes": "Notizen"
+  },
+  "role": {
+    "admin": "Administrator",
+    "manager": "Manager",
+    "employee": "Mitarbeiter"
+  },
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
+  }
+}

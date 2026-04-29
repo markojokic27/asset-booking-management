@@ -1,0 +1,35 @@
+{
+  "heading": "Account info",
+  "loading": "Loading user data...",
+  "error": "Failed to load user data.",
+  "empty": "No user data available.",
+  "common": {
+    "emptyValue": "-"
+  },
+  "sections": {
+    "profile": "Profile",
+    "workDetails": "Work details",
+    "accountDetails": "Account details"
+  },
+  "labels": {
+    "id": "ID",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "department": "Department",
+    "managerEmail": "Manager email",
+    "notes": "Notes"
+  },
+  "role": {
+    "admin": "Admin",
+    "manager": "Manager",
+    "employee": "Employee"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  }
+}

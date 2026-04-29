@@ -1,0 +1,35 @@
+{
+  "heading": "Podaci o računu",
+  "loading": "Učitavanje podataka o korisniku...",
+  "error": "Neuspješno učitavanje podataka o korisniku.",
+  "empty": "Nema dostupnih podataka o korisniku.",
+  "common": {
+    "emptyValue": "-"
+  },
+  "sections": {
+    "profile": "Profil",
+    "workDetails": "Radni podaci",
+    "accountDetails": "Podaci o računu"
+  },
+  "labels": {
+    "id": "ID",
+    "firstName": "Ime",
+    "lastName": "Prezime",
+    "username": "Korisničko ime",
+    "email": "E-mail",
+    "role": "Uloga",
+    "status": "Status",
+    "department": "Odjel",
+    "managerEmail": "E-mail voditelja",
+    "notes": "Napomene"
+  },
+  "role": {
+    "admin": "Administrator",
+    "manager": "Voditelj",
+    "employee": "Zaposlenik"
+  },
+  "status": {
+    "active": "Aktivan",
+    "inactive": "Neaktivan"
+  }
+}
