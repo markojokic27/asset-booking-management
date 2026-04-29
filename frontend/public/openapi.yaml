@@ -1,10 +1,8 @@
-#TEST2
-openapi: "3.1.0"
+openapi: 3.1.0
 info:
-  version: 1.0.0
-  title: Asset Booking Manager
-  description:
-    "The Asset Booking Manager API allows users to discover, reserve, and manage
+  title: Asset Booking Management
+  description: "This is the OpenAPI documentation for documenting and testing endpoints of the Asset Booking Management Project.
+    \ The Asset Booking Manager API allows users to discover, reserve, and manage
     \ shared assets such as meeting rooms, vehicles, devices, and other equipment
     \ within an organization. It exposes endpoints for searching assets by type
     \ and availability, creating and updating reservations, and enforcing booking
@@ -12,1245 +10,2526 @@ info:
     \ integrate this API into internal portals or mobile apps to streamline
     \ scheduling, prevent double-bookings, and improve overall asset utilization
     \ through centralized, auditable booking workflows."
+  contact:
+    name: Mladen Banović
+    url: https://www.maurer-electronics.hr/
+    email: mladen.banovic@maurer-electronics.hr
+  version: "1.0"
 servers:
-  - url: http://demoVM.swagger.io/v1
-security:
-  - bearerAuth: []
+- url: http://127.0.0.1:8080/
+  description: Development
+tags:
+- name: Assets
+  description: Endpoints for Assets. AssetController
+- name: Authentication
+  description: Endpoints for Authentication. AuthController
+- name: Departments
+  description: Endpoints for Departments. DepartmentController
+- name: Asset Categories
+  description: Endpoints for Asset Categories. AssetCategoryController
+- name: Users
+  description: Endpoints for Users. UserController
+- name: Bookings
+  description: Endpoints for Bookings. BookingController
 paths:
-  /v1/users:
-    get:
-      summary: Get all Users
-      tags:
-        - Users
-      parameters:
-        - name: pageNumber
-          in: query
-          description: The page number to return
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-        - name: perPage       # limit
-          in: query
-          description: The number of items to return per Page
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 150
-            default: 10
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/UsersResponse"
-              examples:
-                Users:
-                  $ref: "#/components/examples/UsersResponseExample"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    post:
-      summary: Create a user
-      tags:
-        - Users
-      description: Access restricted to Admin only.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserRequest"
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/UserResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /v1/users/{id}:
-    get:
-      summary: Get User by ID
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          description: ID of the user
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    put:
-      summary: Update User
-      description: Access restricted to Admin only.
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          description: ID of the user
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserRequest"
-      responses:
-        '200':
-          description: User updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-              examples:
-                User Response:
-                  $ref: '#/components/examples/SingleUserExample'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    patch:
-      summary: Soft delete
-      description: Use this to deactivate a user by setting status to INACTIVE.
-      tags:
-        - Users
-      parameters:
-        - name: id
-          in: path
-          description: ID of the user
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-        - name: status
-          in: query
-          description: "Set status to INACTIVE"
-          required: true
-          schema:
-            type: string
-            enum:
-              - INACTIVE
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                note:
-                  type: string
-                  maxLength: 256
-            examples:
-              DeactivateUserExample:
-                summary: Soft delete (deactivate) user
-                value:
-                  note: "Left company or temporarly absent"
-      responses:
-        '200':
-          description: User updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserResponse'
-              examples:
-                User Response:
-                  $ref: '#/components/examples/SingleUserExample'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /v1/departments:
-    get:
-      summary: Get all Departments
-      tags:
-        - Departments
-      parameters:
-        - name: pageNumber
-          in: query
-          description: The page number to return
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-        - name: perPage
-          in: query
-          description: The number of items to return per page
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 150
-            default: 10
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DepartmentsResponse'
-              examples:
-                Departments:
-                  $ref: '#/components/examples/DepartmentsResponseExample'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    post:
-      summary: Create Department
-      description: Access restricted to Admin only.
-      tags:
-        - Departments
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DepartmentRequest'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DepartmentResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
   /v1/departments/{id}:
     get:
-      summary: Get Department by ID
       tags:
-        - Departments
+      - Departments
+      summary: Read department by ID
+      description: Available to anyone.
+      operationId: getById
       parameters:
-        - name: id
-          in: path
-          description: ID of the department
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
-        '200':
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
           description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/DepartmentResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-        '404':
-          $ref: '#/components/responses/NotFound'
-
+                $ref: "#/components/schemas/DepartmentResponseDTO"
     put:
-      summary: Update Department
-      description: Access restricted to Admin and Manager
       tags:
-        - Departments
+      - Departments
+      summary: Update department details
+      description: "Only available to users with role: ADMIN."
+      operationId: update
       parameters:
-        - name: id
-          in: path
-          description: ID of the department
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      requestBody:
+      - name: id
+        in: path
         required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DepartmentRequest'
+              $ref: "#/components/schemas/DepartmentRequestDTO"
+        required: true
       responses:
-        '200':
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
           description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: '#/components/schemas/DepartmentResponse'
-              examples:
-                Department:
-                  $ref: "#/components/examples/DepartmentResponseExample"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-        '404':
-          description: Department not found
-          $ref: '#/components/responses/NotFound'
-  /v1/asset-categories:
-    get:
-      summary: Get all Asset Categories
-      tags:
-        - Asset Categories
-      parameters:
-        - name: pageNumber
-          in: query
-          description: The page number to return
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-        - name: perPage
-          in: query
-          description: The number of items to return per page
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 150
-            default: 10
-      responses:
-        '200':
-          description: Get all asset categories
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetCategoriesResponse'
-              examples:
-                AssetCategories:
-                  $ref: '#/components/examples/AssetCategoriesResponseExample'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    post:
-      summary: Create Asset Category
-      description: Access restricted to Admin only.
-      tags:
-        - Asset Categories
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssetCategoryRequest'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetCategoryResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /v1/asset-categories/{id}:
-    get:
-      summary: Get Asset Category by ID
-      tags:
-        - Asset Categories
-      parameters:
-        - name: id
-          in: path
-          description: ID of the asset category
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetCategoryResponse'
-              examples:
-                AssetCategory:
-                  $ref: '#/components/examples/AssetCategoryResponseExample'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-        '404':
-          $ref: '#/components/responses/NotFound'
-
-    put:
-      summary: Update Asset Category
-      description: Access restricted for Admin only.
-      tags:
-        - Asset Categories
-      parameters:
-        - name: id
-          in: path
-          description: ID of the asset category
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AssetCategoryRequest'
-      responses:
-        '200':
-          description: Asset category updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetCategoryResponse'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-# Delete asset categorry or soft delete (mark status as inactive)
+                $ref: "#/components/schemas/DepartmentResponseDTO"
+      security:
+      - Bearer Authentication: []
     delete:
-      summary: Delete Asset Category
-      description: Access restricted for Admin only.
       tags:
-        - Asset Categories
+      - Departments
+      summary: Soft delete department
+      description: "Only available to users with role: ADMIN."
+      operationId: delete
       parameters:
-        - name: id
-          in: path
-          description: ID of the asset category
-          required: true
-          schema:
-            type: integer
-            format: int64
-            minimum: 1
-      responses:
-        '204':
-          description: Deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetCategoryResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-        '404':
-          description: Asset category not found
-          $ref: '#/components/responses/NotFound'
-
-  /v1/assets:
-    get:
-      summary: Get all Assets 
-      tags:
-        - Assets
-      parameters:
-        - name: pageNumber
-          in: query
-          description: The page number to return
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-        - name: perPage       # limit
-          in: query
-          description: The number of items to return per Page
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 150
-            default: 10
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/AssetsResponse"
-              examples:
-                Assets:
-                  $ref: "#/components/examples/AssetsResponseExample"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    post:
-      summary: Create new Asset
-      description: Access restricted for Admin only.
-      tags:
-        - Assets
-      requestBody:
+      - name: id
+        in: path
         required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AssetRequest"
+        schema:
+          type: integer
+          format: int64
       responses:
-        '201':
-          description: Created
+        "409":
+          description: Conflict
           content:
-            application/json:    
+            application/problem+json:
               schema:
-                $ref: "#/components/schemas/AssetResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /v1/assets/{id}:
-    get:
-      summary: Get Asset by id
-      tags:
-        - Assets
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      responses:
-        '200':
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AssetResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-    put:
-      summary: Update Asset
-      description: Access restricted for Admin only.
-      tags:
-        - Assets
-      parameters:
-        - $ref: '#/components/parameters/IdParam'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AssetRequest"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AssetResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
-  /v1/bookings:
-    get:
-      summary: Get all Bookings 
-      tags:
-        - Bookings 
-      parameters:
-        - name: pageNumber
-          in: query
-          description: The page number to return
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-        - name: perPage       # limit
-          in: query
-          description: The number of items to return per Page
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 150
-            default: 10
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/BookingsResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    post:
-      summary: Create new Booking
-      tags:
-        - Bookings
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                assetId:
-                  $ref: "#/components/schemas/Id"
-                note:
-                  type: string
-                  minLength: 2
-                  maxLength: 256
-                bookingStart:
-                  type: string
-                  format: date-time
-                bookingEnd:
-                  type: string
-                  format: date-time
-              required:
-                - assetId
-                - bookingStart
-                - bookingEnd
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:    
-              schema:
-                $ref: "#/components/schemas/BookingResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-        default:
-          description: Unexpected error
-
+      security:
+      - Bearer Authentication: []
   /v1/bookings/{id}:
     get:
-      summary: Get Booking by id
       tags:
-        - Bookings
+      - Bookings
+      summary: Read booking by ID
+      description: Only available to authenticated users.
+      operationId: getById_1
       parameters:
-        - $ref: '#/components/parameters/IdParam'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
-        '200':
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
           description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: "#/components/schemas/BookingResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/BookingResponseDTO"
+      security:
+      - Bearer Authentication: []
     put:
-      summary: Update Booking
       tags:
-        - Bookings
+      - Bookings
+      summary: Update booking
+      description: "Only available to users with role: ADMIN."
+      operationId: update_1
       parameters:
-        - $ref: '#/components/parameters/IdParam'
-      requestBody:
+      - name: id
+        in: path
         required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                note:
-                  type: string
-                  minLength: 2
-                  maxLength: 256
-                bookingStart:
-                  type: string
-                  format: date-time
-                bookingEnd:
-                  type: string
-                  format: date-time
+              $ref: "#/components/schemas/BookingUpdateDTO"
+        required: true
       responses:
-        '200':
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
           description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: "#/components/schemas/BookingResponse"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /v1/bookings/{id}/cancel-booking:
-    put:
-      summary: Cancel Booking
+                $ref: "#/components/schemas/BookingResponseDTO"
+      security:
+      - Bearer Authentication: []
+    delete:
       tags:
-        - Bookings
+      - Bookings
+      summary: Soft delete booking
+      description: "Only available to users with role: ADMIN."
+      operationId: delete_1
       parameters:
-        - $ref: '#/components/parameters/IdParam'
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
-        '200':
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - Bearer Authentication: []
+  /v1/assets/{id}:
+    get:
+      tags:
+      - Assets
+      summary: Read asset by ID
+      description: Only available to authenticated users.
+      operationId: getAssetById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
           description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties:
-                  id:
-                    $ref: '#/components/schemas/Id'
-                  status:
-                    type: string
-                    enum: [AVAILABLE]
-                required:
-                  - id
-                  - status
-              example:
-                id: 1
-                status: "AVAILABLE"
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: "#/components/schemas/AssetResponseDTO"
+      security:
+      - Bearer Authentication: []
+    put:
+      tags:
+      - Assets
+      summary: Update asset
+      description: "Only available to users with role: ADMIN."
+      operationId: updateAsset
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AssetResponseDTO"
+      security:
+      - Bearer Authentication: []
+    delete:
+      tags:
+      - Assets
+      summary: Delete asset
+      description: Marks an asset as DELETED. Only available to ADMIN.
+      operationId: deleteAsset
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - Bearer Authentication: []
+  /v1/asset-categories/{id}:
+    get:
+      tags:
+      - Asset Categories
+      summary: Read asset category by ID
+      description: Only available to authenticated users.
+      operationId: getById_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AssetCategoryResponseDTO"
+      security:
+      - Bearer Authentication: []
+    put:
+      tags:
+      - Asset Categories
+      summary: Update asset category details
+      description: "Only available to users with role: ADMIN."
+      operationId: update_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetCategoryRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AssetCategoryResponseDTO"
+      security:
+      - Bearer Authentication: []
+    delete:
+      tags:
+      - Asset Categories
+      summary: Soft delete asset category
+      description: "Only available to users with role: ADMIN."
+      operationId: delete_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - Bearer Authentication: []
+  /v1/users:
+    get:
+      tags:
+      - Users
+      summary: Read list of users
+      description: "Only available to users with role: ADMIN. Takes Pageable object."
+      operationId: getAllUsers
+      parameters:
+      - name: page
+        in: query
+        description: One-based page index (1..N)
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageUserResponseDTO"
+      security:
+      - Bearer Authentication: []
+    post:
+      tags:
+      - Users
+      summary: Create user account
+      description: "Available to everyone, used for registering users."
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreateRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+  /v1/ldap/sync:
+    post:
+      tags:
+      - ldap-sync-controller
+      summary: Sync LDAP users to database
+      description: |
+        Triggers a full synchronization of users from LDAP into the local database.
+
+        This includes:
+        - Creating missing users
+        - Updating existing users
+        - Resolving manager relationships
+
+        This operation is idempotent and safe to run multiple times.
+      operationId: sync
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
+      security:
+      - Bearer Authentication: []
+  /v1/departments:
+    get:
+      tags:
+      - Departments
+      summary: Read list of departments
+      description: Avaiable to ...
+      operationId: getAll
+      parameters:
+      - name: page
+        in: query
+        description: One-based page index (1..N)
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageDepartmentResponseDTO"
+    post:
+      tags:
+      - Departments
+      summary: Create Department
+      description: "Only available to users with role: ADMIN."
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/DepartmentResponseDTO"
+      security:
+      - Bearer Authentication: []
+  /v1/bookings:
+    get:
+      tags:
+      - Bookings
+      summary: Read list of bookings
+      description: Only available to authenticated users.
+      operationId: getAll_1
+      parameters:
+      - name: filter
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/BookingFilter"
+      - name: page
+        in: query
+        description: One-based page index (1..N)
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageBookingResponseDTO"
+      security:
+      - Bearer Authentication: []
+    post:
+      tags:
+      - Bookings
+      summary: Create a booking
+      description: Only available to authenticated users.
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingCreateDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BookingResponseDTO"
+      security:
+      - Bearer Authentication: []
+  /v1/auth/refresh:
+    post:
+      tags:
+      - Authentication
+      summary: Refresh tokens endpoint
+      description: Available to anyone. Returns JWT access token if refresh token
+        is valid.
+      operationId: refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RefreshTokenResponseDTO"
+  /v1/auth/login:
+    post:
+      tags:
+      - Authentication
+      summary: Login endpoint
+      description: Available to anyone. Returns JWT access and refresh tokens for
+        authenticaton of requests.
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponseDTO"
+  /v1/assets:
+    get:
+      tags:
+      - Assets
+      summary: Read list of assets
+      description: Only available to authenticated users. Takes a Pageable object.
+      operationId: getAllAssets
+      parameters:
+      - name: filter
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/AssetFilter"
+      - name: page
+        in: query
+        description: One-based page index (1..N)
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageAssetResponseDTO"
+      security:
+      - Bearer Authentication: []
+    post:
+      tags:
+      - Assets
+      summary: Create asset
+      description: "Only available to users with role: ADMIN."
+      operationId: createAsset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AssetResponseDTO"
+      security:
+      - Bearer Authentication: []
+  /v1/asset-categories:
+    get:
+      tags:
+      - Asset Categories
+      summary: Read list of asset categories
+      description: Only available to authenticated users. Takes a Pageable object.
+      operationId: getAll_2
+      parameters:
+      - name: page
+        in: query
+        description: One-based page index (1..N)
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageAssetCategoryResponseDTO"
+      security:
+      - Bearer Authentication: []
+    post:
+      tags:
+      - Asset Categories
+      summary: Create asset category
+      description: "Only available to users with role: ADMIN."
+      operationId: create_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetCategoryRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AssetCategoryResponseDTO"
+      security:
+      - Bearer Authentication: []
+  /v1/users/{id}:
+    get:
+      tags:
+      - Users
+      summary: Read user details
+      description: "Only available to users with role: ADMIN or owners of the account"
+      operationId: getUserById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+      security:
+      - Bearer Authentication: []
+    delete:
+      tags:
+      - Users
+      summary: Soft delete user
+      description: "Only available to users with role: ADMIN or owners of the account"
+      operationId: deleteUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - Bearer Authentication: []
+    patch:
+      tags:
+      - Users
+      summary: Update user
+      description: Only available to users with role ADMIN
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdateRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponseDTO"
+      security:
+      - Bearer Authentication: []
+  /v1/users/{id}/password:
+    patch:
+      tags:
+      - Users
+      summary: 'Change user password '
+      description: Users passwords can be changed only by themselves
+      operationId: changePassword
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequestDTO"
+        required: true
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+      security:
+      - Bearer Authentication: []
+  /v1/assets/{id}/qr-code:
+    get:
+      tags:
+      - Assets
+      summary: Get asset QR Code
+      description: "If an asset does not have a file path saved, generates a new QR\
+        \ code, saves it to a folder and serve it. Creation is only handled the first\
+        \ time."
+      operationId: getOrCreateQRCode
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "200":
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+      security:
+      - Bearer Authentication: []
 components:
   schemas:
-    Id:
-      type: integer
-      format: int64
-      minimum: 1
-    UserRequest:
-      type: object
-      required:
-        - name
-        - username
-        - role
-        - departmentId
-        - status
-      properties:
-        username:
-          type: string 
-          minLength: 3
-          maxLength: 20
-        name:
-          type: string
-          minLength: 3
-          maxLength: 50
-        surname:
-          type: string
-          minLength: 3
-          maxLength: 50
-        email:
-          type: string 
-          format: email
-          examples: 
-            - 'johndoe@gmail.com'
-        role:
-          enum: [EMPLOYEE, MANAGER]
-        status:
-          enum: [ACTIVE, INACTIVE]
-          default: ACTIVE
-        note:
-          type: string
-          maxLength: 256
-        departmentId:
-          $ref: '#/components/schemas/Id'
-        managerEmail:
-          type: string
-          format: email
-          examples: 
-            - 'johndoe2@gmail.com'
-        benefit:
-          enum: [ALL, REC_PARK]
-
-    UserResponse:
-      type: object
-      required:
-        - id
-        - name
-        - username
-        - role
-        - departmentId
-        - status
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        username:
-          type: string 
-          minLength: 3
-          maxLength: 20
-        name:
-          type: string
-          minLength: 3
-          maxLength: 50
-        surname:
-          type: string
-          minLength: 3
-          maxLength: 50
-        email:
-          type: string 
-          format: email
-          examples: 
-            - 'johndoe@gmail.com'
-        role:
-          enum: [EMPLOYEE, MANAGER]
-        status:
-          enum: [ACTIVE, INACTIVE]
-          default: ACTIVE
-        note:
-          type: string
-          maxLength: 256
-        departmentId:
-          $ref: '#/components/schemas/Id'
-        managerEmail:
-          type: string
-          format: email
-          examples: 
-            - 'johndoe2@gmail.com'
-        benefit:
-          enum: [ALL, REC_PARK]
-        createdAt:
-          type: string
-          format: date-time
-        lastModifiedAt:
-          type: string
-          format: date-time
-    
-    UsersResponse:
-      type: array
-      items:
-        $ref: "#/components/schemas/UserResponse"
-    DepartmentRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 2
-          maxLength: 50
-        managerId:
-          $ref: '#/components/schemas/Id'
-      required:
-        - name 
-        - managerId
-    DepartmentResponse:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        name:
-          type: string
-          minLength: 2
-          maxLength: 50
-        managerId:
-          $ref: '#/components/schemas/Id'
-        createdAt:
-          type: string
-          format: date-time
-        lastModifiedAt:
-          type: string
-          format: date-time
-      required:
-        - id 
-        - name 
-        - managerId
-    DepartmentsResponse:
-      type: array 
-      items:
-        $ref: '#/components/schemas/DepartmentResponse'
-    AssetCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 2
-          maxLength: 50
-        description:
-          type: string
-          minLength: 2
-          maxLength: 256
-        bookingPeriod:
-          enum: [HOUR, DAY, WEEK, MONTH]
-        approval:
-          type: boolean 
-          default: false
-      required:
-        - id #maybe to delete
-        - name
-        - bookingPeriod
-
-    AssetCategoryResponse:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        name:
-          type: string
-          minLength: 2
-          maxLength: 50
-        description:
-          type: string
-          minLength: 2
-          maxLength: 256
-        bookingPeriod:
-          enum: [HOUR, DAY, WEEK, MONTH]
-        approval:
-          type: boolean 
-          default: false
-        createdAt:
-          type: string
-          format: date-time
-        lastModifiedAt:
-          type: string
-          format: date-time
-      required:
-        - id 
-        - name
-        - bookingPeriod
-    AssetCategoriesResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/AssetCategoryResponse'
-    AssetRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 2
-          maxLength: 50
-        categoryId:
-          $ref: "#/components/schemas/Id"
-        description:
-          type: string
-          minLength: 2
-          maxLength: 256
-        code:
-          type: string
-        status:
-          type: string
-          enum: [AVAILABLE, UNAVAILABLE]
-        location:
-          type: string
-      required:
-        - name
-        - categoryId
-    AssetResponse:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        name:
-          type: string
-          minLength: 2
-          maxLength: 50
-        categoryId:
-          $ref: '#/components/schemas/Id'
-        description:
-          type: string
-          minLength: 2
-          maxLength: 256
-        code:
-          type: string 
-        status:
-          enum: [AVAILABLE, UNAVAILABLE]
-          # change type to boolean (e.g. available: true/false)
-        location:
-          type: string 
-        createdAt:
-          type: string
-          format: date-time
-        lastModifiedAt:
-          type: string
-          format: date-time
-      required:
-        - id
-        - categoryId
-        - name
-    AssetsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/AssetResponse'
-    BookingResponse:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        userId:
-          $ref: '#/components/schemas/Id'
-        assetId:
-          $ref: '#/components/schemas/Id'
-        note:
-          type: string
-          maxLength: 256
-        status:
-          enum: [SUCCESSFUL, PENDING, REJECTED]
-        bookingStart:
-          type: string 
-          format: date-time
-        bookingEnd:
-          type: string 
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
-        lastModifiedAt:
-          type: string
-          format: date-time
-      required:
-        - id
-        - userId
-        - assetId 
-        - bookingStart
-        - bookingEnd
-    BookingsResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/BookingResponse'
     ProblemDetail:
       type: object
-      description: RFC 7807 Problem Details object with custom timestamp and validation details
-      required:
-        - type
-        - title
-        - status
-        - detail
-        - instance
-        - timestamp
       properties:
         type:
           type: string
           format: uri
-          description: A URI reference that identifies the problem type. Default value is "about:blank" when no specific URI is provided.
-          default: "about:blank"
-          examples:
-            - "about:blank"
         title:
           type: string
-          description: A short, human-readable summary of the problem type.
-          examples:
-            - Invalid data
         status:
           type: integer
           format: int32
-          description: HTTP status code
-          examples: 
-            - 400
         detail:
           type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-          examples:
-            - Data not valid
         instance:
           type: string
           format: uri
-          description: The URI reference that identifies the specific occurrence of the problem.
-          examples:
-            - /v1/users
-        timestamp:
+        properties:
+          type: object
+          additionalProperties: {}
+    DepartmentRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          enum:
+          - ADVANCE_TECHNOLOGY
+          - SECURE_SERVICES
+          - ARCHITECTURE
+          - FINANCE_AND_BUSINESS_ADMINISTRATION
+          - MOBILE_AND_SECURITY
+          - SYSTEM_TEST
+          - HUMAN_RESOURCES
+          - CLOUD_AND_DATA_MANAGEMENT
+          - DEVOPS
+        managerId:
+          type: integer
+          format: int64
+      required:
+      - name
+    DepartmentResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          enum:
+          - ADVANCE_TECHNOLOGY
+          - SECURE_SERVICES
+          - ARCHITECTURE
+          - FINANCE_AND_BUSINESS_ADMINISTRATION
+          - MOBILE_AND_SECURITY
+          - SYSTEM_TEST
+          - HUMAN_RESOURCES
+          - CLOUD_AND_DATA_MANAGEMENT
+          - DEVOPS
+        managerId:
+          type: integer
+          format: int64
+    BookingUpdateDTO:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CANCELLED
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - DELETED
+        bookingStart:
           type: string
           format: date-time
-          description: Time when the error occurred
-          examples:
-            - 2026-04-01T09:32:41Z
-        invalidParams:
+        bookingEnd:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          maxLength: 1000
+          minLength: 0
+    BookingResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        assetId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CANCELLED
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - DELETED
+        bookingStart:
+          type: string
+          format: date-time
+        bookingEnd:
+          type: string
+          format: date-time
+        notes:
+          type: string
+    AssetRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+        categoryId:
+          type: integer
+          format: int64
+        description:
+          type: string
+          maxLength: 255
+          minLength: 0
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DAMAGED
+          - DELETED
+        location:
+          type: string
+          maxLength: 100
+          minLength: 0
+      required:
+      - categoryId
+      - location
+      - name
+      - status
+    AssetResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        categoryId:
+          type: integer
+          format: int64
+        description:
+          type: string
+        code:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DAMAGED
+          - DELETED
+        location:
+          type: string
+    AssetCategoryRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+        description:
+          type: string
+          maxLength: 255
+          minLength: 0
+        bookingPeriod:
+          type: string
+          enum:
+          - HOUR
+          - DAY
+          - WEEK
+          - MONTH
+        approval:
+          type: boolean
+      required:
+      - approval
+      - bookingPeriod
+      - name
+    AssetCategoryResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        bookingPeriod:
+          type: string
+          enum:
+          - HOUR
+          - DAY
+          - WEEK
+          - MONTH
+        approval:
+          type: boolean
+    UserCreateRequestDTO:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          minLength: 3
+          pattern: "^[a-zA-Z0-9._-]+$"
+        surname:
+          type: string
+          maxLength: 100
+          minLength: 0
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+        password:
+          type: string
+          maxLength: 50
+          minLength: 8
+        role:
+          type: string
+          enum:
+          - EMPLOYEE
+          - MANAGER
+          - ADMIN
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - STUDENT
+          - LEFT_COMPANY
+          - DELETED
+        departmentId:
+          type: integer
+          format: int64
+        managerEmail:
+          type: string
+          format: email
+          maxLength: 254
+          minLength: 0
+        notes:
+          type: string
+          maxLength: 1000
+          minLength: 0
+        benefit:
+          type: string
+          maxLength: 100
+          minLength: 0
+      required:
+      - benefit
+      - departmentId
+      - email
+      - managerEmail
+      - name
+      - password
+      - role
+      - status
+      - surname
+      - username
+    UserResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        surname:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+          - EMPLOYEE
+          - MANAGER
+          - ADMIN
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - STUDENT
+          - LEFT_COMPANY
+          - DELETED
+        departmentId:
+          type: integer
+          format: int64
+        managerEmail:
+          type: string
+        notes:
+          type: string
+        benefit:
+          type: string
+    BookingCreateDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        assetId:
+          type: integer
+          format: int64
+        bookingStart:
+          type: string
+          format: date-time
+        bookingEnd:
+          type: string
+          format: date-time
+        notes:
+          type: string
+          maxLength: 1000
+          minLength: 0
+      required:
+      - assetId
+      - bookingEnd
+      - bookingStart
+      - userId
+    RefreshTokenRequestDTO:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    RefreshTokenResponseDTO:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    LoginRequestDTO:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 50
+          minLength: 3
+        password:
+          type: string
+          maxLength: 50
+          minLength: 8
+      required:
+      - password
+      - username
+    LoginResponseDTO:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    UserUpdateRequestDTO:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - STUDENT
+          - LEFT_COMPANY
+          - DELETED
+        notes:
+          type: string
+          maxLength: 1000
+          minLength: 0
+        benefit:
+          type: string
+          maxLength: 100
+          minLength: 0
+      required:
+      - benefit
+      - status
+    ChangePasswordRequestDTO:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+          maxLength: 2147483647
+          minLength: 8
+      required:
+      - currentPassword
+      - newPassword
+    PageUserResponseDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
           type: array
-          description: A list of specific validation errors (only present on bad requests)
           items:
-            type: object
-            properties:
-              field:
-                type: string
-                description: The name of the field that caused the error
-                examples:
-                  - email
-              issue:
-                type: string
-                description: Description of the validation error
-                examples:
-                  - Invalid format
+            $ref: "#/components/schemas/UserResponseDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        unpaged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: "#/components/schemas/SortObject"
+    SortObject:
+      type: object
+      properties:
+        unsorted:
+          type: boolean
+        sorted:
+          type: boolean
+        empty:
+          type: boolean
+    PageDepartmentResponseDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepartmentResponseDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        empty:
+          type: boolean
+    BookingFilter:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - COMPLETED
+          - CANCELLED
+          - PENDING
+          - APPROVED
+          - REJECTED
+          - DELETED
+        userId:
+          type: integer
+          format: int64
+        assetId:
+          type: integer
+          format: int64
+        bookingStart:
+          type: string
+          format: date
+        bookingEnd:
+          type: string
+          format: date
+    PageBookingResponseDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingResponseDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        empty:
+          type: boolean
+    AssetFilter:
+      type: object
+      properties:
+        name:
+          type: string
+        categoryId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - DAMAGED
+          - DELETED
+        location:
+          type: string
+    PageAssetResponseDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetResponseDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        empty:
+          type: boolean
+    PageAssetCategoryResponseDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetCategoryResponseDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        empty:
+          type: boolean
   securitySchemes:
-    bearerAuth:
+    Bearer Authentication:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  parameters:
-    IdParam:
-      name: id         
-      in: path          
-      required: true
-      schema:
-        $ref: '#/components/schemas/Id'
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
-          example:
-            code: BAD_REQUEST
-            message: Invalid request data
-            status: 400
-            timestamp: 2026-03-26T12:00:00Z
-            path: /api/example
-            details:
-              - field: email
-                issue: Invalid format
-
-    NotFound:
-      description: Not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
-          example:
-            code: NOT_FOUND
-            message: Resource not found
-            status: 404
-            timestamp: 2026-03-26T12:00:00Z
-            path: /v1/example/123
-            details:
-              - field: id
-                issue: Not found
-
-    InternalServerError:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetail'
-          example:
-            code: INTERNAL_ERROR
-            message: Something went wrong
-            status: 500
-            timestamp: 2026-03-26T12:00:00Z
-            path: /api/example
-            details:
-              - field: example
-                issue: Example
-  examples:
-    UsersResponseExample:
-      value:
-        - id: 1
-          username: "johndoe"
-          name: "John"
-          surname: "Doe"
-          email: "johndoe@gmail.com"
-          role: "EMPLOYEE"
-          status: "ACTIVE"
-          note: "This is a note about John."
-          departmentId: 101
-          managerEmail: "manager1@example.com"
-          benefit: ALL
-          createdAt: "2026-03-24T10:00:00Z"
-          lastModifiedAt: "2026-03-24T12:00:00Z"
-    SingleUserExample:
-      value:
-        id: 1
-        username: "johndoe"
-        name: "John"
-        surname: "Doe"
-        email: "johndoe@gmail.com"
-        role: EMPLOYEE
-        status: ACTIVE
-        note: "This is a note about John DOE."
-        departmentId: 101
-        managerEmail: "manager1@example.com"
-        benefit: ALL
-        createdAt: "2026-03-24T10:00:00Z"
-        lastModifiedAt: "2026-03-24T12:00:00Z"
-
-    DepartmentResponseExample:
-      value:
-        id: 10
-        name: "Engineering"
-        managerId: 3
-        createdAt: "2026-03-24T10:00:00Z"
-        lastModifiedAt: "2026-03-24T12:00:00Z"
-    DepartmentsResponseExample:
-      value:
-        - id: 10
-          name: "Engineering"
-          managerId: 3
-          createdAt: "2026-03-24T10:00:00Z"
-          lastModifiedAt: "2026-03-24T12:00:00Z"
-        - id: 20
-          name: "Human Resources"
-          managerId: 5
-          createdAt: "2026-03-20T09:30:00Z"
-          lastModifiedAt: "2026-03-22T14:15:00Z"
-
-    AssetCategoryResponseExample:
-      summary: Single asset category
-      value:
-        id: 1
-        name: "Conference Rooms"
-        description: "Meeting rooms equipped with projector and whiteboard"
-        bookingPeriod: HOUR
-        approval: true
-        createdAt: "2026-03-01T08:00:00Z"
-        lastModifiedAt: "2026-03-10T09:30:00Z"
-
-    AssetCategoriesResponseExample:
-      summary: List of asset categories
-      value:
-        - id: 1
-          name: "Conference Rooms"
-          description: "Meeting rooms equipped with projector and whiteboard"
-          bookingPeriod: HOUR
-          approval: true
-          createdAt: "2026-03-01T08:00:00Z"
-          lastModifiedAt: "2026-03-10T09:30:00Z"
-        - id: 2
-          name: "Company Cars"
-          description: "Pool vehicles available for business trips"
-          bookingPeriod: DAY
-          approval: false
-          createdAt: "2026-02-15T10:15:00Z"
-          lastModifiedAt: "2026-02-20T11:45:00Z"
-    AssetsResponseExample:
-      value:
-        - id: 1
-          name: "Laptop 1"
-          description: "Macbook Pro"
-          categoryId: 2
-          code: "string"
-          status: "AVAILABLE"
-          location: "string"
-          createdAt: "2026-03-24T10:00:00Z"
-          lastModifiedAt: "2026-03-24T12:00:00Z"
