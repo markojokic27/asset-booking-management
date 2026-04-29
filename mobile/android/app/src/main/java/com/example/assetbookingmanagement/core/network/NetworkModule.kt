@@ -1,6 +1,7 @@
 package com.example.assetbookingmanagement.core.network
 
 import com.example.assetbookingmanagement.features.asset.data.AssetApi
+import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryApi
 import com.example.assetbookingmanagement.features.auth.data.AuthApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -59,4 +60,9 @@ object NetworkModule {
     @Singleton
     fun provideAssetApi(retrofit: Retrofit): AssetApi =
         retrofit.create(AssetApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAssetCategoryApi(retrofit: Retrofit): AssetCategoryApi =
+        retrofit.create(AssetCategoryApi::class.java)
 }

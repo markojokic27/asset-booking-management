@@ -14,61 +14,92 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
 
 @Composable
-fun AssetDetailsScreen() {
+fun AssetDetailsScreen(
+    assetId: Long,
+    viewModel: AssetDetailsViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val asset = uiState.asset
+    //Fetch asset details when screen is opened or when assetId changes
+    LaunchedEffect(assetId) {
+        viewModel.getAssetDetails(assetId)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp, vertical = 24.dp)
     ) {
-        //Temporary text until asset details are fetched
-        Text(
-            text = "Dell Latitude 5440",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        when {
+            uiState.isLoading -> {
+                Text(
+                    text = "Loading asset details...",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
 
-        Spacer(modifier = Modifier.height(6.dp))
+            uiState.errorMessage != null -> {
+                Text(
+                    text = uiState.errorMessage ?: "",
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
 
-        Text(
-            text = "DL-5440",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
-        )
+            asset != null -> {
+                Text(
+                    text = asset.name,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
 
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
-        )
+                Spacer(modifier = Modifier.height(6.dp))
 
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            AssetDetailItem(label = "Category", value = "")
-            AssetDetailItem(label = "Model", value = "")
-            AssetDetailItem(label = "Location", value = "")
-            AssetDetailItem(label = "Description", value = "")
+                Text(
+                    text = asset.code,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
+                )
+
+                HorizontalDivider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp),
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f)
+                )
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    AssetDetailItem(label = "Category", value = uiState.categoryName ?: "-")
+                    AssetDetailItem(label = "Status", value = asset.status)
+                    AssetDetailItem(label = "Location", value = asset.location)
+                    AssetDetailItem(label = "Description", value = asset.description.ifBlank { "-" })
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                AppButton(
+                    text = "Book now",
+                    iconRes = R.drawable.calendar_today_24,
+                    onClick = {}
+                )
+            }
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        AppButton(
-            text = "Book now",
-            iconRes = R.drawable.calendar_today_24,
-            onClick = {}
-        )
     }
 }
 
@@ -83,16 +114,18 @@ private fun AssetDetailItem(
     ) {
         Text(
             text = label,
+            modifier = Modifier.width(84.dp),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.55f)
         )
 
-        Spacer(modifier = Modifier.width(40.dp))
-
         Text(
             text = value,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 12.dp),
             style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onBackground
         )
     }

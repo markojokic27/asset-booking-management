@@ -3,6 +3,10 @@ package com.example.assetbookingmanagement.app.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +23,7 @@ import com.example.assetbookingmanagement.features.user.ui.ProfileScreen
 @Composable
 fun NavGraph(isUserLoggedIn: Boolean = false) {
     val navController = rememberNavController()
+    var selectedAssetId by remember { mutableStateOf<Long?>(null) }
     val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
@@ -80,14 +85,17 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
 
             composable(Routes.ASSETS) {
                 AssetsScreen(
-                    onAssetClick = {
+                    onAssetClick = { assetId ->
+                        selectedAssetId = assetId
                         navController.navigate(Routes.ASSET_DETAILS)
                     }
                 )
             }
 
             composable(Routes.ASSET_DETAILS) {
-                AssetDetailsScreen()
+                selectedAssetId?.let { assetId ->
+                    AssetDetailsScreen(assetId = assetId)
+                }
             }
 
             composable(Routes.BOOKINGS) {

@@ -31,7 +31,7 @@ import com.example.assetbookingmanagement.core.ui.components.SearchBar
 
 @Composable
 fun AssetsScreen(
-    onAssetClick: () -> Unit = {},
+    onAssetClick: (Long) -> Unit = {},
     viewModel: AssetsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -103,7 +103,7 @@ fun AssetsScreen(
                         ) { asset ->
                             AssetCard(
                                 asset = asset,
-                                onClick = onAssetClick
+                                onClick = { onAssetClick(asset.id) }
                             )
                         }
                     }
