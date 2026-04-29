@@ -29,6 +29,9 @@
 		<lombok.version>1.18.38</lombok.version>
 		<tomcat.version>11.0.21</tomcat.version>
 		<jackson-bom.version>3.1.1</jackson-bom.version>
+		<!--CVE Groups Security fix with advised versions in dependency-check version: 12.1.9-->
+		<log4j2.version>2.25.4</log4j2.version>
+    	<spring-security.version>7.0.5</spring-security.version>
 
 		<!-- SonarQube configuration (used by the 'sonar' profile) -->
 		<sonar.projectKey>asset-booking-management-backend</sonar.projectKey>
