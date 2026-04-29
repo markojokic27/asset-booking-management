@@ -106,6 +106,7 @@ export const EditCategoryModal: React.FC<Props> = ({
                     <div className="text-center text-xl font-bold">Edit Category</div>
 
                     <Button
+                        data-testid="edit-category-close-button"
                         type="button"
                         onClick={onClose}
                         aria-label="Close"
@@ -153,6 +154,7 @@ export const EditCategoryModal: React.FC<Props> = ({
 
                         <div className="flex flex-1 flex-col space-y-5">
                             <FormInput
+                                data-testid="edit-category-name"
                                 id="category-name"
                                 label="Name"
                                 error={!!errors.name}
@@ -161,12 +163,14 @@ export const EditCategoryModal: React.FC<Props> = ({
                             />
 
                             <FormInput
+                                data-testid="edit-category-description"
                                 id="category-description"
                                 label="Description"
                                 {...register('description')}
                             />
 
                             <FormDropdown
+                                data-testid="edit-category-booking-period"
                                 label="Booking period"
                                 options={bookingPeriodOptions}
                                 error={!!errors.bookingPeriod}
@@ -176,6 +180,7 @@ export const EditCategoryModal: React.FC<Props> = ({
 
                             <div className="flex items-center gap-2">
                                 <Checkbox.Root
+                                    data-testid="edit-category-approval-checkbox"
                                     id="edit-category-approval"
                                     checked={undefined}
                                     onCheckedChange={(checked) =>
@@ -202,7 +207,7 @@ export const EditCategoryModal: React.FC<Props> = ({
                     <div className="mx-8 mt-5 h-px bg-(--color-table-border)"></div>
 
                     <div className="mt-5 flex justify-center gap-2">
-                        <Button
+                        <Button data-testid="save-category-button"
                             type="submit"
                             className="mr-5 mb-5 h-10 w-70 px-6 py-4 font-bold"
                         >
