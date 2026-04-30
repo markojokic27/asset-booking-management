@@ -29,6 +29,7 @@ public class AssetControllerTest {
     /** CREATE */
     @Test
     void createAsset_validRequest_returnsCreatedStatus(){
+        
         AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", AssetStatusEnum.ACTIVE, "Room 301");
         AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", null, AssetStatusEnum.ACTIVE, "Room 301");
 
@@ -45,6 +46,7 @@ public class AssetControllerTest {
     /** READ ALL */
     @Test
     void getAllAssets_returnsOkWithLIst(){
+
         AssetResponseDTO response = new AssetResponseDTO(1L,
                 "Hp 15",
                 1L,
@@ -71,6 +73,7 @@ public class AssetControllerTest {
     /** READ BY ID */
     @Test
     void getAssetById_returnsOkWithAsset(){
+
         AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", "QR-LAPTOP-001", AssetStatusEnum.ACTIVE, "Room 301");
 
         when(assetService.getAssetById(1L)).thenReturn(response);
@@ -84,6 +87,7 @@ public class AssetControllerTest {
     /** UPDATE */
     @Test
     void updateAssetById_returnsOkWithUpdatesdAsset(){
+
         AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", AssetStatusEnum.ACTIVE, "Room 301");
         AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", null, AssetStatusEnum.ACTIVE, "Room 301");
 
@@ -95,6 +99,15 @@ public class AssetControllerTest {
         assertThat(result.getBody()).isEqualTo(response);
     }
 
+    /** SOFT DELETE */
+    @Test
+    void deleteAsset_returnsNoContentStatus() {
 
+        ResponseEntity<Void> result = assetController.deleteAsset(1L);
 
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(result.getBody()).isNull();
+
+        verify(assetService).softDeleteAsset(1L);
+    }
 }

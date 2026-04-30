@@ -240,6 +240,32 @@ class AssetServiceImplTest {
                 () -> service.updateAsset(1L, requestDTO));
     }
 
+    // Tests softDeleteAsset(): asset exist → change status to DELETED
+    @Test
+    void shouldSoftDeleteAsset() {
+
+        when(repository.findById(1L)).thenReturn(Optional.of(asset));
+
+        service.softDeleteAsset(1L);
+
+        assertEquals(AssetStatusEnum.DELETED, asset.getStatus());
+        verify(repository).findById(1L);
+        verify(repository).save(asset);
+    }
+
+    // Tests softDeleteAsset(): throws exception if asset does not exist
+    @Test
+    void shouldThrowExceptionWhenSoftDeletingNonExistingAsset() {
+
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.softDeleteAsset(1L));
+
+        verify(repository).findById(1L);
+        verify(repository, never()).save(any());
+    }
+
     private void mockLoggedUser(String user) {
 
         Authentication authentication = mock(Authentication.class);
