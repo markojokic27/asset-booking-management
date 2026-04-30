@@ -33,7 +33,7 @@ export function BookingModal({
   if (!open || !asset) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+    <div data-testid="asset-bookings-modal" className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div className="w-full max-w-150 bg-(--color-bg) p-8 shadow-lg">
         <h2 className="mb-4 text-xl font-semibold">Book {asset.name}</h2>
 
@@ -57,6 +57,7 @@ export function BookingModal({
           <div className="space-y-6">
             <div className="w-full">
               <FiltersBar
+                variant="HOUR" 
                 filters={filters}
                 setFilters={setFilters}
                 showSearch={false}

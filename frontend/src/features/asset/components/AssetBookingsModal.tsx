@@ -96,7 +96,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
             </p>
           </div>
 
-          <button
+          <button data-testid="asset-booking-button"
             type="button"
             onClick={onClose}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover)"

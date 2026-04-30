@@ -79,7 +79,7 @@ export const UsersTable = ({
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
-        <Button
+        <Button data-testid="user-bookings-button"
           size="sm"
           variant="solid"
           iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
