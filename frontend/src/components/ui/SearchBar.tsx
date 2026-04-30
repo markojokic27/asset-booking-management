@@ -1,7 +1,9 @@
+// External packages
 import { twMerge } from 'tailwind-merge';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import { useTranslation } from 'react-i18next';
 
+// TODO: internacionalizacija
 type SearchInputProps = {
   value: string;
   onChange: (value: string) => void;
@@ -17,7 +19,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className={twMerge('relative mb-3 w-full', className)}>
+    <div className={twMerge('relative mb-3 w-full pt-1', className)}>
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <SearchSharpIcon className="h-5 w-5 text-(--color-table-border)" />
       </div>

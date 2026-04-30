@@ -16,7 +16,7 @@ type Filters = {
 };
 
 type Variant = 'DAY' | 'HOUR';
-//TODO optimize
+
 type Props = {
   filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
@@ -71,7 +71,7 @@ export function FiltersBar({
           label={t('ui.filters.date')}
           value={filters.fromDate}
           onChange={(v) => update({ fromDate: v })}
-          className="w-full"
+          className="col-span-1 w-full sm:col-span-2 md:col-span-1 lg:col-start-1"
         />
       )}
 
@@ -80,7 +80,7 @@ export function FiltersBar({
           value={filters.search}
           onChange={(v) => update({ search: v })}
           placeholder="Search assets..."
-          className="col-span-1 w-full sm:col-span-2 lg:col-span-1 lg:mt-5 lg:ml-auto lg:max-w-60"
+          className="col-span-1 w-full sm:col-span-2 lg:col-start-3 lg:mt-5 lg:ml-auto lg:max-w-60"
         />
       )}
     </div>
