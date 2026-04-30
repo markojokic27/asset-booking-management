@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.user.dtos.ChangePasswordRequestDTO;
 import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
 import de.bdr.asset.management.user.dtos.UserResponseDTO;
 import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
@@ -105,7 +106,6 @@ public class UserControllerTest {
     }
 
     /** DELETE */
-
     @Test
     void deleteUser_returnsNoContent() {
 
@@ -119,5 +119,22 @@ public class UserControllerTest {
         assertThat(result.getBody()).isNull();
 
         verify(userService).softDeleteUser(userId);
+    }
+
+    /** CHANGE PASSWORD */
+    @Test
+    void changePassword_validRequest_returnsNoContent() {
+
+        Long userId = 1L;
+        ChangePasswordRequestDTO request = new ChangePasswordRequestDTO("oldPass123", "newPass123");
+
+        doNothing().when(userService).changePassword(userId, request);
+
+        ResponseEntity<Void> result = userController.changePassword(userId, request);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(result.getBody()).isNull();
+
+        verify(userService).changePassword(userId, request);
     }
 }
