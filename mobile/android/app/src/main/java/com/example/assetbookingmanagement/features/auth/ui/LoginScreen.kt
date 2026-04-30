@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.*
 
@@ -24,9 +25,15 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.isLoggedIn) {
+        if (uiState.isLoggedIn) {
+            onLoginSuccess()
+        }
+    }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val spacing = if (isLandscape) 8.dp else 16.dp
@@ -64,7 +71,7 @@ fun LoginScreen(
             AppButton(
                 text = if (uiState.isLoading) "LOGGING IN..." else "LOGIN",
                 enabled = !uiState.isLoading,
-                onClick = { viewModel.login(username, password, onLoginSuccess) }
+                onClick = { viewModel.login(username, password) }
             )
         }
     }

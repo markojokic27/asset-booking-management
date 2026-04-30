@@ -16,6 +16,7 @@ import javax.inject.Inject
 // UI state used by the login screen to show loading and error messages
 data class LoginUiState(
     val isLoading: Boolean = false,
+    val isLoggedIn: Boolean = false,
     val errorMessage: String? = null
 )
 
@@ -27,25 +28,34 @@ class LoginViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    fun login(
-        username: String,
-        password: String,
-        onSuccess: () -> Unit
-    ) {
+    fun login(username: String, password: String) {
         if (username.isBlank() || password.isBlank()) {
             _uiState.update { it.copy(errorMessage = "Username and password are required.") }
             return
         }
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    isLoggedIn = false,
+                    errorMessage = null
+                )
+            }
 
             try {
                 authRepository.login(username, password)
-                onSuccess()
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        isLoggedIn = true,
+                        errorMessage = null
+                    )
+                }
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
+                        isLoading = false,
                         errorMessage = when (error.code()) {
                             401, 403 -> "Wrong username or password."
                             else -> "Login failed. Please try again."
@@ -54,10 +64,11 @@ class LoginViewModel @Inject constructor(
                 }
             } catch (_: IOException) {
                 _uiState.update {
-                    it.copy(errorMessage = "Cannot reach backend.")
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Cannot reach backend."
+                    )
                 }
-            } finally {
-                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
