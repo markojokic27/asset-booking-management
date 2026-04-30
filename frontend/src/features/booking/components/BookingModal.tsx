@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Button } from '../../../components/ui/Button';
 import { Tab } from '../../../components/ui/Tab';
 import { FiltersBar } from '../../../components/ui/FilterBar';
+import { AvailabilityCalendar } from './AvailabilityCalendar';
 
 // Types
 import type { Filters } from '../types';
@@ -70,6 +71,7 @@ export function BookingModal({
               </span>
 
               <p>
+                {/* If a date is not selected, the message is not displayed. Check availability - if available render AVAILABLE else UNAVAILABLE  */}
                 {asset.name} is{' '}
                 <span className="rounded bg-(--color-status-active-bg) px-2 py-0.5 text-(--color-status-active-text)">
                   available
@@ -80,8 +82,18 @@ export function BookingModal({
           </div>
         )}
 
+        {/* Dohvatit bookinge odredenog asseta i posalt ih u events kako bi se prikazali u kalendaru*/}
         {activeTab === 'availability' && (
-          <div className="text-sm">Availability list will be shown here.</div>
+          <AvailabilityCalendar
+            events={[
+              {
+                id: '1',
+                title: `${asset.name} booked`,
+                start: '2026-04-29T10:00:00',
+                end: '2026-04-29T12:00:00',
+              },
+            ]}
+          />
         )}
 
         <div className="mt-10 flex justify-end gap-4">
