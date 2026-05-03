@@ -1,0 +1,10 @@
+logging:
+  level:
+    root: INFO
+    de.bdr.asset: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

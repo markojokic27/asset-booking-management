@@ -15,6 +15,12 @@ dev-down:
 dev-clean:
 	docker compose -f compose.yaml -f compose.dev.yaml down -v
 
+e2e:
+	docker compose -f compose.e2e.yaml up --build -d
+
+e2e-down:
+	docker compose -f compose.e2e.yaml down -v
+
 prod:
 	docker compose up --build
 
