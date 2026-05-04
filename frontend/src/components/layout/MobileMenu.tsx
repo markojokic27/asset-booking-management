@@ -21,7 +21,11 @@ export default function MobileMenu() {
   const links = [
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharp },
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharp },
-    { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharp },
+    {
+      to: '/bookings',
+      label: t('layout.navbar.bookings'),
+      icon: CalendarTodaySharp,
+    },
     { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharp },
   ];
   const navigate = useNavigate();
@@ -45,11 +49,13 @@ export default function MobileMenu() {
         <Dialog.Content className="fixed top-0 left-0 z-50 flex h-full w-[calc(100vw-80px)] flex-col bg-(--color-surface) shadow-lg data-[state=closed]:animate-[slideOut_300ms_ease-in] data-[state=open]:animate-[slideIn_300ms_ease-out]">
           <VisuallyHidden.Root>
             <Dialog.Title>{t('layout.mobileMenu.title')}</Dialog.Title>
-            <Dialog.Description>{t('layout.mobileMenu.description')}</Dialog.Description>
+            <Dialog.Description>
+              {t('layout.mobileMenu.description')}
+            </Dialog.Description>
           </VisuallyHidden.Root>
 
-          <div className="flex w-full flex-col items-center gap-3 px-6 py-4">
-            <Logo className=''/>
+          <div className="flex w-full flex-col items-center px-6 py-4">
+            <Logo className="my-6 h-12 w-auto" />
             <div className="flex w-full items-center justify-center gap-4">
               <LanguageSwitcher />
               <ThemeToggle />
