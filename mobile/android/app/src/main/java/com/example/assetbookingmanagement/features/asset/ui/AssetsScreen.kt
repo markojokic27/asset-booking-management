@@ -17,9 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,7 +32,6 @@ fun AssetsScreen(
     viewModel: AssetsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var searchText by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -58,8 +54,8 @@ fun AssetsScreen(
                     modifier = Modifier.weight(1f)
                 ) {
                     SearchBar(
-                        value = searchText,
-                        onValueChange = { searchText = it },
+                        value = uiState.searchText,
+                        onValueChange = viewModel::onSearchTextChange,
                         placeholder = "Search..."
                     )
                 }
@@ -92,13 +88,13 @@ fun AssetsScreen(
                     )
                 }
 
-                uiState.assets.isNotEmpty() -> {
+                uiState.filteredAssets.isNotEmpty() -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(
-                            items = uiState.assets,
+                            items = uiState.filteredAssets,
                             key = { asset -> asset.id }
                         ) { asset ->
                             AssetCard(
@@ -122,7 +118,7 @@ fun AssetsScreen(
             onQrScanned = { scannedValue ->
                 val assetId = scannedValue.toLongOrNull()
                 if (assetId != null) {
-                    viewModel.getAssetById(assetId)
+                    onAssetClick(assetId)
                 }
             }
         )

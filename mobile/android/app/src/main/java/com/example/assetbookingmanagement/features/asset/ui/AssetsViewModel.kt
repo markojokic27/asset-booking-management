@@ -17,9 +17,15 @@ import javax.inject.Inject
 data class AssetsUiState(
     val isLoading: Boolean = false,
     val assets: List<AssetResponse> = emptyList(),
+    val searchText: String = "",
     val scannedAsset: AssetResponse? = null,
     val errorMessage: String? = null
-)
+){
+    val filteredAssets: List<AssetResponse>
+        get() = assets.filter { asset ->
+            asset.name.contains(searchText, ignoreCase = true)
+        }
+}
 
 @HiltViewModel
 class AssetsViewModel @Inject constructor(
@@ -31,6 +37,12 @@ class AssetsViewModel @Inject constructor(
     init {
         getAssets()
     }
+
+    fun onSearchTextChange(text: String) {
+    _uiState.update {
+        it.copy(searchText = text)
+    }
+}
 
     fun getAssetById(id: Long) {
         viewModelScope.launch {
