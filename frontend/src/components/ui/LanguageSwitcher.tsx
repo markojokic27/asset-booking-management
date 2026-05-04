@@ -1,8 +1,12 @@
+// External packages
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import DE from 'country-flag-icons/react/3x2/DE';
 import GB from 'country-flag-icons/react/3x2/GB';
 import HR from 'country-flag-icons/react/3x2/HR';
 import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
+
+// Components
 import { ChevronDown } from '../icons/ChevronDown';
 
 const languages = [
@@ -22,7 +26,11 @@ function resolveLanguage(code: string) {
   );
 }
 
-function LanguageSwitcher() {
+type Props = {
+  variant?: 'header' | 'mobileMenu';
+};
+
+function LanguageSwitcher({ variant = 'header' }: Props) {
   const { i18n, t } = useTranslation();
 
   const currentLanguage = resolveLanguage(i18n.language);
@@ -37,9 +45,12 @@ function LanguageSwitcher() {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <button data-testid="language-switcher"
+        <button
+          data-testid="language-switcher"
           type="button"
-          aria-label={currentLanguage?.label ?? t('ui.languageSwitcher.selectLanguage')}
+          aria-label={
+            currentLanguage?.label ?? t('ui.languageSwitcher.selectLanguage')
+          }
           className="group flex items-center gap-1.5 text-gray-900 hover:cursor-pointer focus:outline-none dark:text-gray-100"
         >
           {CurrentFlag ? (
@@ -47,13 +58,20 @@ function LanguageSwitcher() {
           ) : (
             <span className="text-sm">?</span>
           )}
-          <ChevronDown className="h-5 w-5 shrink-0 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180" />
+          <ChevronDown
+            className={twMerge(
+              'h-5 w-5 shrink-0 transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180',
+              variant === 'mobileMenu' &&
+                'rotate-180 group-data-[state=open]:rotate-0'
+            )}
+          />
         </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content
-        align="end"
-        className="mt-1 rounded border border-gray-200 bg-white text-gray-900 shadow dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+        side={variant === 'header' ? 'bottom' : 'top'}
+        align={variant === 'header' ? 'end' : 'start'}
+        className="my-2 rounded border border-gray-200 bg-white text-gray-900 shadow dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
       >
         {languages.map((lang) => {
           const Flag = lang.Flag;

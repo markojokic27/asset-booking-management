@@ -54,12 +54,8 @@ export default function MobileMenu() {
             </Dialog.Description>
           </VisuallyHidden.Root>
 
-          <div className="flex w-full flex-col items-center px-6 py-4">
-            <Logo className="my-6 h-12 w-auto" />
-            <div className="flex w-full items-center justify-center gap-4">
-              <LanguageSwitcher />
-              <ThemeToggle />
-            </div>
+          <div className="flex h-20 w-full items-center justify-center px-6">
+            <Logo className="mt-2 h-10 w-auto" />
           </div>
           <nav className="flex-1 overflow-y-auto overscroll-contain">
             {links.map(({ to, label, icon: Icon }) => (
@@ -74,7 +70,10 @@ export default function MobileMenu() {
               </Dialog.Close>
             ))}
           </nav>
-
+          <div className="flex w-full items-center justify-between px-6">
+            <LanguageSwitcher variant="mobileMenu" />
+            <ThemeToggle />
+          </div>
           <div className="mt-auto flex w-full flex-col gap-3 p-6">
             <Dialog.Close asChild>
               <NavLink
