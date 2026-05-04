@@ -17,9 +17,12 @@ public class RegisterTestP {
     @BeforeAll
     static void launchBrowser() {
         playwright = Playwright.create();
+
+        boolean headless = !Boolean.parseBoolean(
+                System.getenv().getOrDefault("HEADED", "true"));
+
         browser = playwright.chromium().launch(
-            new BrowserType.LaunchOptions().setHeadless(false)
-        );
+                new BrowserType.LaunchOptions().setHeadless(headless));
     }
 
     @AfterAll

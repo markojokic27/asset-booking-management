@@ -20,9 +20,8 @@ public class LoginTestP {
     static void launchBrowser() {
         playwright = Playwright.create();
 
-        // headless false is needed for CI
         boolean headless = !Boolean.parseBoolean(
-                System.getenv().getOrDefault("HEADED", "false"));
+                System.getenv().getOrDefault("HEADED", "true"));
 
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions().setHeadless(headless));
@@ -45,13 +44,12 @@ public class LoginTestP {
 
     @Test
     void userCanLogin() {
-        // Fix: use BASE_URL instead of hardcoded localhost for CI
         page.navigate(BASE_URL + "/login");
         page.locator("[data-testid='username']").fill("user_admin");
         page.locator("[data-testid='password']").fill("admin123");
         page.locator("[data-testid='login-button']").click();
-        page.waitForURL("http://localhost:5173/assets");
-        assertThat(page).hasURL("http://localhost:5173/assets");
+        page.waitForURL("http://localhost:5173/bookings");
+        assertThat(page).hasURL("http://localhost:5173/bookings");
     }
 
     @Test
