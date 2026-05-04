@@ -49,7 +49,7 @@ export default function MobileMenu() {
           </VisuallyHidden.Root>
 
           <div className="flex w-full flex-col items-center gap-3 px-6 py-4">
-            <Logo className='scale-200'/>
+            <Logo className=''/>
             <div className="flex w-full items-center justify-center gap-4">
               <LanguageSwitcher />
               <ThemeToggle />
