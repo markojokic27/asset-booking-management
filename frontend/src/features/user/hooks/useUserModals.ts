@@ -4,7 +4,7 @@ import { useState } from 'react';
 // Types
 import type { UserDto } from '../types';
 
-type ModalType = 'view' | 'edit' | 'create' | 'bookings' | null;
+type ModalType = 'view' | 'edit' | 'create' | 'bookings' | 'report' | null;
 
 export function useUserModals() {
   const [activeUser, setActiveUser] = useState<UserDto | null>(null);

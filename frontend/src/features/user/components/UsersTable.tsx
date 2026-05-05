@@ -8,6 +8,7 @@ import { IconButton } from '../../../components/ui/IconButton';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import type { UserDto } from '../types';
 import { getDisplayName } from '../utilis/users';
+import  BarChartIcon from '@mui/icons-material/BarChart';
 
 type Props = {
   data: UserDto[];
@@ -18,6 +19,7 @@ type Props = {
   onEdit: (user: UserDto) => void;
   onBookings: (user: UserDto) => void;
   onDelete: (user: UserDto) => void;
+  onReport: (user: UserDto) => void;
 };
 
 export const UsersTable = ({
@@ -29,6 +31,7 @@ export const UsersTable = ({
   onEdit,
   onBookings,
   onDelete,
+  onReport,
 }: Props) => {
   const { t } = useTranslation();
   const nextSortDirKey = nameSortDir === 'asc' ? 'descending' : 'ascending';
@@ -108,7 +111,16 @@ export const UsersTable = ({
               className="pointer-events-none"
             />
           </IconButton>
+
           <IconButton
+            type="button"
+            aria-label="Izvještaj korisnika"
+            onClick={() => onReport(user)}
+          >
+            <BarChartIcon fontSize="small" className="pointer-events-none" />
+          </IconButton>
+          <IconButton
+            data-testid="edit-user-button"
             type="button"
             aria-label={t('users.table.rowActions.editAria')}
             disabled={user.status === 'DELETED'}

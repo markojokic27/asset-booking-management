@@ -15,6 +15,7 @@ import { UsersTable } from '../features/user/components/UsersTable';
 import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
+import { UserReportModal } from '../features/user/components/UserReportModal';
 
 // Hooks
 import { getFullName } from '../features/user/utilis/users';
@@ -88,6 +89,7 @@ export default function Users() {
           onEdit={(u) => modals.open('edit', u)}
           onBookings={(u) => modals.open('bookings', u)}
           onDelete={(u) => setDeleteState({ type: 'delete', user: u })}
+          onReport={(u) => modals.open('report', u)}
           emptyMessage={
             list.isLoading
               ? t('users.empty.loading')
@@ -149,6 +151,20 @@ export default function Users() {
               id: selection.activeUser.id,
               fullName: getFullName(selection.activeUser),
             }
+            : null
+        }
+      />
+
+      <UserReportModal
+        isOpen={modals.modal === 'report'}
+        onClose={modals.close}
+        user={
+          selection.activeUser
+            ? {
+                id: selection.activeUser.id,
+                name: selection.activeUser.name,
+                surname: selection.activeUser.surname,
+              }
             : null
         }
       />
