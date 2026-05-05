@@ -105,12 +105,12 @@ export default function AssetCategories() {
             value={search}
             onChange={setSearch}
             placeholder="Search category by name"
-            className="w-full sm:w-70"
+            className="w-full sm:w-70 mb-0"
           />
           <Button
             type="submit"
             onClick={() => setOpenAddModal(true)}
-            className="mb-3 h-10 w-full font-bold sm:w-70"
+            className=" h-10 w-full font-bold sm:w-70"
             iconLeft={<AddSharpIcon />}
           >
             Add new category

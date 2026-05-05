@@ -63,7 +63,7 @@ export const AssetCategoriesTable = ({
             data={data}
             columns={columns}
             getRowKey={(c) => c.id}
-            className="w-full"
+            className="w-full mt-6"
         />
     )
 }
