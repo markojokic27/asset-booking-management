@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
+import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
 
 /**
  * Booking Service
@@ -24,4 +25,8 @@ public interface BookingService {
 
     /** DELETE (Soft) */
     void deleteBooking(Long id);
+
+    GeneralReportResponseDTO getGeneralReport();
+    GeneralReportResponseDTO getUserReport(Long userId);
+    GeneralReportResponseDTO getAssetReport(Long assetId);
 }

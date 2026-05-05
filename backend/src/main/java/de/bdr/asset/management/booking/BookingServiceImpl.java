@@ -18,10 +18,11 @@ import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
-import de.bdr.asset.management.core.security.SecurityService;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.InvalidDateRangeException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.core.security.SecurityService;
+import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import de.bdr.asset.management.user.UserStatusEnum;
@@ -250,5 +251,20 @@ public class BookingServiceImpl implements BookingService {
         // booking.setStatus("DELETED"),
 
         // repository.save(booking);
+    }
+
+    @Override
+    public GeneralReportResponseDTO getGeneralReport() {
+        return repository.getGeneralReport();
+    }
+
+    @Override
+    public GeneralReportResponseDTO getUserReport(Long userId) {
+        return repository.getUserReport(userId);
+    }
+
+    @Override
+    public GeneralReportResponseDTO getAssetReport(Long assetId) {
+        return repository.getAssetReport(assetId);
     }
 }
