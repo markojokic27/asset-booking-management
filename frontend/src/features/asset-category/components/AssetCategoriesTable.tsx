@@ -2,7 +2,6 @@ import { Table, type TableColumn } from '../../../components/ui/Table'
 import type { AssetCategoryDto } from '../types'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-import { CATEGORY_ICON_DEFAULT_SRC, CATEGORY_ICON_FALLBACK_SRC, getCategoryIconSrc } from '../utils/categoryIcon'
 
 type Props = {
     data: AssetCategoryDto[]

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 import {
   CATEGORY_ICON_DEFAULT_SRC,
-  CATEGORY_ICON_FALLBACK_SRC,
   getCategoryIconSrc,
 } from '../../asset-category/utils/categoryIcon';
 
@@ -39,10 +38,7 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
           className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
           onError={(e) => {
             const img = e.currentTarget;
-            if (img.src.endsWith(CATEGORY_ICON_DEFAULT_SRC)) {
-              img.src = CATEGORY_ICON_FALLBACK_SRC;
-              return;
-            }
+            img.onerror = null;
             img.src = CATEGORY_ICON_DEFAULT_SRC;
           }}
         />

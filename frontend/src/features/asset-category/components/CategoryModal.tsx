@@ -3,7 +3,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Modal } from '../../../components/ui/Modal';
 import { IconButton } from '../../../components/ui/IconButton';
 import type { AssetCategoryDto } from '../types';
-import { CATEGORY_ICON_DEFAULT_SRC, CATEGORY_ICON_FALLBACK_SRC, getCategoryIconSrc } from '../utils/categoryIcon';
+import { CATEGORY_ICON_DEFAULT_SRC, getCategoryIconSrc } from '../utils/categoryIcon';
 
 export type CategoryModalProps = {
   isOpen: boolean;
@@ -35,10 +35,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
             className="mt-2 h-24 w-24 rounded-lg border border-(--color-table-border) bg-white object-cover shadow-(--shadow-card)"
             onError={(e) => {
               const img = e.currentTarget;
-              if (img.src.endsWith(CATEGORY_ICON_DEFAULT_SRC)) {
-                img.src = CATEGORY_ICON_FALLBACK_SRC;
-                return;
-              }
+              img.onerror = null;
               img.src = CATEGORY_ICON_DEFAULT_SRC;
             }}
           />
