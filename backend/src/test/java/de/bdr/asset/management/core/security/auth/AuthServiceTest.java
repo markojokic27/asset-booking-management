@@ -1,10 +1,5 @@
-package de.bdr.asset.management.ldap;
+package de.bdr.asset.management.core.security.auth;
 
-import de.bdr.asset.management.core.security.*;
-import de.bdr.asset.management.core.security.auth.AuthService;
-import de.bdr.asset.management.core.security.auth.LoginRequestDTO;
-import de.bdr.asset.management.core.security.auth.LoginResponseDTO;
-import de.bdr.asset.management.core.security.auth.RefreshTokenResponseDTO;
 import de.bdr.asset.management.core.security.jwt.JwtTokenProvider;
 import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
 import io.jsonwebtoken.JwtException;

@@ -1,4 +1,4 @@
-package de.bdr.asset.management.ldap;
+package de.bdr.asset.management.core.security.jwt;
 
 import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
 import de.bdr.asset.management.core.security.jwt.JwtAuthenticationFilter;

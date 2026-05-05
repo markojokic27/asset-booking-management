@@ -1,6 +1,5 @@
-package de.bdr.asset.management.ldap;
+package de.bdr.asset.management.core.security.auth;
 
-import de.bdr.asset.management.core.security.auth.RefreshTokenRequestDTO;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

@@ -1,7 +1,5 @@
-package de.bdr.asset.management.ldap;
+package de.bdr.asset.management.core.security.userdetails;
 
-import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
-import de.bdr.asset.management.core.security.userdetails.UserDetailsServiceImpl;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import de.bdr.asset.management.user.UserRoleEnum;

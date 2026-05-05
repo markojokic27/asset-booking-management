@@ -1,15 +1,14 @@
-package de.bdr.asset.management.ldap;
+package de.bdr.asset.management.core.security.auth;
 
-import de.bdr.asset.management.core.security.auth.LoginResponseDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LoginResponseDTOTest {
+class RefreshTokenResponseDTOTest {
 
     @Test
     void shouldCreateRecordWithCorrectValues() {
-        LoginResponseDTO response = new LoginResponseDTO("access-token", "refresh-token");
+        RefreshTokenResponseDTO response = new RefreshTokenResponseDTO("access-token", "refresh-token");
 
         assertThat(response.accessToken()).isEqualTo("access-token");
         assertThat(response.refreshToken()).isEqualTo("refresh-token");
@@ -17,7 +16,7 @@ class LoginResponseDTOTest {
 
     @Test
     void shouldCreateRecordWithNullValues() {
-        LoginResponseDTO response = new LoginResponseDTO(null, null);
+        RefreshTokenResponseDTO response = new RefreshTokenResponseDTO(null, null);
 
         assertThat(response.accessToken()).isNull();
         assertThat(response.refreshToken()).isNull();
@@ -25,7 +24,7 @@ class LoginResponseDTOTest {
 
     @Test
     void shouldCreateRecordWithNullAccessToken() {
-        LoginResponseDTO response = new LoginResponseDTO(null, "refresh-token");
+        RefreshTokenResponseDTO response = new RefreshTokenResponseDTO(null, "refresh-token");
 
         assertThat(response.accessToken()).isNull();
         assertThat(response.refreshToken()).isEqualTo("refresh-token");
@@ -33,7 +32,7 @@ class LoginResponseDTOTest {
 
     @Test
     void shouldCreateRecordWithNullRefreshToken() {
-        LoginResponseDTO response = new LoginResponseDTO("access-token", null);
+        RefreshTokenResponseDTO response = new RefreshTokenResponseDTO("access-token", null);
 
         assertThat(response.accessToken()).isEqualTo("access-token");
         assertThat(response.refreshToken()).isNull();
