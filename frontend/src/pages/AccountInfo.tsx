@@ -1,62 +1,17 @@
 // External packages
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
+import { BadgeRow } from '../components/ui/BadgeRow';
+import { InfoRow } from '../components/ui/InfoRow';
 
-type UserDto = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  role: 'EMPLOYEE' | 'ADMIN' | 'MANAGER';
-  status: 'ACTIVE' | 'INACTIVE';
-  departmentId: number;
-  managerEmail: string;
-  notes?: string;
-};
+// Hooks
+import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
 
-const mockUser: UserDto = {
-  id: '1',
-  firstName: 'Ana',
-  lastName: 'Horvat',
-  email: 'ana.horvat@example.com',
-  username: 'ana.horvat',
-  role: 'ADMIN',
-  status: 'ACTIVE',
-  departmentId: 1,
-  managerEmail: 'manager@example.com',
-  notes: 'Team lead.',
-};
+// Types
+import type { UserDto } from '../features/user/types';
 
-type InfoRowProps = {
-  label: string;
-  value?: string | null;
-  valueClassName?: string;
-  emptyValue?: string;
-};
-
-function InfoRow({
-  label,
-  value,
-  valueClassName = '',
-  emptyValue = '-',
-}: InfoRowProps) {
-  return (
-    <div className="flex flex-col gap-1 border-b border-(--color-table-border) py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-      <span className="text-sm font-semibold tracking-wide text-(--color-table-text)">
-        {label}
-      </span>
-      <span
-        className={`text-sm text-black sm:text-right dark:text-white ${valueClassName}`}
-      >
-        {value && value.trim() !== '' ? value : emptyValue}
-      </span>
-    </div>
-  );
-}
 function getRoleBadgeClass(role: UserDto['role']) {
   switch (role) {
     case 'ADMIN':
@@ -81,29 +36,7 @@ function getStatusBadgeClass(status: UserDto['status']) {
 
 export default function AccountInfo() {
   const { t } = useTranslation();
-  const [user, setUser] = useState<UserDto | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        // const response = await api.get('/users/me');
-        // setUser(response.data);
-
-        setUser(mockUser);
-      } catch {
-        setError(t('account.error'));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, [t]);
+  const { user, isLoading, error } = useCurrentUser();
 
   return (
     <LayoutColumn
@@ -151,7 +84,7 @@ export default function AccountInfo() {
                   data-testid="account-fullname"
                   className="mt-2 text-xl font-bold text-black dark:text-white"
                 >
-                  {user.firstName} {user.lastName}
+                  {user.name} {user.surname}
                 </h2>
                 <p
                   data-testid="account-email"
@@ -165,17 +98,17 @@ export default function AccountInfo() {
             <div className="mt-6">
               <InfoRow
                 label={t('account.labels.id')}
-                value={user.id}
+                value={String(user.id)}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.firstName')}
-                value={user.firstName}
+                value={user.name}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.lastName')}
-                value={user.lastName}
+                value={user.surname}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
@@ -200,29 +133,19 @@ export default function AccountInfo() {
             </h2>
 
             <div className="mt-6">
-              <div className="flex flex-col gap-1 border-b border-(--color-table-border) py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                <span className="text-sm font-semibold tracking-wide text-(--color-table-text)">
-                  {t('account.labels.role')}
-                </span>
-                <span
-                  data-testid="account-role"
-                  className={`inline-flex w-fit rounded-full px-2.5 py-1 text-xs font-semibold sm:ml-auto ${getRoleBadgeClass(user.role)}`}
-                >
-                  {user.role}
-                </span>
-              </div>
+              <BadgeRow
+                label={t('account.labels.role')}
+                value={user.role}
+                badgeClassName={getRoleBadgeClass(user.role)}
+                testId="account-role"
+              />
 
-              <div className="flex flex-col gap-1 border-b border-(--color-table-border) py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                <span className="text-sm font-semibold tracking-wide text-(--color-table-text)">
-                  {t('account.labels.status')}
-                </span>
-                <span
-                  data-testid="account-status"
-                  className={`inline-flex w-fit rounded-full px-2.5 py-1 text-xs font-semibold sm:ml-auto ${getStatusBadgeClass(user.status)}`}
-                >
-                  {user.status}
-                </span>
-              </div>
+              <BadgeRow
+                label={t('account.labels.status')}
+                value={user.status}
+                badgeClassName={getStatusBadgeClass(user.status)}
+                testId="account-status"
+              />
 
               <InfoRow
                 label={t('account.labels.department')}
