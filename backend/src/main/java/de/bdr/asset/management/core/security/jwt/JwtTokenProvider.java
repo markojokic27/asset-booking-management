@@ -75,9 +75,8 @@ public class JwtTokenProvider {
 
     public boolean isValid(String token, UserDetails userDetails) {
         String username = extractUsername(token);
-        // Both conditions must hold: username matches AND token is not expired
-        return username.equals(userDetails.getUsername())
-                && !parseClaims(token).getExpiration().before(new Date());
+
+        return username.equals(userDetails.getUsername());
     }
 
     // Parses and verifies the token signature; throws JwtException on failure

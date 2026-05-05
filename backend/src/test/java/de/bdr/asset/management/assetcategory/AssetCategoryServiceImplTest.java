@@ -1,5 +1,6 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -137,5 +138,33 @@ class AssetCategoryServiceImplTest {
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.updateAssetCategory(1L, requestDTO));
+    }
+
+    // Tests createAssetCategory(): throws exception if category name already exists
+    @Test
+    void shouldThrowExceptionWhenCreatingDuplicateCategory() {
+
+        when(repository.existsByName(requestDTO.name())).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.createAssetCategory(requestDTO));
+
+        verify(repository).existsByName(requestDTO.name());
+        verify(repository, never()).save(any());
+    }
+
+    // Tests updateAssetCategory(): throws exception if new name already exists for a DIFFERENT category
+    @Test
+    void shouldThrowExceptionWhenUpdatingDuplicateCategoryName() {
+
+        when(repository.findById(1L)).thenReturn(Optional.of(category));
+        when(repository.existsByNameAndIdNot(requestDTO.name(), 1L)).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.updateAssetCategory(1L, requestDTO));
+
+        verify(repository).findById(1L);
+        verify(repository).existsByNameAndIdNot(requestDTO.name(), 1L);
+        verify(repository, never()).save(any());
     }
 }

@@ -176,6 +176,38 @@ class AssetServiceImplTest {
                 () -> service.getAssetById(1L));
     }
 
+    // Tests getAssetById(): user is not authenticated (auth is null) -> defaults to non-admin behavior
+    @Test
+    void shouldGetAssetById_WhenUserIsNotAuthenticated() {
+
+
+        SecurityContextHolder.clearContext();
+
+        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.of(asset));
+        when(mapper.toResponse(asset)).thenReturn(responseDTO);
+
+        AssetResponseDTO result = service.getAssetById(1L);
+
+        assertEquals(1L, result.id());
+
+
+        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.DELETED);
+    }
+
+    // Tests getAssetById(): throws exception when user is not authenticated and asset not found
+    @Test
+    void shouldThrowExceptionWhenAssetNotFound_WhenUserIsNotAuthenticated() {
+
+        SecurityContextHolder.clearContext();
+
+        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.getAssetById(1L));
+
+        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.DELETED);
+    }
+
     // Tests getAllAssets(): if user is admin fetch all assets and map them to response DTOs
     @Test
     void shouldReturnAllAssets_WhenUserIsAdmin() {

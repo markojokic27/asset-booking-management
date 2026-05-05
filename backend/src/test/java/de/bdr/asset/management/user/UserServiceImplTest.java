@@ -2,6 +2,7 @@ package de.bdr.asset.management.user;
 
 import de.bdr.asset.management.booking.BookingRepository;
 import de.bdr.asset.management.booking.BookingStatusEnum;
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentEnum;
 import de.bdr.asset.management.user.department.DepartmentRepository;
@@ -136,6 +137,36 @@ class UserServiceImplTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> service.createUser(requestDTO));
 
+        verify(repository, never()).save(any());
+    }
+
+    // Tests createUser(): throws exception if username already exists
+    @Test
+    void shouldThrowExceptionWhenUsernameAlreadyExists() {
+
+        when(repository.existsByUsername(requestDTO.username())).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.createUser(requestDTO));
+
+
+        verify(repository).existsByUsername(requestDTO.username());
+        verify(repository, never()).existsByEmail(any());
+        verify(repository, never()).save(any());
+    }
+
+    // Tests createUser(): throws exception if email already exists
+    @Test
+    void shouldThrowExceptionWhenEmailAlreadyExists() {
+
+        when(repository.existsByUsername(requestDTO.username())).thenReturn(false);
+        when(repository.existsByEmail(requestDTO.email())).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.createUser(requestDTO));
+
+        verify(repository).existsByUsername(requestDTO.username());
+        verify(repository).existsByEmail(requestDTO.email());
         verify(repository, never()).save(any());
     }
 
