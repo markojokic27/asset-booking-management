@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security.ldap;
+package de.bdr.asset.management.core.ldap;
 
 public record LdapUserDTO(
         String username,

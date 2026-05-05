@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.userdetails;
 
 import java.util.Collection;
 import java.util.List;

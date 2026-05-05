@@ -1,7 +1,8 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.benefit;
 
 import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.asset.AssetRepository;
+import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

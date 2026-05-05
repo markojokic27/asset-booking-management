@@ -1,10 +1,11 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.jwt;
 
 import java.util.Date;
 import java.util.Map;
 
 import javax.crypto.SecretKey;
 
+import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;

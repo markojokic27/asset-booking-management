@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.jwt;
 
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security.ldap;
+package de.bdr.asset.management.core.ldap;
 
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;

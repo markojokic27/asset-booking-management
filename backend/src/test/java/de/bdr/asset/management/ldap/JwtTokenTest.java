@@ -1,8 +1,8 @@
 package de.bdr.asset.management.ldap;
 
-import de.bdr.asset.management.core.config.security.CustomUserDetails;
-import de.bdr.asset.management.core.config.security.JwtProperties;
-import de.bdr.asset.management.core.config.security.JwtTokenProvider;
+import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
+import de.bdr.asset.management.core.security.jwt.JwtProperties;
+import de.bdr.asset.management.core.security.jwt.JwtTokenProvider;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRoleEnum;
 import de.bdr.asset.management.user.UserStatusEnum;

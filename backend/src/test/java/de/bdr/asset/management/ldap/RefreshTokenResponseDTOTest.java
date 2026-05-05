@@ -1,6 +1,6 @@
 package de.bdr.asset.management.ldap;
 
-import de.bdr.asset.management.core.config.security.RefreshTokenResponseDTO;
+import de.bdr.asset.management.core.security.auth.RefreshTokenResponseDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

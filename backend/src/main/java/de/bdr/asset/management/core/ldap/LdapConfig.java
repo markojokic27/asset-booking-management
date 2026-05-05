@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security.ldap;
+package de.bdr.asset.management.core.ldap;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

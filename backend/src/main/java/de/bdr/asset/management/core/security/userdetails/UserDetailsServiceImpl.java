@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.userdetails;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

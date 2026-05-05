@@ -1,5 +1,6 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security;
 
+import de.bdr.asset.management.core.security.jwt.JwtAuthenticationFilter;
 import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

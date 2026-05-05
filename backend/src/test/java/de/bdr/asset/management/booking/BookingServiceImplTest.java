@@ -32,7 +32,7 @@ import static de.bdr.asset.management.booking.TestConstants.validUpdateUserStatu
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
-import de.bdr.asset.management.core.config.security.SecurityService;
+import de.bdr.asset.management.core.security.SecurityService;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;

@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security.ldap;
+package de.bdr.asset.management.core.ldap;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ldap.core.LdapTemplate;

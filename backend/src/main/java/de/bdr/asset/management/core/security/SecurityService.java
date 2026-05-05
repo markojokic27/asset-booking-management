@@ -1,5 +1,6 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security;
 
+import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

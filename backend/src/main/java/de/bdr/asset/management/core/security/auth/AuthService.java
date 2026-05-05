@@ -1,5 +1,6 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.auth;
 
+import de.bdr.asset.management.core.security.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;

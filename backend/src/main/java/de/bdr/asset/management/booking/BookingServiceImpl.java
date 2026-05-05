@@ -18,7 +18,7 @@ import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
-import de.bdr.asset.management.core.config.security.SecurityService;
+import de.bdr.asset.management.core.security.SecurityService;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.InvalidDateRangeException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;

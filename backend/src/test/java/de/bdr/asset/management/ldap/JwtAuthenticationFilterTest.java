@@ -1,8 +1,8 @@
 package de.bdr.asset.management.ldap;
 
-import de.bdr.asset.management.core.config.security.CustomUserDetails;
-import de.bdr.asset.management.core.config.security.JwtAuthenticationFilter;
-import de.bdr.asset.management.core.config.security.JwtTokenProvider;
+import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
+import de.bdr.asset.management.core.security.jwt.JwtAuthenticationFilter;
+import de.bdr.asset.management.core.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

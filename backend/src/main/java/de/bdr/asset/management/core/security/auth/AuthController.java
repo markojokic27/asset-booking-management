@@ -1,4 +1,4 @@
-package de.bdr.asset.management.core.config.security;
+package de.bdr.asset.management.core.security.auth;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
