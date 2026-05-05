@@ -1,7 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { FormInput } from '../../../components/ui/FormInput'
 import { Button } from '../../../components/ui/Button'
-import { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormDropdown } from '../../../components/ui/FormDropdown'
 import { createCategory } from '../api/categoryApi'
@@ -25,7 +24,6 @@ type FormValues = {
     description: string
     bookingPeriod: 'DAY' | 'HOUR'
     approval: boolean
-    picture?: string
 }
 
 export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
@@ -36,9 +34,6 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
             approval: false
         }
     })
-
-    const [imagePreview, setImagePreview] = useState<string | undefined>()
-    const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const onSubmit = async (data: FormValues) => {
         try {
@@ -54,13 +49,6 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
             onClose() // close modal after success
         } catch (err) {
             console.error('Error creating category:', err)
-        }
-    }
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (file) {
-            setImagePreview(URL.createObjectURL(file))
         }
     }
 
@@ -95,39 +83,6 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                 {/* FORM */}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex gap-10 px-8 py-8">
-
-                        {/* IMAGE */}
-                        <div className="flex w-65 flex-col items-center justify-center">
-                            <div className="relative w-full">
-                                {imagePreview ? (
-                                    <img
-                                        src={imagePreview}
-                                        alt="preview"
-                                        className="h-42.5 w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card) blur-[1.5px]"
-                                    />
-                                ) : (
-                                    <div className="flex h-42.5 w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)" />
-                                )}
-
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleImageChange}
-                                />
-
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1.5 text-xs shadow-none"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    {imagePreview ? 'Change photo' : 'Upload photo'}
-                                </Button>
-                            </div>
-                        </div>
 
                         {/* INPUTS */}
                         <div className="flex flex-1 flex-col space-y-5">

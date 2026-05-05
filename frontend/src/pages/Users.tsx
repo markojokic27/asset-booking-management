@@ -68,6 +68,8 @@ export default function Users() {
         </div>
       </div>
 
+      <div className="mt-6 h-px w-full bg-(--color-table-border)" />
+
       <div className="mt-6 flex justify-end">
         <SearchInput
           value={list.search}
@@ -109,16 +111,16 @@ export default function Users() {
         user={
           selection.activeUser
             ? {
-                id: selection.activeUser.id,
-                name: getFullName(selection.activeUser),
-                email: selection.activeUser.email,
-                username: selection.activeUser.username,
-                role: selection.activeUser.role,
-                status: selection.activeUser.status,
-                departmentId: selection.activeUser.departmentId,
-                managerEmail: selection.activeUser.managerEmail,
-                notes: selection.activeUser.notes,
-              }
+              id: selection.activeUser.id,
+              name: getFullName(selection.activeUser),
+              email: selection.activeUser.email,
+              username: selection.activeUser.username,
+              role: selection.activeUser.role,
+              status: selection.activeUser.status,
+              departmentId: selection.activeUser.departmentId,
+              managerEmail: selection.activeUser.managerEmail,
+              notes: selection.activeUser.notes,
+            }
             : null
         }
       />
@@ -144,9 +146,9 @@ export default function Users() {
         user={
           selection.activeUser
             ? {
-                id: selection.activeUser.id,
-                fullName: getFullName(selection.activeUser),
-              }
+              id: selection.activeUser.id,
+              fullName: getFullName(selection.activeUser),
+            }
             : null
         }
       />

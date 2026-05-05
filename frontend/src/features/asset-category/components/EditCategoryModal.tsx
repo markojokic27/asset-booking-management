@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { FormInput } from '../../../components/ui/FormInput'
 import { Button } from '../../../components/ui/Button'
-import { useState, useRef, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormDropdown } from '../../../components/ui/FormDropdown'
 import { Checkbox } from 'radix-ui'
@@ -27,7 +27,6 @@ type FormValues = {
     description: string
     bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH'
     approval: boolean
-    picture?: string
 }
 
 export const EditCategoryModal: React.FC<Props> = ({
@@ -36,9 +35,6 @@ export const EditCategoryModal: React.FC<Props> = ({
     category,
     onSave,
 }) => {
-    const [imagePreview, setImagePreview] = useState<string | undefined>()
-    const fileInputRef = useRef<HTMLInputElement | null>(null)
-
     const {
         register,
         handleSubmit,
@@ -84,13 +80,6 @@ export const EditCategoryModal: React.FC<Props> = ({
         }
     }
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (file) {
-            setImagePreview(URL.createObjectURL(file))
-        }
-    }
-
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
@@ -120,38 +109,6 @@ export const EditCategoryModal: React.FC<Props> = ({
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex gap-10 px-8 py-8">
-                        <div className="flex w-65 flex-col items-center justify-center">
-                            <div className="relative w-full">
-                                {imagePreview ? (
-                                    <img
-                                        src={imagePreview}
-                                        alt="preview"
-                                        className="h-42.5 w-full rounded-lg border border-(--color-table-border) object-cover shadow-(--shadow-card) blur-[1.5px]"
-                                    />
-                                ) : (
-                                    <div className="flex h-42.5 w-full items-center justify-center rounded-lg border border-dashed border-(--color-table-border) bg-(--color-modal-placeholder-bg)" />
-                                )}
-
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleImageChange}
-                                />
-
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 py-1.5 text-xs shadow-none"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    {imagePreview ? 'Change photo' : 'Upload photo'}
-                                </Button>
-                            </div>
-                        </div>
-
                         <div className="flex flex-1 flex-col space-y-5">
                             <FormInput
                                 data-testid="edit-category-name"

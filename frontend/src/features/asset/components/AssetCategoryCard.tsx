@@ -1,6 +1,11 @@
 // External packages
 import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
+import {
+  CATEGORY_ICON_DEFAULT_SRC,
+  CATEGORY_ICON_FALLBACK_SRC,
+  getCategoryIconSrc,
+} from '../../asset-category/utils/categoryIcon';
 
 export type AssetCategoryCardProps = {
   title: string;
@@ -27,14 +32,31 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
         className
       )}
     >
-      <div className="flex h-full flex-col justify-between p-4">
-        <span className="text-[10px] font-semibold tracking-[0.22em] text-(--color-table-head-text) uppercase opacity-50">
-          Category
-        </span>
-        <div>
-          <span data-testid="asset-category-card-title" className="block text-base font-black tracking-[0.06em]">
-            {title}
+      <div className="relative flex h-full p-4">
+        <img
+          src={getCategoryIconSrc(title)}
+          alt=""
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (img.src.endsWith(CATEGORY_ICON_DEFAULT_SRC)) {
+              img.src = CATEGORY_ICON_FALLBACK_SRC;
+              return;
+            }
+            img.src = CATEGORY_ICON_DEFAULT_SRC;
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0 bg-(--color-table-surface)/25" />
+
+        <div className="relative z-10 flex flex-1 flex-col justify-between">
+          <span className="text-[10px] font-semibold tracking-[0.22em] text-(--color-table-head-text) uppercase opacity-50">
+            Category
           </span>
+          <div>
+            <span data-testid="asset-category-card-title" className="block text-base font-black tracking-[0.06em]">
+              {title}
+            </span>
+          </div>
         </div>
       </div>
     </button>
