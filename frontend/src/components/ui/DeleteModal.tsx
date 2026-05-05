@@ -41,11 +41,11 @@ export function DeleteModal<T>({
         </p>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button type="button" onClick={onClose}>
+          <Button type="button" variant="secondary" onClick={onClose}>
             {t('ui.deleteModal.cancel')}
           </Button>
 
-          <Button type="button" onClick={onConfirm}>
+          <Button type="button" variant="danger" onClick={onConfirm}>
             {t('ui.deleteModal.confirmDelete')}
           </Button>
         </div>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export type ButtonOwnProps = {
-  variant?: 'solid' | 'outline' | 'dark' | 'link';
+  variant?: 'solid' | 'outline' | 'dark' | 'link' | 'danger' | 'secondary';
   size?: 'sm' | 'md';
   isVisuallyDisabled?: boolean;
   iconLeft?: React.ReactNode;
@@ -49,6 +49,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             'hover:border-grayscale-200 hover:text-grayscale-200 border-white text-white',
           variant === 'link' &&
             'border-0 bg-transparent p-0 underline underline-offset-4 shadow-none hover:no-underline',
+          variant === 'danger' &&
+            'border-red-600 bg-red-600 text-white hover:border-red-700 hover:bg-red-700',
+          variant === 'secondary' &&
+            'border-gray-300 bg-gray-200 text-gray-700 hover:border-gray-400 hover:bg-gray-300',
 
           // sizes
           size === 'sm' && 'px-4 py-3',
