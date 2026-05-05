@@ -18,7 +18,6 @@ data class AssetsUiState(
     val isLoading: Boolean = false,
     val assets: List<AssetResponse> = emptyList(),
     val searchText: String = "",
-    val scannedAsset: AssetResponse? = null,
     val errorMessage: String? = null
 ){
     val filteredAssets: List<AssetResponse>
@@ -44,46 +43,6 @@ class AssetsViewModel @Inject constructor(
     }
 }
 
-    fun getAssetById(id: Long) {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLoading = true,
-                    errorMessage = null
-                )
-            }
-
-            try {
-                val asset = assetRepository.getAssetById(id)
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        scannedAsset = asset,
-                        errorMessage = null
-                    )
-                }
-            } catch (error: HttpException) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You are not authorized to view this asset."
-                            404 -> "Asset not found."
-                            else -> "Failed to load asset."
-                        }
-                    )
-                }
-            } catch (_: IOException) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = "Cannot reach backend."
-                    )
-                }
-            }
-        }
-    }
     fun getAssets() {
         viewModelScope.launch {
             _uiState.update {
