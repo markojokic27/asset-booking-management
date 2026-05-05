@@ -1,7 +1,6 @@
-package de.bdr.asset.management.exception;
+package de.bdr.asset.management.core.exception;
 
 import com.google.zxing.WriterException;
-import de.bdr.asset.management.core.exception.*;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
