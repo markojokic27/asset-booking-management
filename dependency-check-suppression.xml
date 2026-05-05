@@ -10,20 +10,4 @@
         <cve>CVE-2025-7962</cve>
     </suppress>
 
-    <!-- ACCEPTED RISK: swagger-ui DOMPurify mXSS vulnerabilities.
-         Swagger UI is only active in dev/test Spring profile, never exposed in production.
-         Attack requires re-parsing sanitized HTML via innerHTML + special wrappers (xmp, script, etc.)
-         which is an internal Swagger UI rendering concern, not our application code. -->
-    <suppress>
-        <notes>Swagger UI is dev-only (spring.profiles: dev). DOMPurify mXSS via innerHTML re-contextualization not exploitable in production.</notes>
-        <packageUrl regex="true">^pkg:javascript/DOMPurify@.*$</packageUrl>
-        <cve>CVE-2026-0540</cve>
-    </suppress>
-
-    <suppress>
-        <notes>Swagger UI is dev-only (spring.profiles: dev). DOMPurify ADD_ATTR URI bypass not exploitable in production.</notes>
-        <packageUrl regex="true">^pkg:javascript/DOMPurify@.*$</packageUrl>
-        <cve>CVE-2025-15599</cve>
-    </suppress>
-
 </suppressions>
