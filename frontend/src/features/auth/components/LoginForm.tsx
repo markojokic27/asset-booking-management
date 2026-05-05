@@ -36,6 +36,7 @@ const LoginForm = () => {
       const { accessToken, refreshToken, username: user, role } = response.data;
 
       setAccessToken(accessToken);
+      localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 
       localStorage.setItem('username', user); //TODO user id isto spremi

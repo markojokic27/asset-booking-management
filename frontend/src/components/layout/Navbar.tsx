@@ -7,9 +7,12 @@ import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { getFullName } from '../../features/user/utilis/users';
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
+  const { user } = useCurrentUser();
   const navItems = [
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
@@ -56,8 +59,17 @@ export const Navbar: React.FC = () => {
 
         <div className="flex w-full flex-col gap-4">
           <NavLink to="/account-info" className={({ isActive }) => getLinkClass(isActive)}>
-            <AccountCircleSharp className='mr-3' sx={{ fontSize: 26 }} />
-            {t('layout.navbar.account')}
+            <AccountCircleSharp className="mr-3" sx={{ fontSize: 26 }} />
+            {user ? (
+              <div className="flex flex-col leading-tight">
+                <div className="tracking-normal">{getFullName(user)}</div>
+                <div className="text-xs tracking-normal text-gray-500 dark:text-gray-400">
+                  {user.role}
+                </div>
+              </div>
+            ) : (
+              t('layout.navbar.account')
+            )}
           </NavLink>
           <NavLink to="/login" className={getLinkClass(false)}>
             <LogoutSharpIcon className="mr-4" />

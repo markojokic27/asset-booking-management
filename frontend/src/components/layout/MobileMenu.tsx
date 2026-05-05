@@ -15,9 +15,12 @@ import {
   LogoutSharp,
   AccountCircleSharp,
 } from '@mui/icons-material';
+import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { getFullName } from '../../features/user/utilis/users';
 
 export default function MobileMenu() {
   const { t } = useTranslation();
+  const { user } = useCurrentUser();
   const links = [
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharp },
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharp },
@@ -81,7 +84,16 @@ export default function MobileMenu() {
                 className="flex w-full items-center justify-center gap-3 rounded-lg border border-(--color-table-border) py-3 text-lg font-medium"
               >
                 <AccountCircleSharp sx={{ fontSize: 26 }} />
-                {t('layout.navbar.account')}
+                {user ? (
+                  <div className="flex flex-col items-start leading-tight">
+                    <div>{getFullName(user)}</div>
+                    <div className="text-xs font-normal text-gray-500 dark:text-gray-400">
+                      {user.role}
+                    </div>
+                  </div>
+                ) : (
+                  t('layout.navbar.account')
+                )}
               </NavLink>
             </Dialog.Close>
 
