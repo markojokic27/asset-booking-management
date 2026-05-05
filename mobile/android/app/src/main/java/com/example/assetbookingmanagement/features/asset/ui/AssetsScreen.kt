@@ -25,6 +25,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.SearchBar
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun AssetsScreen(
@@ -32,6 +37,10 @@ fun AssetsScreen(
     viewModel: AssetsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    var isFilterSheetOpen by remember {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = Modifier
@@ -62,7 +71,8 @@ fun AssetsScreen(
 
                 IconButton(
                     onClick = {
-                    }
+                        isFilterSheetOpen = true
+                    } 
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.filter_alt_24),
@@ -122,5 +132,22 @@ fun AssetsScreen(
                 }
             }
         )
+        if (isFilterSheetOpen) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.35f))
+                    .clickable {
+                        isFilterSheetOpen = false
+                    }
+            )
+
+            AssetFilterSideSheet(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                onCloseClick = {
+                    isFilterSheetOpen = false
+                }
+            )
+        }
     }
 }
