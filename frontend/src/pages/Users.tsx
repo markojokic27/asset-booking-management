@@ -47,6 +47,7 @@ export default function Users() {
         <h1 className="text-3xl font-black tracking-widest">
           {t('users.title')}
         </h1>
+
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button
             size="sm"
@@ -66,14 +67,15 @@ export default function Users() {
           </Button>
         </div>
       </div>
-      <div className="mt-6 mb-8 h-px w-full bg-(--color-table-border)" />
 
-      <div className="flex justify-end">
+      <div className="mt-6 h-px w-full bg-(--color-table-border)" />
+
+      <div className="mt-6 flex justify-end">
         <SearchInput
           value={list.search}
           onChange={list.setSearch}
           placeholder={t('users.search.placeholder')}
-          className="mb-0 w-70"
+          className="w-70"
         />
       </div>
 
