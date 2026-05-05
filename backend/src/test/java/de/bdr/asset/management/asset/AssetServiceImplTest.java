@@ -266,6 +266,42 @@ class AssetServiceImplTest {
         verify(repository, never()).save(any());
     }
 
+    // Tests updateAssetQRCode(): asset exists → update code (filePath), save, map to response
+    @Test
+    void shouldUpdateAssetQRCode() {
+
+        String filePath = "src/main/resources/qr-codes/1.png";
+
+        when(repository.findById(1L)).thenReturn(Optional.of(asset));
+        when(repository.save(asset)).thenReturn(asset);
+        when(mapper.toResponse(asset)).thenReturn(responseDTO);
+
+        AssetResponseDTO result = service.updateAssetQRCode(1L, filePath);
+
+        assertNotNull(result);
+        assertEquals(filePath, asset.getCode());
+
+        verify(repository).findById(1L);
+        verify(repository).save(asset);
+        verify(mapper).toResponse(asset);
+    }
+
+    // Tests updateAssetQRCode(): throws exception if asset does not exist
+    @Test
+    void shouldThrowExceptionWhenUpdatingQRCodeForNonExistingAsset() {
+
+        String filePath = "src/main/resources/qr-codes/1.png";
+
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.updateAssetQRCode(1L, filePath));
+        
+        verify(repository).findById(1L);
+        verify(repository, never()).save(any());
+        verify(mapper, never()).toResponse(any());
+    }
+
     private void mockLoggedUser(String user) {
 
         Authentication authentication = mock(Authentication.class);

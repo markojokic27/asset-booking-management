@@ -1,8 +1,12 @@
 package de.bdr.asset.management.asset;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import de.bdr.asset.management.asset.qrcode.QRCodeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,17 +15,24 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 @ExtendWith(MockitoExtension.class)
 public class AssetControllerTest {
+
     @Mock
     private AssetService assetService;
+
+    @Mock
+    private QRCodeService qrCodeService;
 
     @InjectMocks
     private AssetController assetController;
@@ -109,5 +120,29 @@ public class AssetControllerTest {
         assertThat(result.getBody()).isNull();
 
         verify(assetService).softDeleteAsset(1L);
+    }
+
+    /** GET OR CREATE QR CODE */
+    @Test
+    void getOrCreateQRCode_returnsOkWithResource() throws Exception {
+
+        Long assetId = 1L;
+
+        File tempFile = File.createTempFile("test-qr", ".png");
+        tempFile.deleteOnExit();
+
+        Files.writeString(tempFile.toPath(), "dummy image data");
+
+        when(qrCodeService.getQRCode(assetId)).thenReturn(tempFile.getAbsolutePath());
+
+        ResponseEntity<Resource> result = assetController.getOrCreateQRCode(assetId);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.IMAGE_PNG);
+        assertThat(result.getHeaders().getContentLength()).isEqualTo(tempFile.length());
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody()).isInstanceOf(InputStreamResource.class);
+
+        verify(qrCodeService).getQRCode(assetId);
     }
 }
