@@ -93,8 +93,8 @@ public class UserControllerTest {
 
     /** UPDATE */
     @Test
-    void updateUser_returnsOkWithUpdatesdUser(){
-        UserUpdateRequestDTO request=new UserUpdateRequestDTO(UserStatusEnum.LEFT_COMPANY, "test notes", "SOME");
+    void updateUser_returnsOkWithUpdatedUser(){
+        UserUpdateRequestDTO request=new UserUpdateRequestDTO("ivan", "ivic", "ivanivic@maurer-electronics.hr", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "ante@maurer-electronics.hr", "test notes", "SOME");
         UserResponseDTO response=new UserResponseDTO( 1L,"ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
 
         when(userService.updateUser(1L, request)).thenReturn(response);

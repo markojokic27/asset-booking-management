@@ -114,6 +114,33 @@ public class UserServiceImpl implements UserService {
                 .filter(u -> u.getStatus() != UserStatusEnum.DELETED)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
+        // TODO
+        if (userUpdateRequest.name() != null) {
+            user.setName(userUpdateRequest.name());
+        }
+
+        if (userUpdateRequest.surname() != null) {
+            user.setSurname(userUpdateRequest.surname());
+        }
+
+        if (userUpdateRequest.email() != null) {
+            user.setEmail(userUpdateRequest.email());
+        }
+
+        if (userUpdateRequest.role() != null) {
+            user.setRole(userUpdateRequest.role());
+        }
+
+        /*
+        if (userUpdateRequest.departmentId() != null) {
+            user.setDepartment(userUpdateRequest.departmentId());
+        }
+        */
+
+        if (userUpdateRequest.managerEmail() != null) {
+            user.setManagerEmail(userUpdateRequest.managerEmail());
+        }
+
         if (userUpdateRequest.status() != null) {
             user.setStatus(userUpdateRequest.status());
         }

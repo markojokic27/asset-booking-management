@@ -84,7 +84,13 @@ class UserServiceImplTest {
         );
 
         userUpdateRequestDTO = new UserUpdateRequestDTO(
+                "ivic",
+                "ivan",
+                "iivanivic@maurer-electonics.hr",
+                UserRoleEnum.EMPLOYEE,
                 UserStatusEnum.ACTIVE,
+                1L,
+                "antem@maurer-electonics.hr",
                 "Some updated notes",
                 "SOME"
         );
