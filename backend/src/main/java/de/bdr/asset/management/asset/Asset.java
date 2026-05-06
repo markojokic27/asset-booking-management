@@ -1,6 +1,7 @@
 package de.bdr.asset.management.asset;
 
 import de.bdr.asset.management.assetcategory.AssetCategory;
+import de.bdr.asset.management.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -17,11 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Asset {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+public class Asset extends BaseEntity {
 
     /** Name of asset */
     @Column(nullable = false, length = 100)
@@ -49,12 +46,4 @@ public class Asset {
     @Column(nullable = false)
     private String location;
 
-    /** Created at */
-    @CreationTimestamp
-    @Column(updatable=false)
-    private Instant createdAt;
-
-    /** Last Modified at */
-    @UpdateTimestamp
-    private Instant lastModifiedAt;
 }

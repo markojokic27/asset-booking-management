@@ -1,8 +1,10 @@
 package de.bdr.asset.management.user;
 
+import de.bdr.asset.management.core.domain.BaseEntity;
 import de.bdr.asset.management.user.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.*;
 
 import java.time.Instant;
@@ -18,11 +20,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntity {
 
     /** Username of user*/
     @Column(nullable = false, unique = true, length = 100)
@@ -71,12 +69,4 @@ public class User {
     @Column(nullable = false, length = 100)
     private String benefit;
 
-    /** Created at */
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Instant createdAt;
-
-    /** Last Modified at */
-    @UpdateTimestamp
-    private Instant lastModifiedAt;
 }

@@ -1,5 +1,6 @@
 package de.bdr.asset.management.user.department;
 
+import de.bdr.asset.management.core.domain.BaseEntity;
 import de.bdr.asset.management.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,11 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Department {
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+public class Department extends BaseEntity {
 
     /** Name of department */
     @Column(nullable=false, unique = true)
@@ -33,12 +30,4 @@ public class Department {
     @JoinColumn(name="manager_id", unique = true)
     private User manager;
 
-    /** Created at */
-    @CreationTimestamp
-    @Column(updatable=false)
-    private Instant createdAt;
-
-    /** Last Modified at */
-    @UpdateTimestamp
-    private Instant lastModifiedAt;
 }

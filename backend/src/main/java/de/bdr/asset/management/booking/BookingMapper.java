@@ -1,16 +1,15 @@
 package de.bdr.asset.management.booking;
 
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        builder = @Builder(disableBuilder = true)
+)
 public interface BookingMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)

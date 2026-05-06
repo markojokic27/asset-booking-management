@@ -2,10 +2,14 @@ package de.bdr.asset.management.user;
 
 import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
 import de.bdr.asset.management.user.dtos.UserResponseDTO;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        builder = @Builder(disableBuilder = true)
+)
 public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)

@@ -1,9 +1,13 @@
 package de.bdr.asset.management.asset;
 
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        builder = @Builder(disableBuilder = true)
+)
 public interface AssetMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "code", ignore = true)

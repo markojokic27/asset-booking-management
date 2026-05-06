@@ -1,6 +1,7 @@
 package de.bdr.asset.management.booking;
 
 import de.bdr.asset.management.asset.Asset;
+import de.bdr.asset.management.core.domain.BaseEntity;
 import de.bdr.asset.management.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,11 +19,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Booking {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Booking extends BaseEntity {
 
     /** ID of user, foreign key */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,12 +48,4 @@ public class Booking {
     @Column(length = 255)
     private String notes;
 
-    /** Created at */
-    @CreationTimestamp
-    @Column(updatable = false)
-    private Instant createdAt;
-
-    /** Last Modified at */
-    @UpdateTimestamp
-    private Instant lastModifiedAt;
 }
