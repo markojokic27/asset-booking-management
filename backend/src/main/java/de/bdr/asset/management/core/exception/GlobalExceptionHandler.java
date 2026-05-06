@@ -31,14 +31,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    /*
-        Generic handler if a resource is not found in the database.
 
-        Example:
-        - Have database with assets with Ids from 1-10
-        - Request an asset with id 25
-        - Does not exist so return status 404, ResourceNotFoundException
-    */
+    public static final String TIMESTAMP = "timestamp";
+    public static final String ISSUE = "issue";
+    public static final String INVALID_PARAMS = "invalidParams";
+
+    /*
+                Generic handler if a resource is not found in the database.
+
+                Example:
+                - Have database with assets with Ids from 1-10
+                - Request an asset with id 25
+                - Does not exist so return status 404, ResourceNotFoundException
+            */
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
@@ -52,7 +57,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Resource not found");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -76,7 +81,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Duplicate resource");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -100,7 +105,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Invalid date range");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -124,7 +129,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Action not allowed");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -142,7 +147,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Conflict with reservation");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -160,7 +165,7 @@ public class GlobalExceptionHandler {
         List<Map<String, String>> invalidParams = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> Map.of(
                         "field", error.getField(),
-                        "issue", error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"
+                        ISSUE, error.getDefaultMessage() != null ? error.getDefaultMessage() : "Invalid value"
                 ))
                 .toList();
 
@@ -173,8 +178,8 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Invalid data");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
-        problemDetail.setProperty("invalidParams", invalidParams);
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
+        problemDetail.setProperty(INVALID_PARAMS, invalidParams);
 
         return problemDetail;
     }
@@ -196,7 +201,7 @@ public class GlobalExceptionHandler {
         Map<String, String> invalidParam = Map.of(
                 "field", fieldName,
                 "rejectedValue", value != null ? value.toString() : "null",
-                "issue", "Invalid value for parameter"
+                ISSUE, "Invalid value for parameter"
         );
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
@@ -206,8 +211,8 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Type mismatch");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
-        problemDetail.setProperty("invalidParams", List.of(invalidParam));
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
+        problemDetail.setProperty(INVALID_PARAMS, List.of(invalidParam));
 
         return problemDetail;
     }
@@ -228,7 +233,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Invalid request");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -245,7 +250,7 @@ public class GlobalExceptionHandler {
         Map<String, String> invalidParam = Map.of(
                 "property", ex.getPropertyName(),
                 "entity", ex.getType().getType().getSimpleName(),
-                "issue", "No such property on entity"
+                ISSUE, "No such property on entity"
         );
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
@@ -255,8 +260,8 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("invalid property");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
-        problemDetail.setProperty("invalidParams", List.of(invalidParam));
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
+        problemDetail.setProperty(INVALID_PARAMS, List.of(invalidParam));
 
         return problemDetail;
     }
@@ -280,7 +285,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Access denied");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -304,7 +309,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Writer exception");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -327,7 +332,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("I/O exception");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -351,43 +356,43 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("User not found with username");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleBadCredentials(BadCredentialsException ex, HttpServletRequest request) {
 
-        log.warn("Incorrect username or password.");
+        log.warn("Incorrect username or password at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST,
-                "Incorrect username or password."
+                HttpStatus.UNAUTHORIZED,
+                ex.getMessage()
         );
 
         problemDetail.setTitle("Incorrect username or password.");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
 
     @ExceptionHandler(JwtException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ProblemDetail handleJwt(JwtException ex, HttpServletRequest request) {
 
-        log.warn("Invalid token");
+        log.warn("Token invalid at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST,
-                "Invalid token"
+                HttpStatus.UNAUTHORIZED,
+                ex.getMessage()
         );
 
         problemDetail.setTitle("Invalid token");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }
@@ -399,7 +404,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleUncaughtException(Exception ex, HttpServletRequest request) {
 
-        log.error("Unexpected internal server error at URI [{}]", request.getRequestURI(), ex.getMessage());
+        log.error("Unexpected internal server error at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -408,7 +413,7 @@ public class GlobalExceptionHandler {
 
         problemDetail.setTitle("Unexpected internal server error");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
-        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
 
         return problemDetail;
     }

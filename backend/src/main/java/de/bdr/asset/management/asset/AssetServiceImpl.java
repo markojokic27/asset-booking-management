@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional(readOnly = true)
 public class AssetServiceImpl implements AssetService {
+    public static final String ASSET_NOT_FOUND_WITH_ID = "Asset not found with id: ";
     private final AssetRepository repository;
     private final AssetMapper mapper;
     private final AssetCategoryRepository assetCategoryRepository;
@@ -81,12 +82,12 @@ public class AssetServiceImpl implements AssetService {
         if (isAdmin) {
 
             asset = repository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+                    .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
         }
         else {
 
             asset = repository.findByIdAndStatusNot(id, AssetStatusEnum.DELETED)
-                    .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+                    .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
         }
 
         log.info("Asset found with id: {}", id);
@@ -165,7 +166,7 @@ public class AssetServiceImpl implements AssetService {
         log.info("Attempting to update asset with id: {}", id);
 
         Asset asset = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
         AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
@@ -195,7 +196,7 @@ public class AssetServiceImpl implements AssetService {
         log.info("Attempting to update asset QR Code with id: {}", id);
 
         Asset asset = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
         asset.setCode(filePath);
         asset = repository.save(asset);
@@ -212,7 +213,7 @@ public class AssetServiceImpl implements AssetService {
         log.info("Attempting to delete asset with id: {}", id);
 
         Asset asset = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
         asset.setStatus(AssetStatusEnum.DELETED);
 
