@@ -28,6 +28,7 @@ import com.example.assetbookingmanagement.core.ui.components.AppButton
 @Composable
 fun AssetDetailsScreen(
     assetId: Long,
+    onBookClick: () -> Unit,
     viewModel: AssetDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -96,7 +97,7 @@ fun AssetDetailsScreen(
                 AppButton(
                     text = "Book now",
                     iconRes = R.drawable.calendar_today_24,
-                    onClick = {}
+                    onClick = onBookClick
                 )
             }
         }

@@ -8,4 +8,5 @@ object Routes {
     const val ASSET_DETAILS = "asset_details"
     const val BOOKINGS = "bookings"
     const val PROFILE = "profile"
+    const val CREATE_BOOKING = "create_booking"
 }

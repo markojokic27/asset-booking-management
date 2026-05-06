@@ -19,6 +19,7 @@ import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
 import com.example.assetbookingmanagement.features.home.ui.HomeScreen
 import com.example.assetbookingmanagement.features.user.ui.ProfileScreen
+import com.example.assetbookingmanagement.features.booking.ui.CreateBookingScreen
 
 @Composable
 fun NavGraph(isUserLoggedIn: Boolean = false) {
@@ -28,7 +29,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar =
-        isBottomNavRoute(currentRoute) || currentRoute == Routes.ASSET_DETAILS
+        isBottomNavRoute(currentRoute) || currentRoute == Routes.ASSET_DETAILS || currentRoute == Routes.CREATE_BOOKING
 
     val headerTitle = when (currentRoute) {
         Routes.HOME -> "Home"
@@ -94,7 +95,12 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
 
             composable(Routes.ASSET_DETAILS) {
                 selectedAssetId?.let { assetId ->
-                    AssetDetailsScreen(assetId = assetId)
+                    AssetDetailsScreen(
+                        assetId = assetId,
+                        onBookClick = {
+                            navController.navigate(Routes.CREATE_BOOKING)
+                        }
+                    )
                 }
             }
 
@@ -104,6 +110,9 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
 
             composable(Routes.PROFILE) {
                 ProfileScreen()
+            }
+            composable(Routes.CREATE_BOOKING) {
+                CreateBookingScreen()
             }
         }
     }
