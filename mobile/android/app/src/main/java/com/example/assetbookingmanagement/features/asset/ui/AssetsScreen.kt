@@ -144,6 +144,9 @@ fun AssetsScreen(
 
             AssetFilterSideSheet(
                 modifier = Modifier.align(Alignment.CenterEnd),
+                categories = uiState.categories,
+                selectedCategoryIds = uiState.selectedCategoryIds,
+                onCategoryClick = viewModel::onCategoryClick,
                 onCloseClick = {
                     isFilterSheetOpen = false
                 }

@@ -8,4 +8,8 @@ class AssetCategoryRepository @Inject constructor(
     suspend fun getAssetCategoryById(id: Long): AssetCategoryResponse {
         return assetCategoryApi.getAssetCategoryById(id)
     }
+
+    suspend fun getAssetCategories(): List<AssetCategoryResponse> {
+        return assetCategoryApi.getAssetCategories().content
+    }
 }

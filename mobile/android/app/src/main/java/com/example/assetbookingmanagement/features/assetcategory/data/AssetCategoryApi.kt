@@ -7,4 +7,7 @@ interface AssetCategoryApi {
 
     @GET("asset-categories/{id}")
     suspend fun getAssetCategoryById(@Path("id") id: Long): AssetCategoryResponse
+
+    @GET("asset-categories")
+    suspend fun getAssetCategories(): AssetCategoryPageResponse
 }
