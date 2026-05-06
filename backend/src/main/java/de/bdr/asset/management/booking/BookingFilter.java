@@ -1,6 +1,6 @@
 package de.bdr.asset.management.booking;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 import lombok.Data;
 
@@ -9,7 +9,8 @@ public class BookingFilter {
     private BookingStatusEnum status;
     private Long userId;
     private Long assetId;
+    private Long categoryId;
     
-    private LocalDate bookingStart;
-    private LocalDate bookingEnd;
+    private Instant bookingStart;
+    private Instant bookingEnd;
 }

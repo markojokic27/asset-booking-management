@@ -171,23 +171,19 @@ public class BookingServiceImpl implements BookingService {
                     cb.equal(root.get("asset").get("id"), filter.getAssetId()));
         }
 
-        if (filter.getBookingStart() != null) {
-            Instant start = filter.getBookingStart()
-                .atStartOfDay(clock.getZone())
-                .toInstant();
-
+        if (filter.getCategoryId() != null) {
             spec = spec.and((root, query, cb) ->
-                cb.greaterThanOrEqualTo(root.get("bookingStart"), start));
+                cb.equal(root.get("asset").get("category").get("id"), filter.getCategoryId()));
+        }
+
+        if (filter.getBookingStart() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.get("bookingStart"), filter.getBookingStart()));
         }
 
         if (filter.getBookingEnd() != null) {
-            Instant end = filter.getBookingEnd()
-                .plusDays(1)
-                .atStartOfDay(clock.getZone())
-                .toInstant();
-
             spec = spec.and((root, query, cb) ->
-                cb.lessThan(root.get("bookingEnd"), end));
+                cb.lessThanOrEqualTo(root.get("bookingEnd"), filter.getBookingEnd()));
         }
 
         Page<Booking> bookings = repository.findAll(spec, pageable);
