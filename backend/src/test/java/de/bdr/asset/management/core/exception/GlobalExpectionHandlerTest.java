@@ -182,25 +182,25 @@ class GlobalExceptionHandlerTest {
     // --- BadCredentialsException ---
 
     @Test
-    void shouldReturn400ForBadCredentialsException() {
+    void shouldReturn401ForBadCredentialsException() {
         BadCredentialsException ex = new BadCredentialsException("Bad credentials");
 
         ProblemDetail result = handler.handleBadCredentials(ex, request);
 
-        assertThat(result.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(result.getDetail()).isEqualTo("Incorrect username or password.");
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        assertThat(result.getDetail()).isEqualTo("Bad credentials");
         assertThat(result.getTitle()).isEqualTo("Incorrect username or password.");
     }
 
     // --- JwtException ---
 
     @Test
-    void shouldReturn400ForJwtException() {
+    void shouldReturn401ForJwtException() {
         JwtException ex = new JwtException("Invalid token");
 
         ProblemDetail result = handler.handleJwt(ex, request);
 
-        assertThat(result.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(result.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(result.getDetail()).isEqualTo("Invalid token");
         assertThat(result.getTitle()).isEqualTo("Invalid token");
     }

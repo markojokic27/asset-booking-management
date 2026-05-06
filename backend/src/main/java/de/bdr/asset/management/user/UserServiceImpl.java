@@ -31,6 +31,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
+    public static final String USER_NOT_FOUND_WITH_ID = "User not found with id: ";
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final BookingRepository bookingRepository;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO getUserById(Long id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
         log.info("User found with id: {}", id);
 
@@ -113,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .filter(u -> u.getStatus() != UserStatusEnum.DELETED)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
         // TODO
         if (userUpdateRequest.name() != null) {
@@ -169,7 +170,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .filter(u -> u.getStatus() != UserStatusEnum.DELETED)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new BadCredentialsException("Current password does not match");
@@ -192,7 +193,7 @@ public class UserServiceImpl implements UserService {
         log.info("Attempting to delete user with id: {}", id);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
         user.setStatus(UserStatusEnum.DELETED);
 

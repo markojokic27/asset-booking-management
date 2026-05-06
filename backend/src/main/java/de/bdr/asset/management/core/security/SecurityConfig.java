@@ -24,6 +24,7 @@ import de.bdr.asset.management.core.security.jwt.JwtAuthenticationFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    public static final String ADMIN = "ADMIN";
     private final JwtAuthenticationFilter jwtFilter;
 
     public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
@@ -68,7 +69,7 @@ public class SecurityConfig {
 
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/users/**")
-                        .hasRole("ADMIN")
+                        .hasRole(ADMIN)
 
                         // =========================
                         // DEPARTMENTS
@@ -84,7 +85,7 @@ public class SecurityConfig {
 
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/departments/**")
-                        .hasRole("ADMIN")
+                        .hasRole(ADMIN)
 
                         // =========================
                         // ASSET CATEGORIES
@@ -96,7 +97,7 @@ public class SecurityConfig {
 
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/asset-categories/**")
-                        .hasRole("ADMIN")
+                        .hasRole(ADMIN)
 
                         // =========================
                         // ASSETS
@@ -108,7 +109,7 @@ public class SecurityConfig {
 
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/assets/**")
-                        .hasRole("ADMIN")
+                        .hasRole(ADMIN)
 
                         // =========================
                         // BOOKINGS
@@ -124,14 +125,14 @@ public class SecurityConfig {
 
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/bookings/**")
-                        .hasRole("ADMIN")
+                        .hasRole(ADMIN)
 
                         // =========================
                         // REPORTS
                         // =========================
 
                         .requestMatchers("/v1/reports/**")
-                        .hasRole("ADMIN")
+                        .hasRole(ADMIN)
 
                         // =========================
                         // ACTUATORS
