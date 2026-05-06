@@ -5,11 +5,11 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
-    data: AssetCategoryDto[]
-    onView: (category: AssetCategoryDto) => void
-    onEdit?: (category: AssetCategoryDto) => void
-    onDelete?: (category: AssetCategoryDto) => void
-}
+  data: AssetCategoryDto[];
+  onView: (category: AssetCategoryDto) => void;
+  onEdit?: (category: AssetCategoryDto) => void;
+  onDelete?: (category: AssetCategoryDto) => void;
+};
 
 export const AssetCategoriesTable = ({
     data,
@@ -76,12 +76,12 @@ export const AssetCategoriesTable = ({
         }
     ]
 
-    return (
-        <Table
-            data={data}
-            columns={columns}
-            getRowKey={(c) => c.id}
-            className="w-full"
-        />
-    )
-}
+  return (
+    <Table
+      data={data}
+      columns={columns}
+      getRowKey={(c) => c.id}
+      className="mt-6 w-full"
+    />
+  );
+};

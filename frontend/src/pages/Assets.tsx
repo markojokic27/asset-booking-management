@@ -135,7 +135,7 @@ export default function Assets() {
         onSelectCategory={setSelectedCategory}
       />
 
-      <div className="mt-12 flex w-full items-center justify-between gap-4">
+      <div className="mt-12 flex w-full flex-col sm:items-center sm:justify-between gap-4 sm:flex-row">
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
           {selectedCategory}
         </h1>
@@ -145,6 +145,7 @@ export default function Assets() {
           size="sm"
           iconLeft={<AddIcon fontSize="small" />}
           onClick={() => setModal({ type: 'add' })}
+          className="w-full sm:w-fit"
         >
           New asset
         </Button>

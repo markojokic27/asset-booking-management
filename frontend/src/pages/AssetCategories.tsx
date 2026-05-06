@@ -15,7 +15,11 @@ import { AssetCategoriesTable } from '../features/asset-category/components/Asse
 import type { AssetCategoryDto } from '../features/asset-category/types';
 
 // API
-import { getAllCategories, getCategoryById, updateCategory } from '../features/asset-category/api/categoryApi';
+import {
+  getAllCategories,
+  getCategoryById,
+  updateCategory,
+} from '../features/asset-category/api/categoryApi';
 
 // Assets
 import AddSharpIcon from '@mui/icons-material/AddSharp';
@@ -66,7 +70,6 @@ export default function AssetCategories() {
     } catch (err) {
       console.error(err);
     }
-
   };
   const handleEdit = async (category: AssetCategoryDto) => {
     setActiveCategory(category);
