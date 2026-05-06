@@ -122,23 +122,4 @@ public class BookingController {
 
         return ResponseEntity.ok(updatedBooking);
     }
-
-    /** Soft DELETE */
-    @Operation(summary = "Soft delete booking", description = "Only available to users with role: ADMIN.")
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-            @PathVariable Long id
-    )
-    {
-        log.info("Received DELETE request for booking with id: {}", id);
-
-        service.deleteBooking(id);
-
-        log.debug("Successfully processed DELETE request for booking id: {}", id);
-
-        return ResponseEntity.noContent().build();
-    }
-
 }

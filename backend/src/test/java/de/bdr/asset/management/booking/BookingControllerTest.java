@@ -93,15 +93,4 @@ public class BookingControllerTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).isEqualTo(response);
     }
-
-    /** DELETE */
-    @Test
-    void deleteAssetCategory_returnsNoContent() {
-
-        ResponseEntity<Void> result = bookingController.delete(1L);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        assertThat(result.getBody()).isNull();
-        verify(bookingService).deleteBooking(1L);
-    }
 }

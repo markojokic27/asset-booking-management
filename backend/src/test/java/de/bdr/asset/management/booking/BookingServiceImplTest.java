@@ -2,19 +2,20 @@ package de.bdr.asset.management.booking;
 
 import java.time.Clock;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import de.bdr.asset.management.core.exception.ActionNotAllowedException;
+import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,6 +30,8 @@ import static de.bdr.asset.management.booking.TestConstants.ASSET_ID;
 import static de.bdr.asset.management.booking.TestConstants.BOOKING_ID;
 import static de.bdr.asset.management.booking.TestConstants.USER_ID;
 import static de.bdr.asset.management.booking.TestConstants.validUpdateUserStatuses;
+import static org.mockito.Mockito.*;
+
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
@@ -83,6 +86,7 @@ class BookingServiceImplTest {
     // Tests createBooking(): user and asset exist, booking saved
     @Test
     void shouldCreateBooking() {
+
         mockAdminUser();
 
         User user = BookingServiceImplTestData.user();
@@ -106,6 +110,7 @@ class BookingServiceImplTest {
     // Tests createBooking(): throws if user not found
     @Test
     void shouldThrowExceptionWhenUserNotFound() {
+
         mockAdminUser();
 
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();
@@ -121,6 +126,7 @@ class BookingServiceImplTest {
     // Tests createBooking(): throws if asset not found
     @Test
     void shouldThrowExceptionWhenAssetNotFound() {
+
         mockAdminUser();
 
         User user = BookingServiceImplTestData.user();
@@ -139,6 +145,7 @@ class BookingServiceImplTest {
     // Tests getBookingById(): booking found
     @Test
     void shouldGetBookingById() {
+
         Booking booking = BookingServiceImplTestData.booking(
                 BookingServiceImplTestData.user(),
                 BookingServiceImplTestData.asset()
@@ -157,6 +164,7 @@ class BookingServiceImplTest {
     // Tests getBookingById(): throws if not found
     @Test
     void shouldThrowExceptionWhenBookingNotFound() {
+
         when(repository.findById(BOOKING_ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
@@ -166,6 +174,7 @@ class BookingServiceImplTest {
     // Tests getAllBookings(): fetch all bookings
     @Test
     void shouldReturnAllBookings() {
+
         User user = BookingServiceImplTestData.user();
         Asset asset = BookingServiceImplTestData.asset();
         Booking booking = BookingServiceImplTestData.booking(user, asset);
@@ -174,7 +183,37 @@ class BookingServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         BookingFilter filter = new BookingFilter();
-        Page<Booking> bookingPage = new PageImpl<>(java.util.List.of(booking));
+        Page<Booking> bookingPage = new PageImpl<>(List.of(booking));
+
+        when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(bookingPage);
+        when(mapper.toResponse(booking)).thenReturn(response);
+
+        Page<BookingResponseDTO> result = service.getAllBookings(filter, pageable);
+
+        assertEquals(1, result.getTotalElements());
+
+        verify(repository).findAll(any(Specification.class), eq(pageable));
+    }
+
+    // Tests getAllBookings(): fetch all bookings with a fully populated filter to cover all 'if' conditions
+    @Test
+    void shouldReturnAllBookings_WithFullyPopulatedFilter() {
+
+        User user = BookingServiceImplTestData.user();
+        Asset asset = BookingServiceImplTestData.asset();
+        Booking booking = BookingServiceImplTestData.booking(user, asset);
+
+        BookingResponseDTO response = BookingServiceImplTestData.response();
+
+        Pageable pageable = PageRequest.of(0, 10);
+        BookingFilter filter = new BookingFilter();
+        filter.setStatus(BookingStatusEnum.ACTIVE);
+        filter.setUserId(USER_ID);
+        filter.setAssetId(ASSET_ID);
+        filter.setCategoryId(1L);
+        filter.setBookingStart(TestConstants.BASE_NOW);
+        filter.setBookingEnd(TestConstants.BASE_NOW.plusSeconds(3600));
+        Page<Booking> bookingPage = new PageImpl<>(List.of(booking));
 
         when(repository.findAll(any(Specification.class), eq(pageable))).thenReturn(bookingPage);
         when(mapper.toResponse(booking)).thenReturn(response);
@@ -189,6 +228,7 @@ class BookingServiceImplTest {
     // Tests updateBooking(): booking exists, user and asset exist, update saved
     @Test
     void shouldUpdateBooking() {
+
         User user = BookingServiceImplTestData.user();
         Asset asset = BookingServiceImplTestData.asset();
         Booking booking = BookingServiceImplTestData.booking(user, asset);
@@ -210,11 +250,97 @@ class BookingServiceImplTest {
     // Tests updateBooking(): throws if booking not found
     @Test
     void shouldThrowExceptionWhenUpdatingNonExistingBooking() {
+
         BookingUpdateDTO request = BookingServiceImplTestData.updateRequest();
 
         when(repository.findById(BOOKING_ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.updateBooking(BOOKING_ID, request));
+    }
+
+    // Tests updateBooking(): throws exception if booking status is CANCELLED
+    @Test
+    void shouldThrowExceptionWhenUpdatingCancelledBooking() {
+
+        Booking booking = BookingServiceImplTestData.booking(
+                BookingServiceImplTestData.user(),
+                BookingServiceImplTestData.asset()
+        );
+        booking.setStatus(BookingStatusEnum.CANCELLED);
+
+        BookingUpdateDTO request = BookingServiceImplTestData.updateRequest();
+
+        when(repository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+
+        assertThrows(ActionNotAllowedException.class,
+                () -> service.updateBooking(BOOKING_ID, request));
+
+        verify(repository).findById(BOOKING_ID);
+        verify(repository, never()).save(any());
+    }
+
+    // Tests updateBooking(): throws exception if booking has already finished
+    @Test
+    void shouldThrowExceptionWhenUpdatingFinishedBooking() {
+
+        Booking booking = BookingServiceImplTestData.booking(
+                BookingServiceImplTestData.user(),
+                BookingServiceImplTestData.asset()
+        );
+        booking.setStatus(BookingStatusEnum.ACTIVE);
+        booking.setBookingEnd(TestConstants.BASE_NOW.minusSeconds(3600));
+
+        BookingUpdateDTO request = BookingServiceImplTestData.updateRequest();
+
+        when(repository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+
+        assertThrows(ActionNotAllowedException.class,
+                () -> service.updateBooking(BOOKING_ID, request));
+
+        verify(repository).findById(BOOKING_ID);
+        verify(repository, never()).save(any());
+    }
+
+    // Tests getGeneralReport(): delegates to repository
+    @Test
+    void shouldGetGeneralReport() {
+
+        GeneralReportResponseDTO expectedReport = mock(GeneralReportResponseDTO.class);
+
+        when(repository.getGeneralReport()).thenReturn(expectedReport);
+
+        GeneralReportResponseDTO actualReport = service.getGeneralReport();
+
+        assertEquals(expectedReport, actualReport);
+        verify(repository).getGeneralReport();
+    }
+
+    // Tests getUserReport(): delegates to repository with userId
+    @Test
+    void shouldGetUserReport() {
+
+        GeneralReportResponseDTO expectedReport = mock(GeneralReportResponseDTO.class);
+
+        when(repository.getUserReport(USER_ID)).thenReturn(expectedReport);
+
+        GeneralReportResponseDTO actualReport = service.getUserReport(USER_ID);
+
+        assertEquals(expectedReport, actualReport);
+        verify(repository).getUserReport(USER_ID);
+    }
+
+    // Tests getAssetReport(): delegates to repository with assetId
+    @Test
+    void shouldGetAssetReport() {
+
+        GeneralReportResponseDTO expectedReport = mock(GeneralReportResponseDTO.class);
+
+        when(repository.getAssetReport(ASSET_ID)).thenReturn(expectedReport);
+
+        GeneralReportResponseDTO actualReport = service.getAssetReport(ASSET_ID);
+
+        assertEquals(expectedReport, actualReport);
+        verify(repository).getAssetReport(ASSET_ID);
     }
 }

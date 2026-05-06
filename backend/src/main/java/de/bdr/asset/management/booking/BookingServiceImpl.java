@@ -229,26 +229,6 @@ public class BookingServiceImpl implements BookingService {
         return mapper.toResponse(booking);
     }
 
-    /**
-     * Delete a specific booking.
-     *
-     * @param id - a Long id
-     * @implNote Should be a soft delete by setting it to inactive or such
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteBooking(Long id) {
-
-        // TODO: Add a field for soft delete
-
-        // Booking booking = repository.findById(id)
-        //     .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id:" + id));
-
-        // booking.setStatus("DELETED"),
-
-        // repository.save(booking);
-    }
-
     @Override
     public GeneralReportResponseDTO getGeneralReport() {
         return repository.getGeneralReport();
