@@ -54,6 +54,7 @@ export default function Bookings() {
   const variant = (selectedCategory?.bookingPeriod ?? 'HOUR') as 'HOUR' | 'DAY';
 
   const handleOpenBookingModal = (asset: AssetDto) => {
+    
     setSelectedAsset(asset);
     setOpenBookingModal(true);
   };

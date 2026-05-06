@@ -1,10 +1,10 @@
 // Components
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { Button } from '../../../components/ui/Button';
+import { Link } from 'react-router-dom';
 
 // Types
 import { type AssetDto } from '../../asset/types';
-
 
 type Props = {
   assets: AssetDto[];
@@ -50,9 +50,9 @@ export function BookingTable({
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: (asset) => (
-        <Button size="sm" onClick={() => onBook(asset)}>
-          Book
-        </Button>
+        <Link to={`/bookings/${asset.id}`}>
+          <Button size="sm">Book</Button>
+        </Link>
       ),
     },
   ];
