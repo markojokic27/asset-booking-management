@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ProblemDetail handleDatabaseConflict(DataIntegrityViolationException ex, HttpServletRequest request) {
 
-        log.warn("Conflict for reservation at URI [{}]", request.getRequestURI(), ex.getMessage());
+        log.warn("Conflict for reservation at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT,
@@ -226,6 +226,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST,
                 ex.getMessage() != null ? ex.getMessage() : "Invalid request"
@@ -247,6 +248,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PropertyReferenceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handlePropertyReference(PropertyReferenceException ex, HttpServletRequest request) {
+
         Map<String, String> invalidParam = Map.of(
                 "property", ex.getPropertyName(),
                 "entity", ex.getType().getType().getSimpleName(),
@@ -258,7 +260,7 @@ public class GlobalExceptionHandler {
                 "Invalid property reference"
         );
 
-        problemDetail.setTitle("invalid property");
+        problemDetail.setTitle("Invalid property");
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         problemDetail.setProperty(TIMESTAMP, Instant.now());
         problemDetail.setProperty(INVALID_PARAMS, List.of(invalidParam));
@@ -300,7 +302,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WriterException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleWriterException(WriterException ex, HttpServletRequest request) {
-        log.error("Writer exception at URI [{}]", request.getRequestURI(), ex.getMessage());
+
+        log.error("Writer exception at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -323,7 +326,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail handleIOException(IOException ex, HttpServletRequest request) {
-        log.error("I/O exception at URI [{}]", request.getRequestURI(), ex.getMessage());
+
+        log.error("I/O exception at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
