@@ -1,0 +1,83 @@
+{
+  "title": "Kategorije imovine",
+  "actions": {
+    "new": "Novo"
+  },
+  "search": {
+    "placeholder": "Pretraži kategorije..."
+  },
+  "empty": {
+    "loading": "Učitavanje kategorija...",
+    "none": "Nema pronađenih kategorija"
+  },
+  "errors": {
+    "loadFailed": "Neuspjelo učitavanje kategorija"
+  },
+  "table": {
+    "columns": {
+      "name": "Naziv",
+      "description": "Opis",
+      "bookingPeriod": "Period rezervacije",
+      "actions": "Radnje"
+    },
+    "rowActions": {
+      "viewAria": "Prikaži kategoriju",
+      "editAria": "Uredi kategoriju"
+    }
+  },
+  "modals": {
+    "common": {
+      "closeAria": "Zatvori"
+    },
+    "view": {
+      "ariaLabel": "Detalji kategorije",
+      "fields": {
+        "icon": "Ikona",
+        "name": "Naziv",
+        "description": "Opis",
+        "bookingPeriod": "Period rezervacije",
+        "approval": "Treba odobrenje voditelja?"
+      },
+      "approval": {
+        "yes": "Da",
+        "no": "Ne"
+      }
+    },
+    "add": {
+      "ariaLabel": "Dodaj kategoriju",
+      "title": "Dodaj novu kategoriju",
+      "submit": "Dodaj",
+      "fields": {
+        "name": "Naziv",
+        "description": "Opis",
+        "bookingPeriod": "Period rezervacije",
+        "approvalLabel": "Sva imovina iz ove kategorije treba odobrenje voditelja"
+      },
+      "validation": {
+        "nameRequired": "Naziv je obavezan",
+        "bookingPeriodRequired": "Period rezervacije je obavezan"
+      }
+    },
+    "edit": {
+      "ariaLabel": "Uredi kategoriju",
+      "title": "Uredi kategoriju",
+      "submit": "Spremi",
+      "fields": {
+        "name": "Naziv",
+        "description": "Opis",
+        "bookingPeriod": "Period rezervacije",
+        "approvalLabel": "Sva imovina iz ove kategorije treba odobrenje voditelja"
+      },
+      "validation": {
+        "nameRequired": "Naziv je obavezan",
+        "bookingPeriodRequired": "Period rezervacije je obavezan"
+      }
+    }
+  },
+  "bookingPeriod": {
+    "hour": "Sat",
+    "day": "Dan",
+    "week": "Tjedan",
+    "month": "Mjesec"
+  }
+}

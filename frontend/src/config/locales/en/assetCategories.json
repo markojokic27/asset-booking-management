@@ -1,0 +1,83 @@
+{
+  "title": "Asset Categories",
+  "actions": {
+    "new": "New"
+  },
+  "search": {
+    "placeholder": "Search category..."
+  },
+  "empty": {
+    "loading": "Loading categories...",
+    "none": "No categories found"
+  },
+  "errors": {
+    "loadFailed": "Failed to load categories"
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "description": "Description",
+      "bookingPeriod": "Booking Period",
+      "actions": "Actions"
+    },
+    "rowActions": {
+      "viewAria": "View category",
+      "editAria": "Edit category"
+    }
+  },
+  "modals": {
+    "common": {
+      "closeAria": "Close"
+    },
+    "view": {
+      "ariaLabel": "Category details",
+      "fields": {
+        "icon": "Icon",
+        "name": "Name",
+        "description": "Description",
+        "bookingPeriod": "Booking Period",
+        "approval": "Need manager approval?"
+      },
+      "approval": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "add": {
+      "ariaLabel": "Add category",
+      "title": "Add New Category",
+      "submit": "Add",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "bookingPeriod": "Booking period",
+        "approvalLabel": "All assets from this category need Manager approval"
+      },
+      "validation": {
+        "nameRequired": "Name is required",
+        "bookingPeriodRequired": "Booking period is required"
+      }
+    },
+    "edit": {
+      "ariaLabel": "Edit category",
+      "title": "Edit Category",
+      "submit": "Save",
+      "fields": {
+        "name": "Name",
+        "description": "Description",
+        "bookingPeriod": "Booking period",
+        "approvalLabel": "All assets from this category need Manager approval"
+      },
+      "validation": {
+        "nameRequired": "Name is required",
+        "bookingPeriodRequired": "Booking period is required"
+      }
+    }
+  },
+  "bookingPeriod": {
+    "hour": "Hour",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month"
+  }
+}

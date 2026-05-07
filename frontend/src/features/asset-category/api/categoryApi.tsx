@@ -28,8 +28,7 @@ export const getCategoryById = async (id: number) => {
 export type CreateCategoryRequest = {
   name: string;
   description: string;
-  bookingPeriod: 'HOUR' |
-  'DAY';
+  bookingPeriod: 'HOUR' | 'DAY' | 'WEEK' | 'MONTH';
   approval: boolean;
   photo?: string;
 };
@@ -45,7 +44,7 @@ export type UpdateCategoryRequest = {
   name: string;
   description?: string;
   bookingPeriod: 'HOUR' |
-  'DAY'| 'WEEK' | 'MONTH';
+  'DAY' | 'WEEK' | 'MONTH';
   approval: boolean;
   photo?: string;
 };

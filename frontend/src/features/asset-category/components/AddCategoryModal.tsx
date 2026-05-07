@@ -6,28 +6,31 @@ import { FormDropdown } from '../../../components/ui/FormDropdown'
 import { createCategory } from '../api/categoryApi'
 import { Checkbox } from "radix-ui";
 import { CheckIcon } from "@radix-ui/react-icons";
+import { useTranslation } from 'react-i18next'
 
 type Props = {
     open: boolean
     onClose: () => void
 }
 
-const bookingPeriodOptions = [
-    { value: 'HOUR', label: 'Hour' },
-    { value: 'DAY', label: 'Day' },
-    { value: 'WEEK', label: 'Week' },
-    { value: 'MONTH', label: 'Month' }
-] as const
-
 type FormValues = {
     name: string
     description: string
-    bookingPeriod: 'DAY' | 'HOUR'
+    bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH'
     approval: boolean
 }
 
 export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
     if (!open) return null
+    const { t } = useTranslation()
+
+    const bookingPeriodOptions = [
+        { value: 'HOUR', label: t('assetCategories.bookingPeriod.hour') },
+        { value: 'DAY', label: t('assetCategories.bookingPeriod.day') },
+        { value: 'WEEK', label: t('assetCategories.bookingPeriod.week') },
+        { value: 'MONTH', label: t('assetCategories.bookingPeriod.month') }
+    ] as const
+
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
         defaultValues: {
             bookingPeriod: 'DAY',
@@ -57,7 +60,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
             className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
             role="dialog"
             aria-modal="true"
-            aria-label="Asset details"
+            aria-label={t('assetCategories.modals.add.ariaLabel')}
             onMouseDown={(e) => {
                 if (e.target === e.currentTarget) onClose()
             }}
@@ -66,12 +69,12 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
 
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 pb-4">
-                    <div className="text-center text-xl font-bold">Add New Category</div>
+                    <div className="text-center text-xl font-bold">{t('assetCategories.modals.add.title')}</div>
 
                     <Button data-testid="category-close-button"
                         type="button"
                         onClick={onClose}
-                        aria-label="Close"
+                        aria-label={t('assetCategories.modals.common.closeAria')}
                         className="absolute right-8 inline-flex bg-white border-none cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
                     >
                         <CloseIcon className="pointer-events-none" />
@@ -90,26 +93,26 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                             <FormInput
                                 data-testid="category-name"
                                 id="asset-name"
-                                label="Name"
+                                label={t('assetCategories.modals.add.fields.name')}
                                 error={!!errors.name}
                                 errorMessage={errors.name?.message}
-                                {...register('name', { required: 'Name is required' })}
+                                {...register('name', { required: t('assetCategories.modals.add.validation.nameRequired') })}
                             />
 
                             <FormInput
                                 data-testid="category-description"
                                 id="asset-description"
-                                label="Description"
+                                label={t('assetCategories.modals.add.fields.description')}
                                 {...register('description')}
                             />
 
                             <FormDropdown
                                 data-testid="category-booking-period"
-                                label="Booking period"
+                                label={t('assetCategories.modals.add.fields.bookingPeriod')}
                                 options={bookingPeriodOptions}
                                 error={!!errors.bookingPeriod}
                                 errorMessage={errors.bookingPeriod?.message}
-                                {...register('bookingPeriod', { required: 'Booking period is required' })}
+                                {...register('bookingPeriod', { required: t('assetCategories.modals.add.validation.bookingPeriodRequired') })}
                             />
 
                             <div className="flex items-center gap-2">
@@ -131,7 +134,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                                     htmlFor="c1"
                                     className="cursor-pointer text-sm"
                                 >
-                                    All assets from this category need Manager approval
+                                    {t('assetCategories.modals.add.fields.approvalLabel')}
                                 </label>
                             </div>
                         </div>
@@ -146,7 +149,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
                             type="submit"
                             className="mr-5 mb-5 h-10 w-70 px-6 py-4 font-bold"
                         >
-                            Add
+                            {t('assetCategories.modals.add.submit')}
                         </Button>
                     </div>
                 </form>

@@ -1,0 +1,83 @@
+{
+  "title": "Asset-Kategorien",
+  "actions": {
+    "new": "Neu"
+  },
+  "search": {
+    "placeholder": "Kategorie suchen..."
+  },
+  "empty": {
+    "loading": "Kategorien werden geladen...",
+    "none": "Keine Kategorien gefunden"
+  },
+  "errors": {
+    "loadFailed": "Kategorien konnten nicht geladen werden"
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "description": "Beschreibung",
+      "bookingPeriod": "Buchungszeitraum",
+      "actions": "Aktionen"
+    },
+    "rowActions": {
+      "viewAria": "Kategorie anzeigen",
+      "editAria": "Kategorie bearbeiten"
+    }
+  },
+  "modals": {
+    "common": {
+      "closeAria": "Schließen"
+    },
+    "view": {
+      "ariaLabel": "Kategoriedetails",
+      "fields": {
+        "icon": "Symbol",
+        "name": "Name",
+        "description": "Beschreibung",
+        "bookingPeriod": "Buchungszeitraum",
+        "approval": "Manager-Freigabe erforderlich?"
+      },
+      "approval": {
+        "yes": "Ja",
+        "no": "Nein"
+      }
+    },
+    "add": {
+      "ariaLabel": "Kategorie hinzufügen",
+      "title": "Neue Kategorie hinzufügen",
+      "submit": "Hinzufügen",
+      "fields": {
+        "name": "Name",
+        "description": "Beschreibung",
+        "bookingPeriod": "Buchungszeitraum",
+        "approvalLabel": "Alle Assets dieser Kategorie benötigen eine Manager-Freigabe"
+      },
+      "validation": {
+        "nameRequired": "Name ist erforderlich",
+        "bookingPeriodRequired": "Buchungszeitraum ist erforderlich"
+      }
+    },
+    "edit": {
+      "ariaLabel": "Kategorie bearbeiten",
+      "title": "Kategorie bearbeiten",
+      "submit": "Speichern",
+      "fields": {
+        "name": "Name",
+        "description": "Beschreibung",
+        "bookingPeriod": "Buchungszeitraum",
+        "approvalLabel": "Alle Assets dieser Kategorie benötigen eine Manager-Freigabe"
+      },
+      "validation": {
+        "nameRequired": "Name ist erforderlich",
+        "bookingPeriodRequired": "Buchungszeitraum ist erforderlich"
+      }
+    }
+  },
+  "bookingPeriod": {
+    "hour": "Stunde",
+    "day": "Tag",
+    "week": "Woche",
+    "month": "Monat"
+  }
+}

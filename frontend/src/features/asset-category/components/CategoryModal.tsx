@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import { Modal } from '../../../components/ui/Modal';
 import { IconButton } from '../../../components/ui/IconButton';
@@ -12,15 +13,26 @@ export type CategoryModalProps = {
 };
 
 export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, category }) => {
+  const { t } = useTranslation();
+
   if (!isOpen || !category) return null;
+
+  const bookingPeriodLabel =
+    category.bookingPeriod === 'HOUR'
+      ? t('assetCategories.bookingPeriod.hour')
+      : category.bookingPeriod === 'DAY'
+        ? t('assetCategories.bookingPeriod.day')
+        : category.bookingPeriod === 'WEEK'
+          ? t('assetCategories.bookingPeriod.week')
+          : t('assetCategories.bookingPeriod.month');
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabel="User details"
+      ariaLabel={t('assetCategories.modals.view.ariaLabel')}
       headerRight={
-        <IconButton onClick={onClose} aria-label="Close">
+        <IconButton onClick={onClose} aria-label={t('assetCategories.modals.common.closeAria')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
@@ -28,7 +40,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
     >
       <div className="space-y-5">
         <div>
-          <p className="text-sm text-(--color-modal-label)">Icon</p>
+          <p className="text-sm text-(--color-modal-label)">{t('assetCategories.modals.view.fields.icon')}</p>
           <img
             src={getCategoryIconSrc(category.name)}
             alt=""
@@ -42,26 +54,28 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
         </div>
 
         <div>
-          <p className="text-sm text-(--color-modal-label)">Name</p>
+          <p className="text-sm text-(--color-modal-label)">{t('assetCategories.modals.view.fields.name')}</p>
           <p data-testid="category-name" className="font-medium text-(--color-text)">
             {category.name}
           </p>
         </div>
 
         <div>
-          <p className="text-sm text-(--color-modal-label)">Description</p>
+          <p className="text-sm text-(--color-modal-label)">{t('assetCategories.modals.view.fields.description')}</p>
           <p data-testid="category.description" className="font-medium text-(--color-text)">
             {category.description}
           </p>
         </div>
         <div>
-          <p className="text-sm text-(--color-modal-label)">Booking Period</p>
-          <p data-testid="category-bookingPeriod" className="font-medium text-(--color-text)">{category.bookingPeriod}</p>
+          <p className="text-sm text-(--color-modal-label)">{t('assetCategories.modals.view.fields.bookingPeriod')}</p>
+          <p data-testid="category-bookingPeriod" className="font-medium text-(--color-text)">{bookingPeriodLabel}</p>
         </div>
 
         <div>
-          <p className="text-sm text-(--color-modal-label)">Need Manager approval?</p>
-          <p data-testid="category-approval" className="font-medium text-(--color-text)">{category.approval ? 'Yes' : 'No'}</p>
+          <p className="text-sm text-(--color-modal-label)">{t('assetCategories.modals.view.fields.approval')}</p>
+          <p data-testid="category-approval" className="font-medium text-(--color-text)">
+            {category.approval ? t('assetCategories.modals.view.approval.yes') : t('assetCategories.modals.view.approval.no')}
+          </p>
         </div>
       </div>
     </Modal>

@@ -17,4 +17,3 @@ export function getCategoryIconSrc(name: string): string {
   // public/ is served at /
   return slug ? `/category-icons/${slug}.png` : CATEGORY_ICON_DEFAULT_SRC;
 }
-
