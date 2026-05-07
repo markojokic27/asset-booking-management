@@ -16,11 +16,11 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
   return (
     <footer
       className={twMerge(
-        'z-10 border-t border-(--color-border) bg-(--color-surface) py-8 shadow-md md:ml-[25%] md:py-4',
+        'z-10 border-t border-(--color-border) bg-(--color-surface) py-8 shadow-md md:ml-[min(25%,300px)] md:w-[calc(100%_-_min(25%,300px))] md:py-4',
         className
       )}
     >
-      <div className="container mx-auto flex flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+      <div className="flex w-full flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
         <div className="flex min-w-0 flex-col items-center gap-2 sm:items-baseline">
           <a
             href="https://www.bundesdruckerei.de/en/careers/maurer-electronics-split"
