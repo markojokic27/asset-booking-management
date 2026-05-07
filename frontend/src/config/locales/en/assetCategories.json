@@ -11,7 +11,8 @@
     "none": "No categories found"
   },
   "errors": {
-    "loadFailed": "Failed to load categories"
+    "loadFailed": "Failed to load categories",
+    "createFailed": "Failed to create category. Please try again."
   },
   "table": {
     "columns": {
@@ -47,6 +48,7 @@
       "ariaLabel": "Add category",
       "title": "Add New Category",
       "submit": "Add",
+      "saving": "Saving…",
       "fields": {
         "name": "Name",
         "description": "Description",

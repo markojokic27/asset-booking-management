@@ -11,7 +11,8 @@
     "none": "Nema pronađenih kategorija"
   },
   "errors": {
-    "loadFailed": "Neuspjelo učitavanje kategorija"
+    "loadFailed": "Neuspjelo učitavanje kategorija",
+    "createFailed": "Neuspjelo dodavanje kategorije. Pokušajte ponovno."
   },
   "table": {
     "columns": {
@@ -47,6 +48,7 @@
       "ariaLabel": "Dodaj kategoriju",
       "title": "Dodaj novu kategoriju",
       "submit": "Dodaj",
+      "saving": "Spremanje…",
       "fields": {
         "name": "Naziv",
         "description": "Opis",

@@ -34,9 +34,7 @@ export type CreateCategoryRequest = {
 };
 
 export const createCategory = async (data: CreateCategoryRequest) => {
-  const res = await api.post<PageResponse<AssetCategoryDto>>(
-    '/asset-categories', data
-  );
+  const res = await api.post<AssetCategoryDto>('/asset-categories', data);
   return res.data;
 }
 
@@ -50,11 +48,6 @@ export type UpdateCategoryRequest = {
 };
 
 export const updateCategory = async (id: number, data: UpdateCategoryRequest) => {
-  const res = await api.put<PageResponse<AssetCategoryDto>>(
-    `/asset-categories/${id}`, data
-  );
+  const res = await api.put<AssetCategoryDto>(`/asset-categories/${id}`, data);
   return res.data;
 }
-
-
-

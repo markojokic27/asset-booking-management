@@ -172,6 +172,9 @@ export default function AssetCategories() {
         <AddCategoryModal
           open={openAddModal}
           onClose={() => setOpenAddModal(false)}
+          onCreate={(created) => {
+            setCategories((prev) => [created, ...prev]);
+          }}
         />
       </div>
     </LayoutColumn>

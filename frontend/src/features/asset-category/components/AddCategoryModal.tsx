@@ -1,159 +1,192 @@
-import CloseIcon from '@mui/icons-material/Close'
-import { FormInput } from '../../../components/ui/FormInput'
-import { Button } from '../../../components/ui/Button'
-import { useForm } from 'react-hook-form'
-import { FormDropdown } from '../../../components/ui/FormDropdown'
-import { createCategory } from '../api/categoryApi'
-import { Checkbox } from "radix-ui";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { useTranslation } from 'react-i18next'
+// External packages
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+// Components
+import { Button } from '../../../components/ui/Button';
+import { FormDropdown } from '../../../components/ui/FormDropdown';
+import { FormInput } from '../../../components/ui/FormInput';
+import { IconButton } from '../../../components/ui/IconButton';
+import { Modal } from '../../../components/ui/Modal';
+
+// Types
+import type { AssetCategoryDto } from '../types';
+
+// API
+import { createCategory } from '../api/categoryApi';
+
+// Icons
+import CloseIcon from '@mui/icons-material/Close';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 type Props = {
-    open: boolean
-    onClose: () => void
+    open: boolean;
+    onClose: () => void;
+    onCreate: (category: AssetCategoryDto) => void;
 }
 
 type FormValues = {
-    name: string
-    description: string
-    bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH'
-    approval: boolean
+    name: string;
+    description: string;
+    bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH';
+    approval: boolean;
 }
 
-export const AddCategoryModal: React.FC<Props> = ({ open, onClose }) => {
-    if (!open) return null
-    const { t } = useTranslation()
+export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) => {
+    const { t } = useTranslation();
+    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     const bookingPeriodOptions = [
         { value: 'HOUR', label: t('assetCategories.bookingPeriod.hour') },
         { value: 'DAY', label: t('assetCategories.bookingPeriod.day') },
         { value: 'WEEK', label: t('assetCategories.bookingPeriod.week') },
-        { value: 'MONTH', label: t('assetCategories.bookingPeriod.month') }
-    ] as const
+        { value: 'MONTH', label: t('assetCategories.bookingPeriod.month') },
+    ] as const;
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        reset,
+        watch,
+        formState: { errors },
+    } = useForm<FormValues>({
         defaultValues: {
+            name: '',
+            description: '',
             bookingPeriod: 'DAY',
-            approval: false
+            approval: false,
+        },
+    });
+
+    useEffect(() => {
+        if (open) {
+            setSubmitError(null);
+            setIsSaving(false);
+            reset({
+                name: '',
+                description: '',
+                bookingPeriod: 'DAY',
+                approval: false,
+            });
         }
-    })
+    }, [open, reset]);
+
+    if (!open) return null;
+    const formId = 'asset-category-create-form';
+    const approvalChecked = watch('approval');
 
     const onSubmit = async (data: FormValues) => {
+        setSubmitError(null);
+        setIsSaving(true);
         try {
-            const payload = {
+            const created = await createCategory({
                 name: data.name,
                 description: data.description,
                 bookingPeriod: data.bookingPeriod,
-                approval: data.approval
-            }
-
-            await createCategory(payload)
-
-            onClose() // close modal after success
+                approval: data.approval,
+            });
+            onCreate(created);
+            onClose();
         } catch (err) {
-            console.error('Error creating category:', err)
+            console.error('Error creating category:', err);
+            setSubmitError(t('assetCategories.errors.createFailed'));
+        } finally {
+            setIsSaving(false);
         }
-    }
+    };
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('assetCategories.modals.add.ariaLabel')}
-            onMouseDown={(e) => {
-                if (e.target === e.currentTarget) onClose()
-            }}
-        >
-            <div className="w-full max-w-200 overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
-
-                {/* HEADER */}
-                <div className="relative flex items-center justify-center px-8 pt-6 pb-4">
-                    <div className="text-center text-xl font-bold">{t('assetCategories.modals.add.title')}</div>
-
-                    <Button data-testid="category-close-button"
-                        type="button"
-                        onClick={onClose}
-                        aria-label={t('assetCategories.modals.common.closeAria')}
-                        className="absolute right-8 inline-flex bg-white border-none cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
+        <Modal
+            isOpen={open}
+            onClose={onClose}
+            ariaLabel={t('assetCategories.modals.add.ariaLabel')}
+            title={<div className="text-xl font-bold">{t('assetCategories.modals.add.title')}</div>}
+            headerRight={
+                <IconButton
+                    data-testid="category-close-button"
+                    onClick={onClose}
+                    aria-label={t('assetCategories.modals.common.closeAria')}
+                >
+                    <CloseIcon className="pointer-events-none" />
+                </IconButton>
+            }
+            footer={
+                <div className="flex justify-end">
+                    <Button
+                        data-testid="add-category-button"
+                        type="submit"
+                        form={formId}
+                        className="shadow-none"
+                        disabled={isSaving}
                     >
-                        <CloseIcon className="pointer-events-none" />
+                        {isSaving ? t('assetCategories.modals.add.saving') : t('assetCategories.modals.add.submit')}
                     </Button>
                 </div>
-
-                <div className="m-4 mx-8 h-px bg-(--color-table-border)"></div>
-
-                {/* FORM */}
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex gap-10 px-8 py-8">
-
-                        {/* INPUTS */}
-                        <div className="flex flex-1 flex-col space-y-5">
-
-                            <FormInput
-                                data-testid="category-name"
-                                id="asset-name"
-                                label={t('assetCategories.modals.add.fields.name')}
-                                error={!!errors.name}
-                                errorMessage={errors.name?.message}
-                                {...register('name', { required: t('assetCategories.modals.add.validation.nameRequired') })}
-                            />
-
-                            <FormInput
-                                data-testid="category-description"
-                                id="asset-description"
-                                label={t('assetCategories.modals.add.fields.description')}
-                                {...register('description')}
-                            />
-
-                            <FormDropdown
-                                data-testid="category-booking-period"
-                                label={t('assetCategories.modals.add.fields.bookingPeriod')}
-                                options={bookingPeriodOptions}
-                                error={!!errors.bookingPeriod}
-                                errorMessage={errors.bookingPeriod?.message}
-                                {...register('bookingPeriod', { required: t('assetCategories.modals.add.validation.bookingPeriodRequired') })}
-                            />
-
-                            <div className="flex items-center gap-2">
-                                <Checkbox.Root
-                                    data-testid="category-approval-checkbox"
-                                    id="c1"
-                                    onCheckedChange={(checked) =>
-                                        setValue('approval', !!checked)
-                                    }
-                                    className="flex h-5 w-5 items-center justify-center rounded border border-(--color-table-border) shadow-sm data-[state=checked]:bg-(--color-primaryblue)"
-                                    defaultChecked
-                                >
-                                    <Checkbox.Indicator className="text-white">
-                                        <CheckIcon />
-                                    </Checkbox.Indicator>
-                                </Checkbox.Root>
-
-                                <label
-                                    htmlFor="c1"
-                                    className="cursor-pointer text-sm"
-                                >
-                                    {t('assetCategories.modals.add.fields.approvalLabel')}
-                                </label>
-                            </div>
+            }
+        >
+            <form id={formId} onSubmit={handleSubmit(onSubmit)} noValidate>
+                <div className="flex flex-col gap-5">
+                    {submitError && (
+                        <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+                            {submitError}
                         </div>
-                    </div>
+                    )}
 
-                    <div className="mx-8 mt-5 h-px bg-(--color-table-border)"></div>
+                    <FormInput
+                        data-testid="category-name"
+                        id="asset-category-name"
+                        label={t('assetCategories.modals.add.fields.name')}
+                        error={!!errors.name}
+                        errorMessage={errors.name?.message}
+                        {...register('name', { required: t('assetCategories.modals.add.validation.nameRequired') })}
+                    />
 
-                    {/* SUBMIT */}
-                    <div className="mt-5 flex justify-center gap-2">
-                        <Button
-                            data-testid="add-category-button"
-                            type="submit"
-                            className="mr-5 mb-5 h-10 w-70 px-6 py-4 font-bold"
-                        >
-                            {t('assetCategories.modals.add.submit')}
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
+                    <FormInput
+                        data-testid="category-description"
+                        id="asset-category-description"
+                        label={t('assetCategories.modals.add.fields.description')}
+                        {...register('description')}
+                    />
+
+                    <FormDropdown
+                        data-testid="category-booking-period"
+                        label={t('assetCategories.modals.add.fields.bookingPeriod')}
+                        options={bookingPeriodOptions}
+                        error={!!errors.bookingPeriod}
+                        errorMessage={errors.bookingPeriod?.message}
+                        {...register('bookingPeriod', { required: t('assetCategories.modals.add.validation.bookingPeriodRequired') })}
+                    />
+
+                    <FormControlLabel
+                        className="m-0 items-start gap-2"
+                        control={
+                            <Checkbox
+                                data-testid="category-approval-checkbox"
+                                id="asset-category-approval"
+                                checked={approvalChecked}
+                                onChange={(e) => setValue('approval', e.target.checked, { shouldDirty: true })}
+                                sx={{
+                                    padding: 0,
+                                    marginTop: '2px',
+                                    color: 'var(--color-table-border)',
+                                    '&.Mui-checked': {
+                                        color: 'var(--color-primaryblue)',
+                                    },
+                                }}
+                            />
+                        }
+                        label={
+                            <span className="cursor-pointer text-sm">
+                                {t('assetCategories.modals.add.fields.approvalLabel')}
+                            </span>
+                        }
+                    />
+                </div>
+            </form>
+        </Modal>
+    );
 }
