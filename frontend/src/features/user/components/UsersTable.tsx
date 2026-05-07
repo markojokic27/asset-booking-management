@@ -155,7 +155,7 @@ export const UsersTable = ({
       getRowKey={(user) => String(user.id)}
       rowClassName={(user) =>
         user.status === 'DELETED'
-          ? 'bg-red-200 opacity-60 hover:bg-red-300'
+          ? 'bg-slate-100 opacity-60 hover:bg-slate-200'
           : undefined
       }
       className="w-full"

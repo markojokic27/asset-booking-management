@@ -1,5 +1,5 @@
 // Hooks
-import { useUsersData } from './useUsersdata';
+import { useUsersData } from './useUsersData';
 import { useUserFilters } from './useUsersFilters';
 import { usePagination } from './usePagination';
 import { useUserModals } from './useUserModals';
@@ -22,6 +22,8 @@ export function useUsers() {
       error: data.error,
       search: filters.search,
       setSearch: filters.setSearch,
+      showDeleted: filters.showDeleted,
+      toggleShowDeleted: filters.toggleShowDeleted,
     },
 
     sorting: {

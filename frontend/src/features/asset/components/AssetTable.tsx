@@ -122,10 +122,10 @@ export function AssetsTable({
       getRowKey={(asset) => asset.id}
       className="w-full"
       rowClassName={(asset) =>
-      asset.status === 'DELETED'
-      ? 'bg-red-200 opacity-60 hover:bg-red-300'
-      : undefined
-  }
+        asset.status === 'DELETED'
+          ? 'bg-slate-100 opacity-60 hover:bg-slate-200'
+          : undefined
+      }
     />
   );
 }

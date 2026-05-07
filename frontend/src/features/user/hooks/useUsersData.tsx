@@ -48,7 +48,10 @@ export function useUsersData() {
     try {
       setDeletingUserId(id);
       await deleteUser(id);
-      setUsers((prev) => prev.filter((u) => u.id !== id));
+      // Soft-delete: keep row visible, mark as deleted immediately.
+      setUsers((prev) =>
+        prev.map((u) => (u.id === id ? { ...u, status: 'DELETED' } : u)),
+      );
     } finally {
       setDeletingUserId(null);
     }
@@ -62,3 +65,4 @@ export function useUsersData() {
     actions: { update, create, remove },
   };
 }
+

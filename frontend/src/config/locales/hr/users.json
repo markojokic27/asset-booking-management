@@ -7,6 +7,9 @@
   "search": {
     "placeholder": "Pretraži korisnike..."
   },
+  "filters": {
+    "showDeleted": "Prikaži obrisane"
+  },
   "empty": {
     "loading": "Učitavanje korisnika...",
     "none": "Još nema korisnika."

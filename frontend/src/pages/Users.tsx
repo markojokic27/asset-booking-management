@@ -16,6 +16,7 @@ import { UserEditModal } from '../features/user/components/UserEditModal';
 import { UserCreateModal } from '../features/user/components/UserCreateModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
 import { UserReportModal } from '../features/user/components/UserReportModal';
+import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
 
 // Hooks
 import { getFullName } from '../features/user/utilis/users';
@@ -71,7 +72,14 @@ export default function Users() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex w-full items-center justify-between">
+        <div className="flex items-center">
+          <ShowDeletedFilter
+            checked={list.showDeleted}
+            onToggle={list.toggleShowDeleted}
+          />
+        </div>
+
         <SearchInput
           value={list.search}
           onChange={list.setSearch}

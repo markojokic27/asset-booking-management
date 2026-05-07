@@ -7,6 +7,9 @@
   "search": {
     "placeholder": "Benutzer suchen…"
   },
+  "filters": {
+    "showDeleted": "Gelöschte anzeigen"
+  },
   "empty": {
     "loading": "Benutzer werden geladen…",
     "none": "Noch keine Benutzer."

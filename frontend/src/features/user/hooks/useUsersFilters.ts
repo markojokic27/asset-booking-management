@@ -7,6 +7,7 @@ import type { UserDto } from '../types';
 export function useUserFilters(users: UserDto[]) {
   const [search, setSearch] = useState('');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [showDeleted, setShowDeleted] = useState(false);
 
   const collator = useMemo(
     () => new Intl.Collator('hr', { sensitivity: 'base' }),
@@ -18,12 +19,13 @@ export function useUserFilters(users: UserDto[]) {
 
     return users.filter(
       (u) =>
-        !q ||
-        u.name.toLowerCase().includes(q) ||
-        u.surname.toLowerCase().includes(q) ||
-        u.email.toLowerCase().includes(q)
+        (showDeleted || u.status !== 'DELETED') &&
+        (!q ||
+          u.name.toLowerCase().includes(q) ||
+          u.surname.toLowerCase().includes(q) ||
+          u.email.toLowerCase().includes(q))
     );
-  }, [users, search]);
+  }, [users, search, showDeleted]);
 
   const sorted = useMemo(() => {
     const dir = sortDir === 'asc' ? 1 : -1;
@@ -43,6 +45,8 @@ export function useUserFilters(users: UserDto[]) {
     data: sorted,
     search,
     setSearch,
+    showDeleted,
+    toggleShowDeleted: () => setShowDeleted((v) => !v),
     sortDir,
     toggleSort: () => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc')),
   };
