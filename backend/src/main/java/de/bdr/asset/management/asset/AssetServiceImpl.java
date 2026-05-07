@@ -3,8 +3,6 @@ package de.bdr.asset.management.asset;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,28 +65,8 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public AssetResponseDTO getAssetById(Long id) {
 
-        boolean isAdmin = false;
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth != null) {
-
-            isAdmin = auth.getAuthorities().stream()
-                    .anyMatch(r -> "ROLE_ADMIN".equals(r.getAuthority()));
-        }
-
-        Asset asset;
-
-        if (isAdmin) {
-
-            asset = repository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
-        }
-        else {
-
-            asset = repository.findByIdAndStatusNot(id, AssetStatusEnum.DELETED)
-                    .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
-        }
+        Asset asset = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
         log.info("Asset found with id: {}", id);
 
@@ -109,21 +87,9 @@ public class AssetServiceImpl implements AssetService {
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );
 
-        boolean isAdmin = false;
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth != null) {
-            isAdmin = auth.getAuthorities().stream()
-                    .anyMatch(r -> "ROLE_ADMIN".equals(r.getAuthority()));
-        }
 
         Specification<Asset> spec = Specification.where((root, query, cb) -> cb.conjunction());
 
-        if (!isAdmin) {
-            spec = spec.and((root, query, cb) ->
-                    cb.notEqual(root.get("status"), AssetStatusEnum.DELETED));
-        }
 
         if (filter.getName() != null) {
             spec = spec.and((root, query, cb) ->

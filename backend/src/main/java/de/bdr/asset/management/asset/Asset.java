@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.*;
 
-import java.time.Instant;
-
 /**
  * Asset domain-entity model.
  */
@@ -18,6 +16,8 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FilterDef(name = "softDeleteFilter", parameters = @ParamDef(name = "deletedStatus", type = String.class))
+@Filter(name = "softDeleteFilter", condition = "status <> :deletedStatus")
 public class Asset extends BaseEntity {
 
     /** Name of asset */
@@ -30,7 +30,7 @@ public class Asset extends BaseEntity {
     private AssetCategory category;
 
     /** Description of asset */
-    @Column(length = 255)
+    @Column
     private String description;
 
     /** QR code of asset */

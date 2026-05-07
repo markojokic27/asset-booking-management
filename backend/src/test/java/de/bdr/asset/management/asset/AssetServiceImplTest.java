@@ -142,14 +142,14 @@ class AssetServiceImplTest {
 
         mockLoggedUser("ROLE_EMPLOYEE");
 
-        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.of(asset));
+        when(repository.findById(1L)).thenReturn(Optional.of(asset));
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
         AssetResponseDTO result = service.getAssetById(1L);
 
         assertEquals(1L, result.id());
 
-        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.DELETED);
+        verify(repository).findById(1L);
     }
 
     // Tests getAssetById(): throws exception if asset not found if user is admin
@@ -170,7 +170,7 @@ class AssetServiceImplTest {
 
         mockLoggedUser("ROLE_EMPLOYEE");
 
-        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.empty());
+        when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.getAssetById(1L));
@@ -183,7 +183,7 @@ class AssetServiceImplTest {
 
         SecurityContextHolder.clearContext();
 
-        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.of(asset));
+        when(repository.findById(1L)).thenReturn(Optional.of(asset));
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
         AssetResponseDTO result = service.getAssetById(1L);
@@ -191,7 +191,7 @@ class AssetServiceImplTest {
         assertEquals(1L, result.id());
 
 
-        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.DELETED);
+        verify(repository).findById(1L);
     }
 
     // Tests getAssetById(): throws exception when user is not authenticated and asset not found
@@ -200,12 +200,12 @@ class AssetServiceImplTest {
 
         SecurityContextHolder.clearContext();
 
-        when(repository.findByIdAndStatusNot(1L, AssetStatusEnum.DELETED)).thenReturn(Optional.empty());
+        when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.getAssetById(1L));
 
-        verify(repository).findByIdAndStatusNot(1L, AssetStatusEnum.DELETED);
+        verify(repository).findById(1L);
     }
 
     // Tests getAllAssets(): if user is admin fetch all assets and map them to response DTOs
@@ -344,4 +344,5 @@ class AssetServiceImplTest {
 
         SecurityContextHolder.setContext(securityContext);
     }
+
 }

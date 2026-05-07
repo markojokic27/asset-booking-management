@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * JPA Asset Repository
@@ -15,17 +17,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface AssetRepository extends JpaRepository<Asset, Long>, JpaSpecificationExecutor<Asset> {
 
     @EntityGraph(attributePaths = {"category"})
-    Optional<Asset> findById(Long id);
+    @Query("SELECT a FROM Asset a WHERE a.id = :id")
+    Optional<Asset> findById(@Param("id")Long id);
 
     @EntityGraph(attributePaths = {"category"})
     Page<Asset> findAll(Specification<Asset> spec, Pageable pageable);
 
     @EntityGraph(attributePaths = {"category"})
-    Optional<Asset> findByIdAndStatusNot(Long id, AssetStatusEnum status);
-
-    @EntityGraph(attributePaths = {"category"})
     Optional<Asset> findByIdAndStatus(Long id, AssetStatusEnum status);
 
-    @EntityGraph(attributePaths = {"category"})
-    Page<Asset> findAllByStatusNot(AssetStatusEnum status, Pageable pageable);
 }
