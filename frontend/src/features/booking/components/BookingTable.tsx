@@ -8,19 +8,12 @@ import { type AssetDto } from '../../asset/types';
 
 type Props = {
   assets: AssetDto[];
-  onBook: (asset: AssetDto) => void;
   isLoading?: boolean;
   error?: string | null;
   className?: string;
 };
 
-export function BookingTable({
-  assets,
-  onBook,
-  isLoading,
-  error,
-  className,
-}: Props) {
+export function BookingTable({ assets, isLoading, error, className }: Props) {
   const columns: TableColumn<AssetDto>[] = [
     {
       key: 'id',

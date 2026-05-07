@@ -35,7 +35,7 @@ export const getAllAssetBookings = async (
 // get all bookings by category ID
 export const getAllCategoryBookings = async (
   page = 0,
-  size = 10,
+  size = 100,
   categoryId: number
 ) => {
   const res = await api.get<PageResponse<BookingDto>>('/bookings', {

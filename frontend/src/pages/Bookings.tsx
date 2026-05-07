@@ -1,3 +1,5 @@
+// pages/Bookings.tsx
+
 // External packages
 import * as React from 'react';
 
@@ -7,13 +9,11 @@ import { FiltersBar } from '../features/booking/components/FilterBar';
 import { Button } from '../components/ui/Button';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { BookingTable } from '../features/booking/components/BookingTable';
-import { BookingModal } from '../features/booking/components/BookingModal';
 
 // Hooks
 import { useBookingData } from '../features/booking/hooks/useBookingData';
 
 // Types
-import type { AssetDto } from '../features/asset/types';
 import type { Filters } from '../features/booking/types';
 
 const defaultFilters: Filters = {
@@ -25,38 +25,22 @@ const defaultFilters: Filters = {
 };
 
 export default function Bookings() {
+  const [filters, setFilters] =
+    React.useState<Filters>(defaultFilters);
+
   const {
     assets,
     categories,
     selectedCategory,
     selectCategoryByName,
     loading,
-  } = useBookingData();
-
-  const [filters, setFilters] = React.useState<Filters>(defaultFilters);
-  const [selectedAsset, setSelectedAsset] = React.useState<AssetDto | null>(
-    null
-  );
-  const [openBookingModal, setOpenBookingModal] = React.useState(false);
-
-  const filteredAssets = assets.filter((a) => {
-    const matchCategory = selectedCategory
-      ? a.categoryId === selectedCategory.id
-      : true;
-
-    const matchSearch = a.name
-      .toLowerCase()
-      .includes(filters.search.trim().toLowerCase());
-
-    return matchCategory && matchSearch;
+  } = useBookingData({
+    filters,
   });
 
-  const variant = (selectedCategory?.bookingPeriod ?? 'HOUR') as 'HOUR' | 'DAY';
-
-  const handleOpenBookingModal = (asset: AssetDto) => {
-    setSelectedAsset(asset);
-    setOpenBookingModal(true);
-  };
+  const variant = (
+    selectedCategory?.bookingPeriod ?? 'HOUR'
+  ) as 'HOUR' | 'DAY';
 
   const handleResetFilters = () => {
     setFilters(defaultFilters);
@@ -90,25 +74,22 @@ export default function Bookings() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
-      <FiltersBar filters={filters} setFilters={setFilters} variant={variant} />
+      <FiltersBar
+        filters={filters}
+        setFilters={setFilters}
+        variant={variant}
+      />
 
       {loading ? (
-        <div className="mt-6">Loading...</div>
+        <div className="mt-6">
+          Loading...
+        </div>
       ) : (
         <BookingTable
-          assets={filteredAssets}
-          onBook={handleOpenBookingModal}
+          assets={assets}
           className="mt-6"
         />
       )}
-
-      <BookingModal
-        open={openBookingModal}
-        onClose={() => setOpenBookingModal(false)}
-        asset={selectedAsset}
-        filters={filters}
-        setFilters={setFilters}
-      />
     </LayoutColumn>
   );
 }
