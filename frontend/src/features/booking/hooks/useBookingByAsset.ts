@@ -1,25 +1,39 @@
-// hooks/useBookingsByAsset.ts
+// External packages
 import { useEffect, useState } from 'react';
-import api from '../../../shared/api';
+
+// Types
+import type { BookingDto } from '../types';
+
+// API
+import { getAllAssetBookings } from '../api/bookingApi';
 
 export const useBookingsByAsset = (assetId: string) => {
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState<BookingDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
     if (!assetId) return;
 
-    setLoading(true);
+    const fetchBookings = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getAllAssetBookings(0, 100, Number(assetId));
+        setBookings(data.content);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    api
-      .get(`/bookings`, {
-        params: { assetId, size: 100 },
-      })
-      .then((res) => setBookings(res.data.content))
-      .catch(setError)
-      .finally(() => setLoading(false));
+    fetchBookings();
   }, [assetId]);
 
-  return { bookings, loading, error };
+  return {
+    bookings,
+    loading,
+    error,
+  };
 };

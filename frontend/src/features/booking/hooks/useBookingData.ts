@@ -8,6 +8,7 @@ import type { AssetCategoryDto } from '../../asset-category/types';
 // API
 import { getAllAssets } from '../../asset/api/assetApi';
 import { getAllCategories } from '../../asset-category/api/categoryApi';
+import { getAllCategoryBookings } from '../api/bookingApi';
 
 export function useBookingData() {
   const [assets, setAssets] = React.useState<AssetDto[]>([]);
@@ -29,6 +30,8 @@ export function useBookingData() {
         setAssets(assetRes.content);
         setCategories(categoryRes.content);
         setSelectedCategory(categoryRes.content[0] ?? null);
+
+        getAllCategoryBookings(0, 100, categoryRes.content[0]?.id ?? 0);
       } catch (err) {
         console.error('Error fetching data:', err);
       } finally {
