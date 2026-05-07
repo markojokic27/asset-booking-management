@@ -3,7 +3,7 @@ import * as React from 'react';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
-import { FiltersBar } from '../components/ui/FilterBar';
+import { FiltersBar } from '../features/booking/components/FilterBar';
 import { Button } from '../components/ui/Button';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { BookingTable } from '../features/booking/components/BookingTable';
@@ -54,7 +54,6 @@ export default function Bookings() {
   const variant = (selectedCategory?.bookingPeriod ?? 'HOUR') as 'HOUR' | 'DAY';
 
   const handleOpenBookingModal = (asset: AssetDto) => {
-    
     setSelectedAsset(asset);
     setOpenBookingModal(true);
   };
