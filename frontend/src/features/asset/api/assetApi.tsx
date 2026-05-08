@@ -57,3 +57,8 @@ export const updateAsset = async (id: number, data: UpdateAssetRequest) => {
   );
   return res.data;
 }
+
+export const getAssetReport = async (id: number) => {
+  const res = await api.get(`/reports/assets/${id}`);
+  return res.data;
+}

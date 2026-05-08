@@ -3,11 +3,13 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
+import  BarChartIcon from '@mui/icons-material/BarChart';
 
 // Components
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Button } from '../../../components/ui/Button';
+
 
 // Types
 import { type AssetDto } from '../../../features/asset/types';
@@ -19,6 +21,8 @@ type Props = {
   onEdit: (asset: AssetDto) => void;
   onDelete: (asset: AssetDto) => void;
   onBookings: (asset: AssetDto) => void;
+  onReport: (asset: AssetDto) => void;
+
 };
 
 export function AssetsTable({
@@ -28,6 +32,7 @@ export function AssetsTable({
   onEdit,
   onDelete,
   onBookings,
+  onReport,
 }: Props) {
   const columns: TableColumn<AssetDto>[] = [
     {
@@ -86,23 +91,28 @@ export function AssetsTable({
               className="pointer-events-none"
             />
           </IconButton>
+           <IconButton
+            type="button"
+            aria-label="Asset report"
+            onClick={() => onReport(asset)}
+          >
+            <BarChartIcon fontSize="small" className="pointer-events-none" />
+          </IconButton>
+
           <IconButton
             data-testid="edit-asset-button"
             type="button"
-            aria-label="Edit user"
+            aria-label="Edit asset"
             disabled={asset.status === 'DELETED'}
             onClick={() => onEdit(asset)}
           >
-            <EditOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
+            <EditOutlinedIcon fontSize="small" className="pointer-events-none" />
           </IconButton>
           <IconButton
             data-testid="delete-asset-button"
             type="button"
             variant="danger"
-            aria-label="Delete user"
+            aria-label="Delete asset"
             disabled={asset.status === 'DELETED'}
           >
             <DeleteOutlineIcon

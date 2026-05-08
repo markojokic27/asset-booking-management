@@ -13,7 +13,7 @@ import { AssetModal } from '../features/asset/components/AssetModal';
 import { AssetBookingsModal } from '../features/asset/components/AssetBookingsModal';
 import { AssetAddModal } from '../features/asset/components/AssetAddModal';
 import { AssetsTable } from '../features/asset/components/AssetTable';
-
+import { AssetReportModal } from '../features/asset/components/AssetReportModal';
 // API
 import { getAllAssets, updateAsset } from '../features/asset/api/assetApi';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
@@ -28,7 +28,9 @@ type ModalState =
   | { type: 'edit'; asset: AssetDto }
   | { type: 'bookings'; asset: AssetDto }
   | { type: 'add' }
-  | { type: 'delete'; asset: AssetDto };
+  | { type: 'delete'; asset: AssetDto }
+  | { type: 'report'; asset: AssetDto };
+
 
 export default function Assets() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
@@ -175,6 +177,7 @@ export default function Assets() {
             onEdit={(asset) => setModal({ type: 'edit', asset })}
             onBookings={(asset) => setModal({ type: 'bookings', asset })}
             onDelete={(asset) => setModal({ type: 'delete', asset })}
+            onReport={(asset) => setModal({type: 'report', asset})}
           />
         )}
       </div>
@@ -183,6 +186,12 @@ export default function Assets() {
         isOpen={modal.type === 'view'}
         onClose={closeModal}
         asset={modal.type === 'view' ? modal.asset : null}
+      />
+
+      <AssetReportModal
+        isOpen={modal.type === 'report'}
+        onClose={closeModal}
+        asset={modal.type === 'report' ? modal.asset : null}
       />
 
       <AssetEditModal
