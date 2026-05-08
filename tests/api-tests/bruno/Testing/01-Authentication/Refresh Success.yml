@@ -1,5 +1,5 @@
 info:
-  name: Refresh Success - 200
+  name: Refresh Success
   type: http
   seq: 3
 

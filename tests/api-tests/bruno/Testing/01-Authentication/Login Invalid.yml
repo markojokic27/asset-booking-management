@@ -1,5 +1,5 @@
 info:
-  name: Login Invalid - 400
+  name: Login Invalid
   type: http
   seq: 1
 
@@ -19,7 +19,7 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "400"
+      value: "401"
     - expression: res.body.title
       operator: eq
       value: '"Incorrect username or password."'

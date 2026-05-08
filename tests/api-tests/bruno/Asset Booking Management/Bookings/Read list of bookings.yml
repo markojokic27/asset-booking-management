@@ -1,7 +1,7 @@
 info:
   name: Read list of bookings
   type: http
-  seq: 4
+  seq: 3
   tags:
     - Bookings
 

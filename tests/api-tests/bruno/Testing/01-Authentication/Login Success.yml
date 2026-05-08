@@ -1,5 +1,5 @@
 info:
-  name: Login Success - 200
+  name: Login Success
   type: http
   seq: 2
 

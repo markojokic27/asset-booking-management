@@ -1,5 +1,5 @@
 info:
-  name: Refresh Invalid - 400
+  name: Refresh Invalid
   type: http
   seq: 4
 
@@ -18,7 +18,7 @@ runtime:
   assertions:
     - expression: res.status
       operator: eq
-      value: "400"
+      value: "401"
     - expression: res.body.title
       operator: eq
       value: '"Invalid token"'
