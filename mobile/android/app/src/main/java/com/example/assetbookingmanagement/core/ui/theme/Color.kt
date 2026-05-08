@@ -22,15 +22,19 @@ val BgLight = Color(0xFFF5F5F5)
 val SurfaceLight = Color(0xFFFFFFFF)
 val TextLight = Color(0xFF252525)
 val PrimaryLight = PrimaryBlue
+val OnPrimaryLight = White
 val OutlineLight = Color(0xFF252525)
 val HeaderLight = Color(0xFFE4E4E4)
+val PickerTimeFieldActiveLight = Color(0x240043CE)
 
 val BgDark = Color(0xFF252525)
 val SurfaceDark = Color(0xFF000000)
 val TextDark = Color(0xFFF5F5F5)
 val PrimaryDark = PrimaryBlue
+val OnPrimaryDark = White
 val OutlineDark = Color(0xFFF5F5F5)
 val HeaderDark = Color(0xFF000000)
+val PickerTimeFieldActiveDark = Color(0x240043CE)
 
 val AssetStatusActiveBg = Color(0xFFC8E6C9)
 val AssetStatusInactiveBg = Color(0xFFE0E0E0)
