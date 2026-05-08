@@ -46,14 +46,16 @@ public class AssetCategoryViewModalTest extends BaseTest {
         ).getText().isBlank());
     }
 
-   
+
 
     @Test
     void viewCategoryModalClosesOnXButton() {
         navigateToCategories();
         openViewModal();
 
-        driver.findElement(By.cssSelector("[aria-label='Close']")).click();
+        driver.findElement(
+                By.cssSelector("[role='dialog'] button")
+        ).click();
 
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.cssSelector("[data-testid='category-name']")

@@ -32,6 +32,7 @@ public class BaseTest {
             case "firefox" -> {
                 FirefoxOptions options = new FirefoxOptions();
                 options.setBinary("/snap/firefox/current/usr/lib/firefox/firefox");
+                options.addArguments("--headless=new"); // <- bez otvaranja browsera
                 driver = new FirefoxDriver(options);
             }
             case "chrome" -> {

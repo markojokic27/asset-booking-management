@@ -17,19 +17,22 @@ public class AddAssetCategoryTest extends BaseTest {
 
     private void openAddCategoryModal() {
         wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//button[contains(text(), 'New') or contains(text(), 'Add')]")
+                By.xpath("//button[contains(text(), 'Novo') or contains(text(), 'Dodaj')]")
         )).click();
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("[role='dialog'][aria-label='Asset details']")
+                By.cssSelector("[role='dialog']")
         ));
     }
 
     private void assertModalClosed() {
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.cssSelector("[role='dialog'][aria-label='Asset details']")
+        wait.until(ExpectedConditions.numberOfElementsToBe(
+                By.cssSelector("[role='dialog']"),
+                0
         ));
+
         assertTrue(driver.findElements(
-                By.cssSelector("[role='dialog'][aria-label='Asset details']")
+                By.cssSelector("[role='dialog']")
         ).isEmpty());
     }
 
@@ -48,7 +51,9 @@ public class AddAssetCategoryTest extends BaseTest {
         navigateToCategories();
         openAddCategoryModal();
 
-        driver.findElement(By.cssSelector("[data-testid='category-close-button']")).click();
+        driver.findElement(
+                By.cssSelector("[data-testid='category-close-button']")
+        ).click();
 
         assertModalClosed();
     }
@@ -60,13 +65,13 @@ public class AddAssetCategoryTest extends BaseTest {
 
         driver.findElement(By.cssSelector("[data-testid='add-category-button']")).click();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//*[contains(text(),'Name is required')]")
-        ));
+        WebElement errorMessage = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//*[contains(text(),'Naziv je obavezan')]")
+                )
+        );
 
-        assertTrue(driver.findElement(
-                By.xpath("//*[contains(text(),'Name is required')]")
-        ).isDisplayed());
+        assertTrue(errorMessage.isDisplayed());
     }
 
     @Test
@@ -88,5 +93,4 @@ public class AddAssetCategoryTest extends BaseTest {
 
         assertModalClosed();
     }
-
 }

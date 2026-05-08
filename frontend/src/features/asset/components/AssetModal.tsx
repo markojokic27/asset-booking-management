@@ -47,7 +47,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
 
   return (
     <div
-      data-testid="asset-details-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"

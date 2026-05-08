@@ -23,7 +23,7 @@ public class AddUserTest extends BaseTest {
 
         WebElement createButton = wait.until(
                 ExpectedConditions.elementToBeClickable(
-                        By.xpath("//button[contains(text(), 'New')]")
+                        By.xpath("//button[contains(text(), 'Novi')]")
                 )
         );
         createButton.click();
@@ -31,27 +31,6 @@ public class AddUserTest extends BaseTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector("[role='dialog'][aria-label='Create user']")
         ));
-    }
-
-    private void fillValidUserExcept(String fieldToSkip) {
-        if (!fieldToSkip.equals("username")) {
-            driver.findElement(By.cssSelector("[data-testid='user-username']")).sendKeys("testuser");
-        }
-        if (!fieldToSkip.equals("name")) {
-            driver.findElement(By.cssSelector("[data-testid='user-name']")).sendKeys("Test");
-        }
-        if (!fieldToSkip.equals("surname")) {
-            driver.findElement(By.cssSelector("[data-testid='user-surname']")).sendKeys("User");
-        }
-        if (!fieldToSkip.equals("email")) {
-            driver.findElement(By.cssSelector("[data-testid='user-email']")).sendKeys("test.user@example.com");
-        }
-        if (!fieldToSkip.equals("password")) {
-            driver.findElement(By.cssSelector("[data-testid='user-password']")).sendKeys("password.123");
-        }
-        if (!fieldToSkip.equals("managerEmail")) {
-            driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).sendKeys("manager@example.com");
-        }
     }
 
     private void clickCreateAndAssertModalStillOpen() {
@@ -104,42 +83,66 @@ public class AddUserTest extends BaseTest {
     @Test
     void userCreateModalShowsErrorForEmptyUsername() {
         openUserCreateModal();
-        fillValidUserExcept("username");
+        driver.findElement(By.cssSelector("[data-testid='user-name']")).sendKeys("Ivan");
+        driver.findElement(By.cssSelector("[data-testid='user-surname']")).sendKeys("Ivic");
+        driver.findElement(By.cssSelector("[data-testid='user-email']")).sendKeys("ivan.ivic@example.com");
+        driver.findElement(By.cssSelector("[data-testid='user-password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).sendKeys("antea.ntic@example.com");
         clickCreateAndAssertModalStillOpen();
     }
 
     @Test
     void userCreateModalShowsErrorForEmptyFirstName() {
         openUserCreateModal();
-        fillValidUserExcept("name");
+        driver.findElement(By.cssSelector("[data-testid='user-username']")).sendKeys("ivanivic");
+        driver.findElement(By.cssSelector("[data-testid='user-surname']")).sendKeys("Ivic");
+        driver.findElement(By.cssSelector("[data-testid='user-email']")).sendKeys("ivan.ivic@example.com");
+        driver.findElement(By.cssSelector("[data-testid='user-password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).sendKeys("antea.ntic@example.com");
         clickCreateAndAssertModalStillOpen();
     }
 
     @Test
     void userCreateModalShowsErrorForEmptyLastName() {
         openUserCreateModal();
-        fillValidUserExcept("surname");
+        driver.findElement(By.cssSelector("[data-testid='user-username']")).sendKeys("ivanivic");
+        driver.findElement(By.cssSelector("[data-testid='user-name']")).sendKeys("Ivan");
+        driver.findElement(By.cssSelector("[data-testid='user-email']")).sendKeys("ivan.ivic@example.com");
+        driver.findElement(By.cssSelector("[data-testid='user-password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).sendKeys("antea.ntic@example.com");
         clickCreateAndAssertModalStillOpen();
     }
 
     @Test
     void userCreateModalShowsErrorForEmptyEmail() {
         openUserCreateModal();
-        fillValidUserExcept("email");
+        driver.findElement(By.cssSelector("[data-testid='user-username']")).sendKeys("ivanivic");
+        driver.findElement(By.cssSelector("[data-testid='user-name']")).sendKeys("Ivan");
+        driver.findElement(By.cssSelector("[data-testid='user-surname']")).sendKeys("Ivic");
+        driver.findElement(By.cssSelector("[data-testid='user-password']")).sendKeys("password.123");
+        driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).sendKeys("antea.ntic@example.com");
         clickCreateAndAssertModalStillOpen();
     }
 
     @Test
     void userCreateModalShowsErrorForEmptyPassword() {
         openUserCreateModal();
-        fillValidUserExcept("password");
+        driver.findElement(By.cssSelector("[data-testid='user-username']")).sendKeys("ivanivic");
+        driver.findElement(By.cssSelector("[data-testid='user-name']")).sendKeys("Ivan");
+        driver.findElement(By.cssSelector("[data-testid='user-surname']")).sendKeys("Ivic");
+        driver.findElement(By.cssSelector("[data-testid='user-email']")).sendKeys("ivan.ivic@example.com");
+        driver.findElement(By.cssSelector("[data-testid='user-manager-email']")).sendKeys("antea.ntic@example.com");
         clickCreateAndAssertModalStillOpen();
     }
 
     @Test
     void userCreateModalShowsErrorForEmptyManagerEmail() {
         openUserCreateModal();
-        fillValidUserExcept("managerEmail");
+        driver.findElement(By.cssSelector("[data-testid='user-username']")).sendKeys("ivanivic");
+        driver.findElement(By.cssSelector("[data-testid='user-name']")).sendKeys("Ivan");
+        driver.findElement(By.cssSelector("[data-testid='user-surname']")).sendKeys("Ivic");
+        driver.findElement(By.cssSelector("[data-testid='user-email']")).sendKeys("ivan.ivic@example.com");
+        driver.findElement(By.cssSelector("[data-testid='user-password']")).sendKeys("password.123");
         clickCreateAndAssertModalStillOpen();
     }
 

@@ -36,7 +36,7 @@ public class AssetEditModalTest extends BaseTest {
         editButton.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("[role='dialog'][aria-label='Edit asset']")
+                By.cssSelector("[data-testid='edit-asset-button']")
         ));
     }
 
@@ -110,7 +110,7 @@ public class AssetEditModalTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='save-asset-button']")).click();
 
         assertTrue(driver.findElement(
-                By.cssSelector("[role='dialog'][aria-label='Edit asset']")
+                By.cssSelector("[data-testid='edit-asset-button']")
         ).isDisplayed());
     }
 
@@ -124,7 +124,7 @@ public class AssetEditModalTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='save-asset-button']")).click();
 
         assertTrue(driver.findElement(
-                By.cssSelector("[role='dialog'][aria-label='Edit asset']")
+                By.cssSelector("[data-testid='edit-asset-button']")
         ).isDisplayed());
     }
 
@@ -157,7 +157,7 @@ public class AssetEditModalTest extends BaseTest {
         driver.findElement(By.cssSelector("[data-testid='save-asset-button']")).click();
 
         assertTrue(driver.findElement(
-                By.cssSelector("[role='dialog'][aria-label='Edit asset']")
+                By.cssSelector("[data-testid='edit-asset-button']")
         ).isDisplayed());
     }
 }

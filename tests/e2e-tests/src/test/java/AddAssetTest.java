@@ -34,26 +34,6 @@ public class AddAssetTest extends BaseTest {
         ));
     }
 
-    private void fillValidAssetExcept(String fieldToSkip) {
-        if (!fieldToSkip.equals("category")) {
-            WebElement category = driver.findElement(By.cssSelector("[data-testid='asset-category']"));
-            category.click();
-            new Select(category).selectByIndex(1);
-        }
-
-        if (!fieldToSkip.equals("name")) {
-            driver.findElement(By.cssSelector("[data-testid='asset-name']")).sendKeys("Test Asset");
-        }
-
-        if (!fieldToSkip.equals("location")) {
-            driver.findElement(By.cssSelector("[data-testid='asset-location']")).sendKeys("Room 1");
-        }
-
-        if (!fieldToSkip.equals("description")) {
-            driver.findElement(By.cssSelector("[data-testid='asset-description']")).sendKeys("Test description");
-        }
-    }
-
     private void clickAddAndAssertModalStillOpen() {
         driver.findElement(By.cssSelector("[data-testid='add-asset-button']")).click();
 
@@ -83,7 +63,12 @@ public class AddAssetTest extends BaseTest {
     void assetAddModalSavesValidAsset() {
         openAssetAddModal();
 
-        fillValidAssetExcept("");
+        WebElement category = driver.findElement(By.cssSelector("[data-testid='asset-category']"));
+        category.click();
+        new Select(category).selectByIndex(1);
+        driver.findElement(By.cssSelector("[data-testid='asset-name']")).sendKeys("Test Asset");
+        driver.findElement(By.cssSelector("[data-testid='asset-location']")).sendKeys("Room 1");
+        driver.findElement(By.cssSelector("[data-testid='asset-description']")).sendKeys("Test description");
 
         driver.findElement(By.cssSelector("[data-testid='add-asset-button']")).click();
 
@@ -99,21 +84,28 @@ public class AddAssetTest extends BaseTest {
     @Test
     void assetAddModalShowsErrorForEmptyName() {
         openAssetAddModal();
-        fillValidAssetExcept("name");
+        WebElement category = driver.findElement(By.cssSelector("[data-testid='asset-category']"));
+        category.click();
+        new Select(category).selectByIndex(1);
+        driver.findElement(By.cssSelector("[data-testid='asset-location']")).sendKeys("Room 1");
         clickAddAndAssertModalStillOpen();
     }
 
     @Test
     void assetAddModalShowsErrorForEmptyCategory() {
         openAssetAddModal();
-        fillValidAssetExcept("category");
+        driver.findElement(By.cssSelector("[data-testid='asset-name']")).sendKeys("Test Asset");
+        driver.findElement(By.cssSelector("[data-testid='asset-location']")).sendKeys("Room 1");
         clickAddAndAssertModalStillOpen();
     }
 
     @Test
     void assetAddModalShowsErrorForEmptyLocation() {
         openAssetAddModal();
-        fillValidAssetExcept("location");
+        WebElement category = driver.findElement(By.cssSelector("[data-testid='asset-category']"));
+        category.click();
+        new Select(category).selectByIndex(1);
+        driver.findElement(By.cssSelector("[data-testid='asset-name']")).sendKeys("Test Asset");
         clickAddAndAssertModalStillOpen();
     }
 

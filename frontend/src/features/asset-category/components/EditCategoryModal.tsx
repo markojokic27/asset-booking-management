@@ -98,7 +98,6 @@ export const EditCategoryModal: React.FC<Props> = ({
                     <div className="text-center text-xl font-bold">{t('assetCategories.modals.edit.title')}</div>
 
                     <Button
-                        data-testid="edit-category-close-button"
                         type="button"
                         onClick={onClose}
                         aria-label={t('assetCategories.modals.common.closeAria')}
