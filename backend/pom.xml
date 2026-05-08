@@ -39,6 +39,7 @@
 		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -150,6 +151,7 @@
 		</dependency>
 
 		<!-- OpenAPI v3 documentation generator based on code -->
+		<!-- Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -162,7 +164,7 @@
 			<artifactId>swagger-ui</artifactId>
 			<version>5.32.5</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency>		
 		<!-- ZXing library for QR Code capabilities -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
