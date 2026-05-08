@@ -1,29 +1,30 @@
 import { bookingValidationSchema } from "../../features/booking/validation";
+import { describe, test, expect } from 'vitest';
 
-    describe("Booking Schema Validation", () =>{
-        test("should pass with valid data", () => {
-            const result = bookingValidationSchema.safeParse({
-                    userId:2,
-                    assetId:1,
-                    status:"ACTIVE",
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:"Some optional notes"
+describe("Booking Schema Validation", () => {
+    test("should pass with valid data", () => {
+        const result = bookingValidationSchema.safeParse({
+            userId: 2,
+            assetId: 1,
+            status: "ACTIVE",
+            bookingStart: new Date("2026-01-04T09:00"),
+            bookingEnd: new Date("2026-01-14T09:00"),
+            note: "Some optional notes"
 
-            });
-
-            expect(result.success).toBe(true);
         });
-        
-    describe("UserId", () =>{
+
+        expect(result.success).toBe(true);
+    });
+
+    describe("UserId", () => {
         test("should fail when userId is null", () => {
             const result = bookingValidationSchema.safeParse({
-                    userId:null,
-                    assetId:1,
-                    status:"ACTIVE",
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:"Some optional notes"
+                userId: null,
+                assetId: 1,
+                status: "ACTIVE",
+                bookingStart: new Date("2026-01-04T09:00"),
+                bookingEnd: new Date("2026-01-14T09:00"),
+                note: "Some optional notes"
 
             });
 
@@ -31,15 +32,15 @@ import { bookingValidationSchema } from "../../features/booking/validation";
         });
     })
 
-    describe("AssetId", () =>{
+    describe("AssetId", () => {
         test("should fail when assetId is null", () => {
             const result = bookingValidationSchema.safeParse({
-                    userId:2,
-                    assetId:null,
-                    status:"ACTIVE",
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:"Some optional notes"
+                userId: 2,
+                assetId: null,
+                status: "ACTIVE",
+                bookingStart: new Date("2026-01-04T09:00"),
+                bookingEnd: new Date("2026-01-14T09:00"),
+                note: "Some optional notes"
 
             });
 
@@ -47,15 +48,15 @@ import { bookingValidationSchema } from "../../features/booking/validation";
         });
     })
 
-    describe("Status", () =>{
+    describe("Status", () => {
         test("should fail when status is null", () => {
             const result = bookingValidationSchema.safeParse({
-                    userId:2,
-                    assetId:1,
-                    status:null,
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:"Some optional notes"
+                userId: 2,
+                assetId: 1,
+                status: null,
+                bookingStart: new Date("2026-01-04T09:00"),
+                bookingEnd: new Date("2026-01-14T09:00"),
+                note: "Some optional notes"
 
             });
 
@@ -63,15 +64,15 @@ import { bookingValidationSchema } from "../../features/booking/validation";
         });
     })
 
-    describe("BookingStart", () =>{
+    describe("BookingStart", () => {
         test("should fail when bookingStart is null", () => {
             const result = bookingValidationSchema.safeParse({
-                    userId:2,
-                    assetId:1,
-                    status:"ACTIVE",
-                    bookingStart:null,
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:"Some optional notes"
+                userId: 2,
+                assetId: 1,
+                status: "ACTIVE",
+                bookingStart: null,
+                bookingEnd: new Date("2026-01-14T09:00"),
+                note: "Some optional notes"
 
             });
 
@@ -81,15 +82,15 @@ import { bookingValidationSchema } from "../../features/booking/validation";
 
 
 
-    describe("BookingEnd", () =>{
+    describe("BookingEnd", () => {
         test("should fail when bookingEnd is null", () => {
             const result = bookingValidationSchema.safeParse({
-                    userId:2,
-                    assetId:1,
-                    status:"ACTIVE",
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd: null,
-                    note:"Some optional notes"
+                userId: 2,
+                assetId: 1,
+                status: "ACTIVE",
+                bookingStart: new Date("2026-01-04T09:00"),
+                bookingEnd: null,
+                note: "Some optional notes"
 
             });
 
@@ -98,35 +99,35 @@ import { bookingValidationSchema } from "../../features/booking/validation";
     })
 
 
-    describe("Note", () =>{
+    describe("Note", () => {
         test("should pass when note is empty", () => {
             const result = bookingValidationSchema.safeParse({
-                    userId:2,
-                    assetId:1,
-                    status:"ACTIVE",
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:""
+                userId: 2,
+                assetId: 1,
+                status: "ACTIVE",
+                bookingStart: new Date("2026-01-04T09:00"),
+                bookingEnd: new Date("2026-01-14T09:00"),
+                note: ""
 
             });
 
             expect(result.success).toBe(true);
         });
 
-         test("should fail when notes is too long ", () =>{
-                const result = bookingValidationSchema.safeParse({
-                   userId:2,
-                    assetId:1,
-                    status:"ACTIVE",
-                    bookingStart:new Date("2026-01-04T09:00"),
-                    bookingEnd:new Date("2026-01-14T09:00"),
-                    note:"a".repeat(1001)
-                    });
-        
-                expect(result.success).toBe(false);
-        
-                });
-        
+        test("should fail when notes is too long ", () => {
+            const result = bookingValidationSchema.safeParse({
+                userId: 2,
+                assetId: 1,
+                status: "ACTIVE",
+                bookingStart: new Date("2026-01-04T09:00"),
+                bookingEnd: new Date("2026-01-14T09:00"),
+                note: "a".repeat(1001)
+            });
+
+            expect(result.success).toBe(false);
+
+        });
+
     })
 
 
@@ -134,4 +135,3 @@ import { bookingValidationSchema } from "../../features/booking/validation";
 })
 
 
-   

@@ -65,3 +65,9 @@ dist-ssr
 
 .m2/
 .metals/
+
+
+# SonarQube
+.scannerwork/
+.sonarqube/
+coverage
