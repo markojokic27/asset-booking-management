@@ -87,7 +87,7 @@ const initialValues: UserCreateModalUser = {
 };
 
 export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalProps) => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
