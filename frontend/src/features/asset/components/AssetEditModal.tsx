@@ -70,18 +70,8 @@ export const AssetEditModal = ({
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [categoriesError, setCategoriesError] = useState('');
 
-  useEffect(() => {
-    if (isOpen) {
-      setErrors(initialErrors);
-      setSubmitError('');
-      setIsSubmitting(false);
-    }
-  }, [isOpen, asset]);
-
-  if (!isOpen || !asset) return null;
-
   const fetchCategories = async () => {
-    if (categories.length > 0 || categoriesLoading) return;
+    if (categoriesLoading) return;
 
     try {
       setCategoriesLoading(true);
@@ -96,6 +86,18 @@ export const AssetEditModal = ({
       setCategoriesLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      setErrors(initialErrors);
+      setSubmitError('');
+      setIsSubmitting(false);
+      setCategories([]);
+      void fetchCategories();
+    }
+  }, [isOpen, asset]);
+
+  if (!isOpen || !asset) return null;
 
   const handleSubmit = async (data: FormData) => {
     const formValues = {
@@ -216,7 +218,7 @@ export const AssetEditModal = ({
                           : 'Select category',
                       },
                       ...categories.map((category) => ({
-                        value: category.id,
+                        value: String(category.id),
                         label: category.name,
                       })),
                     ]}

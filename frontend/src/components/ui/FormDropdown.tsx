@@ -19,14 +19,16 @@ const fieldLabelClassName =
 const fieldClassName =
   'w-full rounded-lg border border-(--color-table-border) bg-(--color-table-surface) px-4 py-3 text-sm font-medium text-(--color-text) shadow-(--shadow-card) outline-none transition duration-100 focus:border-(--color-primaryblue) focus:bg-(--color-surface-hover)';
 
-export const FormDropdown = React.forwardRef<
-  HTMLSelectElement,
-  FormDropdownProps
->(
-  (
-    { id, label, error = false, errorMessage, className, options, ...props },
-    ref
-  ) => {
+export const FormDropdown = React.forwardRef<HTMLSelectElement, FormDropdownProps>(
+  ({ id, label, error = false, errorMessage, className, options, defaultValue, ...props }, ref) => {
+    const [value, setValue] = React.useState(defaultValue ?? '');
+
+    React.useEffect(() => {
+      if (defaultValue !== undefined) {
+        setValue(defaultValue);
+      }
+    }, [defaultValue, options]);
+
     return (
       <div className="w-full">
         {label && (
@@ -43,6 +45,11 @@ export const FormDropdown = React.forwardRef<
             error && 'border-red-500 focus:border-red-500',
             className
           )}
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            props.onChange?.(e);
+          }}
           {...props}
         >
           {options.map((option) => (
