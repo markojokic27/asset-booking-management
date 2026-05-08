@@ -1,26 +1,26 @@
 package de.bdr.asset.management.user;
 
-import de.bdr.asset.management.booking.BookingRepository;
-import de.bdr.asset.management.booking.BookingStatusEnum;
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
-import de.bdr.asset.management.user.dtos.ChangePasswordRequestDTO;
-import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
-import de.bdr.asset.management.user.dtos.UserResponseDTO;
-import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import de.bdr.asset.management.booking.BookingRepository;
+import de.bdr.asset.management.booking.BookingStatusEnum;
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentRepository;
+import de.bdr.asset.management.user.dtos.ChangePasswordRequestDTO;
+import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
+import de.bdr.asset.management.user.dtos.UserResponseDTO;
+import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Implementation of User Service
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         Department department = departmentRepository.findById(userRequest.departmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
 
-        log.debug("Department found. Mapping entity and saving to database...");
+        log.info("Department found. Mapping entity and saving to database...");
         
         User user = mapper.toEntity(userRequest);
         user.setDepartment(department);
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
 
-        log.debug("Fetching users from the database with pagination: " +
+        log.info("Fetching users from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );

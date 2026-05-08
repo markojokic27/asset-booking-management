@@ -53,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             }
         }
 
-        log.debug("Manager found. Mapping entity and saving to database...");
+        log.info("Manager found. Mapping entity and saving to database...");
 
         Department department = mapper.toEntity(departmentRequest);
         department.setManager(manager);
@@ -90,7 +90,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
 
-        log.debug("Fetching departments from the database with pagination: " +
+        log.info("Fetching departments from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );

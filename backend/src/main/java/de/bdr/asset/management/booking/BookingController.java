@@ -1,13 +1,11 @@
 package de.bdr.asset.management.booking;
 
-import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
+import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
@@ -60,7 +59,7 @@ public class BookingController {
 
         BookingResponseDTO createdBooking = service.createBooking(request);
 
-        log.debug("Successfully processed POST request for creating new booking");
+        log.info("Successfully processed POST request for creating new booking");
 
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
@@ -78,7 +77,7 @@ public class BookingController {
 
         BookingResponseDTO foundBooking = service.getBookingById(id);
 
-        log.debug("Successfully processed GET request for booking id: {}", id);
+        log.info("Successfully processed GET request for booking id: {}", id);
 
         return ResponseEntity.ok(foundBooking);
     }
@@ -100,7 +99,7 @@ public class BookingController {
 
         Page<BookingResponseDTO> allBookings = service.getAllBookings(filter, pageable);
 
-        log.debug("Successfully processed GET request for all booking");
+        log.info("Successfully processed GET request for all booking");
 
         return ResponseEntity.ok(allBookings);
     }
@@ -118,7 +117,7 @@ public class BookingController {
 
         BookingResponseDTO updatedBooking = service.updateBooking(id, request);
 
-        log.debug("Successfully processed PUT request for booking id: {}", id);
+        log.info("Successfully processed PUT request for booking id: {}", id);
 
         return ResponseEntity.ok(updatedBooking);
     }

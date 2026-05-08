@@ -108,7 +108,7 @@ public class BookingServiceImpl implements BookingService {
         
         // TODO: Check if this should hold validation logic like if the category is active or not.
         AssetCategory category = asset.getCategory();
-        log.debug("User and asset found. Mapping entity and saving to database...");
+        log.info("User and asset found. Mapping entity and saving to database...");
         
         Booking booking = mapper.toEntity(bookingRequest);
         
@@ -149,7 +149,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Page<BookingResponseDTO> getAllBookings(BookingFilter filter, Pageable pageable) {
 
-        log.debug("Fetching bookings from the database with pagination: " +
+        log.info("Fetching bookings from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );

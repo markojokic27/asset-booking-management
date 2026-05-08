@@ -61,7 +61,7 @@ public class UserController {
 
         Page<UserResponseDTO> users = userService.getAllUsers(pageable);
 
-        log.debug("Successfully processed GET request for all users");
+        log.info("Successfully processed GET request for all users");
 
         return ResponseEntity.ok(users);
     }
@@ -77,7 +77,7 @@ public class UserController {
 
         UserResponseDTO createdUser = userService.createUser(userRequest);
 
-        log.debug("Successfully processed POST request. Created user with id: {}", createdUser.id());
+        log.info("Successfully processed POST request. Created user with id: {}", createdUser.id());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
@@ -96,7 +96,7 @@ public class UserController {
 
         UserResponseDTO user = userService.getUserById(id);
 
-        log.debug("Successfully processed GET request for user id: {}", id);
+        log.info("Successfully processed GET request for user id: {}", id);
 
         return ResponseEntity.ok(user);
     }
@@ -115,7 +115,7 @@ public class UserController {
 
         UserResponseDTO updatedUser = userService.updateUser(id, userUpdateRequest);
 
-        log.debug("Successfully processed PUT request for user id: {}", id);
+        log.info("Successfully processed PUT request for user id: {}", id);
 
         return ResponseEntity.ok(updatedUser);
     }
@@ -145,7 +145,7 @@ public class UserController {
 
         userService.softDeleteUser(id);
 
-        log.debug("Successfully processed DELETE request for user id: {}", id);
+        log.info("Successfully processed DELETE request for user id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

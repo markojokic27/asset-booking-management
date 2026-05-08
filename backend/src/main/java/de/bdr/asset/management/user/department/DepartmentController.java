@@ -119,7 +119,7 @@ public class DepartmentController {
 
         service.deleteDepartment(id);
 
-        log.debug("Successfully processed DELETE request for department id: {}", id);
+        log.info("Successfully processed DELETE request for department id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

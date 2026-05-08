@@ -44,7 +44,7 @@ public class AssetServiceImpl implements AssetService {
         AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
 
-        log.debug("Asset category found. Mapping entity and saving to database...");
+        log.info("Asset category found. Mapping entity and saving to database...");
 
 
         Asset asset = mapper.toEntity(assetRequest);
@@ -82,7 +82,7 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public Page<AssetResponseDTO> getAllAssets(AssetFilter filter, Pageable pageable) {
 
-        log.debug("Fetching assets from the database with pagination: " +
+        log.info("Fetching assets from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );

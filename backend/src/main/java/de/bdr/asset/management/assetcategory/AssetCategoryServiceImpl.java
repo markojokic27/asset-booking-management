@@ -76,7 +76,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     @Override
     public Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable){
 
-        log.debug("Fetching asset categories from the database with pagination: " +
+        log.info("Fetching asset categories from the database with pagination: " +
                         "Page number: {} | Page size: {} | Sort: {}",
                         pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
         );

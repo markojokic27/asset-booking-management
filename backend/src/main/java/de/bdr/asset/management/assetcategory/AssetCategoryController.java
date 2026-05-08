@@ -120,7 +120,7 @@ public class AssetCategoryController {
 
         service.deleteAssetCategory(id);
 
-        log.debug("Successfully processed DELETE request for asset category id: {}", id);
+        log.info("Successfully processed DELETE request for asset category id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
