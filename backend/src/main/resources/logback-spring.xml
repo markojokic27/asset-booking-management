@@ -28,11 +28,18 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="de.bdr.asset.management" level="DEBUG" />
+    <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <logger name="de.bdr.asset.management" level="INFO" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
+        <appender-ref ref="OTEL"/>
     </root>
 
 </configuration>

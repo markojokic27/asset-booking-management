@@ -13,7 +13,7 @@ dev-down:
 	docker compose -f compose.yaml -f compose.dev.yaml down
 
 dev-clean:
-	docker compose -f compose.yaml -f compose.dev.yaml down -v
+	docker compose -f compose.yaml -f compose.dev.yaml down -v --remove-orphans
 
 e2e:
 	docker compose -f compose.e2e.yaml up --build -d

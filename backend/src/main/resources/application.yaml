@@ -89,3 +89,19 @@ management:
       application: ${spring.application.name}
       environment: ${spring.profiles.active:default}
       version: ${build.version:unknown}
+  tracing:
+    sampling:
+      probability: ${SAMPLING_PROBABILITY:0.1}
+  otlp:
+    metrics:
+      export:
+        url: http://otel:4318/v1/metrics
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://otel:4318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://otel:4318/v1/logs

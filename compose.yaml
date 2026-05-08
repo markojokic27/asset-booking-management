@@ -81,19 +81,27 @@ services:
     ports:
       - "9090:9090"
 
-  grafana:
-    image: grafana/grafana:main
-    container_name: grafana
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./tools/grafana/provisioning:/etc/grafana/provisioning
+  # grafana:
+  #   image: grafana/grafana:main
+  #   container_name: grafana
+  #   restart: unless-stopped
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #     - ./tools/grafana/provisioning:/etc/grafana/provisioning
+  #   ports:
+  #     - "4000:3000"
+  #   depends_on:
+  #     - prometheus
+
+  # FOR LOCAL DEVELOPMENT ONLY
+  otel:
+    image: 'grafana/otel-lgtm:latest'
     ports:
-      - "4000:3000"
-    depends_on:
-      - prometheus
+      - '4000:3000'
+      - '4317:4317'
+      - '4318:4318'
 
 volumes:
   db_data:
