@@ -198,9 +198,18 @@ export const AssetEditModal = ({
                 </Form.Control>
               </Form.Field>
 
-              <Form.Field name="categoryId">
-                <Form.Control asChild>
+            <Form.Field name="categoryId">
+              <Form.Control asChild>
+                {categoriesLoading ? (
                   <FormDropdown
+                    id="asset-category"
+                    name="categoryId"
+                    label="Category"
+                    options={[{ value: '', label: 'Loading categories...' }]}
+                  />
+                ) : (
+                  <FormDropdown
+                    key={`category-${asset.id}`}
                     data-testid="asset-category"
                     id="asset-category"
                     name="categoryId"
@@ -208,23 +217,14 @@ export const AssetEditModal = ({
                     defaultValue={String(asset.categoryId)}
                     error={!!errors.categoryId || !!categoriesError}
                     errorMessage={errors.categoryId || categoriesError}
-                    onFocus={fetchCategories}
-                    onClick={fetchCategories}
-                    options={[
-                      {
-                        value: '',
-                        label: categoriesLoading
-                          ? 'Loading categories...'
-                          : 'Select category',
-                      },
-                      ...categories.map((category) => ({
-                        value: String(category.id),
-                        label: category.name,
-                      })),
-                    ]}
+                    options={categories.map((category) => ({
+                      value: String(category.id),
+                      label: category.name,
+                    }))}
                   />
-                </Form.Control>
-              </Form.Field>
+                )}
+              </Form.Control>
+            </Form.Field>
 
               <Form.Field name="name">
                 <Form.Control asChild>
