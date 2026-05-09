@@ -4,11 +4,6 @@ import de.bdr.asset.management.core.domain.BaseEntity;
 import de.bdr.asset.management.user.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.*;
-
-import java.time.Instant;
-
 
 /**
  * User domain-entity model.
@@ -62,7 +57,7 @@ public class User extends BaseEntity {
     private String managerEmail;
 
     /** Notes, Additional information's */
-    @Column(length = 255)
+    @Column
     private String notes;
 
     /** User benefits */

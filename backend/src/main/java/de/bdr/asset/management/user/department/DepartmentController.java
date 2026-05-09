@@ -49,8 +49,6 @@ public class DepartmentController {
             @Valid @RequestBody DepartmentRequestDTO request
     ) throws DuplicateResourceException, ResourceNotFoundException
     {
-        log.info("Received POST request to create a new department");
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createDepartment(request));
@@ -65,11 +63,6 @@ public class DepartmentController {
             @ParameterObject Pageable pageable
     ) throws IllegalArgumentException
     {
-        log.info("Received GET request to fetch departments with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAllDepartments(pageable));
@@ -83,8 +76,6 @@ public class DepartmentController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received GET request to fetch department with id: {}", id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getDepartmentById(id));
@@ -99,8 +90,6 @@ public class DepartmentController {
             @PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request
     ) throws ResourceNotFoundException, DuplicateResourceException
     {
-        log.info("Received PUT request to update department with id: {}", id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateDepartment(id, request));
@@ -115,11 +104,7 @@ public class DepartmentController {
             @PathVariable Long id
     )
     {
-        log.info("Received DELETE request for department with id: {}", id);
-
         service.deleteDepartment(id);
-
-        log.info("Successfully processed DELETE request for department id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

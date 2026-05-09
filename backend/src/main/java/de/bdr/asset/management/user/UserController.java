@@ -54,14 +54,7 @@ public class UserController {
            @ParameterObject Pageable pageable
     ) throws IllegalArgumentException 
     {
-        log.info("Received GET request to fetch users with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         Page<UserResponseDTO> users = userService.getAllUsers(pageable);
-
-        log.info("Successfully processed GET request for all users");
 
         return ResponseEntity.ok(users);
     }
@@ -73,11 +66,7 @@ public class UserController {
             @Valid @RequestBody UserCreateRequestDTO userRequest
     ) throws DuplicateResourceException, ResourceNotFoundException
     {
-        log.info("Received POST request to create a new user for department id: {}", userRequest.departmentId());
-
         UserResponseDTO createdUser = userService.createUser(userRequest);
-
-        log.info("Successfully processed POST request. Created user with id: {}", createdUser.id());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
@@ -92,11 +81,7 @@ public class UserController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received GET request to fetch user with id: {}", id);
-
         UserResponseDTO user = userService.getUserById(id);
-
-        log.info("Successfully processed GET request for user id: {}", id);
 
         return ResponseEntity.ok(user);
     }
@@ -111,11 +96,7 @@ public class UserController {
             @Valid @RequestBody UserUpdateRequestDTO userUpdateRequest
     ) throws ResourceNotFoundException
     {
-        log.info("Received PUT request to update user with id: {}", id);
-
         UserResponseDTO updatedUser = userService.updateUser(id, userUpdateRequest);
-
-        log.info("Successfully processed PUT request for user id: {}", id);
 
         return ResponseEntity.ok(updatedUser);
     }
@@ -129,7 +110,7 @@ public class UserController {
             @RequestBody @Valid ChangePasswordRequestDTO request) {
 
         userService.changePassword(id, request);
-        return ResponseEntity.noContent().build(); // 204 No Content is standard for successful updates with no body
+        return ResponseEntity.noContent().build(); // 204 No Content is standard for successful updates with nobody
     }
 
     /** Soft DELETE */
@@ -141,11 +122,7 @@ public class UserController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received DELETE request to delete user with id: {}", id);
-
         userService.softDeleteUser(id);
-
-        log.info("Successfully processed DELETE request for user id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

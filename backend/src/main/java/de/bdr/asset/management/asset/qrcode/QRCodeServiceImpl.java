@@ -74,8 +74,6 @@ public class QRCodeServiceImpl implements QRCodeService {
         File outputFile = new File(filePath);
         ImageIO.write(qrImage, "PNG", outputFile);
 
-        log.info("Created QR Code for asset {}", id);
-
         assetService.updateAssetQRCode(id, filePath);
 
         return filePath;

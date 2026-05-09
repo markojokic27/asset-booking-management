@@ -37,8 +37,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional(rollbackFor = Exception.class)
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
 
-        log.info("Attempting to create a new department with manager id: {}", departmentRequest.managerId());
-
         if (repository.existsByName(departmentRequest.name())) {
             throw new DuplicateResourceException("Department " + departmentRequest.name() + " already exists.");
         }
@@ -78,8 +76,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
-        log.info("Department found with id: {}", id);
-
         return mapper.toResponse(department);
     }
 
@@ -90,14 +86,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
 
-        log.info("Fetching departments from the database with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         Page<Department> departments = repository.findAll(pageable);
-
-        log.info("Successfully fetched {} departments", departments.getNumberOfElements());
 
         return departments.map(mapper::toResponse);
     }
@@ -110,8 +99,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
-
-        log.info("Attempting to update department with id: {}", id);
 
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));

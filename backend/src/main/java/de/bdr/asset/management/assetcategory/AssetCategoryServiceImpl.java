@@ -36,16 +36,12 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     @Transactional(rollbackFor = Exception.class)
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
 
-        log.info("Attempting to create a new asset category");
-
         if (repository.existsByName(assetCategoryRequest.name())) {
             throw new DuplicateResourceException("Asset category " + assetCategoryRequest.name() + " already exists.");
         }
 
         AssetCategory category = mapper.toEntity(assetCategoryRequest);
         category = repository.save(category);
-
-        log.info("Successfully created new asset category with id: {}", category.getId());
 
         return mapper.toResponse(category);
     }
@@ -62,8 +58,6 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         AssetCategory category = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
-        log.info("Asset category found with id: {}", id);
-
         return mapper.toResponse(category);
     }
 
@@ -76,14 +70,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     @Override
     public Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable){
 
-        log.info("Fetching asset categories from the database with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         Page<AssetCategory> categories = repository.findAll(pageable);
-
-        log.info("Successfully fetched {} asset categories", categories.getNumberOfElements());
 
         return categories.map(mapper::toResponse);
     }
@@ -99,8 +86,6 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     @Transactional(rollbackFor = Exception.class)
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
 
-        log.info("Attempting to update asset category with id: {}", id);
-
         AssetCategory category = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
 
@@ -113,8 +98,6 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         category.setBookingPeriod(assetCategoryRequest.bookingPeriod());
         category.setApproval(assetCategoryRequest.approval());
         AssetCategory updatedCategory = repository.save(category);
-
-        log.info("Successfully updated asset category with id: {}", id);
 
         return mapper.toResponse(updatedCategory);
     }

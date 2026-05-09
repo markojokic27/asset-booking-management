@@ -64,8 +64,6 @@ public class AssetController {
             @PathVariable Long id
     ) throws WriterException, IOException, ResourceNotFoundException
     {
-        log.info("Accessing QR Code for asset with id: {}", id);
-
         File file = new File(qrCodeService.getQRCode(id));
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
@@ -84,8 +82,6 @@ public class AssetController {
             @Valid @RequestBody AssetRequestDTO assetRequest
     ) throws ResourceNotFoundException, DuplicateResourceException
     {
-        log.info("Received POST request to create a new asset");
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(assetService.createAsset(assetRequest));
@@ -101,11 +97,6 @@ public class AssetController {
             @ParameterObject Pageable pageable
     ) throws IllegalArgumentException
     {
-        log.info("Received GET request to fetch assets with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(assetService.getAllAssets(filter, pageable));
@@ -120,8 +111,6 @@ public class AssetController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received GET request to fetch asset with id: {}", id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(assetService.getAssetById(id));
@@ -136,8 +125,6 @@ public class AssetController {
             @PathVariable Long id, @Valid @RequestBody AssetRequestDTO assetRequest
     ) throws ResourceNotFoundException, DuplicateResourceException
     {
-        log.info("Received PUT request to update asset with id: {}", id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(assetService.updateAsset(id, assetRequest));
@@ -152,11 +139,7 @@ public class AssetController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received DELETE request to soft delete an asset");
-
         assetService.softDeleteAsset(id);
-
-        log.info("Successfully processed DELETE request for asset id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

@@ -39,19 +39,12 @@ public class AssetServiceImpl implements AssetService {
     @Transactional(rollbackFor = Exception.class)
     public AssetResponseDTO createAsset(AssetRequestDTO assetRequest) {
 
-        log.info("Attempting to create asset in category id: {}", assetRequest.categoryId());
-
         AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
-
-        log.info("Asset category found. Mapping entity and saving to database...");
-
 
         Asset asset = mapper.toEntity(assetRequest);
         asset.setCategory(category);
         asset = repository.save(asset);
-
-        log.info("Successfully created new asset with id: {} in asset category id: {}", asset.getId(), category.getId());
 
         return mapper.toResponse(asset);
     }
@@ -68,8 +61,6 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
-        log.info("Asset found with id: {}", id);
-
         return mapper.toResponse(asset);
     }
 
@@ -82,14 +73,7 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public Page<AssetResponseDTO> getAllAssets(AssetFilter filter, Pageable pageable) {
 
-        log.info("Fetching assets from the database with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
-
         Specification<Asset> spec = Specification.where((root, query, cb) -> cb.conjunction());
-
 
         if (filter.getName() != null) {
             spec = spec.and((root, query, cb) ->
@@ -113,8 +97,6 @@ public class AssetServiceImpl implements AssetService {
 
         Page<Asset> assets = repository.findAll(spec, pageable);
 
-        log.info("Successfully fetched {} assets", assets.getNumberOfElements());
-
         return assets.map(mapper::toResponse);
     }
 
@@ -129,8 +111,6 @@ public class AssetServiceImpl implements AssetService {
     @Transactional(rollbackFor = Exception.class)
     public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
 
-        log.info("Attempting to update asset with id: {}", id);
-
         Asset asset = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
@@ -143,8 +123,6 @@ public class AssetServiceImpl implements AssetService {
         asset.setCategory(category);
         asset = repository.save(asset);
 
-        log.info("Successfully updated asset with id: {}", id);
-        
         return mapper.toResponse(asset);
     }
 
@@ -159,24 +137,18 @@ public class AssetServiceImpl implements AssetService {
     @Transactional(rollbackFor = Exception.class)
     public AssetResponseDTO updateAssetQRCode(Long id, String filePath) {
 
-        log.info("Attempting to update asset QR Code with id: {}", id);
-
         Asset asset = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
         asset.setCode(filePath);
         asset = repository.save(asset);
 
-        log.info("Successfully updated asset QR Code with id: {}", id);
-        
         return mapper.toResponse(asset);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void softDeleteAsset(Long id) {
-
-        log.info("Attempting to delete asset with id: {}", id);
 
         Asset asset = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));

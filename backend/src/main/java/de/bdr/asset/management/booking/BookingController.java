@@ -55,11 +55,7 @@ public class BookingController {
             @Valid @RequestBody BookingCreateDTO request
     ) throws InvalidDateRangeException, ResourceNotFoundException, DuplicateResourceException
     {
-        log.info("Received POST request to create a new booking");
-
         BookingResponseDTO createdBooking = service.createBooking(request);
-
-        log.info("Successfully processed POST request for creating new booking");
 
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
     }
@@ -73,11 +69,7 @@ public class BookingController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received GET request to fetch booking with id: {}", id);
-
         BookingResponseDTO foundBooking = service.getBookingById(id);
-
-        log.info("Successfully processed GET request for booking id: {}", id);
 
         return ResponseEntity.ok(foundBooking);
     }
@@ -92,14 +84,7 @@ public class BookingController {
             @ParameterObject Pageable pageable
     ) throws IllegalArgumentException
     {
-        log.info("Received GET request to fetch bookings with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         Page<BookingResponseDTO> allBookings = service.getAllBookings(filter, pageable);
-
-        log.info("Successfully processed GET request for all booking");
 
         return ResponseEntity.ok(allBookings);
     }
@@ -113,11 +98,7 @@ public class BookingController {
             @PathVariable Long id, @Valid @RequestBody BookingUpdateDTO request
     ) throws ResourceNotFoundException, ActionNotAllowedException, InvalidDateRangeException, DuplicateResourceException
     {
-        log.info("Received PUT request to update booking with id: {}", id);
-
         BookingResponseDTO updatedBooking = service.updateBooking(id, request);
-
-        log.info("Successfully processed PUT request for booking id: {}", id);
 
         return ResponseEntity.ok(updatedBooking);
     }

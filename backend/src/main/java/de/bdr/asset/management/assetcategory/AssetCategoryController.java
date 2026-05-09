@@ -49,8 +49,6 @@ public class AssetCategoryController {
             @Valid @RequestBody AssetCategoryRequestDTO request
     ) throws DuplicateResourceException
     {
-        log.info("Received POST request to create a new asset category");
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(service.createAssetCategory(request));
@@ -65,11 +63,6 @@ public class AssetCategoryController {
             @ParameterObject Pageable pageable
     ) throws IllegalArgumentException
     {
-        log.info("Received GET request to fetch asset categories with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAllAssetCategories(pageable));
@@ -84,8 +77,6 @@ public class AssetCategoryController {
             @PathVariable Long id
     ) throws ResourceNotFoundException
     {
-        log.info("Received GET request to fetch asset category with id: {}", id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.getAssetCategoryById(id));
@@ -100,8 +91,6 @@ public class AssetCategoryController {
             @PathVariable Long id, @Valid @RequestBody AssetCategoryRequestDTO request
     ) throws ResourceNotFoundException, DuplicateResourceException
     {
-        log.info("Received PUT request to update asset category with id: {}", id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateAssetCategory(id, request));
@@ -116,11 +105,7 @@ public class AssetCategoryController {
             @PathVariable Long id
     )
     {
-        log.info("Received DELETE request for asset category with id: {}", id);
-
         service.deleteAssetCategory(id);
-
-        log.info("Successfully processed DELETE request for asset category id: {}", id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

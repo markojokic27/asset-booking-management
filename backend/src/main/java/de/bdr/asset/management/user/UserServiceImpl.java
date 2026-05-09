@@ -42,8 +42,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public UserResponseDTO createUser(UserCreateRequestDTO userRequest) {
 
-        log.info("Attempting to create a new user for department id: {}", userRequest.departmentId());
-
         if (userRepository.existsByUsername(userRequest.username())) {
             throw new DuplicateResourceException("Username " + userRequest.username() + " is already taken");
         }
@@ -55,15 +53,11 @@ public class UserServiceImpl implements UserService {
         Department department = departmentRepository.findById(userRequest.departmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + userRequest.departmentId()));
 
-        log.info("Department found. Mapping entity and saving to database...");
-        
         User user = mapper.toEntity(userRequest);
         user.setDepartment(department);
         user.setPassword(passwordEncoder.encode(userRequest.password()));
 
         userRepository.save(user);
-
-        log.info("Successfully created new user with id: {} in department id: {}", user.getId(), department.getId());
 
         return mapper.toResponse(user);
     }
@@ -74,22 +68,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
-        log.info("User found with id: {}", id);
-
         return mapper.toResponse(user);
     }
 
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
 
-        log.info("Fetching users from the database with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
-
         Page<User> users = userRepository.findAll(pageable);
-
-        log.info("Successfully fetched {} users", users.getNumberOfElements());
 
         return users.map(mapper::toResponse);
     }
@@ -97,20 +82,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userUpdateRequest) {
-
-        log.info("Attempting to update user with id: {}", id);
-
-        // NOTE:
-        //
-        // we could define following method in repository to avoid filtering for deleted users:
-        //
-        //      Optional<User> findByIdAndStatusNot(Long id, UserStatusEnum status);
-        //
-        // and then pass status DELETED when calling:
-        //
-        //      User user = userRepository.findByIdAndStatusNot(id, UserStatusEnum.DELETED)
-        //                      .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        //
 
         User user = userRepository.findById(id)
                 .filter(u -> u.getStatus() != UserStatusEnum.DELETED)
@@ -157,16 +128,12 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        log.info("Successfully updated user with id: {}", id);
-
         return mapper.toResponse(user);
     }
 
     @Override
     @Transactional
     public void changePassword(Long id, ChangePasswordRequestDTO request) {
-
-        log.info("Attempting to change password for user with id: {}", id);
 
         User user = userRepository.findById(id)
                 .filter(u -> u.getStatus() != UserStatusEnum.DELETED)
@@ -182,15 +149,11 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        log.info("Successfully changed password for user with id: {}", id);
-
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void softDeleteUser(Long id) {
-
-        log.info("Attempting to delete user with id: {}", id);
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
