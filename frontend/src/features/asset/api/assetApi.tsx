@@ -10,7 +10,7 @@ export type PageResponse<T> = {
   number: number
 }
 
-export const getAllAssets = async (page = 0, size = 10) => {
+export const getAllAssets = async (page = 0, size = 50) => {
   const res = await api.get<PageResponse<AssetDto>>(
     '/assets',
     {
