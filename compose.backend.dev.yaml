@@ -3,19 +3,20 @@ services:
   db:
     image: postgres:18
     container_name: postgres-db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - db_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 5
 
   backend:
     build:
@@ -36,6 +37,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 15s # check every 15s
+      timeout: 5s # fail if no response in 5s
+      retries: 5 # mark unhealthy after 5 consecutive failures
+      start_period: 60s # give Spring Boot 60s to start before counting failures
+
+  otel:
+    image: 'grafana/otel-lgtm:latest'
+    ports:
+      - '4000:3000'
+      - '4317:4317'
+      - '4318:4318'
 
 volumes:
   db_data:
