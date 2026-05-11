@@ -16,10 +16,23 @@ import deUsers from './locales/de/users.json';
 import deAccount from './locales/de/account.json';
 import deAssetCategories from './locales/de/assetCategories.json';
 
-const savedLanguage = localStorage.getItem('language');
+export const LANGUAGE_STORAGE_KEY = 'language';
+const SUPPORTED_LANGUAGES = ['en', 'hr', 'de'] as const;
+
+const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+const isStoredSupported =
+  stored !== null &&
+  (SUPPORTED_LANGUAGES as readonly string[]).includes(stored);
+const initialLng = isStoredSupported
+  ? (stored as (typeof SUPPORTED_LANGUAGES)[number])
+  : 'en';
+
+if (!isStoredSupported) {
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, initialLng);
+}
 
 i18next.use(initReactI18next).init({
-  lng: savedLanguage || 'hr',
+  lng: initialLng,
   fallbackLng: 'en',
   resources: {
     en: {

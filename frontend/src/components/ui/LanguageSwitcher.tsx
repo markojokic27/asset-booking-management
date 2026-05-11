@@ -6,6 +6,8 @@ import HR from 'country-flag-icons/react/3x2/HR';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
+import { LANGUAGE_STORAGE_KEY } from '../../config/i18n';
+
 // Components
 import { ChevronDown } from '../icons/ChevronDown';
 
@@ -37,7 +39,7 @@ function LanguageSwitcher({ variant = 'header' }: Props) {
 
   const handleChange = (code: string) => {
     i18n.changeLanguage(code);
-    localStorage.setItem('language', code);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, code);
   };
 
   const CurrentFlag = currentLanguage?.Flag;
