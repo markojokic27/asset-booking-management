@@ -117,7 +117,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
             footer={
                 <div className="flex justify-end">
                     <Button
-                        data-testid="add-category-button"
+                        data-testid="save-category-button"
                         type="submit"
                         form={formId}
                         className="shadow-none"
