@@ -84,8 +84,6 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO createBooking(BookingCreateDTO bookingRequest) {
 
-        log.info("Attempting to create a new booking with user id: {} and asset id: {}", bookingRequest.userId(), bookingRequest.assetId());
-
         // TODO: Maybe an additional check to see if the booking period is some minimum, possibly taken from the controller.
         isStartEndValid(bookingRequest.bookingStart(), bookingRequest.bookingEnd());
 
@@ -117,8 +115,6 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
         repository.save(booking);
-        
-        log.info("Successfully created new booking with id: {} for user id: {} with asset id: {}", booking.getId(), user.getId(), asset.getId());
 
         return mapper.toResponse(booking);
     }
@@ -135,8 +131,6 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
-        log.info("Booking found with id: {}", id);
-
         return mapper.toResponse(booking);
     }
 
@@ -148,11 +142,6 @@ public class BookingServiceImpl implements BookingService {
      */
     @Override
     public Page<BookingResponseDTO> getAllBookings(BookingFilter filter, Pageable pageable) {
-
-        log.info("Fetching bookings from the database with pagination: " +
-                        "Page number: {} | Page size: {} | Sort: {}",
-                        pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort()
-        );
 
         Specification<Booking> spec = Specification.where((root, query, cb) -> cb.conjunction());
 
@@ -188,8 +177,6 @@ public class BookingServiceImpl implements BookingService {
 
         Page<Booking> bookings = repository.findAll(spec, pageable);
 
-        log.info("Successfully fetched {} bookings", bookings.getNumberOfElements());
-
         return bookings.map(mapper::toResponse);
     }
 
@@ -203,8 +190,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO updateBooking(Long id, BookingUpdateDTO bookingRequest) {
-
-        log.info("Attempting to update booking with id: {}", id);
 
         Booking booking = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
@@ -223,9 +208,7 @@ public class BookingServiceImpl implements BookingService {
         isStartEndValid(booking.getBookingStart(), booking.getBookingEnd());
 
         booking = repository.save(booking);
-
-        log.info("Successfully updated booking with id: {}", id);
-
+        
         return mapper.toResponse(booking);
     }
 
