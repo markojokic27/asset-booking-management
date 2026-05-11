@@ -4,13 +4,20 @@ const api = axios.create({
   baseURL: 'http://127.0.0.1:8080/v1',
 });
 
-let accessToken: string | null = null;
+let accessToken: string | null = localStorage.getItem('accessToken');
 
 export const setAccessToken = (token: string | null) => {
   accessToken = token;
+
+  if (token) {
+    localStorage.setItem('accessToken', token);
+  } else {
+    localStorage.removeItem('accessToken');
+  }
 };
 
 let isRefreshing = false;
+
 let subscribers: ((token: string) => void)[] = [];
 
 const subscribe = (cb: (token: string) => void) => {
@@ -24,13 +31,16 @@ const notify = (token: string) => {
 
 api.interceptors.request.use((config) => {
   if (accessToken) {
+    config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
+
   return config;
 });
 
 api.interceptors.response.use(
-  (res) => res,
+  (response) => response,
+
   async (error) => {
     const originalRequest = error.config;
 
@@ -45,11 +55,13 @@ api.interceptors.response.use(
 
     originalRequest._retry = true;
 
-    // ako već refresh ide
+    // if there's already a refresh in progress, wait for it to finish and then retry the original request
     if (isRefreshing) {
       return new Promise((resolve) => {
         subscribe((token) => {
+          originalRequest.headers = originalRequest.headers || {};
           originalRequest.headers.Authorization = `Bearer ${token}`;
+
           resolve(api(originalRequest));
         });
       });
@@ -60,19 +72,31 @@ api.interceptors.response.use(
     try {
       const refreshToken = localStorage.getItem('refreshToken');
 
-      const res = await axios.post('http://127.0.0.1:8080/v1/auth/refresh', {
-        refreshToken,
-      });
+      if (!refreshToken) {
+        logout();
+        return Promise.reject(error);
+      }
 
-      const newToken = res.data.accessToken;
+      const response = await axios.post(
+        'http://127.0.0.1:8080/v1/auth/refresh',
+        {
+          refreshToken,
+        }
+      );
 
-      setAccessToken(newToken);
-      notify(newToken);
+      const newAccessToken = response.data.accessToken;
+
+      setAccessToken(newAccessToken);
+
+      notify(newAccessToken);
+
+      originalRequest.headers = originalRequest.headers || {};
+      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
       return api(originalRequest);
-    } catch (err) {
+    } catch (refreshError) {
       logout();
-      return Promise.reject(err);
+      return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
     }
@@ -81,7 +105,9 @@ api.interceptors.response.use(
 
 export const logout = () => {
   setAccessToken(null);
-  localStorage.clear();
+
+  localStorage.removeItem('refreshToken');
+
   window.location.href = '/login';
 };
 

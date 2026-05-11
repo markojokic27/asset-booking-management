@@ -11,8 +11,8 @@ import { LayoutColumn } from '../components/layout/Layout';
 import type { BookingDto } from '../features/booking/types';
 
 export default function BookingsByAsset() {
-  const { id } = useParams();
-  const { bookings, loading, error } = useBookingsByAsset(id!);
+  const { assetId } = useParams();
+  const { bookings, loading, error } = useBookingsByAsset(assetId!);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Greška</div>;
@@ -25,7 +25,7 @@ export default function BookingsByAsset() {
       className="flex flex-col pt-35"
     >
       {' '}
-      <h1>Bookings za asset {id}</h1>
+      <h1>Bookings za asset {assetId}</h1>
       {bookings.map((b: BookingDto) => (
         <div key={b.id}>AAAAAAAAAAAAAAAAAA{b.assetId} </div>
       ))}

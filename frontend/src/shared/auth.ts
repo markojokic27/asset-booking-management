@@ -4,17 +4,22 @@ import { setAccessToken } from './api';
 export async function initAuth() {
   const refreshToken = localStorage.getItem('refreshToken');
 
-  if (!refreshToken) return null;
+  if (!refreshToken) {
+    return false;
+  }
 
   try {
-    const res = await axios.post('http://127.0.0.1:8080/v1/auth/refresh', {
+    const response = await axios.post('http://127.0.0.1:8080/v1/auth/refresh', {
       refreshToken,
     });
 
-    setAccessToken(res.data.accessToken);
+    const accessToken = response.data.accessToken;
+    setAccessToken(accessToken);
+
     return true;
   } catch {
-    localStorage.clear();
-    return null;
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    return false;
   }
 }
