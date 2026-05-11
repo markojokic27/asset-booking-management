@@ -36,7 +36,6 @@ export const createUser = async (payload: UserUpsertRequest) => {
 
 export const deleteUser = async (id: number) => {
   await api.delete<void>(`/users/${id}`);
-
 };
 
 export const getUserReport = async (id: number) => {

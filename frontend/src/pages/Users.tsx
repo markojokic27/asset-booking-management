@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
-//Components
+// Reusable UI components
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Pagination } from '../components/ui/Pagination';
 import { DeleteModal } from '../components/ui/DeleteModal';
+
+// User-related feature components
 import { UserModal } from '../features/user/components/UserModal';
 import { UsersTable } from '../features/user/components/UsersTable';
 import { UserEditModal } from '../features/user/components/UserEditModal';
@@ -18,8 +20,10 @@ import { UserBookingsModal } from '../features/user/components/UserBookingsModal
 import { UserReportModal } from '../features/user/components/UserReportModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
 
-// Hooks
+// Utility functions
 import { getFullName } from '../features/user/utilis/users';
+
+// Custom hooks
 import { useUsers } from '../features/user/hooks/useUsers';
 
 // Types
@@ -45,12 +49,14 @@ export default function Users() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
+      {/* Page header and action buttons */}
       <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl font-black tracking-widest">
           {t('users.title')}
         </h1>
 
         <div className="flex flex-col gap-3 sm:flex-row">
+          {/* Export users to CSV */}
           <Button
             size="sm"
             variant="outline"
@@ -60,6 +66,7 @@ export default function Users() {
             {t('users.actions.export')}
           </Button>
 
+          {/* Open modal for creating a new user */}
           <Button
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
@@ -70,9 +77,12 @@ export default function Users() {
         </div>
       </div>
 
+      {/* Divider line */}
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
+      {/* Filters and search section */}
       <div className="mt-6 flex w-full items-center justify-between">
+        {/* Toggle visibility of deleted users */}
         <div className="flex items-center">
           <ShowDeletedFilter
             checked={list.showDeleted}
@@ -80,6 +90,7 @@ export default function Users() {
           />
         </div>
 
+        {/* Search users by input value */}
         <SearchInput
           value={list.search}
           onChange={list.setSearch}
@@ -88,16 +99,23 @@ export default function Users() {
         />
       </div>
 
+      {/* Users table */}
       <div className="mt-6">
         <UsersTable
           data={list.pagedUsers}
+
+          // Sorting configuration
           nameSortDir={sorting.nameSortDir}
           onToggleNameSort={sorting.toggleNameSortDir}
+
+          // User actions
           onView={(u) => modals.open('view', u)}
           onEdit={(u) => modals.open('edit', u)}
           onBookings={(u) => modals.open('bookings', u)}
           onDelete={(u) => setDeleteState({ type: 'delete', user: u })}
           onReport={(u) => modals.open('report', u)}
+
+          // Display loading, error or empty state message
           emptyMessage={
             list.isLoading
               ? t('users.empty.loading')
@@ -106,6 +124,7 @@ export default function Users() {
         />
       </div>
 
+      {/* Show pagination only if users exist */}
       {list.filteredUsers.length > 0 && (
         <Pagination
           page={pagination.page}
@@ -115,6 +134,7 @@ export default function Users() {
         />
       )}
 
+      {/* Modal for viewing user details */}
       <UserModal
         isOpen={modals.modal === 'view'}
         onClose={modals.close}
@@ -135,6 +155,7 @@ export default function Users() {
         }
       />
 
+      {/* Modal for editing existing users */}
       <UserEditModal
         isOpen={modals.modal === 'edit'}
         onClose={modals.close}
@@ -144,12 +165,14 @@ export default function Users() {
         }}
       />
 
+      {/* Modal for creating new users */}
       <UserCreateModal
         isOpen={modals.modal === 'create'}
         onClose={modals.close}
         onCreate={actions.create}
       />
 
+      {/* Modal displaying user bookings */}
       <UserBookingsModal
         isOpen={modals.modal === 'bookings'}
         onClose={modals.close}
@@ -163,20 +186,22 @@ export default function Users() {
         }
       />
 
+      {/* Modal for user reports */}
       <UserReportModal
         isOpen={modals.modal === 'report'}
         onClose={modals.close}
         user={
           selection.activeUser
             ? {
-                id: selection.activeUser.id,
-                name: selection.activeUser.name,
-                surname: selection.activeUser.surname,
-              }
+              id: selection.activeUser.id,
+              name: selection.activeUser.name,
+              surname: selection.activeUser.surname,
+            }
             : null
         }
       />
 
+      {/* Confirmation modal before deleting a user */}
       <DeleteModal
         isOpen={deleteState.type === 'delete'}
         onClose={closeDeleteModal}
@@ -188,6 +213,7 @@ export default function Users() {
             deleteState.type === 'delete' ? getFullName(deleteState.user) : '',
         })}
         onConfirm={async () => {
+          // Delete selected user and close modal
           if (deleteState.type === 'delete') {
             await actions.remove(deleteState.user.id);
             closeDeleteModal();
