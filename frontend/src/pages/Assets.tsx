@@ -143,6 +143,7 @@ export default function Assets() {
         </h1>
 
         <Button
+          data-testid="add-asset-button"
           type="button"
           size="sm"
           iconLeft={<AddIcon fontSize="small" />}

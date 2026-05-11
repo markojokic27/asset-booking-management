@@ -113,6 +113,7 @@ export default function AssetCategories() {
           </h1>
 
           <Button
+            data-testid="add-category-button"
             type="button"
             size="sm"
             onClick={() => setOpenAddModal(true)}

@@ -68,6 +68,7 @@ export default function Users() {
 
           {/* Open modal for creating a new user */}
           <Button
+            data-testid="add-user-button"
             size="sm"
             iconLeft={<AddIcon fontSize="small" />}
             onClick={() => modals.open('create')}

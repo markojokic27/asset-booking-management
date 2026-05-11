@@ -6,38 +6,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountInfoTest extends BaseTest {
 
+    private static final String NAV_LINK = "http://localhost:5173/account-info";
+    private static final By HEADING = By.cssSelector("[data-testid='account-heading']");
+    private static final By FULL_NAME = By.cssSelector("[data-testid='account-fullname']");
+    private static final By EMAIL = By.cssSelector("[data-testid='account-email']");
+    private static final By ROLE = By.cssSelector("[data-testid='account-role']");
+    private static final By STATUS = By.cssSelector("[data-testid='account-status']");
+
     private void navigateToAccountInfo() {
         login();
+        driver.get(NAV_LINK);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(HEADING));
+    }
 
-        wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("nav a[href='/account-info']")
-        )).click();
-
-        wait.until(ExpectedConditions.urlContains("/account-info"));
+    private void assertNotBlank(By locator) {
+        String text = driver.findElement(locator).getText();
+        assertNotNull(text);
+        assertFalse(text.isBlank());
     }
 
     @Test
     void accountInfoPageDisplaysUserData() {
         navigateToAccountInfo();
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("[data-testid='account-heading']")
-        ));
-
-        assertFalse(driver.findElement(
-                By.cssSelector("[data-testid='account-fullname']")
-        ).getText().isBlank());
-
-        assertFalse(driver.findElement(
-                By.cssSelector("[data-testid='account-email']")
-        ).getText().isBlank());
-
-        assertFalse(driver.findElement(
-                By.cssSelector("[data-testid='account-role']")
-        ).getText().isBlank());
-
-        assertFalse(driver.findElement(
-                By.cssSelector("[data-testid='account-status']")
-        ).getText().isBlank());
+        wait.until(ExpectedConditions.visibilityOfElementLocated(HEADING));
+        assertNotBlank(FULL_NAME);
+        assertNotBlank(EMAIL);
+        assertNotBlank(ROLE);
+        assertNotBlank(STATUS);
     }
 }
