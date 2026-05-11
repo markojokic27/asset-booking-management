@@ -43,7 +43,7 @@ export function BookingTable({ assets, isLoading, error, className }: Props) {
       headerClassName: 'w-px whitespace-nowrap',
       cellClassName: 'w-px whitespace-nowrap',
       render: (asset) => (
-        <Link to={`/bookings/${asset.id}`}>
+        <Link to={`/assets/${asset.id}/bookings`}>
           <Button size="sm">Book</Button>
         </Link>
       ),

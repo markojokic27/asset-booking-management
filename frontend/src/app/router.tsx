@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
         children: [
           { path: 'assets', element: <Assets /> },
           { path: 'bookings', element: <Bookings /> },
-          { path: 'bookings/:assetId', element: <BookingsByAsset /> },
+          { path: 'assets/:assetId/bookings', element: <BookingsByAsset /> },
           { path: 'users', element: <Users /> },
           { path: 'categories', element: <AssetCategories /> },
           { path: 'manager', element: <Manager /> },
