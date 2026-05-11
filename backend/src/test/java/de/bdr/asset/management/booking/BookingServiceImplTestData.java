@@ -3,36 +3,31 @@ package de.bdr.asset.management.booking;
 import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 
-import static de.bdr.asset.management.booking.TestConstants.ASSET_ID;
-import static de.bdr.asset.management.booking.TestConstants.ASSET_NAME;
-import static de.bdr.asset.management.booking.TestConstants.BOOKING_ID;
-import static de.bdr.asset.management.booking.TestConstants.END;
-import static de.bdr.asset.management.booking.TestConstants.NOTES_DATA;
-import static de.bdr.asset.management.booking.TestConstants.START;
-import static de.bdr.asset.management.booking.TestConstants.UPDATED_NOTES_DATA;
-import static de.bdr.asset.management.booking.TestConstants.USER_ID;
-import static de.bdr.asset.management.booking.TestConstants.USER_NAME;
-
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.user.User;
+
+import static de.bdr.asset.management.booking.TestConstants.*;
 
 public class BookingServiceImplTestData {
     public static User user() {
         User u = new User();
         u.setId(USER_ID);
         u.setName(USER_NAME);
+        u.setRole(USER_ROLE);
         return u;
     }
 
     public static Asset asset() {
         AssetCategory category = new AssetCategory();
+        category.setName(CATEGORY_NAME);
         category.setApproval(false);
         Asset a = new Asset();
         a.setId(ASSET_ID);
         a.setName(ASSET_NAME);
         a.setCategory(category);
+        a.setStatus(ASSET_STATUS);
         return a;
     }
 
@@ -70,8 +65,8 @@ public class BookingServiceImplTestData {
     public static BookingResponseDTO response() {
         return new BookingResponseDTO(
                 BOOKING_ID,
-                USER_ID,
-                ASSET_ID,
+                USER_SUMMARY,
+                ASSET_SUMMARY,
                 BookingStatusEnum.ACTIVE,
                 START,
                 END,

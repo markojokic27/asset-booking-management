@@ -8,9 +8,9 @@ public record BookingResponseDTO(
 
         Long id,
 
-        Long userId,
+        UserSummaryDTO user,
 
-        Long assetId,
+        AssetSummaryDTO asset,
 
         BookingStatusEnum status,
 

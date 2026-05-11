@@ -1,0 +1,9 @@
+package de.bdr.asset.management.booking.dto;
+
+import de.bdr.asset.management.user.UserRoleEnum;
+
+public record UserSummaryDTO(
+        Long id,
+        String username,
+        UserRoleEnum role
+) {}

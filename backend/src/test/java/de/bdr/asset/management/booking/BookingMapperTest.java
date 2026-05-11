@@ -6,13 +6,8 @@ import org.junit.jupiter.api.Test;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 
-import static de.bdr.asset.management.booking.TestConstants.NOTES_DATA;
-
+import static de.bdr.asset.management.booking.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import static de.bdr.asset.management.booking.TestConstants.BOOKING_ID;
-import static de.bdr.asset.management.booking.TestConstants.END;
-import static de.bdr.asset.management.booking.TestConstants.START;
 
 class BookingMapperTest {
 
@@ -65,31 +60,35 @@ class BookingMapperTest {
     }
 
     @Test
-    void shouldMapToResponseCorrectly() {
-        Booking result = BookingMapperTestData.buildBookingWithNullRelations();
+    void shouldMapToResponseWithPopulatedRelations() {
+
+        Booking result = BookingMapperTestData.buildBookingWithRelations();
 
         BookingResponseDTO dto = bookingMapper.toResponse(result);
 
         assertThat(dto.id()).isEqualTo(BOOKING_ID);
-        assertThat(dto.userId()).isNull();
-        assertThat(dto.assetId()).isNull();
         assertThat(dto.status()).isEqualTo(BookingStatusEnum.ACTIVE);
-        assertThat(dto.bookingStart()).isEqualTo(START);
-        assertThat(dto.bookingEnd()).isEqualTo(END);
-        assertThat(dto.notes()).isEqualTo(NOTES_DATA);
+
+        assertThat(dto.user()).isNotNull();
+        assertThat(dto.user().id()).isEqualTo(USER_ID);
+        assertThat(dto.user().username()).isEqualTo(USER_NAME);
+        assertThat(dto.user().role()).isEqualTo(USER_ROLE);
+
+        assertThat(dto.asset()).isNotNull();
+        assertThat(dto.asset().name()).isEqualTo(ASSET_NAME);
+        assertThat(dto.asset().status()).isEqualTo(ASSET_STATUS);
+        assertThat(dto.asset().category()).isEqualTo(CATEGORY_NAME);
     }
 
     @Test
     void shouldHandleNullRelationsInResponse() {
+
         Booking booking = BookingMapperTestData.buildBookingWithNullRelations();
-        booking.setUser(null);
-        booking.setAsset(null);
-        booking.setNotes(null);
 
         BookingResponseDTO dto = bookingMapper.toResponse(booking);
 
-        assertThat(dto.userId()).isNull();
-        assertThat(dto.assetId()).isNull();
-        assertThat(dto.notes()).isNull();
+        assertThat(dto.user()).isNull();
+        assertThat(dto.asset()).isNull();
+        assertThat(dto.notes()).isEqualTo(NOTES_DATA);
     }
 }
