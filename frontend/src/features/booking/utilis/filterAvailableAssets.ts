@@ -1,5 +1,4 @@
-// features/booking/utils/filterAvailableAssets.ts
-
+// Types
 import type { AssetDto } from '../../asset/types';
 import type { BookingDto, Filters } from '../types';
 import type { AssetCategoryDto } from '../../asset-category/types';
@@ -29,7 +28,7 @@ export const filterAvailableAssets = ({
     a.name.toLowerCase().includes(filters.search.trim().toLowerCase())
   );
 
-  if (!filters.fromDate || !filters.toDate) {
+  if (!filters.fromDate && !filters.toDate) {
     return filtered;
   }
 

@@ -1,5 +1,3 @@
-// pages/Bookings.tsx
-
 // External packages
 import * as React from 'react';
 
@@ -25,8 +23,7 @@ const defaultFilters: Filters = {
 };
 
 export default function Bookings() {
-  const [filters, setFilters] =
-    React.useState<Filters>(defaultFilters);
+  const [filters, setFilters] = React.useState<Filters>(defaultFilters);
 
   const {
     assets,
@@ -38,9 +35,7 @@ export default function Bookings() {
     filters,
   });
 
-  const variant = (
-    selectedCategory?.bookingPeriod ?? 'HOUR'
-  ) as 'HOUR' | 'DAY';
+  const variant = (selectedCategory?.bookingPeriod ?? 'HOUR') as 'HOUR' | 'DAY';
 
   const handleResetFilters = () => {
     setFilters(defaultFilters);
@@ -74,21 +69,12 @@ export default function Bookings() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
-      <FiltersBar
-        filters={filters}
-        setFilters={setFilters}
-        variant={variant}
-      />
+      <FiltersBar filters={filters} setFilters={setFilters} variant={variant} />
 
       {loading ? (
-        <div className="mt-6">
-          Loading...
-        </div>
+        <div className="mt-6">Loading...</div>
       ) : (
-        <BookingTable
-          assets={assets}
-          className="mt-6"
-        />
+        <BookingTable assets={assets} className="mt-6" />
       )}
     </LayoutColumn>
   );

@@ -99,7 +99,6 @@ export function useBookingData({ filters }: Props) {
       filters,
     });
   }, [assets, bookings, selectedCategory, filters]);
-
   return {
     assets: filteredAssets,
     categories,
