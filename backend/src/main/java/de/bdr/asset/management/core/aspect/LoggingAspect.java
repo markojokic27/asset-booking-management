@@ -82,11 +82,10 @@ public class LoggingAspect {
             if (arg instanceof Pageable p) {
                 MDC.put("page", String.valueOf(p.getPageNumber()));
                 MDC.put("size", String.valueOf(p.getPageSize()));
-            } else if (arg instanceof Long || arg instanceof String || arg instanceof Integer) {
+            } else if ((arg instanceof Long || arg instanceof String || arg instanceof Integer)
                 // Captures path variables/params using their actual names (e.g., "id")
-                if (parameterNames != null && parameterNames.length > i) {
+                && parameterNames != null && parameterNames.length > i) {
                     MDC.put(parameterNames[i], String.valueOf(arg));
-                }
             }
         }
     }
