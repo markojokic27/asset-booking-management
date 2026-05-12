@@ -4,9 +4,6 @@ import de.bdr.asset.management.core.domain.BaseEntity;
 import de.bdr.asset.management.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.*;
-
-import java.time.Instant;
 
 /**
  * Department domain-entity model.
