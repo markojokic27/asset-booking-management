@@ -5,7 +5,6 @@ import de.bdr.asset.management.core.domain.BaseEntity;
 import de.bdr.asset.management.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.*;
 
 import java.time.Instant;
 
@@ -45,7 +44,7 @@ public class Booking extends BaseEntity {
     private Instant bookingEnd;
 
     /** Notes, Additional information's */
-    @Column(length = 255)
+    @Column
     private String notes;
 
 }

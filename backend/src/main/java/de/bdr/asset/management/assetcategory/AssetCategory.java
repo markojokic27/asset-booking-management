@@ -3,9 +3,6 @@ package de.bdr.asset.management.assetcategory;
 import de.bdr.asset.management.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.*;
-
-import java.time.Instant;
 
 /**
  * Asset category domain-entity model.
@@ -24,7 +21,7 @@ public class AssetCategory extends BaseEntity {
     private String name;
 
     /** Description of asset category */
-    @Column(length = 255)
+    @Column
     private String description;
 
     /** Period of booking */

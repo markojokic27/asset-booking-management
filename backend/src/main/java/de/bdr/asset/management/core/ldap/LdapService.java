@@ -37,7 +37,7 @@ public class LdapService {
         return ldapTemplate.search(
                 "ou=users",
                 "(objectClass=inetOrgPerson)",
-                (Attributes attrs) -> mapToDto(attrs)
+                this::mapToDto
         );
     }
 
