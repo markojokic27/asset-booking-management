@@ -1,20 +1,29 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
+// English translations
 import enLayout from './locales/en/layout.json';
 import enUi from './locales/en/ui.json';
 import enUsers from './locales/en/users.json';
 import enAccount from './locales/en/account.json';
 import enAssetCategories from './locales/en/assetCategories.json';
+import enAssets from './locales/en/assets.json';
+
+// Croatian translations
 import hrLayout from './locales/hr/layout.json';
 import hrUi from './locales/hr/ui.json';
 import hrUsers from './locales/hr/users.json';
 import hrAccount from './locales/hr/account.json';
 import hrAssetCategories from './locales/hr/assetCategories.json';
+import hrAssets from './locales/hr/assets.json'; 
+
+// German translations
 import deLayout from './locales/de/layout.json';
 import deUi from './locales/de/ui.json';
 import deUsers from './locales/de/users.json';
 import deAccount from './locales/de/account.json';
 import deAssetCategories from './locales/de/assetCategories.json';
+import deAssets from './locales/de/assets.json';
 
 export const LANGUAGE_STORAGE_KEY = 'language';
 const SUPPORTED_LANGUAGES = ['en', 'hr', 'de'] as const;
@@ -42,6 +51,7 @@ i18next.use(initReactI18next).init({
         users: enUsers,
         account: enAccount,
         assetCategories: enAssetCategories,
+        assets: enAssets,
       },
     },
     hr: {
@@ -51,6 +61,7 @@ i18next.use(initReactI18next).init({
         users: hrUsers,
         account: hrAccount,
         assetCategories: hrAssetCategories,
+        assets: hrAssets,
       },
     },
     de: {
@@ -60,6 +71,7 @@ i18next.use(initReactI18next).init({
         users: deUsers,
         account: deAccount,
         assetCategories: deAssetCategories,
+        assets: deAssets,
       },
     },
   },

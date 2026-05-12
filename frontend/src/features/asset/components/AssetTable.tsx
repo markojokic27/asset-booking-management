@@ -1,4 +1,6 @@
 // External packages
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -34,96 +36,108 @@ export function AssetsTable({
   onBookings,
   onReport,
 }: Props) {
-  const columns: TableColumn<AssetDto>[] = [
-    {
-      key: 'id',
-      header: 'ID',
-      accessor: 'id',
-      cellClassName: 'font-medium',
-    },
-    {
-      key: 'name',
-      header: 'Asset name',
-      accessor: 'name',
-    },
-    {
-      key: 'category',
-      header: 'Category',
-      render: (asset) =>
-        asset.categoryName ?? categoryMap[asset.categoryId] ?? '-',
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      accessor: 'status',
-    },
-    {
-      key: 'bookings',
-      header: <span className="sr-only">Bookings</span>,
-      headerClassName: 'w-px whitespace-nowrap',
-      cellClassName: 'w-px whitespace-nowrap',
-      render: (asset) => (
-        <Button
-          size="sm"
-          variant="solid"
-          iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
-          className="shadow-none"
-          onClick={() => onBookings(asset)}
-        >
-          Bookings
-        </Button>
-      ),
-    },
-    {
-      key: 'actions', //TODO: puka gap, mora ce se style popravit"
-      header: <span className="sr-only">Actions</span>,
-      cellClassName: 'w-px whitespace-nowrap',
-      render: (asset) => (
-        <div className="flex items-center gap-1">
-          <IconButton
-            type="button"
-            data-testid="view-asset-button"
-            aria-label="View asset"
-            onClick={() => onView(asset)}
-          >
-            <VisibilityOutlinedIcon
-              fontSize="small"
-              className="pointer-events-none"
-            />
-          </IconButton>
-           <IconButton
-            type="button"
-            aria-label="Asset report"
-            onClick={() => onReport(asset)}
-          >
-            <BarChartIcon fontSize="small" className="pointer-events-none" />
-          </IconButton>
+  const { t } = useTranslation();
 
-          <IconButton
-            data-testid="edit-asset-button"
-            type="button"
-            aria-label="Edit asset"
-            disabled={asset.status === 'DELETED'}
-            onClick={() => onEdit(asset)}
+  const columns: TableColumn<AssetDto>[] = useMemo(
+    () => [
+      {
+        key: 'id',
+        header: t('assets.table.id'),
+        accessor: 'id',
+        cellClassName: 'font-medium',
+      },
+      {
+        key: 'name',
+        header: t('assets.table.assetName'),
+        accessor: 'name',
+      },
+      {
+        key: 'category',
+        header: t('assets.table.category'),
+        render: (asset) =>
+          asset.categoryName ?? categoryMap[asset.categoryId] ?? '-',
+      },
+      {
+        key: 'status',
+        header: t('assets.table.status'),
+        accessor: 'status',
+      },
+      {
+        key: 'bookings',
+        header: (
+          <span className="sr-only">{t('assets.table.bookings')}</span>
+        ),
+        headerClassName: 'w-px whitespace-nowrap',
+        cellClassName: 'w-px whitespace-nowrap',
+        render: (asset) => (
+          <Button
+            size="sm"
+            variant="solid"
+            iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
+            className="shadow-none"
+            onClick={() => onBookings(asset)}
           >
-            <EditOutlinedIcon fontSize="small" className="pointer-events-none" />
-          </IconButton>
-          <IconButton
-            data-testid="delete-asset-button"
-            type="button"
-            variant="danger"
-            aria-label="Delete asset"
-            disabled={asset.status === 'DELETED'}
-          >
-            <DeleteOutlineIcon
-              fontSize="small"
-              onClick={() => onDelete?.(asset)}
-            />
-          </IconButton>
-        </div>
-      ),
-    },
-  ];
+            {t('assets.table.bookings')}
+          </Button>
+        ),
+      },
+      {
+        key: 'actions', //TODO: puka gap, mora ce se style popravit"
+        header: (
+          <span className="sr-only">{t('assets.table.actionsSr')}</span>
+        ),
+        cellClassName: 'w-px whitespace-nowrap',
+        render: (asset) => (
+          <div className="flex items-center gap-1">
+            <IconButton
+              type="button"
+              data-testid="view-asset-button"
+              aria-label={t('assets.table.ariaView')}
+              onClick={() => onView(asset)}
+            >
+              <VisibilityOutlinedIcon
+                fontSize="small"
+                className="pointer-events-none"
+              />
+            </IconButton>
+            <IconButton
+              type="button"
+              aria-label={t('assets.table.ariaReport')}
+              onClick={() => onReport(asset)}
+            >
+              <BarChartIcon fontSize="small" className="pointer-events-none" />
+            </IconButton>
+
+            <IconButton
+              data-testid="edit-asset-button"
+              type="button"
+              aria-label={t('assets.table.ariaEdit')}
+              disabled={asset.status === 'DELETED'}
+              onClick={() => onEdit(asset)}
+            >
+              <EditOutlinedIcon
+                fontSize="small"
+                className="pointer-events-none"
+              />
+            </IconButton>
+            <IconButton
+              data-testid="delete-asset-button"
+              type="button"
+              variant="danger"
+              aria-label={t('assets.table.ariaDelete')}
+              disabled={asset.status === 'DELETED'}
+            >
+              <DeleteOutlineIcon
+                fontSize="small"
+                onClick={() => onDelete?.(asset)}
+              />
+            </IconButton>
+          </div>
+        ),
+      },
+    ],
+    [t, categoryMap, onView, onEdit, onDelete, onBookings, onReport]
+  );
 
   return (
     <Table

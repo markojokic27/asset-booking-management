@@ -1,5 +1,6 @@
 // External packages
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -49,18 +50,12 @@ const initialErrors: FormErrors = {
   location: '',
 };
 
-const statusLabels: Record<AssetStatus, string> = {
-  ACTIVE: 'Active',
-  INACTIVE: 'Inactive',
-  DAMAGED: 'Damaged',
-  DELETED: 'Deleted',
-};
-
 export const AssetAddModal = ({
   isOpen,
   onClose,
   onSave,
 }: AssetAddModalProps) => {
+  const { t } = useTranslation();
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
@@ -92,7 +87,7 @@ export const AssetAddModal = ({
       setCategories(data.content);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
-      setCategoriesError('Failed to load categories.');
+      setCategoriesError(t('assets.errors.loadCategories'));
     } finally {
       setCategoriesLoading(false);
     }
@@ -141,7 +136,7 @@ export const AssetAddModal = ({
       onClose();
     } catch (error) {
       console.error('Failed to create asset:', error);
-      setSubmitError('Failed to create asset.');
+      setSubmitError(t('assets.errors.createAsset'));
     } finally {
       setIsSubmitting(false);
     }
@@ -155,7 +150,7 @@ export const AssetAddModal = ({
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="Add asset"
+      aria-label={t('assets.modals.add.title')}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -166,7 +161,7 @@ export const AssetAddModal = ({
             data-testid="close-asset-modal"
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('assets.modals.close')}
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
           >
             <CloseIcon className="pointer-events-none" />
@@ -190,13 +185,13 @@ export const AssetAddModal = ({
                     data-testid="asset-status"
                     id="asset-status"
                     name="status"
-                    label="Status"
+                    label={t('assets.modals.fields.status')}
                     defaultValue="ACTIVE"
                     error={!!errors.status}
                     errorMessage={errors.status}
                     options={assetStatuses.map((status) => ({
                       value: status,
-                      label: statusLabels[status],
+                      label: t(`assets.status.${status}`),
                     }))}
                   />
                 </Form.Control>
@@ -208,7 +203,7 @@ export const AssetAddModal = ({
                     data-testid="asset-category"
                     id="asset-category"
                     name="categoryId"
-                    label="Category"
+                    label={t('assets.modals.fields.category')}
                     defaultValue=""
                     error={!!errors.categoryId || !!categoriesError}
                     errorMessage={errors.categoryId || categoriesError}
@@ -218,8 +213,8 @@ export const AssetAddModal = ({
                       {
                         value: '',
                         label: categoriesLoading
-                          ? 'Loading categories...'
-                          : 'Select category',
+                          ? t('assets.modals.loadingCategories')
+                          : t('assets.modals.add.selectCategory'),
                       },
                       ...categories.map((category) => ({
                         value: category.id,
@@ -237,7 +232,7 @@ export const AssetAddModal = ({
                     id="asset-name"
                     name="name"
                     type="text"
-                    label="Name"
+                    label={t('assets.modals.fields.name')}
                     error={!!errors.name}
                     errorMessage={errors.name}
                   />
@@ -251,7 +246,7 @@ export const AssetAddModal = ({
                     id="asset-location"
                     name="location"
                     type="text"
-                    label="Location"
+                    label={t('assets.modals.fields.location')}
                     error={!!errors.location}
                     errorMessage={errors.location}
                   />
@@ -265,7 +260,7 @@ export const AssetAddModal = ({
                     id="asset-description"
                     name="description"
                     type="text"
-                    label="Description"
+                    label={t('assets.modals.fields.description')}
                     error={!!errors.description}
                     errorMessage={errors.description}
                   />
@@ -286,7 +281,7 @@ export const AssetAddModal = ({
                 type="submit"
                 disabled={isSubmitting}
               >
-                Add Asset
+                {t('assets.modals.add.title')}
               </Button>
             </Form.Submit>
           </div>

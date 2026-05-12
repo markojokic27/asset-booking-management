@@ -1,5 +1,6 @@
 // External packages
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 
 // Components
@@ -11,46 +12,35 @@ export type AssetModalProps = {
   asset: AssetDto | null;
 };
 
-const statusConfig: Record<AssetStatus, { label: string; className: string }> =
-  {
-    ACTIVE: {
-      label: 'Active',
-      className:
-        'bg-(--color-status-active-bg) text-(--color-status-active-text)',
-    },
-    INACTIVE: {
-      label: 'Inactive',
-      className:
-        'bg-(--color-status-inactive-bg) text-(--color-status-inactive-text)',
-    },
-    DAMAGED: {
-      label: 'Damaged',
-      className:
-        'bg-(--color-status-damaged-bg) text-(--color-status-damaged-text)',
-    },
-    DELETED: {
-      label: 'Deleted',
-      className:
-        'bg-(--color-status-deleted-bg) text-(--color-status-deleted-text)',
-    },
-  };
+const statusClassNames: Record<AssetStatus, string> = {
+  ACTIVE:
+    'bg-(--color-status-active-bg) text-(--color-status-active-text)',
+  INACTIVE:
+    'bg-(--color-status-inactive-bg) text-(--color-status-inactive-text)',
+  DAMAGED:
+    'bg-(--color-status-damaged-bg) text-(--color-status-damaged-text)',
+  DELETED:
+    'bg-(--color-status-deleted-bg) text-(--color-status-deleted-text)',
+};
 
 export const AssetModal: React.FC<AssetModalProps> = ({
   isOpen,
   onClose,
   asset,
 }) => {
+  const { t } = useTranslation();
+
   if (!isOpen || !asset) return null;
 
-  const { label: statusLabel, className: statusClassName } =
-    statusConfig[asset.status];
+  const statusLabel = t(`assets.status.${asset.status}`);
+  const statusClassName = statusClassNames[asset.status];
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="Asset details"
+      aria-label={t('assets.modals.view.aria')}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -61,7 +51,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             data-testid="asset-details-close-button"
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('assets.modals.close')}
             className="inline-flex cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
           >
             <CloseIcon className="pointer-events-none" />
@@ -84,7 +74,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
                 data-testid="asset-category-label"
                 className="text-sm text-(--color-modal-label)"
               >
-                Asset category
+                {t('assets.modals.view.category')}
               </p>
               <p
                 data-testid="asset-category-value"
@@ -98,7 +88,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
                 data-testid="asset-name-label"
                 className="text-sm text-(--color-modal-label)"
               >
-                Name
+                {t('assets.modals.fields.name')}
               </p>
               <p
                 data-testid="asset-name-value"
@@ -108,7 +98,9 @@ export const AssetModal: React.FC<AssetModalProps> = ({
               </p>
             </div>
             <div>
-              <p className="text-sm text-(--color-modal-label)">Description</p>
+              <p className="text-sm text-(--color-modal-label)">
+                {t('assets.modals.fields.description')}
+              </p>
               <p
                 data-testid="asset-description-value"
                 className="text-sm text-(--color-text)"
