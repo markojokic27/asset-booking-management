@@ -3,6 +3,7 @@ package de.bdr.asset.management.core.security.auth;
 import de.bdr.asset.management.core.security.jwt.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,11 @@ public class AuthService {
         // Delegates to DaoAuthenticationProvider, which calls UserDetailsService
         // and verifies the password against the BCrypt hash in the database.
         // Throws BadCredentialsException if credentials are wrong.
-        authManager.authenticate(
+        Authentication auth = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.username(), request.password()));
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
         return new LoginResponseDTO(
                 tokenProvider.generateAccessToken(userDetails),
                 tokenProvider.generateRefreshToken(userDetails)

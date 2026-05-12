@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +43,12 @@ class AuthServiceTest {
 
     @Test
     void shouldReturnTokensOnSuccessfulLogin() {
-        when(userDetailsService.loadUserByUsername("ivan.horvat")).thenReturn(userDetails);
+
+        Authentication authentication = mock(Authentication.class);
+
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+
+        when(authManager.authenticate(any())).thenReturn(authentication);
         when(tokenProvider.generateAccessToken(userDetails)).thenReturn("access-token");
         when(tokenProvider.generateRefreshToken(userDetails)).thenReturn("refresh-token");
 
@@ -54,14 +60,14 @@ class AuthServiceTest {
 
     @Test
     void shouldCallAuthManagerOnLogin() {
-        when(userDetailsService.loadUserByUsername("ivan.horvat")).thenReturn(userDetails);
-        when(tokenProvider.generateAccessToken(userDetails)).thenReturn("access-token");
-        when(tokenProvider.generateRefreshToken(userDetails)).thenReturn("refresh-token");
+        Authentication auth = mock(Authentication.class);
+        when(auth.getPrincipal()).thenReturn(userDetails);
+        when(authManager.authenticate(any())).thenReturn(auth);
 
         authService.login(loginRequest);
 
-        verify(authManager).authenticate(argThat(auth ->
-                auth instanceof UsernamePasswordAuthenticationToken token &&
+        verify(authManager).authenticate(argThat(a ->
+                a instanceof UsernamePasswordAuthenticationToken token &&
                         "ivan.horvat".equals(token.getPrincipal()) &&
                         "password123".equals(token.getCredentials())
         ));
@@ -80,14 +86,21 @@ class AuthServiceTest {
     }
 
     @Test
-    void shouldLoadUserByUsernameAfterAuthentication() {
-        when(userDetailsService.loadUserByUsername("ivan.horvat")).thenReturn(userDetails);
+    void shouldUsePrincipalFromAuthentication() {
+
+        Authentication auth = mock(Authentication.class);
+        when(auth.getPrincipal()).thenReturn(userDetails);
+        when(authManager.authenticate(any())).thenReturn(auth);
+
         when(tokenProvider.generateAccessToken(userDetails)).thenReturn("access-token");
         when(tokenProvider.generateRefreshToken(userDetails)).thenReturn("refresh-token");
 
         authService.login(loginRequest);
 
-        verify(userDetailsService).loadUserByUsername("ivan.horvat");
+        verify(auth).getPrincipal();
+        verify(tokenProvider).generateAccessToken(userDetails);
+
+        verifyNoInteractions(userDetailsService);
     }
 
     // --- refresh ---
