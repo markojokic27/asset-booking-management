@@ -1,6 +1,7 @@
 export const CATEGORY_ICON_DEFAULT_SRC = '/category-icons/default.png';
 
 export function categoryNameToIconSlug(name: string): string {
+  if (name.length > 200) throw new Error('Input too long');
   return name
     .trim()
     .toLowerCase()
