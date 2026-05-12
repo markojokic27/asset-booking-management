@@ -80,7 +80,8 @@ export const MultiSelect = ({
             )}
 
             {/* SELECT BOX */}
-            <div
+            <button
+              type="button"
               className={twMerge(
                 fieldClassName,
                 'cursor-pointer'
@@ -114,54 +115,56 @@ export const MultiSelect = ({
                   </span>
                 ))}
               </div>
-            </div>
+            </button>
 
             {/* DROPDOWN */}
-            {open && (
-              <div className="absolute z-50 mt-2 w-full rounded-lg border border-(--color-table-border) bg-(--color-table-surface) shadow-lg">
+            {
+              open && (
+                <div className="absolute z-50 mt-2 w-full rounded-lg border border-(--color-table-border) bg-(--color-table-surface) shadow-lg">
 
-                {/* SEARCH */}
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder={t('ui.multiSelect.searchAssetsPlaceholder')}
-                  className="w-full border-b border-(--color-table-border) bg-transparent px-3 py-2 text-sm outline-none"
-                  onClick={(e) => e.stopPropagation()}
-                />
+                  {/* SEARCH */}
+                  <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder={t('ui.multiSelect.searchAssetsPlaceholder')}
+                    className="w-full border-b border-(--color-table-border) bg-transparent px-3 py-2 text-sm outline-none"
+                    onClick={(e) => e.stopPropagation()}
+                  />
 
-                {/* OPTIONS */}
-                <div className="max-h-60 overflow-y-auto">
+                  {/* OPTIONS */}
+                  <div className="max-h-60 overflow-y-auto">
 
-                  {loading && (
-                    <div className="px-3 py-3 text-sm text-gray-500">
-                      {t('ui.multiSelect.loadingAssets')}
-                    </div>
-                  )}
+                    {loading && (
+                      <div className="px-3 py-3 text-sm text-gray-500">
+                        {t('ui.multiSelect.loadingAssets')}
+                      </div>
+                    )}
 
-                  {!loading && error && (
-                    <div className="px-3 py-3 text-sm text-red-500">
-                      {t('ui.multiSelect.failedToLoadAssets')}
-                    </div>
-                  )}
+                    {!loading && error && (
+                      <div className="px-3 py-3 text-sm text-red-500">
+                        {t('ui.multiSelect.failedToLoadAssets')}
+                      </div>
+                    )}
 
-                  {!loading && !error && filteredOptions.map(opt => (
-                    <label
-                      key={opt.value}
-                      className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-(--color-table-row-hover)"
-                    >
-                      <Checkbox.Root
-                        checked={value.includes(opt.value)}
-                        onCheckedChange={() => toggle(opt.value)}
-                        className="h-4 w-4 rounded border border-(--color-table-border)"
-                      />
-                      {opt.label}
-                    </label>
-                  ))}
+                    {!loading && !error && filteredOptions.map(opt => (
+                      <label
+                        key={opt.value}
+                        className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-(--color-table-row-hover)"
+                      >
+                        <Checkbox.Root
+                          checked={value.includes(opt.value)}
+                          onCheckedChange={() => toggle(opt.value)}
+                          className="h-4 w-4 rounded border border-(--color-table-border)"
+                        />
+                        {opt.label}
+                      </label>
+                    ))}
 
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )
+            }
+          </div >
         )
       }}
     />

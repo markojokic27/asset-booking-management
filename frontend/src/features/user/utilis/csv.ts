@@ -1,6 +1,7 @@
 function csvEscape(value: unknown) {
   const s = value == null ? '' : String(value);
   const needsQuotes = /[",\r\n]/.test(s);
+  // eslint-disable-next-line unicorn/prefer-string-replace-all
   const escaped = s.replace(/"/g, '""');
   return needsQuotes ? `"${escaped}"` : escaped;
 }

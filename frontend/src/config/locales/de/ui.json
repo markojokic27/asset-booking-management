@@ -3,6 +3,7 @@
     "dialogAria": "Dialog"
   },
   "deleteModal": {
+    "closeDialog": "Dialog schließen",
     "defaultTitle": "Element löschen?",
     "defaultDescription": "Möchten Sie \"{{name}}\" wirklich löschen?",
     "cancel": "Abbrechen",

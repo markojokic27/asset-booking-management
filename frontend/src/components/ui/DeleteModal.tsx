@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Button } from './Button';
 import { useTranslation } from 'react-i18next';
 
@@ -21,16 +22,27 @@ export function DeleteModal<T>({
   description,
 }: DeleteModalProps<T>) {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!isOpen || !item) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, item, onClose]);
+
   if (!isOpen || !item) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <div className="w-full max-w-md rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) p-6 shadow-(--shadow-card)">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+      <button
+        type="button"
+        aria-label={t('ui.deleteModal.closeDialog')}
+        className="absolute inset-0 z-0 cursor-default border-0 bg-(--color-modal-overlay) p-0"
+        onClick={onClose}
+      />
+      <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) p-6 shadow-(--shadow-card)">
         <h2 className="text-xl font-bold text-(--color-text)">
           {title ?? t('ui.deleteModal.defaultTitle')}
         </h2>
