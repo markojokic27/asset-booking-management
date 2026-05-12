@@ -180,7 +180,6 @@ class AssetServiceImplTest {
     @Test
     void shouldGetAssetById_WhenUserIsNotAuthenticated() {
 
-
         SecurityContextHolder.clearContext();
 
         when(repository.findById(1L)).thenReturn(Optional.of(asset));
