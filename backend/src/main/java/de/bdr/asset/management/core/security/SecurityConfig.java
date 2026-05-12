@@ -137,11 +137,9 @@ public class SecurityConfig {
                         // =========================
                         // ACTUATORS
                         // =========================
-                        // TODO: Make it so that it requires authentication
-                        // Will need to check how to configure Prometheus to use it
-                        .requestMatchers(EndpointRequest.toAnyEndpoint())
-                        .permitAll()
-
+                        .requestMatchers(EndpointRequest.to("health")).permitAll()
+                        .requestMatchers(EndpointRequest.to("prometheus")).permitAll()
+                        .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole(ADMIN)
                         // =========================
                         // FALLBACK
                         // =========================

@@ -84,7 +84,6 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO createBooking(BookingCreateDTO bookingRequest) {
 
-        // TODO: Maybe an additional check to see if the booking period is some minimum, possibly taken from the controller.
         isStartEndValid(bookingRequest.bookingStart(), bookingRequest.bookingEnd());
 
         Long loggedInUserId = securityService.getCurrentUserId();
@@ -104,7 +103,6 @@ public class BookingServiceImpl implements BookingService {
         Asset asset = assetRepository.findByIdAndStatus(bookingRequest.assetId(), AssetStatusEnum.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId() + " and status ACTIVE"));
         
-        // TODO: Check if this should hold validation logic like if the category is active or not.
         AssetCategory category = asset.getCategory();
         log.info("User and asset found. Mapping entity and saving to database...");
         

@@ -1,15 +1,15 @@
 package de.bdr.asset.management.user.department;
 
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of Department Service
@@ -128,21 +128,5 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         return mapper.toResponse(department);
-    }
-
-    /**
-     * @param id - a Long id
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteDepartment(Long id) {
-
-        // TODO: Add a field for soft delete
-        
-        // Department department = repository.findById(id)
-        //         .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
-
-        // department.setStatus("DELETED");
-        // department = repository.save();
     }
 }

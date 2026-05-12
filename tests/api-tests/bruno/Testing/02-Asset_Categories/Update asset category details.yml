@@ -1,7 +1,7 @@
 info:
   name: Update asset category details
   type: http
-  seq: 4
+  seq: 5
   tags:
     - Asset_Categories
 

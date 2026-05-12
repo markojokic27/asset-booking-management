@@ -11,8 +11,6 @@ import static de.bdr.asset.management.booking.TestConstants.*;
 
 public class BookingMapperTestData {
 
-    private BookingMapperTestData() {};
-
     public static Booking buildBookingWithNullRelations() {
         Booking b = new Booking();
         b.setId(BOOKING_ID);

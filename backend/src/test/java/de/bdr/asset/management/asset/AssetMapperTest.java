@@ -63,7 +63,7 @@ public class AssetMapperTest {
     @Test
     void shouldMapCodeToEntity() {
         Asset result = assetMapper.toEntity(buildRequest());
-        assertThat(result.getCode()).isEqualTo(null);
+        assertThat(result.getCode()).isNull();
     }
 
     @Test
