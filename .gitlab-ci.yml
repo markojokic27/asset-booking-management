@@ -101,7 +101,7 @@ frontend:test:
   script:
     - cd frontend
     - npm ci --legacy-peer-deps   
-    - npm run test -- --watchAll=false --ci
+    - npm run test
   allow_failure: true
   cache:
     key: npm-$CI_PROJECT_ID
