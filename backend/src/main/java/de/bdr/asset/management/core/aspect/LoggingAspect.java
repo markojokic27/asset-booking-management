@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggingAspect {
 
+    public static final String SERVICE = "SERVICE";
+    public static final String REST_CALL = "REST_CALL";
+
     // Matches all methods in any class annotated with @RestController
     // TODO: security concerns, maybe shouldnt log auth controllers
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
@@ -32,9 +35,9 @@ public class LoggingAspect {
 
         try {
             extractContextToMDC(joinPoint);
-            return tryLogAccess(joinPoint, methodName, start, "REST_CALL");
+            return tryLogAccess(joinPoint, methodName, start, REST_CALL);
         } catch (Exception e) {
-            catchLogAccess(e, methodName, start, "REST_CALL");
+            catchLogAccess(e, methodName, start, REST_CALL);
             throw e;
         } finally {
             MDC.clear(); // Essential to prevent context leaking between threads
@@ -49,10 +52,10 @@ public class LoggingAspect {
         long start = System.currentTimeMillis();
 
         try {
-            MDC.put("layer", "SERVICE");
-            return tryLogAccess(joinPoint, methodName, start, "SERVICE");
+            MDC.put("layer", SERVICE);
+            return tryLogAccess(joinPoint, methodName, start, SERVICE);
         } catch (Exception e) {
-            catchLogAccess(e, methodName, start, "SERVICE");
+            catchLogAccess(e, methodName, start, SERVICE);
             throw e;
         } finally {
             // Remove ONLY the layer key so we don't break the Controller's MDC
