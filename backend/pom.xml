@@ -199,6 +199,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-opentelemetry</artifactId>
+			<version>4.1.0-RC1</version>
 		</dependency>
 
 		<dependency>

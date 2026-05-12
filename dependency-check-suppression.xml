@@ -10,4 +10,30 @@
         <cve>CVE-2025-7962</cve>
     </suppress>
 
+    <!-- FALSE POSITIVE: CVE is for OpenTelemetry-Go, not Java (io.opentelemetry group) -->
+    <suppress>
+        <notes>CVE-2026-29181 affects opentelemetry-go, not the Java SDK semconv library</notes>
+        <packageUrl regex="true">^pkg:maven/io\.opentelemetry.*$</packageUrl>
+        <cve>CVE-2026-29181</cve>
+    </suppress>
+
+    <suppress>
+        <notes>CVE-2026-39883 affects opentelemetry-go PATH hijacking, not Java</notes>
+        <packageUrl regex="true">^pkg:maven/io\.opentelemetry.*$</packageUrl>
+        <cve>CVE-2026-39883</cve>
+    </suppress>
+
+    <suppress>
+        <notes>CVE-2026-39882 affects opentelemetry-go OTLP exporter, not Java</notes>
+        <packageUrl regex="true">^pkg:maven/io\.opentelemetry.*$</packageUrl>
+        <cve>CVE-2026-39882</cve>
+    </suppress>
+
+    <!-- FALSE POSITIVE: CVE-2026-40894 affects OpenTelemetry .NET, not Java -->
+    <suppress>
+        <notes>CVE-2026-40894 affects opentelemetry-dotnet baggage parsing, not Java</notes>
+        <packageUrl regex="true">^pkg:maven/io\.opentelemetry.*$</packageUrl>
+        <cve>CVE-2026-40894</cve>
+    </suppress>
+
 </suppressions>
