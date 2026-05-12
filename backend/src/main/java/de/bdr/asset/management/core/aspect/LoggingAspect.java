@@ -26,21 +26,15 @@ public class LoggingAspect {
 
     @Around("restControllers()")
     public Object logControllerAccess(ProceedingJoinPoint joinPoint) throws Throwable {
+
         String methodName = joinPoint.getSignature().getName();
         long start = System.currentTimeMillis();
 
         try {
             extractContextToMDC(joinPoint);
-            log.info("REST_CALL_START: {}", methodName);
-
-            Object result = joinPoint.proceed();
-
-            long duration = System.currentTimeMillis() - start;
-            log.info("REST_CALL_SUCCESS: {} ({}ms)", methodName, duration);
-            return result;
+            return tryLogAccess(joinPoint, methodName, start, "REST_CALL");
         } catch (Exception e) {
-            long duration = System.currentTimeMillis() - start;
-            log.error("REST_CALL_ERROR: {} -> {} ({}ms)", methodName, e.getMessage(), duration);
+            catchLogAccess(e, methodName, start, "REST_CALL");
             throw e;
         } finally {
             MDC.clear(); // Essential to prevent context leaking between threads
@@ -49,22 +43,16 @@ public class LoggingAspect {
 
     @Around("serviceLayer()")
     public Object logServiceAccess(ProceedingJoinPoint joinPoint) throws Throwable {
+
         // Use toShortString() to get "UserService.getUserById" instead of just the method name
         String methodName = joinPoint.getSignature().toShortString();
         long start = System.currentTimeMillis();
 
         try {
             MDC.put("layer", "SERVICE");
-            log.info("SERVICE_START: {}", methodName);
-
-            Object result = joinPoint.proceed();
-
-            long duration = System.currentTimeMillis() - start;
-            log.info("SERVICE_SUCCESS: {} ({}ms)", methodName, duration);
-            return result;
+            return tryLogAccess(joinPoint, methodName, start, "SERVICE");
         } catch (Exception e) {
-            long duration = System.currentTimeMillis() - start;
-            log.error("SERVICE_ERROR: {} -> {} ({}ms)", methodName, e.getMessage(), duration);
+            catchLogAccess(e, methodName, start, "SERVICE");
             throw e;
         } finally {
             // Remove ONLY the layer key so we don't break the Controller's MDC
@@ -72,7 +60,26 @@ public class LoggingAspect {
         }
     }
 
+    private Object tryLogAccess(ProceedingJoinPoint joinPoint, String methodName, long start, String beanName) throws Throwable {
+
+        log.info("{}_START: {}", beanName, methodName);
+
+        Object result = joinPoint.proceed();
+
+        long duration = System.currentTimeMillis() - start;
+        log.info("{}_SUCCESS: {} ({}ms)", beanName, methodName, duration);
+
+        return result;
+    }
+
+    private void catchLogAccess(Exception e, String methodName, long start, String beanName) {
+
+        long duration = System.currentTimeMillis() - start;
+        log.error("{}_ERROR: {} -> {} ({}ms)", beanName, methodName, e.getMessage(), duration);
+    }
+
     private void extractContextToMDC(ProceedingJoinPoint joinPoint) {
+        
         Object[] args = joinPoint.getArgs();
         String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
 
