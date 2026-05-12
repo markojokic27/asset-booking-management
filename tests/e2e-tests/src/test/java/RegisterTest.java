@@ -37,10 +37,8 @@ public class RegisterTest extends BaseTest{
     }
 
     private void assertStaysOnRegister() {
-        wait.until(ExpectedConditions.urlContains("/register"));
-        String currentUrl = driver.getCurrentUrl();
-        assertNotNull(currentUrl);
-        assertTrue(currentUrl.contains("/register"));
+        wait.until(ExpectedConditions.urlToBe(REGISTER_URL));
+        assertEquals(REGISTER_URL, driver.getCurrentUrl());
     }
 
     // Register with valid data
@@ -52,13 +50,14 @@ public class RegisterTest extends BaseTest{
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
         driver.findElement(PASSWORD_INPUT).sendKeys(VALID_PASSWORD);
         driver.findElement(REGISTER_BUTTON).click();
+        wait.until(ExpectedConditions.urlToBe(LOGIN_URL));
         assertEquals(LOGIN_URL, driver.getCurrentUrl());
     }
 
     // Register with empty fields
 
     @Test
-    void RegisterWithEmptyName() {
+    void registerWithEmptyName() {
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
         driver.findElement(PASSWORD_INPUT).sendKeys(VALID_PASSWORD);
@@ -67,7 +66,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithEmptySurname() {
+    void registerWithEmptySurname() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
         driver.findElement(PASSWORD_INPUT).sendKeys(VALID_PASSWORD);
@@ -76,7 +75,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithEmptyUsername() {
+    void registerWithEmptyUsername() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(PASSWORD_INPUT).sendKeys(VALID_PASSWORD);
@@ -85,7 +84,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithEmptyPassword() {
+    void registerWithEmptyPassword() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -94,7 +93,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithAllFieldsEmpty() {
+    void registerWithAllFieldsEmpty() {
         driver.findElement(REGISTER_BUTTON).click();
         assertStaysOnRegister();
     }
@@ -102,7 +101,7 @@ public class RegisterTest extends BaseTest{
     // Register with invalid data
 
     @Test
-    void RegisterWithInvalidName() {
+    void registerWithInvalidName() {
         driver.findElement(NAME_INPUT).sendKeys(INVALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -112,7 +111,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithInvalidSurname() {
+    void registerWithInvalidSurname() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(INVALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -122,7 +121,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithInvalidUsername() {
+    void registerWithInvalidUsername() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(INVALID_USERNAME);
@@ -134,7 +133,7 @@ public class RegisterTest extends BaseTest{
     // Register with short fields
 
     @Test
-    void RegisterWithShortName() {
+    void registerWithShortName() {
         driver.findElement(NAME_INPUT).sendKeys(SHORT_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -144,7 +143,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithShortSurname() {
+    void registerWithShortSurname() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(SHORT_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -154,7 +153,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithShortUsername() {
+    void registerWithShortUsername() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(SHORT_USERNAME);
@@ -164,7 +163,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithShortPassword() {
+    void registerWithShortPassword() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -177,7 +176,7 @@ public class RegisterTest extends BaseTest{
     // Register with long fields
 
     @Test
-    void RegisterWithLongName() {
+    void registerWithLongName() {
         driver.findElement(NAME_INPUT).sendKeys(LONG_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -187,7 +186,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithLongSurname() {
+    void registerWithLongSurname() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(LONG_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);
@@ -197,7 +196,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithLongUsername() {
+    void registerWithLongUsername() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(LONG_USERNAME);
@@ -207,7 +206,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test
-    void RegisterWithLongPassword() {
+    void registerWithLongPassword() {
         driver.findElement(NAME_INPUT).sendKeys(VALID_NAME);
         driver.findElement(SURNAME_INPUT).sendKeys(VALID_SURNAME);
         driver.findElement(USERNAME_INPUT).sendKeys(VALID_USERNAME);

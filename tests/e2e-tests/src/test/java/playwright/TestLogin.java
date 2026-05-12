@@ -10,9 +10,8 @@ public class TestLogin {
     static Browser browser;
     Page page;
 
-    static final String BASE_URL = System.getenv().getOrDefault("E2E_BASE_URL", "http://localhost:5173");
-    static final String LOGIN_URL = BASE_URL + "/login";
-    static final String BOOKINGS_URL = BASE_URL + "/bookings";
+    static final String LOGIN_URL = "http://localhost:5173/login";
+    static final String BOOKINGS_URL = "http://localhost:5173/bookings";
 
     static final String VALID_USERNAME = "user_admin";
     static final String VALID_PASSWORD = "admin123";
@@ -32,10 +31,6 @@ public class TestLogin {
 
         browser = playwright.chromium().launch(
                 new BrowserType.LaunchOptions().setHeadless(headless));
-    }
-    @AfterAll
-    static void closeBrowser() {
-        playwright.close();
     }
 
     @BeforeEach

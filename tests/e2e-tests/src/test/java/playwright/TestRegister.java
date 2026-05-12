@@ -9,9 +9,8 @@ public class TestRegister {
     static Browser browser;
     Page page;
 
-    static final String BASE_URL = System.getenv().getOrDefault("E2E_BASE_URL", "http://localhost:5173");
-    static final String REGISTER_URL = BASE_URL + "/register";
-    static final String LOGIN_URL = BASE_URL + "/login";
+    static final String LOGIN_URL = "http://localhost:5173/login";
+    static final String REGISTER_URL = "http://localhost:5173/register";
 
 
     static final String VALID_NAME = "Ivan";
@@ -46,11 +45,6 @@ public class TestRegister {
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
                 .setHeadless(headless)
                 .setSlowMo(100));
-    }
-
-    @AfterAll
-    static void closeBrowser() {
-        playwright.close();
     }
 
     @BeforeEach
