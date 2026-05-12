@@ -271,8 +271,49 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--MAVEN SITE LIFECYCLE PLUGIN -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.21.0</version>
+			</plugin>
 		</plugins>
 	</build>
+
+	<!--REPORTING SECTION FOR MAVEN SITE LIFECYCLE-->
+	<reporting>
+		<plugins>
+
+			<!-- General project info: dependencies, licenses, team, plugins list -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.9.0</version>
+			</plugin>
+
+			<!-- Test results report (reads Surefire XML output) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<!-- version managed by spring-boot-starter-parent -->
+			</plugin>
+
+			<!-- JaCoCo coverage report (already runs via verify, this adds it to site) -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.14</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+		</plugins>
+	</reporting>
 
 	<!--SEE WIKI PAGE "Maven Build Profiles" ON HOW TO USE THEM-->
 	<profiles>
