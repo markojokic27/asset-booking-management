@@ -95,13 +95,13 @@ management:
   otlp:
     metrics:
       export:
-        url: http://otel:4318/v1/metrics
+        url: http://alloy:4318/v1/metrics
   opentelemetry:
     tracing:
       export:
         otlp:
-          endpoint: http://otel:4318/v1/traces
+          endpoint: http://alloy:4318/v1/traces
     logging:
       export:
         otlp:
-          endpoint: http://otel:4318/v1/logs
+          endpoint: http://alloy:4318/v1/logs
