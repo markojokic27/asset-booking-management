@@ -4,9 +4,9 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
@@ -42,36 +43,8 @@ public class BookingServiceImpl implements BookingService {
     private final SecurityService securityService;
     private final Clock clock;
 
-    public BookingServiceImpl(
-        BookingRepository repository,
-        BookingMapper mapper,
-        UserRepository userRepository,
-        AssetRepository assetRepository,
-        SecurityService securityService,
-        Clock clock
-    ) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.securityService = securityService;
-        this.userRepository = userRepository;
-        this.assetRepository = assetRepository;
-        this.clock = clock;
-    }
-
     private Instant now() {
         return Instant.now(clock);
-    }
-
-    /*
-        Helper function for checking if the start is before end.
-    */
-
-    public void isStartEndValid(Instant bookingStart, Instant bookingEnd) 
-        throws InvalidDateRangeException
-    {   
-        if (!bookingStart.isBefore(bookingEnd)) {
-            throw new InvalidDateRangeException("Booking end time must be after the start time");
-        }
     }
 
     /**
@@ -84,32 +57,30 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO createBooking(BookingCreateDTO bookingRequest) {
 
-        isStartEndValid(bookingRequest.bookingStart(), bookingRequest.bookingEnd());
-
         Long loggedInUserId = securityService.getCurrentUserId();
 
         if (!securityService.isAdmin() && !bookingRequest.userId().equals(loggedInUserId)) {
             throw new AccessDeniedException("Cannot create booking for another user");
         }
 
-        List<UserStatusEnum> validStatuses = List.of(
+        List<UserStatusEnum> validUserStatuses = List.of(
             UserStatusEnum.ACTIVE,
             UserStatusEnum.STUDENT
         );
         
-        User user = userRepository.findByIdAndStatusIn(bookingRequest.userId(), validStatuses)
+        User user = userRepository.findByIdAndStatusIn(bookingRequest.userId(), validUserStatuses)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
 
         Asset asset = assetRepository.findByIdAndStatus(bookingRequest.assetId(), AssetStatusEnum.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId() + " and status ACTIVE"));
         
         AssetCategory category = asset.getCategory();
-        log.info("User and asset found. Mapping entity and saving to database...");
-        
+
         Booking booking = mapper.toEntity(bookingRequest);
         
         booking.setUser(user);
         booking.setAsset(asset);
+
         booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
         repository.save(booking);
@@ -126,10 +97,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDTO getBookingById(Long id) {
 
-        Booking booking = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
-
-        return mapper.toResponse(booking);
+        return repository.findById(id)
+                .map(mapper::toResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
     }
 
     /**
@@ -141,41 +111,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Page<BookingResponseDTO> getAllBookings(BookingFilter filter, Pageable pageable) {
 
-        Specification<Booking> spec = Specification.where((root, query, cb) -> cb.conjunction());
-
-        if (filter.getStatus() != null) {
-            spec = spec.and((root, query, cb) ->
-                cb.equal(root.get("status"), filter.getStatus()));
-        }
-
-        if (filter.getUserId() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("user").get("id"), filter.getUserId()));
-        }
-
-        if (filter.getAssetId() != null) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("asset").get("id"), filter.getAssetId()));
-        }
-
-        if (filter.getCategoryId() != null) {
-            spec = spec.and((root, query, cb) ->
-                cb.equal(root.get("asset").get("category").get("id"), filter.getCategoryId()));
-        }
-
-        if (filter.getBookingStart() != null) {
-            spec = spec.and((root, query, cb) ->
-                cb.greaterThanOrEqualTo(root.get("bookingStart"), filter.getBookingStart()));
-        }
-
-        if (filter.getBookingEnd() != null) {
-            spec = spec.and((root, query, cb) ->
-                cb.lessThanOrEqualTo(root.get("bookingEnd"), filter.getBookingEnd()));
-        }
-
-        Page<Booking> bookings = repository.findAll(spec, pageable);
-
-        return bookings.map(mapper::toResponse);
+        return repository.findAll(BookingSpecs.withFilter(filter), pageable)
+                .map(mapper::toResponse);
     }
 
     /**
@@ -203,7 +140,9 @@ public class BookingServiceImpl implements BookingService {
 
         mapper.updateBookingFromDTO(bookingRequest, booking);
 
-        isStartEndValid(booking.getBookingStart(), booking.getBookingEnd());
+        if (booking.getBookingStart().isAfter(booking.getBookingEnd())) {
+            throw new InvalidDateRangeException("End time must be after start time");
+        }
 
         booking = repository.save(booking);
         
