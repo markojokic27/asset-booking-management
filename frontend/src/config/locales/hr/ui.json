@@ -3,6 +3,7 @@
     "dialogAria": "Dijalog"
   },
   "deleteModal": {
+    "closeDialog": "Zatvori dijalog",
     "defaultTitle": "Obrisati stavku?",
     "defaultDescription": "Jeste li sigurni da želite obrisati \"{{name}}\"?",
     "cancel": "Odustani",

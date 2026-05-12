@@ -3,6 +3,7 @@
     "dialogAria": "Dialog"
   },
   "deleteModal": {
+    "closeDialog": "Close dialog",
     "defaultTitle": "Delete item?",
     "defaultDescription": "Are you sure you want to delete \"{{name}}\"?",
     "cancel": "Cancel",

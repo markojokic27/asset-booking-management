@@ -9,7 +9,3 @@ export type AssetCategory = {
   createdAt: Date;
   lastModifiedAt: Date;
 };
-
-export type AssetCategoryDto = AssetCategory & {
-  // dodati dodatna polja za prikaz u UI ako zatreba
-};
