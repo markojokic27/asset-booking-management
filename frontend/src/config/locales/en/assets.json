@@ -1,0 +1,93 @@
+{
+  "label": "Asset",
+  "categories": {
+    "all": "Assets"
+  },
+  "actions": {
+    "new": "New"
+  },
+  "search": {
+    "placeholder": "Search assets..."
+  },
+  "empty": {
+    "loading": "Loading assets..."
+  },
+  "errors": {
+    "loadAssets": "Failed to load assets",
+    "loadCategories": "Failed to load categories.",
+    "loadBookings": "Failed to load bookings.",
+    "loadReport": "Failed to load report.",
+    "updateAsset": "Failed to update asset.",
+    "createAsset": "Failed to create asset."
+  },
+  "delete": {
+    "title": "Delete asset?",
+    "description": "Are you sure you want to delete \"{{name}}\"? This asset will be marked as deleted."
+  },
+  "categoryCard": {
+    "badge": "Category"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "DAMAGED": "Damaged",
+    "DELETED": "Deleted"
+  },
+  "table": {
+    "id": "ID",
+    "assetName": "Name",
+    "category": "Category",
+    "status": "Status",
+    "bookings": "Bookings",
+    "actionsSr": "Actions",
+    "ariaView": "View asset",
+    "ariaReport": "Asset report",
+    "ariaEdit": "Edit asset",
+    "ariaDelete": "Delete asset"
+  },
+  "modals": {
+    "close": "Close",
+    "save": "Save",
+    "saving": "Saving...",
+    "loadingCategories": "Loading categories...",
+    "fields": {
+      "status": "Status",
+      "category": "Category",
+      "name": "Name",
+      "description": "Description",
+      "location": "Location"
+    },
+    "view": {
+      "aria": "Asset details",
+      "category": "Asset category"
+    },
+    "edit": {
+      "aria": "Edit asset"
+    },
+    "add": {
+      "title": "Add asset",
+      "selectCategory": "Select category"
+    },
+    "bookings": {
+      "closeAria": "Close bookings modal",
+      "loading": "Loading bookings...",
+      "empty": "No bookings for this asset.",
+      "colId": "Booking ID",
+      "colUser": "User",
+      "colDate": "Date",
+      "colNote": "Note"
+    },
+    "report": {
+      "loading": "Loading...",
+      "stats": {
+        "total": "Total bookings",
+        "active": "Active",
+        "completed": "Completed",
+        "canceled": "Canceled",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 // External packages
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 // Components
@@ -23,6 +24,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
   onClose,
   asset,
 }) => {
+  const { t } = useTranslation();
   const [bookings, setBookings] = React.useState<BookingDto[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
@@ -39,48 +41,51 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
         setBookings(data.content);
       } catch (error) {
         console.error(error);
-        setError('Failed to load bookings.');
+        setError(t('assets.errors.loadBookings'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchBookings();
-  }, [isOpen, asset?.id]);
+  }, [isOpen, asset?.id, t]);
+
+  const bookingColumns: TableColumn<BookingDto>[] = React.useMemo(
+    () => [
+      {
+        key: 'id',
+        header: t('assets.modals.bookings.colId'),
+        accessor: 'id',
+      },
+      // booking treba mapirati username preko id-a ili da BE vrati i username
+      {
+        key: 'user',
+        header: t('assets.modals.bookings.colUser'),
+        render: (booking) => booking.userId,
+      },
+      {
+        key: 'dates',
+        header: t('assets.modals.bookings.colDate'),
+        render: (booking) =>
+          `${new Date(booking.bookingStart).toLocaleDateString()} - ${new Date(
+            booking.bookingEnd
+          ).toLocaleDateString()}`,
+      },
+      {
+        key: 'notes',
+        header: t('assets.modals.bookings.colNote'),
+        accessor: 'notes',
+      },
+      {
+        key: 'status',
+        header: t('assets.modals.fields.status'),
+        accessor: 'status',
+      },
+    ],
+    [t]
+  );
 
   if (!isOpen || !asset) return null;
-
-  const bookingColumns: TableColumn<BookingDto>[] = [
-    {
-      key: 'id',
-      header: 'Booking ID',
-      accessor: 'id',
-    },
-    // booking treba mapirati username preko id-a ili da BE vrati i username
-    {
-      key: 'user',
-      header: 'User',
-      render: (booking) => booking.userId,
-    },
-    {
-      key: 'dates',
-      header: 'Date',
-      render: (booking) =>
-        `${new Date(booking.bookingStart).toLocaleDateString()} - ${new Date(
-          booking.bookingEnd
-        ).toLocaleDateString()}`,
-    },
-    {
-      key: 'notes',
-      header: 'Note',
-      accessor: 'notes',
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      accessor: 'status',
-    },
-  ];
 
 
   return (
@@ -89,7 +94,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <h2 className="text-[10px] font-semibold tracking-[0.22em] text-(--color-table-head-text) uppercase opacity-50">
-              Bookings
+              {t('assets.table.bookings')}
             </h2>
             <p className="block text-base font-black tracking-[0.06em]">
               {asset.name}
@@ -100,7 +105,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
             type="button"
             onClick={onClose}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover)"
-            aria-label="Close bookings modal"
+            aria-label={t('assets.modals.bookings.closeAria')}
           >
             <CloseOutlinedIcon fontSize="small" />
           </button>
@@ -108,7 +113,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
 
         {loading && (
           <p className="py-6 text-sm text-(--color-table-head-text)">
-            Loading bookings...
+            {t('assets.modals.bookings.loading')}
           </p>
         )}
 
@@ -122,7 +127,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
             columns={bookingColumns}
             getRowKey={(booking) => booking.id}
             className="w-full"
-            emptyMessage="No bookings for this asset."
+            emptyMessage={t('assets.modals.bookings.empty')}
           />
         )}
       </div>

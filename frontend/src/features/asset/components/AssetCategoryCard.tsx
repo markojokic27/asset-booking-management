@@ -1,5 +1,6 @@
 // External packages
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 import {
   CATEGORY_ICON_DEFAULT_SRC,
@@ -19,6 +20,8 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
   onClick,
   className,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <button
       type="button"
@@ -46,7 +49,7 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
 
         <div className="relative z-10 flex flex-1 flex-col justify-between">
           <span className="text-[10px] font-semibold tracking-[0.22em] text-white/70 uppercase dark:text-(--color-table-head-text) dark:opacity-50">
-            Category
+            {t('assets.categoryCard.badge')}
           </span>
           <div>
             <span data-testid="asset-category-card-title" className="block text-base font-black tracking-[0.06em]">

@@ -1,5 +1,6 @@
 // External packages
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -50,12 +51,6 @@ const initialErrors: FormErrors = {
   location: '',
 };
 
-const statusLabels: Record<AssetStatus, string> = {
-  ACTIVE: 'Active',
-  INACTIVE: 'Inactive',
-  DAMAGED: 'Damaged',
-  DELETED: 'Deleted',
-};
 //TODO: Refactoring
 export const AssetEditModal = ({
   isOpen,
@@ -63,6 +58,7 @@ export const AssetEditModal = ({
   asset,
   onSave,
 }: AssetEditModalProps) => {
+  const { t } = useTranslation();
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -81,7 +77,7 @@ export const AssetEditModal = ({
       setCategories(data.content);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
-      setCategoriesError('Failed to load categories.');
+      setCategoriesError(t('assets.errors.loadCategories'));
     } finally {
       setCategoriesLoading(false);
     }
@@ -140,7 +136,7 @@ export const AssetEditModal = ({
       onClose();
     } catch (error) {
       console.error('Failed to update asset:', error);
-      setSubmitError('Failed to update asset.');
+      setSubmitError(t('assets.errors.updateAsset'));
     } finally {
       setIsSubmitting(false);
     }
@@ -151,7 +147,7 @@ export const AssetEditModal = ({
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="Edit asset"
+      aria-label={t('assets.modals.edit.aria')}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -186,13 +182,13 @@ export const AssetEditModal = ({
                     data-testid="asset-status"
                     id="asset-status"
                     name="status"
-                    label="Status"
+                    label={t('assets.modals.fields.status')}
                     defaultValue={asset.status}
                     error={!!errors.status}
                     errorMessage={errors.status}
                     options={assetStatuses.map((status) => ({
                       value: status,
-                      label: statusLabels[status],
+                      label: t(`assets.status.${status}`),
                     }))}
                   />
                 </Form.Control>
@@ -204,8 +200,13 @@ export const AssetEditModal = ({
                   <FormDropdown
                     id="asset-category"
                     name="categoryId"
-                    label="Category"
-                    options={[{ value: '', label: 'Loading categories...' }]}
+                    label={t('assets.modals.fields.category')}
+                    options={[
+                      {
+                        value: '',
+                        label: t('assets.modals.loadingCategories'),
+                      },
+                    ]}
                   />
                 ) : (
                   <FormDropdown
@@ -213,7 +214,7 @@ export const AssetEditModal = ({
                     data-testid="asset-category"
                     id="asset-category"
                     name="categoryId"
-                    label="Category"
+                    label={t('assets.modals.fields.category')}
                     defaultValue={String(asset.categoryId)}
                     error={!!errors.categoryId || !!categoriesError}
                     errorMessage={errors.categoryId || categoriesError}
@@ -233,7 +234,7 @@ export const AssetEditModal = ({
                     id="asset-name"
                     name="name"
                     type="text"
-                    label="Name"
+                    label={t('assets.modals.fields.name')}
                     defaultValue={asset.name}
                     error={!!errors.name}
                     errorMessage={errors.name}
@@ -248,7 +249,7 @@ export const AssetEditModal = ({
                     id="asset-description"
                     name="description"
                     type="text"
-                    label="Description"
+                    label={t('assets.modals.fields.description')}
                     defaultValue={asset.description ?? ''}
                     error={!!errors.description}
                     errorMessage={errors.description}
@@ -264,7 +265,7 @@ export const AssetEditModal = ({
                     name="location"
                     type="text"
                     defaultValue={asset.location}
-                    label="Location"
+                    label={t('assets.modals.fields.location')}
                     error={!!errors.location}
                     errorMessage={errors.location}
                   />
@@ -286,7 +287,9 @@ export const AssetEditModal = ({
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Saving...' : 'Save'}
+                {isSubmitting
+                  ? t('assets.modals.saving')
+                  : t('assets.modals.save')}
               </Button>
             </Form.Submit>
           </div>

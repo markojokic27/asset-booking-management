@@ -1,5 +1,6 @@
 // External packages
 import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 
 // Components
@@ -33,6 +34,7 @@ type ModalState =
 
 
 export default function Assets() {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
@@ -70,7 +72,7 @@ export default function Assets() {
 
         setAssets(assetsWithCategoryName);
       } catch (err) {
-        setServerError('Failed to load assets');
+        setServerError(t('assets.errors.loadAssets'));
       } finally {
         setLoading(false);
       }
@@ -88,6 +90,11 @@ export default function Assets() {
     () => [...assetCategories.map((c) => c.name)],
     [assetCategories]
   );
+
+  const pageTitle =
+    selectedCategory === 'Assets'
+      ? t('assets.categories.all')
+      : selectedCategory;
 
   const filteredAssets = assets.filter((asset) => {
     const matchesSearch = asset.name
@@ -139,7 +146,7 @@ export default function Assets() {
 
       <div className="mt-12 flex w-full flex-col sm:items-center sm:justify-between gap-4 sm:flex-row">
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
-          {selectedCategory}
+          {pageTitle}
         </h1>
 
         <Button
@@ -150,7 +157,7 @@ export default function Assets() {
           onClick={() => setModal({ type: 'add' })}
           className="w-full sm:w-fit"
         >
-          New asset
+          {t('assets.actions.new')}
         </Button>
       </div>
 
@@ -160,14 +167,14 @@ export default function Assets() {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search assets..."
+          placeholder={t('assets.search.placeholder')}
           className="mb-0 w-full sm:ml-auto sm:w-70"
         />
       </div>
 
       <div className="mt-6 w-full">
         {loading ? (
-          <div>Loading assets...</div>
+          <div>{t('assets.empty.loading')}</div>
         ) : serverError ? (
           <div className="text-red-600">{serverError}</div>
         ) : (
@@ -227,8 +234,10 @@ export default function Assets() {
         onClose={closeModal}
         item={modal.type === 'delete' ? modal.asset : null}
         getItemName={(asset) => asset.name}
-        title="Delete asset?"
-        description={`Are you sure you want to delete "${modal.type === 'delete' ? modal.asset.name : ''}"? This asset will be marked as deleted.`}
+        title={t('assets.delete.title')}
+        description={t('assets.delete.description', {
+          name: modal.type === 'delete' ? modal.asset.name : '',
+        })}
         onConfirm={async () => {
           if (modal.type === 'delete') {
             await handleDelete(modal.asset);

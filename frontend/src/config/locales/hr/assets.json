@@ -1,0 +1,93 @@
+{
+  "label": "Imovina",
+  "categories": {
+    "all": "$t(assets.label)"
+  },
+  "actions": {
+    "new": "Novo"
+  },
+  "search": {
+    "placeholder": "Pretraži imovinu..."
+  },
+  "empty": {
+    "loading": "Učitavanje imovine..."
+  },
+  "errors": {
+    "loadAssets": "Učitavanje imovine nije uspjelo",
+    "loadCategories": "Učitavanje kategorija nije uspjelo.",
+    "loadBookings": "Učitavanje rezervacija nije uspjelo.",
+    "loadReport": "Učitavanje izvještaja nije uspjelo.",
+    "updateAsset": "Ažuriranje imovine nije uspjelo.",
+    "createAsset": "Stvaranje imovine nije uspjelo."
+  },
+  "delete": {
+    "title": "Obrisati imovinu?",
+    "description": "Jeste li sigurni da želite obrisati \"{{name}}\"? Ovo sredstvo bit će označeno kao obrisano."
+  },
+  "categoryCard": {
+    "badge": "Kategorija"
+  },
+  "status": {
+    "ACTIVE": "Aktivno",
+    "INACTIVE": "Neaktivno",
+    "DAMAGED": "Oštećeno",
+    "DELETED": "Obrisano"
+  },
+  "table": {
+    "id": "ID",
+    "assetName": "Naziv",
+    "category": "Kategorija",
+    "status": "Status",
+    "bookings": "Rezervacije",
+    "actionsSr": "Akcije",
+    "ariaView": "Prikaži imovinu",
+    "ariaReport": "Izvještaj imovine",
+    "ariaEdit": "Uredi imovinu",
+    "ariaDelete": "Obriši imovinu"
+  },
+  "modals": {
+    "close": "Zatvori",
+    "save": "Spremi",
+    "saving": "Spremanje...",
+    "loadingCategories": "Učitavanje kategorija...",
+    "fields": {
+      "status": "Status",
+      "category": "Kategorija",
+      "name": "Naziv",
+      "description": "Opis",
+      "location": "Lokacija"
+    },
+    "view": {
+      "aria": "Detalji imovine",
+      "category": "Kategorija imovine"
+    },
+    "edit": {
+      "aria": "Uredi imovinu"
+    },
+    "add": {
+      "title": "Dodaj imovinu",
+      "selectCategory": "Odaberite kategoriju"
+    },
+    "bookings": {
+      "closeAria": "Zatvori prozor rezervacija",
+      "loading": "Učitavanje rezervacija...",
+      "empty": "Nema rezervacija za ovo imovinu.",
+      "colId": "ID rezervacije",
+      "colUser": "Korisnik",
+      "colDate": "Datum",
+      "colNote": "Napomena"
+    },
+    "report": {
+      "loading": "Učitavanje...",
+      "stats": {
+        "total": "Ukupno rezervacija",
+        "active": "Aktivne",
+        "completed": "Završene",
+        "canceled": "Otkazane",
+        "pending": "Na čekanju",
+        "approved": "Odobrene",
+        "rejected": "Odbijene"
+      }
+    }
+  }
+}
