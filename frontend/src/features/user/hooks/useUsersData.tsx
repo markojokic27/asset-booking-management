@@ -5,7 +5,7 @@ import { createUser, deleteUser, getUsers, updateUser } from '../api/users';
 // Types
 import type { UserDto } from '../types';
 // Utils
-import { mapUserToRequest } from '../utilis/users';
+import { mapUserDtoToUpdateRequest } from '../utilis/users';
 
 export function useUsersData() {
   const [users, setUsers] = useState<UserDto[]>([]);
@@ -34,7 +34,7 @@ export function useUsersData() {
   }, []);
 
   const update = async (user: UserDto) => {
-    const dto = await updateUser(user.id, mapUserToRequest(user));
+    const dto = await updateUser(user.id, mapUserDtoToUpdateRequest(user));
     setUsers((prev) => prev.map((u) => (u.id === dto.id ? dto : u)));
     return dto;
   };

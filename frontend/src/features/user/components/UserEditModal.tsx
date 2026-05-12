@@ -15,7 +15,6 @@ const userEditSchema = userValidationSchema
     name: true,
     surname: true,
     email: true,
-    username: true,
     role: true,
     status: true,
     departmentId: true,
@@ -37,7 +36,6 @@ type FormErrors = {
   name: string;
   surname: string;
   email: string;
-  username: string;
   role: string;
   status: string;
   departmentId: string;
@@ -49,7 +47,6 @@ const initialErrors: FormErrors = {
   name: '',
   surname: '',
   email: '',
-  username: '',
   role: '',
   status: '',
   departmentId: '',
@@ -79,7 +76,6 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
       name: data.get('name') as string,
       surname: data.get('surname') as string,
       email: data.get('email') as string,
-      username: data.get('username') as string,
       role: data.get('role') as string,
       status: data.get('status') as string,
       departmentId: data.get('departmentId') as string,
@@ -95,7 +91,6 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
         name: fieldErrors.name?.[0] || '',
         surname: fieldErrors.surname?.[0] || '',
         email: fieldErrors.email?.[0] || '',
-        username: fieldErrors.username?.[0] || '',
         role: fieldErrors.role?.[0] || '',
         status: fieldErrors.status?.[0] || '',
         departmentId: fieldErrors.departmentId?.[0] || '',
@@ -113,7 +108,6 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
         name: result.data.name,
         surname: result.data.surname,
         email: result.data.email,
-        username: result.data.username,
         role: result.data.role,
         status: result.data.status,
         departmentId: result.data.departmentId,
@@ -217,20 +211,6 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
               </Form.Control>
             </Form.Field>
           </div>
-
-          <Form.Field name="username">
-            <Form.Control asChild>
-              <FormInput data-testid="user-username"
-                id="user-username"
-                name="username"
-                type="text"
-                label={t('users.modals.edit.fields.username')}
-                defaultValue={user.username}
-                error={!!errors.username}
-                errorMessage={errors.username}
-              />
-            </Form.Control>
-          </Form.Field>
 
           <Form.Field name="name">
             <Form.Control asChild>
