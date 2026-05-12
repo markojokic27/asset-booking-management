@@ -45,8 +45,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      alloy:
+        condition: service_started
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
       interval: 15s # check every 15s
       timeout: 5s # fail if no response in 5s
       retries: 5 # mark unhealthy after 5 consecutive failures
@@ -61,9 +63,9 @@ services:
       - "3000:8080"
     depends_on:
       backend:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080"]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -75,35 +77,78 @@ services:
     restart: unless-stopped
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-remote-write-receiver'
     volumes:
       - ./tools/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     ports:
       - "9090:9090"
 
-  # grafana:
-  #   image: grafana/grafana:main
-  #   container_name: grafana
-  #   restart: unless-stopped
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-  #     - ./tools/grafana/provisioning:/etc/grafana/provisioning
-  #   ports:
-  #     - "4000:3000"
-  #   depends_on:
-  #     - prometheus
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    command:
+      - run
+      - /etc/alloy/config.alloy
+    volumes:
+      - ./tools/alloy/config.alloy:/etc/alloy/config.alloy:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    command: [ "-config.file=/etc/loki/config.yaml" ]
+    volumes:
+      - ./tools/loki/config.yaml:/etc/loki/config.yaml:ro
+      - loki_data:/loki
+    ports:
+      - "3100:3100"
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    command: [ "-config.file=/etc/tempo/config.yaml" ]
+    volumes:
+      - ./tools/tempo/config.yaml:/etc/tempo/config.yaml:ro
+      - tempo_data:/var/tempo
+    ports:
+      - "3200:3200"
+    expose:
+      - "4317"
+      - "4318"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./tools/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "4000:3000"
+    depends_on:
+      - prometheus
+      - loki
 
   # FOR LOCAL DEVELOPMENT ONLY
-  otel:
-    image: 'grafana/otel-lgtm:latest'
-    ports:
-      - '4000:3000'
-      - '4317:4317'
-      - '4318:4318'
+  # alloy:
+  #   image: 'grafana/otel-lgtm:latest'
+  #   ports:
+  #     - '4000:3000'
+  #     - '4317:4317'
+  #     - '4318:4318'
 
 volumes:
   db_data:
   prometheus_data:
   grafana_data:
+  loki_data:
+  tempo_data:

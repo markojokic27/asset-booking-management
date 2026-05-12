@@ -1,7 +1,7 @@
 logging:
   level:
-    root: DEBUG
-    de.bdr.asset: DEBUG
+    root: INFO
+    de.bdr.asset: INFO
 
 springdoc:
   api-docs:
