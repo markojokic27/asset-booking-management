@@ -5,7 +5,12 @@ export type BadgeRowProps = {
   testId?: string;
 };
 
-export function BadgeRow({ label, value, badgeClassName, testId }: BadgeRowProps) {
+export function BadgeRow({
+  label,
+  value,
+  badgeClassName,
+  testId,
+}: Readonly<BadgeRowProps>) {
   return (
     <div className="flex flex-col gap-1 border-b border-(--color-table-border) py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
       <span className="text-sm font-semibold tracking-wide text-(--color-table-text)">

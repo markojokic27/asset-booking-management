@@ -29,7 +29,8 @@ function getInitialTheme(): Theme {
   return prefersDark ? 'dark' : 'light';
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function ThemeProvider({ children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [theme, setThemeState] = React.useState<Theme>(() => getInitialTheme());
 
   const setTheme = React.useCallback((next: Theme) => {

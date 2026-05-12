@@ -1,11 +1,10 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Logo } from '../icons/Logo';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   MonitorSharp,
