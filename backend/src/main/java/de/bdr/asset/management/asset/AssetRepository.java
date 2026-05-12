@@ -26,4 +26,5 @@ public interface AssetRepository extends JpaRepository<Asset, Long>, JpaSpecific
     @EntityGraph(attributePaths = {"category"})
     Optional<Asset> findByIdAndStatus(Long id, AssetStatusEnum status);
 
+    boolean existsByCategoryId(Long categoryId);
 }

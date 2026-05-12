@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,8 +54,7 @@ public class DepartmentController {
     }
 
     /** READ ALL */
-    // TODO: Discuss if authentication is necessary because of user registration
-    @Operation(summary = "Read list of departments", description = "Avaiable to ...")
+    @Operation(summary = "Read list of departments", description = "Avaiable to authenticated users")
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<Page<DepartmentResponseDTO>> getAll(
@@ -93,21 +91,5 @@ public class DepartmentController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(service.updateDepartment(id, request));
-    }
-
-    /** Soft DELETE */
-    @Operation(summary = "Soft delete department", description = "Only available to users with role: ADMIN.")
-    @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-            @PathVariable Long id
-    )
-    {
-        service.deleteDepartment(id);
-
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .body(null);
     }
 }

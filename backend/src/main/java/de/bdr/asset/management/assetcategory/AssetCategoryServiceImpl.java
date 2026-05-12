@@ -1,15 +1,15 @@
 package de.bdr.asset.management.assetcategory;
 
-import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.stereotype.Service;
-
-import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
+
+import de.bdr.asset.management.asset.AssetRepository;
+import de.bdr.asset.management.core.exception.ActionNotAllowedException;
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
+import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of AssetCategory Service
@@ -18,12 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class AssetCategoryServiceImpl implements AssetCategoryService {
+    private static final String NOT_FOUND = "AssetCategory not found with id: ";
+
     private final AssetCategoryRepository repository;
     private final AssetCategoryMapper mapper;
+    private final AssetRepository assetRepository;
 
-    public AssetCategoryServiceImpl(AssetCategoryRepository repository, AssetCategoryMapper mapper) {
+    public AssetCategoryServiceImpl(AssetCategoryRepository repository, AssetCategoryMapper mapper, AssetRepository assetRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.assetRepository = assetRepository;
     }
 
     /**
@@ -56,7 +60,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     public AssetCategoryResponseDTO getAssetCategoryById(Long id){
 
         AssetCategory category = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
 
         return mapper.toResponse(category);
     }
@@ -87,7 +91,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
 
         AssetCategory category = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
 
         if (repository.existsByNameAndIdNot(assetCategoryRequest.name(), id)) {
             throw new DuplicateResourceException("Asset category " + assetCategoryRequest.name() + " already exists.");
@@ -103,22 +107,23 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     }
 
     /**
-     * Delete a specific asset category.
+     * Delete a specific asset category only if no assets use it.
      *
-     * @param id - a Long id
-     * @implNote Should be a soft delete by setting it to inactive or such
+     * @param id category id
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteAssetCategory(Long id){
+    public void deleteAssetCategory(Long id) {
 
-        // TODO: Add a field for soft delete
+        AssetCategory category = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
 
-        // AssetCategory category = repository.findById(id)
-        //     .orElseThrow(() -> new ResourceNotFoundException("AssetCategory not found with id:" + id));
+        boolean hasAssets = assetRepository.existsByCategoryId(id);
 
-        // category.setStatus("DELETED"),
+        if (hasAssets) {
+            throw new ActionNotAllowedException("Cannot delete category because assets are assigned to it.");
+        }
 
-        // repository.save(category);
+        repository.delete(category);
     }
 }

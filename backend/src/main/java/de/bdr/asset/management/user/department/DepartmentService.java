@@ -17,7 +17,4 @@ public interface DepartmentService {
 
     /** UPDATE */
     DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO request);
-
-    /** DELETE (Soft) */
-    void deleteDepartment(Long id);
 }

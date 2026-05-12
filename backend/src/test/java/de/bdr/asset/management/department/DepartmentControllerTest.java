@@ -96,17 +96,4 @@ public class DepartmentControllerTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).isEqualTo(response);
     }
-
-    /** DELETE */
-    @Test
-    void deleteDepartment_returnsNoContent() {
-
-        ResponseEntity<Void> result = departmentController.delete(1L);
-
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-        assertThat(result.getBody()).isNull();
-        verify(departmentService).deleteDepartment(1L);
-    }
-
-
 }

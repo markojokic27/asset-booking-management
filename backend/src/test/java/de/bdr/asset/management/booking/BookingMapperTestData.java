@@ -13,8 +13,6 @@ import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 
 public class BookingMapperTestData {
 
-    private BookingMapperTestData() {};
-
     public static Booking buildBookingWithNullRelations() {
         Booking b = new Booking();
         b.setId(BOOKING_ID);

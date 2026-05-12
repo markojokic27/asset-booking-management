@@ -22,9 +22,7 @@ http:
       type: query
       description: "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
       disabled: true
-  auth:
-    type: bearer
-    token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyX2FkbWluIiwidXNlcklkIjoxLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTc3NjIzODE4NiwiZXhwIjoxNzc2MjM5MDg2fQ.LZ0o0fOyvI18DO3UMQhLaFQXKQKZvtzP7EBFvENswEc
+  auth: inherit
 
 runtime:
   variables:

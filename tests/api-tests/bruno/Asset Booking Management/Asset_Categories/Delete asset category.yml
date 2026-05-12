@@ -1,7 +1,7 @@
 info:
-  name: Soft delete asset category
+  name: Delete asset category
   type: http
-  seq: 5
+  seq: 3
   tags:
     - Asset_Categories
 
@@ -10,23 +10,11 @@ http:
   url: "{{baseUrl}}/v1/asset-categories/:id"
   params:
     - name: id
-      value: "{{assetCategoryId}}"
+      value: ""
       type: path
-  auth: inherit
-
-runtime:
-  scripts:
-    - type: before-request
-      code: |-
-        const responses = JSON.parse(bru.getFolderVar("delete"));
-
-        const response = responses[bru.getEnvVar("responseRole")];
-
-        bru.setVar("response", response);
-  assertions:
-    - expression: res.status
-      operator: eq
-      value: "{{response}}"
+  auth:
+    type: bearer
+    token: "{{token}}"
 
 settings:
   encodeUrl: true

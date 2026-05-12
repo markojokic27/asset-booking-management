@@ -15,6 +15,9 @@ config:
       bypassProxy: ""
 
 request:
+  auth:
+    type: bearer
+    token: "{{token}}"
   actions:
     - type: set-variable
       phase: after-response
