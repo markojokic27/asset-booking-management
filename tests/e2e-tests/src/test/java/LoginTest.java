@@ -7,17 +7,15 @@ import static org.junit.jupiter.api.Assertions. *;
 
 public class LoginTest extends BaseTest {
 
-    private static final String INVALID_USERNAME="user_admin!";
-    private static final String INVALID_PASSWORD="pass.1234";
+    private static final String WRONG_USERNAME="user_admin!";
+    private static final String WRONG_PASSWORD="pass.1234";
     private static final By USERNAME_INPUT = By.cssSelector("[data-testid='username']");
     private static final By PASSWORD_INPUT = By.cssSelector("[data-testid='password']");
     private static final By LOGIN_BUTTON   = By.cssSelector("[data-testid='login-button']");
 
     private void assertStaysOnLogin() {
-        wait.until(ExpectedConditions.urlContains("/login"));
-        String currentUrl = driver.getCurrentUrl();
-        assertNotNull(currentUrl);
-        assertTrue(currentUrl.contains("/login"));
+        wait.until(ExpectedConditions.urlToBe(LOGIN_URL));
+        assertEquals(LOGIN_URL, driver.getCurrentUrl());
     }
 
     @BeforeEach
@@ -27,49 +25,45 @@ public class LoginTest extends BaseTest {
     }
 
     @Test
-    void UserCanLogin() {
-        login(); 
+    void userCanLogin() {
+        login();
+        wait.until(ExpectedConditions.urlToBe(POST_LOGIN_URL));
         assertEquals(POST_LOGIN_URL, driver.getCurrentUrl());
     }
 
     @Test
-    void LoginWithEmptyUsername() {
+    void loginWithEmptyUsername() {
         driver.findElement(PASSWORD_INPUT).sendKeys(LOGIN_PASSWORD);
         driver.findElement(LOGIN_BUTTON).click();
-        wait.until(ExpectedConditions.urlContains("/login"));
         assertStaysOnLogin();
     }
 
     @Test
-    void LoginWithEmptyPassword() {
+    void loginWithEmptyPassword() {
         driver.findElement(USERNAME_INPUT).sendKeys(LOGIN_USERNAME);
         driver.findElement(LOGIN_BUTTON).click();
-        wait.until(ExpectedConditions.urlContains("/login"));
         assertStaysOnLogin();
     }
 
     @Test
-    void LoginWithBothFieldsEmpty() {
+    void loginWithBothFieldsEmpty() {
         driver.findElement(LOGIN_BUTTON).click();
-        wait.until(ExpectedConditions.urlContains("/login"));
         assertStaysOnLogin();
     }
 
     @Test
-    void LoginWithIncorrectUsername() {
-        driver.findElement(USERNAME_INPUT).sendKeys(INVALID_USERNAME);
+    void loginWithIncorrectUsername() {
+        driver.findElement(USERNAME_INPUT).sendKeys(WRONG_USERNAME);
         driver.findElement(PASSWORD_INPUT).sendKeys(LOGIN_PASSWORD);
         driver.findElement(LOGIN_BUTTON).click();
-        wait.until(ExpectedConditions.urlContains("/login"));
         assertStaysOnLogin();
     }
 
     @Test
-    void LoginWithIncorrectPassword() {
+    void loginWithIncorrectPassword() {
         driver.findElement(USERNAME_INPUT).sendKeys(LOGIN_USERNAME);
-        driver.findElement(PASSWORD_INPUT).sendKeys(INVALID_PASSWORD);
+        driver.findElement(PASSWORD_INPUT).sendKeys(WRONG_PASSWORD);
         driver.findElement(LOGIN_BUTTON).click();
-        wait.until(ExpectedConditions.urlContains("/login"));
         assertStaysOnLogin();
     }
 
