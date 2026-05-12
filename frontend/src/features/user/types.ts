@@ -16,5 +16,8 @@ export type User = {
 // Shape returned by backend
 export type UserDto = Omit<User, 'password'>;
 
-// Shape expected by backend for POST /users and PUT /users/{id}
+// Shape expected by backend for POST /users
 export type UserUpsertRequest = Omit<User, 'id'>;
+
+// PATCH /users/{id} 
+export type UserUpdateRequest = Omit<User, 'id' | 'username' | 'password'>;

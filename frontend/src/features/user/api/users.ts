@@ -2,7 +2,7 @@
 import api from '../../../shared/api';
 
 // Type definitions for users and request payloads
-import type { UserDto, UserUpsertRequest } from '../types';
+import type { UserDto, UserUpdateRequest, UserUpsertRequest } from '../types';
 
 // Generic type representing paginated backend response
 type PageResponse<T> = {
@@ -30,9 +30,9 @@ export const getUserById = async (id: string | number) => {
   return res.data;
 };
 
-// Update existing user
-export const updateUser = async (id: string | number, payload: UserUpsertRequest) => {
-  const res = await api.put<UserDto>(`/users/${id}`, payload);
+// Update existing user 
+export const updateUser = async (id: string | number, payload: UserUpdateRequest) => {
+  const res = await api.patch<UserDto>(`/users/${id}`, payload);
   return res.data;
 };
 
