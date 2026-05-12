@@ -21,6 +21,9 @@ WORKDIR /app
 # Copy JAR from the build stage
 COPY --from=build /app/target/*.jar app.jar
 
+# Add curl for healthcheck
+RUN apk add --no-cache curl
+
 # Expose Spring Boot default port
 EXPOSE 8080
 
