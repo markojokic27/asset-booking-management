@@ -73,7 +73,7 @@ public class UserController {
 
     /** READ BY ID */
     // read by id owner or admin
-    @Operation(summary = "Read user details", description = "Only available to users with role: ADMIN or owners of the account")
+    @Operation(summary = "Read user details", description = "Only available to users with role: ADMIN or owner of the account")
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
@@ -87,9 +87,9 @@ public class UserController {
     }
 
     /** UPDATE */
-    @Operation(summary = "Update user", description = "Only available to users with role ADMIN")
+    @Operation(summary = "Update user", description = "Only available to users with role ADMIN or owner of the account")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable Long id,

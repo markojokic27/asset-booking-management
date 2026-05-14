@@ -67,6 +67,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/v1/users/**")
                         .authenticated()
 
+                        .requestMatchers(HttpMethod.PATCH, "/v1/users/**")
+                        .authenticated()
+
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/users/**")
                         .hasRole(ADMIN)
