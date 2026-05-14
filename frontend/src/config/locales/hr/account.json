@@ -47,8 +47,6 @@
     },
     "validation": {
       "currentRequired": "Unesite trenutačnu lozinku",
-      "newMin": "Nova lozinka mora imati najmanje 8 znakova",
-      "newMax": "Nova lozinka smije imati najviše 50 znakova",
       "confirmMismatch": "Nove lozinke se ne podudaraju"
     },
     "errors": {

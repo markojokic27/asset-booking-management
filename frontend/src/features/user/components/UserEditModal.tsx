@@ -1,13 +1,20 @@
+// external dependencies
 import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
+
+// components
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
+
+// validation
 import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
+
+// types
 import type { UserDto } from '../types';
 
 const userEditSchema = userValidationSchema
@@ -302,4 +309,3 @@ export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalPr
     </Modal>
   );
 };
-
