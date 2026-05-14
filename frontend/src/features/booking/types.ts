@@ -20,6 +20,19 @@ export type BookingDto = Booking & {
   assetCategory?: string;
 };
 
+export type BookingWithRelations = BookingDto & {
+  asset: {
+    name: string;
+    category: string;
+    status: string;
+  };
+  user: {
+    id: number;
+    username: string;
+    role: string;
+  };
+};
+
 export type Filters = {
   search: string;
   fromDate: string;

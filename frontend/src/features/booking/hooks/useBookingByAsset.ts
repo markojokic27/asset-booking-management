@@ -2,13 +2,14 @@
 import { useEffect, useState } from 'react';
 
 // Types
-import type { BookingDto } from '../types';
+import type { BookingWithRelations } from '../types';
 
 // API
 import { getAllAssetBookings } from '../api/bookingApi';
 
+
 export const useBookingsByAsset = (assetId: string) => {
-  const [bookings, setBookings] = useState<BookingDto[]>([]);
+  const [bookings, setBookings] = useState<BookingWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
 
@@ -20,6 +21,7 @@ export const useBookingsByAsset = (assetId: string) => {
         setLoading(true);
         setError(null);
         const data = await getAllAssetBookings(0, 100, Number(assetId));
+
         setBookings(data.content);
       } catch (err) {
         setError(err);

@@ -1,18 +1,20 @@
 import * as React from 'react';
-import FullCalendarComponent from '@fullcalendar/react';
-import type { CalendarOptions } from '@fullcalendar/core';
+
+import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-
-const FullCalendar = FullCalendarComponent as unknown as React.FC<CalendarOptions>;
-
-// dodat da se u kalendru prikazuje booking history i omogucit pregled, te da se klikom na neki datum omoguci booking assseta
 
 type CalendarEvent = {
   id: string;
   title: string;
-  start: string;
-  end: string;
+  start: Date;
+  end: Date;
+  backgroundColor?: string;
+  borderColor?: string;
+  extendedProps?: {
+    status: string;
+    notes?: string;
+  };
 };
 
 type Props = {
@@ -20,36 +22,37 @@ type Props = {
 };
 
 export function AvailabilityCalendar({ events }: Props) {
-  const [isReady, setIsReady] = React.useState(false);
-
-  React.useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      setIsReady(true);
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timeout);
-    };
+  const handleDateClick = React.useCallback((info: any) => {
+    console.log('Selected date:', info.dateStr);
   }, []);
 
-  if (!isReady) {
-    return null;
-  }
+  const handleEventClick = React.useCallback((info: any) => {
+    const { status, notes } = info.event.extendedProps;
+
+    console.log({
+      bookedBy: info.event.title,
+      status,
+      notes,
+    });
+  }, []);
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
+        height="auto"
+        fixedWeekCount={false}
+        showNonCurrentDates={false}
+        events={events}
+        dateClick={handleDateClick}
+        eventClick={handleEventClick}
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
           right: '',
         }}
-        events={events} // bookings koji se prikazuju u kalendaru
-        height="auto"
-        fixedWeekCount={false}
-        showNonCurrentDates={false}
+        eventDisplay="block"
       />
     </div>
   );

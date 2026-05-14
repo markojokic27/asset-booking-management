@@ -1,6 +1,6 @@
 // External packages
-import { useParams } from 'react-router-dom';
 import * as React from 'react';
+import { useParams } from 'react-router-dom';
 
 // Hooks
 import { useBookingsByAsset } from '../features/booking/hooks/useBookingByAsset';
@@ -12,11 +12,7 @@ import { AvailabilityCalendar } from '../features/booking/components/Availabilit
 import { Button } from '../components/ui/Button';
 
 // Types
-import type { BookingDto } from '../features/booking/types';
-import type { AssetDto } from '../features/asset/types';
 import type { Filters } from '../features/booking/types';
-
-import { getAssetById } from '../features/asset/api/assetApi';
 
 const defaultFilters: Filters = {
   search: '',
@@ -26,18 +22,61 @@ const defaultFilters: Filters = {
   toHour: '',
 };
 
+const STATUS_COLORS: Record<string, string> = {
+  APPROVED: '#22c55e',
+  PENDING: '#f59e0b',
+  REJECTED: '#ef4444',
+  CANCELLED: '#6b7280',
+};
+
 export default function BookingsByAsset() {
   const { assetId } = useParams();
   const [filters, setFilters] = React.useState<Filters>(defaultFilters);
 
   const { bookings, loading, error } = useBookingsByAsset(assetId!);
-  const selectedFrom = `${filters.fromDate || '-'} ${filters.fromHour || ''}`;
-  const selectedTo = `${filters.toDate || '-'} ${filters.toHour || ''}`;
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Greška</div>;
+  const asset = bookings?.[0]?.asset;
 
-  const asset = getAssetById(assetId!) as unknown as AssetDto;
+  const calendarEvents = React.useMemo(() => {
+    return bookings.map((booking) => ({
+      id: booking.id.toString(),
+      title: booking.user.username,
+      start: new Date(booking.bookingStart),
+      end: new Date(booking.bookingEnd),
+      backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
+      borderColor: STATUS_COLORS[booking.status] || '#3b82f6',
+      extendedProps: {
+        status: booking.status,
+        notes: booking.notes,
+      },
+    }));
+  }, [bookings]);
+
+  if (loading) {
+    return (
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
+        <div className="pt-35">Loading...</div>
+      </LayoutColumn>
+    );
+  }
+
+  if (error) {
+    return (
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
+        <div className="pt-35 text-red-500">
+          Greška pri dohvaćanju bookinga.
+        </div>
+      </LayoutColumn>
+    );
+  }
+
+  if (!asset) {
+    return (
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
+        <div className="pt-35">Asset nema booking history.</div>
+      </LayoutColumn>
+    );
+  }
 
   return (
     <LayoutColumn
@@ -46,69 +85,68 @@ export default function BookingsByAsset() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
-      <div>
-        <h2 className="mb-4 text-xl font-semibold">Book {asset.name}</h2>
+      <div className="mb-6 flex items-baseline justify-between">
+        <div className="flex items-center gap-6">
+          <h1 className="text-3xl font-black text-black dark:text-white">
+            {asset.name}
+          </h1>
 
-        <div className="mb-5 text-sm">
-          <p className="font-semibold">{asset.name}</p>
-          <p>Model: {asset.name ?? '-'}</p>
-          <p>Location: {asset.location ?? '-'}</p>
+          <span
+            className={`rounded px-3 py-1 text-sm font-medium ${
+              asset.status === 'ACTIVE'
+                ? 'bg-green-100 text-green-700'
+                : 'bg-gray-200 text-gray-700'
+            }`}
+          >
+            {asset.status}
+          </span>
         </div>
 
-        <div className="">
-          <div className="mb-6 flex w-full items-end justify-between">
-            <FiltersBar
-              variant={'DAY'}
-              filters={filters}
-              setFilters={setFilters}
-              showSearch={false}
-              className="grid-cols-1 sm:grid-cols-2 lg:max-w-[80%] lg:grid-cols-2"
-            />
-            <Button
-              variant="solid"
-              className="h-fit"
-              size="md"
-              onClick={() => {
-                console.log('BOOK', {
-                  asset,
-                  from: filters.fromDate,
-                  to: filters.toDate,
-                });
-              }}
-            >
-              Book
-            </Button>
-          </div>
-
-          {/* Implement checking asset status, if available user can book asset, else button book is disabled 
-          <div className="flex items-start gap-3 text-sm">
-            <span className="bg---color-status-active-bg flex h-5 w-5 items-center justify-center text-(--color-status-active-text)">
-              ✓
-            </span>
-
-            <p>
-              {/* If a date is not selected, the message is not displayed. Check availability - if available render AVAILABLE else UNAVAILABLE  }
-              {asset.name} is{' '}
-              <span className="rounded bg-(--color-status-active-bg) px-2 py-0.5 text-(--color-status-active-text)">
-                available
-              </span>{' '}
-              from {selectedFrom} to {selectedTo}
-            </p>
-          </div> */}
-        </div>
-
-        {/* Dohvatit bookinge odredenog asseta i posalt ih u events kako bi se prikazali u kalendaru*/}
-        <AvailabilityCalendar
-          events={[
-            {
-              id: '1',
-              title: `${asset.name} booked`,
-              start: '2026-04-29T10:00:00',
-              end: '2026-04-29T12:00:00',
-            },
-          ]}
-        />
+        <p>Location: TODO</p>
       </div>
+
+      <div className="mb-6 flex w-full items-end justify-between gap-4">
+        <FiltersBar
+          variant="DAY"
+          filters={filters}
+          setFilters={setFilters}
+          showSearch={false}
+          className="mt-0 grid-cols-1 sm:grid-cols-2 lg:max-w-[80%] lg:grid-cols-2"
+        />
+
+        <Button
+          variant="solid"
+          className="h-fit"
+          size="md"
+          disabled={asset.status !== 'ACTIVE'}
+        >
+          Book
+        </Button>
+      </div>
+
+      <div className="mb-4 flex flex-wrap gap-4 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-green-500" />
+          Approved
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-yellow-500" />
+          Pending
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-red-500" />
+          Rejected
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-gray-500" />
+          Cancelled
+        </div>
+      </div>
+
+      <AvailabilityCalendar events={calendarEvents} />
     </LayoutColumn>
   );
 }
