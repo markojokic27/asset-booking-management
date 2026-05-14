@@ -76,6 +76,15 @@ public class CommonMethods {
         }
     }
 
+    public static boolean isElementVisible(By locator) {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static void typeInElement(By locator, String text) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
