@@ -2,7 +2,7 @@ package commonmethods;
 
 import config.ConfigFromFile;
 import constants.CommonConstants;
-import lombok.Getter;
+// import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,9 +19,14 @@ import java.time.Duration;
 @Log4j2
 public class CommonMethods {
 
-    @Getter
+    // @Getter
     private static WebDriver driver;
     private static WebDriverWait wait;
+
+    // Add this manually
+    public static WebDriver getDriver() {
+        return driver;
+    }
 
     protected CommonMethods() {
     }
@@ -29,7 +34,8 @@ public class CommonMethods {
     public static boolean openBrowser() {
         try {
             createDriver();
-            getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.LOGIN_URL_EXTENSION);
+            getDriver().get(
+                    ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.LOGIN_URL_EXTENSION);
             getDriver().manage().window().maximize();
             wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             return true;
