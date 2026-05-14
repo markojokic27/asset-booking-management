@@ -28,15 +28,25 @@ export type BookingDto = Booking & {
 };
 
 export type BookingWithRelations = BookingDto & {
-  asset: {
-    name: string;
-    category: string;
-    status: string;
-  };
   user: {
     id: number;
-    username: string;
+    name: string;
+    surname: string;
+    email: string;
     role: string;
+  };
+  asset: {
+    id: number;
+    name: string;
+    category: {
+      id: number;
+      name: string;
+      bookingPeriod: string;
+      approval: boolean;
+    };
+    status: string;
+    description: string;
+    location: string;
   };
 };
 
