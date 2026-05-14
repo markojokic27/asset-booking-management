@@ -1,5 +1,4 @@
 package constants;
-
 public class CommonConstants{
 
     public static final String BASE_URL = "BASE_URL";
@@ -7,6 +6,8 @@ public class CommonConstants{
     public static final String LOGIN_URL_EXTENSION = "/login";
     public static final String REGISTER_URL_EXTENSION="/register";
     public static final String USERS_URL= "/users";
+    public static final String ASSETS_URL= "/assets";
+    public static final String CATEGORY_URL= "/categories";
 
     //Login
 
@@ -42,10 +43,30 @@ public class CommonConstants{
     public static final String LONG_MANAGER_EMAIL="i".repeat(255);
     public static final String LONG_NOTES="i".repeat(1001);
     public static final String VALID_ROLE="ADMIN";
-    public static final String VALID_STATUS="ACTIVE";
+    public static final String VALID_STATUS="Active";
     public static final String VALID_ID="1";
     public static final String CHANGE_ROLE="EMPLOYEE";
+
+    // User and asset
     public static final String CHANGE_STATUS="Inactive";
+
+    // Asset
+    public static final String VALID_ASSET_NAME = "Parking Spot 16";
+    public static final String VALID_LOCATION = "Floor plan 2";
+    public static final String VALID_DESCRIPTION = "VIP parking";
+    public static final String LONG_ASSET_NAME = "t".repeat(101);
+    public static final String LONG_ASSET_LOCATION = "r".repeat(256);
+    public static final String LONG_DESCRIPTION = "t".repeat(256);
+    public static final String CATEGORY="Parking";
+
+    //Asset category
+    public static final String VALID_CATEGORY_NAME = "Room";
+    public static final String VALID_CATEGORY_DESCRIPTION = "All company rooms ";
+    public static final String VALID_BOOKING_PERIOD = "Day";
+    public static final String LONG_CATEGORY_NAME = "t".repeat(101);
+    public static final String LONG_CATEGORY_DESCRIPTION  = "t".repeat(256);
+    public static final String CHANGE_BOOKING_PERIOD = "Hour";
+
 
     public static final String BROWSER = "BROWSER";
 

@@ -129,7 +129,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
             }
         >
             <form id={formId} onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="flex flex-col gap-5">
+                <div data-testid="category-modal" className="flex flex-col gap-5">
                     {submitError && (
                         <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
                             {submitError}

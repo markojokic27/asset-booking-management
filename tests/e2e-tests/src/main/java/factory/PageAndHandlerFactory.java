@@ -1,9 +1,7 @@
 package factory;
 
 import commonmethods.CommonMethods;
-import pages.LoginPage;
-import pages.RegisterPage;
-import pages.UserPage;
+import pages.*;
 
 public class PageAndHandlerFactory extends CommonMethods {
 
@@ -12,9 +10,14 @@ public class PageAndHandlerFactory extends CommonMethods {
 
     public static UserPage userPage;
 
+    public static AssetPage assetPage;
+    public static AssetCategoryPage assetCategoryPage;
+
     public static void setupPagesAndHandlers() {
         loginPage = new LoginPage();
         registerPage=new RegisterPage();
         userPage=new UserPage();
+        assetPage=new AssetPage();
+        assetCategoryPage=new AssetCategoryPage();
     }
 }
