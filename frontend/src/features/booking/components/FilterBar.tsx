@@ -100,7 +100,7 @@ export function FiltersBar({
         <SearchInput
           value={filters.search}
           onChange={(v) => update({ search: v })}
-          placeholder="Search assets..."
+          placeholder={t('ui.search.assetsPlaceholder')}
           className="col-span-1 mt-auto w-full sm:col-span-2 md:col-span-1 lg:ml-auto lg:max-w-60"
         />
       )}

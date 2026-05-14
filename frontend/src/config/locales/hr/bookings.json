@@ -1,0 +1,13 @@
+{
+  "resetFilters": "Poništi filtere",
+  "loading": "Učitavanje...",
+  "table": {
+    "approval": "Odobrenje",
+    "book": "Rezerviraj",
+    "bookSr": "Rezerviraj imovinu"
+  },
+  "empty": {
+    "loading": "Učitavanje imovine...",
+    "noAssets": "Nema dostupne imovine."
+  }
+}

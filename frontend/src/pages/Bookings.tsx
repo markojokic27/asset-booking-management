@@ -1,5 +1,6 @@
 // External packages
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
@@ -23,6 +24,7 @@ const defaultFilters: Filters = {
 };
 
 export default function Bookings() {
+  const { t } = useTranslation();
   const [filters, setFilters] = React.useState<Filters>(defaultFilters);
 
   const {
@@ -63,7 +65,7 @@ export default function Bookings() {
           className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
           onClick={handleResetFilters}
         >
-          Reset filters
+          {t('bookings.resetFilters')}
         </Button>
       </div>
 
@@ -72,7 +74,7 @@ export default function Bookings() {
       <FiltersBar filters={filters} setFilters={setFilters} variant={variant} />
 
       {loading ? (
-        <div className="mt-6">Loading...</div>
+        <div className="mt-6">{t('bookings.loading')}</div>
       ) : (
         <BookingTable assets={assets} className="mt-6" />
       )}

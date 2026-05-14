@@ -1,0 +1,13 @@
+{
+  "resetFilters": "Filter zurücksetzen",
+  "loading": "Laden...",
+  "table": {
+    "approval": "Freigabe",
+    "book": "Buchen",
+    "bookSr": "Asset buchen"
+  },
+  "empty": {
+    "loading": "Assets werden geladen...",
+    "noAssets": "Keine Assets verfügbar."
+  }
+}

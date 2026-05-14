@@ -1,0 +1,13 @@
+{
+  "resetFilters": "Reset filters",
+  "loading": "Loading...",
+  "table": {
+    "approval": "Approval",
+    "book": "Book",
+    "bookSr": "Book asset"
+  },
+  "empty": {
+    "loading": "Loading assets...",
+    "noAssets": "No assets available."
+  }
+}
