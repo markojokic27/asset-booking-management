@@ -16,6 +16,21 @@ export type User = {
 // Shape returned by backend
 export type UserDto = Omit<User, 'password'>;
 
+// Shape expected by UserModal component (name is combined from surname and name)
+export type UserModalUser = {
+  id: UserDto['id'];
+  name: string;
+} & Pick<
+  UserDto,
+  | 'email'
+  | 'username'
+  | 'role'
+  | 'status'
+  | 'departmentId'
+  | 'managerEmail'
+  | 'notes'
+>;
+
 // Shape expected by backend for POST /users
 export type UserUpsertRequest = Omit<User, 'id'>;
 

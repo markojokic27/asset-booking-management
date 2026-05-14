@@ -47,8 +47,6 @@
     },
     "validation": {
       "currentRequired": "Current password is required",
-      "newMin": "New password must be at least 8 characters",
-      "newMax": "New password must be at most 50 characters",
       "confirmMismatch": "New passwords do not match"
     },
     "errors": {

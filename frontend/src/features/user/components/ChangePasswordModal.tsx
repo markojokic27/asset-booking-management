@@ -1,16 +1,23 @@
+// external dependencies
 import { useEffect, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { isAxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
+// components
 import { Button } from '../../../components/ui/Button';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 
+// api
 import { changeOwnPassword } from '../api/users';
+
+// validation
+import { userValidationSchema } from '../validation';
+
+// types
 import type { UserDto } from '../types';
 
 type ChangePasswordFieldErrors = {
@@ -41,6 +48,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
 
   useEffect(() => {
     if (!isOpen) return;
+    // Reset modal state whenever modal is reopened
     setFieldErrors(emptyPasswordFieldErrors);
     setSubmitError(null);
     setIsSaving(false);
@@ -48,36 +56,34 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
 
   if (!isOpen) return null;
 
-  const schema = z
-    .object({
-      currentPassword: z.string().trim().min(1, t('account.password.validation.currentRequired')),
-      newPassword: z
-        .string()
-        .min(8, t('account.password.validation.newMin'))
-        .max(50, t('account.password.validation.newMax')),
-      confirmNewPassword: z.string(),
-    })
-    .refine((data) => data.newPassword === data.confirmNewPassword, {
-      message: t('account.password.validation.confirmMismatch'),
-      path: ['confirmNewPassword'],
-    });
-
   const handleSubmit = async (data: FormData) => {
+     // Extract raw form values before validation
     const raw = {
       currentPassword: data.get('currentPassword') as string,
       newPassword: data.get('newPassword') as string,
       confirmNewPassword: data.get('confirmNewPassword') as string,
     };
 
-    const parsed = schema.safeParse(raw);
+    const next: ChangePasswordFieldErrors = { ...emptyPasswordFieldErrors };
 
-    if (!parsed.success) {
-      const fe = parsed.error.flatten().fieldErrors;
-      setFieldErrors({
-        currentPassword: fe.currentPassword?.[0] || '',
-        newPassword: fe.newPassword?.[0] || '',
-        confirmNewPassword: fe.confirmNewPassword?.[0] || '',
-      });
+    if (!raw.currentPassword.trim()) {
+      next.currentPassword = t('account.password.validation.currentRequired');
+    }
+
+     // Validate new password against shared password rules
+    const newPwResult = userValidationSchema.shape.password.safeParse(raw.newPassword);
+    if (!newPwResult.success) {
+      next.newPassword = newPwResult.error.issues[0]?.message ?? '';
+    }
+
+    // Check if new passwords match
+    if (raw.newPassword !== raw.confirmNewPassword) {
+      next.confirmNewPassword = t('account.password.validation.confirmMismatch');
+    }
+
+    // If there are any validation errors, set field errors and return
+    if (next.currentPassword || next.newPassword || next.confirmNewPassword) {
+      setFieldErrors(next);
       return;
     }
 
@@ -86,8 +92,8 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
     setIsSaving(true);
     try {
       await changeOwnPassword(user.id, {
-        currentPassword: parsed.data.currentPassword,
-        newPassword: parsed.data.newPassword,
+        currentPassword: raw.currentPassword.trim(),
+        newPassword: raw.newPassword,
       });
       onClose();
     } catch (err) {

@@ -1,14 +1,21 @@
+// external dependencies
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import { useTranslation } from 'react-i18next';
+
+// components
 import { Button } from '../../../components/ui/Button';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Table, type TableColumn } from '../../../components/ui/Table';
+
+// types
 import type { UserDto } from '../types';
+
+// utils
 import { getDisplayName } from '../utilis/users';
-import  BarChartIcon from '@mui/icons-material/BarChart';
 
 type Props = {
   data: UserDto[];
@@ -33,6 +40,7 @@ export const UsersTable = ({
   onDelete,
   onReport,
 }: Props) => {
+  
   const { t } = useTranslation();
   const nextSortDirKey = nameSortDir === 'asc' ? 'descending' : 'ascending';
 
