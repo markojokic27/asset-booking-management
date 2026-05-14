@@ -1,10 +1,14 @@
+// External packages
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+
 // Components
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { Button } from '../../../components/ui/Button';
-import { Link } from 'react-router-dom';
 
 // Types
-import { type AssetDto } from '../../asset/types';
+import { type AssetDto, type AssetStatus } from '../../asset/types';
 
 type Props = {
   assets: AssetDto[];
@@ -14,41 +18,48 @@ type Props = {
 };
 
 export function BookingTable({ assets, isLoading, error, className }: Props) {
-  const columns: TableColumn<AssetDto>[] = [
-    {
-      key: 'id',
-      header: 'ID',
-      accessor: 'id',
-      cellClassName: 'font-medium',
-    },
-    {
-      key: 'name',
-      header: 'Name',
-      accessor: 'name',
-    },
-    {
-      key: 'status',
-      header: 'Status',
-      accessor: 'status',
-    },
-    {
-      key: 'approval',
-      header: 'Approval',
-      // ako nemaš approval u AssetDto → moraš render
-      render: () => '-',
-    },
-    {
-      key: 'book',
-      header: <span className="sr-only">Book</span>,
-      headerClassName: 'w-px whitespace-nowrap',
-      cellClassName: 'w-px whitespace-nowrap',
-      render: (asset) => (
-        <Link to={`/assets/${asset.id}/bookings`}>
-          <Button size="sm">Book</Button>
-        </Link>
-      ),
-    },
-  ];
+  const { t } = useTranslation();
+
+  const columns: TableColumn<AssetDto>[] = useMemo(
+    () => [
+      {
+        key: 'id',
+        header: t('assets.table.id'),
+        accessor: 'id',
+        cellClassName: 'font-medium',
+      },
+      {
+        key: 'name',
+        header: t('assets.table.assetName'),
+        accessor: 'name',
+      },
+      {
+        key: 'status',
+        header: t('assets.table.status'),
+        render: (asset) =>
+          t(`assets.status.${asset.status}` as `assets.status.${AssetStatus}`),
+      },
+      {
+        key: 'approval',
+        header: t('bookings.table.approval'),
+        render: () => '-',
+      },
+      {
+        key: 'book',
+        header: (
+          <span className="sr-only">{t('bookings.table.bookSr')}</span>
+        ),
+        headerClassName: 'w-px whitespace-nowrap',
+        cellClassName: 'w-px whitespace-nowrap',
+        render: (asset) => (
+          <Link to={`/assets/${asset.id}/bookings`}>
+            <Button size="sm">{t('bookings.table.book')}</Button>
+          </Link>
+        ),
+      },
+    ],
+    [t]
+  );
 
   return (
     <Table
@@ -57,7 +68,11 @@ export function BookingTable({ assets, isLoading, error, className }: Props) {
       getRowKey={(asset) => asset.id}
       className={`w-full ${className}`}
       emptyMessage={
-        isLoading ? 'Loading assets...' : error ? error : 'No assets available.'
+        isLoading
+          ? t('bookings.empty.loading')
+          : error
+            ? error
+            : t('bookings.empty.noAssets')
       }
     />
   );

@@ -3,7 +3,6 @@ import { twMerge } from 'tailwind-merge';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import { useTranslation } from 'react-i18next';
 
-// TODO: internacionalizacija
 type SearchInputProps = {
   value: string;
   onChange: (value: string) => void;
