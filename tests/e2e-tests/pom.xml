@@ -13,6 +13,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
         <selenium.version>4.40.0</selenium.version>
+        <testng.version>7.12.0</testng.version>
+        <log4j.version>2.17.0</log4j.version>
     </properties>
 
     <dependencies>
@@ -37,6 +39,27 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!--Needed for injection over annotations-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.38</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+        </dependency>
+
     </dependencies>
 
 
@@ -47,7 +70,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                   <release>17</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
 

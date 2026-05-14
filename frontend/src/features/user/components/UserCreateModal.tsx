@@ -185,7 +185,7 @@ export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalPr
       onClose={onClose}
       ariaLabel="Create user"
       headerRight={
-        <IconButton onClick={onClose} aria-label="Close">
+        <IconButton data-testid="close-button" onClick={onClose} aria-label="Close">
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
