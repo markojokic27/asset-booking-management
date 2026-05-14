@@ -13,6 +13,11 @@ type PageResponse<T> = {
   size: number;
 };
 
+export type ChangePasswordRequest = {
+  currentPassword: string;
+  newPassword: string;
+};
+
 // Fetch paginated list of users
 export const getUsers = async (params?: { page?: number; size?: number }) => {
   const res = await api.get<PageResponse<UserDto>>('/users', {
@@ -45,6 +50,11 @@ export const createUser = async (payload: UserUpsertRequest) => {
 // Delete user by ID
 export const deleteUser = async (id: number) => {
   await api.delete<void>(`/users/${id}`);
+};
+
+// Change own password
+export const changeOwnPassword = async (id: string | number, payload: ChangePasswordRequest) => {
+  await api.patch<void>(`/users/${id}/password`, payload);
 };
 
 // Fetch report data for specific user

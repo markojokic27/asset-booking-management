@@ -17,6 +17,7 @@
     "lastName": "Prezime",
     "username": "Korisničko ime",
     "email": "E-mail",
+    "password": "Lozinka",
     "role": "Uloga",
     "status": "Status",
     "department": "Odjel",
@@ -31,5 +32,28 @@
   "status": {
     "active": "Aktivan",
     "inactive": "Neaktivan"
+  },
+  "password": {
+    "changeButton": "Promijeni lozinku",
+    "modalTitle": "Promjena lozinke",
+    "closeAria": "Zatvori",
+    "cancel": "Odustani",
+    "save": "Spremi lozinku",
+    "saving": "Spremanje…",
+    "fields": {
+      "current": "Trenutačna lozinka",
+      "new": "Nova lozinka",
+      "confirm": "Potvrdi novu lozinku"
+    },
+    "validation": {
+      "currentRequired": "Unesite trenutačnu lozinku",
+      "newMin": "Nova lozinka mora imati najmanje 8 znakova",
+      "newMax": "Nova lozinka smije imati najviše 50 znakova",
+      "confirmMismatch": "Nove lozinke se ne podudaraju"
+    },
+    "errors": {
+      "wrongCurrent": "Trenutačna lozinka nije ispravna.",
+      "submit": "Lozinka se nije mogla promijeniti. Pokušajte ponovno."
+    }
   }
 }
