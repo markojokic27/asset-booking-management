@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Installing the node modules
-RUN npm install
+RUN npm ci
 
 # Copy everything in the current folder to /app
 COPY . .
