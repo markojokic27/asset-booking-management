@@ -17,6 +17,7 @@
     "lastName": "Last name",
     "username": "Username",
     "email": "Email",
+    "password": "Password",
     "role": "Role",
     "status": "Status",
     "department": "Department",
@@ -31,5 +32,28 @@
   "status": {
     "active": "Active",
     "inactive": "Inactive"
+  },
+  "password": {
+    "changeButton": "Change Password",
+    "modalTitle": "Change password",
+    "closeAria": "Close",
+    "cancel": "Cancel",
+    "save": "Update password",
+    "saving": "Updating…",
+    "fields": {
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password"
+    },
+    "validation": {
+      "currentRequired": "Current password is required",
+      "newMin": "New password must be at least 8 characters",
+      "newMax": "New password must be at most 50 characters",
+      "confirmMismatch": "New passwords do not match"
+    },
+    "errors": {
+      "wrongCurrent": "Current password is incorrect.",
+      "submit": "Could not update password. Please try again."
+    }
   }
 }

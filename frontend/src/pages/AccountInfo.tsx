@@ -1,13 +1,16 @@
 // External packages
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
 import { BadgeRow } from '../components/ui/BadgeRow';
 import { InfoRow } from '../components/ui/InfoRow';
+import { Button } from '../components/ui/Button';
 
 // Hooks
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { ChangePasswordModal } from '../features/user/components/ChangePasswordModal';
 
 // Types
 import type { UserDto } from '../features/user/types';
@@ -37,6 +40,7 @@ function getStatusBadgeClass(status: UserDto['status']) {
 export default function AccountInfo() {
   const { t } = useTranslation();
   const { user, isLoading, error } = useCurrentUser();
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 
   return (
     <LayoutColumn
@@ -74,28 +78,26 @@ export default function AccountInfo() {
         </div>
       ) : (
         <div className="mt-6 grid w-full grid-cols-1 gap-6 xl:grid-cols-2">
-          <section className="rounded-2xl border border-(--color-table-border) bg-white p-6 dark:bg-(--color-surface)">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold tracking-[0.18em] text-(--color-table-text) uppercase">
-                  {t('account.sections.profile')}
-                </p>
-                <h2
-                  data-testid="account-fullname"
-                  className="mt-2 text-xl font-bold text-black dark:text-white"
-                >
-                  {user.name} {user.surname}
-                </h2>
-                <p
-                  data-testid="account-email"
-                  className="mt-1 text-sm text-(--color-table-text)"
-                >
-                  {user.email}
-                </p>
-              </div>
+          <section className="flex h-full flex-col rounded-2xl border border-(--color-table-border) bg-white p-6 dark:bg-(--color-surface)">
+            <div>
+              <p className="text-xs font-bold tracking-[0.18em] text-(--color-table-text) uppercase">
+                {t('account.sections.profile')}
+              </p>
+              <h2
+                data-testid="account-fullname"
+                className="mt-2 text-xl font-bold text-black dark:text-white"
+              >
+                {user.name} {user.surname}
+              </h2>
+              <p
+                data-testid="account-email"
+                className="mt-1 text-sm text-(--color-table-text)"
+              >
+                {user.email}
+              </p>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex-1">
               <InfoRow
                 label={t('account.labels.id')}
                 value={String(user.id)}
@@ -120,6 +122,21 @@ export default function AccountInfo() {
                 label={t('account.labels.email')}
                 value={user.email}
                 emptyValue={t('account.common.emptyValue')}
+              />
+              <InfoRow
+                label={t('account.labels.password')}
+                valueSlot={
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="shadow-none"
+                    data-testid="account-open-change-password"
+                    onClick={() => setPasswordModalOpen(true)}
+                  >
+                    {t('account.password.changeButton')}
+                  </Button>
+                }
               />
             </div>
           </section>
@@ -165,6 +182,14 @@ export default function AccountInfo() {
             </div>
           </section>
         </div>
+      )}
+
+      {user && (
+        <ChangePasswordModal
+          user={user}
+          isOpen={passwordModalOpen}
+          onClose={() => setPasswordModalOpen(false)}
+        />
       )}
     </LayoutColumn>
   );
