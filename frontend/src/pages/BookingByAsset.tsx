@@ -40,7 +40,7 @@ export default function BookingsByAsset() {
   const calendarEvents = React.useMemo(() => {
     return bookings.map((booking) => ({
       id: booking.id.toString(),
-      title: booking.user.username,
+      title: booking.user.surname,
       start: new Date(booking.bookingStart),
       end: new Date(booking.bookingEnd),
       backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
