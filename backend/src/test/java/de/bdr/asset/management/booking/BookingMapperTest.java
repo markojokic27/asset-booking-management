@@ -71,13 +71,23 @@ class BookingMapperTest {
 
         assertThat(dto.user()).isNotNull();
         assertThat(dto.user().id()).isEqualTo(USER_ID);
-        assertThat(dto.user().username()).isEqualTo(USER_NAME);
+        assertThat(dto.user().name()).isEqualTo(USER_NAME);
+        assertThat(dto.user().surname()).isEqualTo(USER_SURNAME);
+        assertThat(dto.user().email()).isEqualTo(USER_EMAIL);
         assertThat(dto.user().role()).isEqualTo(USER_ROLE);
 
         assertThat(dto.asset()).isNotNull();
         assertThat(dto.asset().name()).isEqualTo(ASSET_NAME);
         assertThat(dto.asset().status()).isEqualTo(ASSET_STATUS);
-        assertThat(dto.asset().category()).isEqualTo(CATEGORY_NAME);
+        assertThat(dto.asset().description()).isEqualTo(ASSET_DESCRIPTION);
+        assertThat(dto.asset().location()).isEqualTo(ASSET_LOCATION);
+
+        assertThat(dto.asset().category()).isNotNull();
+        assertThat(dto.asset().category().id()).isEqualTo(CATEGORY_ID);
+        assertThat(dto.asset().category().name()).isEqualTo(CATEGORY_NAME);
+        assertThat(dto.asset().category().bookingPeriod()).isEqualTo(BOOKING_PERIOD);
+        assertThat(dto.asset().category().approval()).isEqualTo(CATEGORY_APPROVAL);
+
     }
 
     @Test

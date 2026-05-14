@@ -15,19 +15,27 @@ public class BookingServiceImplTestData {
         User u = new User();
         u.setId(USER_ID);
         u.setName(USER_NAME);
+        u.setSurname(USER_SURNAME);
+        u.setEmail(USER_EMAIL);
         u.setRole(USER_ROLE);
         return u;
     }
 
     public static Asset asset() {
         AssetCategory category = new AssetCategory();
+        category.setId(CATEGORY_ID);
         category.setName(CATEGORY_NAME);
-        category.setApproval(false);
+        category.setBookingPeriod(BOOKING_PERIOD);
+        category.setApproval(CATEGORY_APPROVAL);
+
         Asset a = new Asset();
         a.setId(ASSET_ID);
         a.setName(ASSET_NAME);
+        a.setDescription(ASSET_DESCRIPTION);
+        a.setLocation(ASSET_LOCATION);
         a.setCategory(category);
         a.setStatus(ASSET_STATUS);
+
         return a;
     }
 

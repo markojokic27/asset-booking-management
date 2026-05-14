@@ -4,6 +4,7 @@ import de.bdr.asset.management.booking.BookingStatusEnum;
 
 import java.time.Instant;
 
+// all expect created/updated at
 public record BookingResponseDTO(
 
         Long id,

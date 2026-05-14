@@ -27,14 +27,22 @@ public class BookingMapperTestData {
         User user = new User();
         user.setId(USER_ID);
         user.setUsername(USER_NAME);
+        user.setSurname(USER_SURNAME);
+        user.setEmail(USER_EMAIL);
         user.setRole(USER_ROLE);
 
         AssetCategory category = new AssetCategory();
+        category.setId(CATEGORY_ID);
         category.setName(CATEGORY_NAME);
+        category.setBookingPeriod(BOOKING_PERIOD);
+        category.setApproval(CATEGORY_APPROVAL);
 
         Asset asset = new Asset();
+        asset.setId(ASSET_ID);
         asset.setName(ASSET_NAME);
         asset.setStatus(ASSET_STATUS);
+        asset.setDescription(ASSET_DESCRIPTION);
+        asset.setLocation(ASSET_LOCATION);
         asset.setCategory(category);
 
         b.setUser(user);

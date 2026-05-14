@@ -1,6 +1,7 @@
 package de.bdr.asset.management.booking;
 
 import de.bdr.asset.management.asset.Asset;
+import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.booking.dto.*;
 import de.bdr.asset.management.user.User;
 import org.mapstruct.*;
@@ -20,10 +21,12 @@ public interface BookingMapper {
 
     BookingResponseDTO toResponse(Booking entity);
 
+    @Mapping(target = "name", source = "username")
     UserSummaryDTO toUserSummary(User user);
 
-    @Mapping(target = "category", source = "category.name")
     AssetSummaryDTO toAssetSummary(Asset asset);
+
+    CategorySummaryDTO toCategorySummary(AssetCategory category);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

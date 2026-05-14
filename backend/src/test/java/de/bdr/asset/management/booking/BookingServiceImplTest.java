@@ -111,7 +111,7 @@ class BookingServiceImplTest {
     @Test
     void shouldThrowExceptionWhenUserNotFound() {
 
-        mockAdminUser();
+        when(securityService.isAdmin()).thenReturn(true);
 
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();
 

@@ -6,7 +6,9 @@ import java.util.List;
 
 import de.bdr.asset.management.asset.AssetStatusEnum;
 import de.bdr.asset.management.assetcategory.AssetCategory;
+import de.bdr.asset.management.assetcategory.BookingPeriodEnum;
 import de.bdr.asset.management.booking.dto.AssetSummaryDTO;
+import de.bdr.asset.management.booking.dto.CategorySummaryDTO;
 import de.bdr.asset.management.booking.dto.UserSummaryDTO;
 import de.bdr.asset.management.user.UserRoleEnum;
 import de.bdr.asset.management.user.UserStatusEnum;
@@ -16,13 +18,21 @@ public final class TestConstants {
     public static final Long USER_ID = 1L;
     public static final Long ASSET_ID = 1L;
     public static final Long BOOKING_ID = 1L;
+    public static final Long CATEGORY_ID = 10L;
     
-    public static final String USER_NAME = "Ivan Ivić";
+    public static final String USER_NAME = "Ivan";
+    public static final String USER_SURNAME = "Ivić";
+    public static final String USER_EMAIL = "ivan.ivic@example.com";
     public static final UserRoleEnum USER_ROLE = UserRoleEnum.EMPLOYEE;
 
     public static final String ASSET_NAME = "Dune";
-    public static final String CATEGORY_NAME = "Sci-Fi";
     public static final AssetStatusEnum ASSET_STATUS = AssetStatusEnum.ACTIVE;
+    public static final String ASSET_DESCRIPTION = "Sci-Fi Masterpiece";
+    public static final String ASSET_LOCATION = "Shelf A3";
+
+    public static final String CATEGORY_NAME = "Sci-Fi";
+    public static final BookingPeriodEnum BOOKING_PERIOD = BookingPeriodEnum.DAY; // Example enum value
+    public static final boolean CATEGORY_APPROVAL = false;
 
     public static final String NOTES_DATA = "Notes";
     public static final String UPDATED_NOTES_DATA = "Notes";
@@ -36,13 +46,25 @@ public final class TestConstants {
     public static final UserSummaryDTO USER_SUMMARY = new UserSummaryDTO(
             USER_ID,
             USER_NAME,
+            USER_SURNAME,
+            USER_EMAIL,
             USER_ROLE
     );
 
-    public static final AssetSummaryDTO ASSET_SUMMARY = new AssetSummaryDTO(
-            ASSET_NAME,
+    public static final CategorySummaryDTO CATEGORY_SUMMARY = new CategorySummaryDTO(
+            CATEGORY_ID,
             CATEGORY_NAME,
-            ASSET_STATUS
+            BOOKING_PERIOD,
+            CATEGORY_APPROVAL
+    );
+
+    public static final AssetSummaryDTO ASSET_SUMMARY = new AssetSummaryDTO(
+            ASSET_ID,
+            ASSET_NAME,
+            CATEGORY_SUMMARY,
+            ASSET_STATUS,
+            ASSET_DESCRIPTION,
+            ASSET_LOCATION
     );
 
     public static final List<UserStatusEnum> validUpdateUserStatuses = List.of(
