@@ -1,12 +1,22 @@
 import * as React from 'react';
 
 import FullCalendar from '@fullcalendar/react';
+
+import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 type CalendarEvent = {
   id: string;
   title: string;
+  start: Date;
+  end: Date;
+  backgroundColor?: string;
+  borderColor?: string;
+  extendedProps?: {
+    status: string;
+    notes?: string;
+  };
   start: Date;
   end: Date;
   backgroundColor?: string;
@@ -35,22 +45,10 @@ const isPastDate = (date: Date) => {
   return compareDate < today;
 };
 
-export function AvailabilityCalendar({
-  events,
-  onDateClick,
-  selectedDate,
-}: Props) {
-  const handleDateClick = React.useCallback(
-    (info: any) => {
-      if (isPastDate(info.date)) {
-        return;
-      }
-
-      onDateClick?.(info.dateStr);
-    },
-    [onDateClick]
-  );
-  console.log('events', events);
+export function AvailabilityCalendar({ events }: Props) {
+  const handleDateClick = React.useCallback((info: any) => {
+    console.log('Selected date:', info.dateStr);
+  }, []);
 
   const handleEventClick = React.useCallback((info: any) => {
     const { status, notes } = info.event.extendedProps;
@@ -68,34 +66,19 @@ export function AvailabilityCalendar({
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         height="auto"
-        firstDay={1}
         fixedWeekCount={false}
         showNonCurrentDates={false}
         events={events}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
-        displayEventTime={false} //fix for HOUR variant
-        dayCellClassNames={(arg) => {
-          const date = arg.date.toLocaleDateString('sv-SE');
-
-          const isSelected = selectedDate === date;
-
-          const isPast = isPastDate(arg.date);
-
-          return [
-            'transition-all duration-150',
-
-            isPast
-              ? ' bg-gray-100 text-gray-400 opacity-80 dark:bg-gray-900 dark:text-gray-600'
-              : 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20',
-
-            isSelected
-              ? 'bg-blue-100 ring-2 ring-blue-500 dark:bg-blue-900/40'
-              : '',
-          ].join(' ');
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: '',
         }}
         eventDisplay="block"
       />
     </div>
   );
 }
+

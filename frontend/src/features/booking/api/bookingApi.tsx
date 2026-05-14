@@ -1,9 +1,5 @@
 // Types
-import type {
-  BookingDto,
-  BookingWithRelations,
-  CreateBookingDto,
-} from '../types';
+import type { BookingDto, BookingWithRelations } from '../types';
 
 // API
 import api from '../../../shared/api';
@@ -29,6 +25,7 @@ export const getAllAssetBookings = async (
   size = 10,
   assetId: number
 ) => {
+  const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
   const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
     params: { page, size, assetId },
   });
