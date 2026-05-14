@@ -243,6 +243,31 @@ frontend-package-vulnerabilities-check:
     paths:
       - frontend/node_modules/
 
+#osv security stage, backend and frontedn
+osv-scanner:
+  stage: security
+  image:
+    name: ghcr.io/google/osv-scanner:v2.3.8  
+    entrypoint: [""]                          
+  needs: []                                   
+  script:
+    # Scan both frontend (npm) and backend (Maven) lockfiles recursively
+    - /osv-scanner scan source --format json -r . > osv-report.json || true
+    # Second run exits non-zero if vulns found — this is what actually blocks/allows
+    - /osv-scanner scan source -r .
+  artifacts:
+    when: always                               # keep report even if job fails
+    paths:
+      - osv-report.json
+    expire_in: 14 days
+  allow_failure: true                          # remove this once baseline is clean
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"    # nightly
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'   # blocks bad MRs
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
+
 
 # ─────────────────────────────────────────
 # BRUNO STAGE
@@ -272,10 +297,8 @@ bruno:smoke:
     JWT_REFRESH_SECONDS: "86400"
 
   before_script:
-    # - apk add --no-cache openjdk21-jre maven curl
-    # - npm install -g @usebruno/cli
     - apk add --no-cache --quiet openjdk21-jre maven curl > /dev/null 2>&1
-    - npm install -g @usebruno/cli --silent
+    - npm install -g @usebruno/cli@3.3.0 --silent 
 
   script:
     - cd backend
