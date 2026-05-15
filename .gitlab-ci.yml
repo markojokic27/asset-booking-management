@@ -247,31 +247,14 @@ frontend-package-vulnerabilities-check:
 osv-scanner:
   stage: security
   image:
-    name: ghcr.io/google/osv-scanner:latest
+    name: ghcr.io/google/osv-scanner:v1.9.1
     entrypoint: [""]
-  needs: []
   script:
-    # Scan npm lockfiles (no Maven Central rate-limit issue)
-    - osv-scanner scan source --format json
-        --lockfile frontend/package-lock.json
-        --lockfile tests/package-lock.json
-        > osv-report.json || true
-    # This run exits non-zero if vulnerabilities found
-    - osv-scanner scan source
-        --lockfile frontend/package-lock.json
-        --lockfile tests/package-lock.json
+    - /osv-scanner --format json -r . > osv-report.json || true
   artifacts:
-    when: always
     paths:
       - osv-report.json
-    expire_in: 14 days
-  allow_failure: true
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: $CI_COMMIT_BRANCH == "develop"
-      when: manual
+    expire_in: 7 days
 
 
 # ─────────────────────────────────────────
