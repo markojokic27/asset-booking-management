@@ -194,6 +194,7 @@ frontend:test:
 # ─────────────────────────────────────────
 # SECURITY STAGE
 # ─────────────────────────────────────────
+#backend owasp chech
 backend-dependency-check:
   stage: security
   image: maven:3.9-eclipse-temurin-21
@@ -260,6 +261,25 @@ osv-scanner:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
+
+socket-security:
+  stage: security
+  image:
+    name: socketdev/cli:latest
+    entrypoint: [""]
+  variables:
+    SOCKET_SECURITY_API_KEY: $SOCKET_SECURITY_API_KEY
+    GITLAB_TOKEN: $GITLAB_TOKEN
+    # This is an option to help speed up the processing
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  allow_failure: true
+  #hardcoded 0 instead of ${CI_MERGE_REQUEST_IID:-0} for ommiting MR comments
+  script:
+    - |
+      socketcli \
+        --target-path $CI_PROJECT_DIR \
+        --scm gitlab \
+        --pr-number 0  
 
 
 # ─────────────────────────────────────────
