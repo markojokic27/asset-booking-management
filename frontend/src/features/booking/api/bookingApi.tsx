@@ -1,5 +1,9 @@
 // Types
-import type { BookingDto, BookingWithRelations } from '../types';
+import type {
+  BookingDto,
+  BookingWithRelations,
+  CreateBookingDto,
+} from '../types';
 
 // API
 import api from '../../../shared/api';
