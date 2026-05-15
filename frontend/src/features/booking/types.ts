@@ -50,6 +50,15 @@ export type BookingWithRelations = BookingDto & {
   };
 };
 
+export type CreateBookingDto = {
+  userId: number;
+  assetId: number;
+  status: string;
+  bookingStart: string;
+  bookingEnd: string;
+  notes?: string;
+};
+
 export type Filters = {
   search: string;
   fromDate: string;

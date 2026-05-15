@@ -4,6 +4,12 @@ import { useParams } from 'react-router-dom';
 
 // Hooks
 import { useBookingsByAsset } from '../features/booking/hooks/useBookingByAsset';
+import { useBookingFilters } from '../features/booking/hooks/useBookingFilters';
+import { useBookingAvailability } from '../features/booking/hooks/useBookingAvailability';
+import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
+
+// Utils
+import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
@@ -11,85 +17,31 @@ import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { Button } from '../components/ui/Button';
 
-// Types
-import type { Filters } from '../features/booking/types';
-
-const defaultFilters: Filters = {
-  search: '',
-  fromDate: '',
-  toDate: '',
-  fromHour: '',
-  toHour: '',
-};
-
-const STATUS_COLORS: Record<string, string> = {
-  APPROVED: '#22c55e',
-  PENDING: '#f59e0b',
-  REJECTED: '#ef4444',
-  CANCELLED: '#6b7280',
-};
-
 export default function BookingsByAsset() {
   const { assetId } = useParams();
-  const [filters, setFilters] = React.useState<Filters>(defaultFilters);
 
-  const { bookings, loading, error } = useBookingsByAsset(assetId!);
+  const { filters, setFilters, handleCalendarDateClick } = useBookingFilters();
+
+  const { bookings, loading, error, refetch } = useBookingsByAsset(assetId!);
 
   const asset = bookings?.[0]?.asset;
 
-  const calendarEvents = React.useMemo(() => {
-    return bookings.map((booking) => ({
-      id: booking.id.toString(),
-      title: booking.user.surname,
-      start: new Date(booking.bookingStart),
-      end: new Date(booking.bookingEnd),
-      backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
-      borderColor: STATUS_COLORS[booking.status] || '#3b82f6',
-      extendedProps: {
-        status: booking.status,
-        notes: booking.notes,
-      },
-    }));
-  }, [bookings]);
+  const calendarEvents = React.useMemo(
+    () => mapBookingsToCalendarEvents(bookings),
+    [bookings]
+  );
 
-  const handleCalendarDateClick = React.useCallback((date: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      fromDate: date,
-      toDate: date,
-      fromHour: '06:00',
-      toHour: '22:00',
-    }));
-  }, []);
+  const isButtonDisabled = useBookingAvailability({
+    assetStatus: asset?.status,
+    filters,
+    bookings,
+  });
 
-  const isButtonDisabled = () => {
-    if (
-      asset?.status !== 'ACTIVE' ||
-      !filters.fromDate ||
-      !filters.toDate ||
-      !filters.fromHour ||
-      !filters.toHour
-    ) {
-      return true;
-    }
-
-    const selectedStart = new Date(
-      `${filters.fromDate}T${filters.fromHour}:00`
-    );
-
-    const selectedEnd = new Date(`${filters.toDate}T${filters.toHour}:00`);
-
-    return bookings.some((booking) => {
-      if (booking.status !== 'APPROVED' && booking.status !== 'PENDING') {
-        return false;
-      }
-
-      const bookingStart = new Date(booking.bookingStart);
-      const bookingEnd = new Date(booking.bookingEnd);
-
-      return selectedStart < bookingEnd && selectedEnd > bookingStart;
-    });
-  };
+  const { isCreating, handleCreateBooking } = useCreateBooking({
+    assetId: Number(assetId),
+    filters,
+    refetch,
+  });
 
   if (loading) {
     return (
@@ -141,8 +93,9 @@ export default function BookingsByAsset() {
           </span>
         </div>
 
-        <p>Location: TODO</p>
+        <p>Location: {asset.location}</p>
       </div>
+
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />
 
       <div className="mb-6 flex w-full items-end justify-between gap-4">
@@ -158,32 +111,11 @@ export default function BookingsByAsset() {
           variant="solid"
           className="h-fit"
           size="md"
-          disabled={isButtonDisabled()}
+          disabled={isButtonDisabled || isCreating}
+          onClick={handleCreateBooking}
         >
-          Book
+          {isCreating ? 'Booking...' : 'Book'}
         </Button>
-      </div>
-
-      <div className="mb-4 flex flex-wrap gap-4 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded bg-green-500" />
-          Approved
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded bg-yellow-500" />
-          Pending
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded bg-red-500" />
-          Rejected
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded bg-gray-500" />
-          Cancelled
-        </div>
       </div>
 
       <AvailabilityCalendar

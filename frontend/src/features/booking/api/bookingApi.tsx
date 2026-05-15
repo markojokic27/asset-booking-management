@@ -1,5 +1,9 @@
 // Types
-import type { BookingDto, BookingWithRelations } from '../types';
+import type {
+  BookingDto,
+  BookingWithRelations,
+  CreateBookingDto,
+} from '../types';
 
 // API
 import api from '../../../shared/api';
@@ -42,5 +46,11 @@ export const getAllCategoryBookings = async (
     params: { page, size, categoryId },
   });
   console.log(res);
+  return res.data;
+};
+
+// create booking
+export const createBooking = async (bookingData: CreateBookingDto) => {
+  const res = await api.post<BookingDto>('/bookings', bookingData);
   return res.data;
 };
