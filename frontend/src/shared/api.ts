@@ -54,9 +54,15 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     if (
-      error.response?.status !== 401 ||
-      isAuthEndpointWithoutRefresh(originalRequest?.url)
+      originalRequest.url?.includes('/auth/login') ||
+      originalRequest.url?.includes('/auth/register')
     ) {
+      return Promise.reject(error);
+    }
+
+    if (error.response?.status !== 401||
+      isAuthEndpointWithoutRefresh(originalRequest?.url)
+    ) { {
       return Promise.reject(error);
     }
 

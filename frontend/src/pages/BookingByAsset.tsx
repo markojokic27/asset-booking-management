@@ -1,12 +1,23 @@
 // External packages
+import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import * as React from 'react';
 
 // Hooks
 import { useBookingsByAsset } from '../features/booking/hooks/useBookingByAsset';
 
+// Utils
+import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
+import { useBookingFilters } from '../features/booking/hooks/useBookingFilters';
+import { useBookingAvailability } from '../features/booking/hooks/useBookingAvailability';
+import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
+
+
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
+import { FiltersBar } from '../features/booking/components/FilterBar';
+import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
+import { Button } from '../components/ui/Button';
 import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { Button } from '../components/ui/Button';

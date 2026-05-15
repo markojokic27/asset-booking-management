@@ -1,10 +1,10 @@
 package de.bdr.asset.management.booking;
 
-import de.bdr.asset.management.booking.dto.BookingResponseDTO;
+import de.bdr.asset.management.asset.Asset;
+import de.bdr.asset.management.assetcategory.AssetCategory;
+import de.bdr.asset.management.booking.dto.*;
+import de.bdr.asset.management.user.User;
 import org.mapstruct.*;
-
-import de.bdr.asset.management.booking.dto.BookingCreateDTO;
-import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 
 @Mapper(
         componentModel = "spring",
@@ -19,9 +19,13 @@ public interface BookingMapper {
     @Mapping(target = "asset", ignore = true)
     Booking toEntity(BookingCreateDTO request);
 
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "assetId", source = "asset.id")
     BookingResponseDTO toResponse(Booking entity);
+
+    UserSummaryDTO toUserSummary(User user);
+
+    AssetSummaryDTO toAssetSummary(Asset asset);
+
+    CategorySummaryDTO toCategorySummary(AssetCategory category);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)

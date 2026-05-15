@@ -97,7 +97,7 @@ export const AssetReportModal: React.FC<AssetReportModalProps> = ({ isOpen, onCl
       onClose={onClose}
       ariaLabel={t('assets.table.ariaReport')}
       headerRight={
-        <IconButton data-testid="close-view-modal" onClick={onClose} aria-label={t('assets.modals.close')}>
+        <IconButton onClick={onClose} aria-label={t('assets.modals.close')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }

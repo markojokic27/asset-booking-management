@@ -1,6 +1,13 @@
 import type { AssetDto } from '../asset/types';
 
-export type BookingStatus = 'SUCCESSFUL' | 'PENDING' | 'REJECTED';
+// TODO fix this, changes in Database are needed
+export type BookingStatus =
+  | 'APPROVED'
+  | 'PENDING'
+  | 'REJECTED'
+  | 'ACTIVE'
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 export type Booking = {
   id: string;
@@ -18,6 +25,38 @@ export type BookingDto = Booking & {
   userName?: string;
   assetName?: string;
   assetCategory?: string;
+};
+
+export type BookingWithRelations = BookingDto & {
+  user: {
+    id: number;
+    name: string;
+    surname: string;
+    email: string;
+    role: string;
+  };
+  asset: {
+    id: number;
+    name: string;
+    category: {
+      id: number;
+      name: string;
+      bookingPeriod: string;
+      approval: boolean;
+    };
+    status: string;
+    description: string;
+    location: string;
+  };
+};
+
+export type CreateBookingDto = {
+  userId: number;
+  assetId: number;
+  status: string;
+  bookingStart: string;
+  bookingEnd: string;
+  notes?: string;
 };
 
 export type Filters = {
