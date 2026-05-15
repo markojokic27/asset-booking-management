@@ -12,7 +12,6 @@ import { AvailabilityCalendar } from '../features/booking/components/Availabilit
 import { Button } from '../components/ui/Button';
 
 // Types
-import type { BookingDto } from '../features/booking/types';
 import type { AssetDto } from '../features/asset/types';
 import type { Filters } from '../features/booking/types';
 
@@ -30,9 +29,7 @@ export default function BookingsByAsset() {
   const { assetId } = useParams();
   const [filters, setFilters] = React.useState<Filters>(defaultFilters);
 
-  const { bookings, loading, error } = useBookingsByAsset(assetId!);
-  const selectedFrom = `${filters.fromDate || '-'} ${filters.fromHour || ''}`;
-  const selectedTo = `${filters.toDate || '-'} ${filters.toHour || ''}`;
+  const { loading, error } = useBookingsByAsset(assetId!);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Greška</div>;

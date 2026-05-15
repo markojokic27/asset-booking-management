@@ -11,7 +11,7 @@ import { FormInput } from '../../../components/ui/FormInput';
 
 // Types
 import { assetStatuses, type AssetDto, type AssetStatus } from '../types';
-import type { AssetCategory } from '../../asset-category/types';
+import type { AssetCategoryDto } from '../../asset-category/types';
 
 // Utilis
 import { assetValidationSchema } from '../validation';
@@ -62,7 +62,7 @@ export const AssetEditModal = ({
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [categories, setCategories] = useState<AssetCategory[]>([]);
+  const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
   const [categoriesError, setCategoriesError] = useState('');
 
