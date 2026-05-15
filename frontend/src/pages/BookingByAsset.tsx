@@ -57,8 +57,39 @@ export default function BookingsByAsset() {
       ...prev,
       fromDate: date,
       toDate: date,
+      fromHour: '06:00',
+      toHour: '22:00',
     }));
   }, []);
+
+  const isButtonDisabled = () => {
+    if (
+      asset?.status !== 'ACTIVE' ||
+      !filters.fromDate ||
+      !filters.toDate ||
+      !filters.fromHour ||
+      !filters.toHour
+    ) {
+      return true;
+    }
+
+    const selectedStart = new Date(
+      `${filters.fromDate}T${filters.fromHour}:00`
+    );
+
+    const selectedEnd = new Date(`${filters.toDate}T${filters.toHour}:00`);
+
+    return bookings.some((booking) => {
+      if (booking.status !== 'APPROVED' && booking.status !== 'PENDING') {
+        return false;
+      }
+
+      const bookingStart = new Date(booking.bookingStart);
+      const bookingEnd = new Date(booking.bookingEnd);
+
+      return selectedStart < bookingEnd && selectedEnd > bookingStart;
+    });
+  };
 
   if (loading) {
     return (
@@ -127,7 +158,7 @@ export default function BookingsByAsset() {
           variant="solid"
           className="h-fit"
           size="md"
-          disabled={asset.status !== 'ACTIVE'}
+          disabled={isButtonDisabled()}
         >
           Book
         </Button>
