@@ -112,6 +112,7 @@ export default function BookingsByAsset() {
 
         <p>Location: TODO</p>
       </div>
+      <div className="mb-6 h-px w-full bg-(--color-table-border)" />
 
       <div className="mb-6 flex w-full items-end justify-between gap-4">
         <FiltersBar
