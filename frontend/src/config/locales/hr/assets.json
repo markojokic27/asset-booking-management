@@ -89,5 +89,15 @@
         "rejected": "Odbijene"
       }
     }
+  },
+  "validation": {
+    "nameRequired": "Naziv imovine je obavezan",
+    "nameMax": "Naziv smije imati najviše 100 znakova",
+    "categoryRequired": "Kategorija je obavezna",
+    "descriptionMax": "Opis smije imati najviše 255 znakova",
+    "codeRequired": "QR kod je obavezan",
+    "codeMax": "QR kod smije imati najviše 2000 znakova",
+    "locationRequired": "Lokacija je obavezna",
+    "locationMax": "Lokacija smije imati najviše 255 znakova"
   }
 }

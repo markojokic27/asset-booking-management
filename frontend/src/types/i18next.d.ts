@@ -8,6 +8,7 @@ import enAccount from '../config/locales/en/account.json';
 import enAssetCategories from '../config/locales/en/assetCategories.json';
 import enAssets from '../config/locales/en/assets.json';
 import enBookings from '../config/locales/en/bookings.json';
+import enDepartments from '../config/locales/en/departments.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -21,6 +22,7 @@ declare module 'i18next' {
         assetCategories: typeof enAssetCategories;
         assets: typeof enAssets;
         bookings: typeof enBookings;
+        departments: typeof enDepartments;
       };
     };
   }

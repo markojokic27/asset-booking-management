@@ -15,7 +15,7 @@ import { Modal } from '../../../components/ui/Modal';
 import { changeOwnPassword } from '../api/users';
 
 // validation
-import { userValidationSchema } from '../validation';
+import { createUserValidationSchema } from '../validation';
 
 // types
 import type { UserDto } from '../types';
@@ -71,7 +71,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
     }
 
      // Validate new password against shared password rules
-    const newPwResult = userValidationSchema.shape.password.safeParse(raw.newPassword);
+    const newPwResult = createUserValidationSchema(t).shape.password.safeParse(raw.newPassword);
     if (!newPwResult.success) {
       next.newPassword = newPwResult.error.issues[0]?.message ?? '';
     }

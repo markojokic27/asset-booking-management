@@ -1,5 +1,8 @@
-import { assetValidationSchema } from "../../features/asset/validation";
+import { createAssetValidationSchema } from '../../features/asset/validation';
 import { describe, test, expect } from 'vitest';
+import { testT } from '../testI18n';
+
+const assetValidationSchema = createAssetValidationSchema(testT);
 
 describe("Asset schema validation", () => {
     test("should pass with valid data", () => {

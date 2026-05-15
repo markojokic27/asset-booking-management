@@ -109,5 +109,42 @@
       "editAria": "Benutzer bearbeiten",
       "deleteAria": "Benutzer löschen"
     }
+  },
+  "validation": {
+    "username": {
+      "min": "Benutzername muss mindestens 3 Zeichen lang sein",
+      "max": "Benutzername darf höchstens 50 Zeichen lang sein",
+      "pattern": "Nur Buchstaben, Zahlen sowie ., _ und - sind erlaubt"
+    },
+    "surname": {
+      "required": "Nachname ist erforderlich",
+      "min": "Nachname muss mindestens 3 Zeichen lang sein",
+      "max": "Nachname darf höchstens 100 Zeichen lang sein",
+      "pattern": "Nachname darf nur Buchstaben enthalten"
+    },
+    "name": {
+      "required": "Vorname ist erforderlich",
+      "min": "Vorname muss mindestens 3 Zeichen lang sein",
+      "max": "Vorname darf höchstens 100 Zeichen lang sein",
+      "pattern": "Vorname darf nur Buchstaben enthalten"
+    },
+    "email": {
+      "invalid": "E-Mail hat kein gültiges Format",
+      "max": "E-Mail darf höchstens 254 Zeichen lang sein"
+    },
+    "password": {
+      "min": "Passwort muss mindestens 8 Zeichen lang sein",
+      "max": "Passwort darf höchstens 50 Zeichen lang sein"
+    },
+    "department": {
+      "required": "Abteilung ist erforderlich"
+    },
+    "managerEmail": {
+      "invalid": "E-Mail des Managers hat kein gültiges Format",
+      "max": "E-Mail des Managers darf höchstens 254 Zeichen lang sein"
+    },
+    "notes": {
+      "max": "Notizen dürfen höchstens 1000 Zeichen lang sein"
+    }
   }
 }

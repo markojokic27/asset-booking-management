@@ -1,5 +1,5 @@
 // External packages
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,19 +14,11 @@ import { assetStatuses, type AssetDto, type AssetStatus } from '../types';
 import type { AssetCategoryDto } from '../../asset-category/types';
 
 // Utilis
-import { assetValidationSchema } from '../validation';
+import { createAssetValidationSchema } from '../validation';
 
 // API
 import { updateAsset } from '../api/assetApi';
 import { getAllCategories } from '../../asset-category/api/categoryApi';
-
-const assetEditSchema = assetValidationSchema.pick({
-  name: true,
-  categoryId: true,
-  description: true,
-  status: true,
-  location: true,
-});
 
 type AssetEditModalProps = {
   isOpen: boolean;
@@ -59,6 +51,17 @@ export const AssetEditModal = ({
   onSave,
 }: AssetEditModalProps) => {
   const { t } = useTranslation();
+  const assetEditSchema = useMemo(
+    () =>
+      createAssetValidationSchema(t).pick({
+        name: true,
+        categoryId: true,
+        description: true,
+        status: true,
+        location: true,
+      }),
+    [t],
+  );
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');

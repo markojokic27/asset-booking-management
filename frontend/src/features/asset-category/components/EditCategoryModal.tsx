@@ -118,7 +118,7 @@ export const EditCategoryModal: React.FC<Props> = ({
                                 label={t('assetCategories.modals.edit.fields.name')}
                                 error={!!errors.name}
                                 errorMessage={errors.name?.message}
-                                {...register('name', { required: t('assetCategories.modals.edit.validation.nameRequired') })}
+                                {...register('name', { required: t('assetCategories.validation.nameRequired') })}
                             />
 
                             <FormInput
@@ -134,7 +134,7 @@ export const EditCategoryModal: React.FC<Props> = ({
                                 options={bookingPeriodOptions}
                                 error={!!errors.bookingPeriod}
                                 errorMessage={errors.bookingPeriod?.message}
-                                {...register('bookingPeriod', { required: t('assetCategories.modals.edit.validation.bookingPeriodRequired') })}
+                                {...register('bookingPeriod', { required: t('assetCategories.validation.bookingPeriodRequired') })}
                             />
 
                             <div className="flex items-center gap-2">

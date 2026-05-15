@@ -109,5 +109,42 @@
       "editAria": "Uredi korisnika",
       "deleteAria": "Obriši korisnika"
     }
+  },
+  "validation": {
+    "username": {
+      "min": "Korisničko ime mora imati najmanje 3 znaka",
+      "max": "Korisničko ime smije imati najviše 50 znakova",
+      "pattern": "Dopuštena su samo slova, brojke te znakovi ., _ i -"
+    },
+    "surname": {
+      "required": "Prezime je obavezno",
+      "min": "Prezime mora imati najmanje 3 znaka",
+      "max": "Prezime smije imati najviše 100 znakova",
+      "pattern": "Prezime smije sadržavati samo slova"
+    },
+    "name": {
+      "required": "Ime je obavezno",
+      "min": "Ime mora imati najmanje 3 znaka",
+      "max": "Ime smije imati najviše 100 znakova",
+      "pattern": "Ime smije sadržavati samo slova"
+    },
+    "email": {
+      "invalid": "E-mail nije u ispravnom formatu",
+      "max": "E-mail smije imati najviše 254 znaka"
+    },
+    "password": {
+      "min": "Lozinka mora imati najmanje 8 znakova",
+      "max": "Lozinka smije imati najviše 50 znakova"
+    },
+    "department": {
+      "required": "Odjel je obavezan"
+    },
+    "managerEmail": {
+      "invalid": "E-mail voditelja nije u ispravnom formatu",
+      "max": "E-mail voditelja smije imati najviše 254 znaka"
+    },
+    "notes": {
+      "max": "Bilješke smiju imati najviše 1000 znakova"
+    }
   }
 }

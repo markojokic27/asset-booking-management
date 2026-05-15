@@ -89,5 +89,15 @@
         "rejected": "Abgelehnt"
       }
     }
+  },
+  "validation": {
+    "nameRequired": "Anlagenname ist erforderlich",
+    "nameMax": "Name darf höchstens 100 Zeichen lang sein",
+    "categoryRequired": "Kategorie ist erforderlich",
+    "descriptionMax": "Beschreibung darf höchstens 255 Zeichen lang sein",
+    "codeRequired": "QR-Code ist erforderlich",
+    "codeMax": "QR-Code darf höchstens 2000 Zeichen lang sein",
+    "locationRequired": "Standort ist erforderlich",
+    "locationMax": "Standort darf höchstens 255 Zeichen lang sein"
   }
 }

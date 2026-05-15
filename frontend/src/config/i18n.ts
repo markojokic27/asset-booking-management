@@ -9,6 +9,7 @@ import enAccount from './locales/en/account.json';
 import enAssetCategories from './locales/en/assetCategories.json';
 import enAssets from './locales/en/assets.json';
 import enBookings from './locales/en/bookings.json';
+import enDepartments from './locales/en/departments.json';
 
 // Croatian translations
 import hrLayout from './locales/hr/layout.json';
@@ -18,6 +19,7 @@ import hrAccount from './locales/hr/account.json';
 import hrAssetCategories from './locales/hr/assetCategories.json';
 import hrAssets from './locales/hr/assets.json';
 import hrBookings from './locales/hr/bookings.json';
+import hrDepartments from './locales/hr/departments.json';
 
 // German translations
 import deLayout from './locales/de/layout.json';
@@ -27,6 +29,7 @@ import deAccount from './locales/de/account.json';
 import deAssetCategories from './locales/de/assetCategories.json';
 import deAssets from './locales/de/assets.json';
 import deBookings from './locales/de/bookings.json';
+import deDepartments from './locales/de/departments.json';
 
 export const LANGUAGE_STORAGE_KEY = 'language';
 const SUPPORTED_LANGUAGES = ['en', 'hr', 'de'] as const;
@@ -56,6 +59,7 @@ i18next.use(initReactI18next).init({
         assetCategories: enAssetCategories,
         assets: enAssets,
         bookings: enBookings,
+        departments: enDepartments,
       },
     },
     hr: {
@@ -67,6 +71,7 @@ i18next.use(initReactI18next).init({
         assetCategories: hrAssetCategories,
         assets: hrAssets,
         bookings: hrBookings,
+        departments: hrDepartments,
       },
     },
     de: {
@@ -78,6 +83,7 @@ i18next.use(initReactI18next).init({
         assetCategories: deAssetCategories,
         assets: deAssets,
         bookings: deBookings,
+        departments: deDepartments,
       },
     },
   },

@@ -1,38 +1,41 @@
+import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
 export const assetStatusSchema = z.enum(['ACTIVE', 'INACTIVE', 'DAMAGED']);
 
-export const assetValidationSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'Asset name is required')
-    .max(100, 'Name must be at most 100 characters long'),
+export function createAssetValidationSchema(t: TFunction) {
+  return z.object({
+    name: z
+      .string()
+      .trim()
+      .min(1, t('assets.validation.nameRequired'))
+      .max(100, t('assets.validation.nameMax')),
 
-  categoryId: z.coerce
-    .number({ message: 'Category is required' })
-    .int()
-    .positive('Category is required'),
+    categoryId: z.coerce
+      .number({ message: t('assets.validation.categoryRequired') })
+      .int()
+      .positive(t('assets.validation.categoryRequired')),
 
-  description: z
-    .string()
-    .trim()
-    .max(255, 'Description must be at most 255 characters long')
-    .optional(),
+    description: z
+      .string()
+      .trim()
+      .max(255, t('assets.validation.descriptionMax'))
+      .optional(),
 
-  code: z
-    .string()
-    .trim()
-    .min(1, 'QR code is required')
-    .max(2000, 'QR code must be at most 2000 characters long'),
+    code: z
+      .string()
+      .trim()
+      .min(1, t('assets.validation.codeRequired'))
+      .max(2000, t('assets.validation.codeMax')),
 
-  status: assetStatusSchema,
+    status: assetStatusSchema,
 
-  location: z
-    .string()
-    .trim()
-    .min(1, 'Location is required')
-    .max(255, 'Location must be at most 255 characters long'),
-});
+    location: z
+      .string()
+      .trim()
+      .min(1, t('assets.validation.locationRequired'))
+      .max(255, t('assets.validation.locationMax')),
+  });
+}
 
-export type AssetFormValues = z.infer<typeof assetValidationSchema>;
+export type AssetFormValues = z.infer<ReturnType<typeof createAssetValidationSchema>>;

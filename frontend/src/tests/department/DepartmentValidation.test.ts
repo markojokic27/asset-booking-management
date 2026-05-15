@@ -1,5 +1,8 @@
-import { departmentValidationSchema } from "../../features/department/validation";
+import { createDepartmentValidationSchema } from '../../features/department/validation';
 import { describe, test, expect } from 'vitest';
+import { testT } from '../testI18n';
+
+const departmentValidationSchema = createDepartmentValidationSchema(testT);
 
 
 describe("Department schema validation", () => {

@@ -79,5 +79,12 @@
     "day": "Tag",
     "week": "Woche",
     "month": "Monat"
+  },
+  "validation": {
+    "nameRequired": "Kategoriename ist erforderlich",
+    "nameMax": "Name darf höchstens 100 Zeichen lang sein",
+    "descriptionMax": "Beschreibung darf höchstens 255 Zeichen lang sein",
+    "bookingPeriodRequired": "Buchungszeitraum ist erforderlich",
+    "approvalRequired": "Genehmigung ist erforderlich"
   }
 }

@@ -81,5 +81,12 @@
     "day": "Day",
     "week": "Week",
     "month": "Month"
+  },
+  "validation": {
+    "nameRequired": "Category name is required",
+    "nameMax": "Name must be at most 100 characters long",
+    "descriptionMax": "Description must be at most 255 characters long",
+    "bookingPeriodRequired": "Booking period is required",
+    "approvalRequired": "Approval is required"
   }
 }

@@ -81,5 +81,12 @@
     "day": "Dan",
     "week": "Tjedan",
     "month": "Mjesec"
+  },
+  "validation": {
+    "nameRequired": "Naziv kategorije je obavezan",
+    "nameMax": "Naziv smije imati najviše 100 znakova",
+    "descriptionMax": "Opis smije imati najviše 255 znakova",
+    "bookingPeriodRequired": "Period rezervacije je obavezan",
+    "approvalRequired": "Odobrenje je obavezno"
   }
 }

@@ -1,16 +1,10 @@
 import * as Form from '@radix-ui/react-form';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
-import { userValidationSchema } from '../../user/validation';
+import { createUserValidationSchema } from '../../user/validation';
 import { useNavigate } from 'react-router';
-
-const registerSchema = userValidationSchema.pick({
-  username: true,
-  password: true,
-  name: true,
-  surname: true,
-});
+import { useTranslation } from 'react-i18next';
 
 const RegisterForm = () => {
   const [errors, setErrors] = useState({
@@ -21,6 +15,17 @@ const RegisterForm = () => {
   });
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const registerSchema = useMemo(
+    () =>
+      createUserValidationSchema(t).pick({
+        username: true,
+        password: true,
+        name: true,
+        surname: true,
+      }),
+    [t],
+  );
 
   const handleSubmit = async (data: FormData) => {
     const formData = {

@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
 export const bookingStatusSchema = z.enum([
@@ -6,40 +7,42 @@ export const bookingStatusSchema = z.enum([
   'REJECTED',
   'COMPLETED',
   'APPROVED',
-  'CANCELLED'
+  'CANCELLED',
 ]);
 
-export const bookingValidationSchema = z
-  .object({
-    userId: z.coerce
-      .number({ message: 'User is required' })
-      .int()
-      .positive('User is required'),
+export function createBookingValidationSchema(t: TFunction) {
+  return z
+    .object({
+      userId: z.coerce
+        .number({ message: t('bookings.validation.userRequired') })
+        .int()
+        .positive(t('bookings.validation.userRequired')),
 
-    assetId: z.coerce
-      .number({ message: 'Asset is required' })
-      .int()
-      .positive('Asset is required'),
+      assetId: z.coerce
+        .number({ message: t('bookings.validation.assetRequired') })
+        .int()
+        .positive(t('bookings.validation.assetRequired')),
 
-    status: bookingStatusSchema,
+      status: bookingStatusSchema,
 
-    bookingStart: z.date({
-      message: 'Booking start is required',
-    }),
+      bookingStart: z.date({
+        message: t('bookings.validation.bookingStartRequired'),
+      }),
 
-    bookingEnd: z.date({
-      message: 'Booking end is required',
-    }),
+      bookingEnd: z.date({
+        message: t('bookings.validation.bookingEndRequired'),
+      }),
 
-    note: z
-      .string()
-      .trim()
-      .max(1000, 'Note must be at most 1000 characters long')
-      .optional(),
-  })
-  .refine((data) => data.bookingEnd > data.bookingStart, {
-    path: ['bookingEnd'],
-    message: 'Booking end must be after booking start',
-  });
+      note: z
+        .string()
+        .trim()
+        .max(1000, t('bookings.validation.noteMax'))
+        .optional(),
+    })
+    .refine((data) => data.bookingEnd > data.bookingStart, {
+      path: ['bookingEnd'],
+      message: t('bookings.validation.endAfterStart'),
+    });
+}
 
-export type BookingFormValues = z.infer<typeof bookingValidationSchema>;
+export type BookingFormValues = z.infer<ReturnType<typeof createBookingValidationSchema>>;

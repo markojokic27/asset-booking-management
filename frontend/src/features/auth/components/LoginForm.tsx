@@ -1,16 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
-import { userValidationSchema } from '../../user/validation';
+import { createUserValidationSchema } from '../../user/validation';
 import { useNavigate } from 'react-router-dom';
 import api, { setAccessToken } from '../../../shared/api';
 import { useTranslation } from 'react-i18next';
-
-const loginSchema = userValidationSchema.pick({
-  username: true,
-  password: true,
-});
 
 const LoginForm = () => {
   const [errors, setErrors] = useState({
@@ -22,6 +17,14 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const loginSchema = useMemo(
+    () =>
+      createUserValidationSchema(t).pick({
+        username: true,
+        password: true,
+      }),
+    [t],
+  );
 
   const handleLogin = async (username: string, password: string) => {
     try {
