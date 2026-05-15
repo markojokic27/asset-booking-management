@@ -29,6 +29,15 @@ const notify = (token: string) => {
   subscribers = [];
 };
 
+const AUTH_ENDPOINTS_WITHOUT_REFRESH = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/refresh',
+];
+
+const isAuthEndpointWithoutRefresh = (url?: string) =>
+  AUTH_ENDPOINTS_WITHOUT_REFRESH.some((endpoint) => url?.includes(endpoint));
+
 api.interceptors.request.use((config) => {
   if (accessToken) {
     config.headers = config.headers || {};
@@ -44,7 +53,10 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status !== 401) {
+    if (
+      error.response?.status !== 401 ||
+      isAuthEndpointWithoutRefresh(originalRequest?.url)
+    ) {
       return Promise.reject(error);
     }
 
