@@ -40,8 +40,58 @@ otelcol.processor.batch "default" {
 //
 // LOGS -> LOKI
 //
+
+local.file_match "postgres_logs" {
+  path_targets = [
+    {
+      __path__ = "/var/log/postgresql/*.json",
+      job      = "postgres",
+    },
+  ]
+}
+
 otelcol.exporter.loki "default" {
   forward_to = [loki.write.default.receiver]
+}
+
+
+loki.source.file "postgres_logs" {
+  targets    = local.file_match.postgres_logs.targets
+  forward_to = [loki.process.postgres.receiver]
+
+  tail_from_end = true
+}
+
+loki.process "postgres" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.json {
+    expressions = {
+      level   = "error_severity",
+      message = "message",
+      db      = "dbname",
+      user    = "user",
+      app     = "application_name",
+      client  = "client_addr",
+    }
+  }
+
+  stage.regex {
+    expression = "duration: (?P<duration_ms>[0-9.]+) ms"
+    source     = "message"
+  }
+
+  stage.labels {
+    values = {
+      level = "",
+      db    = "",
+      app   = "",
+    }
+  }
+
+  stage.output {
+    source = "message"
+  }
 }
 
 loki.write "default" {

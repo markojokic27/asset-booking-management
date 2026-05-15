@@ -8,10 +8,16 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
     ports:
       - "${DB_PORT}:5432"
     volumes:
       - db_data:/var/lib/postgresql
+      - postgres_logs:/var/log/postgresql
+      - ./tools/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 5s
@@ -92,6 +98,7 @@ services:
       - /etc/alloy/config.alloy
     volumes:
       - ./tools/alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - postgres_logs:/var/log/postgresql:ro
     ports:
       - "4317:4317"
       - "4318:4318"
@@ -152,3 +159,4 @@ volumes:
   grafana_data:
   loki_data:
   tempo_data:
+  postgres_logs:
