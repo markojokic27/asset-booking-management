@@ -17,31 +17,26 @@ import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { Button } from '../components/ui/Button';
 
+// Types
+import type { AssetDto } from '../features/asset/types';
+import type { Filters } from '../features/booking/types';
+
+import { getAssetById } from '../features/asset/api/assetApi';
+
+const defaultFilters: Filters = {
+  search: '',
+  fromDate: '',
+  toDate: '',
+  fromHour: '',
+  toHour: '',
+};
+
 export default function BookingsByAsset() {
   const { assetId } = useParams();
 
   const { filters, setFilters, handleCalendarDateClick } = useBookingFilters();
 
-  const { bookings, loading, error, refetch } = useBookingsByAsset(assetId!);
-
-  const asset = bookings?.[0]?.asset;
-
-  const calendarEvents = React.useMemo(
-    () => mapBookingsToCalendarEvents(bookings),
-    [bookings]
-  );
-
-  const isButtonDisabled = useBookingAvailability({
-    assetStatus: asset?.status,
-    filters,
-    bookings,
-  });
-
-  const { isCreating, handleCreateBooking } = useCreateBooking({
-    assetId: Number(assetId),
-    filters,
-    refetch,
-  });
+  const { loading, error } = useBookingsByAsset(assetId!);
 
   if (loading) {
     return (
