@@ -391,4 +391,19 @@
 			</build>
 		</profile>
 	</profiles>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+        <version>1.62.0</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-extension-trace-propagators</artifactId>
+        <version>1.62.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
 </project>

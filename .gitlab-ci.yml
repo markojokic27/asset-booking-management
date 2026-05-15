@@ -217,7 +217,7 @@ backend-dependency-check:
       - backend/.m2/repository/
   allow_failure: true         # Don't block dockerize on first runs
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"   # Auto on nightly schedule
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # Auto on nightly schedule
     - if: $CI_COMMIT_BRANCH == "main"         
     - if: $CI_COMMIT_BRANCH == "develop"
       when: manual                            # Manual button on develop
@@ -234,7 +234,7 @@ frontend-package-vulnerabilities-check:
     - npm audit --audit-level=high --omit=dev
   allow_failure: true         # don't block on first runs
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"   # nightly
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # nightly
     - if: $CI_COMMIT_BRANCH == "main"        
     - if: $CI_COMMIT_BRANCH == "develop"
       when: manual                            
@@ -256,6 +256,10 @@ osv-scanner:
     paths:
       - osv-report.json
     expire_in: 7 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 
 # ─────────────────────────────────────────
