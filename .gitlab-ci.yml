@@ -250,8 +250,9 @@ osv-scanner:
     name: ghcr.io/google/osv-scanner:v1.9.1
     entrypoint: [""]
   script:
-    - /osv-scanner --format json -r . > osv-report.json || true
+    - /osv-scanner --format json -r . > osv-report.json #|| true #when true is ommited, job fails on vulnerability
   artifacts:
+    when: always
     paths:
       - osv-report.json
     expire_in: 7 days
