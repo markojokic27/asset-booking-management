@@ -1,5 +1,8 @@
-import { bookingValidationSchema } from "../../features/booking/validation";
+import { createBookingValidationSchema } from '../../features/booking/validation';
 import { describe, test, expect } from 'vitest';
+import { testT } from '../testI18n';
+
+const bookingValidationSchema = createBookingValidationSchema(testT);
 
 describe("Booking Schema Validation", () => {
     test("should pass with valid data", () => {

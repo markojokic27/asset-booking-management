@@ -1,5 +1,5 @@
 // external dependencies
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
@@ -12,25 +12,10 @@ import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 
 // validation
-import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
+import { createUserValidationSchema, userRoleSchema, userStatusSchema } from '../validation';
 
 // types
 import type { UserDto } from '../types';
-
-const userEditSchema = userValidationSchema
-  .pick({
-    name: true,
-    surname: true,
-    email: true,
-    role: true,
-    status: true,
-    departmentId: true,
-    managerEmail: true,
-    notes: true,
-  })
-  .extend({
-    status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
-  });
 
 type UserEditModalProps = {
   isOpen: boolean;
@@ -63,6 +48,24 @@ const initialErrors: FormErrors = {
 
 export const UserEditModal = ({ isOpen, onClose, user, onSave }: UserEditModalProps) => {
   const { t } = useTranslation();
+  const userEditSchema = useMemo(
+    () =>
+      createUserValidationSchema(t)
+        .pick({
+          name: true,
+          surname: true,
+          email: true,
+          role: true,
+          status: true,
+          departmentId: true,
+          managerEmail: true,
+          notes: true,
+        })
+        .extend({
+          status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
+        }),
+    [t],
+  );
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);

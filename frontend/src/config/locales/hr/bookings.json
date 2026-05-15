@@ -9,5 +9,13 @@
   "empty": {
     "loading": "Učitavanje imovine...",
     "noAssets": "Nema dostupne imovine."
+  },
+  "validation": {
+    "userRequired": "Korisnik je obavezan",
+    "assetRequired": "Imovina je obavezna",
+    "bookingStartRequired": "Početak rezervacije je obavezan",
+    "bookingEndRequired": "Kraj rezervacije je obavezan",
+    "noteMax": "Napomena smije imati najviše 1000 znakova",
+    "endAfterStart": "Kraj rezervacije mora biti nakon početka"
   }
 }

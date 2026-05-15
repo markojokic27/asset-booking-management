@@ -1,31 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
-import { userRoleSchema, userStatusSchema, userValidationSchema } from '../validation';
+import { createUserValidationSchema, userRoleSchema, userStatusSchema } from '../validation';
 import type { UserUpsertRequest } from '../types';
-
-const userCreateSchema = userValidationSchema
-  .pick({
-    username: true,
-    name: true,
-    surname: true,
-    email: true,
-    password: true,
-    role: true,
-    status: true,
-    departmentId: true,
-    managerEmail: true,
-    notes: true,
-  })
-  .extend({
-    status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
-  });
 
 export type UserCreateModalUser = Pick<
   UserUpsertRequest,
@@ -87,7 +70,27 @@ const initialValues: UserCreateModalUser = {
 };
 
 export const UserCreateModal = ({ isOpen, onClose, onCreate }: UserCreateModalProps) => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
+  const userCreateSchema = useMemo(
+    () =>
+      createUserValidationSchema(t)
+        .pick({
+          username: true,
+          name: true,
+          surname: true,
+          email: true,
+          password: true,
+          role: true,
+          status: true,
+          departmentId: true,
+          managerEmail: true,
+          notes: true,
+        })
+        .extend({
+          status: userStatusSchema.extract(['ACTIVE', 'INACTIVE']),
+        }),
+    [t],
+  );
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);

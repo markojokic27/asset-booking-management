@@ -1,5 +1,8 @@
-import { userValidationSchema } from '../../features/user/validation'
+import { createUserValidationSchema } from '../../features/user/validation';
 import { describe, test, expect } from 'vitest';
+import { testT } from '../testI18n';
+
+const userValidationSchema = createUserValidationSchema(testT);
 
 describe("User schema validation", () => {
     test("should pass with valid data", () => {

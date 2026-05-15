@@ -89,5 +89,15 @@
         "rejected": "Rejected"
       }
     }
+  },
+  "validation": {
+    "nameRequired": "Asset name is required",
+    "nameMax": "Name must be at most 100 characters long",
+    "categoryRequired": "Category is required",
+    "descriptionMax": "Description must be at most 255 characters long",
+    "codeRequired": "QR code is required",
+    "codeMax": "QR code must be at most 2000 characters long",
+    "locationRequired": "Location is required",
+    "locationMax": "Location must be at most 255 characters long"
   }
 }

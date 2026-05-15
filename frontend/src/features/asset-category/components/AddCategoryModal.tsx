@@ -142,7 +142,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
                         label={t('assetCategories.modals.add.fields.name')}
                         error={!!errors.name}
                         errorMessage={errors.name?.message}
-                        {...register('name', { required: t('assetCategories.modals.add.validation.nameRequired') })}
+                        {...register('name', { required: t('assetCategories.validation.nameRequired') })}
                     />
 
                     <FormInput
@@ -158,7 +158,7 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
                         options={bookingPeriodOptions}
                         error={!!errors.bookingPeriod}
                         errorMessage={errors.bookingPeriod?.message}
-                        {...register('bookingPeriod', { required: t('assetCategories.modals.add.validation.bookingPeriodRequired') })}
+                        {...register('bookingPeriod', { required: t('assetCategories.validation.bookingPeriodRequired') })}
                     />
 
                     <FormControlLabel

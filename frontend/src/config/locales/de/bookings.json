@@ -9,5 +9,13 @@
   "empty": {
     "loading": "Assets werden geladen...",
     "noAssets": "Keine Assets verfügbar."
+  },
+  "validation": {
+    "userRequired": "Benutzer ist erforderlich",
+    "assetRequired": "Asset ist erforderlich",
+    "bookingStartRequired": "Buchungsbeginn ist erforderlich",
+    "bookingEndRequired": "Buchungsende ist erforderlich",
+    "noteMax": "Notiz darf höchstens 1000 Zeichen lang sein",
+    "endAfterStart": "Buchungsende muss nach dem Buchungsbeginn liegen"
   }
 }

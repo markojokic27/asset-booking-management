@@ -109,5 +109,42 @@
       "editAria": "Edit user",
       "deleteAria": "Delete user"
     }
+  },
+  "validation": {
+    "username": {
+      "min": "Username must be at least 3 characters long",
+      "max": "Username must be at most 50 characters long",
+      "pattern": "Only letters, numbers, ., _, and - are allowed"
+    },
+    "surname": {
+      "required": "Surname is required",
+      "min": "Surname must be at least 3 characters long",
+      "max": "Surname must be at most 100 characters long",
+      "pattern": "Surname can contain letters only"
+    },
+    "name": {
+      "required": "Name is required",
+      "min": "Name must be at least 3 characters long",
+      "max": "Name must be at most 100 characters long",
+      "pattern": "Name can contain letters only"
+    },
+    "email": {
+      "invalid": "Email is not in a valid format",
+      "max": "Email must be at most 254 characters long"
+    },
+    "password": {
+      "min": "Password must be at least 8 characters long",
+      "max": "Password must be at most 50 characters long"
+    },
+    "department": {
+      "required": "Department is required"
+    },
+    "managerEmail": {
+      "invalid": "Manager's email is not in a valid format",
+      "max": "Manager's email must be at most 254 characters long"
+    },
+    "notes": {
+      "max": "Notes must be at most 1000 characters long"
+    }
   }
 }

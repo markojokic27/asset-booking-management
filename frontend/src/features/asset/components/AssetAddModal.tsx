@@ -1,5 +1,5 @@
 // External packages
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,19 +14,11 @@ import { assetStatuses, type AssetDto, type AssetStatus } from '../types';
 import type { AssetCategoryDto } from '../../asset-category/types';
 
 // Utilis
-import { assetValidationSchema } from '../validation';
+import { createAssetValidationSchema } from '../validation';
 
 // API
 import { getAllCategories } from '../../asset-category/api/categoryApi';
 import { createAsset } from '../api/assetApi';
-
-const assetAddSchema = assetValidationSchema.pick({
-  name: true,
-  categoryId: true,
-  description: true,
-  status: true,
-  location: true,
-});
 
 type AssetAddModalProps = {
   isOpen: boolean;
@@ -56,6 +48,17 @@ export const AssetAddModal = ({
   onSave,
 }: AssetAddModalProps) => {
   const { t } = useTranslation();
+  const assetAddSchema = useMemo(
+    () =>
+      createAssetValidationSchema(t).pick({
+        name: true,
+        categoryId: true,
+        description: true,
+        status: true,
+        location: true,
+      }),
+    [t],
+  );
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
