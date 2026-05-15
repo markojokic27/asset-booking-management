@@ -21,7 +21,6 @@ public interface BookingMapper {
 
     BookingResponseDTO toResponse(Booking entity);
 
-    @Mapping(target = "name", source = "username")
     UserSummaryDTO toUserSummary(User user);
 
     AssetSummaryDTO toAssetSummary(Asset asset);
