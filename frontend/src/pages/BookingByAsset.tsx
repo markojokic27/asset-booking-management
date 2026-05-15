@@ -52,6 +52,14 @@ export default function BookingsByAsset() {
     }));
   }, [bookings]);
 
+  const handleCalendarDateClick = React.useCallback((date: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      fromDate: date,
+      toDate: date,
+    }));
+  }, []);
+
   if (loading) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
@@ -146,7 +154,11 @@ export default function BookingsByAsset() {
         </div>
       </div>
 
-      <AvailabilityCalendar events={calendarEvents} />
+      <AvailabilityCalendar
+        events={calendarEvents}
+        selectedDate={filters.fromDate}
+        onDateClick={handleCalendarDateClick}
+      />
     </LayoutColumn>
   );
 }

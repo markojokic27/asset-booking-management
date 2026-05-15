@@ -19,12 +19,21 @@ type CalendarEvent = {
 
 type Props = {
   events: CalendarEvent[];
+  onDateClick?: (date: string) => void;
+  selectedDate?: string;
 };
 
-export function AvailabilityCalendar({ events }: Props) {
-  const handleDateClick = React.useCallback((info: any) => {
-    console.log('Selected date:', info.dateStr);
-  }, []);
+export function AvailabilityCalendar({
+  events,
+  onDateClick,
+  selectedDate,
+}: Props) {
+  const handleDateClick = React.useCallback(
+    (info: any) => {
+      onDateClick?.(info.dateStr);
+    },
+    [onDateClick]
+  );
 
   const handleEventClick = React.useCallback((info: any) => {
     const { status, notes } = info.event.extendedProps;
@@ -47,6 +56,18 @@ export function AvailabilityCalendar({ events }: Props) {
         events={events}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
+        dayCellClassNames={(arg) => {
+          const date = arg.date.toLocaleDateString('sv-SE');
+          const isSelected = selectedDate === date;
+
+          return [
+            'cursor-pointer transition-all duration-150',
+            'hover:bg-blue-50 dark:hover:bg-blue-900/20',
+            isSelected
+              ? 'bg-blue-100 dark:bg-blue-900/40 ring-2 ring-blue-500'
+              : '',
+          ].join(' ');
+        }}
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
