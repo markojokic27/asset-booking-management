@@ -5,7 +5,9 @@ import constants.CommonConstants;
 // import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -88,7 +90,16 @@ public class CommonMethods {
     public static void typeInElement(By locator, String text) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-            driver.findElement(locator).sendKeys(text);
+
+            WebElement element = driver.findElement(locator);
+            element.click();
+            element.sendKeys(Keys.CONTROL + "a");
+            element.sendKeys(Keys.BACK_SPACE);
+
+            if (text != null && !text.isEmpty()) {
+                element.sendKeys(text);
+            }
+
         } catch (Exception e) {
             log.error("type in element failed", e);
         }

@@ -36,7 +36,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
   const statusClassName = statusClassNames[asset.status];
 
   return (
-    <div
+    <div data-testid="asset-view-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
@@ -61,7 +61,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         <div className="flex gap-10 px-8 py-8">
           <div className="flex flex-1 flex-col items-stretch space-y-5">
             <span
-              data-testid="asset-status-badge"
+              data-testid="asset-status"
               className={[
                 'inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium',
                 statusClassName,
@@ -71,13 +71,12 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             </span>
             <div>
               <p
-                data-testid="asset-category-label"
+                data-testid="asset-category"
                 className="text-sm text-(--color-modal-label)"
               >
                 {t('assets.modals.view.category')}
               </p>
               <p
-                data-testid="asset-category-value"
                 className="font-medium text-(--color-text)"
               >
                 {asset.categoryName ?? '?'}
@@ -85,13 +84,12 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             </div>
             <div>
               <p
-                data-testid="asset-name-label"
+                data-testid="asset-name"
                 className="text-sm text-(--color-modal-label)"
               >
                 {t('assets.modals.fields.name')}
               </p>
               <p
-                data-testid="asset-name-value"
                 className="font-medium text-(--color-text)"
               >
                 {asset.name}
@@ -102,7 +100,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
                 {t('assets.modals.fields.description')}
               </p>
               <p
-                data-testid="asset-description-value"
+                data-testid="asset-description"
                 className="text-sm text-(--color-text)"
               >
                 {asset.description ?? '-'}

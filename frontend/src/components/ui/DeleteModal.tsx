@@ -36,7 +36,7 @@ export function DeleteModal<T>({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
-      <button
+      <button 
         type="button"
         aria-label={t('ui.deleteModal.closeDialog')}
         className="absolute inset-0 z-0 cursor-default border-0 bg-(--color-modal-overlay) p-0"
@@ -53,11 +53,11 @@ export function DeleteModal<T>({
         </p>
 
         <div className="mt-6 flex justify-end gap-3">
-          <Button type="button" variant="secondary" onClick={onClose}>
+          <Button   data-testid="cancel-delete-button" type="button" variant="secondary" onClick={onClose}>
             {t('ui.deleteModal.cancel')}
           </Button>
 
-          <Button type="button" variant="danger" onClick={onConfirm}>
+          <Button   data-testid="confirm-delete-button" type="button" variant="danger" onClick={onConfirm}>
             {t('ui.deleteModal.confirmDelete')}
           </Button>
         </div>

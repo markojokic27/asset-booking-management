@@ -52,7 +52,7 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
             {t('assets.categoryCard.badge')}
           </span>
           <div>
-            <span data-testid="asset-category-card-title" className="block text-base font-black tracking-[0.06em]">
+            <span className="block text-base font-black tracking-[0.06em]">
               {title}
             </span>
           </div>

@@ -146,7 +146,7 @@ export const AssetEditModal = ({
   };
 
   return (
-    <div
+    <div data-testid="asset-modal"
       className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
       role="dialog"
       aria-modal="true"
@@ -158,6 +158,7 @@ export const AssetEditModal = ({
       <div className="w-full max-w-200 overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
         <div className="flex items-center justify-end px-8 pt-6 pb-4">
           <button
+            data-testid="close-modal"
             type="button"
             onClick={onClose}
             aria-label="Close"
@@ -286,7 +287,7 @@ export const AssetEditModal = ({
           <div className="flex justify-end px-8 py-5">
             <Form.Submit asChild>
               <Button
-                data-testid="save-asset-button"
+                data-testid="save-edit-button"
                 type="submit"
                 disabled={isSubmitting}
               >
