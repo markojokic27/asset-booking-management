@@ -18,32 +18,48 @@ import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { Button } from '../components/ui/Button';
 
+// Types
+import type { Filters } from '../features/booking/types';
+
+const defaultFilters: Filters = {
+  search: '',
+  fromDate: '',
+  toDate: '',
+  fromHour: '',
+  toHour: '',
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  APPROVED: '#22c55e',
+  PENDING: '#f59e0b',
+  REJECTED: '#ef4444',
+  CANCELLED: '#6b7280',
+};
+
 export default function BookingsByAsset() {
   const { assetId } = useParams();
 
   const { filters, setFilters, handleCalendarDateClick } = useBookingFilters();
 
 
-  const { bookings, loading, error, refetch } = useBookingsByAsset(assetId!);
+  const { bookings, loading, error } = useBookingsByAsset(assetId!);
 
   const asset = bookings?.[0]?.asset;
 
-  const calendarEvents = React.useMemo(
-    () => mapBookingsToCalendarEvents(bookings),
-    [bookings]
-  );
-
-  const isButtonDisabled = useBookingAvailability({
-    assetStatus: asset?.status,
-    filters,
-    bookings,
-  });
-
-  const { isCreating, handleCreateBooking } = useCreateBooking({
-    assetId: Number(assetId),
-    filters,
-    refetch,
-  });
+  const calendarEvents = React.useMemo(() => {
+    return bookings.map((booking) => ({
+      id: booking.id.toString(),
+      title: booking.user.surname,
+      start: new Date(booking.bookingStart),
+      end: new Date(booking.bookingEnd),
+      backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
+      borderColor: STATUS_COLORS[booking.status] || '#3b82f6',
+      extendedProps: {
+        status: booking.status,
+        notes: booking.notes,
+      },
+    }));
+  }, [bookings]);
 
   if (loading) {
     return (
@@ -93,27 +109,10 @@ export default function BookingsByAsset() {
           >
             {asset.status}
           </span>
-      <div className="mb-6 flex items-baseline justify-between">
-        <div className="flex items-center gap-6">
-          <h1 className="text-3xl font-black text-black dark:text-white">
-            {asset.name}
-          </h1>
-
-          <span
-            className={`rounded px-3 py-1 text-sm font-medium ${
-              asset.status === 'ACTIVE'
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-200 text-gray-700'
-            }`}
-          >
-            {asset.status}
-          </span>
         </div>
 
-        <p>Location: {asset.location}</p>
+        <p>Location: TODO</p>
       </div>
-
-      <div className="mb-6 h-px w-full bg-(--color-table-border)" />
 
       <div className="mb-6 flex w-full items-end justify-between gap-4">
         <FiltersBar
@@ -128,18 +127,35 @@ export default function BookingsByAsset() {
           variant="solid"
           className="h-fit"
           size="md"
-          disabled={isButtonDisabled || isCreating}
-          onClick={handleCreateBooking}
+          disabled={asset.status !== 'ACTIVE'}
         >
-          {isCreating ? 'Booking...' : 'Book'}
+          Book
         </Button>
       </div>
 
-      <AvailabilityCalendar
-        events={calendarEvents}
-        selectedDate={filters.fromDate}
-        onDateClick={handleCalendarDateClick}
-      />
+      <div className="mb-4 flex flex-wrap gap-4 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-green-500" />
+          Approved
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-yellow-500" />
+          Pending
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-red-500" />
+          Rejected
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="h-3 w-3 rounded bg-gray-500" />
+          Cancelled
+        </div>
+      </div>
+
+      <AvailabilityCalendar events={calendarEvents} />
     </LayoutColumn>
   );
 }
