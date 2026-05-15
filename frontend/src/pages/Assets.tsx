@@ -8,6 +8,7 @@ import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { DeleteModal } from '../components/ui/DeleteModal';
 import { SearchInput } from '../components/ui/SearchBar';
+import { Pagination } from '../components/ui/Pagination';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
@@ -18,6 +19,9 @@ import { AssetReportModal } from '../features/asset/components/AssetReportModal'
 // API
 import { getAllAssets, updateAsset } from '../features/asset/api/assetApi';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
+
+// Hooks
+import { usePagination } from '../features/user/hooks/usePagination';
 
 // Types
 import type { AssetDto } from '../features/asset/types';
@@ -96,19 +100,25 @@ export default function Assets() {
       ? t('assets.categories.all')
       : selectedCategory;
 
-  const filteredAssets = assets.filter((asset) => {
-    const matchesSearch = asset.name
-      .toLowerCase()
-      .includes(search.trim().toLowerCase());
+  const filteredAssets = useMemo(
+    () =>
+      assets.filter((asset) => {
+        const matchesSearch = asset.name
+          .toLowerCase()
+          .includes(search.trim().toLowerCase());
 
-    const matchesCategory =
-      selectedCategory === 'Assets'
-        ? true
-        : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') ===
-          selectedCategory;
+        const matchesCategory =
+          selectedCategory === 'Assets'
+            ? true
+            : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') ===
+              selectedCategory;
 
-    return matchesSearch && matchesCategory;
-  });
+        return matchesSearch && matchesCategory;
+      }),
+    [assets, search, selectedCategory, categoryMap]
+  );
+
+  const pagination = usePagination(filteredAssets, 10);
 
   const closeModal = () => {
     setModal({ type: 'none' });
@@ -179,7 +189,7 @@ export default function Assets() {
           <div className="text-red-600">{serverError}</div>
         ) : (
           <AssetsTable
-            assets={filteredAssets}
+            assets={pagination.paged}
             categoryMap={categoryMap}
             onView={(asset) => setModal({ type: 'view', asset })}
             onEdit={(asset) => setModal({ type: 'edit', asset })}
@@ -189,6 +199,15 @@ export default function Assets() {
           />
         )}
       </div>
+
+      {filteredAssets.length > 0 && !loading && !serverError && (
+        <Pagination
+          page={pagination.page}
+          totalPages={pagination.totalPages}
+          items={pagination.items}
+          onPageChange={pagination.setPage}
+        />
+      )}
 
       <AssetModal
         isOpen={modal.type === 'view'}
