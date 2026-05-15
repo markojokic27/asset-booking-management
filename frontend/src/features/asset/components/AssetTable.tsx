@@ -70,7 +70,7 @@ export function AssetsTable({
         headerClassName: 'w-px whitespace-nowrap',
         cellClassName: 'w-px whitespace-nowrap',
         render: (asset) => (
-          <Button
+          <Button 
             size="sm"
             variant="solid"
             iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
@@ -102,6 +102,7 @@ export function AssetsTable({
             </IconButton>
             <IconButton
               type="button"
+              data-testid="report-asset-button"
               aria-label={t('assets.table.ariaReport')}
               onClick={() => onReport(asset)}
             >
