@@ -4,7 +4,7 @@ stages:
   - security
   - bruno
   #- sonar
-  - dockerize
+  #- dockerize
 
 
 
@@ -280,6 +280,10 @@ socket-security:
         --target-path $CI_PROJECT_DIR \
         --scm gitlab \
         --pr-number 0  
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 
 # ─────────────────────────────────────────
@@ -398,48 +402,48 @@ bruno:smoke:
 # ─────────────────────────────────────────
 # DOCKERIZE STAGE
 # ─────────────────────────────────────────
-backend:dockerize:
-  stage: dockerize
-  image: quay.io/podman/stable
-  services: []
-  needs:
-    - job: backend:compile
-    - job: backend:test
-  script:
-    - echo "Prepare images for backend"
-    - ls -al
-    - cd ./backend
-    - whoami
-    - id
-    - podman info
-    - podman build --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ -f ./Dockerfile -t $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA -t $BACKEND_IMAGE:latest .
-    - echo "Now pushing to $CI_REGISTRY with user $CI_REGISTRY_USER"
-    - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA
-    - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $BACKEND_IMAGE:latest
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"
+# backend:dockerize:
+#   stage: dockerize
+#   image: quay.io/podman/stable
+#   services: []
+#   needs:
+#     - job: backend:compile
+#     - job: backend:test
+#   script:
+#     - echo "Prepare images for backend"
+#     - ls -al
+#     - cd ./backend
+#     - whoami
+#     - id
+#     - podman info
+#     - podman build --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ -f ./Dockerfile -t $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA -t $BACKEND_IMAGE:latest .
+#     - echo "Now pushing to $CI_REGISTRY with user $CI_REGISTRY_USER"
+#     - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+#     - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $BACKEND_IMAGE:$CI_COMMIT_SHORT_SHA
+#     - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $BACKEND_IMAGE:latest
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"
 
 
-frontend:dockerize:
-  stage: dockerize
-  image: quay.io/podman/stable
-  services: []
-  needs:
-    - job: frontend:compile
-  before_script:
-    - podman --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ info
-    - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-  script:
-    - |
-      podman build \
-        --storage-driver=vfs \
-        --root $HOME/.local/share/containers/vfs-storage/ \
-        -f ./frontend/Dockerfile \
-        -t $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA \
-        -t $FRONTEND_IMAGE:latest \
-        ./frontend
-    - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA
-    - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $FRONTEND_IMAGE:latest
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"
+# frontend:dockerize:
+#   stage: dockerize
+#   image: quay.io/podman/stable
+#   services: []
+#   needs:
+#     - job: frontend:compile
+#   before_script:
+#     - podman --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ info
+#     - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+#   script:
+#     - |
+#       podman build \
+#         --storage-driver=vfs \
+#         --root $HOME/.local/share/containers/vfs-storage/ \
+#         -f ./frontend/Dockerfile \
+#         -t $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA \
+#         -t $FRONTEND_IMAGE:latest \
+#         ./frontend
+#     - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $FRONTEND_IMAGE:$CI_COMMIT_SHORT_SHA
+#     - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $FRONTEND_IMAGE:latest
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"

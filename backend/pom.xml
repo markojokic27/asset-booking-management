@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>4.0.6</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
 	<groupId>de.bdr.asset</groupId>
 	<artifactId>management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AssetBookingManagement</name>
 	<description>AssetBookingManagement application</description>
-	<url/>
-	<licenses><license/></licenses>
-	<developers><developer/></developers>
+	<url />
+	<licenses>
+		<license />
+	</licenses>
+	<developers>
+		<developer />
+	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
 	</scm>
 
 	<properties>
@@ -29,17 +34,19 @@
 		<lombok.version>1.18.38</lombok.version>
 		<tomcat.version>11.0.21</tomcat.version>
 		<jackson-bom.version>3.1.1</jackson-bom.version>
-		<!--CVE Groups Security fix with advised versions in dependency-check version: 12.1.9-->
+		<!--CVE
+		Groups Security fix with advised versions in dependency-check version: 12.1.9-->
 		<log4j2.version>2.25.4</log4j2.version>
-    	<spring-security.version>7.0.5</spring-security.version>
+		<spring-security.version>7.0.5</spring-security.version>
 
 		<!-- SonarQube configuration (used by the 'sonar' profile) -->
 		<sonar.projectKey>asset-booking-management-backend</sonar.projectKey>
 		<sonar.projectName>AssetBookingManagement Backend</sonar.projectName>
 		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+		<tomcat.version>11.0.22</tomcat.version>
 	</properties>
 
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -151,7 +158,8 @@
 		</dependency>
 
 		<!-- OpenAPI v3 documentation generator based on code -->
-		<!-- Source: https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+		<!-- Source:
+		https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -164,13 +172,13 @@
 			<artifactId>swagger-ui</artifactId>
 			<version>5.32.5</version>
 			<scope>compile</scope>
-		</dependency>		
+		</dependency>
 		<!-- ZXing library for QR Code capabilities -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 			<version>3.3.0</version>
-    	</dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.zxing</groupId>
@@ -271,7 +279,8 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--MAVEN SITE LIFECYCLE PLUGIN -->
+			<!--MAVEN
+			SITE LIFECYCLE PLUGIN -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -280,7 +289,8 @@
 		</plugins>
 	</build>
 
-	<!--REPORTING SECTION FOR MAVEN SITE LIFECYCLE-->
+	<!--REPORTING
+	SECTION FOR MAVEN SITE LIFECYCLE-->
 	<reporting>
 		<plugins>
 
@@ -315,9 +325,11 @@
 		</plugins>
 	</reporting>
 
-	<!--SEE WIKI PAGE "Maven Build Profiles" ON HOW TO USE THEM-->
+	<!--SEE
+	WIKI PAGE "Maven Build Profiles" ON HOW TO USE THEM-->
 	<profiles>
-		<!--SONAR PROFILE-->
+		<!--SONAR
+		PROFILE-->
 		<profile>
 			<id>sonar</id>
 			<properties>
@@ -329,7 +341,7 @@
 					<plugin>
 						<groupId>org.sonarsource.scanner.maven</groupId>
 						<artifactId>sonar-maven-plugin</artifactId>
-    					<version>5.5.0.6356</version>
+						<version>5.5.0.6356</version>
 						<executions>
 							<execution>
 								<id>sonar-analysis</id>
@@ -338,12 +350,13 @@
 									<goal>sonar</goal>
 								</goals>
 							</execution>
-                		</executions>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
-		<!--OWASP PROFILE-->
+		<!--OWASP
+		PROFILE-->
 		<profile>
 			<id>owasp</id>
 			<build>
@@ -355,7 +368,7 @@
 							<version>5.1.0.4751</version>
 						</plugin>
 					</plugins>
-    			</pluginManagement>
+				</pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>org.owasp</groupId>
@@ -391,19 +404,19 @@
 			</build>
 		</profile>
 	</profiles>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.opentelemetry</groupId>
-        <artifactId>opentelemetry-api</artifactId>
-        <version>1.62.0</version>
-      </dependency>
-      <dependency>
-        <groupId>io.opentelemetry</groupId>
-        <artifactId>opentelemetry-extension-trace-propagators</artifactId>
-        <version>1.62.0</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.opentelemetry</groupId>
+				<artifactId>opentelemetry-api</artifactId>
+				<version>1.62.0</version>
+			</dependency>
+			<dependency>
+				<groupId>io.opentelemetry</groupId>
+				<artifactId>opentelemetry-extension-trace-propagators</artifactId>
+				<version>1.62.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
