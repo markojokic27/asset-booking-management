@@ -149,7 +149,9 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
                         data-testid="category-description"
                         id="asset-category-description"
                         label={t('assetCategories.modals.add.fields.description')}
-                        {...register('description')}
+                        error={!!errors.description}
+                        errorMessage={errors.description?.message}
+                        {...register('description',)}
                     />
 
                     <FormDropdown
