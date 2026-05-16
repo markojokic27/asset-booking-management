@@ -84,7 +84,7 @@ export const EditCategoryModal: React.FC<Props> = ({
     }
 
     return (
-        <div
+        <div data-testid="assetCategory-modal"
             className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
             role="dialog"
             aria-modal="true"
@@ -97,7 +97,7 @@ export const EditCategoryModal: React.FC<Props> = ({
                 <div className="relative flex items-center justify-center px-8 pt-6 pb-4">
                     <div className="text-center text-xl font-bold">{t('assetCategories.modals.edit.title')}</div>
 
-                    <Button
+                    <Button data-testid="category-close-modal"
                         type="button"
                         onClick={onClose}
                         aria-label={t('assetCategories.modals.common.closeAria')}
@@ -113,7 +113,7 @@ export const EditCategoryModal: React.FC<Props> = ({
                     <div className="flex gap-10 px-8 py-8">
                         <div className="flex flex-1 flex-col space-y-5">
                             <FormInput
-                                data-testid="edit-category-name"
+                                data-testid="category-name"
                                 id="category-name"
                                 label={t('assetCategories.modals.edit.fields.name')}
                                 error={!!errors.name}
@@ -122,14 +122,14 @@ export const EditCategoryModal: React.FC<Props> = ({
                             />
 
                             <FormInput
-                                data-testid="edit-category-description"
+                                data-testid="category-description"
                                 id="category-description"
                                 label={t('assetCategories.modals.edit.fields.description')}
                                 {...register('description')}
                             />
 
                             <FormDropdown
-                                data-testid="edit-category-booking-period"
+                                data-testid="category-booking-period"
                                 label={t('assetCategories.modals.edit.fields.bookingPeriod')}
                                 options={bookingPeriodOptions}
                                 error={!!errors.bookingPeriod}
@@ -139,7 +139,7 @@ export const EditCategoryModal: React.FC<Props> = ({
 
                             <div className="flex items-center gap-2">
                                 <Checkbox.Root
-                                    data-testid="edit-category-approval-checkbox"
+                                    data-testid="category-approval-checkbox"
                                     id="edit-category-approval"
                                     checked={undefined}
                                     onCheckedChange={(checked) =>

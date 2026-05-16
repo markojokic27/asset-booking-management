@@ -101,7 +101,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
             </p>
           </div>
 
-          <button data-testid="asset-booking-button"
+          <button data-testid="close-asset-bookings-modal"
             type="button"
             onClick={onClose}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover)"
@@ -122,7 +122,7 @@ export const AssetBookingsModal: React.FC<BookingsModalProps> = ({
         )}
 
         {!loading && !error && (
-          <Table
+          <Table 
             data={bookings}
             columns={bookingColumns}
             getRowKey={(booking) => booking.id}

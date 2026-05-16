@@ -55,7 +55,7 @@ export const AssetCategoriesTable = ({
             render: (category) => (
                 <div className="flex items-center gap-1">
 
-                    <button
+                    <button data-testid="view-assetCategory-button"
                         className="p-1.5 hover:text-(--color-primaryblue)"
                         onClick={() => onView(category)}
                         aria-label={t('assetCategories.table.rowActions.viewAria')}
@@ -63,7 +63,7 @@ export const AssetCategoriesTable = ({
                         <VisibilityOutlinedIcon fontSize="small" />
                     </button>
 
-                    <button
+                    <button data-testid="edit-assetCategory-button"
                         className="p-1.5 hover:text-(--color-primaryblue)"
                         onClick={() => onEdit?.(category)}
                         aria-label={t('assetCategories.table.rowActions.editAria')}

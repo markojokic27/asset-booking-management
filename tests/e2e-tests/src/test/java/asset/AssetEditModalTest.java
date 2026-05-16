@@ -42,11 +42,10 @@ public class AssetEditModalTest extends BaseLogin {
     // Edit asset with empty fields
 
     @Test
-    void assetEditModalWithEmptyName() throws InterruptedException{
+    void assetEditModalWithEmptyName() {
         assetPage.typeName("");
         assetPage.clickEditButton();
 
-        Thread.sleep(2000);
         assertTrue(isElementVisible(assetPage.assetEditModal));
     }
 
