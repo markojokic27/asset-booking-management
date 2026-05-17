@@ -30,7 +30,6 @@ export const getAllAssetBookings = async (
   assetId: number
 ) => {
   const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
-  const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
     params: { page, size, assetId },
   });
   console.log(res);
@@ -52,6 +51,6 @@ export const getAllCategoryBookings = async (
 
 // create booking
 export const createBooking = async (bookingData: CreateBookingDto) => {
-  const res = await api.post<BookingDto>('/bookings', bookingData);
+  const res = await api.post<CreateBookingDto>('/bookings', bookingData);
   return res.data;
 };

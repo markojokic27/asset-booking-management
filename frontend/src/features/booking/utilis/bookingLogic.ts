@@ -14,8 +14,8 @@ export const mapBookingsToCalendarEvents = (
   return bookings.map((booking) => ({
     id: booking.id.toString(),
     title: booking.user.surname,
-    start: new Date(booking.bookingStart),
-    end: new Date(booking.bookingEnd),
+    start: new Date(booking.bookingStart).toISOString(),
+    end: new Date(booking.bookingEnd).toISOString() ,
     backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
     borderColor: STATUS_COLORS[booking.status] || '#3b82f6',
     extendedProps: {
