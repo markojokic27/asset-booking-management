@@ -4,7 +4,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
-import hrLocale from '@fullcalendar/core/locales/hr';
+//import hrLocale from '@fullcalendar/core/locales/hr';
 
 type CalendarEvent = {
   id: string;

@@ -1,12 +1,12 @@
 // Types
 import type { AssetDto } from '../../asset/types';
 import type { BookingDto, Filters } from '../types';
-import type { AssetCategory } from '../../asset-category/types';
+import type { AssetCategoryDto } from '../../asset-category/types';
 
 type Props = {
   assets: AssetDto[];
   bookings: BookingDto[];
-  selectedCategory: AssetCategory | null;
+  selectedCategory: AssetCategoryDto | null;
   filters: Filters;
 };
 

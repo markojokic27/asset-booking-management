@@ -18,22 +18,22 @@ import { AvailabilityCalendar } from '../features/booking/components/Availabilit
 import { Button } from '../components/ui/Button';
 
 // Types
-import type { Filters } from '../features/booking/types';
+// import type { Filters } from '../features/booking/types';
 
-const defaultFilters: Filters = {
-  search: '',
-  fromDate: '',
-  toDate: '',
-  fromHour: '',
-  toHour: '',
-};
+// const defaultFilters: Filters = {
+//   search: '',
+//   fromDate: '',
+//   toDate: '',
+//   fromHour: '',
+//   toHour: '',
+// };
 
-const STATUS_COLORS: Record<string, string> = {
-  APPROVED: '#22c55e',
-  PENDING: '#f59e0b',
-  REJECTED: '#ef4444',
-  CANCELLED: '#6b7280',
-};
+// const STATUS_COLORS: Record<string, string> = {
+//   APPROVED: '#22c55e',
+//   PENDING: '#f59e0b',
+//   REJECTED: '#ef4444',
+//   CANCELLED: '#6b7280',
+// };
 
 export default function BookingsByAsset() {
   const { assetId } = useParams();
@@ -100,11 +100,10 @@ export default function BookingsByAsset() {
           </h1>
 
           <span
-            className={`rounded px-3 py-1 text-sm font-medium ${
-              asset.status === 'ACTIVE'
+            className={`rounded px-3 py-1 text-sm font-medium ${asset.status === 'ACTIVE'
                 ? 'bg-green-100 text-green-700'
                 : 'bg-gray-200 text-gray-700'
-            }`}
+              }`}
           >
             {asset.status}
           </span>
