@@ -2,7 +2,6 @@ package com.example.assetbookingmanagement.features.booking.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.assetbookingmanagement.features.asset.data.AssetRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +26,6 @@ data class BookingsUiState(
 @HiltViewModel
 class BookingsViewModel @Inject constructor(
     private val bookingRepository: BookingRepository,
-    private val assetRepository: AssetRepository,
     private val authSession: AuthSession
 ) : ViewModel() {
 
@@ -56,15 +54,9 @@ class BookingsViewModel @Inject constructor(
                 val bookings = bookingRepository.getUserBookings(userId)
 
                 val bookingItems = bookings.map { booking ->
-                    val assetName = try {
-                        assetRepository.getAssetById(booking.assetId).name
-                    } catch (_: Exception) {
-                        "Unknown asset"
-                    }
-
                     MyBookingUiModel(
                         id = booking.id,
-                        assetName = assetName
+                        assetName = booking.asset.name
                     )
                 }
 
