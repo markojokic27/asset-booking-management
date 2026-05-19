@@ -54,7 +54,7 @@ fun HomeScreen(
             backgroundColor = BookingsCardBg,
             iconRes = R.drawable.calendar_today_24,
             primaryColor = BookingsPrimary,
-            count = "2",
+            count = uiState.myBookingsCount.toString(),
             label = "My bookings",
             onArrowClick = onBookingsClick
         )

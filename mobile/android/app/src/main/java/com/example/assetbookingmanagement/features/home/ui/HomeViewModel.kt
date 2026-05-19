@@ -3,6 +3,8 @@ package com.example.assetbookingmanagement.features.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.asset.data.AssetRepository
+import com.example.assetbookingmanagement.features.auth.data.AuthSession
+import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,12 +14,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HomeUiState(
-    val assetCount: Int = 0
+    val assetCount: Int = 0,
+    val myBookingsCount: Int = 0
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val assetRepository: AssetRepository
+    private val assetRepository: AssetRepository,
+    private val bookingRepository: BookingRepository,
+    private val authSession: AuthSession
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -25,6 +30,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         getAssetCount()
+        getMyBookingsCount()
     }
 
     private fun getAssetCount() {
@@ -34,6 +40,22 @@ class HomeViewModel @Inject constructor(
                 _uiState.update { it.copy(assetCount = response.content.size) }
             } catch (_: Exception) {
                 _uiState.update { it.copy(assetCount = 0) }
+            }
+        }
+    }
+
+    private fun getMyBookingsCount() {
+        viewModelScope.launch {
+            val userId = authSession.getCurrentUserId() ?: run {
+                _uiState.update { it.copy(myBookingsCount = 0) }
+                return@launch
+            }
+
+            try {
+                val bookings = bookingRepository.getUserBookings(userId)
+                _uiState.update { it.copy(myBookingsCount = bookings.size) }
+            } catch (_: Exception) {
+                _uiState.update { it.copy(myBookingsCount = 0) }
             }
         }
     }
