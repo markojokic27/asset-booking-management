@@ -4,10 +4,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -24,12 +23,13 @@ import com.example.assetbookingmanagement.features.booking.ui.CreateBookingScree
 @Composable
 fun NavGraph(isUserLoggedIn: Boolean = false) {
     val navController = rememberNavController()
-    var selectedAssetId by remember { mutableStateOf<Long?>(null) }
     val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
     val navBackStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar =
-        isBottomNavRoute(currentRoute) || currentRoute == Routes.ASSET_DETAILS || currentRoute == Routes.CREATE_BOOKING
+        isBottomNavRoute(currentRoute) ||
+            currentRoute == Routes.ASSET_DETAILS ||
+            currentRoute == Routes.CREATE_BOOKING
 
     val headerTitle = when (currentRoute) {
         Routes.HOME -> "Home"
@@ -87,21 +87,24 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             composable(Routes.ASSETS) {
                 AssetsScreen(
                     onAssetClick = { assetId ->
-                        selectedAssetId = assetId
-                        navController.navigate(Routes.ASSET_DETAILS)
+                        navController.navigate(Routes.assetDetails(assetId))
                     }
                 )
             }
 
-            composable(Routes.ASSET_DETAILS) {
-                selectedAssetId?.let { assetId ->
-                    AssetDetailsScreen(
-                        assetId = assetId,
-                        onBookClick = {
-                            navController.navigate(Routes.CREATE_BOOKING)
-                        }
-                    )
-                }
+            composable(
+                route = Routes.ASSET_DETAILS,
+                arguments = listOf(
+                    navArgument("assetId") { type = NavType.LongType }
+                )
+            ) { backStackEntry ->
+                val assetId = backStackEntry.arguments?.getLong("assetId") ?: return@composable
+                AssetDetailsScreen(
+                    assetId = assetId,
+                    onBookClick = {
+                        navController.navigate(Routes.createBooking(assetId))
+                    }
+                )
             }
 
             composable(Routes.BOOKINGS) {
@@ -111,8 +114,14 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             composable(Routes.PROFILE) {
                 ProfileScreen()
             }
-            composable(Routes.CREATE_BOOKING) {
-                CreateBookingScreen()
+            composable(
+                route = Routes.CREATE_BOOKING,
+                arguments = listOf(
+                    navArgument("assetId") { type = NavType.LongType }
+                )
+            ) { backStackEntry ->
+                val assetId = backStackEntry.arguments?.getLong("assetId") ?: return@composable
+                CreateBookingScreen(assetId = assetId)
             }
         }
     }

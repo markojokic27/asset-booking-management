@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 data class ProfileUiState(
@@ -53,11 +55,22 @@ class ProfileViewModel @Inject constructor(
                         userName = user.name
                     )
                 }
-            } catch (_: Exception) {
+            } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Error loading user."
+                        errorMessage = when (error.code()) {
+                            401, 403 -> "You aren't authorized to view this user."
+                            404 -> "User not found."
+                            else -> "Failed to load user."
+                        }
+                    )
+                }
+            } catch (_: IOException) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Cannot reach backend."
                     )
                 }
             }

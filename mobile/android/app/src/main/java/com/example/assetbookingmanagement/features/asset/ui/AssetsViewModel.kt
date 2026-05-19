@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 data class AssetsUiState(
@@ -80,11 +82,22 @@ class AssetsViewModel @Inject constructor(
                         assets = response.content
                     )
                 }
-            } catch (e: Exception) {
+            } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Error loading assets"
+                        errorMessage = when (error.code()) {
+                            401, 403 -> "You aren't authorized to view assets."
+                            404 -> "Assets not found."
+                            else -> "Failed to load assets."
+                        }
+                    )
+                }
+            } catch (_: IOException) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Cannot reach backend."
                     )
                 }
             }
@@ -98,9 +111,19 @@ class AssetsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(categories = categories)
                 }
-            } catch (_: Exception) {
+            } catch (error: HttpException) {
                 _uiState.update {
-                    it.copy(errorMessage = "Error loading categories")
+                    it.copy(
+                        errorMessage = when (error.code()) {
+                            401, 403 -> "You aren't authorized to view categories."
+                            404 -> "Categories not found."
+                            else -> "Failed to load categories."
+                        }
+                    )
+                }
+            } catch (_: IOException) {
+                _uiState.update {
+                    it.copy(errorMessage = "Cannot reach backend.")
                 }
             }
         }

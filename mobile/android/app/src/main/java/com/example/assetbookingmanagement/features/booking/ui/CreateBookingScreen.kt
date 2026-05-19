@@ -31,6 +31,7 @@ import com.example.assetbookingmanagement.core.ui.components.DateTimePicker
 
 @Composable
 fun CreateBookingScreen(
+    assetId: Long,
     onCancelClick: () -> Unit = {},
     onBookNowClick: () -> Unit = {}
 ) {

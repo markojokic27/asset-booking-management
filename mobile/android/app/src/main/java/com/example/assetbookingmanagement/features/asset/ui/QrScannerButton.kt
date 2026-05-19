@@ -1,5 +1,6 @@
 package com.example.assetbookingmanagement.features.asset.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -57,9 +58,17 @@ fun QrScannerButton(
                         val scannedValue = barcode.rawValue
                         if (!scannedValue.isNullOrBlank()) {
                             onQrScanned(scannedValue)
+                        } else {
+                            Toast.makeText(context, "QR code is empty.", Toast.LENGTH_SHORT).show()
                         }
-                    }
-            },
+                        }
+                        .addOnCanceledListener {
+                            Toast.makeText(context, "QR scan cancelled.", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Failed to scan QR code.", Toast.LENGTH_SHORT).show()
+                        }
+                    },
         contentAlignment = Alignment.Center
     ) {
         Icon(
