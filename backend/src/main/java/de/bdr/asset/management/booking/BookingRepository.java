@@ -1,5 +1,6 @@
 package de.bdr.asset.management.booking;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,4 +81,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
                             WHERE asset_id = :assetId
                         """, nativeQuery = true)
         GeneralReportResponseDTO getAssetReport(@Param("assetId") Long assetId);
+
+        @Modifying(clearAutomatically = true)
+        @Query(value = "UPDATE asset_booking_mgm.booking SET status = 'COMPLETED'" +
+                       "WHERE status = 'APPROVED'" +
+                       "AND booking_end <= :currentTime", nativeQuery = true)
+        int updateCompletedBookings(
+                @Param("currentTime")Instant currentTime
+        );
 }
