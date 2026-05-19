@@ -14,8 +14,7 @@ import { DeleteModal } from '../components/ui/DeleteModal';
 // User-related feature components
 import { UserModal } from '../features/user/components/UserModal';
 import { UsersTable } from '../features/user/components/UsersTable';
-import { UserEditModal } from '../features/user/components/UserEditModal';
-import { UserCreateModal } from '../features/user/components/UserCreateModal';
+import { UserFormModal } from '../features/user/components/UserFormModal';
 import { UserBookingsModal } from '../features/user/components/UserBookingsModal';
 import { UserReportModal } from '../features/user/components/UserReportModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
@@ -156,21 +155,16 @@ export default function Users() {
         }
       />
 
-      {/* Modal for editing existing users */}
-      <UserEditModal
-        isOpen={modals.modal === 'edit'}
-        onClose={modals.close}
+      {/* Modal for creating or editing users */}
+      <UserFormModal
+        isOpen={modals.modal === 'create' || modals.modal === 'edit'}
+        mode={modals.modal === 'create' ? 'create' : 'edit'}
         user={selection.activeUser}
+        onClose={modals.close}
+        onCreate={actions.create}
         onSave={async (user) => {
           await actions.update(user);
         }}
-      />
-
-      {/* Modal for creating new users */}
-      <UserCreateModal
-        isOpen={modals.modal === 'create'}
-        onClose={modals.close}
-        onCreate={actions.create}
       />
 
       {/* Modal displaying user bookings */}
