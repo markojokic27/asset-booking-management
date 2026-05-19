@@ -14,7 +14,9 @@ import javax.inject.Inject
 
 data class MyBookingUiModel(
     val id: Long,
-    val assetName: String
+    val assetName: String,
+    val bookingPeriod: String,
+    val status: String
 )
 
 data class BookingsUiState(
@@ -56,7 +58,9 @@ class BookingsViewModel @Inject constructor(
                 val bookingItems = bookings.map { booking ->
                     MyBookingUiModel(
                         id = booking.id,
-                        assetName = booking.asset.name
+                        assetName = booking.asset.name,
+                        bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
+                        status = booking.status
                     )
                 }
 

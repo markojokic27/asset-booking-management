@@ -94,7 +94,7 @@ fun BookingsScreen(
                                 items = uiState.myBookings,
                                 key = { booking -> booking.id }
                             ) { booking ->
-                                Text(text = booking.assetName)
+                                BookingCard(booking = booking)
                             }
                         }
                     }
