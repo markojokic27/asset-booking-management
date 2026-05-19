@@ -109,7 +109,7 @@ export const UsersTable = ({
       cellClassName: 'w-px whitespace-nowrap',
       render: (user) => (
         <div className="flex items-center gap-1">
-          <IconButton
+          <IconButton data-testid="view-user-button"
             type="button"
             aria-label={t('users.table.rowActions.viewAria')}
             onClick={() => onView(user)}

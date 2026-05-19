@@ -37,7 +37,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
       onClose={onClose}
       ariaLabel={t('users.modals.view.ariaLabel')}
       headerRight={
-        <IconButton onClick={onClose} aria-label={t('users.modals.common.closeAria')}>
+        <IconButton data-testid="user-close-button" onClick={onClose} aria-label={t('users.modals.common.closeAria')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }

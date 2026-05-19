@@ -24,6 +24,10 @@ public class UserPage extends CommonMethods {
     public By userNotesField = By.cssSelector("[data-testid='user-note']");
     public By addUserButton = By.cssSelector("[data-testid='create-user-button']");
 
+    //View asset
+    public By userViewOpenModal = By.cssSelector("[data-testid='view-user-button']");
+    public By userViewCloseModal = By.cssSelector("[data-testid='user-close-button']");
+
     public void userOpenModal() {
         clickOnElement(userOpenModal);
     }
@@ -73,6 +77,16 @@ public class UserPage extends CommonMethods {
 
     public void typeNotes(String notes){
         typeInElement(userNotesField, notes);
+    }
+
+    // View user
+
+    public void userViewOpenModal() {
+        clickOnElement(userViewOpenModal);
+    }
+
+    public void userViewCloseModal() {
+        clickOnElement(userViewCloseModal);
     }
 
     public void user(String role, String status, String name, String surname, String username, String password, String id, String email, String managerEmail, String notes){

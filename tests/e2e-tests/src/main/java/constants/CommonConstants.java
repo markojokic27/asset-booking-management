@@ -8,6 +8,7 @@ public class CommonConstants{
     public static final String USERS_URL= "/users";
     public static final String ASSETS_URL= "/assets";
     public static final String CATEGORY_URL= "/categories";
+    public static final String ACCOUNT_INFO="/account-info";
 
     //Login
 
@@ -66,6 +67,10 @@ public class CommonConstants{
     public static final String LONG_CATEGORY_NAME = "t".repeat(101);
     public static final String LONG_CATEGORY_DESCRIPTION  = "t".repeat(256);
     public static final String CHANGE_BOOKING_PERIOD = "Hour";
+
+    // Account info
+
+    public static final String NEW_PASSWORD = "admin1234";
 
 
     public static final String BROWSER = "BROWSER";

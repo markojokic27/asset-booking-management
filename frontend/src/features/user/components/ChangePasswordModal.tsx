@@ -108,7 +108,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
   };
 
   return (
-    <Modal
+    <Modal 
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel={t('account.password.modalTitle')}
@@ -125,6 +125,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
       footer={
         <div className="flex flex-wrap justify-end gap-3">
           <Button
+            data-testid="account-password-cancel"
             type="button"
             variant="outline"
             className="shadow-none"
@@ -133,7 +134,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
           >
             {t('account.password.cancel')}
           </Button>
-          <Button
+          <Button 
             type="submit"
             form={formId}
             className="shadow-none"
@@ -145,7 +146,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
         </div>
       }
     >
-      <Form.Root
+      <Form.Root 
         noValidate
         id={formId}
         key={user.id}

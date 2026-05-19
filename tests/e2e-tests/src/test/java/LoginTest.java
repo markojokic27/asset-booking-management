@@ -17,7 +17,7 @@ public class LoginTest extends BaseLogin {
     }
 
     @Test
-    void LoginWithEmptyUsername() {
+    void loginWithEmptyUsername() {
         loginPage.login(
                 "",
                 CommonConstants.ADMIN_USERNAME
@@ -26,7 +26,7 @@ public class LoginTest extends BaseLogin {
     }
 
     @Test
-    void LoginWithEmptyPassword(){
+    void loginWithEmptyPassword(){
         loginPage.login(
                 CommonConstants.ADMIN_PASS,
                 ""
@@ -35,7 +35,7 @@ public class LoginTest extends BaseLogin {
     }
 
     @Test
-    void LoginWithEmptyAllFields(){
+    void loginWithEmptyAllFields(){
         loginPage.login(
                 "",
                 ""
@@ -44,7 +44,7 @@ public class LoginTest extends BaseLogin {
     }
 
     @Test
-    void LoginWithWrongUsername(){
+    void loginWithWrongUsername(){
         loginPage.login(
                 CommonConstants.WRONG_USERNAME,
                 CommonConstants.ADMIN_USERNAME
@@ -53,7 +53,7 @@ public class LoginTest extends BaseLogin {
     }
 
     @Test
-    void LoginWithWrongPassword(){
+    void loginWithWrongPassword(){
         loginPage.login(
                 CommonConstants.ADMIN_USERNAME,
                 CommonConstants.WRONG_PASSWORD
