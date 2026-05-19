@@ -150,6 +150,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int bookingStatusToCompleted() {
+
+        Instant currentTime = Instant.now();
+
+        return repository.updateCompletedBookings(currentTime);
+    }
+
+    @Override
     public GeneralReportResponseDTO getGeneralReport() {
         return repository.getGeneralReport();
     }

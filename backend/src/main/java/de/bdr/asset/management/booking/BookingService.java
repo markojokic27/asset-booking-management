@@ -23,6 +23,7 @@ public interface BookingService {
     /** UPDATE */
     BookingResponseDTO updateBooking(Long id, BookingUpdateDTO bookingRequest);
 
+    int bookingStatusToCompleted();
     GeneralReportResponseDTO getGeneralReport();
     GeneralReportResponseDTO getUserReport(Long userId);
     GeneralReportResponseDTO getAssetReport(Long assetId);
