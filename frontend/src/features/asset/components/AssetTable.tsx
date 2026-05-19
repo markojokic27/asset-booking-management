@@ -147,7 +147,7 @@ export function AssetsTable({
       className="w-full"
       rowClassName={(asset) =>
         asset.status === 'DELETED'
-          ? 'bg-slate-100 opacity-60 hover:bg-slate-200'
+          ? 'bg-slate-100 opacity-60 hover:bg-slate-200 dark:text-black dark:[&_td]:!text-black dark:[&_button]:!text-black dark:[&_button:hover]:text-(--color-primaryblue) dark:hover:bg-slate-200'
           : undefined
       }
     />
