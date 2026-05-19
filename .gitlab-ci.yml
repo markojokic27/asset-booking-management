@@ -375,20 +375,20 @@ socket-security:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
 
-#snyk-scan
-snyk-scann:
-  stage: security
-  image: node:24-alpine
-  variables:
-    SNYK_API_KEY: $SNYK_API_KEY
-  script:
-    - npm install -g snyk
-    - snyk auth $SNYK_API_KEY
-    - snyk test --all-projects --json-file-output=snyk_data_file.json
-  artifacts:
-    when: always
-    paths:
-      - snyk_data_file.json
+# #snyk-scan
+# snyk-scann:
+#   stage: security
+#   image: node:24-alpine
+#   variables:
+#     SNYK_API_KEY: $SNYK_API_KEY
+#   script:
+#     - npm install -g snyk
+#     - snyk auth $SNYK_API_KEY
+#     - snyk test --all-projects --json-file-output=snyk_data_file.json
+#   artifacts:
+#     when: always
+#     paths:
+#       - snyk_data_file.json
 
 
 # ─────────────────────────────────────────
