@@ -16,7 +16,7 @@ public class BookingMapperTestData {
         b.setId(BOOKING_ID);
         b.setBookingStart(START);
         b.setBookingEnd(END);
-        b.setStatus(BookingStatusEnum.ACTIVE);
+        b.setStatus(BookingStatusEnum.PENDING);
         b.setNotes(NOTES_DATA);
         return b;
     }
@@ -74,7 +74,7 @@ public class BookingMapperTestData {
                 BOOKING_ID,
                 USER_SUMMARY,
                 ASSET_SUMMARY,
-                BookingStatusEnum.ACTIVE,
+                BookingStatusEnum.PENDING,
                 START,
                 END,
                 NOTES_DATA

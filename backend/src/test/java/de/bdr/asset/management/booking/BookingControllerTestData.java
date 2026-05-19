@@ -34,7 +34,7 @@ public final class BookingControllerTestData {
                 BOOKING_ID,
                 USER_SUMMARY,
                 ASSET_SUMMARY,
-                BookingStatusEnum.ACTIVE,
+                BookingStatusEnum.PENDING,
                 START,
                 END,
                 NOTES_DATA

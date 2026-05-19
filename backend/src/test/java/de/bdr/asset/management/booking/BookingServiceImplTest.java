@@ -207,7 +207,7 @@ class BookingServiceImplTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         BookingFilter filter = new BookingFilter();
-        filter.setStatus(BookingStatusEnum.ACTIVE);
+        filter.setStatus(BookingStatusEnum.PENDING);
         filter.setUserId(USER_ID);
         filter.setAssetId(ASSET_ID);
         filter.setCategoryId(1L);
@@ -243,7 +243,7 @@ class BookingServiceImplTest {
 
         BookingResponseDTO result = service.updateBooking(BOOKING_ID, request);
 
-        assertEquals(BookingStatusEnum.ACTIVE, result.status());
+        assertEquals(BookingStatusEnum.PENDING, result.status());
         verify(repository).save(booking);
     }
 
@@ -288,7 +288,7 @@ class BookingServiceImplTest {
                 BookingServiceImplTestData.user(),
                 BookingServiceImplTestData.asset()
         );
-        booking.setStatus(BookingStatusEnum.ACTIVE);
+        booking.setStatus(BookingStatusEnum.PENDING);
         booking.setBookingEnd(TestConstants.BASE_NOW.minusSeconds(3600));
 
         BookingUpdateDTO request = BookingServiceImplTestData.updateRequest();

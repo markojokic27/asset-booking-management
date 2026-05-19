@@ -44,7 +44,7 @@ public class BookingServiceImplTestData {
         b.setId(BOOKING_ID);
         b.setUser(user);
         b.setAsset(asset);
-        b.setStatus(BookingStatusEnum.ACTIVE);
+        b.setStatus(BookingStatusEnum.PENDING);
         b.setBookingStart(START);
         b.setBookingEnd(END);
         b.setNotes(NOTES_DATA);
@@ -75,7 +75,7 @@ public class BookingServiceImplTestData {
                 BOOKING_ID,
                 USER_SUMMARY,
                 ASSET_SUMMARY,
-                BookingStatusEnum.ACTIVE,
+                BookingStatusEnum.PENDING,
                 START,
                 END,
                 NOTES_DATA

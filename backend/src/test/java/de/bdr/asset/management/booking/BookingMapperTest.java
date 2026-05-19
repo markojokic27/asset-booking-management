@@ -67,7 +67,7 @@ class BookingMapperTest {
         BookingResponseDTO dto = bookingMapper.toResponse(result);
 
         assertThat(dto.id()).isEqualTo(BOOKING_ID);
-        assertThat(dto.status()).isEqualTo(BookingStatusEnum.ACTIVE);
+        assertThat(dto.status()).isEqualTo(BookingStatusEnum.PENDING);
 
         assertThat(dto.user()).isNotNull();
         assertThat(dto.user().id()).isEqualTo(USER_ID);

@@ -238,7 +238,6 @@ class UserServiceImplTest {
     void shouldSoftDeleteUser() {
 
         List<String> statusesToCancel = List.of(
-                BookingStatusEnum.ACTIVE.name(),
                 BookingStatusEnum.APPROVED.name(),
                 BookingStatusEnum.PENDING.name()
         );
