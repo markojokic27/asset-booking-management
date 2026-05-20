@@ -17,8 +17,6 @@ public class AccountPage extends CommonMethods {
     public By typeConfirmPassword = By.cssSelector("[data-testid='account-password-confirm']");
     public By saveNewPassword = By.cssSelector("[data-testid='account-password-submit']");
     public By changePassword = By.cssSelector("[data-testid='account-open-change-password']");
-    public By changePasswordModal = By.cssSelector("[data-testid='change-password-modal']");
-
     public void openHeadingModal (){
             clickOnElement(openHeadingModal);
     }

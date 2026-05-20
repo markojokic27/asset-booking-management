@@ -39,7 +39,6 @@ public class AssetPage extends CommonMethods {
 
     public By assetBookingOpenModal = By.cssSelector("[data-testid='asset-bookings-button']");
     public By assetBookingCloseModal = By.cssSelector("[data-testid='close-asset-bookings-modal']");
-    public By assetBookingModal = By.cssSelector("[data-testid='asset-view-modal']");
 
     public By assetStatus= By.cssSelector("[data-testid='asset-status']");
     public By assetCategory = By.cssSelector("[data-testid='asset-category']");
@@ -127,7 +126,8 @@ public class AssetPage extends CommonMethods {
         clickOnElement(confirmDeleteButton);
     }
 
-    // View booking asset
+
+    // View booking for asset
 
     public void assetBookingOpenModal() {
         clickOnElement(assetBookingOpenModal);

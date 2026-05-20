@@ -28,6 +28,10 @@ public class UserPage extends CommonMethods {
     public By userViewOpenModal = By.cssSelector("[data-testid='view-user-button']");
     public By userViewCloseModal = By.cssSelector("[data-testid='user-close-button']");
 
+    // View booking for user
+    public By userBookingOpenModal = By.cssSelector("[data-testid='user-bookings-button']");
+    public By userBookingCloseModal = By.cssSelector("[data-testid='user-booking-close-button']");
+
     public void userOpenModal() {
         clickOnElement(userOpenModal);
     }
@@ -87,6 +91,16 @@ public class UserPage extends CommonMethods {
 
     public void userViewCloseModal() {
         clickOnElement(userViewCloseModal);
+    }
+
+    // View user
+
+    public void userBookingOpenModal() {
+        clickOnElement(userBookingOpenModal);
+    }
+
+    public void userBookingCloseModal() {
+        clickOnElement(userBookingCloseModal);
     }
 
     public void user(String role, String status, String name, String surname, String username, String password, String id, String email, String managerEmail, String notes){

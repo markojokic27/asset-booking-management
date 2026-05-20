@@ -1,3 +1,5 @@
+package auth;
+
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;

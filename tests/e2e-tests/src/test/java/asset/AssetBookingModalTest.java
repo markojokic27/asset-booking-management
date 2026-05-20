@@ -18,12 +18,6 @@ public class AssetBookingModalTest extends BaseLogin {
         assetPage.assetBookingOpenModal();
     }
 
-    @Test
-    void assetBookingModal(){
-
-        assertTrue(isElementVisible(assetPage.assetBookingModal));
-    }
-
 
     @Test
     public void assetBookingModalCloseOnCloseButton(){

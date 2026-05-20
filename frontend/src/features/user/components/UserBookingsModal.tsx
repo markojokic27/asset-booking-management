@@ -66,7 +66,7 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
         </div>
       }
       headerRight={
-        <IconButton onClick={onClose} aria-label={t('users.modals.bookings.closeAria')}>
+        <IconButton data-testid="user-booking-close-button" onClick={onClose} aria-label={t('users.modals.bookings.closeAria')}>
           <CloseOutlinedIcon fontSize="small" />
         </IconButton>
       }

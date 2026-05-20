@@ -70,7 +70,7 @@ export function AssetsTable({
         headerClassName: 'w-px whitespace-nowrap',
         cellClassName: 'w-px whitespace-nowrap',
         render: (asset) => (
-          <Button
+          <Button data-testid="asset-bookings-button"
             size="sm"
             variant="solid"
             iconLeft={<CalendarTodaySharpIcon fontSize="small" />}
