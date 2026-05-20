@@ -53,38 +53,33 @@ fun AppInput(
     val placeholderColor = if (isDarkTheme) InputPlaceholderDark else InputPlaceholderLight
     val containerColor = if (isDarkTheme) InputSurfaceDark else InputSurfaceLight
     val borderColor = if (isFocused) InputFocusBorder else Color.Transparent
-    val showBottomShadow = value.isEmpty() && !isFocused && enabled
 
     Column(modifier = modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .then(
-                    if (showBottomShadow) {
-                        Modifier.drawWithContent {
-                            drawIntoCanvas { canvas ->
-                                val paint = android.graphics.Paint().apply {
-                                    color = android.graphics.Color.TRANSPARENT
-                                    setShadowLayer(3.dp.toPx(), 0f, 3.dp.toPx(), InputShadow.toArgb())
-                                }
-                                canvas.nativeCanvas.drawRoundRect(
-                                    0f,
-                                    0f,
-                                    size.width,
-                                    size.height,
-                                    8.dp.toPx(),
-                                    8.dp.toPx(),
-                                    paint
-                                )
+                .drawWithContent {
+                    if (enabled) {
+                        drawIntoCanvas { canvas ->
+                            val paint = android.graphics.Paint().apply {
+                                color = android.graphics.Color.TRANSPARENT
+                                setShadowLayer(3.dp.toPx(), 0f, 3.dp.toPx(), InputShadow.toArgb())
                             }
-                            drawContent()
+                            canvas.nativeCanvas.drawRoundRect(
+                                0f,
+                                0f,
+                                size.width,
+                                size.height,
+                                8.dp.toPx(),
+                                8.dp.toPx(),
+                                paint
+                            )
                         }
-                    } else {
-                        Modifier
                     }
-                )
+                    drawContent()
+                }
                 .border(
-                    width = if (isFocused) 1.dp else 0.dp,
+                    width = 1.dp,
                     color = borderColor,
                     shape = RoundedCornerShape(8.dp)
                 )
