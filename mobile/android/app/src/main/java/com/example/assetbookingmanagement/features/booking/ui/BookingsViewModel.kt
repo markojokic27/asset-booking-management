@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 data class MyBookingUiModel(
@@ -22,6 +23,7 @@ data class MyBookingUiModel(
 data class BookingsUiState(
     val isLoading: Boolean = false,
     val myBookings: List<MyBookingUiModel> = emptyList(),
+    val historyBookings: List<MyBookingUiModel> = emptyList(),
     val errorMessage: String? = null
 )
 
@@ -54,20 +56,43 @@ class BookingsViewModel @Inject constructor(
 
             try {
                 val bookings = bookingRepository.getUserBookings(userId)
+                val now = Instant.now()
 
-                val bookingItems = bookings.map { booking ->
-                    MyBookingUiModel(
-                        id = booking.id,
-                        assetName = booking.asset.name,
-                        bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
-                        status = booking.status
-                    )
-                }
+                val myBookings = bookings
+                    .filter { booking ->
+                        runCatching { Instant.parse(booking.bookingEnd) }
+                            .getOrNull()
+                            ?.isBefore(now) == false
+                    }
+                    .map { booking ->
+                        MyBookingUiModel(
+                            id = booking.id,
+                            assetName = booking.asset.name,
+                            bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
+                            status = booking.status
+                        )
+                    }
+
+                val historyBookings = bookings
+                    .filter { booking ->
+                        runCatching { Instant.parse(booking.bookingEnd) }
+                            .getOrNull()
+                            ?.isBefore(now) == true
+                    }
+                    .map { booking ->
+                        MyBookingUiModel(
+                            id = booking.id,
+                            assetName = booking.asset.name,
+                            bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
+                            status = booking.status
+                        )
+                    }
 
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        myBookings = bookingItems
+                        myBookings = myBookings,
+                        historyBookings = historyBookings
                     )
                 }
             } catch (_: Exception) {

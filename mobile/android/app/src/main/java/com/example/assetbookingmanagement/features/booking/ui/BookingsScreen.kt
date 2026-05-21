@@ -72,36 +72,58 @@ fun BookingsScreen(
 
         when (BookingsTab.entries[selectedTabIndex]) {
             BookingsTab.MyBookings -> {
-                when {
-                    uiState.isLoading -> {
-                        Text(text = "Loading bookings...")
-                    }
-
-                    uiState.errorMessage != null -> {
-                        Text(text = uiState.errorMessage!!)
-                    }
-
-                    uiState.myBookings.isEmpty() -> {
-                        Text(text = "No bookings found.")
-                    }
-
-                    else -> {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(
-                                items = uiState.myBookings,
-                                key = { booking -> booking.id }
-                            ) { booking ->
-                                BookingCard(booking = booking)
-                            }
-                        }
-                    }
-                }
+                BookingListContent(
+                    isLoading = uiState.isLoading,
+                    errorMessage = uiState.errorMessage,
+                    bookings = uiState.myBookings,
+                    emptyMessage = "No current or upcoming bookings found."
+                )
             }
 
-            BookingsTab.History -> Unit
+            BookingsTab.History -> {
+                BookingListContent(
+                    isLoading = uiState.isLoading,
+                    errorMessage = uiState.errorMessage,
+                    bookings = uiState.historyBookings,
+                    emptyMessage = "No bookings found."
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BookingListContent(
+    isLoading: Boolean,
+    errorMessage: String?,
+    bookings: List<MyBookingUiModel>,
+    emptyMessage: String
+) {
+    when {
+        isLoading -> {
+            Text(text = "Loading bookings...")
+        }
+
+        errorMessage != null -> {
+            Text(text = errorMessage)
+        }
+
+        bookings.isEmpty() -> {
+            Text(text = emptyMessage)
+        }
+
+        else -> {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(
+                    items = bookings,
+                    key = { booking -> booking.id }
+                ) { booking ->
+                    BookingCard(booking = booking)
+                }
+            }
         }
     }
 }

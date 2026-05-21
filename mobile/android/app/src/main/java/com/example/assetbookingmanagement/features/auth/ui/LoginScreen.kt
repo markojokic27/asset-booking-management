@@ -138,7 +138,7 @@ fun LabeledInput(
     isLandscape: Boolean,
     isPassword: Boolean = false,
     passwordVisible: Boolean = false,
-    passwordVisibilityToggle: @Composable (() -> Unit)? = null,
+    passwordVisibilityToggle: (() -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
     Text(
@@ -158,6 +158,7 @@ fun LabeledInput(
                 IconButton(onClick = passwordVisibilityToggle) {
                     Icon(
                         imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
                     )
                 }
             }
