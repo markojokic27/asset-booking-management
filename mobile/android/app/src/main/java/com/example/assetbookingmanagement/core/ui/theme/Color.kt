@@ -28,7 +28,7 @@ val HeaderLight = Color(0xFFE4E4E4)
 val PickerTimeFieldActiveLight = Color(0x240043CE)
 
 val BgDark = Color(0xFF252525)
-val SurfaceDark = Color(0xFF000000)
+val SurfaceDark = Color(0xFF111111)
 val TextDark = Color(0xFFF5F5F5)
 val PrimaryDark = PrimaryBlue
 val OnPrimaryDark = White

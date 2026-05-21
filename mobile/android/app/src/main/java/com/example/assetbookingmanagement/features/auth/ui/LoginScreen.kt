@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -28,6 +29,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val isDarkTheme = isSystemInDarkTheme()
 
     LaunchedEffect(uiState.isLoggedIn) {
         if (uiState.isLoggedIn) {
@@ -46,7 +48,7 @@ fun LoginScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LoginHeader(isLandscape)
+        LoginHeader(isLandscape = isLandscape, isDarkTheme = isDarkTheme)
 
         Spacer(modifier = Modifier.height(if (isLandscape) 10.dp else 40.dp))
 
@@ -55,6 +57,7 @@ fun LoginScreen(
                 text = "Login",
                 fontSize = if (isLandscape) 24.sp else 32.sp,
                 fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = spacing)
             )
 
@@ -78,23 +81,51 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginHeader(isLandscape: Boolean) {
+fun LoginHeader(isLandscape: Boolean, isDarkTheme: Boolean) {
+    val logoColorFilter =
+        if (isDarkTheme) ColorFilter.tint(MaterialTheme.colorScheme.onBackground) else null
+
     if (isLandscape) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(painterResource(R.drawable.logo), null, Modifier.height(40.dp))
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = null,
+                modifier = Modifier.height(40.dp),
+                colorFilter = logoColorFilter
+            )
             Spacer(Modifier.width(12.dp))
-            Text("Asset Booking Management", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = "Asset Booking Management",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     } else {
         Spacer(Modifier.height(50.dp))
-        Image(painterResource(R.drawable.logo), null, Modifier.height(80.dp))
-        Text("Asset Booking Management", fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
+        Image(
+            painter = painterResource(R.drawable.logo),
+            contentDescription = null,
+            modifier = Modifier.height(80.dp),
+            colorFilter = logoColorFilter
+        )
+        Text(
+            text = "Asset Booking Management",
+            fontSize = 17.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     }
 }
 
 @Composable
 fun LabeledInput(label: String, value: String, placeholder: String, isLandscape: Boolean, isPassword: Boolean = false, onValueChange: (String) -> Unit) {
-    Text(label, fontSize = 13.sp, modifier = Modifier.padding(bottom = if (isLandscape) 2.dp else 6.dp))
+    Text(
+        text = label,
+        fontSize = 13.sp,
+        color = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier.padding(bottom = if (isLandscape) 2.dp else 6.dp)
+    )
     AppInput(
         value = value,
         onValueChange = onValueChange,

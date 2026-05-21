@@ -12,6 +12,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,7 +27,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.theme.PrimaryBlue
-import com.example.assetbookingmanagement.core.ui.theme.White
 
 private data class BottomNavItem(
     val route: String,
@@ -83,17 +83,17 @@ fun BottomNavigationBar(
         modifier = Modifier
             .fillMaxWidth()
             .shadow(elevation = 10.dp)
-            .background(White)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            color = Color(0xFFE0E0E0)
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.14f)
         )
 
         NavigationBar(
             modifier = Modifier.height(108.dp),
-            containerColor = White,
+            containerColor = MaterialTheme.colorScheme.surface,
             tonalElevation = 0.dp,
             windowInsets = NavigationBarDefaults.windowInsets
         ) {
@@ -124,8 +124,8 @@ fun BottomNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = PrimaryBlue,
                         selectedTextColor = PrimaryBlue,
-                        unselectedIconColor = Color.Black,
-                        unselectedTextColor = Color.Black,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurface,
                         indicatorColor = Color.Transparent
                     )
                 )
