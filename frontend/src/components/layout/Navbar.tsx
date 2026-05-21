@@ -5,6 +5,7 @@ import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
+import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
@@ -18,7 +19,7 @@ export const Navbar: React.FC = () => {
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
     { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharpIcon },
     { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon },
-    { to: '/report', label: t('layout.navbar.report'), icon: PeopleSharpIcon },
+    { to: '/report', label: t('layout.navbar.report'), icon: AssessmentSharpIcon },
   ];
   //TODO hover, new tab
   // Base for links
