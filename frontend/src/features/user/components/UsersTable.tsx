@@ -122,7 +122,7 @@ export const UsersTable = ({
 
           <IconButton
             type="button"
-            aria-label="Izvještaj korisnika"
+            aria-label={t('users.table.rowActions.reportAria')}
             onClick={() => onReport(user)}
           >
             <BarChartIcon fontSize="small" className="pointer-events-none" />

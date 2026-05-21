@@ -14,6 +14,9 @@
     "loading": "Učitavanje korisnika...",
     "none": "Još nema korisnika."
   },
+  "errors": {
+    "loadReport": "Učitavanje izvještaja nije uspjelo."
+  },
   "delete": {
     "title": "Obrisati korisnika?",
     "description": "Jeste li sigurni da želite obrisati \"{{name}}\"? Ovaj korisnik će biti označen kao obrisan."
@@ -87,6 +90,19 @@
           "date": "Datum"
         }
       }
+    },
+    "report": {
+      "userLabel": "Korisnik",
+      "loading": "Učitavanje...",
+      "stats": {
+        "total": "Ukupno rezervacija",
+        "active": "Aktivne",
+        "completed": "Završene",
+        "canceled": "Otkazane",
+        "pending": "Na čekanju",
+        "approved": "Odobrene",
+        "rejected": "Odbijene"
+      }
     }
   },
   "table": {
@@ -106,6 +122,7 @@
     },
     "rowActions": {
       "viewAria": "Pregled korisnika",
+      "reportAria": "Izvještaj korisnika",
       "editAria": "Uredi korisnika",
       "deleteAria": "Obriši korisnika"
     }

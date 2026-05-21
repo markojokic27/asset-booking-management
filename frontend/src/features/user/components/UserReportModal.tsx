@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import { Modal } from '../../../components/ui/Modal';
 import { IconButton } from '../../../components/ui/IconButton';
@@ -22,17 +23,8 @@ type UserReportModalProps = {
   user: Pick<UserDto, 'id' | 'name' | 'surname'> | null;
 };
 
-const statItems = (report: GeneralReportResponseDTO) => [
-  { label: 'Ukupno rezervacija', value: report.totalBookingsCount },
-  { label: 'Aktivne', value: report.totalActiveBookingCount },
-  { label: 'Završene', value: report.totalCompletedBookingCount },
-  { label: 'Otkazane', value: report.totalCanceledBookingCount },
-  { label: 'Na čekanju', value: report.totalPendingBookingCount },
-  { label: 'Odobrene', value: report.totalApprovedBookingCount },
-  { label: 'Odbijene', value: report.totalRejectedBookingCount },
-];
-
 export const UserReportModal: React.FC<UserReportModalProps> = ({ isOpen, onClose, user }) => {
+  const { t } = useTranslation();
   const [report, setReport] = useState<GeneralReportResponseDTO | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -40,32 +32,72 @@ export const UserReportModal: React.FC<UserReportModalProps> = ({ isOpen, onClos
   useEffect(() => {
     if (!isOpen || !user) return;
 
-    
-      const fetchReport = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const data = await getUserReport(user.id);
-      setReport(data);
-    } catch {
-      setError('Greška pri učitavanju izvještaja.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchReport = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const data = await getUserReport(user.id);
+        setReport(data);
+      } catch {
+        setError(t('users.errors.loadReport'));
+      } finally {
+        setLoading(false);
+      }
+    };
 
     void fetchReport();
-  }, [isOpen, user]);
+  }, [isOpen, user, t]);
 
   if (!isOpen || !user) return null;
+
+  const statItems =
+    report &&
+    [
+      {
+        key: 'total',
+        label: t('users.modals.report.stats.total'),
+        value: report.totalBookingsCount,
+      },
+      {
+        key: 'active',
+        label: t('users.modals.report.stats.active'),
+        value: report.totalActiveBookingCount,
+      },
+      {
+        key: 'completed',
+        label: t('users.modals.report.stats.completed'),
+        value: report.totalCompletedBookingCount,
+      },
+      {
+        key: 'canceled',
+        label: t('users.modals.report.stats.canceled'),
+        value: report.totalCanceledBookingCount,
+      },
+      {
+        key: 'pending',
+        label: t('users.modals.report.stats.pending'),
+        value: report.totalPendingBookingCount,
+      },
+      {
+        key: 'approved',
+        label: t('users.modals.report.stats.approved'),
+        value: report.totalApprovedBookingCount,
+      },
+      {
+        key: 'rejected',
+        label: t('users.modals.report.stats.rejected'),
+        value: report.totalRejectedBookingCount,
+        fullWidth: true as const,
+      },
+    ];
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabel="Izvještaj korisnika"
+      ariaLabel={t('users.table.rowActions.reportAria')}
       headerRight={
-        <IconButton onClick={onClose} aria-label="Zatvori">
+        <IconButton onClick={onClose} aria-label={t('users.modals.common.closeAria')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
@@ -73,26 +105,26 @@ export const UserReportModal: React.FC<UserReportModalProps> = ({ isOpen, onClos
     >
       <div className="space-y-5">
         <div>
-          <p className="text-sm text-(--color-modal-label)">Korisnik</p>
+          <p className="text-sm text-(--color-modal-label)">{t('users.modals.report.userLabel')}</p>
           <p className="font-medium text-(--color-text)">
             {user.name} {user.surname}
           </p>
         </div>
 
         {loading && (
-          <p className="text-sm text-(--color-modal-label)">Učitavanje...</p>
+          <p className="text-sm text-(--color-modal-label)">{t('users.modals.report.loading')}</p>
         )}
 
         {error && (
           <p className="text-sm text-red-500">{error}</p>
         )}
 
-        {report && !loading && (
+        {statItems && !loading && (
           <div className="grid grid-cols-2 gap-4">
-            {statItems(report).map((item) => (
+            {statItems.map((item) => (
               <div
-                key={item.label}
-                className="rounded-xl border border-(--color-table-border) bg-(--color-table-surface) p-4"
+                key={item.key}
+                className={`rounded-xl border border-(--color-table-border) bg-(--color-table-surface) p-4${'fullWidth' in item && item.fullWidth ? ' col-span-2' : ''}`}
               >
                 <p className="text-sm text-(--color-modal-label)">{item.label}</p>
                 <p className="text-2xl font-bold text-(--color-text)">{item.value}</p>

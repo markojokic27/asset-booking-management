@@ -14,6 +14,9 @@
     "loading": "Loading users...",
     "none": "No users yet."
   },
+  "errors": {
+    "loadReport": "Failed to load report."
+  },
   "delete": {
     "title": "Delete user?",
     "description": "Are you sure you want to delete \"{{name}}\"? This user will be marked as deleted."
@@ -87,6 +90,19 @@
           "date": "Date"
         }
       }
+    },
+    "report": {
+      "userLabel": "User",
+      "loading": "Loading...",
+      "stats": {
+        "total": "Total bookings",
+        "active": "Active",
+        "completed": "Completed",
+        "canceled": "Canceled",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      }
     }
   },
   "table": {
@@ -106,6 +122,7 @@
     },
     "rowActions": {
       "viewAria": "View user",
+      "reportAria": "User report",
       "editAria": "Edit user",
       "deleteAria": "Delete user"
     }
