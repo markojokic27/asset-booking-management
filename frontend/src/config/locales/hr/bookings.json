@@ -17,5 +17,12 @@
     "bookingEndRequired": "Kraj rezervacije je obavezan",
     "noteMax": "Napomena smije imati najviše 1000 znakova",
     "endAfterStart": "Kraj rezervacije mora biti nakon početka"
+  },
+  "status": {
+    "pending": "Na čekanju",
+    "approved": "Odobreno",
+    "cancelled": "Otkazano",
+    "rejected": "Odbijeno",
+    "completed": "Dovršeno"
   }
 }

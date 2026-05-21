@@ -18,6 +18,7 @@ export const Navbar: React.FC = () => {
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
     { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharpIcon },
     { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon },
+    { to: '/report', label: t('layout.navbar.report'), icon: PeopleSharpIcon },
   ];
   //TODO hover, new tab
   // Base for links

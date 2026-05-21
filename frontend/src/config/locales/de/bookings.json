@@ -17,5 +17,12 @@
     "bookingEndRequired": "Buchungsende ist erforderlich",
     "noteMax": "Notiz darf höchstens 1000 Zeichen lang sein",
     "endAfterStart": "Buchungsende muss nach dem Buchungsbeginn liegen"
+  },
+  "status": {
+    "pending": "Ausstehend",
+    "approved": "Genehmigt",
+    "cancelled": "Abgesagt",
+    "rejected": "Abgelehnt",
+    "completed": "Fertiggestellt"
   }
 }

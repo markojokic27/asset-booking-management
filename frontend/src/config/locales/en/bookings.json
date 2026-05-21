@@ -17,5 +17,12 @@
     "bookingEndRequired": "Booking end is required",
     "noteMax": "Note must be at most 1000 characters long",
     "endAfterStart": "Booking end must be after booking start"
+  },
+  "status": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected",
+    "completed": "Completed"
   }
 }

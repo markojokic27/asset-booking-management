@@ -13,6 +13,7 @@ import NotFound from '../pages/NotFound';
 import Users from '../pages/Users';
 import AssetCategories from '../pages/AssetCategories';
 import AccountInfo from '../pages/AccountInfo';
+import Report from '../pages/Report';
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
           { path: 'categories', element: <AssetCategories /> },
           { path: 'manager', element: <Manager /> },
           { path: 'account-info', element: <AccountInfo /> },
+          { path: 'report', element: <Report /> },
         ],
       },
     ],
