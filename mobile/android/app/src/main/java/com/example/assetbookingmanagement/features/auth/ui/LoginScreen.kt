@@ -5,6 +5,9 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +32,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
     val isDarkTheme = isSystemInDarkTheme()
 
     LaunchedEffect(uiState.isLoggedIn) {
@@ -63,7 +67,15 @@ fun LoginScreen(
 
             LabeledInput("Username", username, "Enter username", isLandscape) { username = it }
             Spacer(modifier = Modifier.height(spacing))
-            LabeledInput("Password", password, "Enter password", isLandscape, true) { password = it }
+            LabeledInput(
+                label = "Password",
+                value = password,
+                placeholder = "Enter password",
+                isLandscape = isLandscape,
+                isPassword = true,
+                passwordVisible = passwordVisible,
+                passwordVisibilityToggle = { passwordVisible = !passwordVisible }
+            ) { password = it }
 
             Spacer(modifier = Modifier.height(spacing * 1.5f))
 
@@ -119,7 +131,16 @@ fun LoginHeader(isLandscape: Boolean, isDarkTheme: Boolean) {
 }
 
 @Composable
-fun LabeledInput(label: String, value: String, placeholder: String, isLandscape: Boolean, isPassword: Boolean = false, onValueChange: (String) -> Unit) {
+fun LabeledInput(
+    label: String,
+    value: String,
+    placeholder: String,
+    isLandscape: Boolean,
+    isPassword: Boolean = false,
+    passwordVisible: Boolean = false,
+    passwordVisibilityToggle: @Composable (() -> Unit)? = null,
+    onValueChange: (String) -> Unit
+) {
     Text(
         text = label,
         fontSize = 13.sp,
@@ -130,8 +151,19 @@ fun LabeledInput(label: String, value: String, placeholder: String, isLandscape:
         value = value,
         onValueChange = onValueChange,
         placeholder = placeholder,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text)
+        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text),
+        passwordVisibilityToggle = if (isPassword && passwordVisibilityToggle != null) {
+            {
+                IconButton(onClick = passwordVisibilityToggle) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                    )
+                }
+            }
+        } else {
+            null
+        }
     )
 }
 

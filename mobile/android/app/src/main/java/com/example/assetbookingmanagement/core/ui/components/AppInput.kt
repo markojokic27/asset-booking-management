@@ -43,7 +43,8 @@ fun AppInput(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    passwordVisibilityToggle: @Composable (() -> Unit)? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
@@ -109,6 +110,7 @@ fun AppInput(
                         letterSpacing = 2.8.sp
                     )
                 },
+                trailingIcon = passwordVisibilityToggle,
                 keyboardOptions = keyboardOptions,
                 visualTransformation = visualTransformation,
                 interactionSource = interactionSource,
