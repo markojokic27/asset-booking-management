@@ -13,6 +13,9 @@ public class PageAndHandlerFactory extends CommonMethods {
     public static AssetPage assetPage;
     public static AssetCategoryPage assetCategoryPage;
     public static AccountPage accountPage;
+    public static LogoutPage logoutPage;
+    public static LanguagePage languagePage;
+    public static ThemeTogglePage themeTogglePage;
 
     public static void setupPagesAndHandlers() {
         loginPage = new LoginPage();
@@ -21,5 +24,8 @@ public class PageAndHandlerFactory extends CommonMethods {
         assetPage=new AssetPage();
         assetCategoryPage=new AssetCategoryPage();
         accountPage = new AccountPage();
+        logoutPage = new LogoutPage();
+        languagePage = new LanguagePage();
+        themeTogglePage = new ThemeTogglePage();
     }
 }

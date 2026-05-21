@@ -70,7 +70,8 @@ public class CommonConstants{
 
     // Account info
 
-    public static final String NEW_PASSWORD = "admin1234";
+    public static final String PASSWORD = "andela123";
+    public static final String NEW_PASSWORD = "andela1234";
 
 
     public static final String BROWSER = "BROWSER";

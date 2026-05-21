@@ -70,7 +70,7 @@ function LanguageSwitcher({ variant = 'header' }: Props) {
         </button>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content
+      <DropdownMenu.Content data-testid="select-language"
         side={variant === 'header' ? 'bottom' : 'top'}
         align={variant === 'header' ? 'end' : 'start'}
         className="my-2 rounded border border-gray-200 bg-white text-gray-900 shadow dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
@@ -80,6 +80,7 @@ function LanguageSwitcher({ variant = 'header' }: Props) {
           return (
             <DropdownMenu.Item
               key={lang.code}
+              data-testid={`language-option-${lang.code}`}
               onSelect={() => handleChange(lang.code)}
               className="cursor-pointer px-4 py-2 hover:bg-gray-100 hover:outline-none dark:hover:bg-gray-800"
             >

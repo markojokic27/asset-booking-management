@@ -20,7 +20,7 @@ public class AccountInfoTest extends BaseLogin {
     @Test
     void changeAccountPasswordWithValidData(){
         accountPage.account(
-                CommonConstants.VALID_PASSWORD,
+                CommonConstants.PASSWORD,
                 CommonConstants.NEW_PASSWORD,
                 CommonConstants.NEW_PASSWORD
         );
@@ -42,7 +42,7 @@ public class AccountInfoTest extends BaseLogin {
     @Test
     void changePasswordModalStaysOpenWhenNewPasswordIsEmpty(){
         accountPage.account(
-                CommonConstants.VALID_PASSWORD,
+                CommonConstants.PASSWORD,
                 "",
                 CommonConstants.NEW_PASSWORD
         );
@@ -53,7 +53,7 @@ public class AccountInfoTest extends BaseLogin {
     @Test
     void changePasswordModalStaysOpenWhenConfirmPasswordIsEmpty() {
         accountPage.account(
-                CommonConstants.VALID_PASSWORD,
+                CommonConstants.PASSWORD,
                 CommonConstants.NEW_PASSWORD,
                 ""
         );
@@ -86,7 +86,7 @@ public class AccountInfoTest extends BaseLogin {
     @Test
     void changePasswordModalStaysOpenWithLongNewPassword() {
         accountPage.account(
-                CommonConstants.VALID_PASSWORD,
+                CommonConstants.PASSWORD,
                 CommonConstants.LONG_PASSWORD,
                 CommonConstants.NEW_PASSWORD
         );
@@ -97,7 +97,7 @@ public class AccountInfoTest extends BaseLogin {
     @Test
     void changePasswordModalStaysOpenWithShortNewPassword() {
         accountPage.account(
-                CommonConstants.VALID_PASSWORD,
+                CommonConstants.PASSWORD,
                 CommonConstants.SHORT_PASSWORD,
                 CommonConstants.NEW_PASSWORD
         );
@@ -108,9 +108,9 @@ public class AccountInfoTest extends BaseLogin {
     @Test
     void changePasswordModalStaysOpenWithDifferentConfirmPassword() {
         accountPage.account(
-                CommonConstants.VALID_PASSWORD,
+                CommonConstants.PASSWORD,
                 CommonConstants.LONG_PASSWORD,
-                CommonConstants.VALID_PASSWORD
+                CommonConstants.PASSWORD
         );
 
         assertTrue(isElementVisible(accountPage.typeCurrentPassword));
