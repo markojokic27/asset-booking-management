@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
+import com.example.assetbookingmanagement.core.ui.components.AvailabilityCalendar
 import com.example.assetbookingmanagement.core.ui.components.DateTimePicker
 
 @Composable
@@ -74,8 +75,9 @@ fun CreateBookingScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        if (selectedTabIndex == BookingTab.ChooseDate.ordinal) {
-            DateTimePicker()
+        when (selectedTabIndex) {
+            BookingTab.ChooseDate.ordinal -> DateTimePicker()
+            BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar()
         }
 
         Spacer(modifier = Modifier.weight(1f))
