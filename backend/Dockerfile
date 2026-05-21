@@ -27,5 +27,12 @@ RUN apk add --no-cache curl
 # Expose Spring Boot default port
 EXPOSE 8080
 
+# Switch to non root user for security
+RUN addgroup -S appuser && adduser -S appuser -G appuser
+
+RUN chown -R appuser:appuser /app
+
+USER appuser
+
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
