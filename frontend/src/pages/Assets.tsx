@@ -16,6 +16,7 @@ import { AssetBookingsModal } from '../features/asset/components/AssetBookingsMo
 import { AssetAddModal } from '../features/asset/components/AssetAddModal';
 import { AssetsTable } from '../features/asset/components/AssetTable';
 import { AssetReportModal } from '../features/asset/components/AssetReportModal';
+import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
 // API
 import { getAllAssets, updateAsset } from '../features/asset/api/assetApi';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
@@ -43,6 +44,8 @@ export default function Assets() {
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [search, setSearch] = useState('');
+  const [showDeleted, setShowDeleted] = useState(false);
+  const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
   const [loading, setLoading] = useState(true);
   const [serverError, setServerError] = useState('');
   const [assetCategories, setAssetCategories] = useState<AssetCategoryDto[]>(
@@ -100,6 +103,11 @@ export default function Assets() {
       ? t('assets.categories.all')
       : selectedCategory;
 
+  const collator = useMemo(
+    () => new Intl.Collator('hr', { sensitivity: 'base' }),
+    []
+  );
+
   const filteredAssets = useMemo(
     () =>
       assets.filter((asset) => {
@@ -113,12 +121,22 @@ export default function Assets() {
             : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') ===
               selectedCategory;
 
-        return matchesSearch && matchesCategory;
+        const matchesDeleted = showDeleted || asset.status !== 'DELETED';
+
+        return matchesSearch && matchesCategory && matchesDeleted;
       }),
-    [assets, search, selectedCategory, categoryMap]
+    [assets, search, selectedCategory, categoryMap, showDeleted]
   );
 
-  const pagination = usePagination(filteredAssets, 10);
+  const sortedAssets = useMemo(() => {
+    const dir = nameSortDir === 'asc' ? 1 : -1;
+
+    return [...filteredAssets].sort(
+      (a, b) => collator.compare(a.name, b.name) * dir
+    );
+  }, [filteredAssets, nameSortDir, collator]);
+
+  const pagination = usePagination(sortedAssets, 10);
 
   const closeModal = () => {
     setModal({ type: 'none' });
@@ -173,12 +191,20 @@ export default function Assets() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
-      <div className="mt-6 flex w-full flex-wrap items-end gap-3">
+      <div className="mt-6 flex w-full items-center justify-between">
+        <div className="flex items-center">
+          <ShowDeletedFilter
+            checked={showDeleted}
+            onToggle={() => setShowDeleted((v) => !v)}
+            labelKey="assets.filters.showDeleted"
+          />
+        </div>
+
         <SearchInput
           value={search}
           onChange={setSearch}
           placeholder={t('assets.search.placeholder')}
-          className="mb-0 w-full sm:ml-auto sm:w-70"
+          className="w-70"
         />
       </div>
 
@@ -191,6 +217,10 @@ export default function Assets() {
           <AssetsTable
             assets={pagination.paged}
             categoryMap={categoryMap}
+            nameSortDir={nameSortDir}
+            onToggleNameSort={() =>
+              setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+            }
             onView={(asset) => setModal({ type: 'view', asset })}
             onEdit={(asset) => setModal({ type: 'edit', asset })}
             onBookings={(asset) => setModal({ type: 'bookings', asset })}

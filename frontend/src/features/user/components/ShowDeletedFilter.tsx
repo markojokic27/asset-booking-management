@@ -4,9 +4,15 @@ type ShowDeletedFilterProps = {
   checked: boolean;
   onToggle: () => void;
   className?: string;
+  labelKey?: string;
 };
 
-export function ShowDeletedFilter({ checked, onToggle, className }: ShowDeletedFilterProps) {
+export function ShowDeletedFilter({
+  checked,
+  onToggle,
+  className,
+  labelKey = 'users.filters.showDeleted',
+}: ShowDeletedFilterProps) {
   const { t } = useTranslation();
 
   return (
@@ -43,7 +49,7 @@ export function ShowDeletedFilter({ checked, onToggle, className }: ShowDeletedF
           />
         </svg>
       </span>
-      {t('users.filters.showDeleted')}
+      {t(labelKey)}
     </label>
   );
 }

@@ -19,17 +19,20 @@ import { type AssetDto } from '../../../features/asset/types';
 type Props = {
   assets: AssetDto[];
   categoryMap: Record<number, string>;
+  nameSortDir: 'asc' | 'desc';
+  onToggleNameSort: () => void;
   onView: (asset: AssetDto) => void;
   onEdit: (asset: AssetDto) => void;
   onDelete: (asset: AssetDto) => void;
   onBookings: (asset: AssetDto) => void;
   onReport: (asset: AssetDto) => void;
-
 };
 
 export function AssetsTable({
   assets,
   categoryMap,
+  nameSortDir,
+  onToggleNameSort,
   onView,
   onEdit,
   onDelete,
@@ -37,6 +40,7 @@ export function AssetsTable({
   onReport,
 }: Props) {
   const { t } = useTranslation();
+  const nextSortDirKey = nameSortDir === 'asc' ? 'descending' : 'ascending';
 
   const columns: TableColumn<AssetDto>[] = useMemo(
     () => [
@@ -48,8 +52,37 @@ export function AssetsTable({
       },
       {
         key: 'name',
-        header: t('assets.table.assetName'),
+        header: (
+          <button
+            type="button"
+            onClick={onToggleNameSort}
+            className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
+            aria-label={t('assets.table.sort.byNameAria', {
+              direction: t(`assets.table.sort.direction.${nextSortDirKey}`),
+            })}
+          >
+            <span className="uppercase">{t('assets.table.assetName')}</span>
+            <span
+              className="inline-flex flex-col leading-none"
+              aria-hidden="true"
+            >
+              <span
+                className={nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'}
+              >
+                ▲
+              </span>
+              <span
+                className={
+                  nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'
+                }
+              >
+                ▼
+              </span>
+            </span>
+          </button>
+        ),
         accessor: 'name',
+        cellClassName: 'font-medium',
       },
       {
         key: 'category',
@@ -136,7 +169,18 @@ export function AssetsTable({
         ),
       },
     ],
-    [t, categoryMap, onView, onEdit, onDelete, onBookings, onReport]
+    [
+      t,
+      categoryMap,
+      nameSortDir,
+      nextSortDirKey,
+      onToggleNameSort,
+      onView,
+      onEdit,
+      onDelete,
+      onBookings,
+      onReport,
+    ]
   );
 
   return (

@@ -9,6 +9,9 @@
   "search": {
     "placeholder": "Assets suchen…"
   },
+  "filters": {
+    "showDeleted": "Gelöschte anzeigen"
+  },
   "empty": {
     "loading": "Assets werden geladen…"
   },
@@ -43,7 +46,14 @@
     "ariaView": "Asset anzeigen",
     "ariaReport": "Asset-Bericht",
     "ariaEdit": "Asset bearbeiten",
-    "ariaDelete": "Asset löschen"
+    "ariaDelete": "Asset löschen",
+    "sort": {
+      "byNameAria": "Nach Name sortieren ({{direction}})",
+      "direction": {
+        "ascending": "aufsteigend",
+        "descending": "absteigend"
+      }
+    }
   },
   "modals": {
     "close": "Schließen",

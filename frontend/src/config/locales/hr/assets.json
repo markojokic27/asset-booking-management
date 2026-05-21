@@ -9,6 +9,9 @@
   "search": {
     "placeholder": "Pretraži imovinu..."
   },
+  "filters": {
+    "showDeleted": "Prikaži obrisane"
+  },
   "empty": {
     "loading": "Učitavanje imovine..."
   },
@@ -43,7 +46,14 @@
     "ariaView": "Prikaži imovinu",
     "ariaReport": "Izvještaj imovine",
     "ariaEdit": "Uredi imovinu",
-    "ariaDelete": "Obriši imovinu"
+    "ariaDelete": "Obriši imovinu",
+    "sort": {
+      "byNameAria": "Sortiraj po nazivu ({{direction}})",
+      "direction": {
+        "ascending": "uzlazno",
+        "descending": "silazno"
+      }
+    }
   },
   "modals": {
     "close": "Zatvori",

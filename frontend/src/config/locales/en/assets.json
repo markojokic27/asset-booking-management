@@ -9,6 +9,9 @@
   "search": {
     "placeholder": "Search assets..."
   },
+  "filters": {
+    "showDeleted": "Show deleted"
+  },
   "empty": {
     "loading": "Loading assets..."
   },
@@ -43,7 +46,14 @@
     "ariaView": "View asset",
     "ariaReport": "Asset report",
     "ariaEdit": "Edit asset",
-    "ariaDelete": "Delete asset"
+    "ariaDelete": "Delete asset",
+    "sort": {
+      "byNameAria": "Sort by name {{direction}}",
+      "direction": {
+        "ascending": "ascending",
+        "descending": "descending"
+      }
+    }
   },
   "modals": {
     "close": "Close",
