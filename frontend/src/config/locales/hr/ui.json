@@ -64,5 +64,9 @@
       "invalidCredentials": "Pogrešno korisničko ime ili lozinka",
       "serverError": "Greška na serveru."
     }
+  },
+  "notFound": {
+    "title": "404 - Stranica nije pronađena",
+    "goHome": "Idi na početnu"
   }
 }

@@ -64,5 +64,9 @@
       "invalidCredentials": "Wrong username or password",
       "serverError": "Server error."
     }
+  },
+  "notFound": {
+    "title": "404 - Not Found",
+    "goHome": "Go to Home"
   }
 }

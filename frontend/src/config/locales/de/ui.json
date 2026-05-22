@@ -64,5 +64,9 @@
       "invalidCredentials": "Falscher Benutzername oder falsches Passwort",
       "serverError": "Serverfehler."
     }
+  },
+  "notFound": {
+    "title": "404 - Seite nicht gefunden",
+    "goHome": "Zur Startseite"
   }
 }
