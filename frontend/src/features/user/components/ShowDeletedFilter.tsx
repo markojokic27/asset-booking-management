@@ -49,7 +49,7 @@ export function ShowDeletedFilter({
           />
         </svg>
       </span>
-      {t(labelKey)}
+      {t(labelKey as any)}
     </label>
   );
 }
