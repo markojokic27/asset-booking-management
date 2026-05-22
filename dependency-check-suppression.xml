@@ -5,7 +5,8 @@
          NOT angus-activation (MIME type activation framework).
          CPE mismatch: cpe for eclipse:angus_mail matched wrong artifact. -->
     <suppress>
-        <notes>CVE-2025-7962 is assigned to angus-mail, not angus-activation. CPE false positive - different artifact, different purpose.</notes>
+        <notes>CVE-2025-7962 is assigned to angus-mail, not angus-activation. CPE false positive -
+            different artifact, different purpose.</notes>
         <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus\-activation@.*$</packageUrl>
         <cve>CVE-2025-7962</cve>
     </suppress>
@@ -34,6 +35,17 @@
         <notes>CVE-2026-40894 affects opentelemetry-dotnet baggage parsing, not Java</notes>
         <packageUrl regex="true">^pkg:maven/io\.opentelemetry.*$</packageUrl>
         <cve>CVE-2026-40894</cve>
+    </suppress>
+
+    <!-- FALSE POSITIVE: CVE-2026-42154  affects OpenTelemetry .NET, not Java -->
+    <suppress>
+        <notes>
+            The CVE is about the Prometheus server binary, OWASP Dependency-Check is incorrectly
+            matching it to your micrometer-registry-prometheus Java library because both contain the
+            word "prometheus" in their CPE (Common Platform Enumeration) identifier.
+        </notes>
+        <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer\-registry\-prometheus@.*$</packageUrl>
+        <cve>CVE-2026-42154</cve>
     </suppress>
 
 </suppressions>
