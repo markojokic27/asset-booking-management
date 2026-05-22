@@ -20,7 +20,7 @@ FROM (
                  'MacBook Pro 16',
                  '2026-04-24 09:00:00+00'::timestamptz,
                  '2026-04-25 09:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'MacBook Pro booking for dev work'
              ),
              (
@@ -60,7 +60,7 @@ FROM (
                  'Parking Spot 22',
                  '2026-04-24 11:00:00+00'::timestamptz,
                  '2026-05-24 11:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'Outdoor parking use'
              ),
              (
@@ -76,7 +76,7 @@ FROM (
                  'Design Patterns',
                  '2026-04-24 14:00:00+00'::timestamptz,
                  '2026-04-25 14:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'Design Patterns reading session'
              ),
              (
@@ -92,7 +92,7 @@ FROM (
                  'Desk A1',
                  '2026-04-24 09:00:00+00'::timestamptz,
                  '2026-04-24 10:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'Desk A1 full day booking'
              ),
              (
@@ -116,7 +116,7 @@ FROM (
                  'Meeting Room 12',
                  '2026-04-25 09:00:00+00'::timestamptz,
                  '2026-04-25 10:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'Meeting Room booking'
              ),
              (
@@ -140,7 +140,7 @@ FROM (
                  'Projector Epson',
                  '2026-04-24 08:00:00+00'::timestamptz,
                  '2026-05-24 08:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'Projector use'
              ),
              (
@@ -156,7 +156,7 @@ FROM (
                  'Router Mikrotik',
                  '2026-04-24 12:00:00+00'::timestamptz,
                  '2026-05-24 12:00:00+00'::timestamptz,
-                 'ACTIVE',
+                 'APPROVED',
                  'Router setup'
              ),
              (
@@ -172,7 +172,7 @@ FROM (
                  'Parking Spot 17',
                  '2026-04-24 16:00:00+00'::timestamptz,
                  '2026-05-24 16:00:00+00'::timestamptz,
-                 'DELETED',
+                 'PENDING',
                  'Parking removed'
              )
      ) AS v(

@@ -7,4 +7,4 @@ ALTER TABLE booking
     asset_id WITH =,
     tstzrange(booking_start, booking_end) WITH &&
 )
-WHERE (status IN ('PENDING', 'APPROVED', 'ACTIVE'));
+WHERE (status IN ('PENDING', 'APPROVED'));
