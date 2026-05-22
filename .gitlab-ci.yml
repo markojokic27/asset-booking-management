@@ -21,6 +21,7 @@ variables:
 # ─────────────────────────────────────────
 # DEBUG (develop only — remove when stable)
 # ─────────────────────────────────────────
+# TODO: Remove before going to production
 debug:vars:
   stage: .pre
   image: alpine
@@ -90,8 +91,7 @@ backend:test:
     key: maven-$CI_PROJECT_ID
     paths:
       - backend/.m2/repository/
-
-
+  
 
 frontend:test:
   stage: test
@@ -375,21 +375,74 @@ socket-security:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
 
-# #snyk-scan
-# snyk-scann:
+#snyk-scan
+# snyk-scan-backend:
 #   stage: security
-#   image: node:24-alpine
+#   image: maven:3.9-eclipse-temurin-21
+#   needs:
+#     - job: backend:compile
 #   variables:
-#     SNYK_API_KEY: $SNYK_API_KEY
+#     SNYK_API: "https://api.eu.snyk.io"
+#   before_script:
+#     - apt-get update -qq && apt-get install -y nodejs npm -qq   
+#     - npm ci -g snyk snyk-to-html
 #   script:
-#     - npm install -g snyk
-#     - snyk config environment SNYK-EU-01
-#     - snyk auth $SNYK_API_KEY
-#     - snyk test --all-projects --json-file-output=snyk_data_file.json
+#     - snyk test --file=backend/pom.xml --json-file-output=snyk_backend.json || true
+#     - snyk test --file=tests/e2e-tests/pom.xml --json-file-output=snyk_e2e.json || true
+#     - snyk-to-html -i snyk_backend.json -o snyk_backend_results.html
+#     - snyk-to-html -i snyk_e2e.json -o snyk_e2e_results.html    
+#     - snyk monitor --file=backend/pom.xml --target-reference="$CI_COMMIT_REF_NAME"
+#   cache:
+#     key: maven-$CI_PROJECT_ID
+#     paths:
+#       - backend/.m2/repository/
+#     policy: pull
 #   artifacts:
 #     when: always
 #     paths:
-#       - snyk_data_file.json
+#       - snyk_backend_report.json
+#       - snyk_backend_results.html
+#       - snyk_e2e_report.json
+#       - snyk_e2e_results.html
+#     expire_in: 1 week
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "feature/snyk"
+#     - if: $CI_COMMIT_BRANCH == "develop"
+#     - if: $CI_COMMIT_BRANCH == "main"
+
+
+snyk-scan-frontend:
+  stage: security
+  image: node:24-alpine
+  needs:
+    - job: backend:compile
+    - job: frontend:compile
+  variables:
+    SNYK_API: "https://api.eu.snyk.io"
+  before_script:
+    - npm install -g snyk snyk-to-html
+    - echo "Token starts with $(echo $SNYK_TOKEN | cut -c1-4)..."
+  script:
+    - snyk test --file=frontend/package.json --json-file-output=snyk_data_file.json || true
+    - snyk-to-html -i snyk_data_file.json -o snyk_results.html
+    - snyk monitor --file=frontend/package.json --target-reference="$CI_COMMIT_REF_NAME"
+  cache:
+    key: npm-$CI_PROJECT_ID
+    paths:
+      - frontend/node_modules/
+    policy: pull
+  artifacts:
+    when: always
+    paths:
+      - snyk_data_file.json
+      - snyk_results.html
+    expire_in: 1 week
+  rules:
+    - if: $CI_COMMIT_BRANCH == "feature/snyk"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+
 
 
 # ─────────────────────────────────────────
