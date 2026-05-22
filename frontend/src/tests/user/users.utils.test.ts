@@ -1,5 +1,6 @@
 /* unit tests for user utils functions */
 
+import { describe, it, expect } from 'vitest';
 import {
   getDisplayName,
   getFullName,

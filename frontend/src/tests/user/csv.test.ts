@@ -1,5 +1,6 @@
 /* unit tests for user CSV export */
 
+import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { exportUsersCsv } from '../../features/user/utilis/csv';
 
 /* base user for testing */
@@ -21,44 +22,40 @@ const CSV_HEADERS =
 
 /* describe exportUsersCsv function */
 describe('exportUsersCsv', () => {
-  let capturedBlob: Blob | null;
   let capturedBlobContent: string | null;
   let mockAnchor: HTMLAnchorElement;
-  let createObjectURL: jest.Mock;
-  let revokeObjectURL: jest.Mock;
+  let createObjectURL: Mock;
+  let revokeObjectURL: Mock;
   const OriginalBlob = globalThis.Blob;
 
   beforeEach(() => {
-    capturedBlob = null;
     capturedBlobContent = null;
     mockAnchor = {
       href: '',
       download: '',
-      click: jest.fn(),
+      click: vi.fn(),
     } as unknown as HTMLAnchorElement;
 
-    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('2025-05-22T12:00:00.000Z');
+    vi.spyOn(Date.prototype, 'toISOString').mockReturnValue('2025-05-22T12:00:00.000Z');
 
-    globalThis.Blob = jest.fn((parts: BlobPart[]) => {
-      capturedBlobContent = parts.map(String).join('');
-      capturedBlob = new OriginalBlob(parts);
-      return capturedBlob;
-    }) as unknown as typeof Blob;
+    globalThis.Blob = class extends OriginalBlob {
+      constructor(parts: BlobPart[], options?: BlobPropertyBag) {
+        capturedBlobContent = parts.map(String).join('');
+        super(parts, options);
+      }
+    } as typeof Blob;
 
-    createObjectURL = jest.fn((blob: Blob) => {
-      capturedBlob = blob;
-      return 'blob:mock-url';
-    });
-    revokeObjectURL = jest.fn();
+    createObjectURL = vi.fn(() => 'blob:mock-url');
+    revokeObjectURL = vi.fn();
     globalThis.URL.createObjectURL = createObjectURL;
     globalThis.URL.revokeObjectURL = revokeObjectURL;
 
-    jest.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
+    vi.spyOn(document, 'createElement').mockReturnValue(mockAnchor);
   });
 
   afterEach(() => {
     globalThis.Blob = OriginalBlob;
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   function exportAndReadCsv(users: Record<string, unknown>[]) {
