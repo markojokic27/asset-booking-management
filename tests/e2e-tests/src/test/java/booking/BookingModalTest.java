@@ -18,8 +18,8 @@ public class BookingModalTest extends BaseLogin {
     }
 
     @Test
-    public void ClickForReservation() throws InterruptedException{
-        bookingPage.clickBookingButton();
+    public void ClickForBookAsset() throws InterruptedException{
+        bookingPage.clickBookButton();
         Thread.sleep(2000);
         assertTrue(waitForUrlContains(CommonConstants.ASSETS_URL));
     }

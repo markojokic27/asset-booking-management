@@ -9,13 +9,13 @@ public class BookingPage extends CommonMethods {
         super();
     }
 
-    public By BookingsButton = By.cssSelector("[data-testid='booking-button']");
+    public By BookButton = By.cssSelector("[data-testid='book-button']");
 
     // Search assets
     public By searchField = By.cssSelector("[data-testid='search-input']");
 
-    public void clickBookingButton(){
-        clickOnElement(BookingsButton);
+    public void clickBookButton(){
+        clickOnElement(BookButton);
     }
 
 
