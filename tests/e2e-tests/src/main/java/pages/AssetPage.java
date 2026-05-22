@@ -48,6 +48,8 @@ public class AssetPage extends CommonMethods {
     public By assetButton = By.cssSelector("[data-testid='save-asset-button']");
     public By editButton = By.cssSelector("[data-testid='save-edit-button']");
 
+    // Search assets
+    public By searchField = By.cssSelector("[data-testid='search-input']");
 
     // Add asset
     public void assetOpenModal() {
@@ -136,6 +138,11 @@ public class AssetPage extends CommonMethods {
     public void assetBookingCloseModal() {
         clickOnElement(assetBookingCloseModal);
     }
+
+    // Search assets
+     public void searchAssets(String assets){
+        typeInElement(searchField, assets);
+     }
 
 
 

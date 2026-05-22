@@ -32,6 +32,13 @@ public class UserPage extends CommonMethods {
     public By userBookingOpenModal = By.cssSelector("[data-testid='user-bookings-button']");
     public By userBookingCloseModal = By.cssSelector("[data-testid='user-booking-close-button']");
 
+    // Search assets
+    public By searchField = By.cssSelector("[data-testid='search-input']");
+
+    // View deleted assets
+
+    public By checkBoxDeletedAssets = By.cssSelector("[data-testid='checkbox']");
+
     public void userOpenModal() {
         clickOnElement(userOpenModal);
     }
@@ -102,6 +109,19 @@ public class UserPage extends CommonMethods {
     public void userBookingCloseModal() {
         clickOnElement(userBookingCloseModal);
     }
+
+    // View deteled assets
+
+    public void clickCheckBox (){
+        clickOnElement(checkBoxDeletedAssets);
+    }
+
+
+    // Search assets
+    public void searchUsers(String users){
+        typeInElement(searchField, users);
+    }
+
 
     public void user(String role, String status, String name, String surname, String username, String password, String id, String email, String managerEmail, String notes){
         selectRole(role);

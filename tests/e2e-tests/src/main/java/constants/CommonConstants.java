@@ -9,6 +9,7 @@ public class CommonConstants{
     public static final String ASSETS_URL= "/assets";
     public static final String CATEGORY_URL= "/categories";
     public static final String ACCOUNT_INFO="/account-info";
+    //public static final String BOOKING_ASSET="/assets/id:/bookings";
 
     //Login
 
@@ -72,6 +73,18 @@ public class CommonConstants{
 
     public static final String PASSWORD = "andela123";
     public static final String NEW_PASSWORD = "andela1234";
+
+    // Search assets
+
+    public static final String SEARCH_ASSET="mac";
+
+    // Search assets
+
+    public static final String SEARCH_USERS="doe";
+
+    // Search assets
+
+    public static final String SEARCH_CATEGORY="laptop";
 
 
     public static final String BROWSER = "BROWSER";

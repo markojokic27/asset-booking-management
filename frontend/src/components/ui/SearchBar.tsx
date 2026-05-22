@@ -22,7 +22,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <SearchSharpIcon className="h-5 w-5 text-(--color-table-border)" />
       </div>
-      <input
+      <input data-testid="search-input" 
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
