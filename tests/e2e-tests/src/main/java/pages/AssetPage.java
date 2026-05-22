@@ -51,6 +51,10 @@ public class AssetPage extends CommonMethods {
     // Search assets
     public By searchField = By.cssSelector("[data-testid='search-input']");
 
+    // Toggle deleted assets
+    public By toggleDeletedAssets = By.cssSelector("[data-testid='toggle-deleted']");
+
+
     // Add asset
     public void assetOpenModal() {
         clickOnElement(assetOpenModal);
@@ -139,10 +143,18 @@ public class AssetPage extends CommonMethods {
         clickOnElement(assetBookingCloseModal);
     }
 
+    // Toggle deleted assets
+
+    public void clickToggleDeletedAssets() {
+        clickOnElement(toggleDeletedAssets);
+    }
+
     // Search assets
      public void searchAssets(String assets){
         typeInElement(searchField, assets);
      }
+
+
 
 
 

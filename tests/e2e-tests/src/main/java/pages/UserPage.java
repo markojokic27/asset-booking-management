@@ -39,6 +39,10 @@ public class UserPage extends CommonMethods {
 
     public By checkBoxDeletedAssets = By.cssSelector("[data-testid='checkbox']");
 
+
+    // Toggle deleted assets
+    public By toggleDeletedUsers = By.cssSelector("[data-testid='toggle-deleted']");
+
     public void userOpenModal() {
         clickOnElement(userOpenModal);
     }
@@ -110,12 +114,17 @@ public class UserPage extends CommonMethods {
         clickOnElement(userBookingCloseModal);
     }
 
-    // View deteled assets
+    // View deleted assets
 
     public void clickCheckBox (){
         clickOnElement(checkBoxDeletedAssets);
     }
 
+    // Toggle deleted assets
+
+    public void clickToggleDeletedUsers (){
+        clickOnElement(toggleDeletedUsers);
+    }
 
     // Search assets
     public void searchUsers(String users){
