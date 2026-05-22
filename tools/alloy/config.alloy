@@ -41,6 +41,37 @@ otelcol.processor.batch "default" {
 // LOGS -> LOKI
 //
 
+local.file_match "backend_logs" {
+  path_targets = [
+    {
+      __path__ = "/var/log/backend/application.log",
+      job      = "backend",
+      app      = "asset-management",
+    },
+  ]
+}
+
+loki.source.file "backend_logs" {
+  targets       = local.file_match.backend_logs.targets
+  forward_to    = [loki.process.backend.receiver]
+  tail_from_end = true
+}
+
+loki.process "backend" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.regex {
+    expression = "traceId=(?P<trace_id>[0-9a-f]{32}).*spanId=(?P<span_id>[0-9a-f]{16})"
+  }
+
+  stage.labels {
+    values = {
+      trace_id = "trace_id",
+      span_id  = "span_id",
+    }
+  }
+}
+
 local.file_match "postgres_logs" {
   path_targets = [
     {

@@ -48,6 +48,8 @@ services:
       - .env
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    volumes:
+      - backend_logs:/app/logs
     depends_on:
       db:
         condition: service_healthy
@@ -99,6 +101,7 @@ services:
     volumes:
       - ./tools/alloy/config.alloy:/etc/alloy/config.alloy:ro
       - postgres_logs:/var/log/postgresql:ro
+      - backend_logs:/var/log/backend:ro
     ports:
       - "4317:4317"
       - "4318:4318"
@@ -160,3 +163,4 @@ volumes:
   loki_data:
   tempo_data:
   postgres_logs:
+  backend_logs:

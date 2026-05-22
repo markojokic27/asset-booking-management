@@ -29,7 +29,7 @@ EXPOSE 8080
 
 # Switch to non root user for security
 RUN addgroup -S appuser && adduser -S appuser -G appuser
-
+RUN mkdir -p /app/logs
 RUN chown -R appuser:appuser /app
 
 USER appuser
