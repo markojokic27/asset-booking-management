@@ -1,6 +1,6 @@
 logging {
   level  = "info"
-  format = "logfmt"
+  format = "json"
 }
 
 //
@@ -44,9 +44,9 @@ otelcol.processor.batch "default" {
 local.file_match "backend_logs" {
   path_targets = [
     {
-      __path__ = "/var/log/backend/application.log",
+      __path__ = "/var/log/backend/application.json",
       job      = "backend",
-      app      = "asset-management",
+      app      = "assetbookingmanagement",
     },
   ]
 }
@@ -58,18 +58,25 @@ loki.source.file "backend_logs" {
 }
 
 loki.process "backend" {
-  forward_to = [loki.write.default.receiver]
 
-  stage.regex {
-    expression = "traceId=(?P<trace_id>[0-9a-f]{32}).*spanId=(?P<span_id>[0-9a-f]{16})"
+  stage.json {
+    expressions = {
+      trace_id = "traceId",
+      span_id  = "spanId",
+      level   = "level",
+      logger  = "logger",
+    }
   }
 
   stage.labels {
     values = {
-      trace_id = "trace_id",
-      span_id  = "span_id",
+      trace_id = "",
+      span_id = "",
+      level   = "",
     }
   }
+
+  forward_to = [loki.write.default.receiver]
 }
 
 local.file_match "postgres_logs" {

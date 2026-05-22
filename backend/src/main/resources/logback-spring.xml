@@ -14,18 +14,49 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS_DIR}/application.log</file>
 
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
+        <file>${LOGS_DIR}/application.json</file>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+
+            <jsonGeneratorDecorator
+                class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+
+                <decorator
+                    class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+
+                    <defaultMask>****</defaultMask>
+
+                    <path>password</path>
+                    <path>user.password</path>
+                    <path>credentials.password</path>
+
+                </decorator>
+
+            </jsonGeneratorDecorator>
+
+            <providers>
+
+                <timestamp />
+                <logLevel />
+                <threadName />
+                <loggerName />
+                <message />
+                <mdc />
+                <arguments />
+                <stackTrace />
+
+            </providers>
+
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOGS_DIR}/archived/application-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOGS_DIR}/archived/application-%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
+
     </appender>
 
     <root level="INFO">
