@@ -70,43 +70,49 @@ fun RoleBadge(
 private fun statusBadgeStyle(status: String): AppStatusStyle {
     val isDark = isSystemInDarkTheme()
     return when (status.uppercase()) {
-        "ACTIVE", "APPROVED" -> if (isDark) {
-            AppStatusStyle(StatusActiveBgDark, StatusActiveTextDark, StatusActiveBorderDark)
-        } else {
-            AppStatusStyle(StatusActiveBgLight, StatusActiveTextLight, StatusActiveBorderLight)
-        }
+        "ACTIVE", "APPROVED" -> themedStatusStyle(
+            isDark = isDark,
+            darkStyle = AppStatusStyle(StatusActiveBgDark, StatusActiveTextDark, StatusActiveBorderDark),
+            lightStyle = AppStatusStyle(StatusActiveBgLight, StatusActiveTextLight, StatusActiveBorderLight)
+        )
 
-        "INACTIVE", "REJECTED", "CANCELLED" -> if (isDark) {
-            AppStatusStyle(StatusInactiveBgDark, StatusInactiveTextDark, StatusInactiveBorderDark)
-        } else {
-            AppStatusStyle(StatusInactiveBgLight, StatusInactiveTextLight, StatusInactiveBorderLight)
-        }
+        "INACTIVE", "REJECTED", "CANCELLED" -> themedStatusStyle(
+            isDark = isDark,
+            darkStyle = AppStatusStyle(StatusInactiveBgDark, StatusInactiveTextDark, StatusInactiveBorderDark),
+            lightStyle = AppStatusStyle(StatusInactiveBgLight, StatusInactiveTextLight, StatusInactiveBorderLight)
+        )
 
-        "DAMAGED", "PENDING" -> if (isDark) {
-            AppStatusStyle(StatusDamagedBgDark, StatusDamagedTextDark, StatusDamagedBorderDark)
-        } else {
-            AppStatusStyle(StatusDamagedBgLight, StatusDamagedTextLight, StatusDamagedBorderLight)
-        }
+        "DAMAGED", "PENDING" -> themedStatusStyle(
+            isDark = isDark,
+            darkStyle = AppStatusStyle(StatusDamagedBgDark, StatusDamagedTextDark, StatusDamagedBorderDark),
+            lightStyle = AppStatusStyle(StatusDamagedBgLight, StatusDamagedTextLight, StatusDamagedBorderLight)
+        )
 
-        "DELETED" -> if (isDark) {
-            AppStatusStyle(StatusDeletedBgDark, StatusDeletedTextDark, StatusDeletedBorderDark)
-        } else {
-            AppStatusStyle(StatusDeletedBgLight, StatusDeletedTextLight, StatusDeletedBorderLight)
-        }
+        "DELETED" -> themedStatusStyle(
+            isDark = isDark,
+            darkStyle = AppStatusStyle(StatusDeletedBgDark, StatusDeletedTextDark, StatusDeletedBorderDark),
+            lightStyle = AppStatusStyle(StatusDeletedBgLight, StatusDeletedTextLight, StatusDeletedBorderLight)
+        )
 
-        "COMPLETED" -> if (isDark) {
-            AppStatusStyle(StatusCompletedBgDark, StatusCompletedTextDark, StatusCompletedBorderDark)
-        } else {
-            AppStatusStyle(StatusCompletedBgLight, StatusCompletedTextLight, StatusCompletedBorderLight)
-        }
+        "COMPLETED" -> themedStatusStyle(
+            isDark = isDark,
+            darkStyle = AppStatusStyle(StatusCompletedBgDark, StatusCompletedTextDark, StatusCompletedBorderDark),
+            lightStyle = AppStatusStyle(StatusCompletedBgLight, StatusCompletedTextLight, StatusCompletedBorderLight)
+        )
 
-        else -> if (isDark) {
-            AppStatusStyle(StatusNeutralBgDark, StatusNeutralTextDark, StatusNeutralBorderDark)
-        } else {
-            AppStatusStyle(StatusNeutralBgLight, StatusNeutralTextLight, StatusNeutralBorderLight)
-        }
+        else -> themedStatusStyle(
+            isDark = isDark,
+            darkStyle = AppStatusStyle(StatusNeutralBgDark, StatusNeutralTextDark, StatusNeutralBorderDark),
+            lightStyle = AppStatusStyle(StatusNeutralBgLight, StatusNeutralTextLight, StatusNeutralBorderLight)
+        )
     }
 }
+
+private fun themedStatusStyle(
+    isDark: Boolean,
+    darkStyle: AppStatusStyle,
+    lightStyle: AppStatusStyle
+): AppStatusStyle = if (isDark) darkStyle else lightStyle
 
 @Composable
 private fun roleBadgeStyle(role: String): AppStatusStyle {
