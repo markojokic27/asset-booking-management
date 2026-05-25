@@ -1,0 +1,1016 @@
+= Asset Booking Management — Technical Manual
+:author: Maurer Internship 2026
+:revdate: 2026-05-25
+:revnumber: 1.0
+:toc:
+:toc-title: Table of Contents
+:toclevels: 3
+:sectnums:
+:source-highlighter: highlight.js
+:icons: font
+:tip-caption: 💡 TIP
+:note-caption: 📝 NOTE
+:warning-caption: ⚠️ WARNING
+:caution-caption: 🔴 CAUTION
+
+---
+
+== Project Overview
+
+=== Purpose
+
+The Asset Booking Management system is an internal web and mobile application developed
+as part of the Maurer Internship 2026 programme. It allows company employees to discover,
+reserve, and manage workplace assets — such as hot desks, meeting rooms, parking spots,
+and shared equipment — through a unified interface.
+
+Key capabilities:
+
+* Browse and search all available workplace assets in real time
+* Create, view, edit, and cancel bookings
+* Prevent double-bookings through reservation conflict detection
+* Book assets via QR code using the mobile interface
+* Generate reports on asset utilisation and booking history
+* Real-time visibility of which assets are booked and by whom
+
+=== Tech Stack
+
+[cols="1,2", options="header"]
+|===
+| Layer | Technology
+
+| Frontend | React 19 (with React DOM 19)
+| Frontend testing | @testing-library/react 16, @testing-library/jest-dom 6, @testing-library/user-event 14
+| Backend | Java 21 / Spring Boot (Maven 3.9, profile-based config)
+| Authentication | LDAP + JWT (access token + refresh token)
+| Database | PostgreSQL 18
+| Containerisation | Docker / Docker Compose
+| Build automation | GNU Make
+| API specification | OpenAPI (YAML)
+| API testing | Bruno CLI 3.3.0
+| CI/CD | GitLab CI/CD
+| Security scanning | OWASP Dependency-Check, OSV Scanner, Socket Security, Snyk (frontend)
+| Observability | Grafana (with grafana-clock-panel, grafana-piechart-panel), distributed tracing (configurable sampling)
+| Email | Mailtrap (dev/test SMTP)
+
+|===
+
+=== Architecture Summary
+
+The system follows a three-tier client-server architecture:
+
+[source]
+----
+┌───────────────────────────────────────────────┐
+│                Browser / Mobile               │
+│              React 19 Frontend                │
+│         (served via Nginx in Docker)          │
+└──────────────────────┬────────────────────────┘
+                       │ HTTPS / REST (JSON)
+                       │ JWT Bearer token
+┌──────────────────────▼────────────────────────┐
+│           Spring Boot Backend (Java 21)        │
+│   REST API  │  LDAP Auth  │  Business Logic    │
+└──────────────────────┬────────────────────────┘
+                       │ JDBC
+┌──────────────────────▼────────────────────────┐
+│             PostgreSQL 18 Database             │
+│         (schema managed via db_init.sql)       │
+└───────────────────────────────────────────────┘
+----
+
+All three layers are containerised and orchestrated with Docker Compose.
+The Makefile provides developer-friendly aliases for common compose commands.
+
+---
+
+== Repository Structure
+
+The following is the top-level layout of the repository:
+
+[source]
+----
+asset-booking-management/
+├── backend/                    # Spring Boot backend application
+│   ├── src/                    # Java source code
+│   ├── Dockerfile              # Backend container image definition
+│   └── pom.xml                 # Maven build descriptor
+│
+├── frontend/                   # React 19 frontend application
+│   ├── src/                    # React source code (components, pages, hooks)
+│   ├── dist/                   # Build output (generated, not committed)
+│   ├── Dockerfile              # Frontend container image definition
+│   └── package.json            # NPM project descriptor
+│
+├── deployment/
+│   └── database/
+│       └── db_init.sql         # PostgreSQL schema initialisation script
+│
+├── docs/                       # All project documentation
+│   ├── adr/                    # Architecture Decision Records
+│   ├── database/               # ER model and DB docs
+│   ├── functional-requirements/
+│   ├── images/                 # Logos and diagrams
+│   ├── solution-document/
+│   ├── test-cases/
+│   ├── technical-manual/       # This document lives here
+│   ├── use-cases/
+│   └── user-manual/
+│
+├── openapi/
+│   └── assetBookingManagementOpenAPISpec.yaml  # Full API specification
+│
+├── tests/
+│   ├── api-tests/
+│   │   └── bruno/              # Bruno API test collections
+│   └── e2e-tests/              # End-to-end test project (Playwright/Java)
+│
+├── compose.yaml                # Base Docker Compose file (production)
+├── compose.dev.yaml            # Development overrides (live reload, etc.)
+├── compose.e2e.yaml            # E2E test environment compose file
+├── Makefile                    # Developer command shortcuts
+├── .env                        # Local environment variables (never commit secrets)
+├── .gitlab-ci.yml              # GitLab CI/CD pipeline definition
+└── README.md                   # Project overview and quick-start guide
+----
+
+=== Key Directories Explained
+
+`backend/src/`::
+Contains all Java/Spring Boot source code including controllers, services, repositories,
+security configuration, and domain models.
+
+`frontend/src/`::
+Contains all React components, pages, routing configuration, API client code,
+and state management logic.
+
+`deployment/database/db_init.sql`::
+The canonical SQL schema file used to initialise the PostgreSQL database.
+Applied automatically when the `db` container starts for the first time.
+
+`docs/adr/`::
+Architecture Decision Records documenting significant technical decisions made during
+the project. Reference these before making structural changes.
+
+`openapi/`::
+The single source of truth for the REST API contract between frontend and backend.
+The project follows an API-first approach.
+
+`tests/api-tests/bruno/`::
+Bruno collections used for smoke-testing the API both locally and in CI.
+
+---
+
+== Prerequisites and Environment Setup
+
+=== Required Tools
+
+Ensure the following tools are installed on your development machine before
+attempting to run the project:
+
+[cols="1,1,2", options="header"]
+|===
+| Tool | Minimum Version | Purpose
+
+| Docker | Latest stable | Container runtime
+| Docker Compose | v2 (bundled with Docker Desktop) | Multi-container orchestration
+| GNU Make | Any | Makefile command runner
+| Node.js | 18+ (24 recommended) | Frontend development and testing
+| npm | 6+ | Frontend package management
+| Java JDK | 21 | Backend development (if running outside Docker)
+| Maven | 3.9 | Backend build (if running outside Docker)
+| Bruno | Latest | API testing (optional, local only)
+
+|===
+
+NOTE: For day-to-day development, Docker and Make are the only strict requirements
+if you are not modifying backend Java code directly. The frontend dev server and
+backend both run inside containers.
+
+=== Node.js Version
+
+The CI pipeline uses `node:24-alpine`. It is recommended to match this locally.
+Use a version manager such as `nvm` or `fnm` if you need to switch between Node versions:
+
+[source,bash]
+----
+nvm install 24
+nvm use 24
+----
+
+=== Environment Variables
+
+The project uses a `.env` file at the repository root. Copy the sample below,
+fill in the required values, and save it as `.env`.
+The Makefile automatically exports all variables from `.env` to the shell environment.
+
+NOTE: Never commit the `.env` file to version control. It is listed in `.gitignore`.
+
+[source,bash]
+----
+# ── Database ────────────────────────────────────────────
+DB_HOST=db                         # Name of the DB service in compose (keep as-is)
+DB_PORT=5432                       # PostgreSQL port (default: 5432)
+DB_NAME=database_name_here         # Name of the database to create
+DB_USER=db_user_here               # PostgreSQL username
+DB_PASSWORD=db_password_here       # PostgreSQL password
+
+# ── Spring Boot ─────────────────────────────────────────
+SPRING_PROFILES_ACTIVE=dev         # Active Spring profile: dev | prod
+
+# ── JWT ─────────────────────────────────────────────────
+# Secret must be at least 32 characters long (use a proper generator for production)
+JWT_SECRET=your_long_secret_here
+JWT_EXPIRY_SECONDS=3600            # Access token lifetime in seconds
+JWT_REFRESH_SECONDS=86400          # Refresh token lifetime in seconds
+
+# ── CORS ─────────────────────────────────────────────────
+CORS_ALLOWED_ORIGINS=http://localhost:5173
+CORS_ALLOWED_METHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
+CORS_ALLOWED_HEADERS=*
+CORS_EXPOSED_HEADERS=Authorization
+CORS_ALLOW_CREDENTIALS=false
+CORS_MAX_AGE=3600
+
+# ── Observability ────────────────────────────────────────
+# 1.0 = record all traces (dev). Use 0.1 or lower in production.
+SAMPLING_PROBABILITY=1.0
+
+# ── Grafana ──────────────────────────────────────────────
+GF_SECURITY_ADMIN_USER=your-username
+GF_SECURITY_ADMIN_PASSWORD=your-password
+GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-piechart-panel
+
+# ── Email (Mailtrap for dev/test) ────────────────────────
+MAIL_USERNAME=mailtrap_user
+MAIL_PASSWORD=mailtrap_pass
+
+# ── Security scanning (CI use only) ─────────────────────
+NVD_API_KEY=your-actual-key-here
+SONAR_TOKEN=sonar_token_provided_via_wire
+SONAR_FRONTEND_TOKEN=your-global-sonar-token
+----
+
+==== Environment Variable Reference
+
+[cols="2,1,3", options="header"]
+|===
+| Variable | Required | Description
+
+| `DB_HOST` | Yes | Docker Compose service name for the database. Keep as `db`.
+| `DB_PORT` | Yes | Port exposed by the PostgreSQL container. Default: `5432`.
+| `DB_NAME` | Yes | Name of the PostgreSQL database.
+| `DB_USER` | Yes | PostgreSQL user that the application connects as.
+| `DB_PASSWORD` | Yes | Password for `DB_USER`.
+| `SPRING_PROFILES_ACTIVE` | Yes | Selects the Spring Boot configuration profile (`dev` or `prod`).
+| `JWT_SECRET` | Yes | HMAC signing key for JWT tokens. Must be ≥ 32 characters.
+| `JWT_EXPIRY_SECONDS` | Yes | Lifetime of an access token in seconds.
+| `JWT_REFRESH_SECONDS` | Yes | Lifetime of a refresh token in seconds.
+| `CORS_ALLOWED_ORIGINS` | Yes | Comma-separated list of allowed origins for CORS.
+| `CORS_ALLOWED_METHODS` | Yes | HTTP methods the backend accepts cross-origin.
+| `CORS_ALLOWED_HEADERS` | Yes | Allowed request headers (`*` for all).
+| `CORS_EXPOSED_HEADERS` | No | Headers the browser may read from responses.
+| `CORS_ALLOW_CREDENTIALS` | No | Whether to allow cookies/credentials cross-origin.
+| `CORS_MAX_AGE` | No | How long (seconds) browsers cache preflight responses.
+| `SAMPLING_PROBABILITY` | No | Fraction of traces to export (1.0 = all, 0.1 = 10%).
+| `GF_SECURITY_ADMIN_USER` | No | Grafana admin username.
+| `GF_SECURITY_ADMIN_PASSWORD` | No | Grafana admin password.
+| `GF_INSTALL_PLUGINS` | No | Comma-separated Grafana plugins to install on startup.
+| `MAIL_USERNAME` | No | SMTP username (Mailtrap in dev).
+| `MAIL_PASSWORD` | No | SMTP password (Mailtrap in dev).
+| `NVD_API_KEY` | CI only | API key for the NVD vulnerability database (OWASP check).
+| `SONAR_TOKEN` | CI only | SonarQube authentication token for backend analysis.
+| `SONAR_FRONTEND_TOKEN` | CI only | SonarQube token for frontend analysis.
+
+|===
+
+---
+
+== Installation and Local Development
+
+=== First-Time Setup
+
+. Clone the repository:
++
+[source,bash]
+----
+git clone https://student-gitlab.tn.internal/studentpractice/asset-booking-management.git
+cd asset-booking-management
+----
+
+. Create your local `.env` file:
++
+[source,bash]
+----
+cp .env.example .env
+# Open .env in your editor and fill in all required values
+----
+
+. Start the full development stack:
++
+[source,bash]
+----
+make dev
+----
++
+This runs `docker compose -f compose.yaml -f compose.dev.yaml up --build`, which:
++
+* Builds fresh Docker images for the backend and frontend
+* Starts the PostgreSQL database container (`db`)
+* Initialises the database schema using `deployment/database/db_init.sql`
+* Starts the Spring Boot backend with the `dev` profile
+* Starts the React frontend with live reload enabled
+
+. Verify the stack is running by opening the following URLs:
++
+[cols="1,2", options="header"]
+|===
+| Service | URL
+
+| Frontend | http://localhost:5173
+| Backend API | http://localhost:8080/API/v1
+| Grafana | http://localhost:3000 (if included in compose)
+
+|===
+
+=== Day-to-Day Development Commands
+
+All commands are run from the repository root where the `Makefile` is located.
+
+==== Development Environment
+
+[source,bash]
+----
+# Start all services with live reload (recommended for daily work)
+make dev
+
+# Stop all running containers
+make dev-down
+
+# Stop containers AND remove all volumes (database data will be lost)
+make dev-clean
+----
+
+==== Production Environment (local testing)
+
+[source,bash]
+----
+# Build and start in production mode (no live reload)
+make prod
+
+# Stop production containers
+make prod-down
+
+# Stop and remove all production volumes
+make prod-clean
+----
+
+==== Running Only Specific Services
+
+If you only need the database (e.g. to inspect data with DBeaver or another client):
+
+[source,bash]
+----
+docker compose up db
+----
+
+Connect with any PostgreSQL client using:
+
+* Host: `localhost`
+* Port: `5432`
+* Database: value of `DB_NAME` in your `.env`
+* User / Password: values of `DB_USER` / `DB_PASSWORD`
+
+=== Setting Up Bruno for API Testing
+
+Bruno is the recommended tool for manually testing API endpoints during development.
+
+. Download and install Bruno from https://www.usebruno.com/downloads
+  (select the `.deb` package for Ubuntu, `x86_64` architecture).
+. Open Bruno and select *Open Collection*.
+. Navigate to `tests/api-tests/Bruno/Asset Booking Management/opencollection.yml`.
+. In the top-right environment selector, choose *development*.
+  This sets the `baseUrl` to `http://localhost:8080/API`.
+. Start the application with `make dev`, then run any request in the collection.
+
+=== Frontend-Only Development (without Docker)
+
+If you want to run the frontend directly on your machine (faster hot reload):
+
+[source,bash]
+----
+cd frontend
+npm ci --legacy-peer-deps
+npm run dev
+----
+
+NOTE: The backend must still be running (via `make dev` or Docker) for API calls to work.
+
+=== Running Tests Locally
+
+==== Frontend Tests
+
+[source,bash]
+----
+cd frontend
+npm ci --legacy-peer-deps
+npm run test
+----
+
+==== Backend Tests
+
+[source,bash]
+----
+cd backend
+mvn verify -Dmaven.repo.local=.m2/repository -Ddependency-check.skip=true
+----
+
+==== Dependency Security Check (OWASP)
+
+[source,bash]
+----
+# Online (downloads latest NVD data)
+make dep-check
+
+# Offline (uses cached NVD data, skips update)
+make dep-check-offline
+----
+
+---
+
+== Configuration
+
+=== Spring Boot Profiles
+
+The backend uses Spring Boot profiles to separate environment-specific configuration.
+The active profile is controlled by the `SPRING_PROFILES_ACTIVE` environment variable.
+
+[cols="1,3", options="header"]
+|===
+| Profile | Purpose
+
+| `dev` | Local development. Enables detailed logging, relaxed security, and dev-friendly defaults.
+| `prod` | Production. Enables stricter settings, reduced logging verbosity, and production datasource config.
+
+|===
+
+=== CORS Configuration
+
+CORS is configured entirely via environment variables, making it easy to adjust per environment
+without code changes:
+
+[source,bash]
+----
+CORS_ALLOWED_ORIGINS=http://localhost:5173   # Dev frontend origin
+CORS_ALLOWED_METHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
+CORS_ALLOWED_HEADERS=*
+CORS_EXPOSED_HEADERS=Authorization
+CORS_ALLOW_CREDENTIALS=false
+CORS_MAX_AGE=3600
+----
+
+For production, replace `CORS_ALLOWED_ORIGINS` with the actual deployed frontend domain.
+
+=== JWT Configuration
+
+The backend issues and validates JWT tokens for all authenticated requests.
+
+[source,bash]
+----
+JWT_SECRET=<min 32 character secret>
+JWT_EXPIRY_SECONDS=3600     # Access token: 1 hour
+JWT_REFRESH_SECONDS=86400   # Refresh token: 24 hours
+----
+
+CAUTION: Use a cryptographically secure random generator for `JWT_SECRET` in production.
+Do not reuse development secrets.
+
+=== Observability / Tracing
+
+The `SAMPLING_PROBABILITY` variable controls what fraction of HTTP traces are recorded
+and exported to the tracing backend:
+
+[source,bash]
+----
+SAMPLING_PROBABILITY=1.0   # Record 100% of traces (development)
+SAMPLING_PROBABILITY=0.1   # Record 10% of traces (production)
+----
+
+=== Email (Mailtrap)
+
+In development, outgoing emails are routed to Mailtrap so they never reach real recipients.
+Configure with:
+
+[source,bash]
+----
+MAIL_USERNAME=mailtrap_user
+MAIL_PASSWORD=mailtrap_pass
+----
+
+Replace with production SMTP credentials when deploying.
+
+---
+
+== CI/CD Pipeline
+
+The GitLab CI/CD pipeline is defined in `.gitlab-ci.yml` at the repository root.
+It consists of five stages that run sequentially.
+
+=== Pipeline Overview
+
+[source]
+----
+.pre  →  compile  →  test  →  bruno  →  security
+----
+
+=== Stage Reference
+
+[cols="1,2,3", options="header"]
+|===
+| Stage | Job(s) | What it does
+
+| `.pre` | `debug:vars` | Prints key CI environment variables for debugging. Runs on `develop` branch only. Marked TODO for removal before production.
+| `compile` | `backend:compile` | Builds the Spring Boot JAR using Maven, skipping tests. Caches `.m2` repository. Artifact: `backend/target/`.
+| `compile` | `frontend:compile` | Installs npm dependencies and builds the React app. Caches `node_modules`. Artifact: `frontend/dist/`.
+| `test` | `backend:test` | Runs all backend unit and integration tests via `mvn verify`. Publishes JUnit XML results.
+| `test` | `frontend:test` | Runs frontend tests via `npm run test`. Marked `allow_failure: true`.
+| `bruno` | `bruno:smoke` | Starts the backend against a live PostgreSQL service container, then runs the Bruno API collection as a smoke test. Publishes JUnit XML results.
+| `security` | `backend-dependency-check` | Runs OWASP Dependency-Check on backend Maven dependencies against the NVD database.
+| `security` | `frontend-package-vulnerabilities-check` | Runs `npm audit` on frontend packages at `--audit-level=high`.
+| `security` | `osv-scanner` | Scans the entire repository using Google OSV Scanner for known vulnerabilities.
+| `security` | `socket-security` | Scans supply-chain risks using Socket Security CLI.
+| `security` | `snyk-scan-frontend` | Scans frontend dependencies with Snyk and publishes an HTML report.
+
+|===
+
+=== Stage Details
+
+==== Compile Stage
+
+Both compile jobs run in parallel. Each uses its own Docker image:
+
+* Backend: `maven:3.9-eclipse-temurin-21`
+* Frontend: `node:24-alpine`
+
+Build artifacts are retained for 1 hour and passed to downstream jobs via GitLab artifact
+sharing, avoiding redundant recompilation.
+
+[source,yaml]
+----
+artifacts:
+  paths:
+    - backend/target/
+  expire_in: 1 hour
+----
+
+==== Test Stage
+
+Both test jobs depend on (`needs:`) their respective compile job, ensuring tests
+only run after a successful build.
+
+Backend tests use the Maven Surefire plugin and publish results as GitLab JUnit reports,
+visible directly in merge request pipelines.
+
+[source,yaml]
+----
+artifacts:
+  reports:
+    junit: backend/target/surefire-reports/*.xml
+----
+
+Frontend tests are currently marked `allow_failure: true`, meaning a test failure
+will not block the pipeline.
+
+==== Bruno Smoke Test Stage
+
+The `bruno:smoke` job is the most complex job in the pipeline. It:
+
+. Spins up a PostgreSQL 18 service container alongside the job.
+. Installs OpenJDK 21, Maven, and the Bruno CLI (`@usebruno/cli@3.3.0`) into the Alpine image.
+. Starts the Spring Boot backend in the background using `mvn spring-boot:run`.
+. Polls the login endpoint every 3 seconds (up to 40 retries = ~2 minutes) until the backend is ready.
+. Runs the Bruno test collection against `http://localhost:8080/API` using the `Admin` environment.
+. Publishes JUnit XML results.
+. Kills the backend process in `after_script`.
+
+The job uses several CI-scoped secrets injected as variables:
+
+[cols="1,2", options="header"]
+|===
+| Variable | Purpose
+
+| `BRUNO_DB_PASSWORD` | PostgreSQL password for the CI service container
+| `BRUNO_JWT_SECRET` | JWT secret used by the backend during CI runs
+
+|===
+
+This job runs on merge requests, the `develop` branch, and the `main` branch.
+It is marked `allow_failure: true`.
+
+==== Security Stage
+
+Security jobs are designed to run without blocking the main development flow:
+
+[cols="2,2,2", options="header"]
+|===
+| Job | Trigger | Notes
+
+| `backend-dependency-check` | Nightly schedule, `main`, manual on `develop` | Uses `NVD_API_KEY`. Reports saved for 7 days.
+| `frontend-package-vulnerabilities-check` | Nightly schedule, `main`, manual on `develop` | Fails on `high` or critical npm audit findings.
+| `osv-scanner` | Nightly schedule, `main`, `develop` | Scans recursively (`-r .`). Report saved as JSON for 7 days.
+| `socket-security` | Nightly schedule, `main`, `develop` | Uses `SOCKET_SECURITY_API_KEY` and `GITLAB_TOKEN`.
+| `snyk-scan-frontend` | `feature/snyk`, `develop`, `main` | Uses `SNYK_TOKEN`. Saves JSON and HTML reports for 1 week.
+
+|===
+
+NOTE: Several jobs (`sonar`, `backend-dockerize`, `frontend-dockerize`, `playwright:test`,
+`snyk-scan-backend`) are commented out in the current pipeline. These represent planned
+or in-progress integrations.
+
+=== Required CI/CD Variables
+
+The following variables must be configured in the GitLab project's
+*Settings → CI/CD → Variables* section:
+
+[cols="1,3", options="header"]
+|===
+| Variable | Description
+
+| `BRUNO_DB_PASSWORD` | Password for the PostgreSQL container in the Bruno stage
+| `BRUNO_JWT_SECRET` | JWT secret for the backend during Bruno smoke tests
+| `NVD_API_KEY` | API key for the NIST NVD vulnerability database
+| `SONAR_TOKEN` | SonarQube token for backend analysis
+| `SONAR_FRONTEND_TOKEN` | SonarQube token for frontend analysis
+| `SOCKET_SECURITY_API_KEY` | Socket Security API key
+| `GITLAB_TOKEN` | GitLab access token (used by Socket Security)
+| `SNYK_TOKEN` | Snyk authentication token for frontend scanning
+| `CI_REGISTRY_PASSWORD` | Auto-provided by GitLab for container registry login
+
+|===
+
+---
+
+== Deployment
+
+=== Environments
+
+[cols="1,1,3", options="header"]
+|===
+| Environment | Branch | Description
+
+| Development | `develop` | Local machines and the CI pipeline. Uses `compose.dev.yaml` overrides with live reload.
+| Production | `main` | Deployed to the demo VM. Uses `compose.yaml` only. No live reload.
+| E2E Test | Any | Isolated environment for end-to-end test runs using `compose.e2e.yaml`.
+
+|===
+
+=== Docker Compose Architecture
+
+The project uses a layered Docker Compose approach:
+
+[source,bash]
+----
+# Development (base + dev overrides)
+docker compose -f compose.yaml -f compose.dev.yaml up --build
+
+# Production (base only)
+docker compose up --build
+
+# E2E testing (separate file)
+docker compose -f compose.e2e.yaml up --build -d
+----
+
+The `compose.yaml` file defines all services (frontend, backend, db, Grafana, etc.)
+and their base configuration. The `compose.dev.yaml` file overrides specific settings
+for local development, such as mounting source directories for live reload.
+
+=== Deployment to VM (Manual Process)
+
+NOTE: Automated deployment (`dockerize` and deploy stages) is currently commented out
+in the pipeline. The current process is manual.
+
+. SSH into the demo VM.
+. Pull the latest changes from the `main` branch.
+. Copy the production `.env` file to the repository root (stored securely, not in Git).
+. Run:
++
+[source,bash]
+----
+make prod
+----
+
+. Verify services are healthy:
++
+[source,bash]
+----
+docker compose ps
+docker compose logs backend --tail=50
+----
+
+=== Container Images
+
+The project builds two application images:
+
+[cols="1,2", options="header"]
+|===
+| Image | Build context
+
+| Backend | `backend/Dockerfile` — builds the Spring Boot JAR into a runtime image
+| Frontend | `frontend/Dockerfile` — builds the React app and serves it (likely via Nginx)
+
+|===
+
+The database uses the official `postgres:18` image directly, with no custom Dockerfile.
+Schema initialisation is handled by mounting `deployment/database/db_init.sql`
+into the container's init directory.
+
+---
+
+== Architecture and Key Components
+
+=== Frontend Architecture
+
+The frontend is a React 19 single-page application (SPA).
+
+==== Project Structure (frontend/src/)
+
+[source]
+----
+frontend/src/
+├── components/        # Reusable UI components (buttons, forms, modals, etc.)
+├── pages/             # Top-level route views (LoginPage, DashboardPage, BookingPage, etc.)
+├── hooks/             # Custom React hooks (data fetching, auth state, etc.)
+├── services/ (or api/)# HTTP client functions that call backend API endpoints
+├── context/ (or store/)# Global state management (auth context, booking context)
+├── routes/            # React Router route definitions and guards
+└── utils/             # Helper functions and constants
+----
+
+NOTE: The exact subfolder names may differ slightly. Verify against `frontend/src/`
+in the repository for the current structure.
+
+==== State Management
+
+The application uses React's built-in context API and hooks for state management.
+No external state library (Redux, Zustand) is indicated in the current `package.json`.
+
+==== Routing
+
+Client-side routing is handled by React Router. Protected routes verify the presence
+of a valid JWT access token before rendering. Users without a valid token are
+redirected to the login page.
+
+==== HTTP Client
+
+API calls are made using the browser's `fetch` API or a lightweight wrapper.
+The JWT access token is attached to all authenticated requests as a Bearer token
+in the `Authorization` header:
+
+[source]
+----
+Authorization: Bearer <access_token>
+----
+
+When an access token expires, the client uses the refresh token to obtain a new
+access token before retrying the original request.
+
+=== Backend Architecture
+
+The backend is a Spring Boot application following a layered architecture:
+
+[source]
+----
+backend/src/main/java/
+├── controller/        # REST controllers — handle HTTP requests and responses
+├── service/           # Business logic layer
+├── repository/        # Spring Data JPA repositories — database access
+├── model/ (or entity/)# JPA entity classes mapped to DB tables
+├── dto/               # Data Transfer Objects for API request/response bodies
+├── security/          # JWT filter, LDAP config, Spring Security configuration
+└── config/            # App-wide beans, CORS config, OpenAPI config
+----
+
+==== Authentication Flow
+
+[source]
+----
+1. User submits credentials (username + password) to POST /API/v1/auth/login
+2. Backend validates credentials against the LDAP directory
+3. On success: backend issues a JWT access token + refresh token
+4. Frontend stores tokens and includes access token in subsequent requests
+5. Access token expires → frontend calls POST /API/v1/auth/refresh
+6. Backend validates refresh token → issues a new access token
+----
+
+=== Database
+
+The database is PostgreSQL 18. The schema is defined in `deployment/database/db_init.sql`
+and applied automatically on first container startup.
+
+For the current entity-relationship diagram, refer to `docs/database/ER.png` in the repository.
+
+=== Observability Stack
+
+The application integrates with Grafana for dashboards and metrics visualisation.
+Distributed tracing is configured via `SAMPLING_PROBABILITY` — set to `1.0` during
+development to capture all traces, and a lower value in production to reduce overhead.
+
+---
+
+== API Integration
+
+=== API-First Approach
+
+The project follows an API-first methodology. The OpenAPI specification at
+`openapi/assetBookingManagementOpenAPISpec.yaml` is the single source of truth
+for all endpoints. Both frontend developers and API testers should refer to this
+file when working with the API.
+
+=== Base URL
+
+[cols="1,2", options="header"]
+|===
+| Environment | Base URL
+
+| Local development | `http://localhost:8080/API/v1`
+| CI / Bruno tests | `http://localhost:8080/API`
+| Production (VM) | Configured per deployment
+
+|===
+
+=== Authentication Endpoints
+
+[cols="1,1,2", options="header"]
+|===
+| Method | Path | Description
+
+| `POST` | `/auth/login` | Authenticate with LDAP credentials. Returns access + refresh JWT tokens.
+| `POST` | `/auth/refresh` | Exchange a valid refresh token for a new access token.
+| `POST` | `/auth/logout` | Invalidate the current session / refresh token.
+
+|===
+
+=== Core Resource Endpoints
+
+The full list of endpoints is defined in the OpenAPI spec. The main resource groups are:
+
+[cols="1,3", options="header"]
+|===
+| Resource | Description
+
+| `/assets` | CRUD operations for workplace assets (desks, rooms, parking, equipment)
+| `/bookings` | Create, view, update, and cancel bookings
+| `/users` | User profile and administration
+| `/reports` | Asset utilisation and booking history reports
+
+|===
+
+=== Request / Response Format
+
+All API requests and responses use JSON (`Content-Type: application/json`).
+Authenticated endpoints require the following header:
+
+[source]
+----
+Authorization: Bearer <jwt_access_token>
+----
+
+=== API Testing with Bruno
+
+The Bruno collection at `tests/api-tests/Bruno/` covers the main API workflows
+and is run as part of the CI pipeline. See <<_setting_up_bruno_for_api_testing>>
+for local setup instructions.
+
+---
+
+== Troubleshooting for Developers
+
+=== Docker / Compose Issues
+
+==== Containers fail to start
+
+Check that Docker is running and that no port conflicts exist:
+
+[source,bash]
+----
+docker compose ps
+docker compose logs <service-name>
+----
+
+Common port conflicts:
+
+* Port `5432` — another local PostgreSQL instance may be running. Stop it or change `DB_PORT`.
+* Port `8080` — another application may be using this port.
+* Port `5173` — another Vite/dev server may be running.
+
+==== Database is empty after restart
+
+If you ran `make dev-clean` or `make prod-clean`, all Docker volumes were deleted,
+including the database. The schema will be reapplied on the next `make dev`,
+but any data you inserted manually will be lost.
+
+==== Changes to backend code not reflected
+
+In development mode, the backend does not have live reload by default.
+Restart the backend container after making Java changes:
+
+[source,bash]
+----
+docker compose -f compose.yaml -f compose.dev.yaml restart backend
+----
+
+Or bring everything down and back up:
+
+[source,bash]
+----
+make dev-down && make dev
+----
+
+=== Frontend Issues
+
+==== `npm ci` fails with peer dependency errors
+
+The project uses `--legacy-peer-deps` to resolve peer dependency conflicts
+between React 19 and the testing libraries. Always include this flag:
+
+[source,bash]
+----
+npm ci --legacy-peer-deps
+----
+
+==== Frontend cannot reach the backend (CORS error)
+
+Check that:
+
+. The backend is running (`docker compose ps`).
+. `CORS_ALLOWED_ORIGINS` in `.env` includes the frontend origin (e.g. `http://localhost:5173`).
+. The backend has been restarted after any `.env` changes.
+
+=== Backend Issues
+
+==== JWT token errors (`SignatureException`, `ExpiredJwtException`)
+
+* Ensure `JWT_SECRET` is identical between the process that issued the token
+  and the process validating it. This is critical in multi-container setups.
+* Ensure `JWT_SECRET` is at least 32 characters long.
+* Check that system clocks are synchronised between containers if seeing
+  premature expiry errors.
+
+==== LDAP authentication fails
+
+* Verify that the LDAP server is reachable from within the backend container.
+* Check the backend logs for the specific LDAP error:
++
+[source,bash]
+----
+docker compose logs backend | grep -i ldap
+----
+
+==== `mvn verify` fails locally but passes in CI
+
+* Ensure your local Java version is 21: `java -version`
+* Ensure your local Maven version is 3.9+: `mvn -version`
+* Try clearing the local Maven cache:
++
+[source,bash]
+----
+rm -rf backend/.m2/repository
+mvn clean verify -Dmaven.repo.local=.m2/repository -Ddependency-check.skip=true
+----
+
+=== CI Pipeline Issues
+
+==== Bruno smoke test fails in CI
+
+. Check the pipeline log for the backend startup section.
+  If the backend never reaches `READY=1`, the Spring Boot startup failed.
+. Look for database connection errors — confirm `BRUNO_DB_PASSWORD` is set
+  correctly in GitLab CI/CD variables.
+. Check that `BRUNO_JWT_SECRET` is at least 32 characters.
+
+==== Security scan jobs marked `allow_failure` are failing
+
+Security jobs are non-blocking (`allow_failure: true`) by design for initial runs.
+Review the artifact reports (HTML or JSON) to assess actual vulnerability severity
+before deciding whether to remediate or suppress findings.
+
+==== A job fails with "image not found" or registry errors
+
+Ensure `CI_REGISTRY`, `CI_REGISTRY_USER`, and `CI_REGISTRY_PASSWORD` are available
+in the pipeline context. These are injected automatically by GitLab for projects
+with the Container Registry enabled.
+
+---
+
+== Document Revision History
+
+[cols="1,1,2,3", options="header"]
+|===
+| Version | Date | Author | Notes
+
+| 1.0 | 2026-05-25 | Maurer Internship 2026 | Initial version generated from README, package-lock.json, .gitlab-ci.yml, sample.env, and Makefile.
+
+|===
+
+NOTE: Sections marked TODO in the README (CI-CD deployment details, Demo VM, E2E Playwright tests)
+should be updated in this manual once the corresponding work is completed in the project.
