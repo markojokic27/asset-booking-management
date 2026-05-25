@@ -58,9 +58,9 @@ public class UserServiceImpl implements UserService {
         user.setDepartment(department);
         user.setPassword(passwordEncoder.encode(userRequest.password()));
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return mapper.toResponse(user);
+        return mapper.toResponse(savedUser);
     }
 
     /** {@inheritDoc} */
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     /** {@inheritDoc} */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userUpdateRequest) {
 
         User user = userRepository.findById(id)
@@ -130,8 +130,6 @@ public class UserServiceImpl implements UserService {
             user.setBenefit(userUpdateRequest.benefit());
         }
 
-        userRepository.save(user);
-
         return mapper.toResponse(user);
     }
 
@@ -151,9 +149,6 @@ public class UserServiceImpl implements UserService {
         String newEncodedPassword = passwordEncoder.encode(request.newPassword());
 
         user.setPassword(newEncodedPassword);
-
-        userRepository.save(user);
-
     }
 
     /** {@inheritDoc} */
@@ -165,9 +160,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
         user.setStatus(UserStatusEnum.DELETED);
-
-        userRepository.save(user);
-
+        
         List<String> statusesToCancel = List.of(
                 BookingStatusEnum.APPROVED.name(),
                 BookingStatusEnum.PENDING.name()
