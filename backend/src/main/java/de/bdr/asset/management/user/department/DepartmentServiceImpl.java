@@ -13,10 +13,7 @@ import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Implementation of Department Service
- * Currently returns only dummy data.
- */
+/** Implementation of Department Service */
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -31,12 +28,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * @param departmentRequest - A DepartmentDTO record
-     * @return a DepartmentDTO record
-     */
+    /** {@inheritDoc} */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public DepartmentResponseDTO createDepartment(DepartmentRequestDTO departmentRequest) {
 
         if (repository.existsByName(departmentRequest.name())) {
@@ -68,10 +62,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return mapper.toResponse(department);
     }
 
-    /**
-     * @param id - a Long id
-     * @return a DepartmentRequestDTO record
-     */
+    /** {@inheritDoc} */
     @Override
     public DepartmentResponseDTO getDepartmentById(Long id) {
 
@@ -81,10 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return mapper.toResponse(department);
     }
 
-    /**
-     * @param pageable - A Pageable object, determines the page, size and sort
-     * @return a Page of DepartmentRequestDTO records
-     */
+    /** {@inheritDoc} */
     @Override
     public Page<DepartmentResponseDTO> getAllDepartments(Pageable pageable) {
 
@@ -93,13 +81,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departments.map(mapper::toResponse);
     }
 
-    /**
-     * @param id - a Long id
-     * @param departmentRequest - a DepartmentRequestDTO record
-     * @return a DepartmentRequestDTO record
-     */
+    /** {@inheritDoc} */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
 
         Department department = repository.findById(id)
