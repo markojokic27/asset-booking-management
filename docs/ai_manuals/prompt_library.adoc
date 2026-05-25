@@ -1,0 +1,340 @@
+= AI Prompt Library — Asset Booking App Manuals
+:author: Intern Documentation Project
+:revdate: 2026-05-25
+:toc:
+:toc-title: Table of Contents
+:toclevels: 3
+:sectnums:
+
+== Overview
+
+This document contains all prompts used to generate the User Manual and Technical Manual
+for the internal Asset Booking application. Prompts are organized by document type and
+generation phase. They can be reused with different AI models (Claude, ChatGPT, Gemini, etc.)
+to compare output quality.
+
+Each prompt entry includes:
+
+* *Purpose* — what the prompt is designed to produce
+* *Inputs required* — what you must paste alongside the prompt
+* *The prompt itself* — ready to copy and use
+* *Notes* — tips or variations
+
+---
+
+== User Manual Prompts
+
+=== UM-01 — Generate Full User Manual Structure
+
+*Purpose:* Generate a complete AsciiDoc user manual outline and full content based
+on provided screenshots and app description.
+
+*Inputs required:*
+
+* A short description of what the app does (1–3 sentences)
+* List of key features (can be bullet points)
+* Screenshots of the main app screens (attach images)
+
+*Prompt:*
+
+[source]
+----
+You are a technical writer creating a User Manual for an internal web application
+used by company employees to book assets (such as rooms, equipment, or vehicles).
+
+The app is built with a modern JavaScript frontend framework (React/Vue/Angular).
+The target audience is non-technical employees who need to learn how to use the app.
+
+Here is a description of the app:
+The Asset Booking Management system is an internal web and mobile application developed as part of the Maurer Internship 2026 programme.
+
+Here are the key features:
+App allows company employees to discover, reserve, and manage workplace assets — such as hot desks, meeting rooms, parking spots, and shared equipment — through a unified interface.
+
+I will also provide screenshots of the main screens.
+
+Please generate a complete User Manual in AsciiDoc (.adoc) format with the following structure:
+
+1. Introduction (what the app is, who it's for, how to access it)
+2. Getting Started (login, first-time setup if any)
+3. Navigating the Application (overview of the main layout and navigation)
+4. Browsing and Searching Assets (how to find an asset)
+5. Making a Booking (step-by-step with references to screenshots)
+6. Managing Your Bookings (viewing, editing, cancelling)
+7. Troubleshooting and FAQ (common issues and answers)
+8. Glossary (define key terms like "asset", "booking", "slot", etc.)
+
+Use AsciiDoc formatting: sections with `==`, notes with `NOTE:`, steps with numbered lists,
+and image references as `image::screenshot_name.png[Alt text]`.
+----
+
+*Notes:* Run this prompt once you have at least 5–6 screenshots ready.
+Replace placeholder sections before submitting.
+
+---
+
+=== UM-02 — Generate a Single Manual Section
+
+*Purpose:* Generate or regenerate one specific section of the user manual in isolation.
+Use this to refine a section or fill in a gap.
+
+*Inputs required:*
+
+* Section name and description
+* Relevant screenshot(s) for that section
+
+*Prompt:*
+
+[source]
+----
+You are a technical writer. Generate the "[SECTION NAME]" section of a User Manual
+for an internal asset booking web application.
+
+The target audience is non-technical employees.
+Output must be in AsciiDoc (.adoc) format.
+
+Context about this section:
+[DESCRIBE WHAT THIS SECTION SHOULD COVER]
+
+Here is a screenshot of the relevant screen:
+[ATTACH SCREENSHOT]
+
+Use numbered steps for any actions the user must take.
+Use NOTE: for important tips or warnings.
+Keep language simple and direct.
+----
+
+*Notes:* Useful for iterating on one section without regenerating the full document.
+
+---
+
+=== UM-03 — Improve Tone and Clarity
+
+*Purpose:* Rewrite a generated section to be clearer, friendlier, or more concise.
+
+*Inputs required:*
+
+* The AsciiDoc section text to improve
+
+*Prompt:*
+
+[source]
+----
+Rewrite the following section of a User Manual to be clearer and more user-friendly.
+The audience is non-technical company employees.
+
+Requirements:
+- Use simple, plain language. Avoid jargon.
+- Keep sentences short (under 20 words where possible).
+- Use active voice.
+- Preserve all AsciiDoc formatting (section headers, numbered lists, NOTE: blocks, image references).
+- Do not add new information — only improve what is already there.
+
+Section to rewrite:
+[PASTE ADOC SECTION HERE]
+----
+
+---
+
+=== UM-04 — Generate FAQ Section from Screenshots
+
+*Purpose:* Produce a FAQ based on visible UI states and common user confusion points.
+
+*Inputs required:*
+
+* Screenshots of error states, confirmation dialogs, edge cases
+
+*Prompt:*
+
+[source]
+----
+Based on the following screenshots from an internal asset booking application,
+generate a Frequently Asked Questions (FAQ) section in AsciiDoc format.
+
+Each FAQ entry should follow this format:
+=== Q: [Question]
+[Answer in 2–4 sentences.]
+
+Focus on questions a non-technical employee might ask when:
+- Something goes wrong (error messages, unavailable assets)
+- They are unsure what to do next
+- They want to change or cancel a booking
+
+Screenshots provided:
+[ATTACH SCREENSHOTS]
+----
+
+---
+
+== Technical Manual Prompts
+
+=== TM-01 — Generate Full Technical Manual Structure
+
+*Purpose:* Generate a complete AsciiDoc technical manual for developers and maintainers
+based on the project's GitLab repository files.
+
+*Inputs required:*
+
+* `README.md` content
+* `package.json` content
+* `.gitlab-ci.yml` content (if available)
+* `.env.example` content (if available)
+* Any API documentation or OpenAPI spec
+
+*Prompt:*
+
+[source]
+----
+You are a technical writer creating a Technical Manual for an internal web application
+used for booking company assets. The app uses a React/Vue/Angular frontend.
+
+Your audience is developers and future maintainers of this project.
+
+I will provide the following files from the GitLab repository:
+- README.md
+- package.json
+- .gitlab-ci.yml
+- sample.env
+- makefile
+
+[PASTE FILE CONTENTS HERE]
+
+Generate a complete Technical Manual in AsciiDoc (.adoc) format with the following structure:
+
+1. Project Overview (purpose, tech stack, architecture summary)
+2. Repository Structure (folder layout and what each part does)
+3. Prerequisites and Environment Setup (Node version, dependencies, environment variables)
+4. Installation and Local Development (step-by-step setup)
+5. Configuration (environment variables, API endpoints, feature flags)
+6. CI/CD Pipeline (explain the GitLab CI stages and what they do)
+7. Deployment (how the app is deployed, environments: dev/staging/prod if applicable)
+8. Architecture and Key Components (main components, routing, state management)
+9. API Integration (endpoints the frontend calls, authentication method)
+10. Troubleshooting for Developers (common setup issues and fixes)
+
+Use AsciiDoc formatting throughout. Use code blocks with `[source,bash]` or `[source,json]`
+for all code and configuration snippets.
+----
+
+---
+
+=== TM-02 — Document a Specific Component or Feature
+
+*Purpose:* Generate technical documentation for one component or feature based on its source code.
+
+*Inputs required:*
+
+* The component source code (paste from GitLab)
+
+*Prompt:*
+
+[source]
+----
+You are a technical writer documenting a frontend component for a developer audience.
+
+Here is the source code of the component:
+[PASTE SOURCE CODE]
+
+Generate AsciiDoc documentation for this component that includes:
+1. Purpose — what this component does and where it is used
+2. Props / Inputs — table of all props with name, type, required flag, and description
+3. Events / Outputs — any emitted events or callbacks
+4. Dependencies — other components or services it relies on
+5. Usage Example — a short code snippet showing how to use it
+6. Notes — any known limitations or important behaviours
+
+Use AsciiDoc tables for props and events.
+----
+
+---
+
+=== TM-03 — Document the CI/CD Pipeline
+
+*Purpose:* Produce a clear explanation of the GitLab CI/CD pipeline for new team members.
+
+*Inputs required:*
+
+* `.gitlab-ci.yml` file content
+
+*Prompt:*
+
+[source]
+----
+You are a DevOps technical writer. Based on the following `.gitlab-ci.yml` file,
+generate an AsciiDoc section titled "CI/CD Pipeline" for a Technical Manual.
+
+[PASTE .gitlab-ci.yml CONTENT HERE]
+
+The section should include:
+1. A brief overview of what the pipeline does
+2. A table listing each stage with: Stage Name | Trigger Condition | What It Does
+3. Step-by-step explanation of each job in plain language
+4. Any environment variables or secrets referenced (without revealing their values)
+5. Notes on how to manually trigger or skip stages if applicable
+
+Use `[source,yaml]` code blocks for any YAML excerpts you reference.
+----
+
+---
+
+=== TM-04 — Generate Architecture Diagram Description
+
+*Purpose:* Produce a written architecture description that can be turned into a diagram.
+
+*Inputs required:*
+
+* README or any architecture notes from GitLab
+* `package.json` for dependency context
+
+*Prompt:*
+
+[source]
+----
+Based on the following project files, write an architecture overview section in AsciiDoc
+for a Technical Manual. The app is a frontend booking application.
+
+[PASTE FILES HERE]
+
+The section should describe:
+1. The high-level architecture (frontend → API → backend/database flow)
+2. Key libraries and what role they play (routing, state management, HTTP client, UI components)
+3. How authentication works (if visible from the code)
+4. Data flow for the core booking action (user selects asset → submits booking → result)
+
+Where a diagram would be helpful, describe it in a PlantUML or Mermaid code block
+so it can be rendered later. Use `[source,plantuml]` blocks.
+----
+
+---
+
+== Prompt Comparison Notes
+
+Use this section to record observations when running the same prompt across different AI models.
+
+=== Comparison Log Template
+
+[cols="1,1,2,2", options="header"]
+|===
+| Prompt ID | Model Used | Output Quality (1–5) | Notes / Observations
+
+| UM-01 | Claude Sonnet | | 
+| UM-01 | ChatGPT-4o | | 
+| UM-01 | Gemini 1.5 Pro | | 
+| TM-01 | Claude Sonnet | | 
+| TM-01 | ChatGPT-4o | | 
+| TM-01 | Gemini 1.5 Pro | | 
+|===
+
+Add rows as needed for each prompt and model combination.
+
+---
+
+== How to Use This File
+
+1. Open this `.adoc` file in any text editor or AsciiDoc viewer.
+2. Pick a prompt based on what you need to generate (user manual section, technical section, etc.).
+3. Copy the prompt from the `[source]` block.
+4. Replace all `[PLACEHOLDER]` sections with your actual content.
+5. Paste the prompt + content into your chosen AI model.
+6. Save the AI output as a separate `.adoc` file (e.g. `user_manual.adoc` or `technical_manual.adoc`).
+7. Log your results in the Comparison Log table above.
