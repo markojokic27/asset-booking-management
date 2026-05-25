@@ -151,6 +151,22 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public BookingResponseDTO approveBooking(Long bookingId) {
+
+        // TODO: Logic for approving bookings
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public BookingResponseDTO rejectBooking(Long bookingId) {
+
+        // TODO: Logic for rejecting bookings
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public int bookingStatusToCompleted() {
 
         Instant currentTime = Instant.now();

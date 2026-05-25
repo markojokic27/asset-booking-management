@@ -23,6 +23,12 @@ public interface BookingService {
     /** UPDATE */
     BookingResponseDTO updateBooking(Long id, BookingUpdateDTO bookingRequest);
 
+    /** APPROVE */
+    public BookingResponseDTO approveBooking(Long bookingId);
+
+    /** REJECT */
+    public BookingResponseDTO rejectBooking(Long bookingId);
+
     int bookingStatusToCompleted();
     GeneralReportResponseDTO getGeneralReport();
     GeneralReportResponseDTO getUserReport(Long userId);

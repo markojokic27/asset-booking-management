@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -101,5 +102,33 @@ public class BookingController {
         BookingResponseDTO updatedBooking = service.updateBooking(id, request);
 
         return ResponseEntity.ok(updatedBooking);
+    }
+
+    /** APPROVE */
+    @Operation(summary = "Approve a pending booking", description = "Only available to the manager of the user who created the booking, or an ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<BookingResponseDTO> approve(
+            @PathVariable Long id
+    ) throws ResourceNotFoundException, IllegalStateException, AccessDeniedException
+    {
+        BookingResponseDTO approvedBooking = service.approveBooking(id);
+
+        return ResponseEntity.ok(approvedBooking);
+    }
+
+    /** REJECT */
+    @Operation(summary = "Reject a pending booking", description = "Only available to the manager of the user who created the booking, or an ADMIN.")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<BookingResponseDTO> reject(
+            @PathVariable Long id
+    ) throws ResourceNotFoundException, IllegalStateException, AccessDeniedException
+    {
+        BookingResponseDTO rejectedBooking = service.rejectBooking(id);
+
+        return ResponseEntity.ok(rejectedBooking);
     }
 }
