@@ -6,10 +6,10 @@ public class CommonConstants{
     public static final String LOGIN_URL_EXTENSION = "/login";
     public static final String REGISTER_URL_EXTENSION="/register";
     public static final String USERS_URL= "/users";
+
     public static final String ASSETS_URL= "/assets";
     public static final String CATEGORY_URL= "/categories";
     public static final String ACCOUNT_INFO="/account-info";
-    //public static final String BOOKING_ASSET="/assets/id:/bookings";
 
     //Login
 
