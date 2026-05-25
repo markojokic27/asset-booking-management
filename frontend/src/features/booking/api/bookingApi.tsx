@@ -42,7 +42,7 @@ export const getAllCategoryBookings = async (
   size = 100,
   categoryId: number
 ) => {
-  const res = await api.get<PageResponse<BookingDto>>('/bookings', {
+  const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
     params: { page, size, categoryId },
   });
   console.log(res);

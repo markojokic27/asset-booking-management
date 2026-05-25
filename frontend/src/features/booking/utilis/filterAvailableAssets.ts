@@ -1,11 +1,11 @@
 // Types
 import type { AssetDto } from '../../asset/types';
-import type { BookingDto, Filters } from '../types';
+import type { BookingWithRelations, Filters } from '../types';
 import type { AssetCategoryDto } from '../../asset-category/types';
 
 type Props = {
   assets: AssetDto[];
-  bookings: BookingDto[];
+  bookings: BookingWithRelations[];
   selectedCategory: AssetCategoryDto | null;
   filters: Filters;
 };
@@ -37,12 +37,11 @@ export const filterAvailableAssets = ({
   const filterStart = new Date(
     `${filters.fromDate}T${filters.fromHour || '00:00'}`
   );
-
   const filterEnd = new Date(`${filters.toDate}T${filters.toHour || '23:59'}`);
 
   return filtered.filter((asset) => {
     const assetBookings = bookings.filter(
-      (b) => b.assetId === asset.id && b.status !== 'REJECTED'
+      (b) => b.asset.id === asset.id && b.status !== 'REJECTED'
     );
 
     const hasConflict = assetBookings.some((b) => {

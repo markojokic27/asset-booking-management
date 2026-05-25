@@ -42,6 +42,7 @@ export function FiltersBar({
       if (next.fromHour && next.toHour && next.toHour <= next.fromHour) {
         next.toHour = '';
       }
+      console.log(next);
       return next;
     });
   };

@@ -4,7 +4,7 @@ import * as React from 'react';
 // Types
 import type { AssetDto } from '../../asset/types';
 import type { AssetCategoryDto } from '../../asset-category/types';
-import type { BookingDto, Filters } from '../types';
+import type { BookingWithRelations, Filters } from '../types';
 
 // API
 import { getAllAssets } from '../../asset/api/assetApi';
@@ -21,7 +21,7 @@ type Props = {
 export function useBookingData({ filters }: Props) {
   const [assets, setAssets] = React.useState<AssetDto[]>([]);
   const [categories, setCategories] = React.useState<AssetCategoryDto[]>([]);
-  const [bookings, setBookings] = React.useState<BookingDto[]>([]);
+  const [bookings, setBookings] = React.useState<BookingWithRelations[]>([]);
 
   const [selectedCategory, setSelectedCategory] =
     React.useState<AssetCategoryDto | null>(null);

@@ -6,6 +6,7 @@ import { createBooking } from '../api/bookingApi';
 
 // Types
 import type { Filters } from '../types';
+import { useCurrentUser } from '../../user/hooks/useCurrentUser';
 
 export function useCreateBooking({
   assetId,
@@ -17,13 +18,15 @@ export function useCreateBooking({
   refetch: () => Promise<unknown>;
 }) {
   const [isCreating, setIsCreating] = React.useState(false);
+  const { user } = useCurrentUser();
 
   const handleCreateBooking = React.useCallback(async () => {
     if (
       !filters.fromDate ||
       !filters.toDate ||
       !filters.fromHour ||
-      !filters.toHour
+      !filters.toHour ||
+      !user?.id
     ) {
       return;
     }
@@ -35,14 +38,12 @@ export function useCreateBooking({
         `${filters.fromDate}T${filters.fromHour}:00`
       );
 
-      const bookingEnd = new Date(
-        `${filters.toDate}T${filters.toHour}:00`
-      );
+      const bookingEnd = new Date(`${filters.toDate}T${filters.toHour}:00`);
 
       await createBooking({
-        userId: 1,
+        userId: user.id,
         assetId,
-        status: 'PENDING',
+        status: 'PENDING', // this depends on backend logic
         bookingStart: bookingStart.toISOString(),
         bookingEnd: bookingEnd.toISOString(),
         notes: '',

@@ -32,13 +32,9 @@ export function AvailabilityCalendar({
 }: Props) {
   const isPastDate = (date: Date) => {
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
-
     const compareDate = new Date(date);
-
     compareDate.setHours(0, 0, 0, 0);
-
     return compareDate < today;
   };
 
@@ -47,7 +43,6 @@ export function AvailabilityCalendar({
       if (isPastDate(info.date)) {
         return;
       }
-
       onDateClick?.(info.dateStr);
     },
     [onDateClick]
@@ -88,7 +83,7 @@ export function AvailabilityCalendar({
             'transition-all duration-150',
 
             isPast
-              ? 'cursor-not-allowed bg-gray-100 text-gray-400 opacity-60 dark:bg-gray-900 dark:text-gray-600'
+              ? 'bg-gray-100 text-gray-400 opacity-60 dark:bg-gray-900 dark:text-gray-600'
               : 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20',
 
             isSelected
@@ -96,7 +91,6 @@ export function AvailabilityCalendar({
               : '',
           ].join(' ');
         }}
-
         eventDisplay="block"
       />
     </div>

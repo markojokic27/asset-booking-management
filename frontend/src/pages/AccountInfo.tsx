@@ -83,14 +83,10 @@ export default function AccountInfo() {
               <p className="text-xs font-bold tracking-[0.18em] text-(--color-table-text) uppercase">
                 {t('account.sections.profile')}
               </p>
-              <h2
-                className="mt-2 text-xl font-bold text-black dark:text-white"
-              >
+              <h2 className="mt-2 text-xl font-bold text-black dark:text-white">
                 {user.name} {user.surname}
               </h2>
-              <p
-                className="mt-1 text-sm text-(--color-table-text)"
-              >
+              <p className="mt-1 text-sm text-(--color-table-text)">
                 {user.email}
               </p>
             </div>
@@ -183,7 +179,7 @@ export default function AccountInfo() {
       )}
 
       {user && (
-        <ChangePasswordModal 
+        <ChangePasswordModal
           user={user}
           isOpen={passwordModalOpen}
           onClose={() => setPasswordModalOpen(false)}
