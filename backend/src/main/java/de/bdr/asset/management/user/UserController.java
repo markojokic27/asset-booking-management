@@ -27,9 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * User Controller
- */
+/** User REST Controller. */
 @Slf4j
 @RestController
 @RequestMapping("v1/users")
@@ -45,7 +43,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    /** READ ALL */
     @Operation(summary = "Read list of users", description = "Only available to users with role: ADMIN. Takes Pageable object.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
@@ -59,7 +56,6 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    /** CREATE */
     @Operation(summary = "Create user account", description = "Available to everyone, used for registering users.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(
@@ -71,8 +67,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    /** READ BY ID */
-    // read by id owner or admin
     @Operation(summary = "Read user details", description = "Only available to users with role: ADMIN or owner of the account")
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
@@ -86,7 +80,6 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    /** UPDATE */
     @Operation(summary = "Update user", description = "Only available to users with role ADMIN or owner of the account")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
@@ -113,7 +106,6 @@ public class UserController {
         return ResponseEntity.noContent().build(); // 204 No Content is standard for successful updates with nobody
     }
 
-    /** Soft DELETE */
     @Operation(summary = "Soft delete user", description = "Only available to users with role: ADMIN or owners of the account")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
