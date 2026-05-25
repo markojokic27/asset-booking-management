@@ -130,6 +130,8 @@ public class UserServiceImpl implements UserService {
             user.setBenefit(userUpdateRequest.benefit());
         }
 
+        userRepository.save(user);
+
         return mapper.toResponse(user);
     }
 
@@ -147,8 +149,8 @@ public class UserServiceImpl implements UserService {
         }
 
         String newEncodedPassword = passwordEncoder.encode(request.newPassword());
-
         user.setPassword(newEncodedPassword);
+        userRepository.save(user);
     }
 
     /** {@inheritDoc} */
@@ -160,12 +162,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
         user.setStatus(UserStatusEnum.DELETED);
-        
+        userRepository.save(user);
         List<String> statusesToCancel = List.of(
                 BookingStatusEnum.APPROVED.name(),
                 BookingStatusEnum.PENDING.name()
         );
-
         bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
     }
 }
