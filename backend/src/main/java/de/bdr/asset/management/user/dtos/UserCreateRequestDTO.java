@@ -4,6 +4,21 @@ import de.bdr.asset.management.user.UserRoleEnum;
 import de.bdr.asset.management.user.UserStatusEnum;
 import jakarta.validation.constraints.*;
 
+/**
+ * Data transfer contract containing parameters to provision a new user account.
+ *
+ * @param username Unique login handler containing alphanumeric characters, dots, underscores, or hyphens.
+ * @param surname Family name of the account holder.
+ * @param name First name of the account holder.
+ * @param email Primary unique corporate communication email address.
+ * @param password Raw plaintext login password string prior to encryption hashing.
+ * @param role Core security access privileges assigned to the account.
+ * @param status Initial operational lifecycle status of the profile.
+ * @param departmentId Unique identity key matching the assigned department.
+ * @param managerEmail Corporate email address of the direct line manager.
+ * @param notes Optional administrative remarks or additional historical notes.
+ * @param benefit Booking benefit plan.
+ */
 public record UserCreateRequestDTO(
 
         @NotBlank(message = "Username is required")
