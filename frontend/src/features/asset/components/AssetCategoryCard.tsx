@@ -23,9 +23,10 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
   const { t } = useTranslation();
 
   return (
-    <button
+    <button 
       type="button"
       onClick={onClick}
+      data-testid={`category-card-${title.toLowerCase()}`}
       className={twMerge(
         'group min-h-24 cursor-pointer overflow-hidden rounded-lg border border-(--color-table-border) bg-(--color-table-surface) text-left text-white shadow-(--shadow-card) transition duration-100 dark:text-(--color-text)',
         isSelected

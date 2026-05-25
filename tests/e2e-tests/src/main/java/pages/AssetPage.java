@@ -54,6 +54,10 @@ public class AssetPage extends CommonMethods {
     // Toggle deleted assets
     public By toggleDeletedAssets = By.cssSelector("[data-testid='toggle-deleted']");
 
+    // Asset category filter
+    public By laptopCategoryCard = By.cssSelector("[data-testid='category-card-laptop']");
+
+
 
     // Add asset
     public void assetOpenModal() {
@@ -153,6 +157,13 @@ public class AssetPage extends CommonMethods {
      public void searchAssets(String assets){
         typeInElement(searchField, assets);
      }
+
+    // Asset category filter
+
+    public void clickLaptopCategory() {
+        clickOnElement(laptopCategoryCard);
+    }
+
 
 
 

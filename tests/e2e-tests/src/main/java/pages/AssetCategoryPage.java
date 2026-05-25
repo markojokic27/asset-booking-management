@@ -36,6 +36,7 @@ public class AssetCategoryPage extends CommonMethods {
     public By categoryEditBookingPeriodField = By.cssSelector("[data-testid='edit-category-booking-period']");
     public By categoryEditApprovalField = By.cssSelector("[data-testid='edit-category-approval-checkbox']");
     public By editCategoryButton = By.cssSelector("[data-testid='save-category-button']");
+
     // Search assets
     public By searchField = By.cssSelector("[data-testid='search-input']");
 
@@ -113,8 +114,6 @@ public class AssetCategoryPage extends CommonMethods {
     public void searchCategoryAssets(String categoryAssets){
         typeInElement(searchField, categoryAssets);
     }
-
-
 
     public void category(String name, String description, String bookingPeriod){
         typeName(name);
