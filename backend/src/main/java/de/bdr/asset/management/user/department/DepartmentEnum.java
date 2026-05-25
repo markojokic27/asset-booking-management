@@ -1,8 +1,6 @@
 package de.bdr.asset.management.user.department;
 
-/**
- * Department enumeration.
- */
+/** Organizational department classification. */
 public enum DepartmentEnum {
     ADVANCE_TECHNOLOGY,
     SECURE_SERVICES,
