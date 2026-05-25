@@ -3,6 +3,7 @@ package com.example.assetbookingmanagement.features.user.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
+import com.example.assetbookingmanagement.features.user.data.UserResponse
 import com.example.assetbookingmanagement.features.user.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 data class ProfileUiState(
     val isLoading: Boolean = false,
-    val userName: String = "",
+    val profile: UserResponse? = null,
     val errorMessage: String? = null
 )
 
@@ -52,7 +53,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        userName = user.name
+                        profile = user
                     )
                 }
             } catch (error: HttpException) {

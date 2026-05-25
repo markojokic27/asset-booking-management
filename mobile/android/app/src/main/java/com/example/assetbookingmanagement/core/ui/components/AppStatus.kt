@@ -1,6 +1,7 @@
 package com.example.assetbookingmanagement.core.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -54,8 +55,20 @@ fun StatusBadge(
 }
 
 @Composable
+fun RoleBadge(
+    role: String,
+    modifier: Modifier = Modifier
+) {
+    AppStatus(
+        text = role,
+        statusStyle = roleBadgeStyle(role),
+        modifier = modifier
+    )
+}
+
+@Composable
 private fun statusBadgeStyle(status: String): AppStatusStyle {
-    val isDark = MaterialTheme.colorScheme.background == BgDark
+    val isDark = isSystemInDarkTheme()
     return when (status.uppercase()) {
         "ACTIVE", "APPROVED" -> if (isDark) {
             AppStatusStyle(StatusActiveBgDark, StatusActiveTextDark, StatusActiveBorderDark)
@@ -91,6 +104,30 @@ private fun statusBadgeStyle(status: String): AppStatusStyle {
             AppStatusStyle(StatusNeutralBgDark, StatusNeutralTextDark, StatusNeutralBorderDark)
         } else {
             AppStatusStyle(StatusNeutralBgLight, StatusNeutralTextLight, StatusNeutralBorderLight)
+        }
+    }
+}
+
+@Composable
+private fun roleBadgeStyle(role: String): AppStatusStyle {
+    val isDark = isSystemInDarkTheme()
+    return when (role.uppercase()) {
+        "ADMIN" -> if (isDark) {
+            AppStatusStyle(RoleAdminBgDark, RoleAdminTextDark, RoleAdminBorderDark)
+        } else {
+            AppStatusStyle(RoleAdminBgLight, RoleAdminTextLight, RoleAdminBorderLight)
+        }
+
+        "MANAGER" -> if (isDark) {
+            AppStatusStyle(RoleManagerBgDark, RoleManagerTextDark, RoleManagerBorderDark)
+        } else {
+            AppStatusStyle(RoleManagerBgLight, RoleManagerTextLight, RoleManagerBorderLight)
+        }
+
+        else -> if (isDark) {
+            AppStatusStyle(RoleEmployeeBgDark, RoleEmployeeTextDark, RoleEmployeeBorderDark)
+        } else {
+            AppStatusStyle(RoleEmployeeBgLight, RoleEmployeeTextLight, RoleEmployeeBorderLight)
         }
     }
 }
