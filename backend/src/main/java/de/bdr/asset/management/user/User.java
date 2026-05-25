@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"password", "notes"})
 public class User extends BaseEntity {
 
     /** Unique login username. */

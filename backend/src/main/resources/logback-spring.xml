@@ -28,8 +28,17 @@
                     <defaultMask>****</defaultMask>
 
                     <path>password</path>
-                    <path>user.password</path>
-                    <path>credentials.password</path>
+                    <path>*.password</path>
+                    <path>*.*.password</path>
+                    <path>token</path>
+                    <path>accessToken</path>
+                    <path>refreshToken</path>
+                    <path>secret</path>
+                    <path>apiKey</path>
+                    <path>authorization</path>
+
+                    <value>Bearer\s+[A-Za-z0-9\-._~+/]+=*</value>
+                    <value>(?i)password["=: ]+\S+</value>
 
                 </decorator>
 

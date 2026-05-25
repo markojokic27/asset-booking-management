@@ -18,6 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"notes"})
 public class Booking extends BaseEntity {
 
     /** ID of user, foreign key */

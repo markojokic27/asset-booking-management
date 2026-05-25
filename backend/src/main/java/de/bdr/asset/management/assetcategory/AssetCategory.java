@@ -14,6 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"description"})
 public class AssetCategory extends BaseEntity {
 
     /** Name of asset category */
