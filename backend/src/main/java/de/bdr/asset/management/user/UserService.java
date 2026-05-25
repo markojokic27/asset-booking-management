@@ -7,26 +7,24 @@ import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-/**
- * User Service
- */
+/** Application boundary interface for orchestrating user operations. */
 public interface UserService {
 
-    /** CREATE */
+    /** Registers a new user account. */
     UserResponseDTO createUser(UserCreateRequestDTO userRequest);
 
-    /** READ */
+    /** Retrieves an individual user profile by ID. */
     UserResponseDTO getUserById(Long id);
+
+    /** Fetches a paginated list of all users. */
     Page<UserResponseDTO> getAllUsers(Pageable pageable);
 
-    /** UPDATE */
+    /** Updates details for a user. */
     UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userRequest);
 
-    /**
-     * Change user password
-     */
+    /** Processes a secure update to a user's password. */
     void changePassword(Long id, ChangePasswordRequestDTO changePasswordRequest);
 
-    /** DELETE (Soft) */
+    /** Flags an account as deleted and triggers related booking cancellations. */
     void softDeleteUser(Long id);
 }
