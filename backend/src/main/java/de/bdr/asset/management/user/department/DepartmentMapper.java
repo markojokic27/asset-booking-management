@@ -1,5 +1,7 @@
 package de.bdr.asset.management.user.department;
 
+import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,6 +1,8 @@
 package de.bdr.asset.management.department;
 
 import de.bdr.asset.management.user.department.*;
+import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -60,7 +62,7 @@ public class DepartmentControllerTest {
         when(departmentService.getAllDepartments(any(Pageable.class)))
             .thenReturn(page);
 
-        ResponseEntity<Page<DepartmentResponseDTO>> result = 
+        ResponseEntity<Page<DepartmentResponseDTO>> result =
             departmentController.getAll(PageRequest.of(0, 10));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);

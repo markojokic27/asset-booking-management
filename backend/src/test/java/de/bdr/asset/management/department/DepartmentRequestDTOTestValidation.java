@@ -1,6 +1,6 @@
 package de.bdr.asset.management.department;
 
-import de.bdr.asset.management.user.department.DepartmentRequestDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.DepartmentEnum;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

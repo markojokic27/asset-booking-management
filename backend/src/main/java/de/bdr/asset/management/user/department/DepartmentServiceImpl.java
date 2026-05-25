@@ -1,5 +1,7 @@
 package de.bdr.asset.management.user.department;
 
+import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
