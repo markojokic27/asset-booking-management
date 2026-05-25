@@ -5,9 +5,7 @@ import de.bdr.asset.management.user.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
 
-/**
- * User domain-entity model.
- */
+/** User domain-entity model. */
 @Entity
 @Table(name = "asset_user")  // cannot name "user" because of conflict with postgres "user" keyword
 @Getter
@@ -17,50 +15,50 @@ import lombok.*;
 @Builder
 public class User extends BaseEntity {
 
-    /** Username of user*/
+    /** Unique login username. */
     @Column(nullable = false, unique = true, length = 100)
     private String username;
 
-    /** Family name */
+    /** Family name. */
     @Column(nullable = false, length = 100)
     private String surname;
 
-    /** First name */
+    /** First name. */
     @Column(nullable = false, length = 100)
     private String name;
 
-    /** Email of user */
+    /** Unique corporate email address of user. */
     @Column(nullable = false, length = 100, unique = true)
     private String email;
 
-    /** Password of user */
+    /** Encrypted authentication password hash. */
     @Column(nullable = false, length = 100)
     private String password;
 
-    /** Role of user */
+    /** Security and system access authorization role. */
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
 
-    /** User Status */
+    /** Account lifecycle operational state. */
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatusEnum status;
 
-    /** ID of department, foreign key */
+    /** Associated organizational department. */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    /** Email of manager */
+    /** Corporate email address of the direct manager. */
     @Column(nullable = false, length = 100)
     private String managerEmail;
 
-    /** Notes, Additional information's */
+    /** Administrative remarks or additional account metadata. */
     @Column
     private String notes;
 
-    /** User benefits */
+    /** User booking benefits. */
     @Column(nullable = false, length = 100)
     private String benefit;
 
