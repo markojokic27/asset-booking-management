@@ -22,22 +22,23 @@ import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Implementation of User Service
- */
+/** Implementation of User Service */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
+    /** Error message blueprint when a requested user identity is missing. */
     public static final String USER_NOT_FOUND_WITH_ID = "User not found with id: ";
+
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final BookingRepository bookingRepository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
+    /** {@inheritDoc} */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserResponseDTO createUser(UserCreateRequestDTO userRequest) {
@@ -62,6 +63,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toResponse(user);
     }
 
+    /** {@inheritDoc} */
     @Override
     public UserResponseDTO getUserById(Long id) {
 
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toResponse(user);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
 
@@ -79,6 +82,7 @@ public class UserServiceImpl implements UserService {
         return users.map(mapper::toResponse);
     }
 
+    /** {@inheritDoc} */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userUpdateRequest) {
@@ -131,6 +135,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toResponse(user);
     }
 
+    /** {@inheritDoc} */
     @Override
     @Transactional
     public void changePassword(Long id, ChangePasswordRequestDTO request) {
@@ -151,6 +156,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void softDeleteUser(Long id) {
