@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8080/v1',
+  baseURL: API_BASE_URL,
 });
 
 let accessToken: string | null = localStorage.getItem('accessToken');
@@ -96,12 +98,9 @@ api.interceptors.response.use(
         return Promise.reject(error);
       }
 
-      const response = await axios.post(
-        'http://127.0.0.1:8080/v1/auth/refresh',
-        {
-          refreshToken,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+        refreshToken,
+      });
 
       const newAccessToken = response.data.accessToken;
 
