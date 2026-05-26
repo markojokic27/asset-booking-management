@@ -1,5 +1,6 @@
-package de.bdr.asset.management.assetcategory;
+package de.bdr.asset.management.assetcategory.dto;
 
+import de.bdr.asset.management.assetcategory.BookingPeriodEnum;
 import jakarta.validation.constraints.*;
 
 public record AssetCategoryRequestDTO(

@@ -1,5 +1,7 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,7 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,5 +1,7 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 

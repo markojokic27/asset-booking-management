@@ -1,5 +1,6 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import jakarta.validation.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

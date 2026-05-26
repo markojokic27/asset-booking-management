@@ -3,6 +3,9 @@ package de.bdr.asset.management.assetcategory;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;

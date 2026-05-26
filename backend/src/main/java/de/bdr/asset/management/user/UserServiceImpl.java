@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
-    /** Error message blueprint when a requested user identity is missing. */
+    /** Error message blueprint when a requested gituser identity is missing. */
     public static final String USER_NOT_FOUND_WITH_ID = "User not found with id: ";
 
     private final UserRepository userRepository;
