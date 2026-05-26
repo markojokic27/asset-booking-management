@@ -4,9 +4,7 @@ import de.bdr.asset.management.core.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-/**
- * Asset category domain-entity model.
- */
+/** Asset category domain-entity model. */
 @Entity
 @Table(name="asset_category")
 @Getter
@@ -17,7 +15,7 @@ import lombok.*;
 @ToString(exclude = {"description"})
 public class AssetCategory extends BaseEntity {
 
-    /** Name of asset category */
+    /** Unique name of the asset category. */
     @Column(nullable=false, length = 100, unique = true)
     private String name;
 
@@ -25,12 +23,12 @@ public class AssetCategory extends BaseEntity {
     @Column
     private String description;
 
-    /** Period of booking */
+    /** Allowed booking period type. */
     @Column(nullable=false, length = 50)
     @Enumerated(EnumType.STRING)
     private BookingPeriodEnum bookingPeriod;
 
-    /** Approval for asset category */
+    /** Flag indicating if booking requires prior approval. */
     @Column(nullable = false)
     private boolean approval;
 

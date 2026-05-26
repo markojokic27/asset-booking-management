@@ -11,9 +11,7 @@ import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Implementation of AssetCategory Service
- */
+/** Implementation of AssetCategory Service */
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -30,12 +28,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         this.assetRepository = assetRepository;
     }
 
-    /**
-     * Create asset category in DB.
-     *
-     * @param assetCategoryRequest - a AssetCategoryDTO record
-     * @return an AssetCategoryResponseDTO record
-     */
+    /** {@inheritDoc} */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AssetCategoryResponseDTO createAssetCategory(AssetCategoryRequestDTO assetCategoryRequest){
@@ -50,12 +43,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         return mapper.toResponse(category);
     }
 
-    /**
-     * Returns a specific asset category.
-     *
-     * @param id - a Long id
-     * @return an AssetCategoryResponseDTO record
-     */
+    /** {@inheritDoc} */
     @Override
     public AssetCategoryResponseDTO getAssetCategoryById(Long id){
 
@@ -65,12 +53,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         return mapper.toResponse(category);
     }
 
-    /**
-     * Returns a page of asset categories.
-     *
-     * @param pageable - A Pageable object, determines the page, size and sort
-     * @return a page of AssetCategoryResponseDTO records
-     */
+    /** {@inheritDoc} */
     @Override
     public Page<AssetCategoryResponseDTO> getAllAssetCategories(Pageable pageable){
 
@@ -79,13 +62,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         return categories.map(mapper::toResponse);
     }
 
-    /**
-     * Update and return a specific asset category.
-     *
-     * @param id - a Long id
-     * @param assetCategoryRequest - an AssetCategoryDTO record
-     * @return an AssetCategoryResponseDTO record
-     */
+    /** {@inheritDoc} */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
@@ -106,11 +83,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
         return mapper.toResponse(updatedCategory);
     }
 
-    /**
-     * Delete a specific asset category only if no assets use it.
-     *
-     * @param id category id
-     */
+    /** {@inheritDoc} */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAssetCategory(Long id) {
