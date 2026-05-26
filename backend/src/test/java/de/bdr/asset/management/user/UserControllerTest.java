@@ -94,8 +94,32 @@ public class UserControllerTest {
     /** UPDATE */
     @Test
     void updateUser_returnsOkWithUpdatedUser(){
-        UserUpdateRequestDTO request=new UserUpdateRequestDTO("ivan", "ivic", "ivanivic@maurer-electronics.hr", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "ante@maurer-electronics.hr", "test notes", "SOME");
-        UserResponseDTO response=new UserResponseDTO( 1L,"ivanivic", "ivic", "ivan", "ivanivic@maurer-electonics.hr", UserRoleEnum.EMPLOYEE, UserStatusEnum.ACTIVE, 5L, "antem@maurer-electonics.hr", null, "ALL");
+
+        UserUpdateRequestDTO request = new UserUpdateRequestDTO(
+                "ivic",
+                "ivan",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "updated test notes",
+                null
+        );
+
+        UserResponseDTO response = new UserResponseDTO(
+                1L,
+                "ivanivic",
+                "ivic",
+                "ivan",
+                "ivanivic@maurer-electronics.hr",
+                UserRoleEnum.EMPLOYEE,
+                UserStatusEnum.ACTIVE,
+                5L,
+                "ante@maurer-electronics.hr",
+                "updated test notes",
+                "ALL"
+        );
 
         when(userService.updateUser(1L, request)).thenReturn(response);
 
@@ -103,6 +127,8 @@ public class UserControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).isEqualTo(response);
+        assertThat(result.getBody().notes()).isEqualTo("updated test notes");
+        assertThat(result.getBody().name()).isEqualTo("ivan");
     }
 
     /** DELETE */

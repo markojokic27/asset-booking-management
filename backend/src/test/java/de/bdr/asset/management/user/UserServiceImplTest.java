@@ -214,6 +214,11 @@ class UserServiceImplTest {
     void shouldUpdateUser() {
 
         when(repository.findById(1L)).thenReturn(Optional.of(user));
+
+        Department mockDepartment = new Department();
+        mockDepartment.setId(1L);
+        when(departmentRepository.findById(1L)).thenReturn(Optional.of(mockDepartment));
+
         when(repository.save(user)).thenReturn(user);
         when(mapper.toResponse(user)).thenReturn(responseDTO);
 
@@ -221,6 +226,7 @@ class UserServiceImplTest {
 
         assertEquals("ivan", result.name());
         verify(repository).save(user);
+        verify(departmentRepository).findById(1L);
     }
 
     // Tests updateUser(): throws if user not found

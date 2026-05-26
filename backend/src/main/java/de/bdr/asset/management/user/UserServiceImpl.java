@@ -91,47 +91,16 @@ public class UserServiceImpl implements UserService {
                 .filter(u -> u.getStatus() != UserStatusEnum.DELETED)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
 
-        // TODO
-        if (userUpdateRequest.name() != null) {
-            user.setName(userUpdateRequest.name());
-        }
+        mapper.updateEntityFromDto(userUpdateRequest, user);
 
-        if (userUpdateRequest.surname() != null) {
-            user.setSurname(userUpdateRequest.surname());
-        }
-
-        if (userUpdateRequest.email() != null) {
-            user.setEmail(userUpdateRequest.email());
-        }
-
-        if (userUpdateRequest.role() != null) {
-            user.setRole(userUpdateRequest.role());
-        }
-
-        /*
         if (userUpdateRequest.departmentId() != null) {
-            user.setDepartment(userUpdateRequest.departmentId());
-        }
-        */
+            Department department = departmentRepository.findById(userUpdateRequest.departmentId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Department not found with ID: " + userUpdateRequest.departmentId()));
 
-        if (userUpdateRequest.managerEmail() != null) {
-            user.setManagerEmail(userUpdateRequest.managerEmail());
-        }
-
-        if (userUpdateRequest.status() != null) {
-            user.setStatus(userUpdateRequest.status());
-        }
-
-        if (userUpdateRequest.notes() != null) {
-            user.setNotes(userUpdateRequest.notes());
-        }
-
-        if (userUpdateRequest.benefit() != null) {
-            user.setBenefit(userUpdateRequest.benefit());
+            user.setDepartment(department);
         }
 
         userRepository.save(user);
-
         return mapper.toResponse(user);
     }
 

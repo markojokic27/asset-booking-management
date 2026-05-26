@@ -2,14 +2,14 @@ package de.bdr.asset.management.user;
 
 import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
 import de.bdr.asset.management.user.dtos.UserResponseDTO;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
+import org.mapstruct.*;
 
 /** MapStruct data transformation contract bridging user entity, request DTOs and response DTOs. */
 @Mapper(
         componentModel = "spring",
-        builder = @Builder(disableBuilder = true)
+        builder = @Builder(disableBuilder = true),
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface UserMapper {
 
@@ -23,4 +23,13 @@ public interface UserMapper {
     /** Projects a live user aggregate instance into an outbound API response view data transfer object. */
     @Mapping(target = "departmentId", source = "department.id")
     UserResponseDTO toResponse(User entity);
+
+    /**
+     * Performs a flexible PATCH update.
+     * Takes the partial properties provided in the request DTO and merges them directly into your database entity.
+     */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "department", ignore = true)
+    void updateEntityFromDto(UserUpdateRequestDTO request, @MappingTarget User entity);
+
 }

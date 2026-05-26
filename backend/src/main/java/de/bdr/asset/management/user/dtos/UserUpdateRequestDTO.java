@@ -5,43 +5,40 @@ import de.bdr.asset.management.user.UserStatusEnum;
 import jakarta.validation.constraints.*;
 
 /**
- * Data transfer contract containing parameters to update an existing user account.
+ * Data transfer contract containing optional parameters to partially update an existing user account.
+ * <p>
+ * This DTO supports selective field updates (PATCH). Fields that are omitted or passed as
+ * {@code null} will remain unchanged in the underlying database record.
+ * </p>
  *
- * @param surname Family name of the account holder.
- * @param name First name of the account holder.
- * @param email Primary unique corporate communication email address.
- * @param role Core security access privileges assigned to the account.
- * @param status Lifecycle operational state of the profile.
- * @param departmentId Unique identity key matching the assigned department.
- * @param managerEmail Corporate email address of the direct structural supervisor.
+ * @param surname Optional family name of the account holder.
+ * @param name Optional first name of the account holder.
+ * @param email Optional primary unique corporate communication email address.
+ * @param role Optional core security access privileges assigned to the account.
+ * @param status Optional lifecycle operational state of the profile.
+ * @param departmentId Optional unique identity key matching the assigned organizational department.
+ * @param managerEmail Optional corporate email address of the direct structural supervisor.
  * @param notes Optional administrative remarks or additional historical notes.
- * @param benefit Booking benefit plan.
+ * @param benefit Optional booking benefit plan assigned to the user.
  */
 public record UserUpdateRequestDTO(
 
-        @NotBlank(message = "Family name is required")
         @Size(max = 100)
         String surname,
 
-        @NotBlank(message = "First name is required")
         @Size(max = 100)
         String name,
 
-        @NotBlank(message = "Email is required")
-        @Email(message = "Email is not in the right format")
+        @Email
         @Size(max = 254)
         String email,
 
-        @NotNull(message = "Role is required")
         UserRoleEnum role,
 
-        @NotNull(message = "Status is required")
         UserStatusEnum status,
 
-        @NotNull(message = "Department ID is required")
         Long departmentId,
 
-        @NotBlank(message = "Manager email is required")
         @Email
         @Size(max = 254)
         String managerEmail,
@@ -49,7 +46,6 @@ public record UserUpdateRequestDTO(
         @Size(max = 1000)
         String notes,
 
-        @NotBlank(message = "Benefit is required")
         @Size(max = 100)
         String benefit
 ) {}
