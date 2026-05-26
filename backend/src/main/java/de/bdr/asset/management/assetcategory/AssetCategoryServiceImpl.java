@@ -1,5 +1,6 @@
 package de.bdr.asset.management.assetcategory;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,19 +15,16 @@ import lombok.extern.slf4j.Slf4j;
 /** Implementation of AssetCategory Service */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AssetCategoryServiceImpl implements AssetCategoryService {
+
+    /** Error message blueprint when a requested assetcategory identity is missing. */
     private static final String NOT_FOUND = "AssetCategory not found with id: ";
 
     private final AssetCategoryRepository repository;
     private final AssetCategoryMapper mapper;
     private final AssetRepository assetRepository;
-
-    public AssetCategoryServiceImpl(AssetCategoryRepository repository, AssetCategoryMapper mapper, AssetRepository assetRepository) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.assetRepository = assetRepository;
-    }
 
     /** {@inheritDoc} */
     @Override
@@ -64,7 +62,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
 
     /** {@inheritDoc} */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
 
         AssetCategory category = repository.findById(id)
@@ -85,7 +83,7 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
 
     /** {@inheritDoc} */
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void deleteAssetCategory(Long id) {
 
         AssetCategory category = repository.findById(id)
