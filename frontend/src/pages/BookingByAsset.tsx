@@ -86,6 +86,8 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
+
+  // TODO: dodat notes input za upisat
   return (
     <LayoutColumn
       span={12}
@@ -139,6 +141,7 @@ export default function BookingsByAsset() {
         events={calendarEvents}
         selectedDate={filters.fromDate}
         onDateClick={handleCalendarDateClick}
+        variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
       />
     </LayoutColumn>
   );

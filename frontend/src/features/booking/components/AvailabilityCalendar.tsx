@@ -23,12 +23,14 @@ type Props = {
   events: CalendarEvent[];
   selectedDate?: string;
   onDateClick?: (date: string) => void;
+  variant?: 'HOUR' | 'DAY';
 };
 
 export function AvailabilityCalendar({
   events,
   selectedDate,
   onDateClick,
+  variant = 'DAY',
 }: Props) {
   const isPastDate = (date: Date) => {
     const today = new Date();
@@ -68,10 +70,30 @@ export function AvailabilityCalendar({
         height="auto"
         fixedWeekCount={false}
         showNonCurrentDates={false}
-        displayEventTime={false}
+        displayEventTime={true}
         events={events}
         dateClick={handleDateClick}
         eventClick={handleEventClick}
+        eventContent={(eventInfo) => {
+          const start = eventInfo.event.start?.toLocaleTimeString([], {
+            hour: 'numeric',
+          });
+
+          const end = eventInfo.event.end?.toLocaleTimeString([], {
+            hour: 'numeric',
+          });
+
+          return (
+            <div className="text-xs">
+              {variant === 'HOUR' && (
+                <div className="font-semibold">
+                  {start} - {end}
+                </div>
+              )}
+              <div>{eventInfo.event.title}</div>
+            </div>
+          );
+        }}
         dayCellClassNames={(arg) => {
           const date = arg.date.toLocaleDateString('sv-SE');
 

@@ -43,7 +43,7 @@ export function useCreateBooking({
       await createBooking({
         userId: user.id,
         assetId,
-        status: 'PENDING', // this depends on backend logic
+        status: 'PENDING', //TODO this depends on backend logic - za svaku kategoriju vidi jel triba req, i vidi privilegije
         bookingStart: bookingStart.toISOString(),
         bookingEnd: bookingEnd.toISOString(),
         notes: '',
