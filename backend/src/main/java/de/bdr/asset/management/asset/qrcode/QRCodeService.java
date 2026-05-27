@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.google.zxing.WriterException;
 
-import de.bdr.asset.management.asset.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
 public interface QRCodeService {

@@ -3,6 +3,8 @@ package de.bdr.asset.management.asset;
 import java.util.List;
 import java.util.Optional;
 
+import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

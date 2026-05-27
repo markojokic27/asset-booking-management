@@ -6,6 +6,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import de.bdr.asset.management.asset.qrcode.QRCodeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

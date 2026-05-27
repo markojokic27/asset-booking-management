@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;

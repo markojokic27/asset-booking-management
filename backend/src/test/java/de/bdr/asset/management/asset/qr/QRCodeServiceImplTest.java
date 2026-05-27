@@ -1,6 +1,6 @@
 package de.bdr.asset.management.asset.qr;
 
-import de.bdr.asset.management.asset.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import de.bdr.asset.management.asset.AssetService;
 import de.bdr.asset.management.asset.AssetStatusEnum;
 import de.bdr.asset.management.asset.qrcode.QRCodeServiceImpl;

@@ -15,7 +15,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import de.bdr.asset.management.asset.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import de.bdr.asset.management.asset.AssetService;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;

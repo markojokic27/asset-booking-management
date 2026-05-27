@@ -1,5 +1,6 @@
-package de.bdr.asset.management.asset;
+package de.bdr.asset.management.asset.dtos;
 
+import de.bdr.asset.management.asset.AssetStatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

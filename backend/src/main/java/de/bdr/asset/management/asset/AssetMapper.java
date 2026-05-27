@@ -1,5 +1,7 @@
 package de.bdr.asset.management.asset;
 
+import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

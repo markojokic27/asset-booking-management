@@ -3,6 +3,8 @@ package de.bdr.asset.management.asset;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

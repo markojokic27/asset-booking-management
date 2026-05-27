@@ -1,6 +1,9 @@
 package de.bdr.asset.management.asset;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
+import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
