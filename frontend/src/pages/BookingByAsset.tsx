@@ -100,10 +100,11 @@ export default function BookingsByAsset() {
           </h1>
 
           <span
-            className={`rounded px-3 py-1 text-sm font-medium ${asset.status === 'ACTIVE'
+            className={`rounded px-3 py-1 text-sm font-medium ${
+              asset.status === 'ACTIVE'
                 ? 'bg-green-100 text-green-700'
                 : 'bg-gray-200 text-gray-700'
-              }`}
+            }`}
           >
             {asset.status}
           </span>
@@ -116,7 +117,7 @@ export default function BookingsByAsset() {
 
       <div className="mb-6 flex w-full items-end justify-between gap-4">
         <FiltersBar
-          variant="DAY"
+          variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
           filters={filters}
           setFilters={setFilters}
           showSearch={false}

@@ -37,6 +37,7 @@ export function FiltersBar({
 
   const update = (partial: Partial<Filters>) => {
     setFilters((prev) => {
+      console.log('Updating filters with:', partial);
       const next = { ...prev, ...partial };
 
       if (next.fromHour && next.toHour && next.toHour <= next.fromHour) {

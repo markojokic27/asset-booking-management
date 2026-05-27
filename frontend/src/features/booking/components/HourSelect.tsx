@@ -12,9 +12,14 @@ type Props = {
 };
 
 export const hourOptions = Array.from(
-  { length: 13 },
-  (_, index) => `${String(index + 7).padStart(2, '0')}:00`
+  { length: 17 },
+  (_, index) => `${String(index + 6).padStart(2, '0')}:00`
 );
+
+const toMinutes = (time: string) => {
+  const [h, m] = time.split(':').map(Number);
+  return h * 60 + m;
+};
 
 export const HourSelect: React.FC<Props> = ({
   label,
@@ -35,8 +40,9 @@ export const HourSelect: React.FC<Props> = ({
     if (selectedDate === today && hh < currentHour) {
       return false;
     }
+
     if (minHour) {
-      return hour > minHour;
+      return toMinutes(hour) > toMinutes(minHour);
     }
 
     return true;

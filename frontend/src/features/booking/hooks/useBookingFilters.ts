@@ -3,6 +3,7 @@ import * as React from 'react';
 
 // Types
 import type { Filters } from '../types';
+import { hourOptions } from '../components/HourSelect';
 
 const defaultFilters: Filters = {
   search: '',
@@ -20,8 +21,8 @@ export function useBookingFilters() {
       ...prev,
       fromDate: date,
       toDate: date,
-      fromHour: '06:00',
-      toHour: '22:00',
+      fromHour: hourOptions[0],
+      toHour: hourOptions[hourOptions.length - 1],
     }));
   }, []);
 

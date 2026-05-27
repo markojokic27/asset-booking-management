@@ -23,14 +23,14 @@ const LoginForm = () => {
         username: true,
         password: true,
       }),
-    [t],
+    [t]
   );
 
   const handleLogin = async (username: string, password: string) => {
     try {
       setLoading(true);
       setServerError('');
-
+      // TODO: ovo nikako ne moze ovako, plaintext sifra se salje u req
       const response = await api.post('/auth/login', {
         username,
         password,
@@ -39,6 +39,7 @@ const LoginForm = () => {
       const { accessToken, refreshToken, username: user, role } = response.data;
 
       setAccessToken(accessToken);
+      //TODO: ovo nikako ne moze ovako, token se mora spremiti u context ili redux store, a ne u local storage, jer je local storage ranjiv na XSS napade
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 
@@ -49,7 +50,8 @@ const LoginForm = () => {
     } catch (error: any) {
       if (error.response) {
         setServerError(
-          error.response.data?.message || t('ui.login.errors.invalidCredentials')
+          error.response.data?.message ||
+            t('ui.login.errors.invalidCredentials')
         );
       } else {
         setServerError(t('ui.login.errors.serverError'));
@@ -93,9 +95,7 @@ const LoginForm = () => {
       <h1 className="mb-6 text-center text-6xl font-black text-gray-900 dark:text-gray-100">
         {t('ui.login.title')}
       </h1>
-      <h2 className="mb-6 text-center font-bold">
-        {t('ui.login.subtitle')}
-      </h2>
+      <h2 className="mb-6 text-center font-bold">{t('ui.login.subtitle')}</h2>
       <p className="mb-2 tracking-[0.2em]">{t('ui.login.fields.username')}</p>
       <Form.Field name="username" className="mb-10 w-full md:mb-12">
         <Form.Control asChild>
