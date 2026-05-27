@@ -37,9 +37,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
 
         @Query(value = """
                         SELECT
-                                COUNT(*) FILTER (WHERE status <> 'DELETED') AS totalBookingsCount,
+                                COUNT(*) AS totalBookingsCount,
 
-                                COUNT(*) FILTER (WHERE status = 'ACTIVE') AS totalActiveBookingCount,
                                 COUNT(*) FILTER (WHERE status = 'COMPLETED') AS totalCompletedBookingCount,
                                 COUNT(*) FILTER (WHERE status = 'CANCELLED') AS totalCancelledBookingCount,
                                 COUNT(*) FILTER (WHERE status = 'PENDING') AS totalPendingBookingCount,
@@ -52,9 +51,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
 
         @Query(value = """
                         SELECT
-                            SUM(CASE WHEN status <> 'DELETED' THEN 1 ELSE 0 END) AS totalBookingsCount,
+                            COUNT(*) AS totalBookingsCount,
 
-                            SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) AS totalActiveBookingCount,
                             SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS totalCompletedBookingCount,
                             SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END) AS totalCancelledBookingCount,
                             SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) AS totalPendingBookingCount,
@@ -68,9 +66,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
 
         @Query(value = """
                             SELECT
-                                SUM(CASE WHEN status <> 'DELETED' THEN 1 ELSE 0 END) AS totalBookingsCount,
+                                COUNT(*) AS totalBookingsCount,
 
-                                SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) AS totalActiveBookingCount,
                                 SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS totalCompletedBookingCount,
                                 SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END) AS totalCancelledBookingCount,
                                 SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) AS totalPendingBookingCount,
