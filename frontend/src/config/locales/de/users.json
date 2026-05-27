@@ -98,7 +98,7 @@
         "total": "Buchungen gesamt",
         "active": "Aktiv",
         "completed": "Abgeschlossen",
-        "canceled": "Storniert",
+        "cancelled": "Storniert",
         "pending": "Ausstehend",
         "approved": "Genehmigt",
         "rejected": "Abgelehnt"

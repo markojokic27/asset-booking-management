@@ -695,7 +695,7 @@ A1: If the user has reached the borrowing limit, the system denies the request a
 
 ==== Alternate Flows
 
-A1: If the booking cannot be canceled (e.g. time already started), the system notifies the user.
+A1: If the booking cannot be cancelled (e.g. time already started), the system notifies the user.
 
 ---
 
@@ -1132,7 +1132,7 @@ A3: Manager does not check email or mobile notifications::
 
 A1: Manager presses on notification but the request is no longer available::
 +
-* The system displays a message that the request is canceled
+* The system displays a message that the request is cancelled
 
 ---
 

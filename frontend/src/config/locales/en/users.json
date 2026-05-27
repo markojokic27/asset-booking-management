@@ -98,7 +98,7 @@
         "total": "Total bookings",
         "active": "Active",
         "completed": "Completed",
-        "canceled": "Canceled",
+        "cancelled": "Cancelled",
         "pending": "Pending",
         "approved": "Approved",
         "rejected": "Rejected"

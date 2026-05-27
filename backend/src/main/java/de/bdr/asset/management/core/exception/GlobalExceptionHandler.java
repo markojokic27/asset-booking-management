@@ -114,7 +114,7 @@ public class GlobalExceptionHandler {
         Generic handler for when a resources cannot be put through unallowed action.
 
         Example:
-        - Attempt to update a resource that is CANCELED
+        - Attempt to update a resource that is CANCELLED
     */
     @ExceptionHandler(ActionNotAllowedException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)

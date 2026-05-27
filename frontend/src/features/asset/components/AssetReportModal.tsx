@@ -11,7 +11,7 @@ type GeneralReportResponseDTO = {
   totalBookingsCount: number;
   totalActiveBookingCount: number;
   totalCompletedBookingCount: number;
-  totalCanceledBookingCount: number;
+  totalCancelledBookingCount: number;
   totalPendingBookingCount: number;
   totalApprovedBookingCount: number;
   totalRejectedBookingCount: number;
@@ -69,9 +69,9 @@ export const AssetReportModal: React.FC<AssetReportModalProps> = ({ isOpen, onCl
         value: report.totalCompletedBookingCount,
       },
       {
-        key: 'canceled',
-        label: t('assets.modals.report.stats.canceled'),
-        value: report.totalCanceledBookingCount,
+        key: 'cancelled',
+        label: t('assets.modals.report.stats.cancelled'),
+        value: report.totalCancelledBookingCount,
       },
       {
         key: 'pending',

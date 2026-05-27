@@ -93,7 +93,7 @@
         "total": "Ukupno rezervacija",
         "active": "Aktivne",
         "completed": "Završene",
-        "canceled": "Otkazane",
+        "cancelled": "Otkazane",
         "pending": "Na čekanju",
         "approved": "Odobrene",
         "rejected": "Odbijene"

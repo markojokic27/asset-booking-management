@@ -5,7 +5,7 @@ public record GeneralReportResponseDTO (
 
     Long totalActiveBookingCount,
     Long totalCompletedBookingCount,
-    Long totalCanceledBookingCount,
+    Long totalCancelledBookingCount,
     Long totalPendingBookingCount,  
     Long totalApprovedBookingCount,
     Long totalRejectedBookingCount
