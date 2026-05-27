@@ -6,16 +6,18 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import de.bdr.asset.management.core.exception.ActionNotAllowedException;
-import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,13 +32,16 @@ import static de.bdr.asset.management.booking.TestConstants.ASSET_ID;
 import static de.bdr.asset.management.booking.TestConstants.BOOKING_ID;
 import static de.bdr.asset.management.booking.TestConstants.USER_ID;
 import static de.bdr.asset.management.booking.TestConstants.validUpdateUserStatuses;
-import static org.mockito.Mockito.*;
-
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
-import de.bdr.asset.management.core.security.SecurityService;
+import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
+import de.bdr.asset.management.core.security.SecurityService;
+import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
+import de.bdr.asset.management.report.projections.GeneralReportProjection;
+import de.bdr.asset.management.report.projections.TopAssetBookingsProjection;
+import de.bdr.asset.management.report.projections.TopUserBookingsProjection;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 
@@ -306,14 +311,40 @@ class BookingServiceImplTest {
     @Test
     void shouldGetGeneralReport() {
 
-        GeneralReportResponseDTO expectedReport = mock(GeneralReportResponseDTO.class);
+        GeneralReportProjection stats = mock(GeneralReportProjection.class);
 
-        when(repository.getGeneralReport()).thenReturn(expectedReport);
+        when(stats.getTotalBookingsCount()).thenReturn(10L);
+        when(stats.getTotalCompletedBookingCount()).thenReturn(5L);
+        when(stats.getTotalCancelledBookingCount()).thenReturn(1L);
+        when(stats.getTotalPendingBookingCount()).thenReturn(2L);
+        when(stats.getTotalApprovedBookingCount()).thenReturn(1L);
+        when(stats.getTotalRejectedBookingCount()).thenReturn(1L);
 
-        GeneralReportResponseDTO actualReport = service.getGeneralReport();
+        TopUserBookingsProjection userProjection = mock(TopUserBookingsProjection.class);
+        when(userProjection.getUserId()).thenReturn(1L);
+        when(userProjection.getFullName()).thenReturn("John Doe");
+        when(userProjection.getBookingCount()).thenReturn(7L);
 
-        assertEquals(expectedReport, actualReport);
-        verify(repository).getGeneralReport();
+        TopAssetBookingsProjection assetProjection = mock(TopAssetBookingsProjection.class);
+        when(assetProjection.getAssetId()).thenReturn(1L);
+        when(assetProjection.getAssetName()).thenReturn("Laptop");
+        when(assetProjection.getBookingCount()).thenReturn(4L);
+
+        when(repository.getGeneralStats()).thenReturn(stats);
+        when(repository.getTopUsers()).thenReturn(List.of(userProjection));
+        when(repository.getTopAssets()).thenReturn(List.of(assetProjection));
+
+        GeneralReportResponseDTO actual = service.getGeneralReport();
+
+        assertNotNull(actual);
+
+        assertEquals(10L, actual.totalBookingsCount());
+        assertEquals(1, actual.topUsers().size());
+        assertEquals(1, actual.topAssets().size());
+
+        verify(repository).getGeneralStats();
+        verify(repository).getTopUsers();
+        verify(repository).getTopAssets();
     }
 
     // Tests getUserReport(): delegates to repository with userId

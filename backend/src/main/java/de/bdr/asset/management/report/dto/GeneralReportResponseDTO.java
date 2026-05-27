@@ -1,5 +1,7 @@
 package de.bdr.asset.management.report.dto;
 
+import java.util.List;
+
 public record GeneralReportResponseDTO (
     Long totalBookingsCount,
 
@@ -7,5 +9,8 @@ public record GeneralReportResponseDTO (
     Long totalCancelledBookingCount,
     Long totalPendingBookingCount,
     Long totalApprovedBookingCount,
-    Long totalRejectedBookingCount
+    Long totalRejectedBookingCount,
+
+    List<TopUserBookingCountDTO> topUsers,
+    List<TopAssetBookingCountDTO> topAssets
 ) {}

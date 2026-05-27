@@ -4,7 +4,6 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,9 +22,13 @@ import de.bdr.asset.management.core.exception.InvalidDateRangeException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.core.security.SecurityService;
 import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
+import de.bdr.asset.management.report.dto.TopAssetBookingCountDTO;
+import de.bdr.asset.management.report.dto.TopUserBookingCountDTO;
+import de.bdr.asset.management.report.projections.GeneralReportProjection;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import de.bdr.asset.management.user.UserStatusEnum;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -181,8 +184,45 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public GeneralReportResponseDTO getGeneralReport() {
-        return repository.getGeneralReport();
+
+        GeneralReportProjection stats = repository.getGeneralStats();
+
+        List<TopUserBookingCountDTO> topUsers =
+                repository.getTopUsers()
+                        .stream()
+                        .map(p -> new TopUserBookingCountDTO(
+                                p.getUserId(),
+                                p.getFullName(),
+                                p.getBookingCount()
+                        ))
+                        .toList();
+
+        List<TopAssetBookingCountDTO> topAssets =
+                repository.getTopAssets()
+                        .stream()
+                        .map(p -> new TopAssetBookingCountDTO(
+                                p.getAssetId(),
+                                p.getAssetName(),
+                                p.getBookingCount()
+                        ))
+                        .toList();
+
+        return new GeneralReportResponseDTO(
+            stats.getTotalBookingsCount(),
+            stats.getTotalCompletedBookingCount(),
+            stats.getTotalCancelledBookingCount(),
+            stats.getTotalPendingBookingCount(),
+            stats.getTotalApprovedBookingCount(),
+            stats.getTotalRejectedBookingCount(),
+            topUsers,
+            topAssets
+        );
     }
+
+    // @Override
+    // public GeneralReportResponseDTO getGeneralReport() {
+    //     return repository.getGeneralReport();
+    // }
 
     @Override
     public GeneralReportResponseDTO getUserReport(Long userId) {
