@@ -2,6 +2,7 @@ package de.bdr.asset.management.assetcategory;
 
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
@@ -34,6 +35,7 @@ class AssetCategoryServiceImplTest {
 
     private AssetCategory category;
     private AssetCategoryRequestDTO requestDTO;
+    private AssetCategoryUpdateRequestDTO updateRequestDTO;
     private AssetCategoryResponseDTO responseDTO;
 
     // Prepare test data
@@ -44,6 +46,13 @@ class AssetCategoryServiceImplTest {
         category.setName("Books");
 
         requestDTO = new AssetCategoryRequestDTO(
+                "Books",
+                "A collection of books available for borrowing within the company library.",
+                BookingPeriodEnum.DAY,
+                Boolean.TRUE
+        );
+
+        updateRequestDTO = new AssetCategoryUpdateRequestDTO(
                 "Books",
                 "A collection of books available for borrowing within the company library.",
                 BookingPeriodEnum.DAY,
@@ -122,13 +131,15 @@ class AssetCategoryServiceImplTest {
     void shouldUpdateAssetCategory() {
 
         when(repository.findById(1L)).thenReturn(Optional.of(category));
+        when(repository.existsByNameAndIdNot("Books", 1L)).thenReturn(false);
         when(repository.save(category)).thenReturn(category);
         when(mapper.toResponse(category)).thenReturn(responseDTO);
 
-        AssetCategoryResponseDTO result = service.updateAssetCategory(1L, requestDTO);
+        AssetCategoryResponseDTO result = service.updateAssetCategory(1L, updateRequestDTO);
 
         assertEquals("Books", result.name());
 
+        verify(mapper).updateEntityFromDto(updateRequestDTO, category);
         verify(repository).save(category);
     }
 
@@ -139,7 +150,7 @@ class AssetCategoryServiceImplTest {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> service.updateAssetCategory(1L, requestDTO));
+                () -> service.updateAssetCategory(1L, updateRequestDTO));
     }
 
     // Tests createAssetCategory(): throws exception if category name already exists
@@ -160,10 +171,10 @@ class AssetCategoryServiceImplTest {
     void shouldThrowExceptionWhenUpdatingDuplicateCategoryName() {
 
         when(repository.findById(1L)).thenReturn(Optional.of(category));
-        when(repository.existsByNameAndIdNot(requestDTO.name(), 1L)).thenReturn(true);
+        when(repository.existsByNameAndIdNot(updateRequestDTO.name(), 1L)).thenReturn(true);
 
         assertThrows(DuplicateResourceException.class,
-                () -> service.updateAssetCategory(1L, requestDTO));
+                () -> service.updateAssetCategory(1L, updateRequestDTO));
 
         verify(repository).findById(1L);
         verify(repository).existsByNameAndIdNot(requestDTO.name(), 1L);

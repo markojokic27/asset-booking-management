@@ -2,6 +2,7 @@ package de.bdr.asset.management.assetcategory;
 
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -39,7 +40,7 @@ public interface AssetCategoryService {
      * @param assetCategoryRequest the updated data
      * @return the updated category response data
      */
-    AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest);
+    AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryUpdateRequestDTO assetCategoryRequest);
 
     /**
      * Performs a soft delete on an asset category by its ID.

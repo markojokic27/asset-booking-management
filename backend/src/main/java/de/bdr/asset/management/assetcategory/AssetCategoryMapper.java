@@ -2,14 +2,14 @@ package de.bdr.asset.management.assetcategory;
 
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
+import org.mapstruct.*;
 
 /** Mapper interface to convert between {@link AssetCategory} entities and DTOs. */
 @Mapper(
         componentModel = "spring",
-        builder = @Builder(disableBuilder = true)
+        builder = @Builder(disableBuilder = true),
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface AssetCategoryMapper {
 
@@ -21,4 +21,11 @@ public interface AssetCategoryMapper {
 
     /** Maps an asset category entity to a response DTO. */
     AssetCategoryResponseDTO toResponse(AssetCategory entity);
+
+    /**
+     * Performs a flexible PATCH update on an existing asset category.
+     * Takes the partial fields from the update request DTO and merges them directly into the entity.
+     */
+    @Mapping(target = "id", ignore = true)
+    void updateEntityFromDto(AssetCategoryUpdateRequestDTO request, @MappingTarget AssetCategory entity);
 }

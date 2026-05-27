@@ -2,6 +2,7 @@ package de.bdr.asset.management.assetcategory;
 
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,19 +66,19 @@ public class AssetCategoryServiceImpl implements AssetCategoryService {
     /** {@inheritDoc} */
     @Override
     @Transactional
-    public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryRequestDTO assetCategoryRequest){
+    public AssetCategoryResponseDTO updateAssetCategory(Long id, AssetCategoryUpdateRequestDTO assetCategoryRequest){
 
         AssetCategory category = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND + id));
 
-        if (repository.existsByNameAndIdNot(assetCategoryRequest.name(), id)) {
-            throw new DuplicateResourceException("Asset category " + assetCategoryRequest.name() + " already exists.");
+        if (assetCategoryRequest.name() != null) {
+            if (repository.existsByNameAndIdNot(assetCategoryRequest.name(), id)) {
+                throw new DuplicateResourceException("Asset category " + assetCategoryRequest.name() + " already exists.");
+            }
         }
 
-        category.setName(assetCategoryRequest.name());
-        category.setDescription(assetCategoryRequest.description());
-        category.setBookingPeriod(assetCategoryRequest.bookingPeriod());
-        category.setApproval(assetCategoryRequest.approval());
+        mapper.updateEntityFromDto(assetCategoryRequest, category);
+
         AssetCategory updatedCategory = repository.save(category);
 
         return mapper.toResponse(updatedCategory);

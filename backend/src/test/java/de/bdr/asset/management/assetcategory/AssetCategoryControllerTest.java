@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -89,7 +90,7 @@ public class AssetCategoryControllerTest {
     /** UPDATE */
     @Test
     void updateAssetCategory_returnsOkWithUpdatesdAssetCategory(){
-        AssetCategoryRequestDTO request = new AssetCategoryRequestDTO( "Book", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
+        AssetCategoryUpdateRequestDTO request = new AssetCategoryUpdateRequestDTO("Book", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
         AssetCategoryResponseDTO response = new AssetCategoryResponseDTO( 1L, "Books", "A collection of books available for borrowing within the company library.", BookingPeriodEnum.DAY, Boolean.TRUE);
 
         when(assetCategoryService.updateAssetCategory(1L, request)).thenReturn(response);
