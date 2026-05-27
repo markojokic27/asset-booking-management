@@ -4,6 +4,7 @@ import { fn } from 'storybook/test';
 import type { UserDto } from '../types';
 import { UsersTable } from './UsersTable';
 
+// Mock data used across stories
 const users: UserDto[] = [
   {
     id: 101,
@@ -46,6 +47,7 @@ const users: UserDto[] = [
   },
 ];
 
+// Main Storybook configuration for this component
 const meta = {
   title: 'Features/Users/UsersTable',
   component: UsersTable,
@@ -63,20 +65,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WithUsersAsc: Story = {
+// Story for the table with users
+export const WithUsers: Story = {
   args: {
     data: users,
     nameSortDir: 'asc',
   },
 };
 
-export const WithUsersDesc: Story = {
-  args: {
-    data: users,
-    nameSortDir: 'desc',
-  },
-};
-
+// Story for the empty table
 export const Empty: Story = {
   args: {
     data: [],
@@ -84,4 +81,3 @@ export const Empty: Story = {
     emptyMessage: 'No users found.',
   },
 };
-
