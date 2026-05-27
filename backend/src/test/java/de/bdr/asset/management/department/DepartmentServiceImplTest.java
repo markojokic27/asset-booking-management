@@ -1,5 +1,6 @@
 package de.bdr.asset.management.department;
 
+import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRepository;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
@@ -7,6 +8,7 @@ import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.*;
 import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentUpdateRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +45,7 @@ class DepartmentServiceImplTest {
     private Department department;
     private User manager;
     private DepartmentRequestDTO requestDTO;
+    private DepartmentUpdateRequestDTO updateRequestDTO;
     private DepartmentResponseDTO responseDTO;
 
     @BeforeEach
@@ -57,6 +60,11 @@ class DepartmentServiceImplTest {
         department.setManager(manager);
 
         requestDTO = new DepartmentRequestDTO(
+                DepartmentEnum.DEVOPS,
+                1L
+        );
+
+        updateRequestDTO = new DepartmentUpdateRequestDTO(
                 DepartmentEnum.DEVOPS,
                 1L
         );
@@ -135,13 +143,16 @@ class DepartmentServiceImplTest {
     @Test
     void shouldUpdateDepartment() {
         when(repository.findById(1L)).thenReturn(Optional.of(department));
+        when(repository.existsByNameAndIdNot(DepartmentEnum.DEVOPS, 1L)).thenReturn(false);
         when(userRepository.findById(1L)).thenReturn(Optional.of(manager));
+        when(repository.existsByManagerIdAndIdNot(1L, 1L)).thenReturn(false);
         when(repository.save(department)).thenReturn(department);
         when(mapper.toResponse(department)).thenReturn(responseDTO);
 
-        DepartmentResponseDTO result = service.updateDepartment(1L, requestDTO);
+        DepartmentResponseDTO result = service.updateDepartment(1L, updateRequestDTO);
 
         assertEquals(DepartmentEnum.DEVOPS, result.name());
+        verify(mapper).updateEntityFromDto(updateRequestDTO, department);
         verify(repository).save(department);
     }
 
@@ -151,16 +162,43 @@ class DepartmentServiceImplTest {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> service.updateDepartment(1L, requestDTO));
+                () -> service.updateDepartment(1L, updateRequestDTO));
     }
 
     // Tests updateDepartment(): throws if manager not found
     @Test
     void shouldThrowExceptionWhenUpdatingDepartmentWithNonExistingManager() {
         when(repository.findById(1L)).thenReturn(Optional.of(department));
+        when(repository.existsByNameAndIdNot(DepartmentEnum.DEVOPS, 1L)).thenReturn(false);
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> service.updateDepartment(1L, requestDTO));
+                () -> service.updateDepartment(1L, updateRequestDTO));
+    }
+
+    // Tests updateDepartment(): throws if department name already exists elsewhere
+    @Test
+    void shouldThrowExceptionWhenUpdatingDepartmentWithDuplicateName() {
+        when(repository.findById(1L)).thenReturn(Optional.of(department));
+        when(repository.existsByNameAndIdNot(DepartmentEnum.DEVOPS, 1L)).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.updateDepartment(1L, updateRequestDTO));
+
+        verify(repository, never()).save(any());
+    }
+
+    // Tests updateDepartment(): throws if manager already manages another department
+    @Test
+    void shouldThrowExceptionWhenManagerAlreadyAssignedToAnotherDepartment() {
+        when(repository.findById(1L)).thenReturn(Optional.of(department));
+        when(repository.existsByNameAndIdNot(DepartmentEnum.DEVOPS, 1L)).thenReturn(false);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(manager));
+        when(repository.existsByManagerIdAndIdNot(1L, 1L)).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.updateDepartment(1L, updateRequestDTO));
+
+        verify(repository, never()).save(any());
     }
 }

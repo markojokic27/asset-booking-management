@@ -2,6 +2,7 @@ package de.bdr.asset.management.user.department;
 
 import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentUpdateRequestDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -85,13 +86,12 @@ public class DepartmentController {
     @Operation(summary = "Update department details", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<DepartmentResponseDTO> update(
-            @PathVariable Long id, @Valid @RequestBody DepartmentRequestDTO request
+            @PathVariable Long id, @Valid @RequestBody DepartmentUpdateRequestDTO request
     ) throws ResourceNotFoundException, DuplicateResourceException
     {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(service.updateDepartment(id, request));
+        DepartmentResponseDTO updatedDepartment = service.updateDepartment(id, request);
+        return ResponseEntity.ok(updatedDepartment);
     }
 }

@@ -4,6 +4,7 @@ import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentUpdateRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -46,5 +47,5 @@ public interface DepartmentService {
      * @throws ResourceNotFoundException If the targeted department identity does not exist.
      * @throws DuplicateResourceException If the updated name or manager conflict with another department.
      */
-    DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO request);
+    DepartmentResponseDTO updateDepartment(Long id, DepartmentUpdateRequestDTO request);
 }

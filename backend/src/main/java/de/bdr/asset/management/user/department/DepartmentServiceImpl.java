@@ -2,6 +2,7 @@ package de.bdr.asset.management.user.department;
 
 import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentUpdateRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -84,33 +85,37 @@ public class DepartmentServiceImpl implements DepartmentService {
     /** {@inheritDoc} */
     @Override
     @Transactional
-    public DepartmentResponseDTO updateDepartment(Long id, DepartmentRequestDTO departmentRequest) {
+    public DepartmentResponseDTO updateDepartment(Long id, DepartmentUpdateRequestDTO departmentRequest) {
 
         Department department = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Department not found with id: " + id));
 
-        if (repository.existsByNameAndIdNot(departmentRequest.name(), id)) {
-            throw new DuplicateResourceException("Department " + departmentRequest.name() + " already exists.");
+        if (departmentRequest.name() != null) {
+            if (repository.existsByNameAndIdNot(departmentRequest.name(), id)) {
+                throw new DuplicateResourceException("Department " + departmentRequest.name() + " already exists.");
+            }
         }
 
-        User manager = null;
         if (departmentRequest.managerId() != null) {
-            manager = userRepository.findById(departmentRequest.managerId())
+            User manager = userRepository.findById(departmentRequest.managerId())
                     .orElseThrow(() -> new ResourceNotFoundException("Manager not found with id: " + departmentRequest.managerId()));
 
+            // Prevent assigning a manager who already leads another department
             if (repository.existsByManagerIdAndIdNot(departmentRequest.managerId(), id)) {
                 throw new DuplicateResourceException("Manager with ID " + departmentRequest.managerId() + " is already managing another department.");
             }
+
+            department.setManager(manager);
         }
-        
-        department.setName(departmentRequest.name());
-        department.setManager(manager);
+
+        mapper.updateEntityFromDto(departmentRequest, department);
+
         department = repository.save(department);
 
-        if (manager == null) {
-            log.info("Successfully updated new department with id: {} with no manager id.", department.getId());
+        if (department.getManager() == null) {
+            log.info("Successfully updated department with id: {} with no manager assigned.", department.getId());
         } else {
-            log.info("Successfully updated new department with id: {} with manager id: {}", department.getId(), manager.getId());
+            log.info("Successfully updated department with id: {} with manager id: {}", department.getId(), department.getManager().getId());
         }
 
         return mapper.toResponse(department);

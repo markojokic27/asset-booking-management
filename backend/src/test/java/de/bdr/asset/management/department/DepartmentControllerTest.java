@@ -3,6 +3,7 @@ package de.bdr.asset.management.department;
 import de.bdr.asset.management.user.department.*;
 import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentUpdateRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -88,8 +89,8 @@ public class DepartmentControllerTest {
     /** UPDATE */
     @Test
     void updateDepartment_returnsOkWithUpdatesDepartment(){
-        DepartmentRequestDTO request=new DepartmentRequestDTO( DepartmentEnum.DEVOPS, 2L);
-        DepartmentResponseDTO response=new DepartmentResponseDTO(1L,  DepartmentEnum.DEVOPS, 2L);
+        DepartmentUpdateRequestDTO request = new DepartmentUpdateRequestDTO(DepartmentEnum.DEVOPS, 2L);
+        DepartmentResponseDTO response = new DepartmentResponseDTO(1L, DepartmentEnum.DEVOPS, 2L);
 
         when(departmentService.updateDepartment(1L, request)).thenReturn(response);
 
