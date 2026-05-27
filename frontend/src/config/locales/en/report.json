@@ -2,5 +2,9 @@
   "title": "Report",
   "bookingStatusPieChart": {
     "title": "Bookings by Status"
+  },
+  "bookingStatusBarChart": {
+    "title": "Bookings by Month",
+    "yAxisLabel": "Bookings"
   }
 }

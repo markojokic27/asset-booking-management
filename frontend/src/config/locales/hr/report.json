@@ -2,5 +2,9 @@
   "title": "Report",
   "bookingStatusPieChart": {
     "title": "Rezervacije po Statusu"
+  },
+  "bookingStatusBarChart": {
+    "title": "Rezervacije po Mjesecima",
+    "yAxisLabel": "Rezervacije"
   }
 }

@@ -1,9 +1,9 @@
 import { BarChart } from '@mui/x-charts/BarChart';
-// import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../app/ThemeProvider';
 
 export default function BookingStatusPie() {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
   const { theme } = useTheme();
 
   const isDark = theme === 'dark';
@@ -11,7 +11,7 @@ export default function BookingStatusPie() {
   const chartSetting = {
     yAxis: [
         {
-            label: 'Bookings',
+            label: t('report.bookingStatusBarChart.yAxisLabel'),
             width: 60,
         },
     ],
@@ -131,7 +131,7 @@ export default function BookingStatusPie() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <h2 className="text-xl font-black tracking-wide text-black dark:text-white">
-          Reservations counts by year
+            { t('report.bookingStatusBarChart.title') }
         </h2>
       </div>
 
@@ -140,10 +140,10 @@ export default function BookingStatusPie() {
             dataset={data}
             xAxis={[{ dataKey: 'month' }]}
             series={[
-                { dataKey: 'completed', label: 'Completed' },
-                { dataKey: 'rejected', label: 'Rejected' },
-                { dataKey: 'cancelled', label: 'Cancelled' },
-                { dataKey: 'total', label: 'Total' },
+                { dataKey: 'completed', label: t('bookings.status.completed'), },
+                { dataKey: 'rejected', label: t('bookings.status.rejected'), },
+                { dataKey: 'cancelled', label: t('bookings.status.cancelled'), },
+                { dataKey: 'total', label: 'Total', },
             ]}
             {...chartSetting}
         />

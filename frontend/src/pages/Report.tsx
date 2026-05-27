@@ -32,6 +32,10 @@ export default function Report() {
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
             <BookingStatusBar />
           </div>
+          <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
+            {/* Graph for users with most bookings, top 5 maybe */}
+            {/* Graph for assets with most bookings, top 5 maybe */}
+          </div>
         </div>
       </LayoutColumn>
     </>

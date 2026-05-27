@@ -2,5 +2,9 @@
   "title": "Bericht",
   "bookingStatusPieChart": {
     "title": "Buchungen nach Status"
+  },
+  "bookingStatusBarChart": {
+    "title": "Buchungen nach TODO",
+    "yAxisLabel": "Buchungen"
   }
 }
