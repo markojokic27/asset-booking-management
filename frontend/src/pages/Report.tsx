@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { LayoutColumn } from '../components/layout/Layout';
 
 import BookingStatusPie from '../features/report/components/BookingStatusPie';
+import BookingStatusBar from '../features/report/components/BookingStatusBar';
 
 export default function Report() {
   const { t } = useTranslation();
@@ -27,6 +28,9 @@ export default function Report() {
         <div className="mt-8 flex flex-col gap-6">
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
             <BookingStatusPie />
+          </div>
+          <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
+            <BookingStatusBar />
           </div>
         </div>
       </LayoutColumn>
