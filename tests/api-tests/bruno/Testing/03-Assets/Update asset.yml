@@ -6,7 +6,7 @@ info:
     - Assets
 
 http:
-  method: PUT
+  method: PATCH
   url: "{{baseUrl}}/v1/assets/:id"
   params:
     - name: id

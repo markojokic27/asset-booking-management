@@ -6,7 +6,7 @@ info:
     - Users
 
 http:
-  method: PUT
+  method: PATCH
   url: "{{baseUrl}}/v1/users/:id"
   params:
     - name: id

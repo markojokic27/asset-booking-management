@@ -6,7 +6,7 @@ info:
     - Asset_Categories
 
 http:
-  method: PUT
+  method: PATCH
   url: "{{baseUrl}}/v1/asset-categories/:id"
   params:
     - name: id

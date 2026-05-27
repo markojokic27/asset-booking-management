@@ -6,7 +6,7 @@ info:
     - Bookings
 
 http:
-  method: PUT
+  method: PATCH
   url: "{{baseUrl}}/v1/bookings/:id"
   params:
     - name: id
