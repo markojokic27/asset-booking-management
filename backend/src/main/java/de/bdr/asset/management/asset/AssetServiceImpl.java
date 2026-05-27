@@ -2,6 +2,7 @@ package de.bdr.asset.management.asset;
 
 import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
 import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetUpdateRequestDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -111,18 +112,20 @@ public class AssetServiceImpl implements AssetService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public AssetResponseDTO updateAsset(Long id, AssetRequestDTO assetRequest) {
+    public AssetResponseDTO updateAsset(Long id, AssetUpdateRequestDTO assetRequest) {
 
         Asset asset = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(ASSET_NOT_FOUND_WITH_ID + id));
 
-        AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
+        if (assetRequest.categoryId() != null) {
+            AssetCategory category = assetCategoryRepository.findById(assetRequest.categoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException("AssetCategory does not exist for id: " + assetRequest.categoryId()));
 
-        asset.setName(assetRequest.name());
-        asset.setDescription(assetRequest.description());
-        asset.setStatus(assetRequest.status());
-        asset.setCategory(category);
+            asset.setCategory(category);
+        }
+
+        mapper.updateEntityFromDto(assetRequest, asset);
+
         asset = repository.save(asset);
 
         return mapper.toResponse(asset);

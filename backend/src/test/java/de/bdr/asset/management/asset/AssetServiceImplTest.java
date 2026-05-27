@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
 import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetUpdateRequestDTO;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -54,6 +55,7 @@ class AssetServiceImplTest {
     private Asset asset;
     private AssetCategory category;
     private AssetRequestDTO requestDTO;
+    private AssetUpdateRequestDTO updateRequestDTO;
     private AssetResponseDTO responseDTO;
 
     // Initialize common test data used in all tests
@@ -73,6 +75,14 @@ class AssetServiceImplTest {
                 AssetStatusEnum.ACTIVE,
                 "Room 301"
 
+        );
+
+        updateRequestDTO = new AssetUpdateRequestDTO(
+                "Hp 15",
+                1L,
+                "Laptop located in room 301",
+                AssetStatusEnum.ACTIVE,
+                "Room 301"
         );
 
         responseDTO = new AssetResponseDTO(
@@ -256,12 +266,13 @@ class AssetServiceImplTest {
         when(repository.save(asset)).thenReturn(asset);
         when(mapper.toResponse(asset)).thenReturn(responseDTO);
 
-        AssetResponseDTO result = service.updateAsset(1L, requestDTO);
+        AssetResponseDTO result = service.updateAsset(1L, updateRequestDTO);
 
         assertEquals("Hp 15", result.name());
-
+        verify(mapper).updateEntityFromDto(updateRequestDTO, asset);
         verify(repository).save(asset);
     }
+
 
     // Tests updateAsset(): throws exception if asset does not exist
     @Test
@@ -270,7 +281,7 @@ class AssetServiceImplTest {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> service.updateAsset(1L, requestDTO));
+                () -> service.updateAsset(1L, updateRequestDTO));
     }
 
     // Tests softDeleteAsset(): asset exist → change status to DELETED

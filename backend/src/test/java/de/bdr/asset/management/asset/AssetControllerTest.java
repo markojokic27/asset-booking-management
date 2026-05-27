@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
 import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetUpdateRequestDTO;
 import de.bdr.asset.management.asset.qrcode.QRCodeService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,7 +102,7 @@ public class AssetControllerTest {
     @Test
     void updateAssetById_returnsOkWithUpdatesdAsset(){
 
-        AssetRequestDTO request = new AssetRequestDTO("Hp 15", 1L, "Laptop located in room 301", AssetStatusEnum.ACTIVE, "Room 301");
+        AssetUpdateRequestDTO request = new AssetUpdateRequestDTO("Hp 15", 1L, "Laptop located in room 301", AssetStatusEnum.ACTIVE, "Room 301");
         AssetResponseDTO response = new AssetResponseDTO(1L, "Hp 15", 1L, "Laptop located in room 301", null, AssetStatusEnum.ACTIVE, "Room 301");
 
         when(assetService.updateAsset(1L, request)).thenReturn(response);

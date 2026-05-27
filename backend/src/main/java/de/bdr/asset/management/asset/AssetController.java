@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
 import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
+import de.bdr.asset.management.asset.dtos.AssetUpdateRequestDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -122,14 +124,13 @@ public class AssetController {
     @Operation(summary = "Update asset", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<AssetResponseDTO> updateAsset(
-            @PathVariable Long id, @Valid @RequestBody AssetRequestDTO assetRequest
+            @PathVariable Long id, @Valid @RequestBody AssetUpdateRequestDTO assetRequest
     ) throws ResourceNotFoundException, DuplicateResourceException
     {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(assetService.updateAsset(id, assetRequest));
+        AssetResponseDTO updatedAsset = assetService.updateAsset(id, assetRequest);
+        return ResponseEntity.ok(updatedAsset);
     }
 
     /** Soft DELETE */
