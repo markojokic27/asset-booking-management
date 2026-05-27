@@ -8,7 +8,8 @@ import org.mapstruct.*;
 
 @Mapper(
         componentModel = "spring",
-        builder = @Builder(disableBuilder = true)
+        builder = @Builder(disableBuilder = true),
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
 )
 public interface BookingMapper {
     @Mapping(target = "id", ignore = true)
@@ -27,11 +28,8 @@ public interface BookingMapper {
 
     CategorySummaryDTO toCategorySummary(AssetCategory category);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "lastModifiedAt", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "asset", ignore = true)
     void updateBookingFromDTO(BookingUpdateDTO request, @MappingTarget Booking entity);

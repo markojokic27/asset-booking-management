@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -94,7 +94,7 @@ public class BookingController {
     @Operation(summary = "Update booking", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<BookingResponseDTO> update(
             @PathVariable Long id, @Valid @RequestBody BookingUpdateDTO request
     ) throws ResourceNotFoundException, ActionNotAllowedException, InvalidDateRangeException, DuplicateResourceException

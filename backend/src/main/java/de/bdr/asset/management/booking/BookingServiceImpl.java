@@ -133,19 +133,24 @@ public class BookingServiceImpl implements BookingService {
             throw new ActionNotAllowedException("Cannot update a cancelled booking");
         }
 
-        if (booking.getBookingEnd() != null &&
-            booking.getBookingEnd().isBefore(now())) {
+        if (booking.getBookingEnd() != null && booking.getBookingEnd().isBefore(now())) {
             throw new ActionNotAllowedException("Cannot update a booking that has already finished");
+        }
+
+        if (bookingRequest.status() != null) {
+            booking.setStatus(bookingRequest.status());
         }
 
         mapper.updateBookingFromDTO(bookingRequest, booking);
 
-        if (booking.getBookingStart().isAfter(booking.getBookingEnd())) {
-            throw new InvalidDateRangeException("End time must be after start time");
+        if (booking.getBookingStart() != null && booking.getBookingEnd() != null) {
+            if (!booking.getBookingEnd().isAfter(booking.getBookingStart())) {
+                throw new InvalidDateRangeException("End time must be after start time");
+            }
         }
 
         booking = repository.save(booking);
-        
+
         return mapper.toResponse(booking);
     }
 
