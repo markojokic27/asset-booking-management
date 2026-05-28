@@ -10,15 +10,20 @@ import { DeleteModal } from '../components/ui/DeleteModal';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Pagination } from '../components/ui/Pagination';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
-import { AssetEditModal } from '../features/asset/components/AssetEditModal';
 import { AssetModal } from '../features/asset/components/AssetModal';
 import { AssetBookingsModal } from '../features/asset/components/AssetBookingsModal';
-import { AssetAddModal } from '../features/asset/components/AssetAddModal';
 import { AssetsTable } from '../features/asset/components/AssetTable';
 import { AssetReportModal } from '../features/asset/components/AssetReportModal';
+import { AssetFormModal } from '../features/asset/components/AssetFormModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
+
 // API
-import { getAllAssets, updateAsset } from '../features/asset/api/assetApi';
+import {
+  createAsset,
+  deleteAsset,
+  getAllAssets,
+  updateAsset,
+} from '../features/asset/api/assetApi';
 import { getAllCategories } from '../features/asset-category/api/categoryApi';
 
 // Hooks
@@ -144,15 +149,12 @@ export default function Assets() {
 
   const handleDelete = async (asset: AssetDto) => {
     try {
-      const updatedAsset = {
-        ...asset,
-        status: 'DELETED' as const,
-      };
-
-      await updateAsset(asset.id, updatedAsset);
+      await deleteAsset(asset.id);
 
       setAssets((current) =>
-        current.map((a) => (a.id === asset.id ? updatedAsset : a))
+        current.map((a) =>
+          a.id === asset.id ? { ...a, status: 'DELETED' as const } : a
+        )
       );
     } catch (err) {
       console.error('Failed to delete asset:', err);
@@ -251,11 +253,31 @@ export default function Assets() {
         asset={modal.type === 'report' ? modal.asset : null}
       />
 
-      <AssetEditModal
-        isOpen={modal.type === 'edit'}
-        onClose={closeModal}
+      <AssetFormModal
+        isOpen={modal.type === 'add' || modal.type === 'edit'}
+        mode={modal.type === 'add' ? 'create' : 'edit'}
         asset={modal.type === 'edit' ? modal.asset : null}
-        onSave={(updatedAsset) => {
+        onClose={closeModal}
+        onCreate={async (payload) => {
+          const newAsset = await createAsset(payload);
+          setAssets((current) => [
+            {
+              ...newAsset,
+              categoryName:
+                newAsset.categoryName ?? categoryMap[newAsset.categoryId] ?? '-',
+            },
+            ...current,
+          ]);
+        }}
+        onSave={async (assetToSave) => {
+          const updatedAsset = await updateAsset(assetToSave.id, {
+            name: assetToSave.name,
+            categoryId: assetToSave.categoryId,
+            status: assetToSave.status,
+            location: assetToSave.location,
+            description: assetToSave.description,
+          });
+
           setAssets((currentAssets) =>
             currentAssets.map((asset) =>
               asset.id === updatedAsset.id
@@ -269,7 +291,6 @@ export default function Assets() {
                 : asset
             )
           );
-          closeModal();
         }}
       />
 
@@ -292,23 +313,6 @@ export default function Assets() {
             await handleDelete(modal.asset);
             closeModal();
           }
-        }}
-      />
-      <AssetAddModal
-        isOpen={modal.type === 'add'}
-        onClose={closeModal}
-        onSave={(newAsset) => {
-          setAssets((current) => [
-            {
-              ...newAsset,
-              categoryName:
-                newAsset.categoryName ??
-                categoryMap[newAsset.categoryId] ??
-                '-',
-            },
-            ...current,
-          ]);
-          setModal({ type: 'add' });
         }}
       />
     </LayoutColumn>

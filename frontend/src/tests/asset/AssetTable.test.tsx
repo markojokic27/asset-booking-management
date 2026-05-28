@@ -39,7 +39,7 @@ vi.mock('../../../components/ui/Button', () => ({
 
 vi.mock('@mui/icons-material/VisibilityOutlined', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/EditOutlined', () => ({ default: () => <svg /> }));
-vi.mock('@mui/icons-material/DeleteOutline', () => ({ default: ({ onClick }: any) => <svg onClick={onClick} /> }));
+vi.mock('@mui/icons-material/DeleteOutline', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/CalendarTodaySharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/BarChart', () => ({ default: () => <svg /> }));
 
@@ -108,9 +108,9 @@ describe('AssetsTable', () => {
     expect(baseProps[handler as keyof typeof baseProps]).toHaveBeenCalledWith(activeAsset);
   });
 
-  it('calls onDelete when delete icon is clicked', async () => {
+  it('calls onDelete when delete button is clicked', async () => {
     renderTable();
-    await userEvent.click(screen.getByRole('button', { name: 'assets.table.ariaDelete' }).querySelector('svg')!);
+    await userEvent.click(screen.getByRole('button', { name: 'assets.table.ariaDelete' }));
     expect(baseProps.onDelete).toHaveBeenCalledWith(activeAsset);
   });
 

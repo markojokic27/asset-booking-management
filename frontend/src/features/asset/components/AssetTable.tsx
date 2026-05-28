@@ -159,10 +159,11 @@ export function AssetsTable({
               variant="danger"
               aria-label={t('assets.table.ariaDelete')}
               disabled={asset.status === 'DELETED'}
+              onClick={() => onDelete(asset)}
             >
               <DeleteOutlineIcon
                 fontSize="small"
-                onClick={() => onDelete?.(asset)}
+                className="pointer-events-none"
               />
             </IconButton>
           </div>

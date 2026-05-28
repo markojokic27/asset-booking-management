@@ -52,10 +52,12 @@ export type UpdateAssetRequest = {
 }
 
 export const updateAsset = async (id: number, data: UpdateAssetRequest) => {
-  const res = await api.put<AssetDto>(
-    `/assets/${id}`, data
-  );
+  const res = await api.patch<AssetDto>(`/assets/${id}`, data);
   return res.data;
+};
+
+export const deleteAsset = async (id: number) => {
+  await api.delete<void>(`/assets/${id}`);
 }
 
 export const getAssetReport = async (id: number) => {
