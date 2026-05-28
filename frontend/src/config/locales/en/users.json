@@ -15,7 +15,8 @@
     "none": "No users yet."
   },
   "errors": {
-    "loadReport": "Failed to load report."
+    "loadReport": "Failed to load report.",
+    "loadBookings": "Failed to load bookings."
   },
   "delete": {
     "title": "Delete user?",
@@ -82,12 +83,14 @@
       "ariaLabel": "Bookings",
       "title": "Bookings",
       "closeAria": "Close bookings modal",
+      "loading": "Loading bookings...",
       "empty": "No bookings for this user.",
       "table": {
         "columns": {
           "bookingId": "Booking ID",
           "asset": "Asset",
-          "date": "Date"
+          "date": "Date",
+          "status": "Status"
         }
       }
     },

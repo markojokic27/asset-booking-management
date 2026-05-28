@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 
-import type { UserBookingsModalUser } from './UserBookingsModal';
+import type { UserBookingsModalUser } from '../types';
 import { UserBookingsModal } from './UserBookingsModal';
 
 // Mock data used across stories

@@ -1,55 +1,98 @@
-import * as React from 'react';
+// external imports
+import { useEffect, useMemo, useState, type FC } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useTranslation } from 'react-i18next';
+
+// components
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
+import { BookingStatusBadge } from '../../booking/components/BookingStatusBadge';
 
-type UserBooking = {
-  id: string;
-  userId: string;
-  asset: string;
-  dateFrom: Date;
-  dateTo: Date;
-};
+// api
+import { getAllUserBookings } from '../../booking/api/bookingApi';
 
-export type UserBookingsModalUser = {
-  id: number;
-  fullName: string;
-};
+// utils
+import { isBookingPastEnd } from '../../booking/utilis/bookingLogic';
 
+// types
+import type { BookingWithRelations } from '../../booking/types';
+import type { UserBookingsModalUser } from '../types';
+
+// props for the UserBookingsModal component
 export type UserBookingsModalProps = {
   isOpen: boolean;
   onClose: () => void;
   user: UserBookingsModalUser | null;
 };
 
-export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
+export const UserBookingsModal: FC<UserBookingsModalProps> = ({
   isOpen,
   onClose,
   user,
 }) => {
+  // translation function
   const { t } = useTranslation();
-  if (!isOpen || !user) return null;
 
-  const bookingColumns: TableColumn<UserBooking>[] = [
-    {
-      key: 'id',
-      header: t('users.modals.bookings.table.columns.bookingId'),
-      accessor: 'id',
-    },
-    {
-      key: 'asset',
-      header: t('users.modals.bookings.table.columns.asset'),
-      accessor: 'asset',
-    },
-    {
-      key: 'dates',
-      header: t('users.modals.bookings.table.columns.date'),
-      render: (booking) =>
-        `${booking.dateFrom.toLocaleDateString()} - ${booking.dateTo.toLocaleDateString()}`,
-    },
-  ];
+  // list of bookings
+  const [bookings, setBookings] = useState<BookingWithRelations[]>([]);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!isOpen || !user) return;
+
+    const fetchBookings = async () => {
+      try {
+        setLoading(true);
+        setError('');
+
+        // fetch bookings from API
+        const data = await getAllUserBookings(0, 100, user.id);
+        setBookings(data.content);
+      } catch {
+        setError(t('users.errors.loadBookings'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void fetchBookings();
+  }, [isOpen, user?.id, t]);
+
+  // columns for the bookings table
+  const bookingColumns: TableColumn<BookingWithRelations>[] = useMemo(
+    () => [
+      {
+        key: 'id',
+        header: t('users.modals.bookings.table.columns.bookingId'),
+        accessor: 'id',
+      },
+      {
+        key: 'asset',
+        header: t('users.modals.bookings.table.columns.asset'),
+        render: (booking) => booking.asset.name,
+      },
+      {
+        key: 'dates',
+        header: t('users.modals.bookings.table.columns.date'),
+        render: (booking) =>
+          `${new Date(booking.bookingStart).toLocaleDateString()} - ${new Date(
+            booking.bookingEnd
+          ).toLocaleDateString()}`,
+      },
+      {
+        key: 'status',
+        header: t('users.modals.bookings.table.columns.status'),
+        render: (booking) => <BookingStatusBadge status={booking.status} />,
+      },
+    ],
+    [t]
+  );
+
+  // if the modal is not open or the user is not set, return null
+  if (!isOpen || !user) return null;
 
   return (
     <Modal
@@ -57,6 +100,7 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
       onClose={onClose}
       ariaLabel={t('users.modals.bookings.ariaLabel')}
       size="lg"
+      // title for the modal
       title={
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-widest text-(--color-table-head-text) opacity-50">
@@ -65,19 +109,43 @@ export const UserBookingsModal: React.FC<UserBookingsModalProps> = ({
           <p className="block text-base font-black tracking-wider">{user.fullName}</p>
         </div>
       }
+      // close button for the modal
       headerRight={
-        <IconButton data-testid="user-booking-close-button" onClick={onClose} aria-label={t('users.modals.bookings.closeAria')}>
+        <IconButton
+          data-testid="user-booking-close-button"
+          onClick={onClose}
+          aria-label={t('users.modals.bookings.closeAria')}
+        >
           <CloseOutlinedIcon fontSize="small" />
         </IconButton>
       }
     >
-      <Table
-        data={[]}
-        columns={bookingColumns}
-        getRowKey={(booking) => booking.id}
-        className="w-full"
-        emptyMessage={t('users.modals.bookings.empty')}
-      />
+      {/* loading state */}
+      {loading && (
+        <p className="py-6 text-sm text-(--color-table-head-text)">
+          {t('users.modals.bookings.loading')}
+        </p>
+      )}
+
+      {/* error state */}
+      {error && !loading && <p className="py-6 text-sm text-red-500">{error}</p>}
+
+      {/* success state */}
+      {!loading && !error && (
+        <Table
+          data={bookings}
+          columns={bookingColumns}
+          // key for the bookings
+          getRowKey={(booking) => String(booking.id)}
+          // style for past bookings
+          rowClassName={(booking) =>
+            isBookingPastEnd(booking) ? 'opacity-55' : undefined
+          }
+          className="w-full"
+          // empty message for the bookings
+          emptyMessage={t('users.modals.bookings.empty')}
+        />
+      )}
     </Modal>
   );
 };

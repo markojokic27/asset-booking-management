@@ -31,6 +31,12 @@ export type UserModalUser = {
   | 'notes'
 >;
 
+// Shape expected by UserBookingsModal
+export type UserBookingsModalUser = {
+  id: UserDto['id'];
+  fullName: string;
+};
+
 // Shape expected by backend for POST /users
 export type UserUpsertRequest = Omit<User, 'id'>;
 

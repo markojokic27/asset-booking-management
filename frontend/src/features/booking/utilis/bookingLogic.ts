@@ -53,3 +53,16 @@ export const hasBookingOverlap = ({
     return selectedStart < bookingEnd && selectedEnd > bookingStart;
   });
 };
+
+// function to check if a booking is past its end date
+export const isBookingPastEnd = (booking: Pick<BookingWithRelations, 'bookingEnd'>) =>
+  new Date(booking.bookingEnd).getTime() < Date.now();
+
+// function to sort bookings by start date newest first
+export const sortBookingsNewestFirst = (
+  bookings: BookingWithRelations[]
+): BookingWithRelations[] =>
+  [...bookings].sort(
+    (a, b) =>
+      new Date(b.bookingStart).getTime() - new Date(a.bookingStart).getTime()
+  );

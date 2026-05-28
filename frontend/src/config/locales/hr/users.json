@@ -15,7 +15,8 @@
     "none": "Još nema korisnika."
   },
   "errors": {
-    "loadReport": "Učitavanje izvještaja nije uspjelo."
+    "loadReport": "Učitavanje izvještaja nije uspjelo.",
+    "loadBookings": "Učitavanje rezervacija nije uspjelo."
   },
   "delete": {
     "title": "Obrisati korisnika?",
@@ -82,12 +83,14 @@
       "ariaLabel": "Rezervacije",
       "title": "Rezervacije",
       "closeAria": "Zatvori modal rezervacija",
+      "loading": "Učitavanje rezervacija...",
       "empty": "Nema rezervacija za ovog korisnika.",
       "table": {
         "columns": {
           "bookingId": "ID rezervacije",
           "asset": "Imovina",
-          "date": "Datum"
+          "date": "Datum",
+          "status": "Status"
         }
       }
     },

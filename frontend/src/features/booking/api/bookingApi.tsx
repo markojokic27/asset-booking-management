@@ -36,6 +36,19 @@ export const getAllAssetBookings = async (
   return res.data;
 };
 
+// get all bookings by user ID
+export const getAllUserBookings = async (
+  page = 0,
+  size = 10,
+  userId: number,
+  sort = 'bookingStart,desc'
+) => {
+  const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
+    params: { page, size, userId, sort },
+  });
+  return res.data;
+};
+
 // get all bookings by category ID
 export const getAllCategoryBookings = async (
   page = 0,

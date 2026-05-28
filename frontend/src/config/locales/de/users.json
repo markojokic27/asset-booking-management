@@ -15,7 +15,8 @@
     "none": "Noch keine Benutzer."
   },
   "errors": {
-    "loadReport": "Bericht konnte nicht geladen werden."
+    "loadReport": "Bericht konnte nicht geladen werden.",
+    "loadBookings": "Buchungen konnten nicht geladen werden."
   },
   "delete": {
     "title": "Benutzer löschen?",
@@ -82,12 +83,14 @@
       "ariaLabel": "Buchungen",
       "title": "Buchungen",
       "closeAria": "Buchungsmodal schließen",
+      "loading": "Buchungen werden geladen…",
       "empty": "Keine Buchungen für diesen Benutzer.",
       "table": {
         "columns": {
           "bookingId": "Buchungs-ID",
           "asset": "Asset",
-          "date": "Datum"
+          "date": "Datum",
+          "status": "Status"
         }
       }
     },
