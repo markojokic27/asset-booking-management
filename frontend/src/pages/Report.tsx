@@ -5,6 +5,8 @@ import { LayoutColumn } from '../components/layout/Layout';
 
 import BookingStatusPie from '../features/report/components/BookingStatusPie';
 import BookingStatusBar from '../features/report/components/BookingStatusBar';
+import TopUserBookings from '../features/report/components/TopUserBookingsPie';
+import TopAssetBookings from '../features/report/components/TopAssetBookingsPie';
 
 export default function Report() {
   const { t } = useTranslation();
@@ -33,8 +35,10 @@ export default function Report() {
             <BookingStatusBar />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            {/* Graph for users with most bookings, top 5 maybe */}
-            {/* Graph for assets with most bookings, top 5 maybe */}
+            <TopUserBookings></TopUserBookings>
+          </div>
+          <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
+            <TopAssetBookings></TopAssetBookings>
           </div>
         </div>
       </LayoutColumn>
