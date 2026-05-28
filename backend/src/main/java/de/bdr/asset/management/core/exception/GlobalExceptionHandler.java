@@ -269,6 +269,30 @@ public class GlobalExceptionHandler {
     }
 
     /*
+        Generic handler to indicate that a method has been invoked at an illegal or inappropriate time.
+
+        Example:
+        - Attempt to approve or reject a booking that is not in PENDING state
+    */
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail handleIllegalState(IllegalStateException ex, HttpServletRequest request) {
+
+        log.warn("Illegal state at URI [{}]. Message: {}", request.getRequestURI(), ex.getMessage());
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage() != null ? ex.getMessage() : "Illegal state for requested operation"
+        );
+
+        problemDetail.setTitle("Illegal state");
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        problemDetail.setProperty(TIMESTAMP, Instant.now());
+
+        return problemDetail;
+    }
+
+    /*
         Generic handler if an endpoint is accessed without proper authorization.
 
         Example:

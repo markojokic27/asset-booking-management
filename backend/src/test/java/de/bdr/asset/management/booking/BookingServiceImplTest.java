@@ -8,6 +8,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import de.bdr.asset.management.core.email.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +65,9 @@ class BookingServiceImplTest {
     @Mock
     private AssetRepository assetRepository;
 
+    @Mock
+    private EmailService emailService;
+
     private BookingServiceImpl service;
 
     @BeforeEach
@@ -79,7 +84,8 @@ class BookingServiceImplTest {
                 userRepository,
                 assetRepository,
                 securityService,
-                fixedClock
+                fixedClock,
+                emailService
         );
     }
 

@@ -4,6 +4,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
 
+import de.bdr.asset.management.core.email.EmailService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,6 +46,7 @@ public class BookingServiceImpl implements BookingService {
     private final AssetRepository assetRepository;
     private final SecurityService securityService;
     private final Clock clock;
+    private final EmailService emailService;
 
     private Instant now() {
         return Instant.now(clock);
@@ -86,7 +88,18 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
-        repository.save(booking);
+        booking = repository.save(booking);
+
+        if (category.isApproval()) {
+
+            String approvalLink = "http://localhost:5173/approvals/" + booking.getId();
+
+            String managerEmail = user.getManagerEmail();
+            String employeeName = user.getName() + " " + user.getSurname();
+            String assetName = asset.getName();
+
+            emailService.sendApprovalEmail(managerEmail, assetName, employeeName, approvalLink);
+        }
 
         return mapper.toResponse(booking);
     }
