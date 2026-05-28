@@ -1,5 +1,5 @@
 // External packages
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Components
@@ -28,6 +28,7 @@ export default function AssetCategories() {
   const { t } = useTranslation();
 
   const [search, setSearch] = useState('');
+  const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openViewModal, setOpenViewModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -56,9 +57,26 @@ export default function AssetCategories() {
     load();
   }, [t]);
 
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(search.toLowerCase())
+  const collator = useMemo(
+    () => new Intl.Collator('hr', { sensitivity: 'base' }),
+    []
   );
+
+  const filteredCategories = useMemo(
+    () =>
+      categories.filter((category) =>
+        category.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [categories, search]
+  );
+
+  const sortedCategories = useMemo(() => {
+    const dir = nameSortDir === 'asc' ? 1 : -1;
+
+    return [...filteredCategories].sort(
+      (a, b) => collator.compare(a.name, b.name) * dir
+    );
+  }, [filteredCategories, nameSortDir, collator]);
 
   const handleView = async (category: AssetCategoryDto) => {
     setOpenViewModal(true);
@@ -149,7 +167,11 @@ export default function AssetCategories() {
             </p>
           ) : (
             <AssetCategoriesTable
-              data={filteredCategories}
+              data={sortedCategories}
+              nameSortDir={nameSortDir}
+              onToggleNameSort={() =>
+                setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+              }
               onView={handleView}
               onEdit={handleEdit}
             />

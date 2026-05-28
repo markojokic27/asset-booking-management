@@ -24,11 +24,20 @@
     "rowActions": {
       "viewAria": "View category",
       "editAria": "Edit category"
+    },
+    "sort": {
+      "byNameAria": "Sort by name {{direction}}",
+      "direction": {
+        "ascending": "ascending",
+        "descending": "descending"
+      }
     }
   },
   "modals": {
     "common": {
-      "closeAria": "Close"
+      "closeAria": "Close",
+      "save": "Save",
+      "saving": "Saving…"
     },
     "view": {
       "ariaLabel": "Category details",
@@ -64,6 +73,7 @@
       "ariaLabel": "Edit category",
       "title": "Edit Category",
       "submit": "Save",
+      "submitError": "Failed to save changes. Please try again.",
       "fields": {
         "name": "Name",
         "description": "Description",

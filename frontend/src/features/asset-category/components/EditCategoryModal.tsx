@@ -1,180 +1,210 @@
-import CloseIcon from '@mui/icons-material/Close'
-import { FormInput } from '../../../components/ui/FormInput'
-import { Button } from '../../../components/ui/Button'
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { FormDropdown } from '../../../components/ui/FormDropdown'
-import { Checkbox } from 'radix-ui'
-import { CheckIcon } from '@radix-ui/react-icons'
-import type { AssetCategoryDto } from '../types'
-import { useTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import CloseIcon from '@mui/icons-material/Close';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+import { Button } from '../../../components/ui/Button';
+import { FormDropdown } from '../../../components/ui/FormDropdown';
+import { FormInput } from '../../../components/ui/FormInput';
+import { IconButton } from '../../../components/ui/IconButton';
+import { Modal } from '../../../components/ui/Modal';
+import type { AssetCategoryDto } from '../types';
 
 type Props = {
-    isOpen: boolean
-    onClose: () => void
-    category: AssetCategoryDto | null
-    onSave: (category: AssetCategoryDto) => Promise<void>
-}
+  isOpen: boolean;
+  onClose: () => void;
+  category: AssetCategoryDto | null;
+  onSave: (category: AssetCategoryDto) => Promise<void>;
+};
 
 type FormValues = {
-    name: string
-    description: string
-    bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH'
-    approval: boolean
-}
+  name: string;
+  description: string;
+  bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH';
+  approval: boolean;
+};
 
 export const EditCategoryModal: React.FC<Props> = ({
-    isOpen,
-    onClose,
-    category,
-    onSave,
+  isOpen,
+  onClose,
+  category,
+  onSave,
 }) => {
-    const { t } = useTranslation()
+  const { t } = useTranslation();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
-    const bookingPeriodOptions = [
-        { value: 'HOUR', label: t('assetCategories.bookingPeriod.hour') },
-        { value: 'DAY', label: t('assetCategories.bookingPeriod.day') },
-        { value: 'WEEK', label: t('assetCategories.bookingPeriod.week') },
-        { value: 'MONTH', label: t('assetCategories.bookingPeriod.month') }
-    ] as const
+  const bookingPeriodOptions = [
+    { value: 'HOUR', label: t('assetCategories.bookingPeriod.hour') },
+    { value: 'DAY', label: t('assetCategories.bookingPeriod.day') },
+    { value: 'WEEK', label: t('assetCategories.bookingPeriod.week') },
+    { value: 'MONTH', label: t('assetCategories.bookingPeriod.month') },
+  ] as const;
 
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        reset,
-        formState: { errors },
-    } = useForm<FormValues>({
-        defaultValues: {
-            name: '',
-            description: '',
-            bookingPeriod: 'DAY',
-            approval: false,
-        },
-    })
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      name: '',
+      description: '',
+      bookingPeriod: 'DAY',
+      approval: false,
+    },
+  });
 
-    useEffect(() => {
-        if (isOpen && category) {
-            reset({
-                name: category.name ?? '',
-                description: category.description ?? '',
-                bookingPeriod: category.bookingPeriod as FormValues['bookingPeriod'],
-                approval: category.approval ?? false,
-            })
-        }
-    }, [isOpen, category, reset])
-
-    if (!isOpen || !category) return null
-
-    const onSubmit = async (data: FormValues) => {
-        try {
-            await onSave({
-                ...category,
-                name: data.name,
-                description: data.description,
-                bookingPeriod: data.bookingPeriod,
-                approval: data.approval,
-                lastModifiedAt: new Date(),
-            })
-
-            onClose()
-        } catch (err) {
-            console.error('Error updating category:', err)
-        }
+  useEffect(() => {
+    if (isOpen && category) {
+      setSubmitError(null);
+      setIsSaving(false);
+      reset({
+        name: category.name ?? '',
+        description: category.description ?? '',
+        bookingPeriod: category.bookingPeriod as FormValues['bookingPeriod'],
+        approval: category.approval ?? false,
+      });
     }
+  }, [isOpen, category, reset]);
 
-    return (
-        <div data-testid="assetCategory-modal"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('assetCategories.modals.edit.ariaLabel')}
-            onMouseDown={(e) => {
-                if (e.target === e.currentTarget) onClose()
-            }}
+  if (!isOpen || !category) return null;
+
+  const formId = `asset-category-edit-form-${category.id}`;
+  const approvalChecked = watch('approval');
+
+  const onSubmit = async (data: FormValues) => {
+    setSubmitError(null);
+    setIsSaving(true);
+    try {
+      await onSave({
+        ...category,
+        name: data.name,
+        description: data.description,
+        bookingPeriod: data.bookingPeriod,
+        approval: data.approval,
+        lastModifiedAt: new Date(),
+      });
+      onClose();
+    } catch (err) {
+      console.error('Error updating category:', err);
+      setSubmitError(t('assetCategories.modals.edit.submitError'));
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      ariaLabel={t('assetCategories.modals.edit.ariaLabel')}
+      headerRight={
+        <IconButton
+          data-testid="category-close-modal"
+          onClick={onClose}
+          aria-label={t('assetCategories.modals.common.closeAria')}
         >
-            <div className="w-full max-w-200 overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
-                <div className="relative flex items-center justify-center px-8 pt-6 pb-4">
-                    <div className="text-center text-xl font-bold">{t('assetCategories.modals.edit.title')}</div>
-
-                    <Button data-testid="category-close-modal"
-                        type="button"
-                        onClick={onClose}
-                        aria-label={t('assetCategories.modals.common.closeAria')}
-                        className="absolute right-8 inline-flex bg-white border-none cursor-pointer items-center justify-center rounded p-1.5 text-(--color-table-text) transition-colors hover:bg-(--color-table-row-hover) hover:text-(--color-primaryblue) active:scale-95"
-                    >
-                        <CloseIcon className="pointer-events-none" />
-                    </Button>
-                </div>
-
-                <div className="m-4 mx-8 h-px bg-(--color-table-border)"></div>
-
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex gap-10 px-8 py-8">
-                        <div className="flex flex-1 flex-col space-y-5">
-                            <FormInput
-                                data-testid="category-name"
-                                id="category-name"
-                                label={t('assetCategories.modals.edit.fields.name')}
-                                error={!!errors.name}
-                                errorMessage={errors.name?.message}
-                                {...register('name', { required: t('assetCategories.validation.nameRequired') })}
-                            />
-
-                            <FormInput
-                                data-testid="category-description"
-                                id="category-description"
-                                label={t('assetCategories.modals.edit.fields.description')}
-                                {...register('description')}
-                            />
-
-                            <FormDropdown
-                                data-testid="category-booking-period"
-                                label={t('assetCategories.modals.edit.fields.bookingPeriod')}
-                                options={bookingPeriodOptions}
-                                error={!!errors.bookingPeriod}
-                                errorMessage={errors.bookingPeriod?.message}
-                                {...register('bookingPeriod', { required: t('assetCategories.validation.bookingPeriodRequired') })}
-                            />
-
-                            <div className="flex items-center gap-2">
-                                <Checkbox.Root
-                                    data-testid="category-approval-checkbox"
-                                    id="edit-category-approval"
-                                    checked={undefined}
-                                    onCheckedChange={(checked) =>
-                                        setValue('approval', !!checked)
-                                    }
-                                    className="flex h-5 w-5 items-center justify-center rounded border border-(--color-table-border) shadow-sm data-[state=checked]:bg-(--color-primaryblue)"
-                                    defaultChecked={category.approval}
-                                >
-                                    <Checkbox.Indicator className="text-white">
-                                        <CheckIcon />
-                                    </Checkbox.Indicator>
-                                </Checkbox.Root>
-
-                                <label
-                                    htmlFor="edit-category-approval"
-                                    className="cursor-pointer text-sm"
-                                >
-                                    {t('assetCategories.modals.edit.fields.approvalLabel')}
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mx-8 mt-5 h-px bg-(--color-table-border)"></div>
-
-                    <div className="mt-5 flex justify-center gap-2">
-                        <Button data-testid="save-category-button"
-                            type="submit"
-                            className="mr-5 mb-5 h-10 w-70 px-6 py-4 font-bold"
-                        >
-                            {t('assetCategories.modals.edit.submit')}
-                        </Button>
-                    </div>
-                </form>
-            </div>
+          <CloseIcon className="pointer-events-none" />
+        </IconButton>
+      }
+      footer={
+        <div className="flex justify-end">
+          <Button
+            data-testid="save-category-button"
+            type="submit"
+            form={formId}
+            className="shadow-none"
+            disabled={isSaving}
+          >
+            {isSaving
+              ? t('assetCategories.modals.common.saving')
+              : t('assetCategories.modals.common.save')}
+          </Button>
         </div>
-    )
-}
+      }
+    >
+      <form
+        id={formId}
+        key={category.id}
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        <div
+          data-testid="assetCategory-modal"
+          className="flex flex-col gap-5"
+        >
+          {submitError && (
+            <div className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              {submitError}
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+            <FormInput
+              data-testid="edit-category-name"
+              id="edit-category-name"
+              label={t('assetCategories.modals.edit.fields.name')}
+              error={!!errors.name}
+              errorMessage={errors.name?.message}
+              {...register('name', {
+                required: t('assetCategories.validation.nameRequired'),
+              })}
+            />
+
+            <FormDropdown
+              data-testid="edit-category-booking-period"
+              label={t('assetCategories.modals.edit.fields.bookingPeriod')}
+              options={bookingPeriodOptions}
+              error={!!errors.bookingPeriod}
+              errorMessage={errors.bookingPeriod?.message}
+              {...register('bookingPeriod', {
+                required: t('assetCategories.validation.bookingPeriodRequired'),
+              })}
+            />
+          </div>
+
+          <FormInput
+            data-testid="edit-category-description"
+            id="edit-category-description"
+            label={t('assetCategories.modals.edit.fields.description')}
+            error={!!errors.description}
+            errorMessage={errors.description?.message}
+            {...register('description')}
+          />
+
+          <FormControlLabel
+            className="m-0 items-start gap-2"
+            control={
+              <Checkbox
+                data-testid="edit-category-approval-checkbox"
+                id="edit-category-approval"
+                checked={approvalChecked}
+                onChange={(e) =>
+                  setValue('approval', e.target.checked, { shouldDirty: true })
+                }
+                sx={{
+                  padding: 0,
+                  marginTop: '2px',
+                  color: 'var(--color-table-border)',
+                  '&.Mui-checked': {
+                    color: 'var(--color-primaryblue)',
+                  },
+                }}
+              />
+            }
+            label={
+              <span className="cursor-pointer text-sm">
+                {t('assetCategories.modals.edit.fields.approvalLabel')}
+              </span>
+            }
+          />
+        </div>
+      </form>
+    </Modal>
+  );
+};

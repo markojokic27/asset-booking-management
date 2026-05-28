@@ -190,11 +190,6 @@ export const AssetFormModal = ({
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel={isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.aria')}
-      title={
-        <div className="text-center text-xl font-bold">
-          {isCreate ? t('assets.modals.add.title') : t('assets.modals.save')}
-        </div>
-      }
       headerRight={
         <IconButton onClick={onClose} aria-label={t('assets.modals.close')}>
           <CloseIcon className="pointer-events-none" />
@@ -325,11 +320,7 @@ export const AssetFormModal = ({
               className="shadow-none"
               disabled={isSaving}
             >
-              {isCreate
-                ? t('assets.modals.add.title')
-                : isSaving
-                  ? t('assets.modals.saving')
-                  : t('assets.modals.save')}
+              {isSaving ? t('assets.modals.saving') : t('assets.modals.save')}
             </Button>
           </Form.Submit>
         </div>

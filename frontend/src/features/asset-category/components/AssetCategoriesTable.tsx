@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 
 type Props = {
   data: AssetCategoryDto[];
+  nameSortDir: 'asc' | 'desc';
+  onToggleNameSort: () => void;
   onView: (category: AssetCategoryDto) => void;
   onEdit?: (category: AssetCategoryDto) => void;
   onDelete?: (category: AssetCategoryDto) => void;
@@ -13,15 +15,52 @@ type Props = {
 
 export const AssetCategoriesTable = ({
     data,
+    nameSortDir,
+    onToggleNameSort,
     onView,
     onEdit,
 }: Props) => {
     const { t } = useTranslation()
+    const nextSortDirKey = nameSortDir === 'asc' ? 'descending' : 'ascending';
 
     const columns: TableColumn<AssetCategoryDto>[] = [
         {
             key: 'name',
-            header: t('assetCategories.table.columns.name'),
+            header: (
+              <button
+                type="button"
+                onClick={onToggleNameSort}
+                className="inline-flex cursor-pointer items-center gap-2 select-none hover:text-(--color-primaryblue)"
+                aria-label={t('assetCategories.table.sort.byNameAria', {
+                  direction: t(
+                    `assetCategories.table.sort.direction.${nextSortDirKey}`
+                  ),
+                })}
+              >
+                <span className="uppercase">
+                  {t('assetCategories.table.columns.name')}
+                </span>
+                <span
+                  className="inline-flex flex-col leading-none"
+                  aria-hidden="true"
+                >
+                  <span
+                    className={
+                      nameSortDir === 'asc' ? 'opacity-100' : 'opacity-30'
+                    }
+                  >
+                    ▲
+                  </span>
+                  <span
+                    className={
+                      nameSortDir === 'desc' ? 'opacity-100' : 'opacity-30'
+                    }
+                  >
+                    ▼
+                  </span>
+                </span>
+              </button>
+            ),
             accessor: 'name',
             cellClassName: 'font-medium'
         },

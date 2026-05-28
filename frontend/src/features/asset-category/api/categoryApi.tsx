@@ -48,6 +48,6 @@ export type UpdateCategoryRequest = {
 };
 
 export const updateCategory = async (id: number, data: UpdateCategoryRequest) => {
-  const res = await api.put<AssetCategoryDto>(`/asset-categories/${id}`, data);
+  const res = await api.patch<AssetCategoryDto>(`/asset-categories/${id}`, data);
   return res.data;
 }

@@ -24,11 +24,20 @@
     "rowActions": {
       "viewAria": "Prikaži kategoriju",
       "editAria": "Uredi kategoriju"
+    },
+    "sort": {
+      "byNameAria": "Sortiraj po nazivu ({{direction}})",
+      "direction": {
+        "ascending": "uzlazno",
+        "descending": "silazno"
+      }
     }
   },
   "modals": {
     "common": {
-      "closeAria": "Zatvori"
+      "closeAria": "Zatvori",
+      "save": "Spremi",
+      "saving": "Spremanje…"
     },
     "view": {
       "ariaLabel": "Detalji kategorije",
@@ -64,6 +73,7 @@
       "ariaLabel": "Uredi kategoriju",
       "title": "Uredi kategoriju",
       "submit": "Spremi",
+      "submitError": "Neuspjelo spremanje promjena. Pokušajte ponovno.",
       "fields": {
         "name": "Naziv",
         "description": "Opis",

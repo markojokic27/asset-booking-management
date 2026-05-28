@@ -23,11 +23,20 @@
     "rowActions": {
       "viewAria": "Kategorie anzeigen",
       "editAria": "Kategorie bearbeiten"
+    },
+    "sort": {
+      "byNameAria": "Nach Name sortieren ({{direction}})",
+      "direction": {
+        "ascending": "aufsteigend",
+        "descending": "absteigend"
+      }
     }
   },
   "modals": {
     "common": {
-      "closeAria": "Schließen"
+      "closeAria": "Schließen",
+      "save": "Speichern",
+      "saving": "Speichern…"
     },
     "view": {
       "ariaLabel": "Kategoriedetails",
@@ -62,6 +71,7 @@
       "ariaLabel": "Kategorie bearbeiten",
       "title": "Kategorie bearbeiten",
       "submit": "Speichern",
+      "submitError": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen.",
       "fields": {
         "name": "Name",
         "description": "Beschreibung",

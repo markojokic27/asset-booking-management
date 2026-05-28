@@ -104,7 +104,6 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
             isOpen={open}
             onClose={onClose}
             ariaLabel={t('assetCategories.modals.add.ariaLabel')}
-            title={<div className="text-xl font-bold">{t('assetCategories.modals.add.title')}</div>}
             headerRight={
                 <IconButton
                     data-testid="category-close-button"
@@ -123,7 +122,9 @@ export const AddCategoryModal: React.FC<Props> = ({ open, onClose, onCreate }) =
                         className="shadow-none"
                         disabled={isSaving}
                     >
-                        {isSaving ? t('assetCategories.modals.add.saving') : t('assetCategories.modals.add.submit')}
+                        {isSaving
+                          ? t('assetCategories.modals.common.saving')
+                          : t('assetCategories.modals.common.save')}
                     </Button>
                 </div>
             }
