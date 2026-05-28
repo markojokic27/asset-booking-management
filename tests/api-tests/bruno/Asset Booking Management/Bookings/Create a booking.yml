@@ -12,12 +12,11 @@ http:
     type: json
     data: |-
       {
-        "userId": 0,
-        "assetId": 0,
-        "status": "ACTIVE",
-        "bookingStart": "",
-        "bookingEnd": "",
-        "notes": ""
+        "userId": 1,
+        "assetId": 1,
+        "bookingStart": "2026-06-01T08:00:00Z",
+        "bookingEnd": "2026-06-05T16:00:00Z",
+        "notes": "Testiranje odobrenja rezervacije kao Admin"
       }
   auth:
     type: bearer

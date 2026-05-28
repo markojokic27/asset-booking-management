@@ -62,5 +62,4 @@ public class User extends BaseEntity {
     /** User booking benefits. */
     @Column(nullable = false, length = 100)
     private String benefit;
-
 }
