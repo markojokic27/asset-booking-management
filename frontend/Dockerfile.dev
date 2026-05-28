@@ -1,5 +1,7 @@
 FROM node:24-alpine
 
+RUN apk add --no-cache wget
+
 WORKDIR /app
 
 # Copy only package files first (Docker layer cache — faster rebuilds)

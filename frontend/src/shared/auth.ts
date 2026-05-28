@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { API_BASE_URL, setAccessToken } from './api';
+import { setAccessToken } from './api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/v1';
 
 export async function initAuth() {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -9,7 +10,7 @@ export async function initAuth() {
   }
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+    const response = await axios.post(`${BASE_URL}/auth/refresh`, {
       refreshToken,
     });
 

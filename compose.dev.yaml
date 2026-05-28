@@ -31,3 +31,9 @@ services:
           path: ./frontend/package.json
     depends_on:
       - backend
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:5173 > /dev/null 2>&1 || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s

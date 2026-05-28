@@ -34,6 +34,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         return http
+
                 // Disable CSRF: stateless JWT APIs don't use cookies, so CSRF is irrelevant
                 .csrf(AbstractHttpConfigurer::disable)
 
@@ -46,6 +47,8 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // Allow all CORS preflight requests — must be FIRST
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // =========================
                         // PUBLIC ENDPOINTS
                         // =========================
@@ -159,7 +162,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Cost factor 12: ~300ms per hash on modern hardware — safe and fast enough for login
+        // Cost factor 12: ~300ms per hash on modern hardware — safe and fast enough for
+        // login
         return new BCryptPasswordEncoder(12);
     }
 
