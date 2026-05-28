@@ -1,6 +1,6 @@
 package com.example.assetbookingmanagement.features.user.data
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +24,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    fun testGetUserById() = runBlocking {
+    fun testGetUserById() = runTest {
         val userId = 1L
         val expectedUser = buildUserResponse()
 
