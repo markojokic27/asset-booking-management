@@ -38,24 +38,15 @@ RUN npm run build
 
 
 ### RUNNER STAGE START ###
-# Our runner image, can be changed to something else
-# Was used because of its size
-FROM busybox:1.37 AS runner
+FROM nginx:1.27-alpine AS runner
 
-# Same as before in the builder
-WORKDIR /app
+# Copy built assets
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Create non-root user
-RUN adduser -D appuser
+# Copy SPA routing config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# From builder, copy the dist folder as it is the only
-# thing we need for the build
-COPY --from=builder /app/dist .
+EXPOSE 8080
 
-# Switch to non-root user for security
-USER appuser
-
-# Command to run the container
-CMD ["busybox", "httpd", "-f", "-v", "-p", "8080"]
-
+CMD ["nginx", "-g", "daemon off;"]
 ### RUNNER STAGE END ###
