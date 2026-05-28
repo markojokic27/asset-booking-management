@@ -40,14 +40,18 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimePicker(
+    startDateMillis: Long?,
+    endDateMillis: Long?,
+    startHour: Int,
+    startMinute: Int,
+    endHour: Int,
+    endMinute: Int,
+    onStartDateSelected: (Long?) -> Unit,
+    onEndDateSelected: (Long?) -> Unit,
+    onStartTimeSelected: (Int, Int) -> Unit,
+    onEndTimeSelected: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var startDateMillis by rememberSaveable { mutableStateOf<Long?>(null) }
-    var endDateMillis by rememberSaveable { mutableStateOf<Long?>(null) }
-    var startHour by rememberSaveable { mutableIntStateOf(9) }
-    var startMinute by rememberSaveable { mutableIntStateOf(0) }
-    var endHour by rememberSaveable { mutableIntStateOf(10) }
-    var endMinute by rememberSaveable { mutableIntStateOf(0) }
     var showStartDateDialog by rememberSaveable { mutableStateOf(false) }
     var showEndDateDialog by rememberSaveable { mutableStateOf(false) }
     var showStartTimeDialog by rememberSaveable { mutableStateOf(false) }
@@ -83,7 +87,7 @@ fun DateTimePicker(
             initialSelectedDateMillis = startDateMillis,
             onDismiss = { showStartDateDialog = false },
             onConfirm = {
-                startDateMillis = it
+                onStartDateSelected(it)
                 showStartDateDialog = false
             }
         )
@@ -94,7 +98,7 @@ fun DateTimePicker(
             initialSelectedDateMillis = endDateMillis,
             onDismiss = { showEndDateDialog = false },
             onConfirm = {
-                endDateMillis = it
+                onEndDateSelected(it)
                 showEndDateDialog = false
             }
         )
@@ -106,8 +110,7 @@ fun DateTimePicker(
             initialMinute = startMinute,
             onDismiss = { showStartTimeDialog = false },
             onConfirm = { hour, minute ->
-                startHour = hour
-                startMinute = minute
+                onStartTimeSelected(hour, minute)
                 showStartTimeDialog = false
             }
         )
@@ -119,8 +122,7 @@ fun DateTimePicker(
             initialMinute = endMinute,
             onDismiss = { showEndTimeDialog = false },
             onConfirm = { hour, minute ->
-                endHour = hour
-                endMinute = minute
+                onEndTimeSelected(hour, minute)
                 showEndTimeDialog = false
             }
         )

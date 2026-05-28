@@ -121,7 +121,15 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                 )
             ) { backStackEntry ->
                 val assetId = backStackEntry.arguments?.getLong("assetId") ?: return@composable
-                CreateBookingScreen(assetId = assetId)
+                CreateBookingScreen(
+                    assetId = assetId,
+                    onCancelClick = {
+                        navController.popBackStack()
+                    },
+                    onBookNowClick = {
+                        navController.navigateTopLevel(Routes.BOOKINGS)
+                    }
+                )
             }
         }
     }

@@ -8,4 +8,8 @@ class BookingRepository @Inject constructor(
     suspend fun getUserBookings(userId: Long): List<BookingResponse> {
         return bookingApi.getBookings(userId = userId).content
     }
+
+    suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
+        return bookingApi.createBooking(request)
+    }
 }

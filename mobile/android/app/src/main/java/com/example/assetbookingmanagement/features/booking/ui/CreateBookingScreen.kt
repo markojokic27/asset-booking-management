@@ -12,6 +12,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
 import com.example.assetbookingmanagement.core.ui.components.AvailabilityCalendar
@@ -28,9 +31,17 @@ import com.example.assetbookingmanagement.core.ui.components.DateTimePicker
 fun CreateBookingScreen(
     assetId: Long,
     onCancelClick: () -> Unit = {},
-    onBookNowClick: () -> Unit = {}
+    onBookNowClick: () -> Unit = {},
+    viewModel: CreateBookingViewModel = hiltViewModel()
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingTab.ChooseDate.ordinal) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.bookingCreated) {
+        if (uiState.bookingCreated) {
+            onBookNowClick()
+        }
+    }
 
     BookingTabsLayout(
         selectedTabIndex = selectedTabIndex,
@@ -40,15 +51,36 @@ fun CreateBookingScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         when (selectedTabIndex) {
-            BookingTab.ChooseDate.ordinal -> DateTimePicker()
+            BookingTab.ChooseDate.ordinal -> DateTimePicker(
+                startDateMillis = uiState.startDateMillis,
+                endDateMillis = uiState.endDateMillis,
+                startHour = uiState.startHour,
+                startMinute = uiState.startMinute,
+                endHour = uiState.endHour,
+                endMinute = uiState.endMinute,
+                onStartDateSelected = viewModel::onStartDateSelected,
+                onEndDateSelected = viewModel::onEndDateSelected,
+                onStartTimeSelected = viewModel::onStartTimeSelected,
+                onEndTimeSelected = viewModel::onEndTimeSelected
+            )
             BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar()
+        }
+
+        uiState.errorMessage?.let { message ->
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         BookingButtons(
             onCancelClick = onCancelClick,
-            onBookNowClick = onBookNowClick
+            onBookNowClick = { viewModel.createBooking(assetId) },
+            isSubmitting = uiState.isSubmitting
         )
     }
 }
@@ -56,7 +88,8 @@ fun CreateBookingScreen(
 @Composable
 private fun BookingButtons(
     onCancelClick: () -> Unit,
-    onBookNowClick: () -> Unit
+    onBookNowClick: () -> Unit,
+    isSubmitting: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -79,8 +112,9 @@ private fun BookingButtons(
         }
 
         AppButton(
-            text = "Book now",
+            text = if (isSubmitting) "Booking..." else "Book now",
             iconRes = R.drawable.calendar_today_24,
+            enabled = !isSubmitting,
             onClick = onBookNowClick
         )
     }
