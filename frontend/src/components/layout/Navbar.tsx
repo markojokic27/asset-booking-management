@@ -6,10 +6,11 @@ import PeopleSharpIcon from '@mui/icons-material/PeopleSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
+import HowToRegSharpIcon from '@mui/icons-material/HowToRegSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
-import { getFullName } from '../../features/user/utilis/users';
+import { getFullName, isAdmin, isManager } from '../../features/user/utilis/users';
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
@@ -18,8 +19,19 @@ export const Navbar: React.FC = () => {
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
     { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharpIcon },
-    { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon },
+    ...(isAdmin(user)
+      ? [{ to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon }]
+      : []),
     { to: '/report', label: t('layout.navbar.report'), icon: AssessmentSharpIcon },
+    ...(isManager(user)
+      ? [
+          {
+            to: '/approvals',
+            label: t('layout.navbar.approvals'),
+            icon: HowToRegSharpIcon,
+          },
+        ]
+      : []),
   ];
   //TODO hover, new tab
   // Base for links

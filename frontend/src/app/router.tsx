@@ -8,7 +8,7 @@ import Bookings from '../pages/Bookings';
 import BookingsByAsset from '../pages/BookingByAsset';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
-import Manager from '../pages/Manager';
+import Approvals from '../pages/Approvals';
 import NotFound from '../pages/NotFound';
 import Users from '../pages/Users';
 import AssetCategories from '../pages/AssetCategories';
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
           { path: 'assets/:assetId/bookings', element: <BookingsByAsset /> },
           { path: 'users', element: <Users /> },
           { path: 'categories', element: <AssetCategories /> },
-          { path: 'manager', element: <Manager /> },
+          { path: 'approvals', element: <Approvals /> },
           { path: 'account-info', element: <AccountInfo /> },
           { path: 'report', element: <Report /> },
         ],

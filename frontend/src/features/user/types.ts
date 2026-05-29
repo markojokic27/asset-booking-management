@@ -13,6 +13,9 @@ export type User = {
   benefit?: 'ALL' | 'REC_PARK' | null;
 };
 
+// type for the user role
+export type UserRole = User['role'];
+
 // Shape returned by backend
 export type UserDto = Omit<User, 'password'>;
 

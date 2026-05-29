@@ -102,13 +102,16 @@ export const AssetCategoriesTable = ({
                         <VisibilityOutlinedIcon fontSize="small" />
                     </button>
 
-                    <button data-testid="edit-assetCategory-button"
-                        className="p-1.5 hover:text-(--color-primaryblue)"
-                        onClick={() => onEdit?.(category)}
-                        aria-label={t('assetCategories.table.rowActions.editAria')}
-                    >
-                        <EditOutlinedIcon fontSize="small" />
-                    </button>
+                    {/* if the user is an admin, show the edit button */}
+                    {onEdit && (
+                      <button data-testid="edit-assetCategory-button"
+                          className="p-1.5 hover:text-(--color-primaryblue)"
+                          onClick={() => onEdit(category)}
+                          aria-label={t('assetCategories.table.rowActions.editAria')}
+                      >
+                          <EditOutlinedIcon fontSize="small" />
+                      </button>
+                    )}
 
                 </div>
             )

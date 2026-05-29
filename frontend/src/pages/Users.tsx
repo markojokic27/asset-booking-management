@@ -1,5 +1,6 @@
 // External packages
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
@@ -20,10 +21,11 @@ import { UserReportModal } from '../features/user/components/UserReportModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
 
 // Utility functions
-import { getFullName } from '../features/user/utilis/users';
+import { getFullName, isAdmin } from '../features/user/utilis/users';
 
 // Custom hooks
 import { useUsers } from '../features/user/hooks/useUsers';
+import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
 
 // Types
 import type { UserDto } from '../features/user/types';
@@ -31,6 +33,18 @@ import type { UserDto } from '../features/user/types';
 type DeleteState = { type: 'none' } | { type: 'delete'; user: UserDto };
 
 export default function Users() {
+  // current user
+  const { user, isLoading } = useCurrentUser();
+
+  // if the user is not an admin, redirect to the bookings page
+  if (!isLoading && !isAdmin(user)) {
+    return <Navigate to="/bookings" replace />;
+  }
+
+  return <UsersPage />;
+}
+
+function UsersPage() {
   const { t } = useTranslation();
 
   const { list, sorting, pagination, selection, modals, actions } = useUsers();

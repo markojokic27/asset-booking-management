@@ -28,6 +28,8 @@ import { getAllCategories } from '../features/asset-category/api/categoryApi';
 
 // Hooks
 import { usePagination } from '../features/user/hooks/usePagination';
+import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { isAdmin } from '../features/user/utilis/users';
 
 // Types
 import type { AssetDto } from '../features/asset/types';
@@ -45,6 +47,7 @@ type ModalState =
 
 export default function Assets() {
   const { t } = useTranslation();
+  const { user } = useCurrentUser();
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
@@ -179,16 +182,18 @@ export default function Assets() {
           {pageTitle}
         </h1>
 
-        <Button
-          data-testid="add-asset-button"
-          type="button"
-          size="sm"
-          iconLeft={<AddIcon fontSize="small" />}
-          onClick={() => setModal({ type: 'add' })}
-          className="w-full sm:w-fit"
-        >
-          {t('assets.actions.new')}
-        </Button>
+        {isAdmin(user) && (
+          <Button
+            data-testid="add-asset-button"
+            type="button"
+            size="sm"
+            iconLeft={<AddIcon fontSize="small" />}
+            onClick={() => setModal({ type: 'add' })}
+            className="w-full sm:w-fit"
+          >
+            {t('assets.actions.new')}
+          </Button>
+        )}
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
@@ -224,9 +229,13 @@ export default function Assets() {
               setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
             }
             onView={(asset) => setModal({ type: 'view', asset })}
-            onEdit={(asset) => setModal({ type: 'edit', asset })}
+            {...(isAdmin(user)
+              ? {
+                  onEdit: (asset) => setModal({ type: 'edit', asset }),
+                  onDelete: (asset) => setModal({ type: 'delete', asset }),
+                }
+              : {})}
             onBookings={(asset) => setModal({ type: 'bookings', asset })}
-            onDelete={(asset) => setModal({ type: 'delete', asset })}
             onReport={(asset) => setModal({type: 'report', asset})}
           />
         )}
@@ -253,68 +262,72 @@ export default function Assets() {
         asset={modal.type === 'report' ? modal.asset : null}
       />
 
-      <AssetFormModal
-        isOpen={modal.type === 'add' || modal.type === 'edit'}
-        mode={modal.type === 'add' ? 'create' : 'edit'}
-        asset={modal.type === 'edit' ? modal.asset : null}
-        onClose={closeModal}
-        onCreate={async (payload) => {
-          const newAsset = await createAsset(payload);
-          setAssets((current) => [
-            {
-              ...newAsset,
-              categoryName:
-                newAsset.categoryName ?? categoryMap[newAsset.categoryId] ?? '-',
-            },
-            ...current,
-          ]);
-        }}
-        onSave={async (assetToSave) => {
-          const updatedAsset = await updateAsset(assetToSave.id, {
-            name: assetToSave.name,
-            categoryId: assetToSave.categoryId,
-            status: assetToSave.status,
-            location: assetToSave.location,
-            description: assetToSave.description,
-          });
+      {isAdmin(user) && (
+        <AssetFormModal
+          isOpen={modal.type === 'add' || modal.type === 'edit'}
+          mode={modal.type === 'add' ? 'create' : 'edit'}
+          asset={modal.type === 'edit' ? modal.asset : null}
+          onClose={closeModal}
+          onCreate={async (payload) => {
+            const newAsset = await createAsset(payload);
+            setAssets((current) => [
+              {
+                ...newAsset,
+                categoryName:
+                  newAsset.categoryName ?? categoryMap[newAsset.categoryId] ?? '-',
+              },
+              ...current,
+            ]);
+          }}
+          onSave={async (assetToSave) => {
+            const updatedAsset = await updateAsset(assetToSave.id, {
+              name: assetToSave.name,
+              categoryId: assetToSave.categoryId,
+              status: assetToSave.status,
+              location: assetToSave.location,
+              description: assetToSave.description,
+            });
 
-          setAssets((currentAssets) =>
-            currentAssets.map((asset) =>
-              asset.id === updatedAsset.id
-                ? {
-                    ...updatedAsset,
-                    categoryName:
-                      updatedAsset.categoryName ??
-                      categoryMap[updatedAsset.categoryId] ??
-                      '-',
-                  }
-                : asset
-            )
-          );
-        }}
-      />
+            setAssets((currentAssets) =>
+              currentAssets.map((asset) =>
+                asset.id === updatedAsset.id
+                  ? {
+                      ...updatedAsset,
+                      categoryName:
+                        updatedAsset.categoryName ??
+                        categoryMap[updatedAsset.categoryId] ??
+                        '-',
+                    }
+                  : asset
+              )
+            );
+          }}
+        />
+      )}
 
       <AssetBookingsModal
         isOpen={modal.type === 'bookings'}
         onClose={closeModal}
         asset={modal.type === 'bookings' ? modal.asset : null}
       />
-      <DeleteModal
-        isOpen={modal.type === 'delete'}
-        onClose={closeModal}
-        item={modal.type === 'delete' ? modal.asset : null}
-        getItemName={(asset) => asset.name}
-        title={t('assets.delete.title')}
-        description={t('assets.delete.description', {
-          name: modal.type === 'delete' ? modal.asset.name : '',
-        })}
-        onConfirm={async () => {
-          if (modal.type === 'delete') {
-            await handleDelete(modal.asset);
-            closeModal();
-          }
-        }}
-      />
+      {isAdmin(user) && (
+        <DeleteModal
+          isOpen={modal.type === 'delete'}
+          onClose={closeModal}
+          item={modal.type === 'delete' ? modal.asset : null}
+          getItemName={(asset) => asset.name}
+          title={t('assets.delete.title')}
+          description={t('assets.delete.description', {
+            name: modal.type === 'delete' ? modal.asset.name : '',
+          })}
+          onConfirm={async () => {
+            if (modal.type === 'delete') {
+              await handleDelete(modal.asset);
+              closeModal();
+            }
+          }}
+        />
+      )}
     </LayoutColumn>
   );
 }

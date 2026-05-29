@@ -22,8 +22,8 @@ type Props = {
   nameSortDir: 'asc' | 'desc';
   onToggleNameSort: () => void;
   onView: (asset: AssetDto) => void;
-  onEdit: (asset: AssetDto) => void;
-  onDelete: (asset: AssetDto) => void;
+  onEdit?: (asset: AssetDto) => void;
+  onDelete?: (asset: AssetDto) => void;
   onBookings: (asset: AssetDto) => void;
   onReport: (asset: AssetDto) => void;
 };
@@ -141,31 +141,35 @@ export function AssetsTable({
               <BarChartIcon fontSize="small" className="pointer-events-none" />
             </IconButton>
 
-            <IconButton
-              data-testid="edit-asset-button"
-              type="button"
-              aria-label={t('assets.table.ariaEdit')}
-              disabled={asset.status === 'DELETED'}
-              onClick={() => onEdit(asset)}
-            >
-              <EditOutlinedIcon
-                fontSize="small"
-                className="pointer-events-none"
-              />
-            </IconButton>
-            <IconButton
-              data-testid="delete-asset-button"
-              type="button"
-              variant="danger"
-              aria-label={t('assets.table.ariaDelete')}
-              disabled={asset.status === 'DELETED'}
-              onClick={() => onDelete(asset)}
-            >
-              <DeleteOutlineIcon
-                fontSize="small"
-                className="pointer-events-none"
-              />
-            </IconButton>
+            {onEdit && (
+              <IconButton
+                data-testid="edit-asset-button"
+                type="button"
+                aria-label={t('assets.table.ariaEdit')}
+                disabled={asset.status === 'DELETED'}
+                onClick={() => onEdit(asset)}
+              >
+                <EditOutlinedIcon
+                  fontSize="small"
+                  className="pointer-events-none"
+                />
+              </IconButton>
+            )}
+            {onDelete && (
+              <IconButton
+                data-testid="delete-asset-button"
+                type="button"
+                variant="danger"
+                aria-label={t('assets.table.ariaDelete')}
+                disabled={asset.status === 'DELETED'}
+                onClick={() => onDelete(asset)}
+              >
+                <DeleteOutlineIcon
+                  fontSize="small"
+                  className="pointer-events-none"
+                />
+              </IconButton>
+            )}
           </div>
         ),
       },

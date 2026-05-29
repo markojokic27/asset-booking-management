@@ -13,9 +13,10 @@ import {
   PeopleSharp,
   LogoutSharp,
   AccountCircleSharp,
+  HowToRegSharp,
 } from '@mui/icons-material';
 import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
-import { getFullName } from '../../features/user/utilis/users';
+import { getFullName, isAdmin, isManager } from '../../features/user/utilis/users';
 
 export default function MobileMenu() {
   const { t } = useTranslation();
@@ -28,7 +29,18 @@ export default function MobileMenu() {
       label: t('layout.navbar.bookings'),
       icon: CalendarTodaySharp,
     },
-    { to: '/users', label: t('layout.navbar.users'), icon: PeopleSharp },
+    ...(isAdmin(user)
+      ? [{ to: '/users', label: t('layout.navbar.users'), icon: PeopleSharp }]
+      : []),
+    ...(isManager(user)
+      ? [
+          {
+            to: '/approvals',
+            label: t('layout.navbar.approvals'),
+            icon: HowToRegSharp,
+          },
+        ]
+      : []),
   ];
   const navigate = useNavigate();
   const handleLogout = () => {

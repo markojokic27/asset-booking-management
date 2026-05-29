@@ -21,11 +21,16 @@ import {
   updateCategory,
 } from '../features/asset-category/api/categoryApi';
 
+// Hooks
+import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { isAdmin } from '../features/user/utilis/users';
+
 // Assets
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 
 export default function AssetCategories() {
   const { t } = useTranslation();
+  const { user } = useCurrentUser();
 
   const [search, setSearch] = useState('');
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
@@ -130,15 +135,17 @@ export default function AssetCategories() {
             {t('assetCategories.title')}
           </h1>
 
-          <Button
-            data-testid="add-category-button"
-            type="button"
-            size="sm"
-            onClick={() => setOpenAddModal(true)}
-            iconLeft={<AddSharpIcon fontSize="small" />}
-          >
-            {t('assetCategories.actions.new')}
-          </Button>
+          {isAdmin(user) && (
+            <Button
+              data-testid="add-category-button"
+              type="button"
+              size="sm"
+              onClick={() => setOpenAddModal(true)}
+              iconLeft={<AddSharpIcon fontSize="small" />}
+            >
+              {t('assetCategories.actions.new')}
+            </Button>
+          )}
         </div>
 
         <div className="mt-6 h-px w-full bg-(--color-table-border)" />
@@ -173,7 +180,7 @@ export default function AssetCategories() {
                 setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
               }
               onView={handleView}
-              onEdit={handleEdit}
+              {...(isAdmin(user) ? { onEdit: handleEdit } : {})}
             />
           )}
         </div>
@@ -185,23 +192,27 @@ export default function AssetCategories() {
           }}
           category={activeCategory}
         />
-        <EditCategoryModal
-          isOpen={openEditModal}
-          onClose={() => {
-            setOpenEditModal(false);
-            setActiveCategory(null);
-          }}
-          category={activeCategory}
-          onSave={handleSaveCategory}
-        />
+        {isAdmin(user) && (
+          <>
+            <EditCategoryModal
+              isOpen={openEditModal}
+              onClose={() => {
+                setOpenEditModal(false);
+                setActiveCategory(null);
+              }}
+              category={activeCategory}
+              onSave={handleSaveCategory}
+            />
 
-        <AddCategoryModal
-          open={openAddModal}
-          onClose={() => setOpenAddModal(false)}
-          onCreate={(created) => {
-            setCategories((prev) => [created, ...prev]);
-          }}
-        />
+            <AddCategoryModal
+              open={openAddModal}
+              onClose={() => setOpenAddModal(false)}
+              onCreate={(created) => {
+                setCategories((prev) => [created, ...prev]);
+              }}
+            />
+          </>
+        )}
       </div>
     </LayoutColumn>
   );

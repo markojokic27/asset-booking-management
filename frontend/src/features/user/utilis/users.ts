@@ -20,3 +20,13 @@ export const mapUserDtoToUpdateRequest = (u: UserDto): UserUpdateRequest => ({
   notes: u.notes ?? '',
   benefit: u.benefit ?? 'ALL',
 });
+
+// function to check if the user is an admin
+export function isAdmin(user: Pick<UserDto, 'role'> | null | undefined): boolean {
+  return user?.role === 'ADMIN';
+}
+
+// function to check if the user is a manager
+export function isManager(user: Pick<UserDto, 'role'> | null | undefined): boolean {
+  return user?.role === 'MANAGER';
+}
