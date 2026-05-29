@@ -29,7 +29,7 @@ export default function TopAssetBookings() {
         </h2>
       </div>
 
-      <div className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gray-50 px-4 py-6 dark:bg-white/5 dark:text-white">
+      <div data-testid="top-assets" className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gray-50 px-4 py-6 dark:bg-white/5 dark:text-white">
         <PieChart
           series={[
             {

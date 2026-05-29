@@ -4,10 +4,7 @@ import config.ConfigFromFile;
 import constants.CommonConstants;
 // import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -115,6 +112,13 @@ public class CommonMethods {
         } catch (Exception e) {
             log.error("select by visible text failed", e);
         }
+    }
+
+    public void scrollToElement(By locator) {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element
+        );
     }
 
     public static boolean waitForUrlContains(String extension) {

@@ -14,9 +14,6 @@ public class BookingPage extends CommonMethods {
     // Search assets
     public By searchField = By.cssSelector("[data-testid='search-input']");
 
-    // Asset category filter
-    public By laptopCategoryCard = By.cssSelector("[data-testid='category-card-laptop']");
-
     public void clickBookButton(){
         clickOnElement(BookButton);
     }
@@ -27,11 +24,6 @@ public class BookingPage extends CommonMethods {
         typeInElement(searchField, assets);
     }
 
-    // Asset category filter
-
-    public void clickLaptopCategory() {
-        clickOnElement(laptopCategoryCard);
-    }
 
 
 

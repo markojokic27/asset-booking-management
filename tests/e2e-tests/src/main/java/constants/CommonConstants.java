@@ -10,6 +10,7 @@ public class CommonConstants{
     public static final String ASSETS_URL= "/assets";
     public static final String CATEGORY_URL= "/categories";
     public static final String ACCOUNT_INFO="/account-info";
+    public static final String REPORT_URL="/report";
 
     //Login
 
