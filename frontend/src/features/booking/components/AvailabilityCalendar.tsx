@@ -77,10 +77,12 @@ export function AvailabilityCalendar({
         eventContent={(eventInfo) => {
           const start = eventInfo.event.start?.toLocaleTimeString([], {
             hour: 'numeric',
+            //minute: '2-digit',
           });
 
           const end = eventInfo.event.end?.toLocaleTimeString([], {
             hour: 'numeric',
+            //minute: '2-digit',
           });
 
           return (

@@ -38,8 +38,10 @@ export const filterAvailableAssets = ({
     `${filters.fromDate}T${filters.fromHour || '00:00'}`
   );
   const filterEnd = new Date(`${filters.toDate}T${filters.toHour || '23:59'}`);
-
   return filtered.filter((asset) => {
+    if (Boolean(!isDayVariant && (!filters.fromHour || !filters.toHour))) {
+      return true; // If it's hour variant and hours are selected, we skip date filtering here
+    }
     const assetBookings = bookings.filter(
       (b) => b.asset.id === asset.id && b.status !== 'REJECTED'
     );
