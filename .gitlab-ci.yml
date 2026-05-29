@@ -2,7 +2,8 @@ stages:
   - compile
   - test
   - bruno
-  - security  
+  - security
+  # - dast 
   #- sonar
   #- dockerize
 
@@ -91,22 +92,37 @@ backend:test:
     key: maven-$CI_PROJECT_ID
     paths:
       - backend/.m2/repository/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: manual
   
 
 frontend:test:
   stage: test
-  image: node:24-alpine
+  image: node:24-slim 
   needs:
     - job: frontend:compile
   script:
     - cd frontend
-    - npm ci --legacy-peer-deps   
+    - npm ci --legacy-peer-deps  
+    - npx playwright install --with-deps chromium 
     - npm run test
   allow_failure: true
   cache:
-    key: npm-$CI_PROJECT_ID
-    paths:
-      - frontend/node_modules/
+    - key: npm-$CI_PROJECT_ID
+      paths:
+        - frontend/node_modules/
+    - key: playwright-chromium-$CI_COMMIT_REF_SLUG
+      paths:
+        - /root/.cache/ms-playwright/
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: manual
+  
 
 
 # playwright:test:
@@ -346,6 +362,7 @@ osv-scanner:
     paths:
       - osv-report.json
     expire_in: 7 days
+  needs: [] 
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
     - if: $CI_COMMIT_BRANCH == "main"
@@ -415,7 +432,6 @@ snyk-scan-frontend:
   stage: security
   image: node:24-alpine
   needs:
-    - job: backend:compile
     - job: frontend:compile
   variables:
     SNYK_API: "https://api.eu.snyk.io"
@@ -442,8 +458,134 @@ snyk-scan-frontend:
     - if: $CI_COMMIT_BRANCH == "develop"
     - if: $CI_COMMIT_BRANCH == "main"
 
+# # ─────────────────────────────────────────
+# # DAST STAGE — OWASP ZAP
+# # ─────────────────────────────────────────
+# dast:zap:
+#   stage: dast
+#   image: maven:3.9-eclipse-temurin-21
 
+#   services:
+#     - name: postgres:18
+#       alias: postgres
+#       variables:
+#         POSTGRES_DB: assetbooking
+#         POSTGRES_USER: postgres
+#         POSTGRES_PASSWORD: postgres
 
+#     - name: ghcr.io/zaproxy/zaproxy:stable
+#       alias: zap
+#       # FIX 1: Remove "ports:" entirely — Docker executor doesn't support it.
+#       # ZAP is reachable on port 8090 via the "zap" alias automatically.
+#       entrypoint:
+#         - zap.sh
+#         - -daemon
+#         - -host
+#         - 0.0.0.0
+#         - -port
+#         - "8090"
+#         - -config
+#         - api.disablekey=true
+#         - -config
+#         - api.addrs.addr.name=.*       # ← allow all hosts to call the API
+#         - -config
+#         - api.addrs.addr.enabled=true
+
+#   variables:
+#     SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/assetbooking"
+#     SPRING_DATASOURCE_USERNAME: postgres
+#     SPRING_DATASOURCE_PASSWORD: postgres
+#     MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED: "false"
+#     MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED: "false"
+#     OTEL_SDK_DISABLED: "true"
+#     OTEL_TRACES_EXPORTER: "none"
+#     OTEL_METRICS_EXPORTER: "none"
+#     OTEL_LOGS_EXPORTER: "none"
+#     MANAGEMENT_HEALTH_MAIL_ENABLED: "false"
+#     MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: "always"
+#     SPRING_MAIL_HOST: "localhost"
+
+#   script:
+#     - mkdir -p reports
+
+#     - |
+#       mvn -f backend/pom.xml spring-boot:run \
+#         -Dspring-boot.run.jvmArguments=" \
+#           -Dserver.port=8080 \
+#           -Dotel.sdk.disabled=true \
+#           -Dotel.traces.exporter=none \
+#           -Dotel.metrics.exporter=none \
+#           -Dotel.logs.exporter=none" &
+#       echo $! > /tmp/backend.pid
+
+#     - |
+#       echo "Waiting for backend health..."
+#       for i in $(seq 1 60); do
+#         HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health || true)
+#         if [ "$HTTP" = "200" ]; then
+#           echo "Backend is UP on attempt $i!"
+#           break
+#         fi
+#         if [ "$HTTP" = "503" ]; then
+#           DB_STATUS=$(curl -sf http://localhost:8080/actuator/health/db \
+#             | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('status','DOWN'))" \
+#             2>/dev/null || echo "DOWN")
+#           [ "$DB_STATUS" = "UP" ] && echo "Backend DB UP on attempt $i!" && break
+#           echo "Attempt $i/60 — HTTP=503, DB=$DB_STATUS, sleeping 5s..."
+#         else
+#           echo "Attempt $i/60 — HTTP=$HTTP, sleeping 5s..."
+#         fi
+#         sleep 5
+#         [ "$i" = "60" ] && echo "Backend never became ready!" && exit 1
+#       done
+
+#     # FIX 2: Give ZAP time to fully boot (it takes ~10s from the logs), then poll
+#     - |
+#       echo "Waiting for ZAP API..."
+#       sleep 15
+#       for i in $(seq 1 30); do
+#         # FIX 3: Use --connect-timeout to avoid hanging if ZAP isn't up yet
+#         RESP=$(curl -sf --connect-timeout 3 "http://zap:8090/JSON/core/view/version/" 2>/dev/null || true)
+#         if echo "$RESP" | grep -q "version"; then
+#           echo "ZAP is UP!"
+#           break
+#         fi
+#         echo "Attempt $i/30 — ZAP not ready (response: $RESP), sleeping 5s..."
+#         sleep 5
+#         [ "$i" = "30" ] && echo "ZAP never became ready!" && exit 1
+#       done
+
+#     # Spider scan
+#     - |
+#       SCAN_ID=$(curl -sf "http://zap:8090/JSON/spider/action/scan/?url=http://localhost:8080&maxChildren=5&recurse=true" \
+#         | python3 -c "import sys,json; print(json.load(sys.stdin)['scan'])")
+#       echo "Spider scan ID: $SCAN_ID"
+#       for i in $(seq 1 40); do
+#         STATUS=$(curl -sf "http://zap:8090/JSON/spider/view/status/?scanId=$SCAN_ID" \
+#           | python3 -c "import sys,json; print(json.load(sys.stdin)['status'])")
+#         echo "Spider $STATUS%"
+#         [ "$STATUS" = "100" ] && break
+#         sleep 5
+#       done
+
+#     # Collect alerts
+#     - |
+#       curl -sf "http://zap:8090/JSON/core/view/alerts/?baseurl=http://localhost:8080" \
+#         > reports/zap-alerts.json
+#       echo "Alert count: $(python3 -c "import json; d=json.load(open('reports/zap-alerts.json')); print(len(d.get('alerts',[])))")"
+
+#   after_script:
+#     - kill $(cat /tmp/backend.pid) 2>/dev/null || true
+
+#   artifacts:
+#     when: always
+#     paths:
+#       - reports/
+
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "feature/deploying-to-VM"
+#     - if: $CI_COMMIT_BRANCH == "develop"
+#     - if: $CI_COMMIT_BRANCH == "main"
 
 # ─────────────────────────────────────────
 # SONARQUBE STAGE

@@ -74,3 +74,5 @@ dist-ssr
 coverage
 *storybook.log
 storybook-static
+
+demo-vm
