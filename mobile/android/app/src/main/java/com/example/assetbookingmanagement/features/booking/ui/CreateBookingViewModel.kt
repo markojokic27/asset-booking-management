@@ -2,6 +2,8 @@ package com.example.assetbookingmanagement.features.booking.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assetbookingmanagement.features.asset.data.AssetRepository
+import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
 import com.example.assetbookingmanagement.features.booking.data.BookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
@@ -20,6 +22,8 @@ import java.time.ZoneOffset
 import javax.inject.Inject
 
 data class CreateBookingUiState(
+    val bookingPeriod: String? = null,
+    val approvalRequired: Boolean? = null,
     val startDateMillis: Long? = null,
     val endDateMillis: Long? = null,
     val startHour: Int = 9,
@@ -33,12 +37,37 @@ data class CreateBookingUiState(
 
 @HiltViewModel
 class CreateBookingViewModel @Inject constructor(
+    private val assetRepository: AssetRepository,
+    private val assetCategoryRepository: AssetCategoryRepository,
     private val bookingRepository: BookingRepository,
     private val authSession: AuthSession
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateBookingUiState())
     val uiState: StateFlow<CreateBookingUiState> = _uiState.asStateFlow()
+
+    fun loadBookingPeriod(assetId: Long) {
+        viewModelScope.launch {
+            try {
+                val asset = assetRepository.getAssetById(assetId)
+                val category = assetCategoryRepository.getAssetCategoryById(asset.categoryId)
+
+                _uiState.update {
+                    it.copy(
+                        bookingPeriod = category.bookingPeriod,
+                        approvalRequired = category.approval
+                    )
+                }
+            } catch (_: Exception) {
+                _uiState.update {
+                    it.copy(
+                        bookingPeriod = null,
+                        approvalRequired = null
+                    )
+                }
+            }
+        }
+    }
 
     fun onStartDateSelected(dateMillis: Long?) {
         _uiState.update { it.copy(startDateMillis = dateMillis, errorMessage = null) }
@@ -68,13 +97,28 @@ class CreateBookingViewModel @Inject constructor(
         }
 
         val state = uiState.value
-        val startInstant = toInstant(state.startDateMillis, state.startHour, state.startMinute)
-        val endInstant = toInstant(state.endDateMillis, state.endHour, state.endMinute)
+        val isDayBooking = state.bookingPeriod == "DAY"
+        val startInstant = toInstant(
+            dateMillis = state.startDateMillis,
+            hour = if (isDayBooking) 0 else state.startHour,
+            minute = if (isDayBooking) 0 else state.startMinute
+        )
+        val endInstant = toInstant(
+            dateMillis = state.endDateMillis,
+            hour = if (isDayBooking) 23 else state.endHour,
+            minute = if (isDayBooking) 59 else state.endMinute
+        )
 
         when {
             startInstant == null || endInstant == null -> {
                 _uiState.update {
-                    it.copy(errorMessage = "Please select start and end date and time.")
+                    it.copy(
+                        errorMessage = if (isDayBooking) {
+                            "Please select start and end date."
+                        } else {
+                            "Please select start and end date and time."
+                        }
+                    )
                 }
                 return
             }

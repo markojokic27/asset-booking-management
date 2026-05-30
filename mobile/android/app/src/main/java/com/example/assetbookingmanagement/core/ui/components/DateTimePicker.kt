@@ -50,6 +50,7 @@ fun DateTimePicker(
     onEndDateSelected: (Long?) -> Unit,
     onStartTimeSelected: (Int, Int) -> Unit,
     onEndTimeSelected: (Int, Int) -> Unit,
+    showTimeInputs: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     var showStartDateDialog by rememberSaveable { mutableStateOf(false) }
@@ -66,7 +67,8 @@ fun DateTimePicker(
             timeValue = formatTime(startHour, startMinute),
             timeLabel = "Start time",
             timeContentDescription = "Select start time",
-            onTimeClick = { showStartTimeDialog = true }
+            onTimeClick = { showStartTimeDialog = true },
+            showTimeInput = showTimeInputs
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -78,7 +80,8 @@ fun DateTimePicker(
             timeValue = formatTime(endHour, endMinute),
             timeLabel = "End time",
             timeContentDescription = "Select end time",
-            onTimeClick = { showEndTimeDialog = true }
+            onTimeClick = { showEndTimeDialog = true },
+            showTimeInput = showTimeInputs
         )
     }
 
@@ -104,7 +107,7 @@ fun DateTimePicker(
         )
     }
 
-    if (showStartTimeDialog) {
+    if (showTimeInputs && showStartTimeDialog) {
         AppTimeInputDialog(
             initialHour = startHour,
             initialMinute = startMinute,
@@ -116,7 +119,7 @@ fun DateTimePicker(
         )
     }
 
-    if (showEndTimeDialog) {
+    if (showTimeInputs && showEndTimeDialog) {
         AppTimeInputDialog(
             initialHour = endHour,
             initialMinute = endMinute,
@@ -139,6 +142,7 @@ private fun DateTimeFieldRow(
     timeLabel: String,
     timeContentDescription: String,
     onTimeClick: () -> Unit,
+    showTimeInput: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -154,14 +158,16 @@ private fun DateTimeFieldRow(
             modifier = Modifier.weight(1f)
         )
 
-        DateTimeOutlinedField(
-            value = timeValue,
-            label = timeLabel,
-            imageVector = Icons.Default.AccessTime,
-            contentDescription = timeContentDescription,
-            onClick = onTimeClick,
-            modifier = Modifier.weight(1f)
-        )
+        if (showTimeInput) {
+            DateTimeOutlinedField(
+                value = timeValue,
+                label = timeLabel,
+                imageVector = Icons.Default.AccessTime,
+                contentDescription = timeContentDescription,
+                onClick = onTimeClick,
+                modifier = Modifier.weight(1f)
+            )
+        }
     }
 }
 

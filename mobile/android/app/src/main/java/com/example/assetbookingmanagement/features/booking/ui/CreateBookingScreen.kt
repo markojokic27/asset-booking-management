@@ -37,6 +37,10 @@ fun CreateBookingScreen(
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingTab.ChooseDate.ordinal) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(assetId) {
+        viewModel.loadBookingPeriod(assetId)
+    }
+
     LaunchedEffect(uiState.bookingCreated) {
         if (uiState.bookingCreated) {
             onBookNowClick()
@@ -61,7 +65,8 @@ fun CreateBookingScreen(
                 onStartDateSelected = viewModel::onStartDateSelected,
                 onEndDateSelected = viewModel::onEndDateSelected,
                 onStartTimeSelected = viewModel::onStartTimeSelected,
-                onEndTimeSelected = viewModel::onEndTimeSelected
+                onEndTimeSelected = viewModel::onEndTimeSelected,
+                showTimeInputs = uiState.bookingPeriod != "DAY"
             )
             BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar()
         }
@@ -80,7 +85,8 @@ fun CreateBookingScreen(
         BookingButtons(
             onCancelClick = onCancelClick,
             onBookNowClick = { viewModel.createBooking(assetId) },
-            isSubmitting = uiState.isSubmitting
+            isSubmitting = uiState.isSubmitting,
+            approvalRequired = uiState.approvalRequired == true
         )
     }
 }
@@ -89,7 +95,8 @@ fun CreateBookingScreen(
 private fun BookingButtons(
     onCancelClick: () -> Unit,
     onBookNowClick: () -> Unit,
-    isSubmitting: Boolean
+    isSubmitting: Boolean,
+    approvalRequired: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -112,7 +119,11 @@ private fun BookingButtons(
         }
 
         AppButton(
-            text = if (isSubmitting) "Booking..." else "Book now",
+            text = when {
+                isSubmitting -> "Booking..."
+                approvalRequired -> "Request booking"
+                else -> "Book now"
+            },
             iconRes = R.drawable.calendar_today_24,
             enabled = !isSubmitting,
             onClick = onBookNowClick
