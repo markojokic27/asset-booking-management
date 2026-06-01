@@ -49,6 +49,18 @@ export const getAllUserBookings = async (
   return res.data;
 };
 
+// get all pending bookings (for manager approvals)
+export const getPendingBookings = async (
+  page = 0,
+  size = 100,
+  sort = 'bookingStart,asc'
+) => {
+  const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
+    params: { page, size, status: 'PENDING', sort },
+  });
+  return res.data;
+};
+
 // get all bookings by category ID
 export const getAllCategoryBookings = async (
   page = 0,

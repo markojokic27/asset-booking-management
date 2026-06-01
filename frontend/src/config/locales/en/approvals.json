@@ -1,3 +1,12 @@
 {
-  "title": "Booking Approvals"
+  "title": "Booking Approvals",
+  "table": {
+    "bookingId": "Booking ID",
+    "user": "User",
+    "asset": "Asset",
+    "time": "Booking time"
+  },
+  "loading": "Loading pending bookings...",
+  "empty": "No pending bookings.",
+  "error": "Failed to load pending bookings."
 }

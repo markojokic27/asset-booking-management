@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 // components
 import { LayoutColumn } from '../components/layout/Layout';
+import { PendingApprovalsTable } from '../features/booking/components/PendingApprovalsTable';
 
 // hooks
+import { usePendingBookings } from '../features/booking/hooks/usePendingBookings';
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
 import { isManager } from '../features/user/utilis/users';
 
@@ -16,6 +18,8 @@ export default function Approvals() {
 
   // current user
   const { user, isLoading } = useCurrentUser();
+  const canAccess = isLoading || isManager(user);
+  const { bookings, loading, error } = usePendingBookings(canAccess);
 
   // if the user is not a manager, redirect to the bookings page
   if (!isLoading && !isManager(user)) {
@@ -38,6 +42,12 @@ export default function Approvals() {
         </div>
         {/* divider for the approvals page */}
         <div className="h-px w-full bg-(--color-table-border)" />
+
+        <PendingApprovalsTable
+          bookings={bookings}
+          isLoading={loading || isLoading}
+          error={error || null}
+        />
       </div>
     </LayoutColumn>
   );
