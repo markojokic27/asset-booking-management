@@ -9,31 +9,34 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TimeInput
-import androidx.compose.material3.TimePickerDefaults
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.util.Date
 import java.util.Locale
 
@@ -54,8 +57,15 @@ fun DateTimePicker(
     modifier: Modifier = Modifier
 ) {
     var showStartDateDialog by rememberSaveable { mutableStateOf(false) }
-    var showStartTimeDialog by rememberSaveable { mutableStateOf(false) }
-    var showEndTimeDialog by rememberSaveable { mutableStateOf(false) }
+
+    val startHourOptions = getAvailableHourOptions(
+        selectedDateMillis = dateMillis,
+        minHour = null
+    )
+    val endHourOptions = getAvailableHourOptions(
+        selectedDateMillis = dateMillis,
+        minHour = if (hasSelectedStartTime) startHour else null
+    )
 
     Column(modifier = modifier.fillMaxWidth()) {
         DateField(
@@ -71,11 +81,13 @@ fun DateTimePicker(
                 startTimeValue = if (hasSelectedStartTime) formatTime(startHour, startMinute) else "",
                 startTimeLabel = "From time",
                 startTimeContentDescription = "Select from time",
-                onStartTimeClick = { showStartTimeDialog = true },
+                startOptions = startHourOptions,
+                onStartTimeSelected = { hour -> onStartTimeSelected(hour, 0) },
                 endTimeValue = if (hasSelectedEndTime) formatTime(endHour, endMinute) else "",
                 endTimeLabel = "To time",
                 endTimeContentDescription = "Select to time",
-                onEndTimeClick = { showEndTimeDialog = true }
+                endOptions = endHourOptions,
+                onEndTimeSelected = { hour -> onEndTimeSelected(hour, 0) }
             )
         }
     }
@@ -90,53 +102,6 @@ fun DateTimePicker(
             }
         )
     }
-
-    if (showTimeInputs && showStartTimeDialog) {
-        AppTimeInputDialog(
-            initialHour = startHour,
-            initialMinute = startMinute,
-            onDismiss = { showStartTimeDialog = false },
-            onConfirm = { hour, minute ->
-                onStartTimeSelected(hour, minute)
-                showStartTimeDialog = false
-            }
-        )
-    }
-
-    if (showTimeInputs && showEndTimeDialog) {
-        AppTimeInputDialog(
-            initialHour = endHour,
-            initialMinute = endMinute,
-            onDismiss = { showEndTimeDialog = false },
-            onConfirm = { hour, minute ->
-                onEndTimeSelected(hour, minute)
-                showEndTimeDialog = false
-            }
-        )
-    }
-}
-
-@Composable
-private fun TimeFieldRow(
-    timeValue: String,
-    timeLabel: String,
-    timeContentDescription: String,
-    onTimeClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        DateTimeOutlinedField(
-            value = timeValue,
-            label = timeLabel,
-            imageVector = Icons.Default.AccessTime,
-            contentDescription = timeContentDescription,
-            onClick = onTimeClick,
-            modifier = Modifier.weight(1f)
-        )
-    }
 }
 
 @Composable
@@ -144,32 +109,34 @@ private fun TimeRangeFieldRow(
     startTimeValue: String,
     startTimeLabel: String,
     startTimeContentDescription: String,
-    onStartTimeClick: () -> Unit,
+    startOptions: List<Int>,
+    onStartTimeSelected: (Int) -> Unit,
     endTimeValue: String,
     endTimeLabel: String,
     endTimeContentDescription: String,
-    onEndTimeClick: () -> Unit,
+    endOptions: List<Int>,
+    onEndTimeSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        DateTimeOutlinedField(
+        TimeDropdownField(
             value = startTimeValue,
             label = startTimeLabel,
-            imageVector = Icons.Default.AccessTime,
             contentDescription = startTimeContentDescription,
-            onClick = onStartTimeClick,
+            options = startOptions,
+            onHourSelected = onStartTimeSelected,
             modifier = Modifier.weight(1f)
         )
 
-        DateTimeOutlinedField(
+        TimeDropdownField(
             value = endTimeValue,
             label = endTimeLabel,
-            imageVector = Icons.Default.AccessTime,
             contentDescription = endTimeContentDescription,
-            onClick = onEndTimeClick,
+            options = endOptions,
+            onHourSelected = onEndTimeSelected,
             modifier = Modifier.weight(1f)
         )
     }
@@ -232,7 +199,76 @@ private fun DateTimeOutlinedField(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class) 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TimeDropdownField(
+    value: String,
+    label: String,
+    contentDescription: String,
+    options: List<Int>,
+    onHourSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            label = {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            },
+            placeholder = {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.AccessTime,
+                    contentDescription = contentDescription
+                )
+            },
+            textStyle = MaterialTheme.typography.bodySmall,
+            modifier = Modifier
+                .menuAnchor(
+                    type = MenuAnchorType.PrimaryNotEditable,
+                    enabled = true
+                )
+                .fillMaxWidth()
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            offset = DpOffset(x = 0.dp, y = 4.dp),
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            options.forEach { hour ->
+                val hourLabel = formatTime(hour, 0)
+                DropdownMenuItem(
+                    text = { Text(hourLabel) },
+                    onClick = {
+                        onHourSelected(hour)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppDatePickerDialog(
     initialSelectedDateMillis: Long?,
@@ -277,57 +313,6 @@ private fun AppDatePickerDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AppTimeInputDialog(
-    initialHour: Int,
-    initialMinute: Int,
-    onDismiss: () -> Unit,
-    onConfirm: (Int, Int) -> Unit
-) {
-    val timePickerState = rememberTimePickerState(
-        initialHour = initialHour,
-        initialMinute = initialMinute,
-        is24Hour = true
-    )
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface,
-        title = {
-            Text(
-                text = "Select time",
-                style = MaterialTheme.typography.titleMedium
-            )
-        },
-        text = {
-            TimeInput(
-                state = timePickerState,
-                colors = TimePickerDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary,
-                    periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.14f),
-                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.primary,
-                    selectorColor = MaterialTheme.colorScheme.primary
-                )
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = { onConfirm(timePickerState.hour, timePickerState.minute) }
-            ) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
-}
-
 private fun formatDate(millis: Long): String {
     val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     return formatter.format(Date(millis))
@@ -335,4 +320,25 @@ private fun formatDate(millis: Long): String {
 
 private fun formatTime(hour: Int, minute: Int): String {
     return "%02d:%02d".format(hour, minute)
+}
+
+private fun getAvailableHourOptions(
+    selectedDateMillis: Long?,
+    minHour: Int?
+): List<Int> {
+    val selectedDate = selectedDateMillis?.let {
+        Instant.ofEpochMilli(it)
+            .atZone(ZoneOffset.UTC)
+            .toLocalDate()
+    }
+    val today = LocalDate.now()
+    val currentHour = java.time.LocalTime.now().hour
+
+    return (6..22).filter { hour ->
+        when {
+            selectedDate == today && hour < currentHour -> false
+            minHour != null -> hour > minHour
+            else -> true
+        }
+    }
 }
