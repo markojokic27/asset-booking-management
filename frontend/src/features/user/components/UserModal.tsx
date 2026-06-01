@@ -7,6 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 
+// hooks
+import { useDepartments } from '../../department/hooks/useDepartments';
+
 // types
 import type { UserModalUser } from '../types';
 
@@ -23,7 +26,11 @@ export type UserModalProps = {
 
 export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) => {
   const { t } = useTranslation();
+  const { getDepartmentName } = useDepartments();
   if (!isOpen || !user) return null;
+
+  const departmentLabel =
+    getDepartmentName(user.departmentId) ?? t('users.modals.common.emptyValue');
 
   const statusLabel =
     t(`users.status.${String(user.status).toLowerCase()}`, {
@@ -86,7 +93,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, user }) =
           {/* Department */}
           <div>
             <p className="text-sm text-(--color-modal-label)">{t('users.modals.view.fields.department')}</p>
-            <p data-testid="user-department-id" className="font-medium text-(--color-text)">{user.departmentId}</p>
+            <p data-testid="user-department-id" className="font-medium text-(--color-text)">{departmentLabel}</p>
           </div>
 
           {/* Manager Email */}

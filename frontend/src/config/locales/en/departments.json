@@ -1,4 +1,15 @@
 {
+  "names": {
+    "ADVANCE_TECHNOLOGY": "Advance Technology",
+    "SECURE_SERVICES": "Secure Services",
+    "ARCHITECTURE": "Architecture",
+    "FINANCE_AND_BUSINESS_ADMINISTRATION": "Finance and Business Administration",
+    "MOBILE_AND_SECURITY": "Mobile and Security",
+    "SYSTEM_TEST": "System Test",
+    "HUMAN_RESOURCES": "Human Resources",
+    "CLOUD_AND_DATA_MANAGEMENT": "Cloud and Data Management",
+    "DEVOPS": "DevOps"
+  },
   "validation": {
     "managerRequired": "Manager is required"
   }

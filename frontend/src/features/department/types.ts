@@ -1,11 +1,16 @@
-export type Department = {
-  id: string;
-  name: string;
-  managerId: number; // FK na User
-  createdAt: Date;
-  lastModifiedAt: Date;
-};
+export type DepartmentName =
+  | 'ADVANCE_TECHNOLOGY'
+  | 'SECURE_SERVICES'
+  | 'ARCHITECTURE'
+  | 'FINANCE_AND_BUSINESS_ADMINISTRATION'
+  | 'MOBILE_AND_SECURITY'
+  | 'SYSTEM_TEST'
+  | 'HUMAN_RESOURCES'
+  | 'CLOUD_AND_DATA_MANAGEMENT'
+  | 'DEVOPS';
 
-export type DepartmentDto = Department & {
-  managerName?: string; // opcionalno, samo za prikaz
+export type DepartmentDto = {
+  id: number;
+  name: DepartmentName;
+  managerId?: number | null;
 };
