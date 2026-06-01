@@ -11,10 +11,14 @@ import { useCurrentUser } from '../../user/hooks/useCurrentUser';
 export function useCreateBooking({
   assetId,
   filters,
+  notes,
+  setNotes,
   refetch,
 }: {
   assetId: number;
   filters: Filters;
+  notes: string;
+  setNotes: React.Dispatch<React.SetStateAction<string>>;
   refetch: () => Promise<unknown>;
 }) {
   const [isCreating, setIsCreating] = React.useState(false);
@@ -46,16 +50,16 @@ export function useCreateBooking({
         status: 'PENDING', //TODO this depends on backend logic - za svaku kategoriju vidi jel triba req, i vidi privilegije
         bookingStart: bookingStart.toISOString(),
         bookingEnd: bookingEnd.toISOString(),
-        notes: '',
+        notes,
       });
-
+      setNotes('');
       await refetch();
     } catch (error) {
       console.error('Failed to create booking', error);
     } finally {
       setIsCreating(false);
     }
-  }, [assetId, filters, refetch]);
+  }, [assetId, filters, notes, refetch]);
 
   return {
     isCreating,

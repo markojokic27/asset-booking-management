@@ -16,6 +16,7 @@ import { LayoutColumn } from '../components/layout/Layout';
 import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
 
 // Types
 // import type { Filters } from '../features/booking/types';
@@ -44,6 +45,8 @@ export default function BookingsByAsset() {
 
   const asset = bookings?.[0]?.asset;
 
+  const [notes, setNotes] = React.useState('');
+
   const calendarEvents = React.useMemo(
     () => mapBookingsToCalendarEvents(bookings),
     [bookings]
@@ -57,6 +60,8 @@ export default function BookingsByAsset() {
 
   const { isCreating, handleCreateBooking } = useCreateBooking({
     assetId: Number(assetId),
+    notes,
+    setNotes,
     filters,
     refetch,
   });
@@ -86,8 +91,7 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
-
-  // TODO: dodat notes input za upisat
+  // add dialog with booking info on event click in calendar
   return (
     <LayoutColumn
       span={12}
@@ -117,7 +121,7 @@ export default function BookingsByAsset() {
 
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />
 
-      <div className="mb-6 flex w-full items-end justify-between gap-4">
+      <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
           variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
           filters={filters}
@@ -136,6 +140,16 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
+      <p className="mb-1 text-sm font-medium text-(--color-table-text)">
+        Notes
+      </p>
+
+      <Input
+        placeholder="Notes..."
+        className="mb-6 w-full border shadow-none"
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+      />
 
       <AvailabilityCalendar
         events={calendarEvents}
