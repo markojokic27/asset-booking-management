@@ -126,7 +126,7 @@ export default function BookingsByAsset() {
           className="mt-0 grid-cols-1 sm:grid-cols-2 lg:max-w-[80%] lg:grid-cols-2"
         />
 
-        <Button
+        <Button data-testid="book-asset-button"
           variant="solid"
           className="h-fit"
           size="md"
