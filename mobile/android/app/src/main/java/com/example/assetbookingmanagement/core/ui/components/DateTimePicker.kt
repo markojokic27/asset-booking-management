@@ -40,69 +40,53 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimePicker(
-    startDateMillis: Long?,
-    endDateMillis: Long?,
+    dateMillis: Long?,
     startHour: Int,
     startMinute: Int,
     endHour: Int,
     endMinute: Int,
-    onStartDateSelected: (Long?) -> Unit,
-    onEndDateSelected: (Long?) -> Unit,
+    hasSelectedStartTime: Boolean = true,
+    hasSelectedEndTime: Boolean = true,
+    onDateSelected: (Long?) -> Unit,
     onStartTimeSelected: (Int, Int) -> Unit,
     onEndTimeSelected: (Int, Int) -> Unit,
     showTimeInputs: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     var showStartDateDialog by rememberSaveable { mutableStateOf(false) }
-    var showEndDateDialog by rememberSaveable { mutableStateOf(false) }
     var showStartTimeDialog by rememberSaveable { mutableStateOf(false) }
     var showEndTimeDialog by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxWidth()) {
-        DateTimeFieldRow(
-            dateValue = startDateMillis?.let(::formatDate).orEmpty(),
-            dateLabel = "Start date",
-            dateContentDescription = "Select start date",
-            onDateClick = { showStartDateDialog = true },
-            timeValue = formatTime(startHour, startMinute),
-            timeLabel = "Start time",
-            timeContentDescription = "Select start time",
-            onTimeClick = { showStartTimeDialog = true },
-            showTimeInput = showTimeInputs
+        DateField(
+            dateValue = dateMillis?.let(::formatDate).orEmpty(),
+            dateLabel = "Date",
+            dateContentDescription = "Select date",
+            onDateClick = { showStartDateDialog = true }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        DateTimeFieldRow(
-            dateValue = endDateMillis?.let(::formatDate).orEmpty(),
-            dateLabel = "End date",
-            dateContentDescription = "Select end date",
-            onDateClick = { showEndDateDialog = true },
-            timeValue = formatTime(endHour, endMinute),
-            timeLabel = "End time",
-            timeContentDescription = "Select end time",
-            onTimeClick = { showEndTimeDialog = true },
-            showTimeInput = showTimeInputs
-        )
+        if (showTimeInputs) {
+            Spacer(modifier = Modifier.height(16.dp))
+            TimeRangeFieldRow(
+                startTimeValue = if (hasSelectedStartTime) formatTime(startHour, startMinute) else "",
+                startTimeLabel = "From time",
+                startTimeContentDescription = "Select from time",
+                onStartTimeClick = { showStartTimeDialog = true },
+                endTimeValue = if (hasSelectedEndTime) formatTime(endHour, endMinute) else "",
+                endTimeLabel = "To time",
+                endTimeContentDescription = "Select to time",
+                onEndTimeClick = { showEndTimeDialog = true }
+            )
+        }
     }
 
     if (showStartDateDialog) {
         AppDatePickerDialog(
-            initialSelectedDateMillis = startDateMillis,
+            initialSelectedDateMillis = dateMillis,
             onDismiss = { showStartDateDialog = false },
             onConfirm = {
-                onStartDateSelected(it)
+                onDateSelected(it)
                 showStartDateDialog = false
-            }
-        )
-    }
-
-    if (showEndDateDialog) {
-        AppDatePickerDialog(
-            initialSelectedDateMillis = endDateMillis,
-            onDismiss = { showEndDateDialog = false },
-            onConfirm = {
-                onEndDateSelected(it)
-                showEndDateDialog = false
             }
         )
     }
@@ -133,16 +117,11 @@ fun DateTimePicker(
 }
 
 @Composable
-private fun DateTimeFieldRow(
-    dateValue: String,
-    dateLabel: String,
-    dateContentDescription: String,
-    onDateClick: () -> Unit,
+private fun TimeFieldRow(
     timeValue: String,
     timeLabel: String,
     timeContentDescription: String,
     onTimeClick: () -> Unit,
-    showTimeInput: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -150,25 +129,68 @@ private fun DateTimeFieldRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         DateTimeOutlinedField(
-            value = dateValue,
-            label = dateLabel,
-            imageVector = Icons.Default.DateRange,
-            contentDescription = dateContentDescription,
-            onClick = onDateClick,
+            value = timeValue,
+            label = timeLabel,
+            imageVector = Icons.Default.AccessTime,
+            contentDescription = timeContentDescription,
+            onClick = onTimeClick,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun TimeRangeFieldRow(
+    startTimeValue: String,
+    startTimeLabel: String,
+    startTimeContentDescription: String,
+    onStartTimeClick: () -> Unit,
+    endTimeValue: String,
+    endTimeLabel: String,
+    endTimeContentDescription: String,
+    onEndTimeClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        DateTimeOutlinedField(
+            value = startTimeValue,
+            label = startTimeLabel,
+            imageVector = Icons.Default.AccessTime,
+            contentDescription = startTimeContentDescription,
+            onClick = onStartTimeClick,
             modifier = Modifier.weight(1f)
         )
 
-        if (showTimeInput) {
-            DateTimeOutlinedField(
-                value = timeValue,
-                label = timeLabel,
-                imageVector = Icons.Default.AccessTime,
-                contentDescription = timeContentDescription,
-                onClick = onTimeClick,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        DateTimeOutlinedField(
+            value = endTimeValue,
+            label = endTimeLabel,
+            imageVector = Icons.Default.AccessTime,
+            contentDescription = endTimeContentDescription,
+            onClick = onEndTimeClick,
+            modifier = Modifier.weight(1f)
+        )
     }
+}
+
+@Composable
+private fun DateField(
+    dateValue: String,
+    dateLabel: String,
+    dateContentDescription: String,
+    onDateClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    DateTimeOutlinedField(
+        value = dateValue,
+        label = dateLabel,
+        imageVector = Icons.Default.DateRange,
+        contentDescription = dateContentDescription,
+        onClick = onDateClick,
+        modifier = modifier.fillMaxWidth()
+    )
 }
 
 @Composable

@@ -24,12 +24,13 @@ import javax.inject.Inject
 data class CreateBookingUiState(
     val bookingPeriod: String? = null,
     val approvalRequired: Boolean? = null,
-    val startDateMillis: Long? = null,
-    val endDateMillis: Long? = null,
+    val selectedDateMillis: Long? = null,
     val startHour: Int = 9,
     val startMinute: Int = 0,
     val endHour: Int = 10,
     val endMinute: Int = 0,
+    val hasSelectedStartTime: Boolean = false,
+    val hasSelectedEndTime: Boolean = false,
     val isSubmitting: Boolean = false,
     val bookingCreated: Boolean = false,
     val errorMessage: String? = null
@@ -69,23 +70,29 @@ class CreateBookingViewModel @Inject constructor(
         }
     }
 
-    fun onStartDateSelected(dateMillis: Long?) {
-        _uiState.update { it.copy(startDateMillis = dateMillis, errorMessage = null) }
-    }
-
-    fun onEndDateSelected(dateMillis: Long?) {
-        _uiState.update { it.copy(endDateMillis = dateMillis, errorMessage = null) }
+    fun onDateSelected(dateMillis: Long?) {
+        _uiState.update { it.copy(selectedDateMillis = dateMillis, errorMessage = null) }
     }
 
     fun onStartTimeSelected(hour: Int, minute: Int) {
         _uiState.update {
-            it.copy(startHour = hour, startMinute = minute, errorMessage = null)
+            it.copy(
+                startHour = hour,
+                startMinute = minute,
+                hasSelectedStartTime = true,
+                errorMessage = null
+            )
         }
     }
 
     fun onEndTimeSelected(hour: Int, minute: Int) {
         _uiState.update {
-            it.copy(endHour = hour, endMinute = minute, errorMessage = null)
+            it.copy(
+                endHour = hour,
+                endMinute = minute,
+                hasSelectedEndTime = true,
+                errorMessage = null
+            )
         }
     }
 
@@ -97,33 +104,63 @@ class CreateBookingViewModel @Inject constructor(
         }
 
         val state = uiState.value
-        val isDayBooking = state.bookingPeriod == "DAY"
-        val startInstant = toInstant(
-            dateMillis = state.startDateMillis,
-            hour = if (isDayBooking) 0 else state.startHour,
-            minute = if (isDayBooking) 0 else state.startMinute
-        )
-        val endInstant = toInstant(
-            dateMillis = state.endDateMillis,
-            hour = if (isDayBooking) 23 else state.endHour,
-            minute = if (isDayBooking) 59 else state.endMinute
-        )
+        val isHourlyBooking = state.bookingPeriod == "HOUR"
+        val startInstant = if (isHourlyBooking) {
+            toInstant(
+                dateMillis = state.selectedDateMillis,
+                hour = state.startHour,
+                minute = state.startMinute
+            )
+        } else {
+            toInstant(
+                dateMillis = state.selectedDateMillis,
+                hour = 0,
+                minute = 0
+            )
+        }
+        val endInstant = if (isHourlyBooking) {
+            toInstant(
+                dateMillis = state.selectedDateMillis,
+                hour = state.endHour,
+                minute = state.endMinute
+            )
+        } else {
+            toInstant(
+                dateMillis = state.selectedDateMillis,
+                hour = 23,
+                minute = 59
+            )
+        }
 
         when {
-            startInstant == null || endInstant == null -> {
+            state.selectedDateMillis == null -> {
                 _uiState.update {
                     it.copy(
-                        errorMessage = if (isDayBooking) {
-                            "Please select start and end date."
+                        errorMessage = if (isHourlyBooking) {
+                            "Please select date, from time and to time."
                         } else {
-                            "Please select start and end date and time."
+                            "Please select a date."
                         }
                     )
                 }
                 return
             }
 
-            !endInstant.isAfter(startInstant) -> {
+            startInstant == null || endInstant == null -> {
+                _uiState.update {
+                    it.copy(errorMessage = "Booking period cannot be created from the selected date.")
+                }
+                return
+            }
+
+            isHourlyBooking && (!state.hasSelectedStartTime || !state.hasSelectedEndTime) -> {
+                _uiState.update {
+                    it.copy(errorMessage = "Please select from time and to time.")
+                }
+                return
+            }
+
+            isHourlyBooking && !endInstant.isAfter(startInstant) -> {
                 _uiState.update { it.copy(errorMessage = "End time must be after start time.") }
                 return
             }
