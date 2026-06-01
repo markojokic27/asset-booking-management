@@ -9,6 +9,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 // import { useTheme } from '../../../app/ThemeProvider';
 
 import type { Filters } from '../types';
+import { useUsersData } from '../../user/hooks/useUsersData';
+import { useAssetsData } from '../../asset/hooks/useAssetsData';
 
 type Props = {
   filters: Filters;
@@ -35,31 +37,19 @@ export default function FiltersBar({
     }));
   };
 
-  const users = [
-    {
-        id: 1,
-        label: "John Doe",
-    },
-    {
-        id: 2,
-        label: "Jane Doe",
-    },
-    {
-        id: 3,
-        label: "Mark Jones",
-    },
-  ]
+  const { users } = useUsersData();
 
-  const assets = [
-    {
-      id: 1,
-      label: "Parking spot 10",
-    },
-    {
-      id: 2,
-      label: "Macbook Pro 16",
-    },
-  ];
+  const userOptions = users.map((user) => ({
+    id: user.id,
+    label: `${user.name} ${user.surname}`,
+  }));
+
+  const { assets } = useAssetsData();
+
+  const assetOptions = assets.map((asset) => ({
+    id: asset.id,
+    label: asset.name,
+  }));
 
   return (
     <div
@@ -83,9 +73,9 @@ export default function FiltersBar({
       />
 
      <Autocomplete
-        options={users}
+        options={userOptions}
         getOptionLabel={(option) => option.label}
-        value={users.find((u) => u.id === filters.userId) ?? null}
+        value={userOptions.find((u) => u.id === filters.userId) ?? null}
         onChange={(_, value) =>
             update({
                 userId: value?.id ?? null,
@@ -97,9 +87,9 @@ export default function FiltersBar({
         />
 
       <Autocomplete
-        options={assets}
+        options={assetOptions}
         getOptionLabel={(option) => option.label}
-        value={assets.find((a) => a.id === filters.assetId) ?? null}
+        value={assetOptions.find((a) => a.id === filters.assetId) ?? null}
         onChange={(_, value) =>
             update({
                 assetId: value?.id ?? null,
