@@ -56,7 +56,7 @@ export function AvailabilityCalendar({
 
   const handleEventClick = React.useCallback(
     (info: any) => {
-      console.log("BBB", info.event.extendedProps.booking);
+      console.log('BBB', info.event.extendedProps.booking);
       setSelectedBooking(info.event.extendedProps.booking);
     },
     [setSelectedBooking]
@@ -88,9 +88,9 @@ export function AvailabilityCalendar({
           });
 
           return (
-            <div className="text-xs">
+            <div className="text-md font-semibold">
               {variant === 'HOUR' && (
-                <div className="font-semibold">
+                <div>
                   {start} - {end}
                 </div>
               )}
