@@ -54,10 +54,7 @@ backend:compile:
     paths:
       - backend/.m2/repository/
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-    - if: '$CI_COMMIT_BRANCH == "feature/testcontainers"'
-      when: manual
+   
   
 
 
@@ -78,9 +75,7 @@ frontend:compile:
     paths:
       - frontend/node_modules/ 
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-      when: manual
+   
   
 
 
