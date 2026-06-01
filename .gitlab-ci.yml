@@ -53,6 +53,9 @@ backend:compile:
     key: maven-$CI_PROJECT_ID
     paths:
       - backend/.m2/repository/
+  rules:
+   
+  
 
 
 
@@ -70,17 +73,33 @@ frontend:compile:
   cache:
     key: npm-$CI_PROJECT_ID
     paths:
-      - frontend/node_modules/  
+      - frontend/node_modules/ 
+  rules:
+   
+  
 
 
 # ─────────────────────────────────────────
 # TEST STAGE
 # ─────────────────────────────────────────
+# 
+
+
 backend:test:
   stage: test
   image: maven:3.9-eclipse-temurin-21
+  services:
+    - name: postgres:18
+      alias: postgres
   needs:
     - job: backend:compile
+  variables:
+    POSTGRES_DB: testdb
+    POSTGRES_USER: test
+    POSTGRES_PASSWORD: test
+    TESTCONTAINERS_RYUK_DISABLED: "true"
+    TESTCONTAINERS_HOST_OVERRIDE: postgres
+    DOCKER_HOST: ""   # unset — no Docker daemon needed
   script:
     - cd backend
     - mvn verify -Dmaven.repo.local=.m2/repository -Ddependency-check.skip=true
@@ -93,9 +112,9 @@ backend:test:
     paths:
       - backend/.m2/repository/
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "feature/testcontainers"'
       when: manual
   
 
