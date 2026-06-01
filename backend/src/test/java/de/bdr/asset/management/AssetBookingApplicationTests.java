@@ -3,6 +3,7 @@ package de.bdr.asset.management;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(properties = {
         "JWT_SECRET=1111111111111111111111111111111111111111",
@@ -10,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
         "JWT_REFRESH_SECONDS=86400"
 })
 @ActiveProfiles("test")
+@Testcontainers(disabledWithoutDocker = true)
 class AssetBookingApplicationTests extends AbstractIntegrationTest {
 
     @Test
