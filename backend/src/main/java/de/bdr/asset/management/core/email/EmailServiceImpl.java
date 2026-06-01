@@ -36,4 +36,25 @@ public class EmailServiceImpl implements EmailService{
 
         javaMailSender.send(message);
     }
+
+    @Async
+    @Override
+    public void sendStatusNotificationEmail(String toEmail, String assetName, String status) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom("noreply@asset-booking-manager.com");
+        message.setTo(toEmail);
+        message.setSubject(status + ": Booking for " + assetName);
+
+        String emailBody = String.format(
+                "Dear,\n\nYour request for booking asset '%s' has been %s by your manager.\n\n" +
+                "Best regards,\nAsset Booking Manager",
+                assetName, status
+        );
+
+        message.setText(emailBody);
+
+        javaMailSender.send(message);
+    }
 }
