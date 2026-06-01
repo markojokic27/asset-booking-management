@@ -87,6 +87,13 @@ public class CommonConstants{
 
     public static final String SEARCH_CATEGORY="laptop";
 
+    // Booking
+    public static final String FUTURE_DATE = "2026-06-20";
+    public static final String DATE_FUTURE= "2026-06-28";
+    public static final String PAST_DATE = "2026-05-01";
+    public static final String FROM_HOUR = "09:00";
+    public static final String TO_HOUR = "11:00";
+    public static final String BOOKED_ASSET_ID = "1";
 
     public static final String BROWSER = "BROWSER";
 

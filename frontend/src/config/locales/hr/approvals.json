@@ -1,3 +1,12 @@
 {
-  "title": "Odobravanje rezervacija"
+  "title": "Odobravanje rezervacija",
+  "table": {
+    "bookingId": "ID rezervacije",
+    "user": "Korisnik",
+    "asset": "Imovina",
+    "time": "Vrijeme rezervacije"
+  },
+  "loading": "Učitavanje rezervacija na čekanju...",
+  "empty": "Nema rezervacija na čekanju.",
+  "error": "Učitavanje rezervacija na čekanju nije uspjelo."
 }

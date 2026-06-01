@@ -54,6 +54,14 @@ export const hasBookingOverlap = ({
   });
 };
 
+// format the booking time
+export const formatBookingTime = (start: string | Date, end: string | Date) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  return `${startDate.toLocaleString()} – ${endDate.toLocaleString()}`;
+};
+
 // function to check if a booking is past its end date
 export const isBookingPastEnd = (booking: Pick<BookingWithRelations, 'bookingEnd'>) =>
   new Date(booking.bookingEnd).getTime() < Date.now();

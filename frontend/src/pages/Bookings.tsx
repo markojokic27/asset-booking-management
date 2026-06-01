@@ -61,7 +61,7 @@ export default function Bookings() {
           {selectedCategory?.name ?? ''}
         </h1>
 
-        <Button
+        <Button data-testid="reset-filters-button"
           className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
           onClick={handleResetFilters}
         >

@@ -2,31 +2,121 @@ package pages;
 
 import commonmethods.CommonMethods;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class BookingPage extends CommonMethods {
 
-    public BookingPage(){
+    public BookingPage() {
         super();
     }
 
-    public By BookButton = By.cssSelector("[data-testid='book-button']");
-
-    // Search assets
+    public By bookButton = By.cssSelector("[data-testid='book-button']");
     public By searchField = By.cssSelector("[data-testid='search-input']");
+    public By resetFiltersButton = By.cssSelector("[data-testid='reset-filters-button']");
 
-    public void clickBookButton(){
-        clickOnElement(BookButton);
+    // Filter
+    public By fromDateInput = By.cssSelector("[data-testid='from-date-input']");
+    public By fromHourSelect = By.cssSelector("select[aria-label*='From']");
+    public By toHourSelect = By.cssSelector("select[aria-label*='To']");
+
+    // Book button on asset page
+    public By bookAssetButton = By.cssSelector("[data-testid='book-asset-button']");
+
+    // Calendar
+    public By calendar = By.cssSelector(".fc-dayGridMonth-view");
+    public By calendarNext = By.cssSelector(".fc-next-button");
+    public By calendarPrev = By.cssSelector(".fc-prev-button");
+    public By calendarTitle = By.cssSelector(".fc-toolbar-title");
+
+    public By meetingRoomCategoryCard = By.cssSelector("[data-testid='category-card-meeting room']");
+
+
+
+    public void clickBookButton() {
+        clickOnElement(bookButton);
     }
 
-
-    // Search assets
-    public void searchAssets(String assets){
-        typeInElement(searchField, assets);
+    public void clickBookAssetButton() {
+        clickOnElement(bookAssetButton);
     }
 
+    public void searchAssets(String keyword) {
+        typeInElement(searchField, keyword);
+    }
 
+    public void clickResetFilters() {
+        clickOnElement(resetFiltersButton);
+    }
 
+    // Filter
+    public void enterFromDate(String date) {
+        typeInElement(fromDateInput, date);
+    }
 
+    public String getFromDateValue() {
+        return getDriver().findElement(fromDateInput).getAttribute("value");
+    }
 
+    public void selectFromHour(String hour) {
+        clickOnElement(fromHourSelect);
+        selectByVisibleText(fromHourSelect, hour);
+        clickOnElement(fromHourSelect);
+    }
+
+    public void selectToHour(String hour) {
+        clickOnElement(toHourSelect);
+        selectByVisibleText(toHourSelect, hour);
+        clickOnElement(toHourSelect);
+
+    }
+
+    // Book asset button
+    public boolean isBookAssetButtonEnabled() {
+        try {
+            WebElement btn = getDriver().findElement(bookAssetButton);
+            String disabled = btn.getAttribute("disabled");
+            return disabled == null || disabled.equals("false");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Calendar
+    public boolean isCalendarVisible() {
+        return isElementVisible(calendar);
+    }
+    public void clickCalendarDate(String dateStr) {
+        clickOnElement(By.cssSelector("[data-date='" + dateStr + "']"));
+    }
+
+    public boolean isCalendarCellSelected(String dateStr) {
+        try {
+            String classes = getDriver().findElement(By.cssSelector("[data-date='" + dateStr + "']")).getAttribute("class");
+            return classes != null && classes.contains("ring-2");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isCalendarCellPast(String dateStr) {
+        try {
+            String classes = getDriver().findElement(By.cssSelector("[data-date='" + dateStr + "']")).getAttribute("class");
+            return classes != null && classes.contains("opacity-60");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void clickNextMonth() {
+        clickOnElement(calendarNext);
+    }
+
+    public void clickPrevMonth() {
+        clickOnElement(calendarPrev);
+    }
+
+    public void clickMeetingRoomCategory() {
+        clickOnElement(meetingRoomCategoryCard);
+    }
 
 }

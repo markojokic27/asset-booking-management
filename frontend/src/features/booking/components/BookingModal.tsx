@@ -77,7 +77,7 @@ export function BookingModal({
               <p>
                 {/* If a date is not selected, the message is not displayed. Check availability - if available render AVAILABLE else UNAVAILABLE  */}
                 {asset.name} is{' '}
-                <span className="rounded bg-(--color-status-active-bg) px-2 py-0.5 text-(--color-status-active-text)">
+                <span data-testid="availability-badge" className="rounded bg-(--color-status-active-bg) px-2 py-0.5 text-(--color-status-active-text)">
                   available
                 </span>{' '}
                 from {selectedFrom} to {selectedTo}
@@ -101,11 +101,11 @@ export function BookingModal({
         )}
 
         <div className="mt-10 flex justify-end gap-4">
-          <Button variant="outline" size="md" onClick={onClose}>
+          <Button data-testid="cancel-button" variant="outline" size="md" onClick={onClose}>
             Cancel
           </Button>
 
-          <Button
+          <Button data-testid="book-now-button"
             variant="solid"
             size="md"
             onClick={() => {

@@ -1,4 +1,15 @@
 {
+  "names": {
+    "ADVANCE_TECHNOLOGY": "Napredne tehnologije",
+    "SECURE_SERVICES": "Sigurnosne usluge",
+    "ARCHITECTURE": "Arhitektura",
+    "FINANCE_AND_BUSINESS_ADMINISTRATION": "Financije i poslovna administracija",
+    "MOBILE_AND_SECURITY": "Mobilnost i sigurnost",
+    "SYSTEM_TEST": "Sistemsko testiranje",
+    "HUMAN_RESOURCES": "Ljudski resursi",
+    "CLOUD_AND_DATA_MANAGEMENT": "Cloud i upravljanje podacima",
+    "DEVOPS": "DevOps"
+  },
   "validation": {
     "managerRequired": "Voditelj je obavezan"
   }

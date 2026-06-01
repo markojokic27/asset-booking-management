@@ -35,7 +35,7 @@ export const DateInput: React.FC<Props> = ({
         onClick={openDatePicker}
         className="relative cursor-pointer"
       >
-        <input
+        <input data-testid="from-date-input"
           ref={dateRef}
           id={id}
           type="date"

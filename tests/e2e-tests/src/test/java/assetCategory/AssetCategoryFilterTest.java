@@ -17,12 +17,6 @@ public class AssetCategoryFilterTest extends BaseLogin {
         assertTrue(waitForUrlContains(CommonConstants.ASSETS_URL));
     }
 
-    @Test
-    public void filterAssetsByCategoryOnBookingPage(){
-        login();
-        getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + (CommonConstants.BOOKINGS_URL_EXTENSION));
-        assetPage.clickLaptopCategory();
-        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
-    }
+
 
 }

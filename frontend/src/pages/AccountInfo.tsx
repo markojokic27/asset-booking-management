@@ -9,6 +9,7 @@ import { InfoRow } from '../components/ui/InfoRow';
 import { Button } from '../components/ui/Button';
 
 // Hooks
+import { useDepartments } from '../features/department/hooks/useDepartments';
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
 import { ChangePasswordModal } from '../features/user/components/ChangePasswordModal';
 
@@ -40,6 +41,7 @@ function getStatusBadgeClass(status: UserDto['status']) {
 export default function AccountInfo() {
   const { t } = useTranslation();
   const { user, isLoading, error } = useCurrentUser();
+  const { getDepartmentName } = useDepartments();
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 
   return (
@@ -160,7 +162,7 @@ export default function AccountInfo() {
 
               <InfoRow
                 label={t('account.labels.department')}
-                value={String(user.departmentId)}
+                value={getDepartmentName(user.departmentId) ?? t('account.common.emptyValue')}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow

@@ -129,11 +129,12 @@ export default function Assets() {
             : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') ===
               selectedCategory;
 
-        const matchesDeleted = showDeleted || asset.status !== 'DELETED';
+        const matchesDeleted =
+          (isAdmin(user) && showDeleted) || asset.status !== 'DELETED';
 
         return matchesSearch && matchesCategory && matchesDeleted;
       }),
-    [assets, search, selectedCategory, categoryMap, showDeleted]
+    [assets, search, selectedCategory, categoryMap, showDeleted, user]
   );
 
   const sortedAssets = useMemo(() => {
@@ -198,14 +199,18 @@ export default function Assets() {
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
-      <div className="mt-6 flex w-full items-center justify-between">
-        <div className="flex items-center">
-          <ShowDeletedFilter
-            checked={showDeleted}
-            onToggle={() => setShowDeleted((v) => !v)}
-            labelKey="assets.filters.showDeleted"
-          />
-        </div>
+      <div
+        className={`mt-6 flex w-full items-center ${isAdmin(user) ? 'justify-between' : 'justify-end'}`}
+      >
+        {isAdmin(user) && (
+          <div className="flex items-center">
+            <ShowDeletedFilter
+              checked={showDeleted}
+              onToggle={() => setShowDeleted((v) => !v)}
+              labelKey="assets.filters.showDeleted"
+            />
+          </div>
+        )}
 
         <SearchInput
           value={search}
