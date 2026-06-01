@@ -98,7 +98,12 @@ public class BookingServiceImpl implements BookingService {
             String employeeName = user.getName() + " " + user.getSurname();
             String assetName = asset.getName();
 
-            emailService.sendApprovalEmail(managerEmail, assetName, employeeName, approvalLink);
+            emailService.sendApprovalEmail(
+                    managerEmail,
+                    assetName,
+                    employeeName,
+                    approvalLink
+            );
         }
 
         return mapper.toResponse(booking);
@@ -174,16 +179,70 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO approveBooking(Long bookingId) {
 
-        // TODO: Logic for approving bookings
-        return null;
+        Booking booking = repository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
+
+        if (!booking.getStatus().equals(BookingStatusEnum.PENDING)) {
+            throw new IllegalStateException("Only pending bookings can be approved.");
+        }
+
+        Long loggedInUserId = securityService.getCurrentUserId();
+        User employee = booking.getUser();
+
+        User loggedInUser = userRepository.findById(loggedInUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
+
+        boolean isManager = employee.getManagerEmail().equalsIgnoreCase(loggedInUser.getEmail());
+
+        if (!securityService.isAdmin() && !isManager) {
+            throw new AccessDeniedException("You are not authorized to approve this booking.");
+        }
+
+        booking.setStatus(BookingStatusEnum.APPROVED);
+        repository.save(booking);
+
+        emailService.sendStatusNotificationEmail(
+                employee.getEmail(),
+                booking.getAsset().getName(),
+                booking.getStatus().name()
+        );
+
+        return mapper.toResponse(booking);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO rejectBooking(Long bookingId) {
 
-        // TODO: Logic for rejecting bookings
-        return null;
+        Booking booking = repository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
+
+        if (!booking.getStatus().equals(BookingStatusEnum.PENDING)) {
+            throw new IllegalStateException("Only pending bookings can be rejected.");
+        }
+
+        Long loggedInUserId = securityService.getCurrentUserId();
+        User employee = booking.getUser();
+
+        User loggedInUser = userRepository.findById(loggedInUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
+
+        boolean isManager = employee.getManagerEmail().equalsIgnoreCase(loggedInUser.getEmail());
+
+        if (!securityService.isAdmin() && !isManager) {
+            throw new AccessDeniedException("You are not authorized to reject this booking.");
+        }
+
+        booking.setStatus(BookingStatusEnum.REJECTED);
+        repository.save(booking);
+
+        emailService.sendStatusNotificationEmail(
+                employee.getEmail(),
+                booking.getAsset().getName(),
+                booking.getStatus().name()
+        );
+
+        return mapper.toResponse(booking);
     }
 
     @Override
