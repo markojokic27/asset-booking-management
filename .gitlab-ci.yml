@@ -107,7 +107,7 @@ backend:test:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_BRANCH == "develop"'
-    - if: '$CI_COMMIT_BRANCH == "feature/testcontainers"''
+    - if: '$CI_COMMIT_BRANCH == "feature/testcontainers"'
       when: manual
   
 
