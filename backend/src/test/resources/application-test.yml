@@ -1,22 +1,43 @@
+# spring:
+#   application:
+#     name: assetbookingmanagement
+
+#   # datasource:
+#   #   url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;INIT=CREATE SCHEMA IF NOT EXISTS asset_booking_mgm
+#   #   driver-class-name: org.h2.Driver
+#   #   username: sa
+#   #   password: password
+
+#   jpa:
+#     database-platform: org.hibernate.dialect.H2Dialect
+#     hibernate:
+#       # ddl-auto: create-drop
+#       ddl-auto: validate
+#     show-sql: false
+
+#   flyway:
+#     # enabled: false
+#     enabled: true
+
+#   h2:
+#     console:
+#       enabled: false
+
 spring:
   application:
     name: assetbookingmanagement
 
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;INIT=CREATE SCHEMA IF NOT EXISTS asset_booking_mgm
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: false
+    properties:
+      hibernate:
+        default_schema: asset_booking_mgm
 
   flyway:
-    enabled: false
-
-  h2:
-    console:
-      enabled: false
+    enabled: true
+    locations: classpath:db/migration
+    schemas: asset_booking_mgm
+    default-schema: asset_booking_mgm
+    create-schemas: true

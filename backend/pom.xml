@@ -219,6 +219,24 @@
 			<version>8.1</version>
 		</dependency>
 
+		<!-- TESTCONTAINERS -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+			<!-- no version — BOM manages it -->
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -419,7 +437,18 @@
 				<artifactId>opentelemetry-extension-trace-propagators</artifactId>
 				<version>1.62.0</version>
 			</dependency>
+
+			<!-- TESTCONTAINERS -->
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>1.20.4</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
+
+
 	</dependencyManagement>
 
 </project>
