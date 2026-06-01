@@ -1,8 +1,11 @@
+// External packages
 import * as React from 'react';
-
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+
+// Types
+import type { BookingWithRelations } from '../types';
 
 //import hrLocale from '@fullcalendar/core/locales/hr';
 
@@ -14,8 +17,7 @@ type CalendarEvent = {
   backgroundColor?: string;
   borderColor?: string;
   extendedProps?: {
-    status: string;
-    notes?: string;
+    booking: BookingWithRelations;
   };
 };
 
@@ -24,12 +26,14 @@ type Props = {
   selectedDate?: string;
   onDateClick?: (date: string) => void;
   variant?: 'HOUR' | 'DAY';
+  setSelectedBooking: (booking: BookingWithRelations | null) => void;
 };
 
 export function AvailabilityCalendar({
   events,
   selectedDate,
   onDateClick,
+  setSelectedBooking,
   variant = 'DAY',
 }: Props) {
   const isPastDate = (date: Date) => {
@@ -50,15 +54,13 @@ export function AvailabilityCalendar({
     [onDateClick]
   );
 
-  const handleEventClick = React.useCallback((info: any) => {
-    const { status, notes } = info.event.extendedProps;
-
-    console.log({
-      bookedBy: info.event.title,
-      status,
-      notes,
-    });
-  }, []);
+  const handleEventClick = React.useCallback(
+    (info: any) => {
+      console.log("BBB", info.event.extendedProps.booking);
+      setSelectedBooking(info.event.extendedProps.booking);
+    },
+    [setSelectedBooking]
+  );
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">

@@ -19,8 +19,7 @@ export const mapBookingsToCalendarEvents = (
     backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
     borderColor: STATUS_COLORS[booking.status] || '#3b82f6',
     extendedProps: {
-      status: booking.status,
-      notes: booking.notes,
+      booking,
     },
   }));
 };

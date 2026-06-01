@@ -17,17 +17,10 @@ import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
 
 // Types
-// import type { Filters } from '../features/booking/types';
-
-// const defaultFilters: Filters = {
-//   search: '',
-//   fromDate: '',
-//   toDate: '',
-//   fromHour: '',
-//   toHour: '',
-// };
+import type { BookingWithRelations } from '../features/booking/types';
 
 // const STATUS_COLORS: Record<string, string> = {
 //   APPROVED: '#22c55e',
@@ -46,6 +39,8 @@ export default function BookingsByAsset() {
   const asset = bookings?.[0]?.asset;
 
   const [notes, setNotes] = React.useState('');
+  const [selectedBooking, setSelectedBooking] =
+    React.useState<BookingWithRelations | null>(null);
 
   const calendarEvents = React.useMemo(
     () => mapBookingsToCalendarEvents(bookings),
@@ -91,7 +86,6 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
-  // add dialog with booking info on event click in calendar
   return (
     <LayoutColumn
       span={12}
@@ -130,7 +124,8 @@ export default function BookingsByAsset() {
           className="mt-0 grid-cols-1 sm:grid-cols-2 lg:max-w-[80%] lg:grid-cols-2"
         />
 
-        <Button data-testid="book-asset-button"
+        <Button
+          data-testid="book-asset-button"
           variant="solid"
           className="h-fit"
           size="md"
@@ -140,10 +135,10 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
+
       <p className="mb-1 text-sm font-medium text-(--color-table-text)">
         Notes
       </p>
-
       <Input
         placeholder="Notes..."
         className="mb-6 w-full border shadow-none"
@@ -155,7 +150,13 @@ export default function BookingsByAsset() {
         events={calendarEvents}
         selectedDate={filters.fromDate}
         onDateClick={handleCalendarDateClick}
+        setSelectedBooking={setSelectedBooking}
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
+      />
+
+      <BookingDetailsModal
+        booking={selectedBooking}
+        onClose={() => setSelectedBooking(null)}
       />
     </LayoutColumn>
   );
