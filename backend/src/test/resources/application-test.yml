@@ -26,8 +26,14 @@
 spring:
   application:
     name: assetbookingmanagement
+  datasource:
+    url: jdbc:postgresql://postgres:5432/testdb
+    username: test
+    password: test
+    driver-class-name: org.postgresql.Driver
 
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
     show-sql: false
