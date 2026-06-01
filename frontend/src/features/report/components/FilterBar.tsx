@@ -1,16 +1,16 @@
 import * as React from 'react';
-// import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
+
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 import { DateInput } from '../../booking/components/DateInput';
 import { Button } from '../../../components/ui/Button';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-// import { useTheme } from '../../../app/ThemeProvider';
 
-import type { Filters } from '../types';
 import { useUsersData } from '../../user/hooks/useUsersData';
 import { useAssetsData } from '../../asset/hooks/useAssetsData';
+
+import type { Filters } from '../types';
 
 type Props = {
   filters: Filters;
@@ -19,17 +19,17 @@ type Props = {
   className?: string;
 };
 
+type Option = {
+  id: number;
+  label: string;
+};
+
 export default function FiltersBar({
   filters,
   setFilters,
   onReset,
   className,
 }: Props) {
-  // const { t } = useTranslation();
-  // const { theme } = useTheme();
-  
-  // const isDark = theme === 'dark';
-
   const update = (partial: Partial<Filters>) => {
     setFilters((prev) => ({
       ...prev,
@@ -37,86 +37,119 @@ export default function FiltersBar({
     }));
   };
 
-  const { users } = useUsersData();
+  const {
+    users,
+    loading: usersLoading,
+  } = useUsersData();
 
-  const userOptions = users.map((user) => ({
-    id: user.id,
-    label: `${user.name} ${user.surname}`,
-  }));
+  const {
+    assets,
+    loading: assetsLoading,
+  } = useAssetsData();
 
-  const { assets } = useAssetsData();
+  const userOptions = React.useMemo<Option[]>(
+    () =>
+      users.map((user) => ({
+        id: user.id,
+        label: `${user.name} ${user.surname}`,
+      })),
+    [users]
+  );
 
-  const assetOptions = assets.map((asset) => ({
-    id: asset.id,
-    label: asset.name,
-  }));
+  const assetOptions = React.useMemo<Option[]>(
+    () =>
+      assets.map((asset) => ({
+        id: asset.id,
+        label: asset.name,
+      })),
+    [assets]
+  );
 
   return (
     <div
       className={twMerge(
-        'grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5',
+        'rounded-2xl border border-(--color-table-border) bg-white p-5 shadow-sm dark:bg-(--color-bg-dark)',
         className
       )}
     >
-      <DateInput
-        id="fromDate"
-        label="From"
-        value={filters.fromDate}
-        onChange={(v) => update({ fromDate: v })}
-      />
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <DateInput
+            id="fromDate"
+            label="From"
+            value={filters.fromDate}
+            onChange={(v) => update({ fromDate: v })}
+          />
 
-      <DateInput
-        id="toDate"
-        label="To"
-        value={filters.toDate}
-        onChange={(v) => update({ toDate: v })}
-      />
+          <DateInput
+            id="toDate"
+            label="To"
+            value={filters.toDate}
+            onChange={(v) => update({ toDate: v })}
+          />
+        </div>
 
-     <Autocomplete
-        options={userOptions}
-        getOptionLabel={(option) => option.label}
-        value={userOptions.find((u) => u.id === filters.userId) ?? null}
-        onChange={(_, value) =>
-            update({
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-[1fr_1fr_auto]">
+          <Autocomplete<Option>
+            options={userOptions}
+            loading={usersLoading}
+            getOptionLabel={(option) => option.label}
+            value={
+              userOptions.find((u) => u.id === filters.userId) ?? null
+            }
+            onChange={(_, value) =>
+              update({
                 userId: value?.id ?? null,
-            })
-        }
-        renderInput={(params) => (
-            <TextField {...params} label="Users" />
-        )}
-        />
+              })
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="User"
+                size="small"
+              />
+            )}
+          />
 
-      <Autocomplete
-        options={assetOptions}
-        getOptionLabel={(option) => option.label}
-        value={assetOptions.find((a) => a.id === filters.assetId) ?? null}
-        onChange={(_, value) =>
-            update({
+          <Autocomplete<Option>
+            options={assetOptions}
+            loading={assetsLoading}
+            getOptionLabel={(option) => option.label}
+            value={
+              assetOptions.find((a) => a.id === filters.assetId) ?? null
+            }
+            onChange={(_, value) =>
+              update({
                 assetId: value?.id ?? null,
-            })
-        }
-        renderInput={(params) => (
-            <TextField {...params} label="Assets" />
-        )}
-        />
+              })
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Asset"
+                size="small"
+              />
+            )}
+          />
 
-    <div>
-      <Button
-        variant="solid"
-        className="h-fit self-end"
-      >
-        Apply
-      </Button>
+          <div className="flex gap-2 md:justify-end xl:self-center">
+            <Button
+              variant="solid"
+              className="h-10 min-w-[100px]"
+            >
+              Apply
+            </Button>
 
-      <Button
-        variant="secondary"
-        onClick={onReset}
-        className="h-fit self-end"
-      >
-        Reset
-      </Button>
-    </div>
-
+            <Button
+              variant="secondary"
+              onClick={onReset}
+              className="h-10 min-w-[100px]"
+            >
+              Reset
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

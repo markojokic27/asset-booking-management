@@ -1,4 +1,8 @@
 import * as React from 'react';
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme,
+} from '@mui/material/styles';
 
 type Theme = 'light' | 'dark';
 
@@ -29,7 +33,8 @@ function getInitialTheme(): Theme {
   return prefersDark ? 'dark' : 'light';
 }
 
-export function ThemeProvider({ children,
+export function ThemeProvider({
+  children,
 }: Readonly<{ children: React.ReactNode }>) {
   const [theme, setThemeState] = React.useState<Theme>(() => getInitialTheme());
 
@@ -41,9 +46,11 @@ export function ThemeProvider({ children,
 
   const toggleTheme = React.useCallback(() => {
     setThemeState((prev) => {
-      const next: Theme = prev === 'dark' ? 'light' : 'dark';
+      const next = prev === 'dark' ? 'light' : 'dark';
+
       localStorage.setItem(STORAGE_KEY, next);
       applyThemeToDocument(next);
+
       return next;
     });
   }, []);
@@ -52,12 +59,32 @@ export function ThemeProvider({ children,
     applyThemeToDocument(theme);
   }, [theme]);
 
+  const muiTheme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: theme,
+        },
+      }),
+    [theme]
+  );
+
   const value = React.useMemo(
-    () => ({ theme, setTheme, toggleTheme }),
+    () => ({
+      theme,
+      setTheme,
+      toggleTheme,
+    }),
     [theme, setTheme, toggleTheme]
   );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>
+      <MuiThemeProvider theme={muiTheme}>
+        {children}
+      </MuiThemeProvider>
+    </ThemeContext.Provider>
+  );
 }
 
 export function useTheme() {

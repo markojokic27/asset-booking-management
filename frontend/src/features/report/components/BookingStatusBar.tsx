@@ -1,12 +1,8 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../../../app/ThemeProvider';
 
 export default function BookingStatusPie() {
   const { t } = useTranslation();
-  const { theme } = useTheme();
-
-  const isDark = theme === 'dark';
 
   const chartSetting = {
     yAxis: [
@@ -16,28 +12,6 @@ export default function BookingStatusPie() {
         },
     ],
     height: 300,
-    sx: {
-        '& .MuiChartsLegend-label': {
-            color: isDark ? '#ffffff !important' : '#111111 !important',
-        },
-        '& .MuiChartsAxis-tickLabel': {
-            color: isDark ? '#ffffff !important' : '#111111 !important',
-        },
-        '& text': {
-            color: isDark ? '#ffffff !important' : '#111111 !important',
-        },
-
-        '& tspan': {
-            stroke: isDark ? '#ffffff !important' : '#111111 !important',
-            fontWeight: "lighter",
-        },
-        '& .MuiChartsAxis-line': {
-            stroke: isDark ? '#ffffff !important' : '#111111 !important',
-        },
-        '& .MuiChartsAxis-tick': {
-            stroke: isDark ? '#ffffff !important' : '#111111 !important',
-        },
-    },
   };
 
   const data = [

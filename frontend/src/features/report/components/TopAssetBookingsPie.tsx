@@ -1,12 +1,8 @@
 import { PieChart } from '@mui/x-charts/PieChart';
 // import { useTranslation } from 'react-i18next';
-import { useTheme } from '../../../app/ThemeProvider';
 
 export default function TopAssetBookings() {
   // const { t } = useTranslation();
-  const { theme } = useTheme();
-
-  const isDark = theme === 'dark';
 
   const data = [
     {
@@ -46,17 +42,6 @@ export default function TopAssetBookings() {
             },
           ]}
           height={320}
-          sx={{
-            '& .MuiChartsLegend-label': {
-              color: isDark ? '#ffffff' : '#111111',
-            },
-            '& .MuiChartsAxis-tickLabel': {
-              color: isDark ? '#ffffff' : '#111111',
-            },
-            '& text': {
-              color: isDark ? '#ffffff' : '#111111',
-            },
-          }}
         />
       </div>
     </div>
