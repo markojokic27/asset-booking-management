@@ -97,6 +97,17 @@ export const AssetModal: React.FC<AssetModalProps> = ({
             </div>
             <div>
               <p className="text-sm text-(--color-modal-label)">
+                {t('assets.modals.fields.location')}
+              </p>
+              <p
+                data-testid="asset-description"
+                className="text-sm text-(--color-text)"
+              >
+                {asset.location ?? '-'}
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-(--color-modal-label)">
                 {t('assets.modals.fields.description')}
               </p>
               <p

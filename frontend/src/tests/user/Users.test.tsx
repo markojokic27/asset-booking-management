@@ -13,8 +13,18 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../features/user/hooks/useUsers', () => ({ useUsers: vi.fn() }));
 
+// mock the useCurrentUser hook
+vi.mock('../../features/user/hooks/useCurrentUser', () => ({
+  useCurrentUser: vi.fn(() => ({
+    user: { id: 1, role: 'ADMIN' },
+    isLoading: false,
+    error: null,
+  })),
+}));
+
 vi.mock('../../features/user/utilis/users', () => ({
   getFullName: (u: { name: string; surname: string }) => `${u.name} ${u.surname}`,
+  isAdmin: (user: { role?: string } | null | undefined) => user?.role === 'ADMIN',
 }));
 
 vi.mock('../../components/layout/Layout', () => ({
