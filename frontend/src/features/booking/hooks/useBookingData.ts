@@ -25,7 +25,6 @@ export function useBookingData({ filters }: Props) {
 
   const [selectedCategory, setSelectedCategory] =
     React.useState<AssetCategoryDto | null>(null);
-
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -41,7 +40,15 @@ export function useBookingData({ filters }: Props) {
         setAssets(assetRes.content);
         setCategories(categoryRes.content);
 
-        if (categoryRes.content.length > 0) {
+        const savedCategory = localStorage.getItem('selectedBookingCategory');
+
+        if (savedCategory) {
+          const category = categoryRes.content.find(
+            (c) => c.name === savedCategory
+          );
+
+          setSelectedCategory(category ?? categoryRes.content[0]);
+        } else {
           setSelectedCategory(categoryRes.content[0]);
         }
       } catch (err) {
@@ -86,6 +93,10 @@ export function useBookingData({ filters }: Props) {
 
   const selectCategoryByName = (categoryName: string) => {
     const category = categories.find((c) => c.name === categoryName);
+
+    if (category) {
+      localStorage.setItem('selectedBookingCategory', category.name);
+    }
 
     setSelectedCategory(category ?? null);
   };
