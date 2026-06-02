@@ -58,19 +58,19 @@ api.interceptors.response.use(
       originalRequest.url?.includes('/auth/login') ||
       originalRequest.url?.includes('/auth/register')
     ) {
-      return Promise.reject(error);
+      throw error;
     }
 
     if (
       error.response?.status !== 401 ||
       isAuthEndpointWithoutRefresh(originalRequest?.url)
     ) {
-      return Promise.reject(error);
+      throw error;
     }
 
     if (originalRequest._retry) {
       logout();
-      return Promise.reject(error);
+      throw error;
     }
 
     originalRequest._retry = true;
@@ -94,7 +94,7 @@ api.interceptors.response.use(
 
       if (!refreshToken) {
         logout();
-        return Promise.reject(error);
+        throw error;
       }
 
       const response = await axios.post(
@@ -116,7 +116,7 @@ api.interceptors.response.use(
       return api(originalRequest);
     } catch (refreshError) {
       logout();
-      return Promise.reject(refreshError);
+      throw refreshError;
     } finally {
       isRefreshing = false;
     }
