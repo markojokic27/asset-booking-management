@@ -9,6 +9,10 @@ class BookingRepository @Inject constructor(
         return bookingApi.getBookings(userId = userId).content
     }
 
+    suspend fun getAssetBookings(assetId: Long): List<BookingResponse> {
+        return bookingApi.getBookings(assetId = assetId).content
+    }
+
     suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
         return bookingApi.createBooking(request)
     }

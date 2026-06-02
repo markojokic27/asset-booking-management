@@ -9,7 +9,8 @@ interface BookingApi {
 
     @GET("bookings")
     suspend fun getBookings(
-        @Query("userId") userId: Long,
+        @Query("userId") userId: Long? = null,
+        @Query("assetId") assetId: Long? = null,
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 50
     ): BookingListResponse

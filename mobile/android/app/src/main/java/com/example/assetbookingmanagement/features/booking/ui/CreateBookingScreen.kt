@@ -68,7 +68,13 @@ fun CreateBookingScreen(
                 onEndTimeSelected = viewModel::onEndTimeSelected,
                 showTimeInputs = uiState.bookingPeriod == "HOUR"
             )
-            BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar()
+            BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar(
+                availabilityByDate = uiState.availabilityByDate,
+                onDateClick = { dateMillis ->
+                    viewModel.onDateSelected(dateMillis)
+                    selectedTabIndex = BookingTab.ChooseDate.ordinal
+                }
+            )
         }
 
         uiState.errorMessage?.let { message ->

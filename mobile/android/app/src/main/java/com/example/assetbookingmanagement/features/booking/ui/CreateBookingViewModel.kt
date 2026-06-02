@@ -16,14 +16,21 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import javax.inject.Inject
 
+enum class AvailabilityStatus {
+    DAY_BOOKED,
+    HOUR_BOOKED
+}
+
 data class CreateBookingUiState(
     val bookingPeriod: String? = null,
     val approvalRequired: Boolean? = null,
+    val availabilityByDate: Map<Long, AvailabilityStatus> = emptyMap(),
     val selectedDateMillis: Long? = null,
     val startHour: Int = 9,
     val startMinute: Int = 0,
@@ -51,19 +58,32 @@ class CreateBookingViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val asset = assetRepository.getAssetById(assetId)
-                val category = assetCategoryRepository.getAssetCategoryById(asset.categoryId)
+                val assetCategory = assetCategoryRepository.getAssetCategoryById(asset.categoryId)
+                val bookedDateStatus = if (assetCategory.bookingPeriod == "HOUR") {
+                    AvailabilityStatus.HOUR_BOOKED
+                } else {
+                    AvailabilityStatus.DAY_BOOKED
+                }
+                val availabilityByDate = bookingRepository.getAssetBookings(assetId)
+                    .filter { it.status == "APPROVED" || it.status == "PENDING" }
+                    .flatMap { booking ->
+                        booking.bookingStart.toDateMillisRange(booking.bookingEnd)
+                    }
+                    .associateWith { bookedDateStatus }
 
                 _uiState.update {
                     it.copy(
-                        bookingPeriod = category.bookingPeriod,
-                        approvalRequired = category.approval
+                        bookingPeriod = assetCategory.bookingPeriod,
+                        approvalRequired = assetCategory.approval,
+                        availabilityByDate = availabilityByDate
                     )
                 }
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
                         bookingPeriod = null,
-                        approvalRequired = null
+                        approvalRequired = null,
+                        availabilityByDate = emptyMap()
                     )
                 }
             }
@@ -227,3 +247,24 @@ private fun toInstant(
         ?.atTime(LocalTime.of(hour, minute))
         ?.atZone(ZoneId.systemDefault())
         ?.toInstant()
+
+//Generates a list of UTC start-of-day timestamps for each date in the range from startDateTime to endDateTime
+private fun String.toDateMillisRange(endDateTime: String): List<Long> {
+    val startDate = Instant.parse(this)
+        .atZone(ZoneOffset.UTC)
+        .toLocalDate()
+    val endDate = Instant.parse(endDateTime)
+        .atZone(ZoneOffset.UTC)
+        .toLocalDate()
+
+    return generateSequence(startDate) { currentDate ->
+        currentDate.plusDays(1).takeIf { !it.isAfter(endDate) }
+    }
+        .map(LocalDate::toUtcStartOfDayMillis)
+        .toList()
+}
+
+private fun LocalDate.toUtcStartOfDayMillis(): Long =
+    atStartOfDay()
+        .toInstant(ZoneOffset.UTC)
+        .toEpochMilli()
