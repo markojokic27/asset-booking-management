@@ -8,6 +8,7 @@ import { FiltersBar } from '../features/booking/components/FilterBar';
 import { Button } from '../components/ui/Button';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { BookingTable } from '../features/booking/components/BookingTable';
+import { ParkingMap } from './ParkingMap';
 
 // Hooks
 import { useBookingData } from '../features/booking/hooks/useBookingData';
@@ -61,12 +62,16 @@ export default function Bookings() {
           {selectedCategory?.name ?? ''}
         </h1>
 
-        <Button data-testid="reset-filters-button"
-          className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
-          onClick={handleResetFilters}
-        >
-          {t('bookings.resetFilters')}
-        </Button>
+        <div className="flex items-center gap-3">
+          {selectedCategory?.name === 'Parking' && <ParkingMap />}
+
+          <Button data-testid="reset-filters-button"
+            className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
+            onClick={handleResetFilters}
+          >
+            {t('bookings.resetFilters')}
+          </Button>
+        </div>
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
