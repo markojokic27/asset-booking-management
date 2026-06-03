@@ -2,6 +2,7 @@ package de.bdr.asset.management.core.email;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.SneakyThrows;
+// import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -17,6 +18,9 @@ public class EmailServiceImpl implements EmailService{
         this.mailSender = mailSender;
     }
 
+    // @Value("${spring.mail.username}")
+    // private String senderEmail;
+
     @Async
     @SneakyThrows
     @Override
@@ -26,6 +30,7 @@ public class EmailServiceImpl implements EmailService{
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setFrom("noreply@asset-booking-manager.com");
+        // helper.setFrom(senderEmail);
         helper.setTo(managerEmail);
         helper.setSubject("Approval needed. Booking for " + assetName);
 
@@ -52,6 +57,7 @@ public class EmailServiceImpl implements EmailService{
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setFrom("noreply@asset-booking-manager.com");
+        // helper.setFrom(senderEmail);
         helper.setTo(toEmail);
         helper.setSubject(status + ": Booking for " + assetName);
 

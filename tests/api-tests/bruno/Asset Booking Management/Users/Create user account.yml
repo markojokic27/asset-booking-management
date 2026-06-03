@@ -12,17 +12,17 @@ http:
     type: json
     data: |-
       {
-        "username": "",
-        "surname": "",
-        "name": "",
-        "email": "",
-        "password": "",
+        "username": "mail_user",
+        "surname": "Real",
+        "name": "Mail",
+        "email": "jokedjiko@gmail.com",
+        "password": "mail123",
         "role": "EMPLOYEE",
         "status": "ACTIVE",
-        "departmentId": 0,
-        "managerEmail": "",
-        "notes": "",
-        "benefit": ""
+        "departmentId": 1,
+        "managerEmail": "mateo.plava@gmail.com",
+        "notes": "Account for mail testing",
+        "benefit": "ALL"
       }
   auth: inherit
 
