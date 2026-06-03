@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService{
                 "<p>Dear,</p>" +
                 "<p>Employee <strong>%s</strong> has requested booking for <strong>%s</strong>.</p>" +
                 "<p>Please approve or reject the request by clicking on the link below:</p>" +
-                "<p><a href=\\\"%s\\\" style=\\\"color: #007bff; text-decoration: none; font-weight: bold;\\\">Click here to review the request</a></p>" +
+                "<p><a href=\"%s\" style=\"color: #007bff; text-decoration: none; font-weight: bold;\">Click here to review the request</a></p>" +
                 "<br><p>Best regards,<br>Asset Booking Manager</p>",
                 employeeName, assetName, approvalLink
         );
