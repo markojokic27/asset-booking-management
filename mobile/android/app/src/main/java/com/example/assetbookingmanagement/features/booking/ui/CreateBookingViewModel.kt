@@ -7,6 +7,7 @@ import com.example.assetbookingmanagement.features.assetcategory.data.AssetCateg
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
 import com.example.assetbookingmanagement.features.booking.data.BookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
+import com.example.assetbookingmanagement.features.booking.data.BookingResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,7 @@ data class CreateBookingUiState(
     val bookingPeriod: String? = null,
     val approvalRequired: Boolean? = null,
     val availabilityByDate: Map<Long, AvailabilityStatus> = emptyMap(),
+    val bookedHoursByDate: Map<Long, Set<Int>> = emptyMap(),
     val selectedDateMillis: Long? = null,
     val startHour: Int = 9,
     val startMinute: Int = 0,
@@ -70,12 +72,22 @@ class CreateBookingViewModel @Inject constructor(
                         booking.bookingStart.toDateMillisRange(booking.bookingEnd)
                     }
                     .associateWith { bookedDateStatus }
+                val bookedHoursByDate = if (assetCategory.bookingPeriod == "HOUR") {
+                    bookingRepository.getAssetBookings(assetId)
+                        .filter { it.status == "APPROVED" || it.status == "PENDING" }
+                        .flatMap { booking -> booking.toBookedHoursByDate().entries }
+                        .groupBy({ it.key }, { it.value })
+                        .mapValues { (_, hourSets) -> hourSets.flatten().toSet() }
+                } else {
+                    emptyMap()
+                }
 
                 _uiState.update {
                     it.copy(
                         bookingPeriod = assetCategory.bookingPeriod,
                         approvalRequired = assetCategory.approval,
-                        availabilityByDate = availabilityByDate
+                        availabilityByDate = availabilityByDate,
+                        bookedHoursByDate = bookedHoursByDate
                     )
                 }
             } catch (_: Exception) {
@@ -83,7 +95,8 @@ class CreateBookingViewModel @Inject constructor(
                     it.copy(
                         bookingPeriod = null,
                         approvalRequired = null,
-                        availabilityByDate = emptyMap()
+                        availabilityByDate = emptyMap(),
+                        bookedHoursByDate = emptyMap()
                     )
                 }
             }
@@ -268,3 +281,16 @@ private fun LocalDate.toUtcStartOfDayMillis(): Long =
     atStartOfDay()
         .toInstant(ZoneOffset.UTC)
         .toEpochMilli()
+
+private fun BookingResponse.toBookedHoursByDate(): Map<Long, Set<Int>> {
+    val startDateTime = Instant.parse(bookingStart).atZone(ZoneId.systemDefault())
+    val endDateTime = Instant.parse(bookingEnd).atZone(ZoneId.systemDefault())
+    if (startDateTime.toLocalDate() != endDateTime.toLocalDate()) {
+        return emptyMap()
+    }
+
+    return mapOf(
+        startDateTime.toLocalDate().toUtcStartOfDayMillis() to
+            (startDateTime.hour until endDateTime.hour).toSet()
+    )
+}

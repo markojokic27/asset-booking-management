@@ -50,6 +50,7 @@ fun DateTimePicker(
     endMinute: Int,
     hasSelectedStartTime: Boolean = true,
     hasSelectedEndTime: Boolean = true,
+    unavailableHours: Set<Int> = emptySet(),
     onDateSelected: (Long?) -> Unit,
     onStartTimeSelected: (Int, Int) -> Unit,
     onEndTimeSelected: (Int, Int) -> Unit,
@@ -82,11 +83,18 @@ fun DateTimePicker(
                 startTimeLabel = "From time",
                 startTimeContentDescription = "Select from time",
                 startOptions = startHourOptions,
+                startDisabledOptions = unavailableHours,
                 onStartTimeSelected = { hour -> onStartTimeSelected(hour, 0) },
                 endTimeValue = if (hasSelectedEndTime) formatTime(endHour, endMinute) else "",
                 endTimeLabel = "To time",
                 endTimeContentDescription = "Select to time",
                 endOptions = endHourOptions,
+                endDisabledOptions = getUnavailableEndHours(
+                    endOptions = endHourOptions,
+                    unavailableHours = unavailableHours,
+                    hasSelectedStartTime = hasSelectedStartTime,
+                    selectedStartHour = startHour
+                ),
                 onEndTimeSelected = { hour -> onEndTimeSelected(hour, 0) }
             )
         }
@@ -110,11 +118,13 @@ private fun TimeRangeFieldRow(
     startTimeLabel: String,
     startTimeContentDescription: String,
     startOptions: List<Int>,
+    startDisabledOptions: Set<Int>,
     onStartTimeSelected: (Int) -> Unit,
     endTimeValue: String,
     endTimeLabel: String,
     endTimeContentDescription: String,
     endOptions: List<Int>,
+    endDisabledOptions: Set<Int>,
     onEndTimeSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -127,6 +137,7 @@ private fun TimeRangeFieldRow(
             label = startTimeLabel,
             contentDescription = startTimeContentDescription,
             options = startOptions,
+            disabledOptions = startDisabledOptions,
             onHourSelected = onStartTimeSelected,
             modifier = Modifier.weight(1f)
         )
@@ -136,6 +147,7 @@ private fun TimeRangeFieldRow(
             label = endTimeLabel,
             contentDescription = endTimeContentDescription,
             options = endOptions,
+            disabledOptions = endDisabledOptions,
             onHourSelected = onEndTimeSelected,
             modifier = Modifier.weight(1f)
         )
@@ -206,6 +218,7 @@ private fun TimeDropdownField(
     label: String,
     contentDescription: String,
     options: List<Int>,
+    disabledOptions: Set<Int>,
     onHourSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -256,8 +269,19 @@ private fun TimeDropdownField(
         ) {
             options.forEach { hour ->
                 val hourLabel = formatTime(hour, 0)
+                val isDisabled = hour in disabledOptions
                 DropdownMenuItem(
-                    text = { Text(hourLabel) },
+                    text = {
+                        Text(
+                            text = hourLabel,
+                            color = if (isDisabled) {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            }
+                        )
+                    },
+                    enabled = !isDisabled,
                     onClick = {
                         onHourSelected(hour)
                         expanded = false
@@ -341,4 +365,19 @@ private fun getAvailableHourOptions(
             else -> true
         }
     }
+}
+
+private fun getUnavailableEndHours(
+    endOptions: List<Int>,
+    unavailableHours: Set<Int>,
+    hasSelectedStartTime: Boolean,
+    selectedStartHour: Int
+): Set<Int> {
+    if (!hasSelectedStartTime) {
+        return unavailableHours
+    }
+
+    return endOptions.filter { endHour ->
+        unavailableHours.any { bookedHour -> bookedHour in selectedStartHour until endHour }
+    }.toSet()
 }

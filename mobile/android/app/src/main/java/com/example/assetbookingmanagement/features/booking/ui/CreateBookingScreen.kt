@@ -63,6 +63,7 @@ fun CreateBookingScreen(
                 endMinute = uiState.endMinute,
                 hasSelectedStartTime = uiState.hasSelectedStartTime,
                 hasSelectedEndTime = uiState.hasSelectedEndTime,
+                unavailableHours = uiState.bookedHoursByDate[uiState.selectedDateMillis].orEmpty(),
                 onDateSelected = viewModel::onDateSelected,
                 onStartTimeSelected = viewModel::onStartTimeSelected,
                 onEndTimeSelected = viewModel::onEndTimeSelected,
