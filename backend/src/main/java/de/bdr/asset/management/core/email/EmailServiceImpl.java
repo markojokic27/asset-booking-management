@@ -1,60 +1,69 @@
 package de.bdr.asset.management.core.email;
 
-import org.springframework.mail.SimpleMailMessage;
+import jakarta.mail.internet.MimeMessage;
+import lombok.SneakyThrows;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailServiceImpl implements EmailService{
 
-    private final JavaMailSender javaMailSender;
+    private final JavaMailSender mailSender;
 
-    public EmailServiceImpl(JavaMailSender javaMailSender) {
+    public EmailServiceImpl(JavaMailSender mailSender) {
 
-        this.javaMailSender = javaMailSender;
+        this.mailSender = mailSender;
     }
 
     @Async
+    @SneakyThrows
     @Override
     public void sendApprovalEmail(String managerEmail, String assetName, String employeeName, String approvalLink) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        message.setFrom("noreply@asset-booking-manager.com");
-        message.setTo(managerEmail);
-        message.setSubject("Approval needed. Booking for " + assetName);
+        helper.setFrom("noreply@asset-booking-manager.com");
+        helper.setTo(managerEmail);
+        helper.setSubject("Approval needed. Booking for " + assetName);
 
         String emailBody = String.format(
-                "Dear,\n\nEmployee %s has requested booking for %s.\n\n" +
-                "Please approve or reject request by clicking on the link:\n%s\n\n" +
-                "Best regards,\nAsset Booking Manager",
+                "<p>Dear,</p>" +
+                "<p>Employee <strong>%s</strong> has requested booking for <strong>%s</strong>.</p>" +
+                "<p>Please approve or reject the request by clicking on the link below:</p>" +
+                "<p><a href=\\\"%s\\\" style=\\\"color: #007bff; text-decoration: none; font-weight: bold;\\\">Click here to review the request</a></p>" +
+                "<br><p>Best regards,<br>Asset Booking Manager</p>",
                 employeeName, assetName, approvalLink
         );
 
-        message.setText(emailBody);
+        helper.setText(emailBody, true);
 
-        javaMailSender.send(message);
+        mailSender.send(message);
     }
 
     @Async
+    @SneakyThrows
     @Override
     public void sendStatusNotificationEmail(String toEmail, String assetName, String status) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        message.setFrom("noreply@asset-booking-manager.com");
-        message.setTo(toEmail);
-        message.setSubject(status + ": Booking for " + assetName);
+        helper.setFrom("noreply@asset-booking-manager.com");
+        helper.setTo(toEmail);
+        helper.setSubject(status + ": Booking for " + assetName);
 
         String emailBody = String.format(
-                "Dear,\n\nYour request for booking asset '%s' has been %s by your manager.\n\n" +
-                "Best regards,\nAsset Booking Manager",
-                assetName, status
+                "<p>Dear,</p>" +
+                "<p>Your request for booking asset <strong>'%s'<strong> has been <strong style=\\\"color: %s;\\\">%s</strong> by your manager.<p>" +
+                "<br><p>Best regards,<br>Asset Booking Manager</p>",
+                assetName, status.equalsIgnoreCase("APPROVED") ? "green" : "red", status.toLowerCase()
         );
 
-        message.setText(emailBody);
+        helper.setText(emailBody, true);
 
-        javaMailSender.send(message);
+        mailSender.send(message);
     }
 }
