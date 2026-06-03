@@ -31,7 +31,7 @@ export const ParkingMap: React.FC = () => {
 
   return (
     <>
-      <Button variant="outline" onClick={openModal}>
+      <Button data-testid="parking-map-button" variant="outline" onClick={openModal}>
         {t('bookings.viewParkingMap')}
       </Button>
 
@@ -54,7 +54,7 @@ export const ParkingMap: React.FC = () => {
               {/* Floor tabs */}
               <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1">
                 {(['-1', '-2'] as FloorLevel[]).map((level) => (
-                  <button
+                  <button data-testid={`level-button-${level}`}
                     key={level}
                     onClick={() => setActiveFloor(level)}
                     className={[
@@ -70,7 +70,7 @@ export const ParkingMap: React.FC = () => {
               </div>
 
               {/* Close */}
-              <button
+              <button data-testid="parking-close-button"
                 onClick={closeModal}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                 aria-label="Close map"

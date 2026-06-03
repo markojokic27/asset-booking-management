@@ -1,0 +1,53 @@
+package booking;
+import baselogin.BaseLogin;
+import config.ConfigFromFile;
+import constants.CommonConstants;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import static org.testng.AssertJUnit.assertTrue;
+
+
+public class ParkingMapTest extends BaseLogin {
+
+    @BeforeMethod
+    public void setUp() {
+        login();
+        getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.BOOKINGS_URL_EXTENSION);
+        bookingPage.clickParkingCategory();
+    }
+
+    @Test
+    public void clickParkingMapButtonOpenModal() {
+        bookingPage.clickParkingMapButton();
+        assertTrue(isElementVisible(bookingPage.parkingMapModal));
+    }
+
+    @Test
+    public void parkingMapModalShowsLevelMinus1ByDefault() {
+        bookingPage.clickParkingMapButton();
+        assertTrue(isElementVisible(bookingPage.floorLevelMinus1Active));
+    }
+
+    @Test
+    public void clickLevelMinus2SwitchesFloor(){
+        bookingPage.clickParkingMapButton();
+        bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
+        assertTrue(isElementVisible(bookingPage.floorLevelMinus2Active));
+    }
+
+    @Test
+    public void clickLevelMinus1AfterMinus2SwitchesBack() {
+        bookingPage.clickParkingMapButton();
+        bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
+        bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_1);
+        assertTrue(isElementVisible(bookingPage.floorLevelMinus1Active));
+    }
+
+    @Test
+    public void closeModalWithCloseButton() {
+        bookingPage.clickParkingMapButton();
+        bookingPage.closeParkingMapModal();
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
+    }
+}

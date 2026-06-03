@@ -30,6 +30,13 @@ public class BookingPage extends CommonMethods {
 
     public By meetingRoomCategoryCard = By.cssSelector("[data-testid='category-card-meeting room']");
 
+    // Parking map
+    public By parkingMapButton = By.cssSelector("[data-testid='parking-map-button']");
+    public By parkingMapModal = By.cssSelector("[aria-label='Parking map']");
+    public By parkingMapCloseButton = By.cssSelector("[data-testid='parking-close-button']");
+    public By floorLevelMinus1Active = By.cssSelector("[data-testid='level-button--1'].bg-white");
+    public By floorLevelMinus2Active = By.cssSelector("[data-testid='level-button--2'].bg-white");
+
 
 
     public void clickBookButton() {
@@ -117,6 +124,24 @@ public class BookingPage extends CommonMethods {
 
     public void clickMeetingRoomCategory() {
         clickOnElement(meetingRoomCategoryCard);
+    }
+
+    // Parking
+
+    public void clickParkingCategory() {
+        clickOnElement(By.cssSelector("[data-testid='category-card-parking']"));
+    }
+
+    public void clickParkingMapButton() {
+        clickOnElement(parkingMapButton);
+    }
+
+    public void closeParkingMapModal() {
+        clickOnElement(parkingMapCloseButton);
+    }
+
+    public void clickFloorLevel(String level) {
+        clickOnElement(By.cssSelector("[data-testid='level-button-" + level + "']"));
     }
 
 }

@@ -95,6 +95,10 @@ public class CommonConstants{
     public static final String TO_HOUR = "11:00";
     public static final String BOOKED_ASSET_ID = "1";
 
+    // Parking
+    public static final String FLOOR_LEVEL_MINUS_1 = "-1";
+    public static final String FLOOR_LEVEL_MINUS_2 = "-2";
+
     public static final String BROWSER = "BROWSER";
 
     // Drivers constants
