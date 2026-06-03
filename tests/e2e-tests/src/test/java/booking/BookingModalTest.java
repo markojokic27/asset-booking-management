@@ -38,25 +38,23 @@ public class BookingModalTest extends BaseLogin {
     }
 
     @Test
-    public void bookButtonIsEnabledAfterSelectingDateOnHourlyAsset() throws InterruptedException{
+    public void bookButtonIsEnabledAfterSelectingDateOnHourlyAsset() {
         bookingPage.clickMeetingRoomCategory();
         bookingPage.clickBookButton();
         bookingPage.enterFromDate(CommonConstants.DATE_FUTURE);
         bookingPage.clickCalendarDate(CommonConstants.DATE_FUTURE);
         bookingPage.selectFromHour(CommonConstants.FROM_HOUR);
         bookingPage.selectToHour(CommonConstants.TO_HOUR);
-        Thread.sleep(2000);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
 
     @Test
-    public void successfulBookingLaptopAddsEventToCalendar() throws InterruptedException{
+    public void successfulBookingLaptopAddsEventToCalendar(){
         bookingPage.clickBookButton();
         bookingPage.enterFromDate(CommonConstants.FUTURE_DATE);
         bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE);
         bookingPage.clickBookAssetButton();
-        Thread.sleep(2000);
         assertTrue(bookingPage.isCalendarVisible());
     }
 
@@ -70,5 +68,11 @@ public class BookingModalTest extends BaseLogin {
         bookingPage.selectToHour(CommonConstants.TO_HOUR);
         bookingPage.clickBookAssetButton();
         assertTrue(bookingPage.isCalendarVisible());
+    }
+
+    @Test
+    public void bookNowIsDisabledForInactiveAsset() {
+        bookingPage.clickBookButtonForInactiveAsset();
+        assertFalse(bookingPage.isBookAssetButtonEnabled());
     }
 }

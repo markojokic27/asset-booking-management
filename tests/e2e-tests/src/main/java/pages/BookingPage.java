@@ -2,7 +2,6 @@ package pages;
 
 import commonmethods.CommonMethods;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 public class BookingPage extends CommonMethods {
 
@@ -10,6 +9,7 @@ public class BookingPage extends CommonMethods {
         super();
     }
 
+    // Locators
     public By bookButton = By.cssSelector("[data-testid='book-button']");
     public By searchField = By.cssSelector("[data-testid='search-input']");
     public By resetFiltersButton = By.cssSelector("[data-testid='reset-filters-button']");
@@ -36,8 +36,12 @@ public class BookingPage extends CommonMethods {
     public By parkingMapCloseButton = By.cssSelector("[data-testid='parking-close-button']");
     public By floorLevelMinus1Active = By.cssSelector("[data-testid='level-button--1'].bg-white");
     public By floorLevelMinus2Active = By.cssSelector("[data-testid='level-button--2'].bg-white");
+    public By categoryParkingCard = By.cssSelector("[data-testid='category-card-parking']");
 
-
+    // Parking filter
+    private By calendarCellLocator(String dateStr) {
+        return By.cssSelector("[data-date='" + dateStr + "']");
+    }
 
     public void clickBookButton() {
         clickOnElement(bookButton);
@@ -74,44 +78,23 @@ public class BookingPage extends CommonMethods {
         clickOnElement(toHourSelect);
         selectByVisibleText(toHourSelect, hour);
         clickOnElement(toHourSelect);
-
-    }
-
-    // Book asset button
-    public boolean isBookAssetButtonEnabled() {
-        try {
-            WebElement btn = getDriver().findElement(bookAssetButton);
-            String disabled = btn.getAttribute("disabled");
-            return disabled == null || disabled.equals("false");
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     // Calendar
     public boolean isCalendarVisible() {
         return isElementVisible(calendar);
     }
+
     public void clickCalendarDate(String dateStr) {
-        clickOnElement(By.cssSelector("[data-date='" + dateStr + "']"));
+        clickOnElement(calendarCellLocator(dateStr));
     }
 
     public boolean isCalendarCellSelected(String dateStr) {
-        try {
-            String classes = getDriver().findElement(By.cssSelector("[data-date='" + dateStr + "']")).getAttribute("class");
-            return classes != null && classes.contains("ring-2");
-        } catch (Exception e) {
-            return false;
-        }
+        return elementHasClass(calendarCellLocator(dateStr), "ring-2");
     }
 
     public boolean isCalendarCellPast(String dateStr) {
-        try {
-            String classes = getDriver().findElement(By.cssSelector("[data-date='" + dateStr + "']")).getAttribute("class");
-            return classes != null && classes.contains("opacity-60");
-        } catch (Exception e) {
-            return false;
-        }
+        return elementHasClass(calendarCellLocator(dateStr), "opacity-60");
     }
 
     public void clickNextMonth() {
@@ -122,14 +105,19 @@ public class BookingPage extends CommonMethods {
         clickOnElement(calendarPrev);
     }
 
+    // Book asset button
+    public boolean isBookAssetButtonEnabled() {
+        return isElementEnabled(bookAssetButton);
+    }
+
+    // Meeting room
     public void clickMeetingRoomCategory() {
         clickOnElement(meetingRoomCategoryCard);
     }
 
     // Parking
-
     public void clickParkingCategory() {
-        clickOnElement(By.cssSelector("[data-testid='category-card-parking']"));
+        clickOnElement(categoryParkingCard);
     }
 
     public void clickParkingMapButton() {
@@ -144,4 +132,7 @@ public class BookingPage extends CommonMethods {
         clickOnElement(By.cssSelector("[data-testid='level-button-" + level + "']"));
     }
 
+    public void clickBookButtonForInactiveAsset() {
+        clickOnElement(By.xpath("//td[normalize-space()='Inactive']/following-sibling::td//button"));
+    }
 }

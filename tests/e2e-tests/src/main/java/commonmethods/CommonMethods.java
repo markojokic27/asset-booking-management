@@ -74,6 +74,23 @@ public class CommonMethods {
             log.error("click on element failed", e);
         }
     }
+    protected boolean isElementEnabled(By locator) {
+        try {
+            return driver.findElement(locator).isEnabled();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    protected boolean elementHasClass(By locator, String cssClass) {
+        try {
+            String classes = driver.findElement(locator).getAttribute("class");
+            return classes != null && classes.contains(cssClass);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     public static boolean isElementVisible(By locator) {
         try {
