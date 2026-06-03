@@ -15,6 +15,7 @@ import com.example.assetbookingmanagement.core.ui.components.Header
 import com.example.assetbookingmanagement.features.asset.ui.AssetDetailsScreen
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
 import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
+import com.example.assetbookingmanagement.features.booking.ui.BookingSuccessScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
 import com.example.assetbookingmanagement.features.home.ui.HomeScreen
 import com.example.assetbookingmanagement.features.user.ui.ProfileScreen
@@ -29,13 +30,16 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
     val showBottomBar =
         isBottomNavRoute(currentRoute) ||
             currentRoute == Routes.ASSET_DETAILS ||
-            currentRoute == Routes.CREATE_BOOKING
+            currentRoute == Routes.CREATE_BOOKING ||
+            currentRoute == Routes.BOOKING_SUCCESS
 
     val headerTitle = when (currentRoute) {
         Routes.HOME -> "Home"
         Routes.ASSETS -> "Assets"
         Routes.BOOKINGS -> "Bookings"
         Routes.PROFILE -> "Profile"
+        Routes.CREATE_BOOKING -> "Create booking"
+        Routes.BOOKING_SUCCESS -> "Booking status"
         else -> ""
     }
     Scaffold(
@@ -127,9 +131,15 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                         navController.popBackStack()
                     },
                     onBookNowClick = {
-                        navController.navigateTopLevel(Routes.BOOKINGS)
+                        navController.navigate(Routes.BOOKING_SUCCESS) {
+                            popUpTo(Routes.CREATE_BOOKING) { inclusive = true }
+                        }
                     }
                 )
+            }
+
+            composable(Routes.BOOKING_SUCCESS) {
+                BookingSuccessScreen()
             }
         }
     }

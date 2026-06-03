@@ -9,6 +9,7 @@ object Routes {
     const val BOOKINGS = "bookings"
     const val PROFILE = "profile"
     const val CREATE_BOOKING = "create_booking/{assetId}"
+    const val BOOKING_SUCCESS = "booking_success"
 
     fun assetDetails(assetId: Long) = "asset_details/$assetId"
 
