@@ -1,6 +1,6 @@
 // external imports
-import { useCallback } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // components
@@ -16,17 +16,47 @@ import { isManager } from '../features/user/utilis/users';
 // Approvals page
 export default function Approvals() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { bookingId } = useParams();
 
   const { user, isLoading } = useCurrentUser();
   const canFetch = !isLoading && user != null && isManager(user);
   const { bookings, loading, error, refetch } = usePendingBookings(user, canFetch);
 
+  const selectedBooking = useMemo(
+    () =>
+      bookingId
+        ? bookings.find((booking) => String(booking.id) === bookingId) ?? null
+        : null,
+    [bookings, bookingId]
+  );
+
+  useEffect(() => {
+    if (bookingId && !loading && !isLoading && !selectedBooking) {
+      navigate('/approvals', { replace: true });
+    }
+  }, [bookingId, loading, isLoading, selectedBooking, navigate]);
+
   const handleApprovalSuccess = useCallback(async () => {
     await refetch();
-  }, [refetch]);
+    if (bookingId) {
+      navigate('/approvals', { replace: true });
+    }
+  }, [refetch, bookingId, navigate]);
 
   const { approve, reject, processingId, actionError } =
     useBookingApproval(handleApprovalSuccess);
+
+  const handleOpenBooking = useCallback(
+    (id: number | string) => {
+      navigate(`/approvals/${id}`);
+    },
+    [navigate]
+  );
+
+  const handleCloseBooking = useCallback(() => {
+    navigate('/approvals');
+  }, [navigate]);
 
   if (!isLoading && !isManager(user)) {
     return <Navigate to="/bookings" replace />;
@@ -52,8 +82,11 @@ export default function Approvals() {
           bookings={bookings}
           isLoading={loading || isLoading}
           error={error || null}
-          onApprove={(bookingId) => void approve(bookingId)}
-          onReject={(bookingId) => void reject(bookingId)}
+          selectedBooking={selectedBooking}
+          onOpenBooking={handleOpenBooking}
+          onCloseBooking={handleCloseBooking}
+          onApprove={(id) => void approve(id)}
+          onReject={(id) => void reject(id)}
           processingId={processingId}
           actionError={actionError || null}
         />

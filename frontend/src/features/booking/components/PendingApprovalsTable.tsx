@@ -1,5 +1,5 @@
 // external packages
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
@@ -19,6 +19,9 @@ type Props = {
   bookings: BookingWithRelations[];
   isLoading?: boolean;
   error?: string | null;
+  selectedBooking: BookingWithRelations | null;
+  onOpenBooking: (bookingId: number | string) => void;
+  onCloseBooking: () => void;
   onApprove: (bookingId: number) => void;
   onReject: (bookingId: number) => void;
   processingId?: number | null;
@@ -30,53 +33,40 @@ export function PendingApprovalsTable({
   bookings,
   isLoading,
   error,
+  selectedBooking,
+  onOpenBooking,
+  onCloseBooking,
   onApprove,
   onReject,
   processingId = null,
   actionError = null,
 }: Props) {
   const { t } = useTranslation();
-  const [selectedBooking, setSelectedBooking] =
-    useState<BookingWithRelations | null>(null);
-
-  useEffect(() => {
-    if (
-      selectedBooking &&
-      !bookings.some((booking) => booking.id === selectedBooking.id)
-    ) {
-      setSelectedBooking(null);
-    }
-  }, [bookings, selectedBooking]);
 
   const columns: TableColumn<BookingWithRelations>[] = useMemo(
     () => [
-      // booking id column
       {
         key: 'id',
         header: t('approvals.table.bookingId'),
         accessor: 'id',
         cellClassName: 'font-medium',
       },
-      // user column
       {
         key: 'user',
         header: t('approvals.table.user'),
         render: (booking) => getFullName(booking.user),
       },
-      // asset column
       {
         key: 'asset',
         header: t('approvals.table.asset'),
         render: (booking) => booking.asset.name,
       },
-      // time column
       {
         key: 'time',
         header: t('approvals.table.time'),
         render: (booking) =>
           formatBookingTime(booking.bookingStart, booking.bookingEnd),
       },
-      // actions column
       {
         key: 'actions',
         header: (
@@ -100,13 +90,12 @@ export function PendingApprovalsTable({
 
   return (
     <>
-      {/* pending approvals table */}
       <Table
         data={bookings}
         columns={columns}
         getRowKey={(booking) => String(booking.id)}
         className="w-full"
-        onRowClick={(booking) => setSelectedBooking(booking)}
+        onRowClick={(booking) => onOpenBooking(booking.id)}
         emptyMessage={
           isLoading
             ? t('approvals.loading')
@@ -116,10 +105,9 @@ export function PendingApprovalsTable({
         }
       />
 
-      {/* pending approval details modal */}
       <PendingApprovalDetailsModal
         booking={selectedBooking}
-        onClose={() => setSelectedBooking(null)}
+        onClose={onCloseBooking}
         onApprove={onApprove}
         onReject={onReject}
         processingId={processingId}

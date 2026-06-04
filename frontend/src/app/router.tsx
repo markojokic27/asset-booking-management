@@ -35,6 +35,7 @@ export const router = createBrowserRouter([
           { path: 'users', element: <Users /> },
           { path: 'categories', element: <AssetCategories /> },
           { path: 'approvals', element: <Approvals /> },
+          { path: 'approvals/:bookingId', element: <Approvals /> },
           { path: 'account-info', element: <AccountInfo /> },
           { path: 'report', element: <Report /> },
         ],
