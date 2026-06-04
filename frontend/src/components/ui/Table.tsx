@@ -18,6 +18,7 @@ export type TableProps<T> = {
   className?: string;
   rowClassName?: string | ((row: T, index: number) => string | undefined);
   emptyMessage?: React.ReactNode;
+  onRowClick?: (row: T, index: number) => void;
 };
 
 const tableContainerClassName =
@@ -54,6 +55,7 @@ export function Table<T>({
   className,
   rowClassName,
   emptyMessage,
+  onRowClick,
 }: TableProps<T>) {
   const { t } = useTranslation();
   const resolvedEmptyMessage = emptyMessage ?? t('ui.table.emptyMessage');
@@ -85,10 +87,19 @@ export function Table<T>({
                   key={getRowKey(row, index)}
                   className={twMerge(
                     defaultTableRowClassName,
+                    onRowClick && 'cursor-pointer',
                     typeof rowClassName === 'function'
                       ? rowClassName(row, index)
                       : rowClassName
                   )}
+                  // added row click for viewing the booking details on approvals page
+                  onClick={
+                    onRowClick
+                      ? () => {
+                          onRowClick(row, index);
+                        }
+                      : undefined
+                  }
                 >
                   {columns.map((column) => (
                     <td

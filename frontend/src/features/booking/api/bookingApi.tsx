@@ -79,3 +79,19 @@ export const createBooking = async (bookingData: CreateBookingDto) => {
   const res = await api.post<CreateBookingDto>('/bookings', bookingData);
   return res.data;
 };
+
+// approve booking
+export const approveBooking = async (bookingId: number) => {
+  const res = await api.post<BookingWithRelations>(
+    `/bookings/${bookingId}/approve`
+  );
+  return res.data;
+};
+
+// reject booking
+export const rejectBooking = async (bookingId: number) => {
+  const res = await api.post<BookingWithRelations>(
+    `/bookings/${bookingId}/reject`
+  );
+  return res.data;
+};

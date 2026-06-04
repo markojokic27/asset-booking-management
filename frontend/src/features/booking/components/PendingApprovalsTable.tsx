@@ -1,9 +1,11 @@
 // external packages
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
 import { Table, type TableColumn } from '../../../components/ui/Table';
+import { ApprovalActionButtons } from './ApprovalActionButtons';
+import { PendingApprovalDetailsModal } from './PendingApprovalDetailsModal';
 
 // utils
 import { formatBookingTime } from '../utilis/bookingLogic';
@@ -17,11 +19,34 @@ type Props = {
   bookings: BookingWithRelations[];
   isLoading?: boolean;
   error?: string | null;
+  onApprove: (bookingId: number) => void;
+  onReject: (bookingId: number) => void;
+  processingId?: number | null;
+  actionError?: string | null;
 };
 
-// Pending Approvals Table component
-export function PendingApprovalsTable({ bookings, isLoading, error }: Props) {
+// pending approvals component
+export function PendingApprovalsTable({
+  bookings,
+  isLoading,
+  error,
+  onApprove,
+  onReject,
+  processingId = null,
+  actionError = null,
+}: Props) {
   const { t } = useTranslation();
+  const [selectedBooking, setSelectedBooking] =
+    useState<BookingWithRelations | null>(null);
+
+  useEffect(() => {
+    if (
+      selectedBooking &&
+      !bookings.some((booking) => booking.id === selectedBooking.id)
+    ) {
+      setSelectedBooking(null);
+    }
+  }, [bookings, selectedBooking]);
 
   const columns: TableColumn<BookingWithRelations>[] = useMemo(
     () => [
@@ -51,24 +76,55 @@ export function PendingApprovalsTable({ bookings, isLoading, error }: Props) {
         render: (booking) =>
           formatBookingTime(booking.bookingStart, booking.bookingEnd),
       },
+      // actions column
+      {
+        key: 'actions',
+        header: (
+          <span className="sr-only">{t('approvals.table.actionsSr')}</span>
+        ),
+        headerClassName: 'w-px whitespace-nowrap',
+        cellClassName: 'w-px whitespace-nowrap',
+        render: (booking) => (
+          <ApprovalActionButtons
+            bookingId={Number(booking.id)}
+            onApprove={onApprove}
+            onReject={onReject}
+            processingId={processingId}
+            size="sm"
+          />
+        ),
+      },
     ],
-    [t] // if the translation changes, the columns will be recalculated
+    [t, onApprove, onReject, processingId]
   );
 
   return (
-    // table component
-    <Table
-      data={bookings}
-      columns={columns}
-      getRowKey={(booking) => String(booking.id)}
-      className="w-full"
-      emptyMessage={
-        isLoading
-          ? t('approvals.loading')
-          : error
-            ? error
-            : t('approvals.empty')
-      }
-    />
+    <>
+      {/* pending approvals table */}
+      <Table
+        data={bookings}
+        columns={columns}
+        getRowKey={(booking) => String(booking.id)}
+        className="w-full"
+        onRowClick={(booking) => setSelectedBooking(booking)}
+        emptyMessage={
+          isLoading
+            ? t('approvals.loading')
+            : error
+              ? error
+              : t('approvals.empty')
+        }
+      />
+
+      {/* pending approval details modal */}
+      <PendingApprovalDetailsModal
+        booking={selectedBooking}
+        onClose={() => setSelectedBooking(null)}
+        onApprove={onApprove}
+        onReject={onReject}
+        processingId={processingId}
+        actionError={actionError}
+      />
+    </>
   );
 }

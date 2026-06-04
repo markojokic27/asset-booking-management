@@ -4,9 +4,41 @@
     "bookingId": "Booking ID",
     "user": "User",
     "asset": "Asset",
-    "time": "Booking time"
+    "time": "Booking time",
+    "actionsSr": "Approval actions"
+  },
+  "actions": {
+    "approve": "Approve booking",
+    "reject": "Reject booking",
+    "approveLabel": "Approve",
+    "rejectLabel": "Reject",
+    "processing": "Processing request"
   },
   "loading": "Loading pending bookings...",
   "empty": "No pending bookings.",
-  "error": "Failed to load pending bookings."
+  "error": "Failed to load pending bookings.",
+  "actionError": "Could not update the booking. Please try again.",
+  "modal": {
+    "ariaLabel": "Pending booking details #{{id}}",
+    "title": "Booking #{{id}}",
+    "closeAria": "Close",
+    "cancel": "Close",
+    "sections": {
+      "user": "User",
+      "asset": "Asset",
+      "booking": "Booking",
+      "notes": "Notes"
+    },
+    "fields": {
+      "name": "Name",
+      "role": "Role",
+      "email": "Email",
+      "status": "Status",
+      "category": "Category",
+      "location": "Location",
+      "description": "Description",
+      "bookingId": "Booking ID",
+      "time": "Booking time"
+    }
+  }
 }

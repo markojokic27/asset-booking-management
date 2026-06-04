@@ -4,9 +4,41 @@
     "bookingId": "ID rezervacije",
     "user": "Korisnik",
     "asset": "Imovina",
-    "time": "Vrijeme rezervacije"
+    "time": "Vrijeme rezervacije",
+    "actionsSr": "Akcije odobravanja"
+  },
+  "actions": {
+    "approve": "Odobri rezervaciju",
+    "reject": "Odbij rezervaciju",
+    "approveLabel": "Odobri",
+    "rejectLabel": "Odbij",
+    "processing": "Obrada zahtjeva"
   },
   "loading": "Učitavanje rezervacija na čekanju...",
   "empty": "Nema rezervacija na čekanju.",
-  "error": "Učitavanje rezervacija na čekanju nije uspjelo."
+  "error": "Učitavanje rezervacija na čekanju nije uspjelo.",
+  "actionError": "Rezervacija nije ažurirana. Pokušajte ponovno.",
+  "modal": {
+    "ariaLabel": "Detalji rezervacije na čekanju #{{id}}",
+    "title": "Rezervacija #{{id}}",
+    "closeAria": "Zatvori",
+    "cancel": "Zatvori",
+    "sections": {
+      "user": "Korisnik",
+      "asset": "Imovina",
+      "booking": "Rezervacija",
+      "notes": "Napomene"
+    },
+    "fields": {
+      "name": "Ime",
+      "role": "Uloga",
+      "email": "E-pošta",
+      "status": "Status",
+      "category": "Kategorija",
+      "location": "Lokacija",
+      "description": "Opis",
+      "bookingId": "ID rezervacije",
+      "time": "Vrijeme rezervacije"
+    }
+  }
 }

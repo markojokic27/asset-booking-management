@@ -4,9 +4,41 @@
     "bookingId": "Buchungs-ID",
     "user": "Benutzer",
     "asset": "Asset",
-    "time": "Buchungszeit"
+    "time": "Buchungszeit",
+    "actionsSr": "Freigabeaktionen"
+  },
+  "actions": {
+    "approve": "Buchung genehmigen",
+    "reject": "Buchung ablehnen",
+    "approveLabel": "Genehmigen",
+    "rejectLabel": "Ablehnen",
+    "processing": "Anfrage wird bearbeitet"
   },
   "loading": "Ausstehende Buchungen werden geladen...",
   "empty": "Keine ausstehenden Buchungen.",
-  "error": "Ausstehende Buchungen konnten nicht geladen werden."
+  "error": "Ausstehende Buchungen konnten nicht geladen werden.",
+  "actionError": "Die Buchung konnte nicht aktualisiert werden. Bitte erneut versuchen.",
+  "modal": {
+    "ariaLabel": "Details zur ausstehenden Buchung #{{id}}",
+    "title": "Buchung #{{id}}",
+    "closeAria": "Schließen",
+    "cancel": "Schließen",
+    "sections": {
+      "user": "Benutzer",
+      "asset": "Asset",
+      "booking": "Buchung",
+      "notes": "Notizen"
+    },
+    "fields": {
+      "name": "Name",
+      "role": "Rolle",
+      "email": "E-Mail",
+      "status": "Status",
+      "category": "Kategorie",
+      "location": "Standort",
+      "description": "Beschreibung",
+      "bookingId": "Buchungs-ID",
+      "time": "Buchungszeit"
+    }
+  }
 }

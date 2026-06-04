@@ -1,44 +1,44 @@
 // external packages
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // api
 import { getPendingBookings } from '../api/bookingApi';
 
+// utils
+import { filterPendingBookingsForApprover } from '../utilis/approvalFilter';
+
 // types
 import type { BookingWithRelations } from '../types';
+import type { UserDto } from '../../user/types';
 
-export function usePendingBookings(enabled = true) {
+export function usePendingBookings(
+  approver: Pick<UserDto, 'email' | 'role'> | null,
+  enabled = true
+) {
   const { t } = useTranslation();
   const [bookings, setBookings] = useState<BookingWithRelations[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const refetch = useCallback(async () => {
+    if (!enabled || !approver) return;
+
+    try {
+      setLoading(true);
+      setError('');
+      const data = await getPendingBookings();
+      setBookings(filterPendingBookingsForApprover(data.content, approver));
+    } catch {
+      setError(t('approvals.error'));
+    } finally {
+      setLoading(false);
+    }
+  }, [enabled, approver, t]);
+
   useEffect(() => {
-    // check if the component is mounted
-    if (!enabled) return;
+    void refetch();
+  }, [refetch]);
 
-    const fetchBookings = async () => {
-      try {
-        // set the loading state to true
-        setLoading(true);
-        setError('');
-
-        // wait for the bookings to be fetched
-        const data = await getPendingBookings();
-        setBookings(data.content);
-      } catch {
-        // set the error state to the error message
-        setError(t('approvals.error'));
-      } finally {
-        // set the loading state to false
-        setLoading(false);
-      }
-    };
-
-    // fetch the bookings
-    void fetchBookings();
-  }, [enabled, t]);
-
-  return { bookings, loading, error };
+  return { bookings, loading, error, refetch };
 }

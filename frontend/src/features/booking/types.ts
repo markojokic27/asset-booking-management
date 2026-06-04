@@ -34,6 +34,7 @@ export type BookingWithRelations = BookingDto & {
     surname: string;
     email: string;
     role: string;
+    managerEmail: string;
   };
   asset: {
     id: number;
