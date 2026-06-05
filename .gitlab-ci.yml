@@ -144,86 +144,128 @@ frontend:test:
   
 
 
-# playwright:test:
-#   stage: test
-#   image: mcr.microsoft.com/playwright/java:v1.59.0-jammy
-#   needs:
-#     - job: backend:compile
-#       artifacts: true
-#     - job: frontend:compile
-#       artifacts: true
-#   services:
-#     - name: postgres:18
-#       alias: postgres
-#   variables:
-#     E2E_BASE_URL: "http://localhost:5173"
-#     HEADED: "false"
-#     POSTGRES_DB: asset_mgm
-#     POSTGRES_USER: asset_mgm_user
-#     POSTGRES_PASSWORD: $BRUNO_DB_PASSWORD
-#     DB_HOST: postgres
-#     DB_PORT: "5432"
-#     DB_NAME: asset_mgm
-#     DB_USER: asset_mgm_user
-#     DB_PASSWORD: $BRUNO_DB_PASSWORD
-#     JWT_SECRET: $BRUNO_JWT_SECRET
-#     JWT_EXPIRY_SECONDS: "3600"
-#     JWT_REFRESH_SECONDS: "86400"
-#   before_script:
-#     - apt-get update -qq && apt-get install -y maven nodejs npm curl > /dev/null 2>&1
-#     - npm install -g serve --silent > /dev/null 2>&1
-#   script:
-#     # Start backend
-#     - cd backend
-#     - mvn -q spring-boot:run \
-#       -Dspring-boot.run.profiles=dev \
-#       -Dmaven.repo.local=.m2/repository \
-#       -Dspring-boot.run.jvmArguments="-Dlogging.level.root=WARN" \
-#       > /tmp/backend.log 2>&1 &
-#     - echo $! > /tmp/backend.pid
-#     - cd ..
 
-#     # Wait for backend
-#     - |
-#       for i in $(seq 1 40); do
-#         STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/actuator/health || echo "000")
-#         if [ "$STATUS" = "200" ] || [ "$STATUS" = "403" ]; then
-#           echo "Backend is up (HTTP $STATUS)."
-#           break
-#         fi
-#         echo "Not ready (status $STATUS), retry $i/40..."
-#         sleep 3
-#       done
+# ─────────────────────────────────────────
+# PLAYWRIGHT E2E (full-stack: backend + served frontend)
+# ─────────────────────────────────────────
+playwright:e2e:
+  stage: test
+  image: mcr.microsoft.com/playwright/java:v1.59.0-jammy
+  needs:
+    - job: backend:compile
+      artifacts: true
+    - job: frontend:compile
+      artifacts: true
+  services:
+    - name: postgres:18
+      alias: postgres
+  variables:
+    E2E_BASE_URL: "http://localhost:5173"
+    HEADLESS: "true"
+    POSTGRES_DB: asset_mgm
+    POSTGRES_USER: asset_mgm_user
+    POSTGRES_PASSWORD: $BRUNO_DB_PASSWORD
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_NAME: asset_mgm
+    DB_USER: asset_mgm_user
+    DB_PASSWORD: $BRUNO_DB_PASSWORD
+    JWT_SECRET: $BRUNO_JWT_SECRET
+    JWT_EXPIRY_SECONDS: "3600"
+    JWT_REFRESH_SECONDS: "86400"
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq curl python3
+  script:
+    # --- 1. Start backend ---
+    - |
+      cd backend
+      mvn -q spring-boot:run \
+        -Dspring-boot.run.profiles=dev \
+        -Dmaven.repo.local=.m2/repository \
+        -Dlogging.level.root=WARN \
+        -Dspring.datasource.url=jdbc:postgresql://postgres:5432/${DB_NAME} \
+        -Dspring.datasource.username=${DB_USER} \
+        -Dspring.datasource.password=${DB_PASSWORD} \
+        -Dapp.jwt.secret=${JWT_SECRET} \
+        -Dapp.jwt.expirySeconds=${JWT_EXPIRY_SECONDS} \
+        -Dapp.jwt.refreshSeconds=${JWT_REFRESH_SECONDS} \
+        -Dmanagement.otlp.metrics.export.enabled=false \
+        > /tmp/backend.log 2>&1 &
+      echo $! > /tmp/backend.pid
+      cd ..
 
-#     # Serve frontend from built dist/
-#     - serve frontend/dist -p 5173 &
-#     - sleep 3
-#     - echo "Frontend is up."
+    # --- 2. Wait for backend on actuator port 8081 (no curl needed) ---
+    - |
+      echo "Waiting for backend on port 8081..."
+      for i in $(seq 1 40); do
+        if (echo > /dev/tcp/localhost/8081) 2>/dev/null; then
+          echo "Backend TCP port 8081 is open (attempt $i). Waiting 2s for actuator readiness..."
+          sleep 2
+          break
+        fi
+        echo "  attempt $i/40 — port not open yet, retrying in 3s..."
+        sleep 3
+        if [ "$i" = "40" ]; then
+          echo "=== BACKEND FAILED TO START ==="
+          cat /tmp/backend.log
+          exit 1
+        fi
+      done
 
-#     # Install Playwright browsers (chromium only, already in MCR image)
-#     - cd tests/e2e-tests
-#     - mvn -q exec:java -e \
-#       -Dexec.mainClass=com.microsoft.playwright.CLI \
-#       -Dexec.args="install chromium"
+    # --- 3. Serve frontend with Python (no npm/node needed) ---
+    - |
+      echo "Serving frontend on :5173..."
+      cd frontend/dist
+      python3 -m http.server 5173 > /tmp/frontend.log 2>&1 &
+      echo $! > /tmp/frontend.pid
+      cd ../..
 
-#     # Run only Playwright tests (not Selenium)
-#     - mvn test -Dtest="playwright.*"
-#         -DE2E_BASE_URL=$E2E_BASE_URL
-#         -DHEADED=$HEADED
+      echo "Waiting for frontend..."
+      for i in $(seq 1 20); do
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5173/ || echo "000")
+        if [ "$STATUS" != "000" ]; then
+          echo "Frontend ready (HTTP $STATUS) at attempt $i."
+          break
+        fi
+        echo "  attempt $i/20 — not ready yet, retrying..."
+        sleep 1
+        if [ "$i" = "20" ]; then
+          echo "=== FRONTEND FAILED TO START ==="
+          cat /tmp/frontend.log
+          exit 1
+        fi
+      done
 
-#   after_script:
-#     - kill $(cat /tmp/backend.pid) 2>/dev/null || true
+    # --- 4. Run E2E tests ---
+    - |
+      cd tests/e2e-tests
+      mvn test \
+        -DE2E_BASE_URL="${E2E_BASE_URL}" \
+        -DHEADED="${HEADLESS}" \
+        -Dmaven.repo.local=../../backend/.m2/repository
 
-#   artifacts:
-#     when: always
-#     reports:
-#       junit: tests/e2e-tests/target/surefire-reports/TEST-*.xml
-#     paths:
-#       - tests/e2e-tests/target/surefire-reports/
+  after_script:
+    - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+    - kill $(cat /tmp/frontend.pid 2>/dev/null) 2>/dev/null || true
 
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == "develop"
-#     - if: $CI_COMMIT_BRANCH == "main"
+  cache:
+    key: maven-$CI_PROJECT_ID
+    paths:
+      - backend/.m2/repository/
+    policy: pull
+
+  artifacts:
+    when: always
+    reports:
+      junit: tests/e2e-tests/target/surefire-reports/TEST-*.xml
+    paths:
+      - tests/e2e-tests/target/surefire-reports/
+    expire_in: 1 week
+
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
 
 
 # ─────────────────────────────────────────
