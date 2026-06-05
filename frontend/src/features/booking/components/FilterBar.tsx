@@ -16,7 +16,7 @@ type Filters = {
   toHour: string;
 };
 
-type Variant = 'DAY' | 'HOUR';
+type Variant = 'DAY' | 'HOUR' | 'DAY-CHECK';
 
 type Props = {
   filters: Filters;
@@ -88,7 +88,7 @@ export function FiltersBar({
             />
           </div>
         </>
-      ) : (
+      ) : variant === 'DAY' ? (
         <DateInput
           id="date"
           label={t('ui.filters.date')}
@@ -96,6 +96,23 @@ export function FiltersBar({
           onChange={(v) => update({ fromDate: v })}
           className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-start-1 lg:w-1/2"
         />
+      ) : (
+        <>
+          <DateInput
+            id="date"
+            label={t('ui.filters.date')}
+            value={filters.fromDate}
+            onChange={(v) => update({ fromDate: v })}
+            className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
+          />
+          <DateInput
+            id="date"
+            label={t('ui.filters.date')}
+            value={filters.toDate}
+            onChange={(v) => update({ toDate: v })}
+            className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
+          />
+        </>
       )}
 
       {showSearch && (
