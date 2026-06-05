@@ -1,6 +1,5 @@
 // Types
 import type {
-  BookingDto,
   BookingWithRelations,
   CreateBookingDto,
 } from '../types';
@@ -15,11 +14,14 @@ export type PageResponse<T> = {
   number: number;
 };
 
-export const getAllBookings = async (page = 0, size = 10) => {
-  const res = await api.get<PageResponse<BookingDto>>('/bookings', {
-    params: { page, size },
+export const getAllBookings = async (
+  page = 0,
+  size = 10,
+  sort = 'bookingStart,desc'
+) => {
+  const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
+    params: { page, size, sort },
   });
-  console.log('res', res);
   return res.data;
 };
 

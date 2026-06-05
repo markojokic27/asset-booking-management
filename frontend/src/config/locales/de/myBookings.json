@@ -1,4 +1,13 @@
 {
   "title": "Meine Buchungen",
-  "titleAdmin": "Alle Buchungen"
+  "titleAdmin": "Alle Buchungen",
+  "table": {
+    "user": "Benutzer",
+    "asset": "Asset",
+    "time": "Buchungszeit",
+    "status": "Status"
+  },
+  "loading": "Buchungen werden geladen...",
+  "empty": "Keine Buchungen gefunden.",
+  "error": "Buchungen konnten nicht geladen werden."
 }

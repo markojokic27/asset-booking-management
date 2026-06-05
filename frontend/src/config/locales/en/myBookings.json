@@ -1,4 +1,13 @@
 {
   "title": "My Bookings",
-  "titleAdmin": "All Bookings"
+  "titleAdmin": "All Bookings",
+  "table": {
+    "user": "User",
+    "asset": "Asset",
+    "time": "Booking time",
+    "status": "Status"
+  },
+  "loading": "Loading bookings...",
+  "empty": "No bookings found.",
+  "error": "Failed to load bookings."
 }

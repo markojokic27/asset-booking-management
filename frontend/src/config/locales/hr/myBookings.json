@@ -1,4 +1,13 @@
 {
   "title": "Moje rezervacije",
-  "titleAdmin": "Sve rezervacije"
+  "titleAdmin": "Sve rezervacije",
+  "table": {
+    "user": "Korisnik",
+    "asset": "Asset",
+    "time": "Vrijeme rezervacije",
+    "status": "Status"
+  },
+  "loading": "Učitavanje rezervacija...",
+  "empty": "Nema rezervacija.",
+  "error": "Učitavanje rezervacija nije uspjelo."
 }
