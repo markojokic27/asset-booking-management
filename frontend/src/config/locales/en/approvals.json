@@ -1,5 +1,8 @@
 {
   "title": "Booking Approvals",
+  "search": {
+    "placeholder": "Search bookings..."
+  },
   "table": {
     "bookingId": "Booking ID",
     "user": "User",

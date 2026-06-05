@@ -1,5 +1,8 @@
 {
   "title": "Buchungsfreigaben",
+  "search": {
+    "placeholder": "Buchungen suchen..."
+  },
   "table": {
     "bookingId": "Buchungs-ID",
     "user": "Benutzer",

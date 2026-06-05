@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { filterPendingBookingsForApprover } from '../../features/booking/utilis/approvalFilter';
+import {
+  filterPendingBookingsBySearch,
+  filterPendingBookingsForApprover,
+} from '../../features/booking/utilis/approvalFilter';
 import type { BookingWithRelations } from '../../features/booking/types';
 
 const baseBooking = (managerEmail: string): BookingWithRelations =>
@@ -59,5 +62,63 @@ describe('filterPendingBookingsForApprover', () => {
     });
 
     expect(result).toHaveLength(2);
+  });
+});
+
+describe('filterPendingBookingsBySearch', () => {
+  it('returns all bookings when search is empty', () => {
+    const bookings = [baseBooking('mark.jones@example.com')];
+
+    expect(filterPendingBookingsBySearch(bookings, '')).toHaveLength(1);
+    expect(filterPendingBookingsBySearch(bookings, '   ')).toHaveLength(1);
+  });
+
+  it('filters by booking id', () => {
+    const bookings = [
+      { ...baseBooking('mark.jones@example.com'), id: '12' },
+      { ...baseBooking('mark.jones@example.com'), id: '99' },
+    ] as BookingWithRelations[];
+
+    const result = filterPendingBookingsBySearch(bookings, '12');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('12');
+  });
+
+  it('filters by user name and email', () => {
+    const bookings = [
+      baseBooking('mark.jones@example.com'),
+      {
+        ...baseBooking('mark.jones@example.com'),
+        user: {
+          ...baseBooking('mark.jones@example.com').user,
+          name: 'Marko',
+          surname: 'Babic',
+          email: 'marko@example.com',
+        },
+      },
+    ] as BookingWithRelations[];
+
+    expect(filterPendingBookingsBySearch(bookings, 'jane')).toHaveLength(1);
+    expect(filterPendingBookingsBySearch(bookings, 'marko@')).toHaveLength(1);
+    expect(filterPendingBookingsBySearch(bookings, 'babic')).toHaveLength(1);
+  });
+
+  it('filters by asset name', () => {
+    const bookings = [
+      baseBooking('mark.jones@example.com'),
+      {
+        ...baseBooking('mark.jones@example.com'),
+        asset: {
+          ...baseBooking('mark.jones@example.com').asset,
+          name: 'Projector',
+        },
+      },
+    ] as BookingWithRelations[];
+
+    const result = filterPendingBookingsBySearch(bookings, 'projector');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].asset.name).toBe('Projector');
   });
 });

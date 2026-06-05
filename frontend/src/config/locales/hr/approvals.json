@@ -1,5 +1,8 @@
 {
   "title": "Odobravanje rezervacija",
+  "search": {
+    "placeholder": "Pretraži rezervacije..."
+  },
   "table": {
     "bookingId": "ID rezervacije",
     "user": "Korisnik",

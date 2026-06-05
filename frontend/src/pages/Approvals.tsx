@@ -1,16 +1,18 @@
 // external imports
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // components
 import { LayoutColumn } from '../components/layout/Layout';
+import { SearchInput } from '../components/ui/SearchBar';
 import { PendingApprovalsTable } from '../features/booking/components/PendingApprovalsTable';
 
 // hooks
 import { useBookingApproval } from '../features/booking/hooks/useBookingApproval';
 import { usePendingBookings } from '../features/booking/hooks/usePendingBookings';
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { filterPendingBookingsBySearch } from '../features/booking/utilis/approvalFilter';
 import { isManager } from '../features/user/utilis/users';
 
 // Approvals page
@@ -22,6 +24,13 @@ export default function Approvals() {
   const { user, isLoading } = useCurrentUser();
   const canFetch = !isLoading && user != null && isManager(user);
   const { bookings, loading, error, refetch } = usePendingBookings(user, canFetch);
+  const [search, setSearch] = useState('');
+
+  // filtered bookings for the approvals page
+  const filteredBookings = useMemo(
+    () => filterPendingBookingsBySearch(bookings, search),
+    [bookings, search]
+  );
 
   const selectedBooking = useMemo(
     () =>
@@ -78,8 +87,18 @@ export default function Approvals() {
 
         <div className="h-px w-full bg-(--color-table-border)" />
 
+        {/* search input for the approvals page */}
+        <div className="flex w-full items-center justify-end">
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder={t('approvals.search.placeholder')}
+            className="w-70"
+          />
+        </div>
+
         <PendingApprovalsTable
-          bookings={bookings}
+          bookings={filteredBookings}
           isLoading={loading || isLoading}
           error={error || null}
           selectedBooking={selectedBooking}

@@ -1,5 +1,5 @@
 // external imports
-import { isAdmin } from '../../user/utilis/users';
+import { getFullName, isAdmin } from '../../user/utilis/users';
 
 // types
 import type { UserDto } from '../../user/types';
@@ -24,5 +24,26 @@ export function filterPendingBookingsForApprover(
   return bookings.filter(
     (booking) =>
       booking.user.managerEmail?.trim().toLowerCase() === approverEmail
+  );
+}
+
+// filter pending bookings by search
+export function filterPendingBookingsBySearch(
+  bookings: BookingWithRelations[],
+  search: string
+): BookingWithRelations[] {
+  // get the search query
+  const q = search.trim().toLowerCase();
+  if (!q) {
+    return bookings;
+  }
+
+  return bookings.filter(
+    (booking) =>
+      // filter by booking id, user name, user email, and asset name
+      String(booking.id).includes(q) ||
+      getFullName(booking.user).toLowerCase().includes(q) ||
+      booking.user.email.toLowerCase().includes(q) ||
+      booking.asset.name.toLowerCase().includes(q)
   );
 }
