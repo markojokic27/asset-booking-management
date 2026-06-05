@@ -26,7 +26,7 @@ type Props = {
   selectedDate?: string;
   onDateClick?: (date: string) => void;
   variant?: 'HOUR' | 'DAY';
-  setSelectedBooking: (booking: BookingWithRelations | null) => void;
+  setSelectedBooking?: (booking: BookingWithRelations | null) => void;
 };
 
 export function AvailabilityCalendar({
@@ -56,11 +56,11 @@ export function AvailabilityCalendar({
 
   const handleEventClick = React.useCallback(
     (info: any) => {
-      console.log('BBB', info.event.extendedProps.booking);
-      setSelectedBooking(info.event.extendedProps.booking);
+      setSelectedBooking?.(info.event.extendedProps?.booking ?? null);
     },
     [setSelectedBooking]
   );
+
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">
