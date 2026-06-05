@@ -11,6 +11,7 @@ import enBookings from '../config/locales/en/bookings.json';
 import enDepartments from '../config/locales/en/departments.json';
 import enReport from '../config/locales/en/report.json';
 import enApprovals from '../config/locales/en/approvals.json';
+import enMyBookings from '../config/locales/en/myBookings.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -27,6 +28,7 @@ declare module 'i18next' {
         departments: typeof enDepartments;
         report: typeof enReport;
         approvals: typeof enApprovals;
+        myBookings: typeof enMyBookings;
       };
     };
   }

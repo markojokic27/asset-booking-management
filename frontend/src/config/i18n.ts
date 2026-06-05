@@ -12,6 +12,7 @@ import enBookings from './locales/en/bookings.json';
 import enDepartments from './locales/en/departments.json';
 import enReport from './locales/en/report.json';
 import enApprovals from './locales/en/approvals.json';
+import enMyBookings from './locales/en/myBookings.json';
 
 // Croatian translations
 import hrLayout from './locales/hr/layout.json';
@@ -24,6 +25,7 @@ import hrBookings from './locales/hr/bookings.json';
 import hrDepartments from './locales/hr/departments.json';
 import hrReport from './locales/hr/report.json';
 import hrApprovals from './locales/hr/approvals.json';
+import hrMyBookings from './locales/hr/myBookings.json';
 
 // German translations
 import deLayout from './locales/de/layout.json';
@@ -36,6 +38,7 @@ import deBookings from './locales/de/bookings.json';
 import deDepartments from './locales/de/departments.json';
 import deReport from './locales/de/report.json';
 import deApprovals from './locales/de/approvals.json';
+import deMyBookings from './locales/de/myBookings.json';
 
 export const LANGUAGE_STORAGE_KEY = 'language';
 const SUPPORTED_LANGUAGES = ['en', 'hr', 'de'] as const;
@@ -67,6 +70,7 @@ i18next.use(initReactI18next).init({
         bookings: enBookings,
         report: enReport,
         approvals: enApprovals,
+        myBookings: enMyBookings,
         departments: enDepartments,
       },
     },
@@ -81,6 +85,7 @@ i18next.use(initReactI18next).init({
         bookings: hrBookings,
         report: hrReport,
         approvals: hrApprovals,
+        myBookings: hrMyBookings,
         departments: hrDepartments,
       },
     },
@@ -95,6 +100,7 @@ i18next.use(initReactI18next).init({
         bookings: deBookings,
         report: deReport,
         approvals: deApprovals,
+        myBookings: deMyBookings,
         departments: deDepartments,
       },
     },

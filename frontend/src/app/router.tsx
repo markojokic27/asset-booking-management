@@ -14,6 +14,7 @@ import Users from '../pages/Users';
 import AssetCategories from '../pages/AssetCategories';
 import AccountInfo from '../pages/AccountInfo';
 import Report from '../pages/Report';
+import MyBookings from '../pages/MyBookings';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
         children: [
           { path: 'assets', element: <Assets /> },
           { path: 'bookings', element: <Bookings /> },
+          { path: 'my-bookings', element: <MyBookings /> },
           { path: 'assets/:assetId/bookings', element: <BookingsByAsset /> },
           { path: 'users', element: <Users /> },
           { path: 'categories', element: <AssetCategories /> },

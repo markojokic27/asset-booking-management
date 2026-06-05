@@ -14,6 +14,7 @@ import {
   LogoutSharp,
   AccountCircleSharp,
   HowToRegSharp,
+  EventNoteSharp,
 } from '@mui/icons-material';
 import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
 import { getFullName, isAdmin, isManager } from '../../features/user/utilis/users';
@@ -28,6 +29,13 @@ export default function MobileMenu() {
       to: '/bookings',
       label: t('layout.navbar.bookings'),
       icon: CalendarTodaySharp,
+    },
+    {
+      to: '/my-bookings',
+      label: isAdmin(user)
+        ? t('layout.navbar.allBookings')
+        : t('layout.navbar.myBookings'),
+      icon: EventNoteSharp,
     },
     ...(isAdmin(user)
       ? [{ to: '/users', label: t('layout.navbar.users'), icon: PeopleSharp }]

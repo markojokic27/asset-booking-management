@@ -7,6 +7,7 @@ import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import DnsSharpIcon from '@mui/icons-material/DnsSharp';
 import AssessmentSharpIcon from '@mui/icons-material/AssessmentSharp';
 import HowToRegSharpIcon from '@mui/icons-material/HowToRegSharp';
+import EventNoteSharpIcon from '@mui/icons-material/EventNoteSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
@@ -19,6 +20,13 @@ export const Navbar: React.FC = () => {
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
     { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharpIcon },
+    {
+      to: '/my-bookings',
+      label: isAdmin(user)
+        ? t('layout.navbar.allBookings')
+        : t('layout.navbar.myBookings'),
+      icon: EventNoteSharpIcon,
+    },
     ...(isAdmin(user)
       ? [{ to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon }]
       : []),

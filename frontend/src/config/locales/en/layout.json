@@ -3,6 +3,8 @@
     "assets": "Assets",
     "categories": "Categories",
     "bookings": "Bookings",
+    "myBookings": "My Bookings",
+    "allBookings": "All Bookings",
     "users": "Users",
     "account": "Account",
     "report": "Report",

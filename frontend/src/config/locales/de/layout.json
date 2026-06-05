@@ -3,6 +3,8 @@
     "assets": "Inventar",
     "categories": "Kategorien",
     "bookings": "Buchungen",
+    "myBookings": "Meine Buchungen",
+    "allBookings": "Alle Buchungen",
     "users": "Benutzer",
     "account": "Konto",
     "report": "Bericht",

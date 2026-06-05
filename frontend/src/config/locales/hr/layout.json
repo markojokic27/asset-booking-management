@@ -3,6 +3,8 @@
     "assets": "Imovina",
     "categories": "Kategorije",
     "bookings": "Rezervacije",
+    "myBookings": "Moje rezervacije",
+    "allBookings": "Sve rezervacije",
     "users": "Korisnici",
     "account": "Račun",
     "report": "Report",
