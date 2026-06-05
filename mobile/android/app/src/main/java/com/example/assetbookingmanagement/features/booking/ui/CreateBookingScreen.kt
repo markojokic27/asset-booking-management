@@ -31,7 +31,7 @@ import com.example.assetbookingmanagement.core.ui.components.DateTimePicker
 fun CreateBookingScreen(
     assetId: Long,
     onCancelClick: () -> Unit = {},
-    onBookNowClick: () -> Unit = {},
+    onBookNowClick: (assetName: String, fromDate: String, toDate: String) -> Unit = { _, _, _ -> },
     viewModel: CreateBookingViewModel = hiltViewModel()
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingTab.ChooseDate.ordinal) }
@@ -43,7 +43,11 @@ fun CreateBookingScreen(
 
     LaunchedEffect(uiState.bookingCreated) {
         if (uiState.bookingCreated) {
-            onBookNowClick()
+            onBookNowClick(
+                uiState.assetName,
+                uiState.bookingStartDisplay,
+                uiState.bookingEndDisplay
+            )
         }
     }
 

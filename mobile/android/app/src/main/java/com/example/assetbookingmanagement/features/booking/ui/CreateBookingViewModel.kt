@@ -29,6 +29,7 @@ enum class AvailabilityStatus {
 }
 
 data class CreateBookingUiState(
+    val assetName: String = "",
     val bookingPeriod: String? = null,
     val approvalRequired: Boolean? = null,
     val availabilityByDate: Map<Long, AvailabilityStatus> = emptyMap(),
@@ -42,6 +43,8 @@ data class CreateBookingUiState(
     val hasSelectedEndTime: Boolean = false,
     val isSubmitting: Boolean = false,
     val bookingCreated: Boolean = false,
+    val bookingStartDisplay: String = "-",
+    val bookingEndDisplay: String = "-",
     val errorMessage: String? = null
 )
 
@@ -84,6 +87,7 @@ class CreateBookingViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
+                        assetName = asset.name,
                         bookingPeriod = assetCategory.bookingPeriod,
                         approvalRequired = assetCategory.approval,
                         availabilityByDate = availabilityByDate,
@@ -222,6 +226,8 @@ class CreateBookingViewModel @Inject constructor(
                     it.copy(
                         isSubmitting = false,
                         bookingCreated = true,
+                        bookingStartDisplay = startInstant.toBookingDisplayText(isHourlyBooking),
+                        bookingEndDisplay = endInstant.toBookingDisplayText(isHourlyBooking),
                         errorMessage = null
                     )
                 }

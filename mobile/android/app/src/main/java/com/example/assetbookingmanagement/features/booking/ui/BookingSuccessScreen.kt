@@ -27,7 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BookingSuccessScreen() {
+fun BookingSuccessScreen(
+    assetName: String,
+    fromDate: String,
+    toDate: String
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +72,15 @@ fun BookingSuccessScreen() {
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         Spacer(modifier = Modifier.height(24.dp))
-        //TODO: Fetch and display booking details
+        Text(
+            text = assetName.ifBlank { "-" },
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         BookingSummaryRow(
             icon = {
                 Icon(
@@ -78,7 +90,7 @@ fun BookingSuccessScreen() {
                 )
             },
             label = "From",
-            value = "-"
+            value = fromDate
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -92,7 +104,7 @@ fun BookingSuccessScreen() {
                 )
             },
             label = "To",
-            value = "-"
+            value = toDate
         )
     }
 }

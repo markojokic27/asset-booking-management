@@ -130,16 +130,42 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                     onCancelClick = {
                         navController.popBackStack()
                     },
-                    onBookNowClick = {
-                        navController.navigate(Routes.BOOKING_SUCCESS) {
+                    onBookNowClick = { assetName, fromDate, toDate ->
+                        navController.navigate(
+                            Routes.bookingSuccess(
+                                assetName = assetName,
+                                fromDate = fromDate,
+                                toDate = toDate
+                            )
+                        ) {
                             popUpTo(Routes.CREATE_BOOKING) { inclusive = true }
                         }
                     }
                 )
             }
 
-            composable(Routes.BOOKING_SUCCESS) {
-                BookingSuccessScreen()
+            composable(
+                route = Routes.BOOKING_SUCCESS,
+                arguments = listOf(
+                    navArgument("assetName") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("fromDate") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("toDate") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    }
+                )
+            ) { backStackEntry ->
+                BookingSuccessScreen(
+                    assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
+                    fromDate = backStackEntry.arguments?.getString("fromDate") ?: "-",
+                    toDate = backStackEntry.arguments?.getString("toDate") ?: "-"
+                )
             }
         }
     }
