@@ -34,6 +34,10 @@
     "toTime": "Do",
     "date": "Datum"
   },
+  "notes": {
+    "label": "Bilješke",
+    "placeholder": "Unesite bilješke..."
+  },
   "dateTimeInput": {
     "hourAriaSuffix": "sat"
   },

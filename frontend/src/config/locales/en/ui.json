@@ -34,6 +34,10 @@
     "toTime": "To time",
     "date": "Date"
   },
+    "notes": {
+    "label": "Notes",
+    "placeholder": "Enter notes..."
+  },
   "dateTimeInput": {
     "hourAriaSuffix": "hour"
   },

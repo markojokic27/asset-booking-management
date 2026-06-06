@@ -10,27 +10,22 @@ import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
 
 // Utils
 import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
+import { useTranslation } from 'react-i18next';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
 import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
+import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
 
-// const STATUS_COLORS: Record<string, string> = {
-//   APPROVED: '#22c55e',
-//   PENDING: '#f59e0b',
-//   REJECTED: '#ef4444',
-//   CANCELLED: '#6b7280',
-// };
-
 export default function BookingsByAsset() {
   const { assetId } = useParams();
+  const { t } = useTranslation();
 
   const { filters, setFilters, handleCalendarDateClick } = useBookingFilters();
 
@@ -70,21 +65,19 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
-
   if (error) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
         <div className="pt-35 text-red-500">
-          Greška pri dohvaćanju bookinga.
+          Error loading bookings. Please try again later.
         </div>
       </LayoutColumn>
     );
   }
-
   if (!asset) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
-        <div className="pt-35">Asset nema booking history.</div>
+        <div className="pt-35">Asset doesnt have booking history.</div>
       </LayoutColumn>
     );
   }
@@ -129,10 +122,10 @@ export default function BookingsByAsset() {
       <div className="mb-6 flex items-end gap-4">
         <div className="flex w-full flex-col">
           <p className="mb-1 text-sm font-medium text-(--color-table-text)">
-            Notes
+            {t('ui.notes.label')}
           </p>
           <Input
-            placeholder="Notes..."
+            placeholder={t('ui.notes.placeholder')}
             className="w-full border shadow-none"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
