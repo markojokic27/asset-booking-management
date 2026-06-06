@@ -19,10 +19,22 @@ class AuthSession @Inject constructor() {
     private var storedUserId: Long? = null
 
     fun saveTokens(response: LoginResponse) {
-        accessToken = response.accessToken
-        refreshToken = response.refreshToken
-        storedUserId = extractUserId(response.accessToken)
+        saveTokens(
+            accessToken = response.accessToken,
+            refreshToken = response.refreshToken
+        )
     }
+
+    fun saveTokens(
+        accessToken: String,
+        refreshToken: String
+    ) {
+        this.accessToken = accessToken
+        this.refreshToken = refreshToken
+        storedUserId = extractUserId(accessToken)
+    }
+
+    fun getCurrentRefreshToken(): String? = refreshToken
 
     fun getCurrentUserId(): Long? = storedUserId
 
