@@ -51,7 +51,7 @@ export function FiltersBar({
   return (
     <div
       className={twMerge(
-        'mt-6 grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3',
+        'mt-6 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3',
         className
       )}
     >

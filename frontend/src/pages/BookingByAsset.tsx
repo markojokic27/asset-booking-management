@@ -60,6 +60,7 @@ export default function BookingsByAsset() {
     setNotes,
     filters,
     refetch,
+    bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
   });
 
   if (loading) {
@@ -115,7 +116,7 @@ export default function BookingsByAsset() {
       </div>
 
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />
-      {/*TODO minjanje Filtera...  */}
+
       <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
           variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAYS'}
@@ -125,7 +126,7 @@ export default function BookingsByAsset() {
           className="mt-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2"
         />
       </div>
-      <div className="mb-6 flex items-end gap-2">
+      <div className="mb-6 flex items-end gap-4">
         <div className="flex w-full flex-col">
           <p className="mb-1 text-sm font-medium text-(--color-table-text)">
             Notes
@@ -151,7 +152,6 @@ export default function BookingsByAsset() {
 
       <AvailabilityCalendar
         events={calendarEvents}
-        selectedDate={filters.fromDate}
         selectedFromDate={filters.fromDate}
         selectedToDate={filters.toDate}
         onDateClick={handleCalendarDateClick}

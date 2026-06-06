@@ -23,8 +23,6 @@ type CalendarEvent = {
 
 type Props = {
   events: CalendarEvent[];
-  selectedDate?: string;
-
   selectedFromDate?: string;
   selectedToDate?: string;
 
@@ -36,7 +34,6 @@ type Props = {
 
 export function AvailabilityCalendar({
   events,
-  selectedDate,
   selectedFromDate,
   selectedToDate,
   onDateClick,
@@ -85,8 +82,6 @@ export function AvailabilityCalendar({
 
   const isDateInRange = (date: string, from?: string, to?: string) => {
     if (!from) return false;
-    console.log('AAAAAA', date, from, to);
-
     if (!to) {
       return date === from;
     }

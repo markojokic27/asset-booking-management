@@ -14,17 +14,23 @@ export function useCreateBooking({
   notes,
   setNotes,
   refetch,
+  bookingPeriod,
 }: {
   assetId: number;
   filters: Filters;
   notes: string;
   setNotes: React.Dispatch<React.SetStateAction<string>>;
   refetch: () => Promise<unknown>;
+  bookingPeriod: 'HOUR' | 'DAY';
 }) {
   const [isCreating, setIsCreating] = React.useState(false);
   const { user } = useCurrentUser();
 
   const handleCreateBooking = React.useCallback(async () => {
+    if (bookingPeriod === 'DAY') {
+      filters.fromHour = '06:00';
+      filters.toHour = '22:00';
+    }
     if (
       !filters.fromDate ||
       !filters.toDate ||
@@ -32,6 +38,7 @@ export function useCreateBooking({
       !filters.toHour ||
       !user?.id
     ) {
+      console.warn('Missing required fields for booking creation');
       return;
     }
 
