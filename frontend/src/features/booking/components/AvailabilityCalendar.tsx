@@ -24,6 +24,10 @@ type CalendarEvent = {
 type Props = {
   events: CalendarEvent[];
   selectedDate?: string;
+
+  selectedFromDate?: string;
+  selectedToDate?: string;
+
   onDateClick?: (date: string) => void;
   variant?: 'HOUR' | 'DAY';
   setSelectedBooking?: (booking: BookingWithRelations | null) => void;
@@ -32,6 +36,8 @@ type Props = {
 export function AvailabilityCalendar({
   events,
   selectedDate,
+  selectedFromDate,
+  selectedToDate,
   onDateClick,
   setSelectedBooking,
   variant = 'DAY',
@@ -61,6 +67,15 @@ export function AvailabilityCalendar({
     [setSelectedBooking]
   );
 
+  const isDateInRange = (date: string, from?: string, to?: string) => {
+    if (!from) return false;
+    console.log('AAAAAA', date, from, to);
+
+    if (!to) {
+      return date === from;
+    }
+    return date >= from && date <= to;
+  };
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">
@@ -101,7 +116,11 @@ export function AvailabilityCalendar({
         dayCellClassNames={(arg) => {
           const date = arg.date.toLocaleDateString('sv-SE');
 
-          const isSelected = selectedDate === date;
+          const isSelected = isDateInRange(
+            date,
+            selectedFromDate,
+            selectedToDate
+          );
 
           const isPast = isPastDate(arg.date);
 

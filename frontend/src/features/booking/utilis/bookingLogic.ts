@@ -15,7 +15,7 @@ export const mapBookingsToCalendarEvents = (
     id: booking.id.toString(),
     title: booking.user.surname,
     start: new Date(booking.bookingStart).toISOString(),
-    end: new Date(booking.bookingEnd).toISOString() ,
+    end: new Date(booking.bookingEnd).toISOString(),
     backgroundColor: STATUS_COLORS[booking.status] || '#3b82f6',
     borderColor: STATUS_COLORS[booking.status] || '#3b82f6',
     extendedProps: {
@@ -30,17 +30,24 @@ export const hasBookingOverlap = ({
   toDate,
   fromHour,
   toHour,
+  bookingPeriod,
 }: {
   bookings: BookingWithRelations[];
   fromDate: string;
   toDate: string;
-  fromHour: string;
-  toHour: string;
+  fromHour?: string;
+  toHour?: string;
+  bookingPeriod: 'HOUR' | 'DAY';
 }) => {
-  const selectedStart = new Date(`${fromDate}T${fromHour}:00`);
+  const selectedStart =
+    bookingPeriod === 'HOUR'
+      ? new Date(`${fromDate}T${fromHour}:00`)
+      : new Date(`${fromDate}T00:00:00`);
 
-  const selectedEnd = new Date(`${toDate}T${toHour}:00`);
-
+  const selectedEnd =
+    bookingPeriod === 'HOUR'
+      ? new Date(`${toDate}T${toHour}:00`)
+      : new Date(`${toDate}T23:59:59`);
   return bookings.some((booking) => {
     if (booking.status !== 'APPROVED' && booking.status !== 'PENDING') {
       return false;
@@ -62,8 +69,9 @@ export const formatBookingTime = (start: string | Date, end: string | Date) => {
 };
 
 // function to check if a booking is past its end date
-export const isBookingPastEnd = (booking: Pick<BookingWithRelations, 'bookingEnd'>) =>
-  new Date(booking.bookingEnd).getTime() < Date.now();
+export const isBookingPastEnd = (
+  booking: Pick<BookingWithRelations, 'bookingEnd'>
+) => new Date(booking.bookingEnd).getTime() < Date.now();
 
 // function to sort bookings by start date newest first
 export const sortBookingsNewestFirst = (

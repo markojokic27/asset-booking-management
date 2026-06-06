@@ -51,6 +51,7 @@ export default function BookingsByAsset() {
     assetStatus: asset?.status,
     filters,
     bookings,
+    bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
   });
 
   const { isCreating, handleCreateBooking } = useCreateBooking({
@@ -114,26 +115,24 @@ export default function BookingsByAsset() {
       </div>
 
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />
-          {/*TODO minjanje Filtera...  */}
+      {/*TODO minjanje Filtera...  */}
       <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
-          variant={
-            asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY-CHECK'
-          }
+          variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAYS'}
           filters={filters}
           setFilters={setFilters}
           showSearch={false}
-          className="mt-0 grid-cols-1 sm:grid-cols-2  lg:grid-cols-2"
+          className="mt-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2"
         />
       </div>
-      <div className="flex gap-2 mb-6 items-end">
+      <div className="mb-6 flex items-end gap-2">
         <div className="flex w-full flex-col">
           <p className="mb-1 text-sm font-medium text-(--color-table-text)">
             Notes
           </p>
           <Input
             placeholder="Notes..."
-            className=" w-full border shadow-none"
+            className="w-full border shadow-none"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
@@ -141,7 +140,7 @@ export default function BookingsByAsset() {
         <Button
           data-testid="book-asset-button"
           variant="solid"
-          className="h-11"
+          className="h-11 min-w-40"
           size="md"
           disabled={isButtonDisabled || isCreating}
           onClick={handleCreateBooking}
@@ -153,6 +152,8 @@ export default function BookingsByAsset() {
       <AvailabilityCalendar
         events={calendarEvents}
         selectedDate={filters.fromDate}
+        selectedFromDate={filters.fromDate}
+        selectedToDate={filters.toDate}
         onDateClick={handleCalendarDateClick}
         setSelectedBooking={setSelectedBooking}
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}

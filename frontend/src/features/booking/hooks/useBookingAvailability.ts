@@ -12,19 +12,23 @@ export function useBookingAvailability({
   assetStatus,
   filters,
   bookings,
+  bookingPeriod,
 }: {
   assetStatus?: string;
   filters: Filters;
   bookings: BookingWithRelations[];
+  bookingPeriod: 'HOUR' | 'DAY';
 }) {
   return React.useMemo(() => {
-    if (
-      assetStatus !== 'ACTIVE' ||
-      !filters.fromDate ||
-      !filters.toDate ||
-      !filters.fromHour ||
-      !filters.toHour
-    ) {
+    if (assetStatus !== 'ACTIVE') {
+      return true;
+    }
+
+    if (!filters.fromDate || !filters.toDate) {
+      return true;
+    }
+
+    if (bookingPeriod === 'HOUR' && (!filters.fromHour || !filters.toHour)) {
       return true;
     }
 
@@ -34,6 +38,7 @@ export function useBookingAvailability({
       toDate: filters.toDate,
       fromHour: filters.fromHour,
       toHour: filters.toHour,
+      bookingPeriod,
     });
   }, [assetStatus, bookings, filters]);
 }

@@ -16,7 +16,7 @@ type Filters = {
   toHour: string;
 };
 
-type Variant = 'DAY' | 'HOUR' | 'DAY-CHECK';
+type Variant = 'DAY' | 'HOUR' | 'DAYS';
 
 type Props = {
   filters: Filters;
