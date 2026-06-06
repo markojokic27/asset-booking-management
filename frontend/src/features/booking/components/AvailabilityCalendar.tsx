@@ -31,6 +31,7 @@ type Props = {
   onDateClick?: (date: string) => void;
   variant?: 'HOUR' | 'DAY';
   setSelectedBooking?: (booking: BookingWithRelations | null) => void;
+  onRangeSelect: (fromDate: string, toDate: string) => void;
 };
 
 export function AvailabilityCalendar({
@@ -40,6 +41,7 @@ export function AvailabilityCalendar({
   selectedToDate,
   onDateClick,
   setSelectedBooking,
+  onRangeSelect,
   variant = 'DAY',
 }: Props) {
   const isPastDate = (date: Date) => {
@@ -67,6 +69,20 @@ export function AvailabilityCalendar({
     [setSelectedBooking]
   );
 
+  const handleDateRangeSelect = React.useCallback(
+    (info: any) => {
+      const fromDate = info.startStr;
+
+      const endDate = new Date(info.end);
+      endDate.setDate(endDate.getDate() - 1);
+
+      const toDate = endDate.toLocaleDateString('sv-SE');
+
+      onRangeSelect?.(fromDate, toDate);
+    },
+    [onRangeSelect]
+  );
+
   const isDateInRange = (date: string, from?: string, to?: string) => {
     if (!from) return false;
     console.log('AAAAAA', date, from, to);
@@ -89,7 +105,10 @@ export function AvailabilityCalendar({
         showNonCurrentDates={false}
         displayEventTime={true}
         events={events}
-        dateClick={handleDateClick}
+        selectable={variant !== 'HOUR'}
+        selectMirror={true}
+        dateClick={variant === 'HOUR' ? handleDateClick : undefined}
+        select={variant !== 'HOUR' ? handleDateRangeSelect : undefined}
         eventClick={handleEventClick}
         eventContent={(eventInfo) => {
           const start = eventInfo.event.start?.toLocaleTimeString([], {

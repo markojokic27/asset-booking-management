@@ -100,14 +100,14 @@ export function FiltersBar({
         <>
           <DateInput
             id="date"
-            label={t('ui.filters.date')}
+            label={t('ui.filters.fromTime')}
             value={filters.fromDate}
             onChange={(v) => update({ fromDate: v })}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />
           <DateInput
             id="date"
-            label={t('ui.filters.date')}
+            label={t('ui.filters.toTime')}
             value={filters.toDate}
             onChange={(v) => update({ toDate: v })}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"

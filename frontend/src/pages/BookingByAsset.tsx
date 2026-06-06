@@ -156,6 +156,13 @@ export default function BookingsByAsset() {
         selectedToDate={filters.toDate}
         onDateClick={handleCalendarDateClick}
         setSelectedBooking={setSelectedBooking}
+        onRangeSelect={(fromDate, toDate) =>
+          setFilters((prev) => ({
+            ...prev,
+            fromDate,
+            toDate,
+          }))
+        }
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
       />
 
