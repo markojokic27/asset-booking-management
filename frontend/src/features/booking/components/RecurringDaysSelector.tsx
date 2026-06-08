@@ -3,7 +3,7 @@ type Props = {
   onChange: (days: number[]) => void;
 };
 
-export function RecurringDaysSelector({ onChange }: Props) {
+export function RecurringDaysSelector({ onChange: _onChange }: Props) {
   const days = [
     { value: 1, label: 'Ponedjeljak' },
     { value: 2, label: 'Utorak' },
