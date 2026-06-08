@@ -93,8 +93,8 @@ benefit:
     - PARKING
     - BOOK
     - DESK
-    - MEETING_ROOM
-    - IT_EQUIPMENT
+    - MEETING ROOM
+    - IT EQUIPMENT
   benefit-delimiter: ";"
 
 management:

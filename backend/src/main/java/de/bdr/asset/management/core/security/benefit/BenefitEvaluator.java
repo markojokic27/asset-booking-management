@@ -22,7 +22,7 @@ public class BenefitEvaluator {
         CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
 
         // Admin Bypass
-        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+        if (auth.getAuthorities().stream().anyMatch(a -> ("ROLE_ADMIN").equals(a.getAuthority()))) {
             return true;
         }
 
