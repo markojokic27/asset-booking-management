@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 
 import de.bdr.asset.management.core.email.EmailService;
+import de.bdr.asset.management.user.UserRoleEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -78,6 +79,8 @@ public class BookingServiceImpl implements BookingService {
 
         Asset asset = assetRepository.findByIdAndStatus(bookingRequest.assetId(), AssetStatusEnum.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId() + " and status ACTIVE"));
+
+        boolean isPrivilegedUser = securityService.isAdmin() || user.getRole().equals(UserRoleEnum.MANAGER);
         
         AssetCategory category = asset.getCategory();
 
@@ -86,11 +89,13 @@ public class BookingServiceImpl implements BookingService {
         booking.setUser(user);
         booking.setAsset(asset);
 
-        booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
+        boolean requiresApproval = category.isApproval() && !isPrivilegedUser;
+
+        booking.setStatus(requiresApproval ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
         booking = repository.save(booking);
 
-        if (category.isApproval()) {
+        if (requiresApproval) {
 
             String approvalLink = "http://localhost:5173/approvals/" + booking.getId();
 
