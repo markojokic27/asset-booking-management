@@ -94,6 +94,24 @@ class LoginViewModelTest {
     }
 
     @Test
+    fun testLoginShowsGenericErrorWhenRequestFailsWithUnexpectedStatus() = runTest {
+        val username = "ivan.horvat"
+        val password = "password123"
+        val fakeAuthApi = FakeAuthApi().apply {
+            loginException = buildHttpException(500)
+        }
+        val viewModel = LoginViewModel(buildAuthRepository(fakeAuthApi))
+
+        viewModel.login(username, password)
+        advanceUntilIdle()
+
+        assertEquals(listOf(LoginRequest(username, password)), fakeAuthApi.loginRequests)
+        assertFalse(viewModel.uiState.value.isLoading)
+        assertFalse(viewModel.uiState.value.isLoggedIn)
+        assertEquals("Login failed. Please try again.", viewModel.uiState.value.errorMessage)
+    }
+
+    @Test
     fun testLoginShowsBackendErrorWhenServerCannotBeReached() = runTest {
         val username = "ivan.horvat"
         val password = "password123"
