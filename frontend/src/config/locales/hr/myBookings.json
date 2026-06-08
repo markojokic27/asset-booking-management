@@ -1,6 +1,9 @@
 {
   "title": "Moje rezervacije",
   "titleAdmin": "Sve rezervacije",
+  "search": {
+    "placeholder": "Pretraži rezervacije..."
+  },
   "table": {
     "user": "Korisnik",
     "asset": "Asset",

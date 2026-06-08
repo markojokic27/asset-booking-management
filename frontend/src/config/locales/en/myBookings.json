@@ -1,6 +1,9 @@
 {
   "title": "My Bookings",
   "titleAdmin": "All Bookings",
+  "search": {
+    "placeholder": "Search bookings..."
+  },
   "table": {
     "user": "User",
     "asset": "Asset",

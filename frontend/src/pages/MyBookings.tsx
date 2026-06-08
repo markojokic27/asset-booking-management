@@ -1,8 +1,10 @@
 // external imports
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // components
 import { LayoutColumn } from '../components/layout/Layout';
+import { SearchInput } from '../components/ui/SearchBar';
 import { MyBookingsTable } from '../features/booking/components/MyBookingsTable';
 
 // hooks
@@ -10,6 +12,7 @@ import { useMyBookings } from '../features/booking/hooks/useMyBookings';
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
 
 // utils
+import { filterPendingBookingsBySearch } from '../features/booking/utilis/approvalFilter';
 import { isAdmin } from '../features/user/utilis/users';
 
 export default function MyBookings() {
@@ -18,6 +21,14 @@ export default function MyBookings() {
   const { bookings, loading, error } = useMyBookings(
     user,
     !isUserLoading && user != null
+  );
+  // search state for the bookings
+  const [search, setSearch] = useState('');
+
+  // filtered bookings for the bookings table
+  const filteredBookings = useMemo(
+    () => filterPendingBookingsBySearch(bookings, search),
+    [bookings, search]
   );
 
   return (
@@ -37,9 +48,19 @@ export default function MyBookings() {
         {/* divider for the my bookings page */}
         <div className="h-px w-full bg-(--color-table-border)" />
 
+        {/* search input for the bookings table */}
+        <div className="flex w-full items-center justify-end">
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder={t('myBookings.search.placeholder')}
+            className="w-70"
+          />
+        </div>
+
         {/* my bookings table */}
         <MyBookingsTable
-          bookings={bookings}
+          bookings={filteredBookings}
           isLoading={loading || isUserLoading}
           error={error}
         />
