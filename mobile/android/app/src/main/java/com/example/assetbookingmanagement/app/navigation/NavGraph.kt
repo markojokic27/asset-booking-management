@@ -116,7 +116,13 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             }
 
             composable(Routes.PROFILE) {
-                ProfileScreen()
+                ProfileScreen(
+                    onLogoutSuccess = {
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(navController.graph.id) { inclusive = true }
+                        }
+                    }
+                )
             }
             composable(
                 route = Routes.CREATE_BOOKING,

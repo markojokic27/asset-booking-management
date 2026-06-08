@@ -2,6 +2,7 @@ package com.example.assetbookingmanagement.features.user.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assetbookingmanagement.features.auth.data.AuthRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
 import com.example.assetbookingmanagement.features.user.data.UserResponse
 import com.example.assetbookingmanagement.features.user.data.UserRepository
@@ -17,6 +18,8 @@ import javax.inject.Inject
 
 data class ProfileUiState(
     val isLoading: Boolean = false,
+    val isLoggingOut: Boolean = false,
+    val isLoggedOut: Boolean = false,
     val profile: UserResponse? = null,
     val errorMessage: String? = null
 )
@@ -24,7 +27,8 @@ data class ProfileUiState(
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val authSession: AuthSession
+    private val authSession: AuthSession,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -74,6 +78,21 @@ class ProfileViewModel @Inject constructor(
                         errorMessage = "Cannot reach backend."
                     )
                 }
+            }
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoggingOut = true, errorMessage = null) }
+
+            authRepository.logout()
+
+            _uiState.update {
+                it.copy(
+                    isLoggingOut = false,
+                    isLoggedOut = true
+                )
             }
         }
     }
