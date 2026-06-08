@@ -18,6 +18,7 @@ public class PageAndHandlerFactory extends CommonMethods {
     public static ThemeTogglePage themeTogglePage;
     public static BookingPage bookingPage;
     public static ReportPage reportPage;
+    public static MyBookingsPage myBookingsPage;
 
     public static void setupPagesAndHandlers() {
         loginPage = new LoginPage();
@@ -31,5 +32,6 @@ public class PageAndHandlerFactory extends CommonMethods {
         themeTogglePage = new ThemeTogglePage();
         bookingPage = new BookingPage();
         reportPage = new ReportPage();
+        myBookingsPage = new MyBookingsPage();
     }
 }

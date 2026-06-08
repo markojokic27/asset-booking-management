@@ -36,4 +36,18 @@ public class BaseLogin extends PageAndHandlerFactory {
         loginPage.clickLoginButton();
         assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
     }
+
+    protected void loginWithEmployee() {
+        loginPage.typeUsername(CommonConstants.EMPLOYEE_USERNAME);
+        loginPage.typePassword(CommonConstants.EMPLOYEE_PASS);
+        loginPage.clickLoginButton();
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
+    }
+
+    protected void loginWithManager() {
+        loginPage.typeUsername(CommonConstants.MANAGER_USERNAME);
+        loginPage.typePassword(CommonConstants.MANAGER_PASS);
+        loginPage.clickLoginButton();
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
+    }
 }

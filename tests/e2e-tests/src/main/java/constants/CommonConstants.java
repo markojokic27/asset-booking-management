@@ -11,6 +11,7 @@ public class CommonConstants{
     public static final String CATEGORY_URL= "/categories";
     public static final String ACCOUNT_INFO="/account-info";
     public static final String REPORT_URL="/report";
+    public static final String MY_BOOKING_URL="/my-bookings";
 
     //Login
 
@@ -18,6 +19,10 @@ public class CommonConstants{
     public static final String ADMIN_PASS = "admin123";
     public static final String WRONG_USERNAME="user_admin!";
     public static final String WRONG_PASSWORD="pass.1234";
+    public static final String EMPLOYEE_USERNAME="user_employee";
+    public static final String EMPLOYEE_PASS="employee123";
+    public static final String MANAGER_USERNAME="user_manager";
+    public static final String MANAGER_PASS="manager123";
 
     // Register and user
 
