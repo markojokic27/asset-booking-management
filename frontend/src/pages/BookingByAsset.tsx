@@ -17,6 +17,7 @@ import { LayoutColumn } from '../components/layout/Layout';
 import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
 import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
+import { RecurringDaysSelector } from '../features/booking/components/RecurringDaysSelector';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 
@@ -142,7 +143,17 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
-
+      {asset.category.name === 'Parking' && (
+        <RecurringDaysSelector
+          //selectedDays={filters.selectedDays}
+          onChange={(days) =>
+            setFilters((prev) => ({
+              ...prev,
+              selectedDays: days,
+            }))
+          }
+        />
+      )}
       <AvailabilityCalendar
         events={calendarEvents}
         selectedFromDate={filters.fromDate}
