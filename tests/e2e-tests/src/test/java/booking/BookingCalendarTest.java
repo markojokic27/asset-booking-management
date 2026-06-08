@@ -25,8 +25,8 @@ public class BookingCalendarTest extends BaseLogin {
 
     @Test
     public void clickFutureDateHighlightsCell() {
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE);
-        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE));
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE_FROM));
     }
 
     @Test
@@ -39,8 +39,8 @@ public class BookingCalendarTest extends BaseLogin {
 
     @Test
     public void clickFutureDatePopulatesDateFilter() {
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE);
-        assertEquals(CommonConstants.FUTURE_DATE, bookingPage.getFromDateValue());
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        assertEquals(CommonConstants.FUTURE_DATE_FROM, bookingPage.getFromDateValue());
     }
 
     @Test

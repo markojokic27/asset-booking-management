@@ -30,10 +30,15 @@ public class BookingModalTest extends BaseLogin {
     }
 
     @Test
-    public void bookNowIsEnabledAfterSelectingFreeSlot() {
+    public void bookNowIsEnabledAfterSelectingFreeSlot() throws InterruptedException{
+        bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.DATE_FUTURE);
-        bookingPage.clickCalendarDate(CommonConstants.DATE_FUTURE);
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickNextMonth();
+        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        Thread.sleep(2000);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
@@ -50,10 +55,14 @@ public class BookingModalTest extends BaseLogin {
 
 
     @Test
-    public void successfulBookingLaptopAddsEventToCalendar(){
+    public void successfulBookingLaptopAddsEventToCalendar() {
+        bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE);
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickNextMonth();
+        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
         bookingPage.clickBookAssetButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
@@ -62,8 +71,8 @@ public class BookingModalTest extends BaseLogin {
     public void successfulBookingMeetingRoomAddsEventToCalendar(){
         bookingPage.clickMeetingRoomCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE);
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
         bookingPage.selectFromHour(CommonConstants.FROM_HOUR);
         bookingPage.selectToHour(CommonConstants.TO_HOUR);
         bookingPage.clickBookAssetButton();

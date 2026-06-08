@@ -6,6 +6,7 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  testId?: string; 
 };
 
 export const DateInput: React.FC<Props> = ({
@@ -14,6 +15,7 @@ export const DateInput: React.FC<Props> = ({
   value,
   onChange,
   className,
+  testId,
 }) => {
   const dateRef = React.useRef<HTMLInputElement>(null);
 
@@ -35,7 +37,7 @@ export const DateInput: React.FC<Props> = ({
         onClick={openDatePicker}
         className="relative cursor-pointer"
       >
-        <input data-testid="from-date-input"
+        <input data-testid={testId}
           ref={dateRef}
           id={id}
           type="date"

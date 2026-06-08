@@ -102,6 +102,7 @@ export function FiltersBar({
             id="date"
             label={t('ui.filters.fromTime')}
             value={filters.fromDate}
+            testId='from-date-input'
             onChange={(v) => update({ fromDate: v })}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />
@@ -109,6 +110,7 @@ export function FiltersBar({
             id="date"
             label={t('ui.filters.toTime')}
             value={filters.toDate}
+            testId='to-date-input'
             onChange={(v) => update({ toDate: v })}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />

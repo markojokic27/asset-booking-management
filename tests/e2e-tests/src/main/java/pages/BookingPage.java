@@ -16,6 +16,7 @@ public class BookingPage extends CommonMethods {
 
     // Filter
     public By fromDateInput = By.cssSelector("[data-testid='from-date-input']");
+    public By toDateInput = By.cssSelector("[data-testid='to-date-input']");
     public By fromHourSelect = By.cssSelector("select[aria-label*='From']");
     public By toHourSelect = By.cssSelector("select[aria-label*='To']");
 
@@ -62,6 +63,9 @@ public class BookingPage extends CommonMethods {
     // Filter
     public void enterFromDate(String date) {
         typeInElement(fromDateInput, date);
+    }
+    public void enterToDate(String date) {
+        typeInElement(toDateInput, date);
     }
 
     public String getFromDateValue() {
