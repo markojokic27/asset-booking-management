@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  filterBookingsByAsset,
   filterPendingBookingsBySearch,
   filterPendingBookingsForApprover,
 } from '../../features/booking/utilis/approvalFilter';
@@ -62,6 +63,43 @@ describe('filterPendingBookingsForApprover', () => {
     });
 
     expect(result).toHaveLength(2);
+  });
+});
+
+describe('filterBookingsByAsset', () => {
+  it('returns all bookings when asset id is null', () => {
+    const bookings = [
+      baseBooking('mark.jones@example.com'),
+      {
+        ...baseBooking('mark.jones@example.com'),
+        asset: {
+          ...baseBooking('mark.jones@example.com').asset,
+          id: 2,
+          name: 'Projector',
+        },
+      },
+    ] as BookingWithRelations[];
+
+    expect(filterBookingsByAsset(bookings, null)).toHaveLength(2);
+  });
+
+  it('filters bookings by asset id', () => {
+    const bookings = [
+      baseBooking('mark.jones@example.com'),
+      {
+        ...baseBooking('mark.jones@example.com'),
+        asset: {
+          ...baseBooking('mark.jones@example.com').asset,
+          id: 2,
+          name: 'Projector',
+        },
+      },
+    ] as BookingWithRelations[];
+
+    const result = filterBookingsByAsset(bookings, 2);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].asset.name).toBe('Projector');
   });
 });
 

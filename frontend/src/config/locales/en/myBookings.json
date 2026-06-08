@@ -4,6 +4,10 @@
   "search": {
     "placeholder": "Search bookings..."
   },
+  "filter": {
+    "asset": "Asset",
+    "allAssets": "All assets"
+  },
   "table": {
     "user": "User",
     "asset": "Asset",

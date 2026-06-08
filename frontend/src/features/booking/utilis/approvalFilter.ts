@@ -27,6 +27,17 @@ export function filterPendingBookingsForApprover(
   );
 }
 
+export function filterBookingsByAsset(
+  bookings: BookingWithRelations[],
+  assetId: number | null
+): BookingWithRelations[] {
+  if (assetId == null) {
+    return bookings;
+  }
+
+  return bookings.filter((booking) => booking.asset.id === assetId);
+}
+
 // filter pending bookings by search
 export function filterPendingBookingsBySearch(
   bookings: BookingWithRelations[],

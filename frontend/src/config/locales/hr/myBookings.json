@@ -4,6 +4,10 @@
   "search": {
     "placeholder": "Pretraži rezervacije..."
   },
+  "filter": {
+    "asset": "Asset",
+    "allAssets": "Svi asseti"
+  },
   "table": {
     "user": "Korisnik",
     "asset": "Asset",
