@@ -32,6 +32,8 @@ type Props = {
   onRangeSelect: (fromDate: string, toDate: string) => void;
 };
 
+
+
 export function AvailabilityCalendar({
   events,
   selectedFromDate,

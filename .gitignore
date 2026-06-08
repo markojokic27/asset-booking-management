@@ -75,4 +75,5 @@ coverage
 *storybook.log
 storybook-static
 
+deployment/demo-package.tar.gz
 demo-vm

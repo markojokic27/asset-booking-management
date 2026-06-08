@@ -32,6 +32,15 @@ export function BookingModal({
 
   if (!open || !asset) return null;
 
+
+  const handleRangeSelect = (fromDate: string, toDate: string) => {
+    setFilters(prev => ({
+      ...prev,
+      fromDate,
+      toDate,
+    }));
+  };
+
   return (
     <div
       data-testid="asset-bookings-modal"
@@ -87,7 +96,7 @@ export function BookingModal({
         )}
 
         {/* Dohvatit bookinge odredenog asseta i posalt ih u events kako bi se prikazali u kalendaru*/}
-        {activeTab === 'availability' && (
+        {/* {activeTab === 'availability' && (
           <AvailabilityCalendar
             events={[
               {
@@ -97,6 +106,14 @@ export function BookingModal({
                 end: '2026-04-29T12:00:00',
               },
             ]}
+          />
+        )} */}
+
+
+        {activeTab === 'availability' && (
+          <AvailabilityCalendar
+            events={[]}
+            onRangeSelect={handleRangeSelect}
           />
         )}
 
