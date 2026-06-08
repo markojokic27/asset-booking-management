@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 // components
 import { LayoutColumn } from '../components/layout/Layout';
+import { Pagination } from '../components/ui/Pagination';
 import { SearchInput } from '../components/ui/SearchBar';
 import { MyBookingsTable } from '../features/booking/components/MyBookingsTable';
 
 // hooks
 import { useMyBookings } from '../features/booking/hooks/useMyBookings';
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { usePagination } from '../features/user/hooks/usePagination';
 
 // utils
 import { filterPendingBookingsBySearch } from '../features/booking/utilis/approvalFilter';
@@ -30,6 +32,9 @@ export default function MyBookings() {
     () => filterPendingBookingsBySearch(bookings, search),
     [bookings, search]
   );
+
+  // pagination for the bookings table
+  const pagination = usePagination(filteredBookings, 10);
 
   return (
     <LayoutColumn
@@ -60,10 +65,20 @@ export default function MyBookings() {
 
         {/* my bookings table */}
         <MyBookingsTable
-          bookings={filteredBookings}
+          bookings={pagination.paged}
           isLoading={loading || isUserLoading}
           error={error}
         />
+
+        {/* pagination for the bookings table */}
+        {filteredBookings.length > 0 && !loading && !error && (
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            items={pagination.items}
+            onPageChange={pagination.setPage}
+          />
+        )}
       </div>
     </LayoutColumn>
   );
