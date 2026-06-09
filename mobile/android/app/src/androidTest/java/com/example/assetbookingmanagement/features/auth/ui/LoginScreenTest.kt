@@ -17,8 +17,10 @@ import com.example.assetbookingmanagement.core.ui.theme.AssetBookingManagementTh
 import com.example.assetbookingmanagement.features.auth.data.AuthApi
 import com.example.assetbookingmanagement.features.auth.data.AuthRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
+import com.example.assetbookingmanagement.features.auth.data.AuthTokenStore
 import com.example.assetbookingmanagement.features.auth.data.LoginRequest
 import com.example.assetbookingmanagement.features.auth.data.LoginResponse
+import com.example.assetbookingmanagement.features.auth.data.RefreshTokenRequest
 import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -42,7 +44,8 @@ class LoginScreenTest {
         viewModel = LoginViewModel(
             AuthRepository(
                 authApi = fakeAuthApi,
-                authSession = AuthSession()
+                authSession = AuthSession(),
+                authTokenStore = AuthTokenStore(composeRule.activity)
             )
         )
     }
@@ -157,6 +160,10 @@ class LoginScreenTest {
         override suspend fun login(request: LoginRequest): LoginResponse {
             requests += request
             return pendingResponse?.await() ?: response
+        }
+
+        override suspend fun refresh(request: RefreshTokenRequest): LoginResponse {
+            error("Refresh is not used in LoginScreen tests.")
         }
     }
 }
