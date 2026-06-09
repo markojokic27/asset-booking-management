@@ -166,6 +166,20 @@ class AssetsViewModelTest {
     }
 
     @Test
+    fun testInitShowsNotFoundErrorWhenCategoriesDoNotExist() = runTest {
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            getCategoriesException = buildHttpException(404)
+        }
+        val viewModel = AssetsViewModel(
+            buildAssetRepository(),
+            buildAssetCategoryRepository(fakeCategoryApi)
+        )
+        advanceUntilIdle()
+
+        assertEquals("Categories not found.", viewModel.uiState.value.errorMessage)
+    }
+
+    @Test
     fun testInitShowsGenericErrorWhenCategoriesFailWithUnexpectedStatus() = runTest {
         val fakeCategoryApi = FakeAssetCategoryApi().apply {
             getCategoriesException = buildHttpException(500)

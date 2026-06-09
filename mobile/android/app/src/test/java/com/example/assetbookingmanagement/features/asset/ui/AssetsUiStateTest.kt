@@ -50,6 +50,20 @@ class AssetsUiStateTest {
         assertEquals(listOf(laptop), state.filteredAssets)
     }
 
+    @Test
+    fun testFilteredAssetsReturnsEmptyWhenNoAssetMatchesBothConditions() {
+        val state = AssetsUiState(
+            assets = listOf(
+                asset(id = 1, name = "MacBook Pro 16", categoryId = 1),
+                asset(id = 16, name = "Projector Epson", categoryId = 6)
+            ),
+            selectedCategoryIds = setOf(1),
+            searchText = "projector"
+        )
+
+        assertEquals(emptyList<AssetResponse>(), state.filteredAssets)
+    }
+
     private fun asset(
         id: Long,
         name: String,
