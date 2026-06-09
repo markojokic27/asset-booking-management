@@ -1,9 +1,9 @@
 stages:
-  - compile
+  - build
   - test
   - bruno
   - security
-  # - dast 
+  #- dast 
   #- sonar
   #- dockerize
 
@@ -20,8 +20,8 @@ variables:
 # ─────────────────────────────────────────
 # COMPILE STAGE
 # ─────────────────────────────────────────
-backend:compile:
-  stage: compile
+backend:build:
+  stage: build
   image: maven:3.9-eclipse-temurin-21
   script:
     - cd backend
@@ -37,8 +37,8 @@ backend:compile:
   rules:
    
 
-frontend:compile:
-  stage: compile
+frontend:build:
+  stage: build
   image: node:24-alpine
   script:
     - cd frontend
@@ -68,7 +68,7 @@ backend:test:
     - name: postgres:18
       alias: postgres
   needs:
-    - job: backend:compile
+    - job: backend:build
   variables:
     POSTGRES_DB: testdb
     POSTGRES_USER: test
@@ -98,7 +98,7 @@ frontend:test:
   stage: test
   image: node:24-slim 
   needs:
-    - job: frontend:compile
+    - job: frontend:build
   script:
     - cd frontend
     - npm ci --legacy-peer-deps  
@@ -128,9 +128,9 @@ playwright:e2e:
   stage: test
   image: mcr.microsoft.com/playwright/java:v1.59.0-jammy
   needs:
-    - job: backend:compile
+    - job: backend:build
       artifacts: true
-    - job: frontend:compile
+    - job: frontend:build
       artifacts: true
   services:
     - name: postgres:18
@@ -354,7 +354,7 @@ backend-dependency-check:
   stage: security
   image: maven:3.9-eclipse-temurin-21
   needs:
-    - job: backend:compile    # Reuses backend/target/ artifact, skips recompile
+    - job: backend:build    # Reuses backend/target/ artifact, skips recompile
   script:
     - cd backend
     - mvn clean verify -Powasp
@@ -383,7 +383,7 @@ frontend-package-vulnerabilities-check:
   stage: security
   image: node:24-alpine
   needs:
-    - job: frontend:compile
+    - job: frontend:build
   script:
     - cd frontend
     - npm ci --legacy-peer-deps
@@ -438,7 +438,7 @@ socket-security:
         --pr-number 0  
   rules:
   - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
-  - if: $CI_COMMIT_BRANCH == "main"
+  - if: $CI_COMMIT_BRANCH == "develop"
     changes:
       - "**/package.json"
       - "**/package-lock.json"
@@ -458,7 +458,7 @@ socket-security:
 #   stage: security
 #   image: maven:3.9-eclipse-temurin-21
 #   needs:
-#     - job: backend:compile
+#     - job: backend:build
 #   variables:
 #     SNYK_API: "https://api.eu.snyk.io"
 #   before_script:
@@ -493,7 +493,7 @@ snyk-scan-frontend:
   stage: security
   image: node:24-alpine
   needs:
-    - job: frontend:compile
+    - job: frontend:build
   variables:
     SNYK_API: "https://api.eu.snyk.io"
   before_script:
@@ -682,7 +682,7 @@ snyk-scan-frontend:
 #   image: quay.io/podman/stable
 #   services: []
 #   needs:
-#     - job: backend:compile
+#     - job: backend:build
 #     - job: backend:test
 #   script:
 #     - echo "Prepare images for backend"
@@ -705,7 +705,7 @@ snyk-scan-frontend:
 #   image: quay.io/podman/stable
 #   services: []
 #   needs:
-#     - job: frontend:compile
+#     - job: frontend:build
 #   before_script:
 #     - podman --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ info
 #     - echo "$CI_REGISTRY_PASSWORD" | podman login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
