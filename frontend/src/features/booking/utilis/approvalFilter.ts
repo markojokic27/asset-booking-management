@@ -38,6 +38,44 @@ export function filterBookingsByAsset(
   return bookings.filter((booking) => booking.asset.id === assetId);
 }
 
+// filter bookings by date range
+export function filterBookingsByDateRange(
+  bookings: BookingWithRelations[],
+  fromDate: string,
+  toDate: string
+): BookingWithRelations[] {
+  // remove whitespace from the dates
+  const from = fromDate.trim();
+  const to = toDate.trim();
+
+  // if no dates are provided, return all bookings
+  if (!from && !to) {
+    return bookings;
+  }
+
+  // convert the dates to Date objects
+  const filterStart = from ? new Date(`${from}T00:00:00`) : null;
+  const filterEnd = to ? new Date(`${to}T23:59:59.999`) : null;
+
+  return bookings.filter((booking) => {
+    // convert the booking start and end dates to Date objects
+    const bookingStart = new Date(booking.bookingStart);
+    const bookingEnd = new Date(booking.bookingEnd);
+
+    // if the booking end date is before the filter start date, return false
+    if (filterStart && bookingEnd < filterStart) {
+      return false;
+    }
+
+    // if the booking start date is after the filter end date, return false
+    if (filterEnd && bookingStart > filterEnd) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
 // filter pending bookings by search
 export function filterPendingBookingsBySearch(
   bookings: BookingWithRelations[],

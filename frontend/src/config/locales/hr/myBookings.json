@@ -6,7 +6,9 @@
   },
   "filter": {
     "asset": "Asset",
-    "allAssets": "Svi asseti"
+    "allAssets": "Svi asseti",
+    "fromDate": "Od",
+    "toDate": "Do"
   },
   "table": {
     "user": "Korisnik",

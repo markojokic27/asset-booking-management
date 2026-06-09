@@ -6,7 +6,9 @@
   },
   "filter": {
     "asset": "Asset",
-    "allAssets": "Alle Assets"
+    "allAssets": "Alle Assets",
+    "fromDate": "Von",
+    "toDate": "Bis"
   },
   "table": {
     "user": "Benutzer",

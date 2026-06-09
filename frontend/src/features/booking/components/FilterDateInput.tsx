@@ -6,16 +6,18 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   className?: string;
-  testId?: string; 
+  min?: string;
+  max?: string;
 };
 
-export const DateInput: React.FC<Props> = ({
+export const FilterDateInput: React.FC<Props> = ({
   id,
   label,
   value,
   onChange,
   className,
-  testId,
+  min,
+  max,
 }) => {
   const dateRef = React.useRef<HTMLInputElement>(null);
 
@@ -33,16 +35,14 @@ export const DateInput: React.FC<Props> = ({
         {label}
       </p>
 
-      <div
-        onClick={openDatePicker}
-        className="relative cursor-pointer"
-      >
-        <input data-testid={testId}
+      <div onClick={openDatePicker} className="relative cursor-pointer">
+        <input
           ref={dateRef}
           id={id}
           type="date"
           value={value}
-          min={new Date().toISOString().split('T')[0]}
+          min={min}
+          max={max}
           onChange={(e) => onChange(e.target.value)}
           className={`date-filter-control h-11 w-full cursor-pointer rounded-lg border-2 border-(--color-table-border) bg-(--color-table-surface) px-3 py-2 text-sm transition outline-none focus:outline-none dark:[&::-webkit-calendar-picker-indicator]:invert ${
             value

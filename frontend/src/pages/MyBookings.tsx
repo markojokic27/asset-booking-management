@@ -7,6 +7,7 @@ import { LayoutColumn } from '../components/layout/Layout';
 import { FormDropdown } from '../components/ui/FormDropdown';
 import { Pagination } from '../components/ui/Pagination';
 import { SearchInput } from '../components/ui/SearchBar';
+import { FilterDateInput } from '../features/booking/components/FilterDateInput';
 import { MyBookingsTable } from '../features/booking/components/MyBookingsTable';
 
 // hooks
@@ -17,6 +18,7 @@ import { usePagination } from '../features/user/hooks/usePagination';
 // utils
 import {
   filterBookingsByAsset,
+  filterBookingsByDateRange,
   filterPendingBookingsBySearch,
 } from '../features/booking/utilis/approvalFilter';
 import { isAdmin } from '../features/user/utilis/users';
@@ -30,6 +32,8 @@ export default function MyBookings() {
   );
   const [search, setSearch] = useState('');
   const [selectedAssetId, setSelectedAssetId] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   const assetOptions = useMemo(() => {
     const assets = new Map<number, string>();
@@ -46,15 +50,16 @@ export default function MyBookings() {
   const filteredBookings = useMemo(() => {
     const assetId = selectedAssetId ? Number(selectedAssetId) : null;
     const byAsset = filterBookingsByAsset(bookings, assetId);
+    const byDate = filterBookingsByDateRange(byAsset, fromDate, toDate);
 
-    return filterPendingBookingsBySearch(byAsset, search);
-  }, [bookings, search, selectedAssetId]);
+    return filterPendingBookingsBySearch(byDate, search);
+  }, [bookings, fromDate, search, selectedAssetId, toDate]);
 
   const pagination = usePagination(filteredBookings, 10);
 
   useEffect(() => {
     pagination.setPage(1);
-  }, [search, selectedAssetId]);
+  }, [fromDate, search, selectedAssetId, toDate]);
 
   return (
     <LayoutColumn
@@ -73,28 +78,46 @@ export default function MyBookings() {
         {/* divider for the my bookings page */}
         <div className="h-px w-full bg-(--color-table-border)" />
 
-        <div className="flex w-full flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full pt-1 sm:w-40">
-            <FormDropdown
-              id="my-bookings-asset-filter"
-              aria-label={t('myBookings.filter.asset')}
-              value={selectedAssetId}
-              onChange={(event) => setSelectedAssetId(event.target.value)}
-              options={[
-                { value: '', label: t('myBookings.filter.allAssets') },
-                ...assetOptions.map((asset) => ({
-                  value: asset.id,
-                  label: asset.name,
-                })),
-              ]}
-              className="border-2 py-2.5 text-(--color-table-text) shadow-none"
+        <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+            <FilterDateInput
+              id="my-bookings-from-date"
+              label={t('myBookings.filter.fromDate')}
+              value={fromDate}
+              onChange={setFromDate}
+              max={toDate || undefined}
+              className="w-full sm:w-40"
             />
+            <FilterDateInput
+              id="my-bookings-to-date"
+              label={t('myBookings.filter.toDate')}
+              value={toDate}
+              onChange={setToDate}
+              min={fromDate || undefined}
+              className="w-full sm:w-40"
+            />
+            <div className="relative w-full pt-1 sm:w-40">
+              <FormDropdown
+                id="my-bookings-asset-filter"
+                aria-label={t('myBookings.filter.asset')}
+                value={selectedAssetId}
+                onChange={(event) => setSelectedAssetId(event.target.value)}
+                options={[
+                  { value: '', label: t('myBookings.filter.allAssets') },
+                  ...assetOptions.map((asset) => ({
+                    value: asset.id,
+                    label: asset.name,
+                  })),
+                ]}
+                className="border-2 py-2.5 text-(--color-table-text) shadow-none"
+              />
+            </div>
           </div>
           <SearchInput
             value={search}
             onChange={setSearch}
             placeholder={t('myBookings.search.placeholder')}
-            className="w-full sm:w-70"
+            className="w-full lg:w-70"
           />
         </div>
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   filterBookingsByAsset,
+  filterBookingsByDateRange,
   filterPendingBookingsBySearch,
   filterPendingBookingsForApprover,
 } from '../../features/booking/utilis/approvalFilter';
@@ -100,6 +101,83 @@ describe('filterBookingsByAsset', () => {
 
     expect(result).toHaveLength(1);
     expect(result[0].asset.name).toBe('Projector');
+  });
+});
+
+describe('filterBookingsByDateRange', () => {
+  const bookingWithDates = (
+    start: string,
+    end: string
+  ): BookingWithRelations =>
+    ({
+      ...baseBooking('mark.jones@example.com'),
+      bookingStart: new Date(start),
+      bookingEnd: new Date(end),
+    }) as BookingWithRelations;
+
+  it('returns all bookings when both dates are empty', () => {
+    const bookings = [
+      bookingWithDates('2026-03-01T09:00:00', '2026-03-01T17:00:00'),
+      bookingWithDates('2026-04-10T09:00:00', '2026-04-10T17:00:00'),
+    ];
+
+    expect(filterBookingsByDateRange(bookings, '', '')).toHaveLength(2);
+    expect(filterBookingsByDateRange(bookings, '   ', '   ')).toHaveLength(2);
+  });
+
+  it('filters bookings that end before the from date', () => {
+    const bookings = [
+      bookingWithDates('2026-03-01T09:00:00', '2026-03-01T17:00:00'),
+      bookingWithDates('2026-04-10T09:00:00', '2026-04-10T17:00:00'),
+    ];
+
+    const result = filterBookingsByDateRange(bookings, '2026-04-01', '');
+
+    expect(result).toHaveLength(1);
+    expect(new Date(result[0].bookingStart).getMonth()).toBe(3);
+  });
+
+  it('filters bookings that start after the to date', () => {
+    const bookings = [
+      bookingWithDates('2026-03-01T09:00:00', '2026-03-01T17:00:00'),
+      bookingWithDates('2026-04-10T09:00:00', '2026-04-10T17:00:00'),
+    ];
+
+    const result = filterBookingsByDateRange(bookings, '', '2026-03-31');
+
+    expect(result).toHaveLength(1);
+    expect(new Date(result[0].bookingStart).getMonth()).toBe(2);
+  });
+
+  it('filters bookings outside the selected date range', () => {
+    const bookings = [
+      bookingWithDates('2026-03-01T09:00:00', '2026-03-01T17:00:00'),
+      bookingWithDates('2026-03-15T09:00:00', '2026-03-15T17:00:00'),
+      bookingWithDates('2026-04-10T09:00:00', '2026-04-10T17:00:00'),
+    ];
+
+    const result = filterBookingsByDateRange(
+      bookings,
+      '2026-03-10',
+      '2026-03-20'
+    );
+
+    expect(result).toHaveLength(1);
+    expect(new Date(result[0].bookingStart).getDate()).toBe(15);
+  });
+
+  it('includes bookings that overlap the selected range', () => {
+    const bookings = [
+      bookingWithDates('2026-03-09T09:00:00', '2026-03-12T17:00:00'),
+    ];
+
+    const result = filterBookingsByDateRange(
+      bookings,
+      '2026-03-10',
+      '2026-03-11'
+    );
+
+    expect(result).toHaveLength(1);
   });
 });
 
