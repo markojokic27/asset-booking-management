@@ -437,21 +437,15 @@ socket-security:
         --scm gitlab \
         --pr-number 0  
   rules:
-  - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
-  - if: $CI_COMMIT_BRANCH == "develop"
-    changes:
-      - "**/package.json"
-      - "**/package-lock.json"
-      - "**/pom.xml"
-      - "**/requirements.txt"
-      - "**/build.gradle"
-  - if: $CI_COMMIT_BRANCH == "develop"
-    changes:
-      - "**/package.json"
-      - "**/package-lock.json"
-      - "**/pom.xml"
-      - "**/requirements.txt"
-      - "**/build.gradle"
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "develop"'
+      changes:
+        - "**/package.json"
+        - "**/package-lock.json"
+        - "**/pom.xml"
+        - "**/requirements.txt"
+        - "**/build.gradle"
+    - when: never
 
 #snyk-scan
 # snyk-scan-backend:
