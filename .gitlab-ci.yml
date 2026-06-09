@@ -15,25 +15,6 @@ variables:
   DOCKER_HOST: tcp://docker:2375      # non-TLS port
   DOCKER_TLS_CERTDIR: ""              # TLS disabled
   #SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  
-
-
-
-# ─────────────────────────────────────────
-# DEBUG (develop only — remove when stable)
-# ─────────────────────────────────────────
-# TODO: Remove before going to production
-debug:vars:
-  stage: .pre
-  image: alpine
-  script:
-    - echo "CI_REGISTRY=$CI_REGISTRY"
-    - echo "CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE"
-    - echo "CI_REGISTRY_USER=$CI_REGISTRY_USER"
-    - echo "CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "develop"
-
 
 
 # ─────────────────────────────────────────
@@ -55,9 +36,6 @@ backend:compile:
       - backend/.m2/repository/
   rules:
    
-  
-
-
 
 frontend:compile:
   stage: compile
@@ -83,8 +61,6 @@ frontend:compile:
 # TEST STAGE
 # ─────────────────────────────────────────
 # 
-
-
 backend:test:
   stage: test
   image: maven:3.9-eclipse-temurin-21
@@ -249,24 +225,37 @@ playwright:e2e:
     - kill $(cat /tmp/frontend.pid 2>/dev/null) 2>/dev/null || true
 
   cache:
-    key: maven-$CI_PROJECT_ID
-    paths:
-      - backend/.m2/repository/
-    policy: pull
+    - key:
+        files:
+          - backend/pom.xml
+      prefix: "e2e-maven-backend-$CI_PROJECT_ID"
+      paths:
+        - backend/.m2/repository/
+      policy: pull
 
-  artifacts:
-    when: always
-    reports:
-      junit: tests/e2e-tests/target/surefire-reports/TEST-*.xml
-    paths:
-      - tests/e2e-tests/target/surefire-reports/
-    expire_in: 1 week
+    - key:
+        files:
+          - tests/e2e-tests/pom.xml
+      prefix: "e2e-maven-tests-$CI_PROJECT_ID"
+      paths:
+        - tests/e2e-tests/.m2/repository/
+      policy: pull
 
   allow_failure: true
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
-    - if: $CI_COMMIT_BRANCH == "develop"
+    # 1. Scheduled pipelines (full regression)
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+    # 2. MR targeting develop or main (pre-merge gate)
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" &&
+          ($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" ||
+           $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main")
+
+    # 3. Direct push to main/develop
     - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
 
 
 # ─────────────────────────────────────────
@@ -411,7 +400,7 @@ frontend-package-vulnerabilities-check:
     paths:
       - frontend/node_modules/
 
-#osv security stage, backend and frontedn
+#osv security stage, backend and frontend
 osv-scanner:
   stage: security
   image:
@@ -434,13 +423,12 @@ osv-scanner:
 socket-security:
   stage: security
   image:
-    name: socketdev/cli:latest
+    name: socketdev/cli:2.4.6
     entrypoint: [""]
+    pull_policy: if-not-present
   variables:
     SOCKET_SECURITY_API_KEY: $SOCKET_SECURITY_API_KEY
     GITLAB_TOKEN: $GITLAB_TOKEN
-    # This is an option to help speed up the processing
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   allow_failure: true
   #hardcoded 0 instead of ${CI_MERGE_REQUEST_IID:-0} for ommiting MR comments
   script:
@@ -450,9 +438,21 @@ socket-security:
         --scm gitlab \
         --pr-number 0  
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "develop"
+  - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
+  - if: $CI_COMMIT_BRANCH == "main"
+    changes:
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "**/pom.xml"
+      - "**/requirements.txt"
+      - "**/build.gradle"
+  - if: $CI_COMMIT_BRANCH == "develop"
+    changes:
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "**/pom.xml"
+      - "**/requirements.txt"
+      - "**/build.gradle"
 
 #snyk-scan
 # snyk-scan-backend:
