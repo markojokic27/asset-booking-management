@@ -44,6 +44,11 @@ export const hasBookingOverlap = ({
       ? new Date(`${fromDate}T${fromHour}:00`)
       : new Date(`${fromDate}T00:00:00`);
 
+  // check if the selected start time is in the past
+  if (selectedStart.toISOString() < new Date().toISOString()) {
+    return true;
+  }
+
   const selectedEnd =
     bookingPeriod === 'HOUR'
       ? new Date(`${toDate}T${toHour}:00`)
