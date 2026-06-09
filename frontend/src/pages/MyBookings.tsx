@@ -80,7 +80,7 @@ export default function MyBookings() {
 
         <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
-            <FilterDateInput
+            <FilterDateInput 
               id="my-bookings-from-date"
               label={t('myBookings.filter.fromDate')}
               value={fromDate}
@@ -88,7 +88,7 @@ export default function MyBookings() {
               max={toDate || undefined}
               className="w-full sm:w-40"
             />
-            <FilterDateInput
+            <FilterDateInput 
               id="my-bookings-to-date"
               label={t('myBookings.filter.toDate')}
               value={toDate}
@@ -97,7 +97,7 @@ export default function MyBookings() {
               className="w-full sm:w-40"
             />
             <div className="relative w-full pt-1 sm:w-40">
-              <FormDropdown
+              <FormDropdown data-testid="my-booking-asset-filter"
                 id="my-bookings-asset-filter"
                 aria-label={t('myBookings.filter.asset')}
                 value={selectedAssetId}
@@ -113,7 +113,7 @@ export default function MyBookings() {
               />
             </div>
           </div>
-          <SearchInput
+          <SearchInput data-testid="search-input"
             value={search}
             onChange={setSearch}
             placeholder={t('myBookings.search.placeholder')}

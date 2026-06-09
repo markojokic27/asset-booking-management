@@ -105,6 +105,9 @@ public class CommonConstants{
     public static final String FLOOR_LEVEL_MINUS_1 = "-1";
     public static final String FLOOR_LEVEL_MINUS_2 = "-2";
 
+    // My bookings list
+
+    public static final String ASSET="Desk A1";
     public static final String BROWSER = "BROWSER";
 
     // Drivers constants

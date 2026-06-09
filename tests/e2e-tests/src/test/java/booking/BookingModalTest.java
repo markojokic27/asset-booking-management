@@ -30,7 +30,7 @@ public class BookingModalTest extends BaseLogin {
     }
 
     @Test
-    public void bookNowIsEnabledAfterSelectingFreeSlot() throws InterruptedException{
+    public void bookNowIsEnabledAfterSelectingFreeSlot(){
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
         bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
@@ -38,7 +38,6 @@ public class BookingModalTest extends BaseLogin {
         bookingPage.clickNextMonth();
         bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
         bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
-        Thread.sleep(2000);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
