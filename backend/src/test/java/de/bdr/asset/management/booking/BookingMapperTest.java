@@ -75,6 +75,7 @@ class BookingMapperTest {
         assertThat(dto.user().surname()).isEqualTo(USER_SURNAME);
         assertThat(dto.user().email()).isEqualTo(USER_EMAIL);
         assertThat(dto.user().role()).isEqualTo(USER_ROLE);
+        assertThat(dto.user().managerEmail()).isEqualTo(MANAGER_EMAIL);
 
         assertThat(dto.asset()).isNotNull();
         assertThat(dto.asset().name()).isEqualTo(ASSET_NAME);

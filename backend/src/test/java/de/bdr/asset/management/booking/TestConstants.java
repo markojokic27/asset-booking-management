@@ -23,6 +23,7 @@ public final class TestConstants {
     public static final String USER_NAME = "Ivan";
     public static final String USER_SURNAME = "Ivić";
     public static final String USER_EMAIL = "ivan.ivic@example.com";
+    public static final String MANAGER_EMAIL = "manager@example.com";
     public static final UserRoleEnum USER_ROLE = UserRoleEnum.EMPLOYEE;
 
     public static final String ASSET_NAME = "Dune";
@@ -48,7 +49,8 @@ public final class TestConstants {
             USER_NAME,
             USER_SURNAME,
             USER_EMAIL,
-            USER_ROLE
+            USER_ROLE,
+            MANAGER_EMAIL
     );
 
     public static final CategorySummaryDTO CATEGORY_SUMMARY = new CategorySummaryDTO(

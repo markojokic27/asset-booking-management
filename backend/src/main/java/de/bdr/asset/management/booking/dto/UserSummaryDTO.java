@@ -7,5 +7,6 @@ public record UserSummaryDTO(
         String name,
         String surname,
         String email,
-        UserRoleEnum role
+        UserRoleEnum role,
+        String managerEmail
 ) {}

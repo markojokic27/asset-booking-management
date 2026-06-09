@@ -30,6 +30,7 @@ public class BookingMapperTestData {
         user.setSurname(USER_SURNAME);
         user.setEmail(USER_EMAIL);
         user.setRole(USER_ROLE);
+        user.setManagerEmail(MANAGER_EMAIL);
 
         AssetCategory category = new AssetCategory();
         category.setId(CATEGORY_ID);
