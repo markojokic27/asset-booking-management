@@ -224,11 +224,11 @@ playwright:e2e:
     - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
     - kill $(cat /tmp/frontend.pid 2>/dev/null) 2>/dev/null || true
 
+
   cache:
     - key:
         files:
           - backend/pom.xml
-      prefix: "e2e-maven-backend-$CI_PROJECT_ID"
       paths:
         - backend/.m2/repository/
       policy: pull
@@ -236,7 +236,6 @@ playwright:e2e:
     - key:
         files:
           - tests/e2e-tests/pom.xml
-      prefix: "e2e-maven-tests-$CI_PROJECT_ID"
       paths:
         - tests/e2e-tests/.m2/repository/
       policy: pull
