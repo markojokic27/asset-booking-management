@@ -37,6 +37,7 @@ export default function BookingsByAsset() {
   const [notes, setNotes] = React.useState('');
   const [selectedBooking, setSelectedBooking] =
     React.useState<BookingWithRelations | null>(null);
+  const [visibleMonth, setVisibleMonth] = React.useState(new Date());
 
   const calendarEvents = React.useMemo(
     () => mapBookingsToCalendarEvents(bookings),
@@ -45,7 +46,7 @@ export default function BookingsByAsset() {
 
   const isButtonDisabled = useBookingAvailability({
     assetStatus: asset?.status,
-    filters,
+    filters: filters,
     bookings,
     bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
   });
@@ -54,7 +55,7 @@ export default function BookingsByAsset() {
     assetId: Number(assetId),
     notes,
     setNotes,
-    filters,
+    filters: filters,
     refetch,
     bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
   });
@@ -145,11 +146,11 @@ export default function BookingsByAsset() {
       </div>
       {asset.category.name === 'Parking' && (
         <RecurringDaysSelector
-          //selectedDays={filters.selectedDays}
+          selectedDays={filters.selectedWeekdays}
           onChange={(days) =>
             setFilters((prev) => ({
               ...prev,
-              selectedDays: days,
+              selectedWeekdays: days,
             }))
           }
         />
@@ -168,6 +169,15 @@ export default function BookingsByAsset() {
           }))
         }
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
+        onMonthChange={setVisibleMonth}
+        selectedWeekdays={filters.selectedWeekdays}
+        setSelecterdWeekdays={(weekdays) =>
+          setFilters((prev) => ({
+            ...prev,
+            selectedWeekdays: weekdays,
+          }))
+        }
+        visibleMonth={visibleMonth}
       />
 
       <BookingDetailsModal

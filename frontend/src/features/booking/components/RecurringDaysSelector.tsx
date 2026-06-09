@@ -1,9 +1,9 @@
 type Props = {
-  //selectedDays: number[];
+  selectedDays: number[];
   onChange: (days: number[]) => void;
 };
 
-export function RecurringDaysSelector({ onChange: _onChange }: Props) {
+export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
   const days = [
     { value: 1, label: 'Ponedjeljak' },
     { value: 2, label: 'Utorak' },
@@ -13,12 +13,11 @@ export function RecurringDaysSelector({ onChange: _onChange }: Props) {
   ];
 
   const toggleDay = (day: number) => {
-    console.log('Toggling day:', day);
-    /*if (selectedDays.includes(day)) {
+    if (selectedDays.includes(day)) {
       onChange(selectedDays.filter((d) => d !== day));
     } else {
       onChange([...selectedDays, day]);
-    }*/
+    }
   };
 
   return (

@@ -7,6 +7,9 @@ import interactionPlugin from '@fullcalendar/interaction';
 // Types
 import type { BookingWithRelations } from '../types';
 
+// Utilis
+import { getDatesForWeekdays } from '../utilis/getDatesForWeekdays';
+
 //import hrLocale from '@fullcalendar/core/locales/hr';
 
 type CalendarEvent = {
@@ -30,9 +33,11 @@ type Props = {
   variant?: 'HOUR' | 'DAY';
   setSelectedBooking?: (booking: BookingWithRelations | null) => void;
   onRangeSelect: (fromDate: string, toDate: string) => void;
+  visibleMonth?: Date;
+  selectedWeekdays?: number[];
+  setSelecterdWeekdays?: (weekdays: number[]) => void;
+  onMonthChange?: (date: Date) => void;
 };
-
-
 
 export function AvailabilityCalendar({
   events,
@@ -41,6 +46,10 @@ export function AvailabilityCalendar({
   onDateClick,
   setSelectedBooking,
   onRangeSelect,
+  visibleMonth,
+  onMonthChange,
+  selectedWeekdays,
+  setSelecterdWeekdays,
   variant = 'DAY',
 }: Props) {
   const isPastDate = (date: Date) => {
@@ -90,6 +99,13 @@ export function AvailabilityCalendar({
     return date >= from && date <= to;
   };
 
+  const recurringDates = React.useMemo(() => {
+    if (!visibleMonth) {
+      return [];
+    }
+    return getDatesForWeekdays(visibleMonth, selectedWeekdays ?? []);
+  }, [visibleMonth, selectedWeekdays]);
+
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">
       <FullCalendar
@@ -104,9 +120,16 @@ export function AvailabilityCalendar({
         events={events}
         selectable={variant !== 'HOUR'}
         selectMirror={true}
-        dateClick={variant === 'HOUR' ? handleDateClick : undefined}
+        dateClick={
+          variant === 'HOUR'
+            ? handleDateClick
+            : undefined//() => setSelecterdWeekdays?.([]) TODO
+        }
         select={variant !== 'HOUR' ? handleDateRangeSelect : undefined}
         eventClick={handleEventClick}
+        datesSet={(info) => {
+          onMonthChange?.(info.view.currentStart);
+        }}
         eventContent={(eventInfo) => {
           const start = eventInfo.event.start?.toLocaleTimeString([], {
             hour: 'numeric',
@@ -137,6 +160,7 @@ export function AvailabilityCalendar({
             selectedFromDate,
             selectedToDate
           );
+          const isRecurring = recurringDates.includes(date);
 
           const isPast = isPastDate(arg.date);
 
@@ -147,7 +171,7 @@ export function AvailabilityCalendar({
               ? 'bg-gray-100 text-gray-400 opacity-60 dark:bg-gray-900 dark:text-gray-600'
               : 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20',
 
-            isSelected
+            isSelected || isRecurring
               ? 'bg-blue-100 ring-2 ring-blue-500 dark:bg-blue-900/40'
               : '',
           ].join(' ');

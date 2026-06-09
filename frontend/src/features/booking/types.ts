@@ -66,6 +66,7 @@ export type Filters = {
   toDate: string;
   fromHour: string;
   toHour: string;
+  selectedWeekdays: number[];
 };
 
 export type BookingsState = {

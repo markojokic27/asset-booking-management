@@ -14,6 +14,7 @@ type Filters = {
   toDate: string;
   fromHour: string;
   toHour: string;
+  selectedWeekdays: number[];
 };
 
 type Variant = 'DAY' | 'HOUR' | 'DAYS';

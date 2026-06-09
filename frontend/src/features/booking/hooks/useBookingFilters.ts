@@ -11,6 +11,7 @@ const defaultFilters: Filters = {
   toDate: '',
   fromHour: '',
   toHour: '',
+  selectedWeekdays: [],
 };
 
 export function useBookingFilters() {
@@ -23,6 +24,7 @@ export function useBookingFilters() {
       toDate: date,
       fromHour: hourOptions[0],
       toHour: hourOptions[hourOptions.length - 1],
+      selectedWeekdays: [],
     }));
   }, []);
 
