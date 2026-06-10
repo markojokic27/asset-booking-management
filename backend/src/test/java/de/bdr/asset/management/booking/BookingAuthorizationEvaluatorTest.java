@@ -3,6 +3,7 @@ package de.bdr.asset.management.booking;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
+
 import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
 import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.UserRoleEnum;
