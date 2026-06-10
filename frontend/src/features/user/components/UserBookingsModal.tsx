@@ -130,21 +130,23 @@ export const UserBookingsModal: FC<UserBookingsModalProps> = ({
       {/* error state */}
       {error && !loading && <p className="py-6 text-sm text-red-500">{error}</p>}
 
-      {/* success state */}
+      {/* success state — scroll after ~8 rows */}
       {!loading && !error && (
-        <Table
-          data={bookings}
-          columns={bookingColumns}
-          // key for the bookings
-          getRowKey={(booking) => String(booking.id)}
-          // style for past bookings
-          rowClassName={(booking) =>
-            isBookingPastEnd(booking) ? 'opacity-55' : undefined
-          }
-          className="w-full"
-          // empty message for the bookings
-          emptyMessage={t('users.modals.bookings.empty')}
-        />
+        <div className="max-h-[min(29rem,calc(100vh-12rem))] overflow-y-auto [&_thead]:sticky [&_thead]:top-0 [&_thead]:z-10">
+          <Table
+            data={bookings}
+            columns={bookingColumns}
+            // key for the bookings
+            getRowKey={(booking) => String(booking.id)}
+            // style for past bookings
+            rowClassName={(booking) =>
+              isBookingPastEnd(booking) ? 'opacity-55' : undefined
+            }
+            className="w-full"
+            // empty message for the bookings
+            emptyMessage={t('users.modals.bookings.empty')}
+          />
+        </div>
       )}
     </Modal>
   );
