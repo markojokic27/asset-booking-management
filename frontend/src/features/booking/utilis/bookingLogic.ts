@@ -45,8 +45,6 @@ export const hasBookingOverlap = ({
   fromHour,
   toHour,
   bookingPeriod,
-  selectedWeekdays,
-  visibleMonth,
 }: {
   bookings: BookingWithRelations[];
   fromDate: string;
@@ -54,10 +52,7 @@ export const hasBookingOverlap = ({
   fromHour?: string;
   toHour?: string;
   bookingPeriod: 'HOUR' | 'DAY';
-  selectedWeekdays: number[];
-  visibleMonth: Date;
 }) => {
-  
   const selectedStart =
     bookingPeriod === 'HOUR'
       ? new Date(`${fromDate}T${fromHour}:00`)

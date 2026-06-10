@@ -15,6 +15,7 @@ export function useCreateBooking({
   setNotes,
   refetch,
   bookingPeriod,
+  availableRecurringDates,
 }: {
   assetId: number;
   filters: Filters;
@@ -22,9 +23,18 @@ export function useCreateBooking({
   setNotes: React.Dispatch<React.SetStateAction<string>>;
   refetch: () => Promise<unknown>;
   bookingPeriod: 'HOUR' | 'DAY';
+  availableRecurringDates: string[];
 }) {
   const [isCreating, setIsCreating] = React.useState(false);
   const { user } = useCurrentUser();
+
+  if (availableRecurringDates.length > 0) {
+    console.log(
+      'Creating recurring booking with dates:',
+      availableRecurringDates
+    );
+    //TODO new API point
+  }
 
   const handleCreateBooking = React.useCallback(async () => {
     if (bookingPeriod === 'DAY') {

@@ -13,17 +13,26 @@ export function useBookingAvailability({
   filters,
   bookings,
   bookingPeriod,
-  visibleMonth,
+  reccuringDates,
+  avaibleRecurringDates,
 }: {
   assetStatus?: string;
   filters: Filters;
   bookings: BookingWithRelations[];
   bookingPeriod: 'HOUR' | 'DAY';
-  visibleMonth: Date;
+  reccuringDates: number[];
+  avaibleRecurringDates: string[];
 }) {
   return React.useMemo(() => {
     if (assetStatus !== 'ACTIVE') {
       return true;
+    }
+
+    if (reccuringDates.length > 0) {
+      if (avaibleRecurringDates.length === 0) {
+        return true;
+      }
+      return false;
     }
 
     if (!filters.fromDate || !filters.toDate) {
@@ -40,9 +49,7 @@ export function useBookingAvailability({
       toDate: filters.toDate,
       fromHour: filters.fromHour,
       toHour: filters.toHour,
-      selectedWeekdays: filters.selectedWeekdays,
       bookingPeriod,
-      visibleMonth,
     });
-  }, [assetStatus, bookings, filters, visibleMonth]);
+  }, [assetStatus, bookings, filters, reccuringDates, avaibleRecurringDates]);
 }

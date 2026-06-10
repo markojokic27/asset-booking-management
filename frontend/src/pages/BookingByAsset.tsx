@@ -50,8 +50,7 @@ export default function BookingsByAsset() {
     [recurringDates, bookings]
   );
 
-  console.log('Recurring dates:', recurringDates);
-
+  console.log('Available recurring dates:', availableRecurringDates);
   const calendarEvents = React.useMemo(
     () => mapBookingsToCalendarEvents(bookings),
     [bookings]
@@ -62,7 +61,8 @@ export default function BookingsByAsset() {
     filters: filters,
     bookings,
     bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
-    visibleMonth,
+    reccuringDates: filters.selectedWeekdays,
+    avaibleRecurringDates: availableRecurringDates,
   });
 
   const { isCreating, handleCreateBooking } = useCreateBooking({
@@ -72,6 +72,7 @@ export default function BookingsByAsset() {
     filters: filters,
     refetch,
     bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
+    availableRecurringDates: availableRecurringDates,
   });
 
   if (loading) {
