@@ -9,12 +9,24 @@ object Routes {
     const val ASSETS = "assets"
     const val ASSET_DETAILS = "asset_details/{assetId}"
     const val BOOKINGS = "bookings"
+    const val BOOKING_DETAILS =
+        "booking_details/{bookingId}?assetName={assetName}&fromDate={fromDate}&toDate={toDate}&status={status}&categoryName={categoryName}&isHourlyBooking={isHourlyBooking}"
     const val PROFILE = "profile"
     const val CREATE_BOOKING = "create_booking/{assetId}"
     const val BOOKING_SUCCESS =
         "booking_success?assetName={assetName}&fromDate={fromDate}&toDate={toDate}"
 
     fun assetDetails(assetId: Long) = "asset_details/$assetId"
+
+    fun bookingDetails(
+        bookingId: Long,
+        assetName: String,
+        fromDate: String,
+        toDate: String,
+        status: String,
+        categoryName: String,
+        isHourlyBooking: Boolean
+    ) = "booking_details/$bookingId?assetName=${Uri.encode(assetName)}&fromDate=${Uri.encode(fromDate)}&toDate=${Uri.encode(toDate)}&status=${Uri.encode(status)}&categoryName=${Uri.encode(categoryName)}&isHourlyBooking=$isHourlyBooking"
 
     fun createBooking(assetId: Long) = "create_booking/$assetId"
 

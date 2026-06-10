@@ -17,7 +17,11 @@ data class MyBookingUiModel(
     val id: Long,
     val assetName: String,
     val bookingPeriod: String,
-    val status: String
+    val status: String,
+    val bookingStart: String,
+    val bookingEnd: String,
+    val categoryName: String,
+    val isHourlyBooking: Boolean
 )
 
 data class BookingsUiState(
@@ -69,7 +73,11 @@ class BookingsViewModel @Inject constructor(
                             id = booking.id,
                             assetName = booking.asset.name,
                             bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
-                            status = booking.status
+                            status = booking.status,
+                            bookingStart = booking.bookingStart,
+                            bookingEnd = booking.bookingEnd,
+                            categoryName = booking.asset.category.name.ifBlank { "-" },
+                            isHourlyBooking = booking.asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
                         )
                     }
 
@@ -84,7 +92,11 @@ class BookingsViewModel @Inject constructor(
                             id = booking.id,
                             assetName = booking.asset.name,
                             bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
-                            status = booking.status
+                            status = booking.status,
+                            bookingStart = booking.bookingStart,
+                            bookingEnd = booking.bookingEnd,
+                            categoryName = booking.asset.category.name.ifBlank { "-" },
+                            isHourlyBooking = booking.asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
                         )
                     }
 

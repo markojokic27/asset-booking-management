@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun BookingsScreen(
+    onBookingClick: (MyBookingUiModel) -> Unit = {},
     viewModel: BookingsViewModel = hiltViewModel()
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingsTab.MyBookings.ordinal) }
@@ -37,7 +38,8 @@ fun BookingsScreen(
                     isLoading = uiState.isLoading,
                     errorMessage = uiState.errorMessage,
                     bookings = uiState.myBookings,
-                    emptyMessage = "No current or upcoming bookings found."
+                    emptyMessage = "No current or upcoming bookings found.",
+                    onBookingClick = onBookingClick
                 )
             }
 
@@ -46,7 +48,8 @@ fun BookingsScreen(
                     isLoading = uiState.isLoading,
                     errorMessage = uiState.errorMessage,
                     bookings = uiState.historyBookings,
-                    emptyMessage = "No bookings found."
+                    emptyMessage = "No bookings found.",
+                    onBookingClick = onBookingClick
                 )
             }
         }
@@ -58,7 +61,8 @@ private fun BookingListContent(
     isLoading: Boolean,
     errorMessage: String?,
     bookings: List<MyBookingUiModel>,
-    emptyMessage: String
+    emptyMessage: String,
+    onBookingClick: (MyBookingUiModel) -> Unit
 ) {
     when {
         isLoading -> {
@@ -82,7 +86,10 @@ private fun BookingListContent(
                     items = bookings,
                     key = { booking -> booking.id }
                 ) { booking ->
-                    BookingCard(booking = booking)
+                    BookingCard(
+                        booking = booking,
+                        onClick = { onBookingClick(booking) }
+                    )
                 }
             }
         }

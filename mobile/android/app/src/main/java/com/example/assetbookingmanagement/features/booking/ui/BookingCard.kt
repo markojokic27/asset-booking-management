@@ -11,9 +11,10 @@ import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 
 @Composable
 fun BookingCard(
-    booking: MyBookingUiModel
+    booking: MyBookingUiModel,
+    onClick: () -> Unit = {}
 ) {
-    AppCard {
+    AppCard(onClick = onClick) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = booking.assetName,

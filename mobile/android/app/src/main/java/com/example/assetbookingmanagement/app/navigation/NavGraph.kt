@@ -15,6 +15,7 @@ import com.example.assetbookingmanagement.core.ui.components.Header
 import com.example.assetbookingmanagement.features.asset.ui.AssetDetailsScreen
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
 import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
+import com.example.assetbookingmanagement.features.booking.ui.BookingDetailsScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingSuccessScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
 import com.example.assetbookingmanagement.features.home.ui.HomeScreen
@@ -30,6 +31,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
     val showBottomBar =
         isBottomNavRoute(currentRoute) ||
             currentRoute == Routes.ASSET_DETAILS ||
+            currentRoute == Routes.BOOKING_DETAILS ||
             currentRoute == Routes.CREATE_BOOKING ||
             currentRoute == Routes.BOOKING_SUCCESS
 
@@ -37,6 +39,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
         Routes.HOME -> "Home"
         Routes.ASSETS -> "Assets"
         Routes.BOOKINGS -> "Bookings"
+        Routes.BOOKING_DETAILS -> "Booking details"
         Routes.PROFILE -> "Profile"
         Routes.CREATE_BOOKING -> "Create booking"
         Routes.BOOKING_SUCCESS -> "Booking status"
@@ -112,7 +115,63 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             }
 
             composable(Routes.BOOKINGS) {
-                BookingsScreen()
+                BookingsScreen(
+                    onBookingClick = { booking ->
+                        navController.navigate(
+                            Routes.bookingDetails(
+                                bookingId = booking.id,
+                                assetName = booking.assetName,
+                                fromDate = booking.bookingStart,
+                                toDate = booking.bookingEnd,
+                                status = booking.status,
+                                categoryName = booking.categoryName,
+                                isHourlyBooking = booking.isHourlyBooking
+                            )
+                        )
+                    }
+                )
+            }
+
+            composable(
+                route = Routes.BOOKING_DETAILS,
+                arguments = listOf(
+                    navArgument("bookingId") { type = NavType.LongType },
+                    navArgument("assetName") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("fromDate") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("toDate") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("status") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("categoryName") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("isHourlyBooking") {
+                        type = NavType.BoolType
+                        defaultValue = false
+                    }
+                )
+            ) { backStackEntry ->
+                val bookingId = backStackEntry.arguments?.getLong("bookingId") ?: return@composable
+                BookingDetailsScreen(
+                    bookingId = bookingId,
+                    assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
+                    bookingStart = backStackEntry.arguments?.getString("fromDate") ?: "-",
+                    bookingEnd = backStackEntry.arguments?.getString("toDate") ?: "-",
+                    status = backStackEntry.arguments?.getString("status") ?: "-",
+                    categoryName = backStackEntry.arguments?.getString("categoryName") ?: "-",
+                    isHourlyBooking = backStackEntry.arguments?.getBoolean("isHourlyBooking") ?: false
+                )
             }
 
             composable(Routes.PROFILE) {
