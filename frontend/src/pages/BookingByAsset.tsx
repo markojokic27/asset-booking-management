@@ -26,6 +26,8 @@ import { Input } from '../components/ui/Input';
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
 
+// TODO: internationalization
+
 export default function BookingsByAsset() {
   const { assetId } = useParams();
   const { t } = useTranslation();

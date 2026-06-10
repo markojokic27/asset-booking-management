@@ -25,5 +25,15 @@
     "cancelled": "Otkazano",
     "rejected": "Odbijeno",
     "completed": "Dovršeno"
+  },
+  "recurringDays": {
+    "bookEvery": "Rezerviraj svaki",
+    "monday": "Ponedjeljak",
+    "tuesday": "Utorak",
+    "wednesday": "Srijeda",
+    "thursday": "Četvrtak",
+    "friday": "Petak",
+    "saturday": "Subota",
+    "sunday": "Nedjelja"
   }
 }

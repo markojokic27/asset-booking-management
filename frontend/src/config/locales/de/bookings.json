@@ -25,5 +25,15 @@
     "cancelled": "Abgesagt",
     "rejected": "Abgelehnt",
     "completed": "Fertiggestellt"
+  },
+  "recurringDays": {
+    "bookEvery": "Jeden buchen",
+    "monday": "Montag",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Donnerstag",
+    "friday": "Freitag",
+    "saturday": "Samstag",
+    "sunday": "Sonntag"
   }
 }
