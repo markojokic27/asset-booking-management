@@ -1,9 +1,11 @@
 // external imports
 import { useEffect, useMemo, useState, type FC } from 'react';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useTranslation } from 'react-i18next';
 
 // components
+import { Button } from '../../../components/ui/Button';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
@@ -14,6 +16,7 @@ import { getAllUserBookings } from '../../booking/api/bookingApi';
 
 // utils
 import { isBookingPastEnd } from '../../booking/utilis/bookingLogic';
+import { exportUserBookingsCsv } from '../utilis/csv';
 
 // types
 import type { BookingWithRelations } from '../../booking/types';
@@ -109,15 +112,26 @@ export const UserBookingsModal: FC<UserBookingsModalProps> = ({
           <p className="block text-base font-black tracking-wider">{user.fullName}</p>
         </div>
       }
-      // close button for the modal
       headerRight={
-        <IconButton
-          data-testid="user-booking-close-button"
-          onClick={onClose}
-          aria-label={t('users.modals.bookings.closeAria')}
-        >
-          <CloseOutlinedIcon fontSize="small" />
-        </IconButton>
+        <div className="flex items-center gap-10">
+          <Button
+            data-testid="user-bookings-export-button"
+            size="sm"
+            variant="outline"
+            iconLeft={<FileDownloadOutlinedIcon fontSize="small" />}
+            disabled={loading || !!error || bookings.length === 0}
+            onClick={() => exportUserBookingsCsv(bookings, user, t)}
+          >
+            {t('users.modals.bookings.export')}
+          </Button>
+          <IconButton
+            data-testid="user-booking-close-button"
+            onClick={onClose}
+            aria-label={t('users.modals.bookings.closeAria')}
+          >
+            <CloseOutlinedIcon fontSize="small" />
+          </IconButton>
+        </div>
       }
     >
       {/* loading state */}

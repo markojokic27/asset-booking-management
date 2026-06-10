@@ -82,6 +82,7 @@
     "bookings": {
       "ariaLabel": "Rezervacije",
       "title": "Rezervacije",
+      "export": "Izvoz",
       "closeAria": "Zatvori modal rezervacija",
       "loading": "Učitavanje rezervacija...",
       "empty": "Nema rezervacija za ovog korisnika.",

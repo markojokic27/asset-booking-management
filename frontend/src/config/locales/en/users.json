@@ -82,6 +82,7 @@
     "bookings": {
       "ariaLabel": "Bookings",
       "title": "Bookings",
+      "export": "Export",
       "closeAria": "Close bookings modal",
       "loading": "Loading bookings...",
       "empty": "No bookings for this user.",

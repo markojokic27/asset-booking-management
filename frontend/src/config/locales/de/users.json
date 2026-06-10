@@ -82,6 +82,7 @@
     "bookings": {
       "ariaLabel": "Buchungen",
       "title": "Buchungen",
+      "export": "Exportieren",
       "closeAria": "Buchungsmodal schließen",
       "loading": "Buchungen werden geladen…",
       "empty": "Keine Buchungen für diesen Benutzer.",
