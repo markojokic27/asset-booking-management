@@ -107,7 +107,7 @@ public class BookingController {
     /** APPROVE */
     @Operation(summary = "Approve a pending booking", description = "Only available to the manager of the user who created the booking, or an ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("@bookingAuth.canManageBooking(authentication, #id)")
     @PostMapping("/{id}/approve")
     public ResponseEntity<BookingResponseDTO> approve(
             @PathVariable Long id
@@ -121,7 +121,7 @@ public class BookingController {
     /** REJECT */
     @Operation(summary = "Reject a pending booking", description = "Only available to the manager of the user who created the booking, or an ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("@bookingAuth.canManageBooking(authentication, #id)")
     @PostMapping("/{id}/reject")
     public ResponseEntity<BookingResponseDTO> reject(
             @PathVariable Long id

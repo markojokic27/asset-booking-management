@@ -1,0 +1,27 @@
+package de.bdr.asset.management.booking;
+
+import de.bdr.asset.management.core.security.userdetails.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+@Component("bookingAuth")
+@RequiredArgsConstructor
+public class BookingAuthorizationEvaluator {
+
+    private final BookingRepository bookingRepository;
+
+    public boolean canManageBooking(Authentication authentication, Long bookingId) {
+
+        if (authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return true;
+        }
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+        return booking.getUser().getManagerEmail().equalsIgnoreCase(currentUser.getEmail());
+    }
+}

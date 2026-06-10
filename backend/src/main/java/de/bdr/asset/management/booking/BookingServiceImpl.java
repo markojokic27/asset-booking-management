@@ -191,23 +191,11 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalStateException("Only pending bookings can be approved.");
         }
 
-        Long loggedInUserId = securityService.getCurrentUserId();
-        User employee = booking.getUser();
-
-        User loggedInUser = userRepository.findById(loggedInUserId)
-                .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-
-        boolean isManager = employee.getManagerEmail().equalsIgnoreCase(loggedInUser.getEmail());
-
-        if (!securityService.isAdmin() && !isManager) {
-            throw new AccessDeniedException("You are not authorized to approve this booking.");
-        }
-
         booking.setStatus(BookingStatusEnum.APPROVED);
         repository.save(booking);
 
         emailService.sendStatusNotificationEmail(
-                employee.getEmail(),
+                booking.getUser().getEmail(),
                 booking.getAsset().getName(),
                 booking.getStatus().name()
         );
@@ -226,23 +214,11 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalStateException("Only pending bookings can be rejected.");
         }
 
-        Long loggedInUserId = securityService.getCurrentUserId();
-        User employee = booking.getUser();
-
-        User loggedInUser = userRepository.findById(loggedInUserId)
-                .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found"));
-
-        boolean isManager = employee.getManagerEmail().equalsIgnoreCase(loggedInUser.getEmail());
-
-        if (!securityService.isAdmin() && !isManager) {
-            throw new AccessDeniedException("You are not authorized to reject this booking.");
-        }
-
         booking.setStatus(BookingStatusEnum.REJECTED);
         repository.save(booking);
 
         emailService.sendStatusNotificationEmail(
-                employee.getEmail(),
+                booking.getUser().getEmail(),
                 booking.getAsset().getName(),
                 booking.getStatus().name()
         );
