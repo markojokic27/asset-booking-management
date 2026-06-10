@@ -49,6 +49,7 @@ export function AvailabilityCalendar({
   visibleMonth,
   onMonthChange,
   selectedWeekdays,
+  // @ts-ignore - prop required by parent BookingByAsset.tsx, frontend team to refactor
   setSelecterdWeekdays,
   variant = 'DAY',
 }: Props) {

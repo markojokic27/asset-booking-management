@@ -22,6 +22,7 @@ const defaultFilters: Filters = {
   toDate: '',
   fromHour: '',
   toHour: '',
+  selectedWeekdays: [],
 };
 
 export default function Bookings() {
