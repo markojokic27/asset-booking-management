@@ -10,6 +10,7 @@ import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
 
 // Utils
 import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
+import { getDatesForWeekdays } from '../features/booking/utilis/getDatesForWeekdays';
 import { useTranslation } from 'react-i18next';
 
 // Components
@@ -39,6 +40,13 @@ export default function BookingsByAsset() {
     React.useState<BookingWithRelations | null>(null);
   const [visibleMonth, setVisibleMonth] = React.useState(new Date());
 
+  const recurringDates = getDatesForWeekdays(
+    visibleMonth,
+    filters.selectedWeekdays
+  );
+
+  console.log('Recurring dates:', recurringDates);
+
   const calendarEvents = React.useMemo(
     () => mapBookingsToCalendarEvents(bookings),
     [bookings]
@@ -49,6 +57,7 @@ export default function BookingsByAsset() {
     filters: filters,
     bookings,
     bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
+    visibleMonth,
   });
 
   const { isCreating, handleCreateBooking } = useCreateBooking({
@@ -145,7 +154,7 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
-      {asset.category.name === 'Parking' && (
+      {asset.category.name === 'Parking' && ( //TODO - allow only to privileged users
         <RecurringDaysSelector
           selectedDays={filters.selectedWeekdays}
           onChange={(days) =>
@@ -176,14 +185,8 @@ export default function BookingsByAsset() {
         }
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
         onMonthChange={setVisibleMonth}
-        selectedWeekdays={filters.selectedWeekdays}
-        setSelecterdWeekdays={(weekdays) =>
-          setFilters((prev) => ({
-            ...prev,
-            selectedWeekdays: weekdays,
-          }))
-        }
-        visibleMonth={visibleMonth}
+        recurringDates={recurringDates}
+        bookings={bookings}
       />
 
       <BookingDetailsModal

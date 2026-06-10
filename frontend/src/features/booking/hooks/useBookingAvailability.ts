@@ -13,11 +13,13 @@ export function useBookingAvailability({
   filters,
   bookings,
   bookingPeriod,
+  visibleMonth,
 }: {
   assetStatus?: string;
   filters: Filters;
   bookings: BookingWithRelations[];
   bookingPeriod: 'HOUR' | 'DAY';
+  visibleMonth: Date;
 }) {
   return React.useMemo(() => {
     if (assetStatus !== 'ACTIVE') {
@@ -38,7 +40,9 @@ export function useBookingAvailability({
       toDate: filters.toDate,
       fromHour: filters.fromHour,
       toHour: filters.toHour,
+      selectedWeekdays: filters.selectedWeekdays,
       bookingPeriod,
+      visibleMonth,
     });
-  }, [assetStatus, bookings, filters]);
+  }, [assetStatus, bookings, filters, visibleMonth]);
 }

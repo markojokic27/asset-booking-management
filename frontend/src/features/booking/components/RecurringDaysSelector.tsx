@@ -21,7 +21,7 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
   };
 
   return (
-    <div className="my-6">
+    <div className="mb-6">
       <p className="mb-2 font-medium">Rezerviraj svaki:</p>
 
       <div className="flex flex-wrap gap-4">

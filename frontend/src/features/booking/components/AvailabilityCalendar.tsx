@@ -8,7 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import type { BookingWithRelations } from '../types';
 
 // Utilis
-import { getDatesForWeekdays } from '../utilis/getDatesForWeekdays';
+import { getAvailableRecurringDates } from '../utilis/getAvailableRecurringDates';
 
 //import hrLocale from '@fullcalendar/core/locales/hr';
 
@@ -28,15 +28,13 @@ type Props = {
   events: CalendarEvent[];
   selectedFromDate?: string;
   selectedToDate?: string;
-
   onDateClick?: (date: string) => void;
   variant?: 'HOUR' | 'DAY';
   setSelectedBooking?: (booking: BookingWithRelations | null) => void;
   onRangeSelect: (fromDate: string, toDate: string) => void;
-  visibleMonth?: Date;
-  selectedWeekdays?: number[];
-  setSelecterdWeekdays?: (weekdays: number[]) => void;
+  recurringDates?: string[];
   onMonthChange?: (date: Date) => void;
+  bookings: BookingWithRelations[];
 };
 
 export function AvailabilityCalendar({
@@ -46,12 +44,10 @@ export function AvailabilityCalendar({
   onDateClick,
   setSelectedBooking,
   onRangeSelect,
-  visibleMonth,
   onMonthChange,
-  selectedWeekdays,
-  // @ts-ignore - prop required by parent BookingByAsset.tsx, frontend team to refactor
-  setSelecterdWeekdays,
+  recurringDates = [],
   variant = 'DAY',
+  bookings,
 }: Props) {
   const isPastDate = (date: Date) => {
     const today = new Date();
@@ -100,12 +96,10 @@ export function AvailabilityCalendar({
     return date >= from && date <= to;
   };
 
-  const recurringDates = React.useMemo(() => {
-    if (!visibleMonth) {
-      return [];
-    }
-    return getDatesForWeekdays(visibleMonth, selectedWeekdays ?? []);
-  }, [visibleMonth, selectedWeekdays]);
+  const availableRecurringDates = React.useMemo(
+    () => getAvailableRecurringDates(recurringDates, bookings),
+    [recurringDates, bookings]
+  );
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">
@@ -121,13 +115,7 @@ export function AvailabilityCalendar({
         events={events}
         selectable={variant !== 'HOUR'}
         selectMirror={true}
-        dateClick={
-          variant === 'HOUR'
-            ? handleDateClick
-            : () => {
-                setSelecterdWeekdays?.([]);
-              }
-        }
+        dateClick={variant === 'HOUR' ? handleDateClick : undefined}
         select={variant !== 'HOUR' ? handleDateRangeSelect : undefined}
         eventClick={handleEventClick}
         datesSet={(info) => {
@@ -163,8 +151,7 @@ export function AvailabilityCalendar({
             selectedFromDate,
             selectedToDate
           );
-          const isRecurring = recurringDates.includes(date);
-
+          const isRecurring = availableRecurringDates.includes(date);
           const isPast = isPastDate(arg.date);
 
           return [

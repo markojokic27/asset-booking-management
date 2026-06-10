@@ -8,6 +8,20 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: '#6b7280',
 };
 
+// function to check if a booking is past its end date
+export const isBookingPastEnd = (
+  booking: Pick<BookingWithRelations, 'bookingEnd'>
+) => new Date(booking.bookingEnd).getTime() < Date.now();
+
+// function to sort bookings by start date newest first
+export const sortBookingsNewestFirst = (
+  bookings: BookingWithRelations[]
+): BookingWithRelations[] =>
+  [...bookings].sort(
+    (a, b) =>
+      new Date(b.bookingStart).getTime() - new Date(a.bookingStart).getTime()
+  );
+
 export const mapBookingsToCalendarEvents = (
   bookings: BookingWithRelations[]
 ) => {
@@ -31,6 +45,8 @@ export const hasBookingOverlap = ({
   fromHour,
   toHour,
   bookingPeriod,
+  selectedWeekdays,
+  visibleMonth,
 }: {
   bookings: BookingWithRelations[];
   fromDate: string;
@@ -38,7 +54,10 @@ export const hasBookingOverlap = ({
   fromHour?: string;
   toHour?: string;
   bookingPeriod: 'HOUR' | 'DAY';
+  selectedWeekdays: number[];
+  visibleMonth: Date;
 }) => {
+  
   const selectedStart =
     bookingPeriod === 'HOUR'
       ? new Date(`${fromDate}T${fromHour}:00`)
@@ -72,17 +91,3 @@ export const formatBookingTime = (start: string | Date, end: string | Date) => {
 
   return `${startDate.toLocaleString()} – ${endDate.toLocaleString()}`;
 };
-
-// function to check if a booking is past its end date
-export const isBookingPastEnd = (
-  booking: Pick<BookingWithRelations, 'bookingEnd'>
-) => new Date(booking.bookingEnd).getTime() < Date.now();
-
-// function to sort bookings by start date newest first
-export const sortBookingsNewestFirst = (
-  bookings: BookingWithRelations[]
-): BookingWithRelations[] =>
-  [...bookings].sort(
-    (a, b) =>
-      new Date(b.bookingStart).getTime() - new Date(a.bookingStart).getTime()
-  );
