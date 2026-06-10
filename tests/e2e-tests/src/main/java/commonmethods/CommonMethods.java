@@ -2,7 +2,6 @@ package commonmethods;
 
 import config.ConfigFromFile;
 import constants.CommonConstants;
-// import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -18,34 +17,33 @@ import java.time.Duration;
 @Log4j2
 public class CommonMethods {
 
-    // @Getter
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    // Add this manually
+    protected CommonMethods() {}
+
     public static WebDriver getDriver() {
         return driver;
     }
 
-    protected CommonMethods() {
-    }
+
+    //  Browser setup
 
     public static boolean openBrowser() {
         try {
             createDriver();
-            getDriver().get(
-                    ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.LOGIN_URL_EXTENSION);
-            getDriver().manage().window().maximize();
+            driver.get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.LOGIN_URL_EXTENSION);
+            driver.manage().window().maximize();
             wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             return true;
         } catch (Exception e) {
-            log.error("openBrowser", e);
+            log.error("openBrowser failed", e);
+            return false;
         }
-        return false;
     }
 
     public static void closeBrowser() {
-        getDriver().quit();
+        driver.quit();
     }
 
     public static void createDriver() {
@@ -57,24 +55,73 @@ public class CommonMethods {
                 driver = new FirefoxDriver(options);
             } else if (browser.equalsIgnoreCase(CommonConstants.CHROME)) {
                 ChromeOptions options = new ChromeOptions();
-                options.addArguments("--no-sandbox");
-                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--no-sandbox", "--disable-dev-shm-usage");
                 driver = new ChromeDriver(options);
             }
         } catch (Exception e) {
-            log.error("createDriver", e);
+            log.error("createDriver failed", e);
         }
     }
 
+
+    //  Private helper
+
+    private static WebElement getElement(By locator) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+
+    //  Public methods
+
     public static void clickOnElement(By locator) {
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(locator));
-            driver.findElement(locator).click();
+            wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
         } catch (Exception e) {
-            log.error("click on element failed", e);
+            log.error("clickOnElement failed", e);
         }
     }
-    protected boolean isElementEnabled(By locator) {
+
+    public static void typeInElement(By locator, String text) {
+        try {
+            WebElement element = getElement(locator);
+            element.click();
+            element.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            if (text != null && !text.isEmpty()) {
+                element.sendKeys(text);
+            }
+        } catch (Exception e) {
+            log.error("typeInElement failed", e);
+        }
+    }
+
+    public static void selectByVisibleText(By locator, String text) {
+        try {
+            new Select(getElement(locator)).selectByVisibleText(text);
+        } catch (Exception e) {
+            log.error("selectByVisibleText failed", e);
+        }
+    }
+
+    public static void inputDate(By locator, String date) {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            WebElement element = driver.findElement(locator);
+            element.sendKeys(date);
+        } catch (Exception e) {
+            log.error("inputDate failed", e);
+        }
+    }
+
+    public static boolean isElementVisible(By locator) {
+        try {
+            getElement(locator);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isElementEnabled(By locator) {
         try {
             return driver.findElement(locator).isEnabled();
         } catch (Exception e) {
@@ -82,7 +129,7 @@ public class CommonMethods {
         }
     }
 
-    protected boolean elementHasClass(By locator, String cssClass) {
+    public static boolean elementHasClass(By locator, String cssClass) {
         try {
             String classes = driver.findElement(locator).getAttribute("class");
             return classes != null && classes.contains(cssClass);
@@ -91,58 +138,20 @@ public class CommonMethods {
         }
     }
 
-
-    public static boolean isElementVisible(By locator) {
+    public static void scrollToElement(By locator) {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-            return true;
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
         } catch (Exception e) {
-            return false;
+            log.error("scrollToElement failed", e);
         }
-    }
-
-    public static void typeInElement(By locator, String text) {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-
-            WebElement element = driver.findElement(locator);
-            element.click();
-            element.sendKeys(Keys.CONTROL + "a");
-            element.sendKeys(Keys.BACK_SPACE);
-
-            if (text != null && !text.isEmpty()) {
-                element.sendKeys(text);
-            }
-
-        } catch (Exception e) {
-            log.error("type in element failed", e);
-        }
-    }
-
-    public static void selectByVisibleText(By locator, String text) {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-
-            Select select = new Select(driver.findElement(locator));
-            select.selectByVisibleText(text);
-
-        } catch (Exception e) {
-            log.error("select by visible text failed", e);
-        }
-    }
-
-    public void scrollToElement(By locator) {
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block: 'center'});", element
-        );
     }
 
     public static boolean waitForUrlContains(String extension) {
         try {
             return wait.until(ExpectedConditions.urlContains(extension));
         } catch (Exception e) {
-            log.error("waitForUrl failed", e);
+            log.error("waitForUrlContains failed", e);
             return false;
         }
     }
@@ -155,5 +164,4 @@ public class CommonMethods {
             return "";
         }
     }
-
 }

@@ -33,5 +33,27 @@ public class AllBookingTest extends BaseLogin {
 
     }
 
+    @Test
+    public void filterBookingsByDateRange() throws InterruptedException{
+        myBookingsPage.inputFromDate(CommonConstants.DATE_FROM);
+        myBookingsPage.inputToDate(CommonConstants.DATE_TO);
+        Thread.sleep(2000);
+        assertTrue(isElementVisible(myBookingsPage.bookingList));
+    }
+
+    @Test
+    public void filterBookingsByFromDateOnly(){
+        myBookingsPage.inputFromDate(CommonConstants.DATE_FROM);
+        assertTrue(isElementVisible(myBookingsPage.bookingList));
+    }
+
+    @Test
+    public void filterBookingsByToDateOnly()throws  InterruptedException{
+        myBookingsPage.inputToDate(CommonConstants.DATE_TO);
+        Thread.sleep(2000);
+        assertTrue(isElementVisible(myBookingsPage.bookingList));
+    }
+
+
 
 }

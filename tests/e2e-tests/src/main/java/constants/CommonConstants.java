@@ -108,6 +108,8 @@ public class CommonConstants{
     // My bookings list
 
     public static final String ASSET="Desk A1";
+    public static final String DATE_FROM = "06/26/2026";
+    public static final String DATE_TO="07/03/2026";
     public static final String BROWSER = "BROWSER";
 
     // Drivers constants

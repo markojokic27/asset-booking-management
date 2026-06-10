@@ -12,6 +12,9 @@ public class MyBookingsPage extends CommonMethods {
     public By bookingList = By.cssSelector("table");
     public By assetFilter = By.cssSelector("[data-testid='my-booking-asset-filter']");
     public By searchField = By.cssSelector("[data-testid='search-input']");
+    public By inputFromDate = By.id("my-bookings-from-date");
+    public By inputToDate   = By.id("my-bookings-to-date");
+
 
 
     public void selectAssetFilter(String asset){
@@ -21,5 +24,12 @@ public class MyBookingsPage extends CommonMethods {
         typeInElement(searchField, keyword);
     }
 
+    public void inputFromDate(String date){
+        inputDate(inputFromDate, date);
+    }
+
+    public void inputToDate(String date){
+        inputDate(inputToDate, date);
+    }
 
 }
