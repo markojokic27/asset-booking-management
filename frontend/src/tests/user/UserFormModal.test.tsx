@@ -7,6 +7,13 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
+vi.mock('../../features/department/hooks/useDepartments', () => ({
+  useDepartments: () => ({
+    getDepartmentName: (id: number) => `Department ${id}`,
+    departmentOptions: [{ value: 1, label: 'Department 1' }],
+  }),
+}));
+
 vi.mock('@radix-ui/react-form', async () => vi.importActual('@radix-ui/react-form'));
 
 const activeUser: UserDto = {

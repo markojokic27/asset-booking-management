@@ -9,7 +9,11 @@ import { getDepartments } from '../api/departments';
 import type { DepartmentDto } from '../types';
 
 // utils
-import { buildDepartmentNameById, getDepartmentNameById } from '../utilis/department';
+import {
+  buildDepartmentNameById,
+  formatDepartmentName,
+  getDepartmentNameById,
+} from '../utilis/department';
 
 export function useDepartments() {
   const { t } = useTranslation();
@@ -45,5 +49,15 @@ export function useDepartments() {
   const getDepartmentName = (departmentId: number | null | undefined) =>
     getDepartmentNameById(departmentId, namesById);
 
-  return { getDepartmentName };
+  // get department options
+  const departmentOptions = useMemo(
+    () =>
+      departments.map((department) => ({
+        value: department.id,
+        label: formatDepartmentName(department.name, t),
+      })),
+    [departments, t],
+  );
+
+  return { getDepartmentName, departmentOptions };
 }

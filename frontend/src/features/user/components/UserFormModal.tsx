@@ -12,6 +12,11 @@ import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
+
+// hooks
+import { useDepartments } from '../../department/hooks/useDepartments';
+
+// validation
 import { createUserValidationSchema, userRoleSchema, userStatusSchema } from '../validation';
 
 // types
@@ -90,6 +95,7 @@ export const UserFormModal = ({
   onSave,
 }: UserFormModalProps) => {
   const { t } = useTranslation();
+  const { getDepartmentName, departmentOptions } = useDepartments();
   const isCreate = mode === 'create';
   const fieldsKey = isCreate ? 'users.modals.create.fields' : 'users.modals.edit.fields';
 
@@ -162,6 +168,19 @@ export const UserFormModal = ({
       value: status,
       label: statusLabels[status],
     }));
+
+  // resolve department options
+  const resolvedDepartmentOptions =
+    departmentOptions.length > 0
+      ? departmentOptions
+      : [
+          {
+            value: formValues.departmentId,
+            label:
+              getDepartmentName(formValues.departmentId) ??
+              String(formValues.departmentId),
+          },
+        ];
 
   const handleSubmit = async (data: FormData) => {
     const formPayload = isCreate
@@ -399,15 +418,15 @@ export const UserFormModal = ({
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Form.Field name="departmentId">
               <Form.Control asChild>
-                <FormInput
+                <FormDropdown
                   data-testid="user-department-id"
                   id="user-department"
                   name="departmentId"
-                  type="number"
-                  label={t(`${fieldsKey}.departmentId`)}
-                  defaultValue={String(formValues.departmentId)}
+                  label={t(`${fieldsKey}.department`)}
+                  defaultValue={formValues.departmentId}
                   error={!!errors.departmentId}
                   errorMessage={errors.departmentId}
+                  options={resolvedDepartmentOptions}
                 />
               </Form.Control>
             </Form.Field>

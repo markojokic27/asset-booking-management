@@ -58,7 +58,7 @@
         "firstName": "First name",
         "lastName": "Last name",
         "email": "Email",
-        "departmentId": "Department ID",
+        "department": "Department",
         "managerEmail": "Manager email",
         "notes": "Notes"
       }
@@ -74,7 +74,7 @@
         "lastName": "Last name",
         "email": "Email",
         "password": "Password",
-        "departmentId": "Department ID",
+        "department": "Department",
         "managerEmail": "Manager email",
         "notes": "Notes"
       }

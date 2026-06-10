@@ -58,7 +58,7 @@
         "firstName": "Vorname",
         "lastName": "Nachname",
         "email": "E-Mail",
-        "departmentId": "Abteilungs-ID",
+        "department": "Abteilung",
         "managerEmail": "E-Mail des Vorgesetzten",
         "notes": "Notizen"
       }
@@ -74,7 +74,7 @@
         "lastName": "Nachname",
         "email": "E-Mail",
         "password": "Passwort",
-        "departmentId": "Abteilungs-ID",
+        "department": "Abteilung",
         "managerEmail": "E-Mail des Vorgesetzten",
         "notes": "Notizen"
       }

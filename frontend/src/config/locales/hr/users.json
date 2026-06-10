@@ -58,7 +58,7 @@
         "firstName": "Ime",
         "lastName": "Prezime",
         "email": "Email",
-        "departmentId": "ID odjela",
+        "department": "Odjel",
         "managerEmail": "Email voditelja",
         "notes": "Bilješke"
       }
@@ -74,7 +74,7 @@
         "lastName": "Prezime",
         "email": "Email",
         "password": "Lozinka",
-        "departmentId": "ID odjela",
+        "department": "Odjel",
         "managerEmail": "Email voditelja",
         "notes": "Bilješke"
       }
