@@ -104,13 +104,27 @@ public class CommonMethods {
 
     public static void inputDate(By locator, String date) {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-            WebElement element = driver.findElement(locator);
-            element.sendKeys(date);
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            ((JavascriptExecutor) driver).executeScript(
+                    "var s = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;" +
+                            "s.call(arguments[0], arguments[1]);" +
+                            "arguments[0].dispatchEvent(new Event('input', {bubbles:true}));" +
+                            "arguments[0].dispatchEvent(new Event('change', {bubbles:true}));",
+                    element, date
+            );
         } catch (Exception e) {
             log.error("inputDate failed", e);
         }
     }
+
+    public static void jsClick(WebElement element) {
+        try {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        } catch (Exception e) {
+            log.error("jsClick failed", e);
+        }
+    }
+
 
     public static boolean isElementVisible(By locator) {
         try {

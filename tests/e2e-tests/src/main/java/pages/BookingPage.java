@@ -19,6 +19,7 @@ public class BookingPage extends CommonMethods {
     public By toDateInput = By.cssSelector("[data-testid='to-date-input']");
     public By fromHourSelect = By.cssSelector("select[aria-label*='From']");
     public By toHourSelect = By.cssSelector("select[aria-label*='To']");
+    public By checkBoxDays = By.cssSelector("[data-testid='checkbox-days-label']");
 
     // Book button on asset page
     public By bookAssetButton = By.cssSelector("[data-testid='book-asset-button']");
@@ -62,10 +63,10 @@ public class BookingPage extends CommonMethods {
 
     // Filter
     public void enterFromDate(String date) {
-        typeInElement(fromDateInput, date);
+        inputDate(fromDateInput, date);
     }
     public void enterToDate(String date) {
-        typeInElement(toDateInput, date);
+        inputDate(toDateInput, date);
     }
 
     public String getFromDateValue() {
@@ -139,4 +140,13 @@ public class BookingPage extends CommonMethods {
     public void clickBookButtonForInactiveAsset() {
         clickOnElement(By.xpath("//td[normalize-space()='Inactive']/following-sibling::td//button"));
     }
+    public void selectAllRecurringDays() {
+        getDriver().findElements(checkBoxDays).forEach(BookingPage::jsClick);
+    }
+
+    public void clickCheckBoxDays() {
+        clickOnElement(checkBoxDays);
+    }
+
+
 }

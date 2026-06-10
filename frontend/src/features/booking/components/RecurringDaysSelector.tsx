@@ -35,9 +35,11 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
         {days.map((day) => (
           <label
             key={day.value}
+            data-testid="checkbox-days-label" 
             className="flex items-center gap-2 hover:cursor-pointer"
           >
             <input
+              data-testid="checkbox-days"
               type="checkbox"
               className="h-5 w-5 rounded border-gray-300 text-blue-600 hover:cursor-pointer focus:ring-blue-500"
               checked={selectedDays.includes(day.value)}

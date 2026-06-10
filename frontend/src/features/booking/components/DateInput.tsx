@@ -47,10 +47,10 @@ export const DateInput: React.FC<Props> = ({
 
       <div onClick={openDatePicker} className="relative cursor-pointer">
         <input
-          data-testid={testId}
           ref={dateRef}
           id={id}
           type="date"
+          data-testid={testId}
           value={value}
           min={new Date().toISOString().split('T')[0]}
           onChange={(e) => onChange(e.target.value)}
