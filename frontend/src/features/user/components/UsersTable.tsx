@@ -2,7 +2,7 @@
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import BarChartIcon from '@mui/icons-material/BarChart';
+// import BarChartIcon from '@mui/icons-material/BarChart';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import { useTranslation } from 'react-i18next';
 
@@ -38,7 +38,7 @@ export const UsersTable = ({
   onEdit,
   onBookings,
   onDelete,
-  onReport,
+  onReport: _onReport,
 }: Props) => {
   
   const { t } = useTranslation();
@@ -120,13 +120,13 @@ export const UsersTable = ({
             />
           </IconButton>
 
-          <IconButton
+          {/* <IconButton
             type="button"
             aria-label={t('users.table.rowActions.reportAria')}
             onClick={() => onReport(user)}
           >
             <BarChartIcon fontSize="small" className="pointer-events-none" />
-          </IconButton>
+          </IconButton> */}
           <IconButton
             data-testid="edit-user-button"
             type="button"
