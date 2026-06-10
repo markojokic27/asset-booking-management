@@ -26,9 +26,13 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
 
       <div className="flex flex-wrap gap-4">
         {days.map((day) => (
-          <label key={day.value} className="flex items-center gap-2">
+          <label
+            key={day.value}
+            className="flex items-center gap-2 hover:cursor-pointer"
+          >
             <input
               type="checkbox"
+              className="h-5 w-5 rounded border-gray-300 text-blue-600 hover:cursor-pointer focus:ring-blue-500"
               checked={selectedDays.includes(day.value)}
               onChange={() => toggleDay(day.value)}
             />

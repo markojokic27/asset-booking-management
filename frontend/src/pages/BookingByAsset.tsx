@@ -106,14 +106,14 @@ export default function BookingsByAsset() {
       mdOffset={3}
       className="flex flex-col pt-35"
     >
-      <div className="mb-6 flex items-baseline justify-between">
-        <div className="flex items-center gap-6">
+      <div className="mb-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
           <h1 className="text-3xl font-black text-black dark:text-white">
             {asset.name}
           </h1>
 
           <span
-            className={`rounded px-3 py-1 text-sm font-medium ${
+            className={`rounded px-3 py-1 text-center text-sm font-medium ${
               asset.status === 'ACTIVE'
                 ? 'bg-green-100 text-green-700'
                 : 'bg-gray-200 text-gray-700'
