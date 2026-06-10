@@ -7,9 +7,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 // Types
 import type { BookingWithRelations } from '../types';
 
-// Utilis
-import { getAvailableRecurringDates } from '../utilis/getAvailableRecurringDates';
-
 //import hrLocale from '@fullcalendar/core/locales/hr';
 
 type CalendarEvent = {
@@ -32,9 +29,8 @@ type Props = {
   variant?: 'HOUR' | 'DAY';
   setSelectedBooking?: (booking: BookingWithRelations | null) => void;
   onRangeSelect: (fromDate: string, toDate: string) => void;
-  recurringDates?: string[];
+  availableRecurringDates?: string[];
   onMonthChange?: (date: Date) => void;
-  bookings: BookingWithRelations[];
 };
 
 export function AvailabilityCalendar({
@@ -45,9 +41,8 @@ export function AvailabilityCalendar({
   setSelectedBooking,
   onRangeSelect,
   onMonthChange,
-  recurringDates = [],
+  availableRecurringDates = [],
   variant = 'DAY',
-  bookings,
 }: Props) {
   const isPastDate = (date: Date) => {
     const today = new Date();
@@ -95,11 +90,6 @@ export function AvailabilityCalendar({
     }
     return date >= from && date <= to;
   };
-
-  const availableRecurringDates = React.useMemo(
-    () => getAvailableRecurringDates(recurringDates, bookings),
-    [recurringDates, bookings]
-  );
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">

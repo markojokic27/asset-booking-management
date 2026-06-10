@@ -11,6 +11,7 @@ import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
 // Utils
 import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
 import { getDatesForWeekdays } from '../features/booking/utilis/getDatesForWeekdays';
+import { getAvailableRecurringDates } from '../features/booking/utilis/getAvailableRecurringDates';
 import { useTranslation } from 'react-i18next';
 
 // Components
@@ -43,6 +44,10 @@ export default function BookingsByAsset() {
   const recurringDates = getDatesForWeekdays(
     visibleMonth,
     filters.selectedWeekdays
+  );
+  const availableRecurringDates = React.useMemo(
+    () => getAvailableRecurringDates(recurringDates, bookings),
+    [recurringDates, bookings]
   );
 
   console.log('Recurring dates:', recurringDates);
@@ -185,8 +190,7 @@ export default function BookingsByAsset() {
         }
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
         onMonthChange={setVisibleMonth}
-        recurringDates={recurringDates}
-        bookings={bookings}
+        availableRecurringDates={availableRecurringDates}
       />
 
       <BookingDetailsModal
