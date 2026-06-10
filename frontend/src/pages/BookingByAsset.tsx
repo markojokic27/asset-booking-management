@@ -83,6 +83,7 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
+  console.log(filters);
   return (
     <LayoutColumn
       span={12}
@@ -151,6 +152,10 @@ export default function BookingsByAsset() {
             setFilters((prev) => ({
               ...prev,
               selectedWeekdays: days,
+              fromDate: '',
+              toDate: '',
+              fromHour: '',
+              toHour: '',
             }))
           }
         />
@@ -166,6 +171,7 @@ export default function BookingsByAsset() {
             ...prev,
             fromDate,
             toDate,
+            selectedWeekdays: [],
           }))
         }
         variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}

@@ -29,7 +29,7 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
           <label key={day.value} className="flex items-center gap-2">
             <input
               type="checkbox"
-              //checked={selectedDays.includes(day.value)}
+              checked={selectedDays.includes(day.value)}
               onChange={() => toggleDay(day.value)}
             />
 

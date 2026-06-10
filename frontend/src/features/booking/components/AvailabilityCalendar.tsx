@@ -123,7 +123,9 @@ export function AvailabilityCalendar({
         dateClick={
           variant === 'HOUR'
             ? handleDateClick
-            : undefined//() => setSelecterdWeekdays?.([]) TODO
+            : () => {
+                setSelecterdWeekdays?.([]);
+              }
         }
         select={variant !== 'HOUR' ? handleDateRangeSelect : undefined}
         eventClick={handleEventClick}
