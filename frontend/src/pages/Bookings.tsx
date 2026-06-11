@@ -1,19 +1,12 @@
-// External packages
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
-// Components
 import { LayoutColumn } from '../components/layout/Layout';
 import { FiltersBar } from '../features/booking/components/FilterBar';
 import { Button } from '../components/ui/Button';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { BookingTable } from '../features/booking/components/BookingTable';
 import { ParkingMap } from './ParkingMap';
-
-// Hooks
 import { useBookingData } from '../features/booking/hooks/useBookingData';
-
-// Types
 import type { Filters } from '../features/booking/types';
 
 const defaultFilters: Filters = {
@@ -33,11 +26,11 @@ export default function Bookings() {
     assets,
     categories,
     selectedCategory,
+    bookings,
     selectCategoryByName,
     loading,
-  } = useBookingData({
-    filters,
-  });
+    refetchBookings, // ← NOVO
+  } = useBookingData({ filters });
 
   const variant = (selectedCategory?.bookingPeriod ?? 'HOUR') as 'HOUR' | 'DAY';
 
@@ -64,9 +57,17 @@ export default function Bookings() {
         </h1>
 
         <div className="flex items-center gap-3">
-          {selectedCategory?.name === 'Parking' && <ParkingMap />}
-
-          <Button data-testid="reset-filters-button"
+          {selectedCategory?.name === 'Parking' && (
+            <ParkingMap
+              bookings={bookings}
+              assets={assets}
+              filters={filters}
+              refetchBookings={refetchBookings}
+              setFilters={setFilters}
+            />
+          )}
+          <Button
+            data-testid="reset-filters-button"
             className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
             onClick={handleResetFilters}
           >
@@ -76,7 +77,6 @@ export default function Bookings() {
       </div>
 
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
-
       <FiltersBar filters={filters} setFilters={setFilters} variant={variant} />
 
       {loading ? (

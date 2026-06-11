@@ -35,5 +35,31 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday"
+  },
+  "parkingMap": {
+    "title": "Parking Map",
+    "availabilityFor": "Availability for {{date}}",
+    "today": "Today · {{date}}",
+    "levelTab": "Level {{level}}",
+    "spotNumber": "Parking Spot",
+    "taken": "Taken",
+    "available": "Available",
+    "notesPlaceholder": "Notes (optional)",
+    "booking": "Booking...",
+    "selectDateFirst": "Select a date first to book",
+    "closeAria": "Close map",
+    "clearDate": "Clear"
+  },
+  "floorMap": {
+  "stairs": "Stairs",
+  "level": "Level",
+  "entrance": "Entrance",
+  "directionOfTravel": "Direction of travel",
+  "legend": {
+    "maurerSpot": "Maurer Spot",
+    "taken": "Taken",
+    "noParking": "No parking",
+    "stairs": "Stairs"
   }
+}
 }

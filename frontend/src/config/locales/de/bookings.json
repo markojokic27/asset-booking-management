@@ -35,5 +35,31 @@
     "friday": "Freitag",
     "saturday": "Samstag",
     "sunday": "Sonntag"
+  },
+  "parkingMap": {
+    "title": "Parkplatz karte",
+    "availabilityFor": "Verfügbarkeit für {{date}}",
+    "today": "Heute · {{date}}",
+    "levelTab": "Ebene {{level}}",
+    "spotNumber": "Parkplatz",
+    "taken": "Belegt",
+    "available": "Verfügbar",
+    "notesPlaceholder": "Anmerkung (optional)",
+    "booking": "Wird gebucht...",
+    "selectDateFirst": "Bitte zuerst ein Datum auswählen",
+    "closeAria": "Karte schließen",
+    "clearDate": "Löschen"
+  },
+  "floorMap": {
+  "stairs": "Treppenhaus",
+  "level": "Ebene",
+  "entrance": "Einfahrt",
+  "directionOfTravel": "Fahrtrichtung",
+  "legend": {
+    "maurerSpot": "Maurer Spot",
+    "taken": "Belegt",
+    "noParking": "Parken verboten",
+    "stairs": "Treppenhaus"
+  }
   }
 }

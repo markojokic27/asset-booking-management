@@ -35,5 +35,31 @@
     "friday": "Petak",
     "saturday": "Subota",
     "sunday": "Nedjelja"
+  },
+  "parkingMap": {
+    "title": "Karta parkinga",
+    "availabilityFor": "Dostupnost za {{date}}",
+    "today": "Danas · {{date}}",
+    "levelTab": "Kat {{level}}",
+    "spotNumber": "Parking mjesto",
+    "taken": "Zauzeto",
+    "available": "Slobodno",
+    "notesPlaceholder": "Napomena (opcionalno)",
+    "booking": "Rezerviranje...",
+    "selectDateFirst": "Odaberite datum za rezervaciju",
+    "closeAria": "Zatvori kartu",
+    "clearDate": "Očisti"
+  },
+  "floorMap": {
+  "stairs": "Stubište",
+  "level": "Kat",
+  "entrance": "Ulaz",
+  "directionOfTravel": "Smjer vožnje",
+  "legend": {
+    "maurerSpot": "Maurer Spot",
+    "taken": "Zauzeto",
+    "noParking": "Zabranjeno",
+    "stairs": "Stubište"
   }
+}
 }
