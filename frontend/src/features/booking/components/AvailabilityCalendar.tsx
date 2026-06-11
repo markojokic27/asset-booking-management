@@ -33,6 +33,8 @@ type Props = {
   onMonthChange?: (date: Date) => void;
 };
 
+// TODO: internationalization on calendar (weekdays, month, today...)
+
 export function AvailabilityCalendar({
   events,
   selectedFromDate,

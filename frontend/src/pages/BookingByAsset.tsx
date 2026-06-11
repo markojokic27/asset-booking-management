@@ -124,7 +124,7 @@ export default function BookingsByAsset() {
             {asset.status}
           </span>
         </div>
-        <p>Location: {asset.location}</p> {/* TODO - internationalize */}
+        <p>{t('assets.location')}: {asset.location}</p> 
       </div>
 
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />

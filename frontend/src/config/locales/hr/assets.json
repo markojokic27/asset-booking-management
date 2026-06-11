@@ -1,5 +1,6 @@
 {
   "label": "Imovina",
+  "location": "Lokacija",
   "categories": {
     "all": "$t(assets.label)"
   },

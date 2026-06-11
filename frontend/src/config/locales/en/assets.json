@@ -1,5 +1,6 @@
 {
   "label": "Asset",
+  "location": "Location",
   "categories": {
     "all": "Assets"
   },
