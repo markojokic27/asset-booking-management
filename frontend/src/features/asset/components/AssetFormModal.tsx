@@ -13,12 +13,9 @@ import { Modal } from '../../../components/ui/Modal';
 
 // Types
 import { type AssetDto, type AssetStatus } from '../types';
-import { assetStatusSchema } from '../validation';
+import { assetStatusSchema, createAssetValidationSchema } from '../validation';
 import type { AssetCategoryDto } from '../../asset-category/types';
 import type { CreateAssetRequest } from '../api/assetApi';
-
-// Utils
-import { createAssetValidationSchema } from '../validation';
 
 // API
 import { getAllCategories } from '../../asset-category/api/categoryApi';
