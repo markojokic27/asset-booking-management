@@ -6,8 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LayoutColumn } from '../components/layout/Layout';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Button } from '../components/ui/Button';
-import { AddCategoryModal } from '../features/asset-category/components/AddCategoryModal';
-import { EditCategoryModal } from '../features/asset-category/components/EditCategoryModal';
+import { CategoryFormModal } from '../features/asset-category/components/CategoryFormModal';
 import { CategoryModal } from '../features/asset-category/components/CategoryModal';
 import { AssetCategoriesTable } from '../features/asset-category/components/AssetCategoriesTable';
 
@@ -16,6 +15,7 @@ import type { AssetCategoryDto } from '../features/asset-category/types';
 
 // API
 import {
+  createCategory,
   getAllCategories,
   getCategoryById,
   updateCategory,
@@ -34,9 +34,8 @@ export default function AssetCategories() {
 
   const [search, setSearch] = useState('');
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
-  const [openAddModal, setOpenAddModal] = useState(false);
+  const [formModalMode, setFormModalMode] = useState<'none' | 'create' | 'edit'>('none');
   const [openViewModal, setOpenViewModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
   const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [serverError, setServerError] = useState('');
@@ -96,7 +95,7 @@ export default function AssetCategories() {
   };
   const handleEdit = async (category: AssetCategoryDto) => {
     setActiveCategory(category);
-    setOpenEditModal(true);
+    setFormModalMode('edit');
     try {
       const fullCategory = await getCategoryById(category.id);
       setActiveCategory(fullCategory);
@@ -105,21 +104,25 @@ export default function AssetCategories() {
     }
   };
 
+  const closeFormModal = () => {
+    setFormModalMode('none');
+    setActiveCategory(null);
+  };
+
+  const handleCreateCategory = async (
+    data: Parameters<typeof createCategory>[0]
+  ) => {
+    const created = await createCategory(data);
+    setCategories((prev) => [created, ...prev]);
+  };
+
   const handleSaveCategory = async (updatedCategory: AssetCategoryDto) => {
-    try {
-      await updateCategory(updatedCategory.id, updatedCategory);
-
-      setCategories((prev) =>
-        prev.map((category) =>
-          category.id === updatedCategory.id ? updatedCategory : category
-        )
-      );
-
-      setActiveCategory(updatedCategory);
-      setOpenEditModal(false);
-    } catch (err) {
-      console.error('Failed to update category:', err);
-    }
+    await updateCategory(updatedCategory.id, updatedCategory);
+    setCategories((prev) =>
+      prev.map((category) =>
+        category.id === updatedCategory.id ? updatedCategory : category
+      )
+    );
   };
 
   return (
@@ -140,7 +143,7 @@ export default function AssetCategories() {
               data-testid="add-category-button"
               type="button"
               size="sm"
-              onClick={() => setOpenAddModal(true)}
+              onClick={() => setFormModalMode('create')}
               iconLeft={<AddSharpIcon fontSize="small" />}
             >
               {t('assetCategories.actions.new')}
@@ -193,25 +196,14 @@ export default function AssetCategories() {
           category={activeCategory}
         />
         {isAdmin(user) && (
-          <>
-            <EditCategoryModal
-              isOpen={openEditModal}
-              onClose={() => {
-                setOpenEditModal(false);
-                setActiveCategory(null);
-              }}
-              category={activeCategory}
-              onSave={handleSaveCategory}
-            />
-
-            <AddCategoryModal
-              open={openAddModal}
-              onClose={() => setOpenAddModal(false)}
-              onCreate={(created) => {
-                setCategories((prev) => [created, ...prev]);
-              }}
-            />
-          </>
+          <CategoryFormModal
+            isOpen={formModalMode !== 'none'}
+            mode={formModalMode === 'create' ? 'create' : 'edit'}
+            category={activeCategory}
+            onClose={closeFormModal}
+            onCreate={handleCreateCategory}
+            onSave={handleSaveCategory}
+          />
         )}
       </div>
     </LayoutColumn>
