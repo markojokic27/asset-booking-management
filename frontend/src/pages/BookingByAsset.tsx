@@ -100,7 +100,7 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
-  console.log(filters);
+  console.log('FFFF', filters);
   return (
     <LayoutColumn
       span={12}
@@ -124,8 +124,7 @@ export default function BookingsByAsset() {
             {asset.status}
           </span>
         </div>
-
-        <p>Location: {asset.location}</p>
+        <p>Location: {asset.location}</p> {/* TODO - internationalize */}
       </div>
 
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />

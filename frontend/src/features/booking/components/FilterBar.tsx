@@ -8,14 +8,8 @@ import { SearchInput } from '../../../components/ui/SearchBar';
 import { DateInput } from './DateInput';
 import { HourSelect } from './HourSelect';
 
-type Filters = {
-  search: string;
-  fromDate: string;
-  toDate: string;
-  fromHour: string;
-  toHour: string;
-  selectedWeekdays: number[];
-};
+// Types
+import type { Filters } from '../types';
 
 type Variant = 'DAY' | 'HOUR' | 'DAYS';
 
@@ -38,13 +32,22 @@ export function FiltersBar({
 
   const update = (partial: Partial<Filters>) => {
     setFilters((prev) => {
-      console.log('Updating filters with:', partial);
       const next = { ...prev, ...partial };
+
+      if (Object.keys(partial).includes('fromDate') && !partial.toDate) {
+        next.toDate = next.fromDate;
+        next.selectedWeekdays = [];
+      }
+
+      if ('toDate' in partial && next.toDate < next.fromDate) {
+        next.fromDate = next.toDate;
+        next.selectedWeekdays = [];
+      }
 
       if (next.fromHour && next.toHour && next.toHour <= next.fromHour) {
         next.toHour = '';
       }
-      console.log(next);
+
       return next;
     });
   };
@@ -106,7 +109,7 @@ export function FiltersBar({
             label={t('ui.filters.fromTime')}
             placeholder={t('ui.filters.selectDate')}
             value={filters.fromDate}
-            testId='from-date-input'
+            testId="from-date-input"
             onChange={(v) => update({ fromDate: v })}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />
@@ -115,7 +118,7 @@ export function FiltersBar({
             label={t('ui.filters.toTime')}
             placeholder={t('ui.filters.selectDate')}
             value={filters.toDate}
-            testId='to-date-input'
+            testId="to-date-input"
             onChange={(v) => update({ toDate: v })}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />
