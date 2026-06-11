@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
 import { SearchInput } from '../components/ui/SearchBar';
+import { Pagination } from '../components/ui/Pagination';
 import { Button } from '../components/ui/Button';
 import { CategoryFormModal } from '../features/asset-category/components/CategoryFormModal';
 import { CategoryModal } from '../features/asset-category/components/CategoryModal';
@@ -23,6 +24,7 @@ import {
 
 // Hooks
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { usePagination } from '../features/user/hooks/usePagination';
 import { isAdmin } from '../features/user/utilis/users';
 
 // Assets
@@ -81,6 +83,12 @@ export default function AssetCategories() {
       (a, b) => collator.compare(a.name, b.name) * dir
     );
   }, [filteredCategories, nameSortDir, collator]);
+
+  const pagination = usePagination(sortedCategories, 10);
+
+  useEffect(() => {
+    pagination.setPage(1);
+  }, [search, nameSortDir]);
 
   const handleView = async (category: AssetCategoryDto) => {
     setOpenViewModal(true);
@@ -177,7 +185,7 @@ export default function AssetCategories() {
             </p>
           ) : (
             <AssetCategoriesTable
-              data={sortedCategories}
+              data={pagination.paged}
               nameSortDir={nameSortDir}
               onToggleNameSort={() =>
                 setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
@@ -187,6 +195,15 @@ export default function AssetCategories() {
             />
           )}
         </div>
+
+        {sortedCategories.length > 0 && !loading && !serverError && (
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            items={pagination.items}
+            onPageChange={pagination.setPage}
+          />
+        )}
         <CategoryModal
           isOpen={openViewModal}
           onClose={() => {
