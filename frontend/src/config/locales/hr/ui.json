@@ -32,14 +32,16 @@
   "filters": {
     "fromTime": "Od",
     "toTime": "Do",
-    "date": "Datum"
+    "date": "Datum",
+    "selectDate": "Odaberi datum..."
   },
   "notes": {
     "label": "Bilješke",
     "placeholder": "Unesite bilješke..."
   },
   "dateTimeInput": {
-    "hourAriaSuffix": "sat"
+    "hourAriaSuffix": "sat",
+    "selectHour": "Odaberi sat"
   },
   "multiSelect": {
     "selectAssets": "Odaberi imovinu...",

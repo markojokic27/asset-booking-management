@@ -32,14 +32,16 @@
   "filters": {
     "fromTime": "Von",
     "toTime": "Bis",
-    "date": "Datum"
+    "date": "Datum",
+    "selectDate": "Datum auswählen..."
   },
   "notes": {
     "label": "Notizen",
     "placeholder": "Notizen eingeben..."
   },
   "dateTimeInput": {
-    "hourAriaSuffix": "Uhr"
+    "hourAriaSuffix": "Uhr",
+    "selectHour": "Stunde auswählen"
   },
   "multiSelect": {
     "selectAssets": "Assets auswählen…",

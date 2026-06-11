@@ -3,6 +3,7 @@ import * as React from 'react';
 type Props = {
   id: string;
   label: string;
+  placeholder?: string;
   value: string;
   onChange: (value: string) => void;
   className?: string;
@@ -12,6 +13,7 @@ type Props = {
 export const DateInput: React.FC<Props> = ({
   id,
   label,
+  placeholder,
   value,
   onChange,
   className,
@@ -61,7 +63,7 @@ export const DateInput: React.FC<Props> = ({
             value ? 'text-(--color-table-text)' : 'text-(--color-table-text)/60'
           }`}
         >
-          {value ? formatDisplayDate(value) : 'Odaberite datum'}
+          {value ? formatDisplayDate(value) : placeholder}
         </div>
       </div>
     </div>

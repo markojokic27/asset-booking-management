@@ -63,7 +63,7 @@ export const HourSelect: React.FC<Props> = ({
         }`}
       >
         <option value="" disabled hidden>
-          Select hour
+          {t('ui.dateTimeInput.selectHour')}
         </option>
 
         {availableHours.map((hour) => (

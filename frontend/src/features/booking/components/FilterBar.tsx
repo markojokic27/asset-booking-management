@@ -61,6 +61,7 @@ export function FiltersBar({
           <DateInput
             id="date"
             label={t('ui.filters.date')}
+            placeholder={t('ui.filters.selectDate')}
             value={filters.fromDate}
             onChange={(v) =>
               update({
@@ -93,6 +94,7 @@ export function FiltersBar({
         <DateInput
           id="date"
           label={t('ui.filters.date')}
+          placeholder={t('ui.filters.selectDate')}
           value={filters.fromDate}
           onChange={(v) => update({ fromDate: v })}
           className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-start-1 lg:w-1/2"
@@ -102,6 +104,7 @@ export function FiltersBar({
           <DateInput
             id="date"
             label={t('ui.filters.fromTime')}
+            placeholder={t('ui.filters.selectDate')}
             value={filters.fromDate}
             testId='from-date-input'
             onChange={(v) => update({ fromDate: v })}
@@ -110,6 +113,7 @@ export function FiltersBar({
           <DateInput
             id="date"
             label={t('ui.filters.toTime')}
+            placeholder={t('ui.filters.selectDate')}
             value={filters.toDate}
             testId='to-date-input'
             onChange={(v) => update({ toDate: v })}
