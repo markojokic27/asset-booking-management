@@ -2,9 +2,13 @@ package de.bdr.asset.management.booking;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import de.bdr.asset.management.booking.dto.*;
 import de.bdr.asset.management.core.email.EmailService;
+import de.bdr.asset.management.user.UserRoleEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,9 +18,6 @@ import de.bdr.asset.management.asset.Asset;
 import de.bdr.asset.management.asset.AssetRepository;
 import de.bdr.asset.management.asset.AssetStatusEnum;
 import de.bdr.asset.management.assetcategory.AssetCategory;
-import de.bdr.asset.management.booking.dto.BookingCreateDTO;
-import de.bdr.asset.management.booking.dto.BookingResponseDTO;
-import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.InvalidDateRangeException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
@@ -51,43 +52,38 @@ public class BookingServiceImpl implements BookingService {
         return Instant.now(clock);
     }
 
+    private record BookingValidationContext(User user, Asset asset) {}
+
     /**
-     * Create booking in DB.
+     * Create single booking in DB.
      *
      * @param bookingRequest - a BookingDTO record
-     * @return an BookingResponseDTO record
+     * @return a BookingResponseDTO record
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO createBooking(BookingCreateDTO bookingRequest) {
 
-        Long targetUserId = bookingRequest.userId() != null
-                ? bookingRequest.userId()
-                : securityService.getCurrentUserId();
+        BookingValidationContext context = validateAndGetContext(bookingRequest.userId(), bookingRequest.assetId());
 
-        List<UserStatusEnum> validUserStatuses = List.of(
-            UserStatusEnum.ACTIVE,
-            UserStatusEnum.STUDENT
-        );
-        
-        User user = userRepository.findByIdAndStatusIn(targetUserId, validUserStatuses)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + targetUserId));
-
-        Asset asset = assetRepository.findByIdAndStatus(bookingRequest.assetId(), AssetStatusEnum.ACTIVE)
-            .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId() + " and status ACTIVE"));
+        User user = context.user();
+        Asset asset = context.asset();
 
         AssetCategory category = asset.getCategory();
+
+        boolean isPrivilegedUser = securityService.isAdmin() || user.getRole().equals(UserRoleEnum.MANAGER);
+        boolean requiresApproval = category.isApproval() && !isPrivilegedUser;
 
         Booking booking = mapper.toEntity(bookingRequest);
         
         booking.setUser(user);
         booking.setAsset(asset);
 
-        booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
+        booking.setStatus(requiresApproval ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
         booking = repository.save(booking);
 
-        if (category.isApproval()) {
+        if (requiresApproval) {
 
             String approvalLink = "http://localhost:5173/approvals/" + booking.getId();
 
@@ -103,10 +99,69 @@ public class BookingServiceImpl implements BookingService {
     }
 
     /**
+     * Create recurring bookings in DB.
+     *
+     * @param bookingRequest - a BookingDTO record
+     * @return a list of BookingResponseDTO records
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<BookingResponseDTO> createRecurringBookings(RecurringBookingCreateDTO bookingRequest) {
+
+        BookingValidationContext context = validateAndGetContext(bookingRequest.userId(), bookingRequest.assetId());
+        User user = context.user();
+        Asset asset = context.asset();
+
+        AssetCategory category = asset.getCategory();
+
+        boolean isPrivilegedUser = securityService.isAdmin() || user.getRole().equals(UserRoleEnum.MANAGER);
+        boolean requiresApproval = category.isApproval() && !isPrivilegedUser;
+
+        BookingStatusEnum status = requiresApproval ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED;
+
+        List<Booking> bookingsToSave = new ArrayList<>();
+
+        for (TimeSlotDTO slot : bookingRequest.timeSlots()) {
+            
+            Booking booking = new Booking();
+            booking.setUser(user);
+            booking.setAsset(asset);
+            booking.setNotes(bookingRequest.notes());
+            booking.setBookingStart(slot.bookingStart());
+            booking.setBookingEnd(slot.bookingEnd());
+            booking.setStatus(status);
+
+            bookingsToSave.add(booking);
+        }
+
+        List<Booking> savedBookings = repository.saveAll(bookingsToSave);
+
+        if (requiresApproval) {
+
+            String idsParam = savedBookings.stream()
+                    .map(booking -> String.valueOf(booking.getId()))
+                    .collect(Collectors.joining(","));
+
+            String approvalLink = "http://localhost:5173/approvals/bulk?ids=" + idsParam;
+
+            emailService.sendApprovalEmail(
+                    user.getManagerEmail(),
+                    asset.getName() + " (Multiple Dates)",
+                    user.getName() + " " + user.getSurname(),
+                    approvalLink
+            );
+        }
+
+        return savedBookings.stream()
+                .map(mapper::toResponse)
+                .toList();
+    }
+
+    /**
      * Returns a specific booking.
      *
      * @param id - a Long id
-     * @return an BookingResponseDTO record
+     * @return a BookingResponseDTO record
      */
     @Override
     public BookingResponseDTO getBookingById(Long id) {
@@ -134,7 +189,7 @@ public class BookingServiceImpl implements BookingService {
      *
      * @param id - a Long id
      * @param bookingRequest - an BookingUpdateDTO record
-     * @return an BookingResponseDTO record
+     * @return a BookingResponseDTO record
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -273,5 +328,24 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public GeneralReportResponseDTO getAssetReport(Long assetId) {
         return repository.getAssetReport(assetId);
+    }
+
+    private BookingValidationContext validateAndGetContext(Long requestedUserId, Long assetId) {
+
+        Long targetUserId = requestedUserId != null
+                ? requestedUserId
+                : securityService.getCurrentUserId();
+
+        List<UserStatusEnum> validUserStatuses = List.of(
+                UserStatusEnum.ACTIVE,
+                UserStatusEnum.STUDENT
+        );
+        User user = userRepository.findByIdAndStatusIn(targetUserId, validUserStatuses)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + targetUserId));
+
+        Asset asset = assetRepository.findByIdAndStatus(assetId, AssetStatusEnum.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + assetId + " and status ACTIVE"));
+
+        return new BookingValidationContext(user, asset);
     }
 }

@@ -1,5 +1,6 @@
 package de.bdr.asset.management.booking;
 
+import de.bdr.asset.management.booking.dto.RecurringBookingCreateDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,13 +9,18 @@ import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
 
+import java.util.List;
+
 /**
  * Booking Service
  */
 public interface BookingService {
 
-    /** CREATE */
+    /** CREATE SINGLE*/
     BookingResponseDTO createBooking(BookingCreateDTO bookingRequest);
+
+    /** CREATE RECURRING*/
+    List<BookingResponseDTO> createRecurringBookings(RecurringBookingCreateDTO bookingRequest);
 
     /** READ */
     BookingResponseDTO getBookingById(Long id);
