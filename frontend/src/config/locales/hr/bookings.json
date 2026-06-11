@@ -37,7 +37,7 @@
     "sunday": "Nedjelja"
   },
   "parkingMap": {
-    "title": "Karta parkinga",
+    "title": "Parking mapa",
     "availabilityFor": "Dostupnost za {{date}}",
     "today": "Danas · {{date}}",
     "levelTab": "Kat {{level}}",

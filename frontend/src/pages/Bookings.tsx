@@ -29,7 +29,7 @@ export default function Bookings() {
     bookings,
     selectCategoryByName,
     loading,
-    refetchBookings, // ← NOVO
+    refetchBookings,
   } = useBookingData({ filters });
 
   const variant = (selectedCategory?.bookingPeriod ?? 'HOUR') as 'HOUR' | 'DAY';

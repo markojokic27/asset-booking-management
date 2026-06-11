@@ -37,7 +37,7 @@ export function useBookingData({ filters }: Props) {
             (c) => c.name === savedCategory
           );
           setSelectedCategory(category ?? categoryRes.content[0]);
-        } else {                                          // ← FALI OVO
+        } else {                      
           if (categoryRes.content.length > 0) {
             setSelectedCategory(categoryRes.content[0]);
           }
@@ -51,7 +51,6 @@ export function useBookingData({ filters }: Props) {
     fetchInitialData();
   }, []);
 
-  // ← Izvučeno van useEffect-a da se može koristiti kao refetch
   const fetchBookings = React.useCallback(async () => {
     if (!selectedCategory) return;
     try {
@@ -97,6 +96,6 @@ export function useBookingData({ filters }: Props) {
     setSelectedCategory,
     selectCategoryByName,
     loading,
-    refetchBookings: fetchBookings, // ← NOVO
+    refetchBookings: fetchBookings,
   };
 }

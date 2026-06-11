@@ -7,8 +7,6 @@ import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
 import type { BookingWithRelations, Filters } from '../features/booking/types';
 import type { AssetDto } from '../features/asset/types';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 type FloorLevel = '-1' | '-2';
 
 export interface SpotClickInfo {
@@ -23,8 +21,6 @@ interface Props {
   refetchBookings: () => Promise<unknown>;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
 }
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function getTakenSpots(bookings: BookingWithRelations[], filters?: Filters): number[] {
   const referenceDate = filters?.fromDate ? new Date(filters.fromDate) : new Date();
@@ -66,8 +62,6 @@ function formatDate(filters?: Filters): string {
   });
 }
 
-// ─── Spot Popover ─────────────────────────────────────────────────────────────
-
 interface PopoverProps {
   info: SpotClickInfo;
   isTaken: boolean;
@@ -92,6 +86,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
     toDate:   filters?.fromDate ?? '',
     fromHour: '06:00',
     toHour:   '22:00',
+    selectedWeekdays: [],
   };
 
   const { isCreating, handleCreateBooking } = useCreateBooking({
@@ -100,6 +95,8 @@ const SpotPopover: React.FC<PopoverProps> = ({
     notes,
     setNotes,
     refetch: refetchBookings,
+    bookingPeriod: 'DAY',
+    availableRecurringDates: [],
   });
 
   const handleBook = async () => {
@@ -116,7 +113,6 @@ const SpotPopover: React.FC<PopoverProps> = ({
     >
       <div className="w-72 rounded-xl bg-white p-6 shadow-2xl">
 
-        {/* Header */}
         <div className="flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
@@ -137,7 +133,6 @@ const SpotPopover: React.FC<PopoverProps> = ({
           </button>
         </div>
 
-        {/* Status badge */}
         <div className="mt-3">
           <span className={[
             'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
@@ -151,7 +146,6 @@ const SpotPopover: React.FC<PopoverProps> = ({
           </span>
         </div>
 
-        {/* Notes */}
         {!isTaken && !noDateSelected && (
           <input
             placeholder={t('bookings.parkingMap.notesPlaceholder')}
@@ -161,7 +155,6 @@ const SpotPopover: React.FC<PopoverProps> = ({
           />
         )}
 
-        {/* Book button */}
         <div className="mt-4">
           <Button
             className="w-full"
@@ -181,8 +174,6 @@ const SpotPopover: React.FC<PopoverProps> = ({
     </div>
   );
 };
-
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 export const ParkingMap: React.FC<Props> = ({
   bookings,
@@ -256,13 +247,11 @@ export const ParkingMap: React.FC<Props> = ({
         >
           <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
 
-            {/* Header */}
             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
               <div>
                 <h2 className="text-lg font-bold tracking-wide text-gray-900">
                   {t('bookings.parkingMap.title')}
                 </h2>
-                {/* Date picker */}
                 <div className="mt-1 flex items-center gap-2">
                   <input
                     type="date"
@@ -286,7 +275,6 @@ export const ParkingMap: React.FC<Props> = ({
                 </div>
               </div>
 
-              {/* Floor tabs */}
               <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1">
                 {(['-1', '-2'] as FloorLevel[]).map((level) => (
                   <button data-testid={`level-button-${level}`}
@@ -304,7 +292,6 @@ export const ParkingMap: React.FC<Props> = ({
                 ))}
               </div>
 
-              {/* Close */}
               <button data-testid="parking-close-button"
                 onClick={closeModal}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
@@ -316,7 +303,6 @@ export const ParkingMap: React.FC<Props> = ({
               </button>
             </div>
 
-            {/* Map */}
             <div className="overflow-y-auto p-4">
               {activeFloor === '-1'
                 ? <FloorMinus1 takenSpots={takenSpots} onSpotClick={handleSpotClick} />
@@ -325,7 +311,6 @@ export const ParkingMap: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* Spot popover */}
           {selectedSpot && (
             <SpotPopover
               info={selectedSpot}
