@@ -1,5 +1,6 @@
 package de.bdr.asset.management.booking;
 
+import de.bdr.asset.management.booking.dto.RecurringBookingCreateDTO;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 /**
  * Booking Controller
  */
@@ -47,7 +50,7 @@ public class BookingController {
         this.service = service;
     }
 
-    /** CREATE */
+    /** CREATE SINGLE*/
     @Operation(summary = "Create a booking", description = "Only available to authenticated users.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("@bookingAuth.canCreateBooking(authentication, #request.userId)" +
@@ -60,6 +63,20 @@ public class BookingController {
         BookingResponseDTO createdBooking = service.createBooking(request);
 
         return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
+    }
+
+    /** CREATE RECURRING*/
+    @Operation(summary = "Create recurring bookings", description = "Only available to authenticated users.")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @PreAuthorize("@benefitEvaluator.canBook(authentication, #request.assetId)")
+    @PostMapping("/recurring")
+    public ResponseEntity<List<BookingResponseDTO>> createRecurring(
+            @Valid @RequestBody RecurringBookingCreateDTO request
+    ) throws InvalidDateRangeException, ResourceNotFoundException, DuplicateResourceException
+    {
+        List<BookingResponseDTO> createdBookings = service.createRecurringBookings(request);
+
+        return new ResponseEntity<>(createdBookings, HttpStatus.CREATED);
     }
 
     /** READ BY ID */

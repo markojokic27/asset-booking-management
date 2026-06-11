@@ -542,6 +542,72 @@ paths:
                 $ref: "#/components/schemas/BookingResponseDTO"
       security:
       - Bearer Authentication: []
+  /v1/booking/recurring:
+    post:
+      tags:
+      - Bookings
+      summary: Create recurring bookings
+      description: Creates multiple independent bookings at once. All slots must be in the same month. Only available to authenticated users.
+      operationId: createRecurring
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecurringBookingCreateDTO"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookingResponseDTO"
+        "404":
+          description: Not Found (User or Asset not found)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "400":
+          description: Bad Request (Validation failed, e.g., dates not in the same month)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "409":
+          description: Conflict (One or more time slots overlap with existing bookings)
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "422":
+          description: Unprocessable Content
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "403":
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+      security:
+      - Bearer Authentication: []
   /v1/bookings/{id}/reject:
     post:
       tags:
@@ -2455,6 +2521,41 @@ components:
       - assetId
       - bookingEnd
       - bookingStart
+      - userId
+    TimeSlotDTO:
+      type: object
+      properties:
+        bookingStart:
+          type: string
+          format: date-time
+        bookingEnd:
+          type: string
+          format: date-time
+      required:
+      - bookingEnd
+      - bookingStart
+    RecurringBookingCreateDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        assetId:
+          type: integer
+          format: int64
+        timeSlots:
+          type: array
+          minItems: 1
+          maxItems: 31
+          items:
+            $ref: "#/components/schemas/TimeSlotDTO"
+        notes:
+          type: string
+          maxLength: 1000
+          minLength: 0
+      required:
+      - assetId
+      - timeSlots
       - userId
     AssetSummaryDTO:
       type: object
