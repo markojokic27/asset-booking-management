@@ -1,14 +1,11 @@
 package com.example.assetbookingmanagement.features.user.ui
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -34,9 +28,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import com.example.assetbookingmanagement.core.ui.components.DetailsRow
+import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
 import com.example.assetbookingmanagement.core.ui.components.RoleBadge
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 import com.example.assetbookingmanagement.features.user.data.UserResponse
@@ -117,7 +114,7 @@ private fun ProfileDetailsSection(
     isLoggingOut: Boolean,
     onLogoutClick: () -> Unit
 ) {
-    SectionCard(
+    DetailsSectionCard(
         title = "PROFILE DETAILS",
         heading = listOf(profile.name, profile.surname)
             .filter { it.isNotBlank() }
@@ -129,7 +126,7 @@ private fun ProfileDetailsSection(
         InfoRow(label = "Last name", value = profile.surname.ifBlank { "-" }, showDivider = true)
         InfoRow(label = "Username", value = profile.username.ifBlank { "-" }, showDivider = true)
         InfoRow(label = "Email", value = profile.email.ifBlank { "-" }, showDivider = true)
-        DetailRow(showDivider = false) {
+        DetailsRow(showDivider = false) {
             Text(
                 text = "Password",
                 style = MaterialTheme.typography.bodyMedium,
@@ -160,11 +157,11 @@ private fun ProfileDetailsSection(
 
 @Composable
 private fun WorkDetailsSection(profile: UserResponse) {
-    SectionCard(
+    DetailsSectionCard(
         title = "WORK DETAILS",
         heading = "Account details"
     ) {
-        DetailRow(showDivider = true) {
+        DetailsRow(showDivider = true) {
             Text(
                 text = "Role",
                 style = MaterialTheme.typography.bodyMedium,
@@ -172,7 +169,7 @@ private fun WorkDetailsSection(profile: UserResponse) {
             )
             RoleBadge(role = profile.role.ifBlank { "-" })
         }
-        DetailRow(showDivider = true) {
+        DetailsRow(showDivider = true) {
             Text(
                 text = "Status",
                 style = MaterialTheme.typography.bodyMedium,
@@ -199,64 +196,12 @@ private fun WorkDetailsSection(profile: UserResponse) {
 }
 
 @Composable
-private fun SectionCard(
-    title: String,
-    heading: String,
-    subtitle: String? = null,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = heading,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                subtitle?.takeIf { it.isNotBlank() }?.let {
-                    Text(
-                        text = it,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-
-            Column(content = content)
-        }
-    }
-}
-
-@Composable
 private fun InfoRow(
     label: String,
     value: String,
     showDivider: Boolean
 ) {
-    DetailRow(showDivider = showDivider) {
+    DetailsRow(showDivider = showDivider) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
@@ -302,24 +247,5 @@ private fun LogoutRow(
             color = logoutColor,
             fontWeight = FontWeight.Medium
         )
-    }
-}
-
-@Composable
-private fun DetailRow(
-    showDivider: Boolean,
-    content: @Composable RowScope.() -> Unit
-) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) { content() }
-        if (showDivider) {
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        }
     }
 }
