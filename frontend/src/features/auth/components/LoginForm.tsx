@@ -1,11 +1,17 @@
+// External packages
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
+import { useTranslation } from 'react-i18next';
+
+// Components
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { createUserValidationSchema } from '../../user/validation';
-import { useNavigate } from 'react-router-dom';
+
+// API
 import api, { setAccessToken } from '../../../shared/api';
-import { useTranslation } from 'react-i18next';
+
 
 const LoginForm = () => {
   const [errors, setErrors] = useState({

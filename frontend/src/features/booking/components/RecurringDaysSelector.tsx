@@ -27,7 +27,7 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
 
   return (
     <div className="mb-6">
-      <p className="mb-2 font-medium">
+      <p className=" mb-2 text-sm font-medium text-(--color-table-text)">
         {t('bookings.recurringDays.bookEvery')}
       </p>
 
@@ -35,7 +35,7 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
         {days.map((day) => (
           <label
             key={day.value}
-            data-testid="checkbox-days-label" 
+            data-testid="checkbox-days-label"
             className="flex items-center gap-2 hover:cursor-pointer"
           >
             <input
