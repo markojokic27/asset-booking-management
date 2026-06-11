@@ -50,7 +50,8 @@ public class BookingController {
     /** CREATE */
     @Operation(summary = "Create a booking", description = "Only available to authenticated users.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("@benefitEvaluator.canBook(authentication, #request.assetId)")
+    @PreAuthorize("@bookingAuth.canCreateBooking(authentication, #request.userId)" +
+                  "and @benefitEvaluator.canBook(authentication, #request.assetId)")
     @PostMapping
     public ResponseEntity<BookingResponseDTO> create(
             @Valid @RequestBody BookingCreateDTO request
@@ -122,7 +123,7 @@ public class BookingController {
     @Operation(summary = "Reject a pending booking", description = "Only available to the manager of the user who created the booking, or an ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("@bookingAuth.canManageBooking(authentication, #id)")
-    @PostMapping("/{id}/reject")
+        @PostMapping("/{id}/reject")
     public ResponseEntity<BookingResponseDTO> reject(
             @PathVariable Long id
     ) throws ResourceNotFoundException, IllegalStateException, AccessDeniedException

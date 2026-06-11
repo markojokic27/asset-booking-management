@@ -98,8 +98,6 @@ class BookingServiceImplTest {
     @Test
     void shouldCreateBooking() {
 
-        mockAdminUser();
-
         User user = BookingServiceImplTestData.user();
         Asset asset = BookingServiceImplTestData.asset();
         Booking booking = BookingServiceImplTestData.booking(user, asset);
@@ -122,8 +120,6 @@ class BookingServiceImplTest {
     @Test
     void shouldThrowExceptionWhenUserNotFound() {
 
-        when(securityService.isAdmin()).thenReturn(true);
-
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();
 
         when(userRepository.findByIdAndStatusIn(USER_ID, validUpdateUserStatuses)).thenReturn(Optional.empty());
@@ -137,9 +133,7 @@ class BookingServiceImplTest {
     // Tests createBooking(): throws if asset not found
     @Test
     void shouldThrowExceptionWhenAssetNotFound() {
-
-        mockAdminUser();
-
+        
         User user = BookingServiceImplTestData.user();
 
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();

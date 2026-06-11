@@ -5,10 +5,8 @@ import java.time.Instant;
 import java.util.List;
 
 import de.bdr.asset.management.core.email.EmailService;
-import de.bdr.asset.management.user.UserRoleEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,25 +61,21 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(rollbackFor = Exception.class)
     public BookingResponseDTO createBooking(BookingCreateDTO bookingRequest) {
 
-        Long loggedInUserId = securityService.getCurrentUserId();
-
-        if (!securityService.isAdmin() && !bookingRequest.userId().equals(loggedInUserId)) {
-            throw new AccessDeniedException("Cannot create booking for another user");
-        }
+        Long targetUserId = bookingRequest.userId() != null
+                ? bookingRequest.userId()
+                : securityService.getCurrentUserId();
 
         List<UserStatusEnum> validUserStatuses = List.of(
             UserStatusEnum.ACTIVE,
             UserStatusEnum.STUDENT
         );
         
-        User user = userRepository.findByIdAndStatusIn(bookingRequest.userId(), validUserStatuses)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + bookingRequest.userId()));
+        User user = userRepository.findByIdAndStatusIn(targetUserId, validUserStatuses)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + targetUserId));
 
         Asset asset = assetRepository.findByIdAndStatus(bookingRequest.assetId(), AssetStatusEnum.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + bookingRequest.assetId() + " and status ACTIVE"));
 
-        boolean isPrivilegedUser = securityService.isAdmin() || user.getRole().equals(UserRoleEnum.MANAGER);
-        
         AssetCategory category = asset.getCategory();
 
         Booking booking = mapper.toEntity(bookingRequest);
@@ -89,24 +83,18 @@ public class BookingServiceImpl implements BookingService {
         booking.setUser(user);
         booking.setAsset(asset);
 
-        boolean requiresApproval = category.isApproval() && !isPrivilegedUser;
-
-        booking.setStatus(requiresApproval ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
+        booking.setStatus(category.isApproval() ? BookingStatusEnum.PENDING : BookingStatusEnum.APPROVED);
 
         booking = repository.save(booking);
 
-        if (requiresApproval) {
+        if (category.isApproval()) {
 
             String approvalLink = "http://localhost:5173/approvals/" + booking.getId();
 
-            String managerEmail = user.getManagerEmail();
-            String employeeName = user.getName() + " " + user.getSurname();
-            String assetName = asset.getName();
-
             emailService.sendApprovalEmail(
-                    managerEmail,
-                    assetName,
-                    employeeName,
+                    user.getManagerEmail(),
+                    asset.getName(),
+                    user.getName() + " " + user.getSurname(),
                     approvalLink
             );
         }

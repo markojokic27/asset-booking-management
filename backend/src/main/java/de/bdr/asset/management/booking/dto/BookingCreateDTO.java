@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record BookingCreateDTO(
-        @NotNull(message = "User ID is required")
+
         Long userId,
 
         @NotNull(message = "Asset ID is required")

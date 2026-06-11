@@ -24,4 +24,15 @@ public class BookingAuthorizationEvaluator {
         CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
         return booking.getUser().getManagerEmail().equalsIgnoreCase(currentUser.getEmail());
     }
+
+    public boolean canCreateBooking(Authentication authentication, Long targetUserId) {
+        if (targetUserId == null) return true;
+        if (authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            return true;
+        }
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+        // self-booking with explicit id
+        return user.getId().equals(targetUserId);
+    }
 }
