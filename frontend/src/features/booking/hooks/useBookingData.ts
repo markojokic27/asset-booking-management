@@ -36,11 +36,11 @@ export function useBookingData({ filters }: Props) {
           const category = categoryRes.content.find(
             (c) => c.name === savedCategory
           );
-
           setSelectedCategory(category ?? categoryRes.content[0]);
-        } else {
-        if (categoryRes.content.length > 0) {
-          setSelectedCategory(categoryRes.content[0]);
+        } else {                                          // ← FALI OVO
+          if (categoryRes.content.length > 0) {
+            setSelectedCategory(categoryRes.content[0]);
+          }
         }
       } catch (err) {
         console.error('Error fetching initial booking data:', err);
