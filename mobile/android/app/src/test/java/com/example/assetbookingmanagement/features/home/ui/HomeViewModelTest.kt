@@ -82,6 +82,56 @@ class HomeViewModelTest {
         assertEquals(0, fakeBookingApi.getBookingsCalls)
     }
 
+    @Test
+    fun testInitShowsZeroAssetsWhenAssetRequestFails() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeAssetApi = FakeAssetApi().apply {
+            getAssetsException = RuntimeException("Asset request failed")
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(buildBookingResponse(id = 1L))
+            )
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(fakeAssetApi),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession
+        )
+        advanceUntilIdle()
+
+        assertEquals(0, viewModel.uiState.value.assetCount)
+        assertEquals(1, viewModel.uiState.value.myBookingsCount)
+    }
+
+    @Test
+    fun testInitShowsZeroBookingsWhenBookingRequestFails() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeAssetApi = FakeAssetApi().apply {
+            response = AssetListResponse(
+                content = listOf(buildAssetResponse(id = 1L, name = "Hp 15"))
+            )
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            getBookingsException = RuntimeException("Booking request failed")
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(fakeAssetApi),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession
+        )
+        advanceUntilIdle()
+
+        assertEquals(1, viewModel.uiState.value.assetCount)
+        assertEquals(0, viewModel.uiState.value.myBookingsCount)
+    }
+
     private fun buildAssetResponse(
         id: Long,
         name: String
@@ -126,9 +176,11 @@ class HomeViewModelTest {
     private class FakeAssetApi : AssetApi {
         var response: AssetListResponse = AssetListResponse(content = emptyList())
         var getAssetsCalls: Int = 0
+        var getAssetsException: Exception? = null
 
         override suspend fun getAssets(page: Int, size: Int): AssetListResponse {
             getAssetsCalls++
+            getAssetsException?.let { throw it }
             return response
         }
 
@@ -140,6 +192,7 @@ class HomeViewModelTest {
     private class FakeBookingApi : BookingApi {
         var response: BookingListResponse = BookingListResponse(content = emptyList())
         var getBookingsCalls: Int = 0
+        var getBookingsException: Exception? = null
 
         override suspend fun getBookings(
             userId: Long?,
@@ -148,6 +201,7 @@ class HomeViewModelTest {
             size: Int
         ): BookingListResponse {
             getBookingsCalls++
+            getBookingsException?.let { throw it }
             return response
         }
 
