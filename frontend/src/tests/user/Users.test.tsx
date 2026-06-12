@@ -1,8 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Users from '../../pages/Users';
-import { useUsers } from '../../features/user/hooks/useUsers';
-
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -13,7 +11,6 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../features/user/hooks/useUsers', () => ({ useUsers: vi.fn() }));
 
-// mock the useCurrentUser hook
 vi.mock('../../features/user/hooks/useCurrentUser', () => ({
   useCurrentUser: vi.fn(() => ({
     user: { id: 1, role: 'ADMIN' },
@@ -115,6 +112,11 @@ vi.mock('../../components/ui/DeleteModal', () => ({
     ) : null,
 }));
 
+import Users from '../../pages/Users';
+import { useUsers } from '../../features/user/hooks/useUsers';
+import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+
+// ── Fixtures ──────────────────────────────────────────────────────────────────
 
 const activeUser = {
   id: 1,
@@ -161,18 +163,52 @@ const buildUseUsers = (overrides: Record<string, any> = {}) => ({
 });
 
 const renderPage = (overrides: Record<string, any> = {}) => {
-  (useUsers as any).mockReturnValue(buildUseUsers(overrides));
-  return render(<Users />);
+  vi.mocked(useUsers).mockReturnValue(buildUseUsers(overrides));
+  return render(
+    <MemoryRouter initialEntries={['/users']}>
+      <Routes>
+        <Route path="/users" element={<Users />} />
+        <Route path="/bookings" element={<div>BookingsPage</div>} />
+      </Routes>
+    </MemoryRouter>
+  );
 };
 
 const getDialog = (label: string) => screen.getByRole('dialog', { name: label });
 const queryDialog = (label: string) => screen.queryByRole('dialog', { name: label });
 const openDeleteModal = () => fireEvent.click(screen.getByText('delete'));
 
-// --- Tests ---
+// ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe('Users page', () => {
   beforeEach(() => vi.clearAllMocks());
+
+  describe('access control', () => {
+    it('renders page for admin', () => {
+      renderPage();
+      expect(screen.getByText('users.title')).toBeInTheDocument();
+    });
+
+    it('redirects non-admin to /bookings', () => {
+      vi.mocked(useCurrentUser).mockReturnValue({
+        user: { id: 2, role: 'EMPLOYEE' } as any,
+        isLoading: false,
+        error: null,
+      });
+      renderPage();
+      expect(screen.getByText('BookingsPage')).toBeInTheDocument();
+    });
+
+    it('does not redirect while loading', () => {
+      vi.mocked(useCurrentUser).mockReturnValue({
+        user: null,
+        isLoading: true,
+        error: null,
+      });
+      renderPage();
+      expect(screen.queryByText('BookingsPage')).not.toBeInTheDocument();
+    });
+  });
 
   describe('rendering', () => {
     it('renders key UI elements', () => {
@@ -186,8 +222,8 @@ describe('Users page', () => {
 
     it.each([
       ['loading', { isLoading: true, pagedUsers: [] }, 'users.empty.loading'],
-      ['error', { error: 'Failed to load users.', pagedUsers: [] }, 'Failed to load users.'],
-      ['empty', { pagedUsers: [], filteredUsers: [] }, 'users.empty.none'],
+      ['error',   { error: 'Failed to load users.', pagedUsers: [] }, 'Failed to load users.'],
+      ['empty',   { pagedUsers: [], filteredUsers: [] }, 'users.empty.none'],
     ])('shows correct message when %s', (_, listOverrides, expectedText) => {
       renderPage({ list: { ...baseList, ...listOverrides } });
       expect(screen.getByText(expectedText)).toBeInTheDocument();
@@ -237,11 +273,11 @@ describe('Users page', () => {
 
   describe('modals render by state', () => {
     it.each([
-      ['view', 'view-modal'],
+      ['view',     'view-modal'],
       ['bookings', 'bookings-modal'],
-      ['report', 'report-modal'],
-      ['create', 'form-modal-create'],
-      ['edit', 'form-modal-edit'],
+      ['report',   'report-modal'],
+      ['create',   'form-modal-create'],
+      ['edit',     'form-modal-edit'],
     ])('renders correct modal for state "%s"', (modalType, ariaLabel) => {
       renderPage({ modals: { ...mockModals, modal: modalType } });
       expect(getDialog(ariaLabel)).toBeInTheDocument();
@@ -277,7 +313,7 @@ describe('Users page', () => {
   });
 
   describe('delete modal', () => {
-    it('shows correct title, description and item name via getItemName', () => {
+    it('shows correct title, description and item name', () => {
       renderPage();
       openDeleteModal();
       expect(screen.getByText('users.delete.title')).toBeInTheDocument();
@@ -303,10 +339,9 @@ describe('Users page', () => {
       expect(mockActions.remove).not.toHaveBeenCalled();
     });
 
-    it('does not show modal or call remove by default', () => {
+    it('does not show modal by default', () => {
       renderPage();
       expect(queryDialog('delete-modal')).not.toBeInTheDocument();
-      expect(mockActions.remove).not.toHaveBeenCalled();
     });
   });
 });

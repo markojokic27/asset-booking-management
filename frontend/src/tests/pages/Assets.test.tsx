@@ -1,18 +1,14 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Assets from '../../pages/Assets';
 
-// ── Mocks ────────────────────────────────────────────────────────────────────
+// ── Mocks ─────────────────────────────────────────────────────────────────────
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string, opts?: Record<string, unknown>) => opts?.name ? `${key}:${opts.name}` : key }),
 }));
-
 vi.mock('@mui/icons-material/Add', () => ({ default: () => null }));
 
-const { mockUseCurrentUser } = vi.hoisted(() => ({
-  mockUseCurrentUser: vi.fn(),
-}));
+const { mockUseCurrentUser } = vi.hoisted(() => ({ mockUseCurrentUser: vi.fn() }));
 vi.mock('../../features/user/hooks/useCurrentUser', () => ({
   useCurrentUser: () => mockUseCurrentUser(),
 }));
@@ -34,22 +30,15 @@ vi.mock('../../features/asset-category/api/categoryApi', () => ({
   getAllCategories: () => mockGetAllCategories(),
 }));
 
-vi.mock('../../features/user/utilis/users', () => ({
-  isAdmin: vi.fn(),
-}));
+vi.mock('../../features/user/utilis/users', () => ({ isAdmin: vi.fn() }));
 import { isAdmin } from '../../features/user/utilis/users';
 const mockIsAdmin = vi.mocked(isAdmin);
 
 vi.mock('../../features/user/hooks/usePagination', () => ({
   usePagination: (items: unknown[]) => ({
-    paged: items,
-    page: 1,
-    totalPages: 1,
-    items: items.length,
-    setPage: vi.fn(),
+    paged: items, page: 1, totalPages: 1, items: items.length, setPage: vi.fn(),
   }),
 }));
-
 vi.mock('../../components/layout/Layout', () => ({
   LayoutColumn: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
@@ -63,31 +52,31 @@ vi.mock('../../components/ui/SearchBar', () => ({
     <input aria-label="search" value={value} onChange={(e) => onChange(e.target.value)} />
   ),
 }));
-vi.mock('../../components/ui/Pagination', () => ({
-  Pagination: () => <div>Pagination</div>,
-}));
+vi.mock('../../components/ui/Pagination', () => ({ Pagination: () => <div>Pagination</div> }));
+
+let capturedDeleteModalProps: Record<string, unknown> = {};
 vi.mock('../../components/ui/DeleteModal', () => ({
-  DeleteModal: ({ isOpen, onClose, onConfirm }: { isOpen: boolean; onClose: () => void; onConfirm: () => void }) =>
-    isOpen ? (
+  DeleteModal: (props: Record<string, unknown>) => {
+    capturedDeleteModalProps = props;
+    return (props.isOpen as boolean) ? (
       <div>
         <span>delete-modal</span>
-        <button onClick={onConfirm}>confirm-delete</button>
-        <button onClick={onClose}>cancel-delete</button>
+        <button onClick={props.onConfirm as () => void}>confirm-delete</button>
+        <button onClick={props.onClose as () => void}>cancel-delete</button>
       </div>
-    ) : null,
+    ) : null;
+  },
 }));
 vi.mock('../../features/asset/components/AssetCategoryGrid', () => ({
   AssetCategoryGrid: ({ categories, onSelectCategory }: { categories: string[]; onSelectCategory: (c: string) => void }) => (
-    <div>
-      {categories.map((c) => (
-        <button key={c} onClick={() => onSelectCategory(c)}>{c}</button>
-      ))}
-    </div>
+    <div>{categories.map((c) => <button key={c} onClick={() => onSelectCategory(c)}>{c}</button>)}</div>
   ),
 }));
 vi.mock('../../features/asset/components/AssetTable', () => ({
-  AssetsTable: ({ assets, onView, onEdit, onDelete, onBookings, onReport }: {
+  AssetsTable: ({ assets, onView, onEdit, onDelete, onBookings, onReport, onToggleNameSort, nameSortDir }: {
     assets: { id: number; name: string }[];
+    nameSortDir: string;
+    onToggleNameSort: () => void;
     onView: (a: { id: number; name: string }) => void;
     onEdit?: (a: { id: number; name: string }) => void;
     onDelete?: (a: { id: number; name: string }) => void;
@@ -95,6 +84,8 @@ vi.mock('../../features/asset/components/AssetTable', () => ({
     onReport: (a: { id: number; name: string }) => void;
   }) => (
     <div>
+      <button onClick={onToggleNameSort}>toggle-sort</button>
+      <span>sort-dir:{nameSortDir}</span>
       {assets.map((a) => (
         <div key={a.id}>
           <span>{a.name}</span>
@@ -109,20 +100,27 @@ vi.mock('../../features/asset/components/AssetTable', () => ({
   ),
 }));
 vi.mock('../../features/asset/components/AssetModal', () => ({
-  AssetModal: ({ isOpen }: { isOpen: boolean }) =>
-    isOpen ? <div>asset-modal</div> : null,
+  AssetModal: ({ isOpen }: { isOpen: boolean }) => isOpen ? <div>asset-modal</div> : null,
 }));
 vi.mock('../../features/asset/components/AssetBookingsModal', () => ({
-  AssetBookingsModal: ({ isOpen }: { isOpen: boolean }) =>
-    isOpen ? <div>bookings-modal</div> : null,
+  AssetBookingsModal: ({ isOpen }: { isOpen: boolean }) => isOpen ? <div>bookings-modal</div> : null,
 }));
 vi.mock('../../features/asset/components/AssetReportModal', () => ({
-  AssetReportModal: ({ isOpen }: { isOpen: boolean }) =>
-    isOpen ? <div>report-modal</div> : null,
+  AssetReportModal: ({ isOpen }: { isOpen: boolean }) => isOpen ? <div>report-modal</div> : null,
 }));
 vi.mock('../../features/asset/components/AssetFormModal', () => ({
-  AssetFormModal: ({ isOpen }: { isOpen: boolean }) =>
-    isOpen ? <div>form-modal</div> : null,
+  AssetFormModal: ({ isOpen, onCreate, onSave }: {
+    isOpen: boolean;
+    onCreate: (payload: unknown) => Promise<void>;
+    onSave: (asset: { id: number; name: string; categoryId: number; status: string; location: string; description: string }) => Promise<void>;
+  }) =>
+    isOpen ? (
+      <div>
+        <span>form-modal</span>
+        <button onClick={() => onCreate({ name: 'New Asset', categoryId: 1 })}>submit-create</button>
+        <button onClick={() => onSave({ id: 10, name: 'Updated', categoryId: 1, status: 'ACTIVE', location: 'A', description: 'D' })}>submit-save</button>
+      </div>
+    ) : null,
 }));
 vi.mock('../../features/user/components/ShowDeletedFilter', () => ({
   ShowDeletedFilter: ({ onToggle }: { onToggle: () => void }) => (
@@ -130,189 +128,268 @@ vi.mock('../../features/user/components/ShowDeletedFilter', () => ({
   ),
 }));
 
+import Assets from '../../pages/Assets';
+
+// ── Fixtures ──────────────────────────────────────────────────────────────────
 
 const mockCategory = { id: 1, name: 'Laptops' };
-const mockAsset = { id: 10, name: 'MacBook', categoryId: 1, status: 'ACTIVE' };
+const mockAsset = { id: 10, name: 'MacBook', categoryId: 1, categoryName: 'Laptops', status: 'ACTIVE' };
+const deletedAsset = { id: 11, name: 'OldLaptop', categoryId: 1, categoryName: 'Laptops', status: 'DELETED' };
 
-function setupMocks({ admin = false } = {}) {
+const setupMocks = ({ admin = false } = {}) => {
   mockUseCurrentUser.mockReturnValue({ user: { id: 1 } });
   mockIsAdmin.mockReturnValue(admin);
   mockGetAllCategories.mockResolvedValue({ content: [mockCategory] });
   mockGetAllAssets.mockResolvedValue({ content: [mockAsset] });
-}
+};
+
+const waitForLoad = () => waitFor(() => expect(screen.getByText('MacBook')).toBeInTheDocument());
+const openDeleteModal = () => waitFor(() => fireEvent.click(screen.getByText('delete-10')));
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe('Assets', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    capturedDeleteModalProps = {};
+  });
 
   it('shows loading state initially', () => {
     setupMocks();
-    // Never resolves — stays in loading
     mockGetAllAssets.mockReturnValue(new Promise(() => {}));
     mockGetAllCategories.mockReturnValue(new Promise(() => {}));
-
     render(<Assets />);
-
     expect(screen.getByText('assets.empty.loading')).toBeInTheDocument();
   });
 
   it('shows error when API fails', async () => {
     setupMocks();
     mockGetAllAssets.mockRejectedValue(new Error('fail'));
-
     render(<Assets />);
-
-    await waitFor(() =>
-      expect(screen.getByText('assets.errors.loadAssets')).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText('assets.errors.loadAssets')).toBeInTheDocument());
   });
 
-  it('renders assets after successful load', async () => {
+  it('renders assets and categories after load', async () => {
     setupMocks();
-
     render(<Assets />);
-
-    await waitFor(() =>
-      expect(screen.getByText('MacBook')).toBeInTheDocument()
-    );
-  });
-
-  it('renders category buttons from API', async () => {
-    setupMocks();
-
-    render(<Assets />);
-
-    await waitFor(() =>
-      expect(screen.getByText('Laptops')).toBeInTheDocument()
-    );
+    await waitFor(() => {
+      expect(screen.getByText('MacBook')).toBeInTheDocument();
+      expect(screen.getByText('Laptops')).toBeInTheDocument();
+    });
   });
 
   it('filters assets by search input', async () => {
-    mockUseCurrentUser.mockReturnValue({ user: { id: 1 } });
-    mockIsAdmin.mockReturnValue(false);
-    mockGetAllCategories.mockResolvedValue({ content: [mockCategory] });
+    setupMocks();
     mockGetAllAssets.mockResolvedValue({
-      content: [
-        mockAsset,
-        { id: 11, name: 'Monitor', categoryId: 1, status: 'ACTIVE' },
-      ],
+      content: [mockAsset, { id: 11, name: 'Monitor', categoryId: 1, status: 'ACTIVE' }],
     });
-
     render(<Assets />);
-
-    await waitFor(() => expect(screen.getByText('MacBook')).toBeInTheDocument());
-
+    await waitForLoad();
     fireEvent.change(screen.getByLabelText('search'), { target: { value: 'Monitor' } });
-
     expect(screen.getByText('Monitor')).toBeInTheDocument();
     expect(screen.queryByText('MacBook')).not.toBeInTheDocument();
   });
 
-  describe('admin actions', () => {
-    it('shows add button for admin', async () => {
-      setupMocks({ admin: true });
-
+  describe('category filtering', () => {
+    it('shows all assets and correct title by default', async () => {
+      setupMocks();
+      mockGetAllAssets.mockResolvedValue({
+        content: [mockAsset, { id: 11, name: 'Monitor', categoryId: 2, categoryName: 'Monitors', status: 'ACTIVE' }],
+      });
       render(<Assets />);
-
-      await waitFor(() =>
-        expect(screen.getByText('assets.actions.new')).toBeInTheDocument()
-      );
+      await waitFor(() => {
+        expect(screen.getByText('MacBook')).toBeInTheDocument();
+        expect(screen.getByText('Monitor')).toBeInTheDocument();
+        expect(screen.getByText('assets.categories.all')).toBeInTheDocument();
+      });
     });
 
-    it('does not show add button for non-admin', async () => {
-      setupMocks({ admin: false });
-
+    it('filters assets and updates title when category selected', async () => {
+      setupMocks();
+      mockGetAllCategories.mockResolvedValue({ content: [mockCategory, { id: 2, name: 'Monitors' }] });
+      mockGetAllAssets.mockResolvedValue({
+        content: [mockAsset, { id: 11, name: 'Monitor', categoryId: 2, categoryName: 'Monitors', status: 'ACTIVE' }],
+      });
       render(<Assets />);
+      await waitFor(() => screen.getByText('Monitors'));
+      fireEvent.click(screen.getByText('Monitors'));
+      expect(screen.getByText('Monitor')).toBeInTheDocument();
+      expect(screen.queryByText('MacBook')).not.toBeInTheDocument();
+      expect(screen.queryByText('assets.categories.all')).not.toBeInTheDocument();
+    });
 
-      await waitFor(() => screen.getByText('MacBook'));
+    it.each([
+      ['categoryMap fallback when categoryName is null',                { ...mockAsset, categoryName: null }],
+      ['"-" fallback when both categoryName and categoryMap missing',   { ...mockAsset, categoryId: 999, categoryName: null }],
+    ])('uses %s', async (_, asset) => {
+      setupMocks();
+      if (asset.categoryId === 999) mockGetAllCategories.mockResolvedValue({ content: [] });
+      mockGetAllAssets.mockResolvedValue({ content: [asset] });
+      render(<Assets />);
+      await waitForLoad();
+      expect(screen.getByText('MacBook')).toBeInTheDocument();
+    });
+  });
 
+  describe('sorting', () => {
+    const twoAssets = [
+      { id: 11, name: 'Zebra', categoryId: 1, categoryName: 'Laptops', status: 'ACTIVE' },
+      { id: 10, name: 'Apple', categoryId: 1, categoryName: 'Laptops', status: 'ACTIVE' },
+    ];
+
+    it('sorts asc by default, toggles to desc on click', async () => {
+      setupMocks();
+      mockGetAllAssets.mockResolvedValue({ content: twoAssets });
+      render(<Assets />);
+      await waitFor(() => screen.getByText('Apple'));
+
+      expect(screen.getByText('sort-dir:asc')).toBeInTheDocument();
+      let items = screen.getAllByText(/^(Apple|Zebra)$/);
+      expect(items[0].textContent).toBe('Apple');
+      expect(items[1].textContent).toBe('Zebra');
+
+      fireEvent.click(screen.getByText('toggle-sort'));
+      expect(screen.getByText('sort-dir:desc')).toBeInTheDocument();
+      items = screen.getAllByText(/^(Apple|Zebra)$/);
+      expect(items[0].textContent).toBe('Zebra');
+      expect(items[1].textContent).toBe('Apple');
+    });
+  });
+
+  describe('showDeleted filter', () => {
+    it('hides deleted assets by default, shows after toggle, hides again on second toggle', async () => {
+      setupMocks({ admin: true });
+      mockGetAllAssets.mockResolvedValue({ content: [mockAsset, deletedAsset] });
+      render(<Assets />);
+      await waitForLoad();
+      expect(screen.queryByText('OldLaptop')).not.toBeInTheDocument();
+      fireEvent.click(screen.getByText('toggle-deleted'));
+      expect(screen.getByText('OldLaptop')).toBeInTheDocument();
+      fireEvent.click(screen.getByText('toggle-deleted'));
+      expect(screen.queryByText('OldLaptop')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('admin actions', () => {
+    it('shows add button and ShowDeletedFilter for admin', async () => {
+      setupMocks({ admin: true });
+      render(<Assets />);
+      await waitFor(() => {
+        expect(screen.getByText('assets.actions.new')).toBeInTheDocument();
+        expect(screen.getByText('toggle-deleted')).toBeInTheDocument();
+      });
+    });
+
+    it('hides add button for non-admin', async () => {
+      setupMocks();
+      render(<Assets />);
+      await waitForLoad();
       expect(screen.queryByText('assets.actions.new')).not.toBeInTheDocument();
     });
 
-    it('opens add modal when add button is clicked', async () => {
+    it('opens add modal on add button click', async () => {
       setupMocks({ admin: true });
-
       render(<Assets />);
-
       await waitFor(() => fireEvent.click(screen.getByText('assets.actions.new')));
-
       expect(screen.getByText('form-modal')).toBeInTheDocument();
     });
 
-    it('opens edit modal when edit is clicked', async () => {
+    it('opens edit modal on edit click', async () => {
       setupMocks({ admin: true });
-
       render(<Assets />);
-
       await waitFor(() => fireEvent.click(screen.getByText('edit-10')));
-
       expect(screen.getByText('form-modal')).toBeInTheDocument();
     });
 
-    it('opens delete modal when delete is clicked', async () => {
+    it('passes correct title and item name to DeleteModal', async () => {
       setupMocks({ admin: true });
-
       render(<Assets />);
-
-      await waitFor(() => fireEvent.click(screen.getByText('delete-10')));
-
-      expect(screen.getByText('delete-modal')).toBeInTheDocument();
+      await openDeleteModal();
+      expect(capturedDeleteModalProps.title).toBe('assets.delete.title');
+      expect((capturedDeleteModalProps.getItemName as (item: unknown) => string)?.(mockAsset)).toBe('MacBook');
     });
 
-    it('calls deleteAsset and closes modal on confirm', async () => {
+    it('confirms delete, marks asset as DELETED and shows after showDeleted toggle', async () => {
       setupMocks({ admin: true });
       mockDeleteAsset.mockResolvedValue({});
-
       render(<Assets />);
-
-      await waitFor(() => fireEvent.click(screen.getByText('delete-10')));
+      await openDeleteModal();
       fireEvent.click(screen.getByText('confirm-delete'));
-
-      await waitFor(() => expect(mockDeleteAsset).toHaveBeenCalledWith(10));
-      expect(screen.queryByText('delete-modal')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(mockDeleteAsset).toHaveBeenCalledWith(10);
+        expect(screen.queryByText('delete-modal')).not.toBeInTheDocument();
+      });
+      fireEvent.click(screen.getByText('toggle-deleted'));
+      expect(screen.getByText('MacBook')).toBeInTheDocument();
     });
 
-    it('shows ShowDeletedFilter for admin', async () => {
+    it('logs error and keeps asset in list when deleteAsset fails', async () => {
       setupMocks({ admin: true });
-
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockDeleteAsset.mockRejectedValue(new Error('delete failed'));
       render(<Assets />);
-
+      await openDeleteModal();
+      fireEvent.click(screen.getByText('confirm-delete'));
       await waitFor(() =>
-        expect(screen.getByText('toggle-deleted')).toBeInTheDocument()
+        expect(consoleSpy).toHaveBeenCalledWith('Failed to delete asset:', expect.any(Error))
       );
+      expect(screen.getByText('MacBook')).toBeInTheDocument();
+      consoleSpy.mockRestore();
     });
   });
 
   describe('modals', () => {
-    it('opens view modal', async () => {
+    it.each([
+      ['view',     'view-10',     'asset-modal'],
+      ['bookings', 'bookings-10', 'bookings-modal'],
+      ['report',   'report-10',   'report-modal'],
+    ])('opens %s modal on click', async (_, btnText, modalText) => {
       setupMocks();
-
       render(<Assets />);
+      await waitFor(() => fireEvent.click(screen.getByText(btnText)));
+      expect(screen.getByText(modalText)).toBeInTheDocument();
+    });
+  });
 
-      await waitFor(() => fireEvent.click(screen.getByText('view-10')));
-
-      expect(screen.getByText('asset-modal')).toBeInTheDocument();
+  describe('AssetFormModal callbacks', () => {
+    describe('onCreate', () => {
+      it.each([
+        ['categoryName present',         { id: 99, name: 'New Asset', categoryId: 1,   categoryName: 'Laptops', status: 'ACTIVE' }],
+        ['categoryMap fallback',         { id: 99, name: 'New Asset', categoryId: 1,   categoryName: null,      status: 'ACTIVE' }],
+        ['"-" fallback (no category)',   { id: 99, name: 'New Asset', categoryId: 999, categoryName: null,      status: 'ACTIVE' }],
+      ])('%s', async (_, apiResponse) => {
+        setupMocks({ admin: true });
+        if (apiResponse.categoryId === 999) mockGetAllCategories.mockResolvedValue({ content: [] });
+        mockCreateAsset.mockResolvedValue(apiResponse);
+        render(<Assets />);
+        await waitFor(() => fireEvent.click(screen.getByText('assets.actions.new')));
+        fireEvent.click(screen.getByText('submit-create'));
+        await waitFor(() => {
+          expect(mockCreateAsset).toHaveBeenCalledWith({ name: 'New Asset', categoryId: 1 });
+          expect(screen.getByText('New Asset')).toBeInTheDocument();
+        });
+      });
     });
 
-    it('opens bookings modal', async () => {
-      setupMocks();
-
-      render(<Assets />);
-
-      await waitFor(() => fireEvent.click(screen.getByText('bookings-10')));
-
-      expect(screen.getByText('bookings-modal')).toBeInTheDocument();
-    });
-
-    it('opens report modal', async () => {
-      setupMocks();
-
-      render(<Assets />);
-
-      await waitFor(() => fireEvent.click(screen.getByText('report-10')));
-
-      expect(screen.getByText('report-modal')).toBeInTheDocument();
+    describe('onSave', () => {
+      it.each([
+        ['categoryName present',         { id: 10, name: 'Updated', categoryId: 1,   categoryName: 'Laptops', status: 'ACTIVE' }],
+        ['categoryMap fallback',         { id: 10, name: 'Updated', categoryId: 1,   categoryName: null,      status: 'ACTIVE' }],
+        ['"-" fallback (no category)',   { id: 10, name: 'Updated', categoryId: 999, categoryName: null,      status: 'ACTIVE' }],
+      ])('%s', async (_, apiResponse) => {
+        setupMocks({ admin: true });
+        if (apiResponse.categoryId === 999) mockGetAllCategories.mockResolvedValue({ content: [] });
+        mockUpdateAsset.mockResolvedValue(apiResponse);
+        render(<Assets />);
+        await waitFor(() => fireEvent.click(screen.getByText('edit-10')));
+        fireEvent.click(screen.getByText('submit-save'));
+        await waitFor(() => {
+          expect(mockUpdateAsset).toHaveBeenCalledWith(10, {
+            name: 'Updated', categoryId: 1, status: 'ACTIVE', location: 'A', description: 'D',
+          });
+          expect(screen.getByText('Updated')).toBeInTheDocument();
+        });
+      });
     });
   });
 });
