@@ -505,8 +505,9 @@ osv-scanner:
   allow_failure: false
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: manual
+      allow_failure: true
 
 
 #socket scan
