@@ -44,6 +44,11 @@ export function FiltersBar({
         next.selectedWeekdays = [];
       }
 
+      if ('toDate' in partial && !next.fromDate) {
+        next.fromDate = next.toDate;
+        next.selectedWeekdays = [];
+      }
+
       if (next.fromHour && next.toHour && next.toHour <= next.fromHour) {
         next.toHour = '';
       }
