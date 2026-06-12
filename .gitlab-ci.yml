@@ -17,7 +17,7 @@ stages:
   #SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
 
 default:
-  interruptible: true
+  interruptible: false
 
 workflow:
   rules:
@@ -55,16 +55,21 @@ workflow:
 # ─────────────────────────────────────────
 backend:build:
   stage: build
-  image: maven:3.9-eclipse-temurin-21
+  image: 
+    name: maven:3.9-eclipse-temurin-21
+    # pull_policy: if-not-present
   script:
     - cd backend
     - mvn clean package -DskipTests -Dmaven.repo.local=.m2/repository 
   artifacts:
     paths:
-      - backend/target/
+      - backend/target/*.jar
     expire_in: 1 hour
   cache:
-    key: maven-$CI_PROJECT_ID
+    key:
+      files:
+        - backend/pom.xml
+      prefix: maven
     paths:
       - backend/.m2/repository/
   rules: *standard_rules
@@ -72,7 +77,9 @@ backend:build:
 
 frontend:build:
   stage: build
-  image: node:24-alpine
+  image: 
+    name: node:24-alpine
+    # pull_policy: if-not-present
   script:
     - cd frontend
     - npm ci --legacy-peer-deps
@@ -82,7 +89,10 @@ frontend:build:
       - frontend/dist/        
     expire_in: 1 hour
   cache:
-    key: npm-$CI_PROJECT_ID
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
     paths:
       - frontend/node_modules/ 
   rules: *standard_rules
@@ -96,10 +106,15 @@ frontend:build:
 # 
 backend:test:
   stage: test
-  image: maven:3.9-eclipse-temurin-21
+  image: 
+    name: maven:3.9-eclipse-temurin-21
+    # pull_policy: if-not-present
   services:
     - name: postgres:18
       alias: postgres
+      # pull_policy: if-not-present
+
+
   needs:
     - job: backend:build
       artifacts: true
@@ -118,16 +133,22 @@ backend:test:
       junit: backend/target/surefire-reports/*.xml
     when: always
   cache:
-    key: maven-$CI_PROJECT_ID
+    key:
+      files:
+        - backend/pom.xml
+      prefix: maven
     paths:
       - backend/.m2/repository/
+    policy: pull
   rules: *standard_rules
       
   
 
 frontend:test:
   stage: test
-  image: node:24-slim 
+  image: 
+    name: node:24-slim
+    # pull_policy: if-not-present
   needs:
       - job: frontend:build
         artifacts: true
@@ -138,12 +159,15 @@ frontend:test:
     - npm run test
   allow_failure: true
   cache:
-    - key: npm-$CI_PROJECT_ID
-      paths:
-        - frontend/node_modules/
-    - key: playwright-chromium-$CI_COMMIT_REF_SLUG
-      paths:
-        - /root/.cache/ms-playwright/
+      - key:
+         files:
+          - frontend/package-lock.json
+         prefix: npm
+        paths:
+          - frontend/node_modules/
+      - key: playwright-chromium-$CI_COMMIT_REF_SLUG
+        paths:
+          - /root/.cache/ms-playwright/
   rules: *standard_rules
       
   
@@ -153,7 +177,9 @@ frontend:test:
 # ─────────────────────────────────────────
 playwright:e2e:
   stage: test
-  image: mcr.microsoft.com/playwright/java:v1.59.0-jammy
+  image: 
+    name: mcr.microsoft.com/playwright/java:v1.59.0-jammy
+    # pull_policy: if-not-present
   needs:
     - job: backend:build
       artifacts: true
@@ -162,6 +188,7 @@ playwright:e2e:
   services:
     - name: postgres:18
       alias: postgres
+      # pull_policy: if-not-present
   variables:
     E2E_BASE_URL: "http://localhost:5173"
     HEADLESS: "true"
@@ -258,7 +285,7 @@ playwright:e2e:
           - backend/pom.xml
       paths:
         - backend/.m2/repository/
-      policy: pull-push
+      policy: pull
 
     - key:
         files:
@@ -267,7 +294,7 @@ playwright:e2e:
         - tests/e2e-tests/.m2/repository/
       policy: pull
 
-  allow_failure: true
+  allow_failure: false
   # rules:
   #   # 1. Scheduled pipelines (full regression)
   #   - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -299,10 +326,13 @@ playwright:e2e:
 # ─────────────────────────────────────────
 bruno:smoke:
   stage: bruno
-  image: node:24-alpine
+  image: 
+    name: node:24-alpine
+    # pull_policy: if-not-present
   services:
     - name: postgres:18
       alias: postgres
+      # pull_policy: if-not-present
   variables:
     BRUNO_BASE_URL: "http://localhost:8080/API"
     BRUNO_ENV_FILE: "environments/Admin.yml"
@@ -368,6 +398,14 @@ bruno:smoke:
 
   
 
+  cache:
+      key:
+        files:
+          - backend/pom.xml
+        prefix: maven
+      paths:
+        - backend/.m2/repository/
+      policy: pull
   artifacts:
     when: always
     reports:
@@ -387,7 +425,9 @@ bruno:smoke:
 #backend owasp chech
 backend-dependency-check:
   stage: security
-  image: maven:3.9-eclipse-temurin-21
+  image: 
+    name: maven:3.9-eclipse-temurin-21
+    # pull_policy: if-not-present
   needs:
     - job: backend:build    # Reuses backend/target/ artifact, skips recompile
       artifacts: true
@@ -405,7 +445,10 @@ backend-dependency-check:
       - backend/target/dependency-check-report/dependency-check-report.json
     expire_in: 7 days
   cache:
-    key: maven-$CI_PROJECT_ID
+    key:
+      files:
+        - backend/pom.xml
+      prefix: maven
     paths:
       - backend/.m2/repository/
   allow_failure: true         # Don't block dockerize on first runs
@@ -414,18 +457,23 @@ backend-dependency-check:
 #frontend security stage
 frontend-package-vulnerabilities-check:
   stage: security
-  image: node:24-alpine
+  image: 
+    name: node:24-alpine
+    # pull_policy: if-not-present
   needs:
     - job: frontend:build
   script:
     - cd frontend
-    - npm ci --legacy-peer-deps
+    # - npm ci --legacy-peer-deps
     - npm audit --audit-level=high --omit=dev
   allow_failure: true         # don't block on first runs
   rules: *standard_rules_manual
                           
   cache:
-    key: npm-$CI_PROJECT_ID
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
     paths:
       - frontend/node_modules/
 
@@ -434,6 +482,7 @@ osv-scanner:
   stage: security
   image:
     name: ghcr.io/google/osv-scanner-action:v2.0.2 #latest stabile
+    # pull_policy: if-not-present
   # old working version
   # name: ghcr.io/google/osv-scanner:v1.9.1
     entrypoint: [""]
@@ -445,7 +494,7 @@ osv-scanner:
       - osv-report.json
     expire_in: 7 days
   needs: [] 
-  allow_failure: true
+  allow_failure: false
   rules: *standard_rules
 
 #socket scan
@@ -454,7 +503,7 @@ socket-security:
   image:
     name: socketdev/cli:2.4.6
     entrypoint: [""]
-    pull_policy: if-not-present  # NOT GOOD PRACTICE, IMPLEMENTED BECAUSE OF LOW MEMORY ON GITLAB RUNNER
+    # pull_policy: if-not-present  # NOT GOOD PRACTICE, IMPLEMENTED BECAUSE OF LOW MEMORY ON GITLAB RUNNER
   variables:
     SOCKET_SECURITY_API_KEY: $SOCKET_SECURITY_API_KEY
     GITLAB_TOKEN: $GITLAB_TOKEN
@@ -483,7 +532,9 @@ socket-security:
 
 snyk-scan-frontend:
   stage: security
-  image: node:24-alpine
+  image: 
+    name: node:24-alpine
+    # pull_policy: if-not-present
   needs:
     - job: frontend:build
       artifacts: true
@@ -497,7 +548,10 @@ snyk-scan-frontend:
     - snyk-to-html -i snyk_data_file.json -o snyk_results.html
     - snyk monitor --file=frontend/package.json --target-reference="$CI_COMMIT_REF_NAME"
   cache:
-    key: npm-$CI_PROJECT_ID
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
     paths:
       - frontend/node_modules/
     policy: pull
