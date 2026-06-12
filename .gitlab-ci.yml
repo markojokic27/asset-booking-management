@@ -452,7 +452,11 @@ backend-dependency-check:
     paths:
       - backend/.m2/repository/
   allow_failure: true         # Don't block dockerize on first runs
-  rules: *standard_rules_manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # Auto on nightly schedule
+    - if: $CI_COMMIT_BRANCH == "main"         
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual                            # Manual button on develop
 
 #frontend security stage
 frontend-package-vulnerabilities-check:
@@ -467,7 +471,11 @@ frontend-package-vulnerabilities-check:
     # - npm ci --legacy-peer-deps
     - npm audit --audit-level=high --omit=dev
   allow_failure: true         # don't block on first runs
-  rules: *standard_rules_manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # nightly
+    - if: $CI_COMMIT_BRANCH == "main"        
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual          
                           
   cache:
     key:
@@ -495,7 +503,11 @@ osv-scanner:
     expire_in: 7 days
   needs: [] 
   allow_failure: false
-  rules: *standard_rules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
 
 #socket scan
 socket-security:
@@ -561,5 +573,9 @@ snyk-scan-frontend:
       - snyk_data_file.json
       - snyk_results.html
     expire_in: 1 week
-  rules: *standard_rules_manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_SNYK == "true"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
 
