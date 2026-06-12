@@ -38,6 +38,12 @@ const createInitialValues: FormValues = {
   approval: false,
 };
 
+function getFieldsKey(isCreate: boolean): string {
+  return isCreate
+    ? 'assetCategories.modals.add.fields'
+    : 'assetCategories.modals.edit.fields';
+}
+
 export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
   isOpen,
   mode,
@@ -48,9 +54,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const isCreate = mode === 'create';
-  const fieldsKey = isCreate
-    ? 'assetCategories.modals.add.fields'
-    : 'assetCategories.modals.edit.fields';
+  const fieldsKey = getFieldsKey(isCreate);
 
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
