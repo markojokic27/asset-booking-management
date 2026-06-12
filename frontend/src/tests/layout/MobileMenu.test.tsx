@@ -1,10 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import MobileMenu from '../../components/layout/MobileMenu';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
-import { isAdmin, isManager } from '../../features/user/utilis/users';
 
 const mockNavigate = vi.fn();
 
@@ -12,140 +9,90 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return { ...actual, useNavigate: () => mockNavigate };
 });
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}));
-
+vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
 vi.mock('../../components/icons/Logo', () => ({
-  Logo: ({ className }: React.SVGProps<SVGSVGElement>) => (
-    <svg className={className} aria-label="Logo" />
-  ),
+  Logo: ({ className }: React.SVGProps<SVGSVGElement>) => <svg className={className} aria-label="Logo" />,
 }));
-
-vi.mock('../../components/ui/LanguageSwitcher', () => ({
-  default: () => <div>LanguageSwitcher</div>,
-}));
-
-vi.mock('../../components/ui/ThemeToggle', () => ({
-  default: () => <button>ThemeToggle</button>,
-}));
-
+vi.mock('../../components/ui/LanguageSwitcher', () => ({ default: () => <div>LanguageSwitcher</div> }));
+vi.mock('../../components/ui/ThemeToggle', () => ({ default: () => <button>ThemeToggle</button> }));
 vi.mock('../../components/ui/Button', () => ({
   Button: ({ children, onClick, className }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button onClick={onClick} className={className}>{children}</button>
   ),
 }));
-
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({
-  useCurrentUser: vi.fn(() => ({ user: null, isLoading: false, error: null })),
-}));
-
+vi.mock('../../features/user/hooks/useCurrentUser', () => ({ useCurrentUser: vi.fn() }));
 vi.mock('../../features/user/utilis/users', () => ({
   getFullName: vi.fn(() => 'Test User'),
-  isAdmin: vi.fn(() => false),
-  isManager: vi.fn(() => false),
+  isAdmin: vi.fn(),
+  isManager: vi.fn(),
 }));
-
 vi.mock('@mui/icons-material', () => ({
-  MonitorSharp: () => <svg />,
-  DnsSharp: () => <svg />,
-  CalendarTodaySharp: () => <svg />,
-  PeopleSharp: () => <svg />,
-  LogoutSharp: () => <svg />,
-  AccountCircleSharp: () => <svg />,
-  HowToRegSharp: () => <svg />,
-  EventNoteSharp: () => <svg />,
+  MonitorSharp: () => <svg />, DnsSharp: () => <svg />, CalendarTodaySharp: () => <svg />,
+  PeopleSharp: () => <svg />, LogoutSharp: () => <svg />, AccountCircleSharp: () => <svg />,
+  HowToRegSharp: () => <svg />, EventNoteSharp: () => <svg />,
 }));
 
-const renderMenu = () =>
-  render(
-    <MemoryRouter>
-      <MobileMenu />
-    </MemoryRouter>
-  );
+import MobileMenu from '../../components/layout/MobileMenu';
+import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { isAdmin, isManager } from '../../features/user/utilis/users';
+
+const renderMenu = () => render(<MemoryRouter><MobileMenu /></MemoryRouter>);
+const openMenu = () => userEvent.click(screen.getByRole('button', { name: '' }));
 
 describe('MobileMenu', () => {
-  afterEach(() => {
+  beforeEach(() => {
+    vi.clearAllMocks();
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(isManager).mockReturnValue(false);
     vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: null });
   });
 
-  it('renders the trigger button', () => {
+  it('renders trigger button and opens menu on click', async () => {
     renderMenu();
     expect(screen.getByRole('button', { name: '' })).toBeInTheDocument();
-  });
-
-  it('opens the menu when trigger is clicked', async () => {
-    renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
+    await openMenu();
     expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 
-  it('renders nav links after opening', async () => {
+  it('renders common nav links, logout and account link after opening', async () => {
     renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    expect(screen.getByText('layout.navbar.assets')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.categories')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.bookings')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.myBookings')).toBeInTheDocument();
+    await openMenu();
+    for (const key of ['layout.navbar.assets', 'layout.navbar.categories', 'layout.navbar.bookings', 'layout.navbar.myBookings', 'layout.navbar.logout']) {
+      expect(screen.getByText(key)).toBeInTheDocument();
+    }
+    expect(screen.getByRole('link', { name: /layout\.navbar\.account/i })).toHaveAttribute('href', '/account-info');
   });
 
-  it('does not render users link for non-admin', async () => {
+  it.each([
+    ['users',     'admin',   () => vi.mocked(isAdmin).mockReturnValue(true),   'layout.navbar.users'],
+    ['approvals', 'manager', () => vi.mocked(isManager).mockReturnValue(true), 'layout.navbar.approvals'],
+  ])('renders %s link only for %s', async (_, __, setup, linkText) => {
     renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    expect(screen.queryByText('layout.navbar.users')).not.toBeInTheDocument();
+    await openMenu();
+    expect(screen.queryByText(linkText)).not.toBeInTheDocument();
+
+    cleanup();
+    setup();
+    renderMenu();
+    await openMenu();
+    expect(screen.getByText(linkText)).toBeInTheDocument();
   });
 
-  it('does not render approvals link for non-manager', async () => {
+  it('navigates to /login on logout click', async () => {
     renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    expect(screen.queryByText('layout.navbar.approvals')).not.toBeInTheDocument();
-  });
-
-  it('renders users link for admin', async () => {
-    vi.mocked(isAdmin).mockReturnValue(true);
-    renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    expect(screen.getByText('layout.navbar.users')).toBeInTheDocument();
-  });
-
-  it('renders approvals link for manager', async () => {
-    vi.mocked(isManager).mockReturnValue(true);
-    renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    expect(screen.getByText('layout.navbar.approvals')).toBeInTheDocument();
-  });
-
-  it('renders logout button after opening', async () => {
-    renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    expect(screen.getByText('layout.navbar.logout')).toBeInTheDocument();
-  });
-
-  it('clears auth cookie and navigates to /login on logout', async () => {
-    renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
+    await openMenu();
     await userEvent.click(screen.getByText('layout.navbar.logout'));
     expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
 
-  it('renders account-info link after opening', async () => {
-    renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
-    const accountLink = screen.getByRole('link', { name: /layout\.navbar\.account/i });
-    expect(accountLink).toHaveAttribute('href', '/account-info');
-  });
-
-  it('renders user full name when user is logged in', async () => {
+  it('renders user full name when logged in', async () => {
     vi.mocked(useCurrentUser).mockReturnValue({
       user: { id: 1, role: 'admin', firstName: 'Test', lastName: 'User' } as any,
       isLoading: false,
       error: null,
     });
     renderMenu();
-    await userEvent.click(screen.getByRole('button', { name: '' }));
+    await openMenu();
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 });

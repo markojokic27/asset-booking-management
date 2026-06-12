@@ -1,19 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
+
+vi.mock('../../components/ui/UserMenu', () => ({ default: () => <div>UserMenu</div> }));
+
 import FloatingUserMenu from '../../components/layout/FloatingUserMenu';
 
-vi.mock('../../components/ui/UserMenu', () => ({
-  default: () => <div>UserMenu</div>,
-}));
-
 describe('FloatingUserMenu', () => {
-  it('renders UserMenu', () => {
-    render(<FloatingUserMenu />);
-    expect(screen.getByText('UserMenu')).toBeInTheDocument();
-  });
-
-  it('renders with fixed positioning classes', () => {
+  it('renders UserMenu with fixed positioning', () => {
     const { container } = render(<FloatingUserMenu />);
+    expect(screen.getByText('UserMenu')).toBeInTheDocument();
     expect(container.firstChild).toHaveClass('fixed', 'top-20', 'z-50');
   });
 });

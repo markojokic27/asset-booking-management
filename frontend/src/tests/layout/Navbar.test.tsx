@@ -1,30 +1,19 @@
 import { render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { Navbar } from '../../components/layout/Navbar';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
-import { isAdmin, isManager } from '../../features/user/utilis/users';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}));
-
+vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
 vi.mock('../../components/layout/Layout', () => ({
   LayoutColumn: ({ children, className }: React.HTMLAttributes<HTMLDivElement>) => (
     <div className={className}>{children}</div>
   ),
 }));
-
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({
-  useCurrentUser: vi.fn(() => ({ user: null, isLoading: false, error: null })),
-}));
-
+vi.mock('../../features/user/hooks/useCurrentUser', () => ({ useCurrentUser: vi.fn() }));
 vi.mock('../../features/user/utilis/users', () => ({
   getFullName: vi.fn(() => 'Test User'),
-  isAdmin: vi.fn(() => false),
-  isManager: vi.fn(() => false),
+  isAdmin: vi.fn(),
+  isManager: vi.fn(),
 }));
-
 vi.mock('@mui/icons-material/MonitorSharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/CalendarTodaySharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/PeopleSharp', () => ({ default: () => <svg /> }));
@@ -33,81 +22,55 @@ vi.mock('@mui/icons-material/DnsSharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/AssessmentSharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/HowToRegSharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/EventNoteSharp', () => ({ default: () => <svg /> }));
-vi.mock('@mui/icons-material', () => ({
-  AccountCircleSharp: () => <svg />,
-}));
+vi.mock('@mui/icons-material', () => ({ AccountCircleSharp: () => <svg /> }));
 
-const renderNavbar = () =>
-  render(
-    <MemoryRouter>
-      <Navbar />
-    </MemoryRouter>
-  );
+import { Navbar } from '../../components/layout/Navbar';
+import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { isAdmin, isManager } from '../../features/user/utilis/users';
+
+const renderNavbar = (initialEntries = ['/']) =>
+  render(<MemoryRouter initialEntries={initialEntries}><Navbar /></MemoryRouter>);
 
 describe('Navbar', () => {
-  afterEach(() => {
+  beforeEach(() => {
+    vi.clearAllMocks();
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(isManager).mockReturnValue(false);
     vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: null });
   });
 
-  it('renders the navigation element', () => {
+  it('renders navigation with default links and correct hrefs', () => {
     renderNavbar();
     expect(screen.getByRole('navigation')).toBeInTheDocument();
+    for (const key of ['assets', 'categories', 'bookings', 'myBookings', 'report', 'logout']) {
+      expect(screen.getByText(`layout.navbar.${key}`)).toBeInTheDocument();
+    }
+    expect(screen.getByRole('link', { name: /layout\.navbar\.account/i })).toHaveAttribute('href', '/account-info');
+    expect(screen.getByRole('link', { name: /layout\.navbar\.logout/i })).toHaveAttribute('href', '/login');
   });
 
-  it('renders default nav links', () => {
+  it.each([
+    ['users',     'admin',   () => vi.mocked(isAdmin).mockReturnValue(true),   'layout.navbar.users'],
+    ['approvals', 'manager', () => vi.mocked(isManager).mockReturnValue(true), 'layout.navbar.approvals'],
+  ])('renders %s link only for %s', (_, __, setup, linkText) => {
     renderNavbar();
-    expect(screen.getByText('layout.navbar.assets')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.categories')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.bookings')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.myBookings')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.report')).toBeInTheDocument();
-    expect(screen.getByText('layout.navbar.logout')).toBeInTheDocument();
-  });
-
-  it('does not render users link for non-admin', () => {
+    expect(screen.queryByText(linkText)).not.toBeInTheDocument();
+    setup();
     renderNavbar();
-    expect(screen.queryByText('layout.navbar.users')).not.toBeInTheDocument();
+    expect(screen.getAllByText(linkText)[0]).toBeInTheDocument();
   });
 
-  it('does not render approvals link for non-manager', () => {
-    renderNavbar();
-    expect(screen.queryByText('layout.navbar.approvals')).not.toBeInTheDocument();
-  });
-
-  it('renders users link for admin', () => {
-    vi.mocked(isAdmin).mockReturnValue(true);
-    renderNavbar();
-    expect(screen.getByText('layout.navbar.users')).toBeInTheDocument();
-  });
-
-  it('renders allBookings label for admin', () => {
+  it('shows allBookings and hides myBookings for admin', () => {
     vi.mocked(isAdmin).mockReturnValue(true);
     renderNavbar();
     expect(screen.getByText('layout.navbar.allBookings')).toBeInTheDocument();
     expect(screen.queryByText('layout.navbar.myBookings')).not.toBeInTheDocument();
   });
 
-  it('renders approvals link for manager', () => {
-    vi.mocked(isManager).mockReturnValue(true);
+  it('renders user full name and role when logged in, account key when not', () => {
     renderNavbar();
-    expect(screen.getByText('layout.navbar.approvals')).toBeInTheDocument();
-  });
+    expect(screen.getByText('layout.navbar.account')).toBeInTheDocument();
 
-  it('renders account link pointing to /account-info', () => {
-    renderNavbar();
-    const accountLink = screen.getByRole('link', { name: /layout\.navbar\.account/i });
-    expect(accountLink).toHaveAttribute('href', '/account-info');
-  });
-
-  it('renders logout link pointing to /login', () => {
-    renderNavbar();
-    const logoutLink = screen.getByRole('link', { name: /layout\.navbar\.logout/i });
-    expect(logoutLink).toHaveAttribute('href', '/login');
-  });
-
-  it('renders user full name and role when logged in', () => {
     vi.mocked(useCurrentUser).mockReturnValue({
       user: { id: 1, role: 'admin', firstName: 'Test', lastName: 'User' } as any,
       isLoading: false,
@@ -118,26 +81,15 @@ describe('Navbar', () => {
     expect(screen.getByText('admin')).toBeInTheDocument();
   });
 
-  it('renders account translation key when no user', () => {
+  it('applies inactive styles by default and active styles on current route', () => {
     renderNavbar();
-    expect(screen.getByText('layout.navbar.account')).toBeInTheDocument();
-  });
+    const inactive = screen.getByRole('link', { name: /layout\.navbar\.assets/i });
+    expect(inactive).toHaveClass('border-transparent');
+    expect(inactive).not.toHaveClass('shadow-card');
 
-  it('applies inactive link styles by default', () => {
-    renderNavbar();
-    const link = screen.getByRole('link', { name: /layout\.navbar\.assets/i });
-    expect(link).toHaveClass('border-transparent');
-    expect(link).not.toHaveClass('shadow-card');
-  });
-
-  it('applies active link styles on current route', () => {
-    render(
-      <MemoryRouter initialEntries={['/assets']}>
-        <Navbar />
-      </MemoryRouter>
-    );
-    const link = screen.getByRole('link', { name: /layout\.navbar\.assets/i });
-    expect(link).toHaveClass('shadow-card');
-    expect(link).not.toHaveClass('border-transparent');
+    renderNavbar(['/assets']);
+    const active = screen.getAllByRole('link', { name: /layout\.navbar\.assets/i })[1];
+    expect(active).toHaveClass('shadow-card');
+    expect(active).not.toHaveClass('border-transparent');
   });
 });
