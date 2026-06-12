@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    id("jacoco")
+
 }
 
 android {
@@ -35,6 +37,7 @@ android {
         debug {
             enableUnitTestCoverage = true
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -42,6 +45,9 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    lint {
+        xmlReport = true
     }
 }
 
@@ -76,4 +82,81 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.play.services.code.scanner)
     implementation(libs.androidx.compose.material.icons.extended)
+}
+
+
+
+jacoco {
+    toolVersion = "0.8.14"
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        xml.outputLocation.set(
+            layout.buildDirectory.file(
+                "reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+            )
+        )
+        html.outputLocation.set(
+            layout.buildDirectory.dir(
+                "reports/jacoco/jacocoTestReport/html"
+            )
+        )
+    }
+
+    val fileFilter = listOf(
+    "**/R.class", "**/R\$*.class", "**/BuildConfig.*",
+    "**/Manifest*.*", "**/*Test*.*", "android/**/*.*",
+    "**/Hilt_*.*",
+    "**/*_Factory.*",
+    "**/*_Provide*Factory.*",       // NetworkModule_ProvideXFactory
+    "**/*_MembersInjector*.*",
+    "**/*_GeneratedInjector.*",
+    "**/*_HiltModules*.*",
+    "**/*_HiltComponents*.*",
+    "**/*_ComponentTreeDeps*.*",
+    "**/Dagger*.*",
+    "**/dagger/**",
+    "**/hilt_aggregated_deps/**",
+    "**/codegen/**"
+)
+
+    val debugTree = fileTree(
+        layout.buildDirectory.dir(
+            "intermediates/classes/debug/transformDebugClassesWithAsm/dirs"
+        )
+    ) {
+        exclude(fileFilter)
+    }
+
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    classDirectories.setFrom(files(debugTree))
+    executionData.setFrom(
+        layout.buildDirectory.file(
+            "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec"
+        )
+    )
+}
+
+
+
+
+
+sonar {
+    properties {
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            layout.buildDirectory.file("reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+                .get().asFile.path
+        )
+        property(
+            "sonar.androidLint.reportPaths",
+            layout.buildDirectory.file("reports/lint-results-debug.xml")
+                .get().asFile.path
+        )
+    }
 }
