@@ -14,6 +14,9 @@ import com.example.assetbookingmanagement.features.booking.data.BookingRepositor
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
 import com.example.assetbookingmanagement.features.booking.data.CategorySummary
 import com.example.assetbookingmanagement.features.booking.data.UserSummary
+import com.example.assetbookingmanagement.features.user.data.UserApi
+import com.example.assetbookingmanagement.features.user.data.UserRepository
+import com.example.assetbookingmanagement.features.user.data.UserResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -49,17 +52,23 @@ class HomeViewModelTest {
                 )
             )
         }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(role = "USER")
+        }
         `when`(authSession.getCurrentUserId()).thenReturn(2L)
 
         val viewModel = HomeViewModel(
             assetRepository = AssetRepository(fakeAssetApi),
             bookingRepository = BookingRepository(fakeBookingApi),
-            authSession = authSession
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
         )
         advanceUntilIdle()
 
         assertEquals(3, viewModel.uiState.value.assetCount)
         assertEquals(2, viewModel.uiState.value.myBookingsCount)
+        assertEquals(false, viewModel.uiState.value.isManager)
+        assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(1, fakeAssetApi.getAssetsCalls)
         assertEquals(1, fakeBookingApi.getBookingsCalls)
     }
@@ -74,11 +83,14 @@ class HomeViewModelTest {
         val viewModel = HomeViewModel(
             assetRepository = AssetRepository(FakeAssetApi()),
             bookingRepository = BookingRepository(fakeBookingApi),
-            authSession = authSession
+            authSession = authSession,
+            userRepository = UserRepository(FakeUserApi())
         )
         advanceUntilIdle()
 
         assertEquals(0, viewModel.uiState.value.myBookingsCount)
+        assertEquals(false, viewModel.uiState.value.isManager)
+        assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(0, fakeBookingApi.getBookingsCalls)
     }
 
@@ -93,13 +105,17 @@ class HomeViewModelTest {
                 content = listOf(buildBookingResponse(id = 1L))
             )
         }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(role = "USER")
+        }
 
         `when`(authSession.getCurrentUserId()).thenReturn(2L)
 
         val viewModel = HomeViewModel(
             assetRepository = AssetRepository(fakeAssetApi),
             bookingRepository = BookingRepository(fakeBookingApi),
-            authSession = authSession
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
         )
         advanceUntilIdle()
 
@@ -118,18 +134,80 @@ class HomeViewModelTest {
         val fakeBookingApi = FakeBookingApi().apply {
             getBookingsException = RuntimeException("Booking request failed")
         }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(role = "USER")
+        }
 
         `when`(authSession.getCurrentUserId()).thenReturn(2L)
 
         val viewModel = HomeViewModel(
             assetRepository = AssetRepository(fakeAssetApi),
             bookingRepository = BookingRepository(fakeBookingApi),
-            authSession = authSession
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
         )
         advanceUntilIdle()
 
         assertEquals(1, viewModel.uiState.value.assetCount)
         assertEquals(0, viewModel.uiState.value.myBookingsCount)
+    }
+
+    @Test
+    fun testInitLoadsPendingApprovalsForManager() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(
+                    buildBookingResponse(id = 10L),
+                    buildBookingResponse(id = 11L),
+                    buildBookingResponse(id = 12L)
+                )
+            )
+        }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(role = "MANAGER")
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(FakeAssetApi()),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
+        )
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.value.isManager)
+        assertEquals(3, viewModel.uiState.value.pendingApprovalsCount)
+        assertEquals(2, fakeBookingApi.getBookingsCalls)
+    }
+
+    @Test
+    fun testInitDoesNotLoadPendingApprovalsForRegularUser() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(buildBookingResponse(id = 1L))
+            )
+        }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(role = "USER")
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(FakeAssetApi()),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
+        )
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.value.isManager)
+        assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
+        assertEquals(1, fakeBookingApi.getBookingsCalls)
     }
 
     private fun buildAssetResponse(
@@ -172,6 +250,20 @@ class HomeViewModelTest {
         bookingStart = "2026-01-04T09:00:00Z",
         bookingEnd = "2026-01-14T09:00:00Z",
         notes = "Some optional notes"
+    )
+
+    private fun buildUserResponse(role: String) = UserResponse(
+        id = 2L,
+        username = "ivan.horvat",
+        surname = "Horvat",
+        name = "Ivan",
+        email = "ivan@example.com",
+        role = role,
+        status = "ACTIVE",
+        departmentId = 1L,
+        managerEmail = "manager@example.com",
+        notes = null,
+        benefit = null
     )
 
     private class FakeAssetApi : AssetApi {
@@ -218,5 +310,31 @@ class HomeViewModelTest {
         override suspend fun rejectBooking(bookingId: Long): BookingResponse {
             error("rejectBooking is not used in HomeViewModel tests.")
         }
+    }
+
+    private class FakeUserApi : UserApi {
+        var response: UserResponse = buildDefaultUserResponse()
+        var getUserException: Exception? = null
+
+        override suspend fun getUserById(id: Long): UserResponse {
+            getUserException?.let { throw it }
+            return response
+        }
+    }
+
+    companion object {
+        private fun buildDefaultUserResponse() = UserResponse(
+            id = 2L,
+            username = "ivan.horvat",
+            surname = "Horvat",
+            name = "Ivan",
+            email = "ivan@example.com",
+            role = "USER",
+            status = "ACTIVE",
+            departmentId = 1L,
+            managerEmail = "manager@example.com",
+            notes = null,
+            benefit = null
+        )
     }
 }
