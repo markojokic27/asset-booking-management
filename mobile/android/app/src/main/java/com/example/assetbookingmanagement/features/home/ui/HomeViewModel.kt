@@ -17,7 +17,6 @@ import javax.inject.Inject
 data class HomeUiState(
     val assetCount: Int = 0,
     val myBookingsCount: Int = 0,
-    val isManager: Boolean = false,
     val pendingApprovalsCount: Int = 0
 )
 
@@ -68,37 +67,38 @@ class HomeViewModel @Inject constructor(
     private fun getCurrentUserRole() {
         viewModelScope.launch {
             val userId = authSession.getCurrentUserId() ?: run {
-                _uiState.update {
-                    it.copy(
-                        isManager = false,
-                        pendingApprovalsCount = 0
-                    )
-                }
+                _uiState.update { it.copy(pendingApprovalsCount = 0) }
                 return@launch
             }
 
             try {
                 val user = userRepository.getUserById(userId)
-                val isManager = user.role.equals("ADMIN", ignoreCase = true) ||
-                    user.role.equals("MANAGER", ignoreCase = true)
+                val isAdmin = user.role.equals("ADMIN", ignoreCase = true)
+                val canManageApprovals = isAdmin || user.role.equals("MANAGER", ignoreCase = true)
 
-                _uiState.update { it.copy(isManager = isManager) }
-
-                if (isManager) {
+                if (canManageApprovals) {
                     val pendingBookings = bookingRepository.getPendingBookings()
+                    val visiblePendingBookings = if (isAdmin) {
+                        pendingBookings
+                    } else {
+                        val currentUserEmail = user.email.trim().lowercase()
+                        pendingBookings.filter { booking ->
+                            booking.user.managerEmail
+                                ?.trim()
+                                ?.lowercase() == currentUserEmail
+                        }
+                    }
+
                     _uiState.update {
-                        it.copy(pendingApprovalsCount = pendingBookings.size)
+                        it.copy(
+                            pendingApprovalsCount = visiblePendingBookings.size
+                        )
                     }
                 } else {
                     _uiState.update { it.copy(pendingApprovalsCount = 0) }
                 }
             } catch (_: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isManager = false,
-                        pendingApprovalsCount = 0
-                    )
-                }
+                _uiState.update { it.copy(pendingApprovalsCount = 0) }
             }
         }
     }

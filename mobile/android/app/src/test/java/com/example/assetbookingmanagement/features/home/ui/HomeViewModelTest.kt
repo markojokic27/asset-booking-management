@@ -67,7 +67,6 @@ class HomeViewModelTest {
 
         assertEquals(3, viewModel.uiState.value.assetCount)
         assertEquals(2, viewModel.uiState.value.myBookingsCount)
-        assertEquals(false, viewModel.uiState.value.isManager)
         assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(1, fakeAssetApi.getAssetsCalls)
         assertEquals(1, fakeBookingApi.getBookingsCalls)
@@ -89,7 +88,6 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         assertEquals(0, viewModel.uiState.value.myBookingsCount)
-        assertEquals(false, viewModel.uiState.value.isManager)
         assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(0, fakeBookingApi.getBookingsCalls)
     }
@@ -153,19 +151,22 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun testInitLoadsPendingApprovalsForManager() = runTest {
+    fun testInitLoadsOnlyMatchingPendingApprovalsForManager() = runTest {
         val authSession = mock(AuthSession::class.java)
         val fakeBookingApi = FakeBookingApi().apply {
             response = BookingListResponse(
                 content = listOf(
-                    buildBookingResponse(id = 10L),
-                    buildBookingResponse(id = 11L),
-                    buildBookingResponse(id = 12L)
+                    buildBookingResponse(id = 10L, managerEmail = "manager@example.com"),
+                    buildBookingResponse(id = 11L, managerEmail = "manager2@example.com"),
+                    buildBookingResponse(id = 12L, managerEmail = "manager@example.com")
                 )
             )
         }
         val fakeUserApi = FakeUserApi().apply {
-            response = buildUserResponse(role = "MANAGER")
+            response = buildUserResponse(
+                role = "MANAGER",
+                email = "manager@example.com"
+            )
         }
 
         `when`(authSession.getCurrentUserId()).thenReturn(2L)
@@ -178,8 +179,7 @@ class HomeViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals(true, viewModel.uiState.value.isManager)
-        assertEquals(3, viewModel.uiState.value.pendingApprovalsCount)
+        assertEquals(2, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(2, fakeBookingApi.getBookingsCalls)
     }
 
@@ -205,9 +205,41 @@ class HomeViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals(false, viewModel.uiState.value.isManager)
         assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(1, fakeBookingApi.getBookingsCalls)
+    }
+
+    @Test
+    fun testInitLoadsAllPendingApprovalsForAdmin() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(
+                    buildBookingResponse(id = 20L, managerEmail = "manager@example.com"),
+                    buildBookingResponse(id = 21L, managerEmail = "manager2@example.com"),
+                    buildBookingResponse(id = 22L, managerEmail = null)
+                )
+            )
+        }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(
+                role = "ADMIN",
+                email = "admin@example.com"
+            )
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(FakeAssetApi()),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
+        )
+        advanceUntilIdle()
+
+        assertEquals(3, viewModel.uiState.value.pendingApprovalsCount)
+        assertEquals(2, fakeBookingApi.getBookingsCalls)
     }
 
     private fun buildAssetResponse(
@@ -223,7 +255,10 @@ class HomeViewModelTest {
         location = "Room 301"
     )
 
-    private fun buildBookingResponse(id: Long) = BookingResponse(
+    private fun buildBookingResponse(
+        id: Long,
+        managerEmail: String? = "manager@example.com"
+    ) = BookingResponse(
         id = id,
         user = UserSummary(
             id = 2L,
@@ -231,7 +266,7 @@ class HomeViewModelTest {
             surname = "Horvat",
             email = "ivan@example.com",
             role = "ADMIN",
-            managerEmail = "manager@example.com"
+            managerEmail = managerEmail
         ),
         asset = AssetSummary(
             id = 1L,
@@ -252,12 +287,15 @@ class HomeViewModelTest {
         notes = "Some optional notes"
     )
 
-    private fun buildUserResponse(role: String) = UserResponse(
+    private fun buildUserResponse(
+        role: String,
+        email: String = "ivan@example.com"
+    ) = UserResponse(
         id = 2L,
         username = "ivan.horvat",
         surname = "Horvat",
         name = "Ivan",
-        email = "ivan@example.com",
+        email = email,
         role = role,
         status = "ACTIVE",
         departmentId = 1L,
