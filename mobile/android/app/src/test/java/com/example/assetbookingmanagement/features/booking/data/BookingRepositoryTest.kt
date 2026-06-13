@@ -57,6 +57,49 @@ class BookingRepositoryTest {
         assertEquals(expectedBooking, result)
     }
 
+    @Test
+    fun testGetPendingBookings() = runTest {
+        val expectedBookings = listOf(buildBookingResponse(id = 10L), buildBookingResponse(id = 11L))
+
+        `when`(
+            bookingApi.getBookings(
+                status = "PENDING",
+                size = 100
+            )
+        ).thenReturn(BookingListResponse(content = expectedBookings))
+
+        val result = repository.getPendingBookings()
+
+        verify(bookingApi).getBookings(status = "PENDING", size = 100)
+        assertEquals(expectedBookings, result)
+    }
+
+    @Test
+    fun testApproveBooking() = runTest {
+        val bookingId = 7L
+        val expectedBooking = buildBookingResponse(id = bookingId)
+
+        `when`(bookingApi.approveBooking(bookingId)).thenReturn(expectedBooking)
+
+        val result = repository.approveBooking(bookingId)
+
+        verify(bookingApi).approveBooking(bookingId)
+        assertEquals(expectedBooking, result)
+    }
+
+    @Test
+    fun testRejectBooking() = runTest {
+        val bookingId = 8L
+        val expectedBooking = buildBookingResponse(id = bookingId)
+
+        `when`(bookingApi.rejectBooking(bookingId)).thenReturn(expectedBooking)
+
+        val result = repository.rejectBooking(bookingId)
+
+        verify(bookingApi).rejectBooking(bookingId)
+        assertEquals(expectedBooking, result)
+    }
+
     private fun buildBookingResponse(id: Long) = BookingResponse(
         id = id,
         user = UserSummary(
@@ -64,7 +107,8 @@ class BookingRepositoryTest {
             name = "Ivan",
             surname = "Horvat",
             email = "ivan@example.com",
-            role = "ADMIN"
+            role = "ADMIN",
+            managerEmail = "manager@example.com"
         ),
         asset = AssetSummary(
             id = 1L,

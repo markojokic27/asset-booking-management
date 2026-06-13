@@ -152,7 +152,8 @@ class HomeViewModelTest {
             name = "Ivan",
             surname = "Horvat",
             email = "ivan@example.com",
-            role = "ADMIN"
+            role = "ADMIN",
+            managerEmail = "manager@example.com"
         ),
         asset = AssetSummary(
             id = 1L,
@@ -197,6 +198,7 @@ class HomeViewModelTest {
         override suspend fun getBookings(
             userId: Long?,
             assetId: Long?,
+            status: String?,
             page: Int,
             size: Int
         ): BookingListResponse {
@@ -207,6 +209,14 @@ class HomeViewModelTest {
 
         override suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
             error("createBooking is not used in HomeViewModel tests.")
+        }
+
+        override suspend fun approveBooking(bookingId: Long): BookingResponse {
+            error("approveBooking is not used in HomeViewModel tests.")
+        }
+
+        override suspend fun rejectBooking(bookingId: Long): BookingResponse {
+            error("rejectBooking is not used in HomeViewModel tests.")
         }
     }
 }

@@ -13,7 +13,19 @@ class BookingRepository @Inject constructor(
         return bookingApi.getBookings(assetId = assetId).content
     }
 
+    suspend fun getPendingBookings(): List<BookingResponse> {
+        return bookingApi.getBookings(status = "PENDING", size = 100).content
+    }
+
     suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
         return bookingApi.createBooking(request)
+    }
+
+    suspend fun approveBooking(bookingId: Long): BookingResponse {
+        return bookingApi.approveBooking(bookingId)
+    }
+
+    suspend fun rejectBooking(bookingId: Long): BookingResponse {
+        return bookingApi.rejectBooking(bookingId)
     }
 }

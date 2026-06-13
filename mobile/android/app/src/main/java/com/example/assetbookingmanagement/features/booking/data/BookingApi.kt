@@ -4,6 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface BookingApi {
 
@@ -11,6 +12,7 @@ interface BookingApi {
     suspend fun getBookings(
         @Query("userId") userId: Long? = null,
         @Query("assetId") assetId: Long? = null,
+        @Query("status") status: String? = null,
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 50
     ): BookingListResponse
@@ -18,5 +20,15 @@ interface BookingApi {
     @POST("bookings")
     suspend fun createBooking(
         @Body request: BookingCreateRequest
+    ): BookingResponse
+
+    @POST("bookings/{bookingId}/approve")
+    suspend fun approveBooking(
+        @Path("bookingId") bookingId: Long
+    ): BookingResponse
+
+    @POST("bookings/{bookingId}/reject")
+    suspend fun rejectBooking(
+        @Path("bookingId") bookingId: Long
     ): BookingResponse
 }
