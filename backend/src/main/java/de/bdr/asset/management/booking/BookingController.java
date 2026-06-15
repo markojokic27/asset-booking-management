@@ -111,7 +111,7 @@ public class BookingController {
     /** UPDATE */
     @Operation(summary = "Update booking", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+    @PreAuthorize("@bookingAuth.canUpdateBooking(authentication, #id)")
     @PatchMapping("/{id}")
     public ResponseEntity<BookingResponseDTO> update(
             @PathVariable Long id, @Valid @RequestBody BookingUpdateDTO request

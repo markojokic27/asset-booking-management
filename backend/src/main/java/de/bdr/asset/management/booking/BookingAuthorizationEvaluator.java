@@ -14,7 +14,7 @@ public class BookingAuthorizationEvaluator {
     public boolean canManageBooking(Authentication authentication, Long bookingId) {
 
         if (authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                .anyMatch(a -> ("ROLE_ADMIN").equals(a.getAuthority()))) {
             return true;
         }
 
@@ -26,13 +26,30 @@ public class BookingAuthorizationEvaluator {
     }
 
     public boolean canCreateBooking(Authentication authentication, Long targetUserId) {
+
         if (targetUserId == null) return true;
+
         if (authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                .anyMatch(a -> ("ROLE_ADMIN").equals(a.getAuthority()))) {
             return true;
         }
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         // self-booking with explicit id
         return user.getId().equals(targetUserId);
+    }
+
+    public boolean canUpdateBooking(Authentication authentication, Long bookingId) {
+
+        if (authentication.getAuthorities().stream()
+                .anyMatch(a -> ("ROLE_ADMIN").equals(a.getAuthority()))) {
+            return true;
+        }
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found with id: " + bookingId));
+
+        CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+
+        return currentUser.getId().equals(booking.getUser().getId());
     }
 }
