@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,35 +30,48 @@ import com.example.assetbookingmanagement.core.ui.theme.*
 fun HomeScreen(
     onAssetsClick: () -> Unit = {},
     onBookingsClick: () -> Unit = {},
+    onApprovalRequestsClick: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        HomeCard(
-            modifier = Modifier.weight(1f),
-            backgroundColor = AssetsCardBg,
-            iconRes = R.drawable.computer_24,
-            primaryColor = PrimaryBlue,
-            count = uiState.assetCount.toString(),
-            label = "All assets",
-            onArrowClick = onAssetsClick
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            HomeCard(
+                modifier = Modifier.weight(1f),
+                backgroundColor = AssetsCardBg,
+                iconRes = R.drawable.computer_24,
+                primaryColor = PrimaryBlue,
+                count = uiState.assetCount.toString(),
+                label = "All assets",
+                onArrowClick = onAssetsClick
+            )
 
-        HomeCard(
-            modifier = Modifier.weight(1f),
-            backgroundColor = BookingsCardBg,
-            iconRes = R.drawable.calendar_today_24,
-            primaryColor = BookingsPrimary,
-            count = uiState.myBookingsCount.toString(),
-            label = "My bookings",
-            onArrowClick = onBookingsClick
-        )
+            HomeCard(
+                modifier = Modifier.weight(1f),
+                backgroundColor = BookingsCardBg,
+                iconRes = R.drawable.calendar_today_24,
+                primaryColor = BookingsPrimary,
+                count = uiState.myBookingsCount.toString(),
+                label = "My bookings",
+                onArrowClick = onBookingsClick
+            )
+        }
+
+        if (uiState.canManageApprovals) {
+            ApprovalRequestsCard(
+                pendingCount = uiState.pendingApprovalsCount,
+                onArrowClick = onApprovalRequestsClick
+            )
+        }
     }
 }
 
@@ -121,6 +135,51 @@ private fun HomeCard(
                         modifier = Modifier.size(20.dp)
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ApprovalRequestsCard(
+    pendingCount: Int,
+    onArrowClick: () -> Unit
+) {
+    Surface(
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surface
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 18.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = "Pending Approvals",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = "$pendingCount requests",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            IconButton(
+                onClick = onArrowClick,
+                modifier = Modifier.size(28.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_right_alt_24),
+                    contentDescription = "Open pending approvals",
+                    tint = TextLight,
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
     }

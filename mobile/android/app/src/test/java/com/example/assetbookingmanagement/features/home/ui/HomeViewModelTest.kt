@@ -67,6 +67,7 @@ class HomeViewModelTest {
 
         assertEquals(3, viewModel.uiState.value.assetCount)
         assertEquals(2, viewModel.uiState.value.myBookingsCount)
+        assertEquals(false, viewModel.uiState.value.canManageApprovals)
         assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(1, fakeAssetApi.getAssetsCalls)
         assertEquals(1, fakeBookingApi.getBookingsCalls)
@@ -88,6 +89,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         assertEquals(0, viewModel.uiState.value.myBookingsCount)
+        assertEquals(false, viewModel.uiState.value.canManageApprovals)
         assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(0, fakeBookingApi.getBookingsCalls)
     }
@@ -179,6 +181,7 @@ class HomeViewModelTest {
         )
         advanceUntilIdle()
 
+        assertEquals(true, viewModel.uiState.value.canManageApprovals)
         assertEquals(2, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(2, fakeBookingApi.getBookingsCalls)
     }
@@ -205,6 +208,7 @@ class HomeViewModelTest {
         )
         advanceUntilIdle()
 
+        assertEquals(false, viewModel.uiState.value.canManageApprovals)
         assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(1, fakeBookingApi.getBookingsCalls)
     }
@@ -238,6 +242,7 @@ class HomeViewModelTest {
         )
         advanceUntilIdle()
 
+        assertEquals(true, viewModel.uiState.value.canManageApprovals)
         assertEquals(3, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(2, fakeBookingApi.getBookingsCalls)
     }

@@ -17,6 +17,7 @@ import javax.inject.Inject
 data class HomeUiState(
     val assetCount: Int = 0,
     val myBookingsCount: Int = 0,
+    val canManageApprovals: Boolean = false,
     val pendingApprovalsCount: Int = 0
 )
 
@@ -67,7 +68,12 @@ class HomeViewModel @Inject constructor(
     private fun getCurrentUserRole() {
         viewModelScope.launch {
             val userId = authSession.getCurrentUserId() ?: run {
-                _uiState.update { it.copy(pendingApprovalsCount = 0) }
+                _uiState.update {
+                    it.copy(
+                        canManageApprovals = false,
+                        pendingApprovalsCount = 0
+                    )
+                }
                 return@launch
             }
 
@@ -75,6 +81,8 @@ class HomeViewModel @Inject constructor(
                 val user = userRepository.getUserById(userId)
                 val isAdmin = user.role.equals("ADMIN", ignoreCase = true)
                 val canManageApprovals = isAdmin || user.role.equals("MANAGER", ignoreCase = true)
+
+                _uiState.update { it.copy(canManageApprovals = canManageApprovals) }
 
                 if (canManageApprovals) {
                     val pendingBookings = bookingRepository.getPendingBookings()
@@ -98,7 +106,12 @@ class HomeViewModel @Inject constructor(
                     _uiState.update { it.copy(pendingApprovalsCount = 0) }
                 }
             } catch (_: Exception) {
-                _uiState.update { it.copy(pendingApprovalsCount = 0) }
+                _uiState.update {
+                    it.copy(
+                        canManageApprovals = false,
+                        pendingApprovalsCount = 0
+                    )
+                }
             }
         }
     }

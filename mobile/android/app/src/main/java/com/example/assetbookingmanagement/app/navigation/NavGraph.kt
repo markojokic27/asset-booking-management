@@ -18,6 +18,7 @@ import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingDetailsScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingSuccessScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
+import com.example.assetbookingmanagement.features.booking.ui.ApprovalRequestsScreen
 import com.example.assetbookingmanagement.features.home.ui.HomeScreen
 import com.example.assetbookingmanagement.features.user.ui.ProfileScreen
 import com.example.assetbookingmanagement.features.booking.ui.CreateBookingScreen
@@ -32,6 +33,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
         isBottomNavRoute(currentRoute) ||
             currentRoute == Routes.ASSET_DETAILS ||
             currentRoute == Routes.BOOKING_DETAILS ||
+            currentRoute == Routes.APPROVAL_REQUESTS ||
             currentRoute == Routes.CREATE_BOOKING ||
             currentRoute == Routes.BOOKING_SUCCESS
 
@@ -39,6 +41,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
         Routes.HOME -> "Home"
         Routes.ASSETS -> "Assets"
         Routes.BOOKINGS -> "Bookings"
+        Routes.APPROVAL_REQUESTS -> "Pending Approvals"
         Routes.BOOKING_DETAILS -> "Booking details"
         Routes.PROFILE -> "Profile"
         Routes.CREATE_BOOKING -> "Create booking"
@@ -53,8 +56,6 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                     showBackArrow = currentRoute != Routes.HOME,
                     onBackClick = {
                         navController.popBackStack()
-                    },
-                    onNotificationClick = {
                     }
                 )
             }
@@ -87,8 +88,15 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                     },
                     onBookingsClick = {
                         navController.navigateTopLevel(Routes.BOOKINGS)
+                    },
+                    onApprovalRequestsClick = {
+                        navController.navigate(Routes.APPROVAL_REQUESTS)
                     }
                 )
+            }
+
+            composable(Routes.APPROVAL_REQUESTS) {
+                ApprovalRequestsScreen()
             }
 
             composable(Routes.ASSETS) {

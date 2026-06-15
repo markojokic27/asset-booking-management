@@ -9,6 +9,7 @@ object Routes {
     const val ASSETS = "assets"
     const val ASSET_DETAILS = "asset_details/{assetId}"
     const val BOOKINGS = "bookings"
+    const val APPROVAL_REQUESTS = "approval_requests"
     const val BOOKING_DETAILS =
         "booking_details/{bookingId}?assetName={assetName}&fromDate={fromDate}&toDate={toDate}&status={status}&categoryName={categoryName}&isHourlyBooking={isHourlyBooking}"
     const val PROFILE = "profile"
