@@ -60,6 +60,13 @@ export type CreateBookingDto = {
   notes?: string;
 };
 
+export type BookingUpdateDto = {
+  status?: BookingStatus;
+  bookingStart?: string;
+  bookingEnd?: string;
+  notes?: string;
+};
+
 export type Filters = {
   search: string;
   fromDate: string;

@@ -27,6 +27,7 @@
     "closeAria": "Zatvori",
     "keepBooking": "Ne, zadrži rezervaciju",
     "confirmCancel": "Da, otkaži rezervaciju",
+    "processing": "Otkazivanje...",
     "fields": {
       "asset": "Asset",
       "time": "Vrijeme rezervacije",
@@ -36,5 +37,6 @@
   },
   "loading": "Učitavanje rezervacija...",
   "empty": "Nema rezervacija.",
-  "error": "Učitavanje rezervacija nije uspjelo."
+  "error": "Učitavanje rezervacija nije uspjelo.",
+  "cancelError": "Rezervacija nije otkazana. Pokušajte ponovno."
 }

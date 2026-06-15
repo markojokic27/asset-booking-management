@@ -17,9 +17,17 @@ type Props = {
   booking: BookingWithRelations | null;
   onClose: () => void;
   onConfirm: () => void;
+  isProcessing?: boolean;
+  actionError?: string | null;
 };
 
-export function CancelBookingModal({ booking, onClose, onConfirm }: Props) {
+export function CancelBookingModal({
+  booking,
+  onClose,
+  onConfirm,
+  isProcessing = false,
+  actionError = null,
+}: Props) {
   const { t } = useTranslation();
 
   if (!booking) return null;
@@ -99,18 +107,36 @@ export function CancelBookingModal({ booking, onClose, onConfirm }: Props) {
           <div className="mx-6 h-px shrink-0 bg-(--color-table-border) sm:mx-8" />
 
           <div className="shrink-0 px-6 py-4 sm:px-8 sm:py-5">
-            <div className="flex flex-wrap items-center justify-end gap-3">
-              <Button variant="outline" size="md" onClick={onClose}>
-                {t('myBookings.cancelModal.keepBooking')}
-              </Button>
-              <Button
-                data-testid="confirm-cancel-booking-button"
-                variant="danger"
-                size="md"
-                onClick={onConfirm}
-              >
-                {t('myBookings.cancelModal.confirmCancel')}
-              </Button>
+            <div className="flex flex-col gap-4">
+              {actionError && (
+                <p
+                  className="text-sm text-red-600 dark:text-red-400"
+                  role="alert"
+                >
+                  {actionError}
+                </p>
+              )}
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                <Button
+                  variant="outline"
+                  size="md"
+                  onClick={onClose}
+                  disabled={isProcessing}
+                >
+                  {t('myBookings.cancelModal.keepBooking')}
+                </Button>
+                <Button
+                  data-testid="confirm-cancel-booking-button"
+                  variant="danger"
+                  size="md"
+                  onClick={onConfirm}
+                  disabled={isProcessing}
+                >
+                  {isProcessing
+                    ? t('myBookings.cancelModal.processing')
+                    : t('myBookings.cancelModal.confirmCancel')}
+                </Button>
+              </div>
             </div>
           </div>
         </div>

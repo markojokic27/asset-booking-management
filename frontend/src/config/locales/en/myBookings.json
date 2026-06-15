@@ -27,6 +27,7 @@
     "closeAria": "Close",
     "keepBooking": "No, keep booking",
     "confirmCancel": "Yes, cancel booking",
+    "processing": "Cancelling...",
     "fields": {
       "asset": "Asset",
       "time": "Booking time",
@@ -36,5 +37,6 @@
   },
   "loading": "Loading bookings...",
   "empty": "No bookings found.",
-  "error": "Failed to load bookings."
+  "error": "Failed to load bookings.",
+  "cancelError": "Booking was not cancelled. Please try again."
 }

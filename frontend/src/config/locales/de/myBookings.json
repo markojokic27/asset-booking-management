@@ -27,6 +27,7 @@
     "closeAria": "Schließen",
     "keepBooking": "Nein, Buchung behalten",
     "confirmCancel": "Ja, Buchung stornieren",
+    "processing": "Wird storniert...",
     "fields": {
       "asset": "Asset",
       "time": "Buchungszeit",
@@ -36,5 +37,6 @@
   },
   "loading": "Buchungen werden geladen...",
   "empty": "Keine Buchungen gefunden.",
-  "error": "Buchungen konnten nicht geladen werden."
+  "error": "Buchungen konnten nicht geladen werden.",
+  "cancelError": "Buchung wurde nicht storniert. Bitte versuchen Sie es erneut."
 }

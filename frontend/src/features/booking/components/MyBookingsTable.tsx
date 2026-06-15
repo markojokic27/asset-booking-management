@@ -24,16 +24,42 @@ type Props = {
   bookings: BookingWithRelations[];
   isLoading?: boolean;
   error?: string | null;
+  onCancelBooking: (bookingId: number) => Promise<boolean>;
+  isCancelling?: boolean;
+  cancelError?: string | null;
+  onClearCancelError?: () => void;
 };
 
-export function MyBookingsTable({ bookings, isLoading, error }: Props) {
+export function MyBookingsTable({
+  bookings,
+  isLoading,
+  error,
+  onCancelBooking,
+  isCancelling = false,
+  cancelError = null,
+  onClearCancelError,
+}: Props) {
   const { t } = useTranslation();
   const [bookingToCancel, setBookingToCancel] =
     useState<BookingWithRelations | null>(null);
 
-  const handleConfirmCancel = () => {
-    // TODO: call cancel booking API when backend is ready
+  const openCancelModal = (booking: BookingWithRelations) => {
+    onClearCancelError?.();
+    setBookingToCancel(booking);
+  };
+
+  const closeCancelModal = () => {
+    onClearCancelError?.();
     setBookingToCancel(null);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!bookingToCancel) return;
+
+    const success = await onCancelBooking(Number(bookingToCancel.id));
+    if (success) {
+      setBookingToCancel(null);
+    }
   };
 
   const columns: TableColumn<BookingWithRelations>[] = useMemo(
@@ -74,14 +100,15 @@ export function MyBookingsTable({ bookings, isLoading, error }: Props) {
               size="sm"
               variant="outline"
               className="border-red-600 text-red-600 hover:border-red-700 hover:bg-red-50 hover:text-red-700 dark:border-red-500 dark:text-red-400 dark:hover:bg-red-950/40 dark:hover:text-red-300"
-              onClick={() => setBookingToCancel(booking)}
+              onClick={() => openCancelModal(booking)}
+              disabled={isCancelling}
             >
               {t('myBookings.actions.cancel')}
             </Button>
           ) : null,
       },
     ],
-    [t]
+    [isCancelling, t]
   );
 
   return (
@@ -105,8 +132,10 @@ export function MyBookingsTable({ bookings, isLoading, error }: Props) {
 
       <CancelBookingModal
         booking={bookingToCancel}
-        onClose={() => setBookingToCancel(null)}
-        onConfirm={handleConfirmCancel}
+        onClose={closeCancelModal}
+        onConfirm={() => void handleConfirmCancel()}
+        isProcessing={isCancelling}
+        actionError={cancelError}
       />
     </>
   );

@@ -11,6 +11,7 @@ import { FilterDateInput } from '../features/booking/components/FilterDateInput'
 import { MyBookingsTable } from '../features/booking/components/MyBookingsTable';
 
 // hooks
+import { useBookingCancellation } from '../features/booking/hooks/useBookingCancellation';
 import { useMyBookings } from '../features/booking/hooks/useMyBookings';
 import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
 import { usePagination } from '../features/user/hooks/usePagination';
@@ -26,10 +27,12 @@ import { isAdmin } from '../features/user/utilis/users';
 export default function MyBookings() {
   const { t } = useTranslation();
   const { user, isLoading: isUserLoading } = useCurrentUser();
-  const { bookings, loading, error } = useMyBookings(
+  const { bookings, loading, error, refetch } = useMyBookings(
     user,
     !isUserLoading && user != null
   );
+  const { cancel, isCancelling, cancelError, clearCancelError } =
+    useBookingCancellation(refetch);
   const [search, setSearch] = useState('');
   const [selectedAssetId, setSelectedAssetId] = useState('');
   const [fromDate, setFromDate] = useState('');
@@ -126,6 +129,10 @@ export default function MyBookings() {
           bookings={pagination.paged}
           isLoading={loading || isUserLoading}
           error={error}
+          onCancelBooking={cancel}
+          isCancelling={isCancelling}
+          cancelError={cancelError}
+          onClearCancelError={clearCancelError}
         />
 
         {/* pagination for the bookings table */}

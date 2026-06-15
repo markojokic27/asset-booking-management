@@ -1,5 +1,6 @@
 // Types
 import type {
+  BookingUpdateDto,
   BookingWithRelations,
   CreateBookingDto,
 } from '../types';
@@ -97,3 +98,19 @@ export const rejectBooking = async (bookingId: number) => {
   );
   return res.data;
 };
+
+// update booking
+export const updateBooking = async (
+  bookingId: number,
+  data: BookingUpdateDto
+) => {
+  const res = await api.patch<BookingWithRelations>(
+    `/bookings/${bookingId}`,
+    data
+  );
+  return res.data;
+};
+
+// cancel booking
+export const cancelBooking = async (bookingId: number) =>
+  updateBooking(bookingId, { status: 'CANCELLED' });
