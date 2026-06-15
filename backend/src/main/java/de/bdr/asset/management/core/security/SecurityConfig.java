@@ -132,6 +132,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/v1/bookings/**")
                         .authenticated()
 
+                        .requestMatchers(HttpMethod.PATCH, "/v1/bookings/**")
+                        .authenticated()
+
                         // all other methods -> ADMIN only
                         .requestMatchers("/v1/bookings/**")
                         .hasRole(ADMIN)

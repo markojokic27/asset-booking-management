@@ -109,7 +109,7 @@ public class BookingController {
     }
 
     /** UPDATE */
-    @Operation(summary = "Update booking", description = "Only available to users with role: ADMIN.")
+    @Operation(summary = "Update booking", description = "Only available to authenticated users and users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("@bookingAuth.canUpdateBooking(authentication, #id)")
     @PatchMapping("/{id}")
@@ -140,7 +140,7 @@ public class BookingController {
     @Operation(summary = "Reject a pending booking", description = "Only available to the manager of the user who created the booking, or an ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("@bookingAuth.canManageBooking(authentication, #id)")
-        @PostMapping("/{id}/reject")
+    @PostMapping("/{id}/reject")
     public ResponseEntity<BookingResponseDTO> reject(
             @PathVariable Long id
     ) throws ResourceNotFoundException, IllegalStateException, AccessDeniedException
