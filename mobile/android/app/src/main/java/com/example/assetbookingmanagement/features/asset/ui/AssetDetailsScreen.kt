@@ -24,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
+import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 
 @Composable
 fun AssetDetailsScreen(
@@ -67,13 +68,6 @@ fun AssetDetailsScreen(
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
-                Spacer(modifier = Modifier.height(6.dp))
-
-                Text(
-                    text = asset.code,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.75f)
-                )
 
                 HorizontalDivider(
                     modifier = Modifier
@@ -87,7 +81,7 @@ fun AssetDetailsScreen(
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     AssetDetailItem(label = "Category", value = uiState.categoryName ?: "-")
-                    AssetDetailItem(label = "Status", value = asset.status)
+                    AssetStatusDetailItem(label = "Status", status = asset.status)
                     AssetDetailItem(label = "Location", value = asset.location)
                     AssetDetailItem(label = "Description", value = asset.description.ifBlank { "-" })
                 }
@@ -97,10 +91,34 @@ fun AssetDetailsScreen(
                 AppButton(
                     text = "Book now",
                     iconRes = R.drawable.calendar_today_24,
+                    enabled = asset.status == "ACTIVE",
                     onClick = onBookClick
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun AssetStatusDetailItem(
+    label: String,
+    status: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            modifier = Modifier.width(84.dp),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.55f)
+        )
+
+        StatusBadge(
+            status = status,
+            modifier = Modifier.padding(start = 12.dp)
+        )
     }
 }
 
