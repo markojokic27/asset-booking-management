@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
 
@@ -24,7 +24,7 @@ const defaultFilters: Filter = {
 export default function Report() {
   const { t } = useTranslation();
   const [filters, setFilters] = useState<Filter>(defaultFilters);
-  const { report, loading } = useGeneralReport(filters);
+  const { report } = useGeneralReport(filters); //loading is removed because it is breaking the build
 
   const handleResetFilters = () => {
     setFilters(defaultFilters);
@@ -59,7 +59,7 @@ export default function Report() {
             <BookingStatusPie report={report} />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <BookingStatusBar  report={report}/>
+            <BookingStatusBar report={report} />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
             <TopUserBookings report={report} />
