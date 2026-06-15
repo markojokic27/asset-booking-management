@@ -317,7 +317,11 @@ playwright:e2e:
     paths:
       - tests/e2e-tests/target/surefire-reports/
     expire_in: 1 week
-  rules: *standard_rules_manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_E2E == "true"
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: manual
+      allow_failure: true
  
 
 
@@ -470,7 +474,7 @@ frontend-package-vulnerabilities-check:
     - cd frontend
     # - npm ci --legacy-peer-deps
     - npm audit --audit-level=high --omit=dev
-  allow_failure: true         # don't block on first runs
+  allow_failure: false        
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # nightly
     - if: $CI_COMMIT_BRANCH == "main"        
@@ -507,7 +511,7 @@ osv-scanner:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
     - if: '$CI_COMMIT_BRANCH == "develop"'
       when: manual
-      allow_failure: true
+      allow_failure: false
 
 
 #socket scan
@@ -520,7 +524,7 @@ socket-security:
   variables:
     SOCKET_SECURITY_API_KEY: $SOCKET_SECURITY_API_KEY
     GITLAB_TOKEN: $GITLAB_TOKEN
-  allow_failure: true
+  allow_failure: false
   #hardcoded 0 instead of ${CI_MERGE_REQUEST_IID:-0} for ommiting MR comments
   script:
     - |
@@ -576,7 +580,8 @@ snyk-scan-frontend:
     expire_in: 1 week
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_SNYK == "true"
-    - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
+      allow_failure: false
 
 
