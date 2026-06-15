@@ -10,9 +10,11 @@ import TopUserBookings from '../features/report/components/TopUserBookingsPie';
 import TopAssetBookings from '../features/report/components/TopAssetBookingsPie';
 
 // Types
-import type { Filters } from '../features/report/types';
+import type { Filter } from '../features/report/types';
+import { getGeneralReport } from '../features/report/api/reportApi';
+import { Button } from '../components/ui/Button';
 
-const defaultFilters: Filters = {
+const defaultFilters: Filter = {
   fromDate: '',
   toDate: '',
   userId: null,
@@ -21,7 +23,7 @@ const defaultFilters: Filters = {
 
 export default function Report() {
   const { t } = useTranslation();
-  const [filters, setFilters] = useState<Filters>(defaultFilters);
+  const [filters, setFilters] = useState<Filter>(defaultFilters);
 
   const handleResetFilters = () => {
     setFilters(defaultFilters);
