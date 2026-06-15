@@ -1,7 +1,12 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTranslation } from 'react-i18next';
+import type { GeneralReportResponseDTO } from '../types';
 
-export default function BookingStatusPie() {
+export default function BookingStatusPie({
+  report,
+}: {
+  report: GeneralReportResponseDTO | null;
+}) {
   const { t } = useTranslation();
 
   const chartSetting = {
@@ -14,92 +19,27 @@ export default function BookingStatusPie() {
     height: 300,
   };
 
-  const data = [
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Jan',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Feb',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Mar',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Apr',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'May',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'June',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'July',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Aug',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Sept',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Oct',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Nov',
-    },
-    {
-        completed: 1,
-        rejected: 2,
-        cancelled: 3,
-        total: 6,
-        month: 'Dec',
-    },
-  ];
+  const data = (report?.monthlyStats ?? [])
+  .slice()
+  .sort((a, b) => {
+    if (a.year !== b.year) {
+      return a.year - b.year;
+    }
+
+    return a.month - b.month;
+  })
+  .map((m) => ({
+    month: new Date(m.year, m.month - 1).toLocaleDateString(undefined, {
+        month: 'short',
+        year: 'numeric',
+    }),
+    completed: m.totalCompletedBookingCount,
+    rejected: m.totalRejectedBookingCount,
+    cancelled: m.totalCancelledBookingCount,
+    pending: m.totalPendingBookingCount,
+    approved: m.totalApprovedBookingCount,
+    total: m.totalBookingsCount,
+  }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -117,6 +57,8 @@ export default function BookingStatusPie() {
                 { dataKey: 'completed', label: t('bookings.status.completed'), },
                 { dataKey: 'rejected', label: t('bookings.status.rejected'), },
                 { dataKey: 'cancelled', label: t('bookings.status.cancelled'), },
+                { dataKey: 'approved', label: t('bookings.status.approved'), },
+                { dataKey: 'pending', label: t('bookings.status.pending'), },
                 { dataKey: 'total', label: 'Total', },
             ]}
             {...chartSetting}

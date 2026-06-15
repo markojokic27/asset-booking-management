@@ -4,17 +4,17 @@ import { twMerge } from 'tailwind-merge';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
-import { DateInput } from '../../booking/components/DateInput';
+import { DateInput, DateInputNoMin } from '../../booking/components/DateInput';
 import { Button } from '../../../components/ui/Button';
 
 import { useUsersData } from '../../user/hooks/useUsersData';
 import { useAssetsData } from '../../asset/hooks/useAssetsData';
 
-import type { Filters } from '../types';
+import type { Filter } from '../types';
 
 type Props = {
-  filters: Filters;
-  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+  filters: Filter;
+  setFilters: React.Dispatch<React.SetStateAction<Filter>>;
   onReset: () => void;
   className?: string;
 };
@@ -30,7 +30,7 @@ export default function FiltersBar({
   onReset,
   className,
 }: Props) {
-  const update = (partial: Partial<Filters>) => {
+  const update = (partial: Partial<Filter>) => {
     setFilters((prev) => ({
       ...prev,
       ...partial,
@@ -74,7 +74,7 @@ export default function FiltersBar({
     >
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <DateInput
+          <DateInputNoMin
             id="fromDate"
             label="From"
             value={filters.fromDate}
@@ -133,13 +133,6 @@ export default function FiltersBar({
           />
 
           <div className="flex gap-2 md:justify-end xl:self-center">
-            <Button
-              variant="solid"
-              className="h-10 min-w-[100px]"
-            >
-              Apply
-            </Button>
-
             <Button
               variant="secondary"
               onClick={onReset}

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
 
@@ -11,8 +11,8 @@ import TopAssetBookings from '../features/report/components/TopAssetBookingsPie'
 
 // Types
 import type { Filter } from '../features/report/types';
-import { getGeneralReport } from '../features/report/api/reportApi';
-import { Button } from '../components/ui/Button';
+
+import { useGeneralReport } from '../features/report/hooks/useGeneralReport';
 
 const defaultFilters: Filter = {
   fromDate: '',
@@ -24,6 +24,7 @@ const defaultFilters: Filter = {
 export default function Report() {
   const { t } = useTranslation();
   const [filters, setFilters] = useState<Filter>(defaultFilters);
+  const { report, loading } = useGeneralReport(filters);
 
   const handleResetFilters = () => {
     setFilters(defaultFilters);
@@ -55,16 +56,16 @@ export default function Report() {
 
         <div className="mt-8 flex flex-col gap-6">
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <BookingStatusPie />
+            <BookingStatusPie report={report} />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <BookingStatusBar />
+            <BookingStatusBar  report={report}/>
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <TopUserBookings></TopUserBookings>
+            <TopUserBookings report={report} />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <TopAssetBookings></TopAssetBookings>
+            <TopAssetBookings report={report} />
           </div>
         </div>
       </LayoutColumn>

@@ -1,21 +1,19 @@
 import { PieChart } from '@mui/x-charts/PieChart';
-// import { useTranslation } from 'react-i18next';
+import type { GeneralReportResponseDTO } from '../types';
 
-export default function TopAssetBookings() {
-  // const { t } = useTranslation();
+export default function TopAssetBookings({
+  report,
+}: {
+  report: GeneralReportResponseDTO | null;
+}) {
+  const data =
+    report?.topAssets?.map((a) => ({
+      id: a.assetId,
+      value: a.bookingCount,
+      label: a.name,
+    })) ?? [];
 
-  const data = [
-    {
-      assetId: 1,
-      value: 3,
-      label: "Parking spot 10",
-    },
-    {
-      assetId: 2,
-      value: 2,
-      label: "Macbook Pro 16",
-    },
-  ];
+  const total = data.reduce((sum, d) => sum + d.value, 0);
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,24 +23,33 @@ export default function TopAssetBookings() {
         </h2>
       </div>
 
-      <div data-testid="top-assets" className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gray-50 px-4 py-6 dark:bg-white/5 dark:text-white">
-        <PieChart
-          series={[
-            {
-              data,
-              innerRadius: 55,
-              outerRadius: 110,
-              paddingAngle: 2,
-              cornerRadius: 5,
-              faded: {
-                innerRadius: 50,
-                additionalRadius: -5,
-                color: '#9ca3af',
+      <div
+        data-testid="top-assets"
+        className="flex w-full items-center justify-center overflow-hidden rounded-2xl bg-gray-50 px-4 py-6 dark:bg-white/5 dark:text-white"
+      >
+        {total === 0 ? (
+          <div className="flex h-[320px] items-center justify-center text-gray-500">
+            No data available
+          </div>
+        ) : (
+          <PieChart
+            series={[
+              {
+                data,
+                innerRadius: 55,
+                outerRadius: 110,
+                paddingAngle: 2,
+                cornerRadius: 5,
+                faded: {
+                  innerRadius: 50,
+                  additionalRadius: -5,
+                  color: '#9ca3af',
+                },
               },
-            },
-          ]}
-          height={320}
-        />
+            ]}
+            height={320}
+          />
+        )}
       </div>
     </div>
   );

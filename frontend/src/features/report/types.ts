@@ -13,30 +13,30 @@ export type TopUserBookingCountDTO = {
 
 export type TopAssetBookingCountDTO = {
   assetId: number;
-  fullName: string;
+  name: string;
   bookingCount: number;
 }
 
 export type MonthlyBookingCountDTO = {
   year: number;
   month: number;
-  totalBookingCount: number;
+  totalBookingsCount: number;
 
-  totalApprovedCount: number;
-  totalCancelledCount: number;
-  totalPendingCount: number;
-  totalRejectedCount: number;
-  totalCompletedCount: number;
+  totalApprovedBookingCount: number;
+  totalCancelledBookingCount: number;
+  totalPendingBookingCount: number;
+  totalRejectedBookingCount: number;
+  totalCompletedBookingCount: number;
 }
 
 export type GeneralReportResponseDTO = {
-  totalBookingCount: number;
+  totalBookingsCount: number;
 
-  totalApprovedCount: number;
-  totalCancelledCount: number;
-  totalPendingCount: number;
-  totalRejectedCount: number;
-  totalCompletedCount: number;
+  totalApprovedBookingCount: number;
+  totalCancelledBookingCount: number;
+  totalPendingBookingCount: number;
+  totalRejectedBookingCount: number;
+  totalCompletedBookingCount: number;
 
   topUsers: TopUserBookingCountDTO[];
   topAssets: TopAssetBookingCountDTO[];
