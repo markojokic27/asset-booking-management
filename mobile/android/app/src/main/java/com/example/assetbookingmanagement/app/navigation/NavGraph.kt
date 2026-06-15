@@ -15,6 +15,7 @@ import com.example.assetbookingmanagement.core.ui.components.Header
 import com.example.assetbookingmanagement.features.asset.ui.AssetDetailsScreen
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
 import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
+import com.example.assetbookingmanagement.features.booking.ui.ApprovalRequestDetailsScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingDetailsScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingSuccessScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
@@ -34,6 +35,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             currentRoute == Routes.ASSET_DETAILS ||
             currentRoute == Routes.BOOKING_DETAILS ||
             currentRoute == Routes.APPROVAL_REQUESTS ||
+            currentRoute == Routes.APPROVAL_REQUEST_DETAILS ||
             currentRoute == Routes.CREATE_BOOKING ||
             currentRoute == Routes.BOOKING_SUCCESS
 
@@ -42,6 +44,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
         Routes.ASSETS -> "Assets"
         Routes.BOOKINGS -> "Bookings"
         Routes.APPROVAL_REQUESTS -> "Pending Approvals"
+        Routes.APPROVAL_REQUEST_DETAILS -> "Approval request details"
         Routes.BOOKING_DETAILS -> "Booking details"
         Routes.PROFILE -> "Profile"
         Routes.CREATE_BOOKING -> "Create booking"
@@ -96,7 +99,69 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             }
 
             composable(Routes.APPROVAL_REQUESTS) {
-                ApprovalRequestsScreen()
+                ApprovalRequestsScreen(
+                    onApprovalRequestClick = { request ->
+                        navController.navigate(
+                            Routes.approvalRequestDetails(
+                                bookingId = request.id,
+                                assetName = request.assetName,
+                                requesterName = request.requesterName,
+                                fromDate = request.bookingStart,
+                                toDate = request.bookingEnd,
+                                status = request.status,
+                                isHourlyBooking = request.isHourlyBooking
+                            )
+                        )
+                    }
+                )
+            }
+
+            composable(
+                route = Routes.APPROVAL_REQUEST_DETAILS,
+                arguments = listOf(
+                    navArgument("bookingId") { type = NavType.LongType },
+                    navArgument("assetName") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("requesterName") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                    },
+                    navArgument("fromDate") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("toDate") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("status") {
+                        type = NavType.StringType
+                        defaultValue = "-"
+                    },
+                    navArgument("isHourlyBooking") {
+                        type = NavType.BoolType
+                        defaultValue = false
+                    }
+                )
+            ) { backStackEntry ->
+                val bookingId = backStackEntry.arguments?.getLong("bookingId") ?: return@composable
+                ApprovalRequestDetailsScreen(
+                    bookingId = bookingId,
+                    assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
+                    requesterName = backStackEntry.arguments?.getString("requesterName").orEmpty(),
+                    bookingStart = backStackEntry.arguments?.getString("fromDate") ?: "-",
+                    bookingEnd = backStackEntry.arguments?.getString("toDate") ?: "-",
+                    status = backStackEntry.arguments?.getString("status") ?: "-",
+                    isHourlyBooking = backStackEntry.arguments?.getBoolean("isHourlyBooking") ?: false,
+                    onApproved = {
+                        navController.popBackStack()
+                    },
+                    onRejected = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             composable(Routes.ASSETS) {

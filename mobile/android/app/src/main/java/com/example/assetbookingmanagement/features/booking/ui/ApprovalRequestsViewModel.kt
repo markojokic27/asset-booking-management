@@ -19,7 +19,10 @@ data class ApprovalRequestUiModel(
     val assetName: String,
     val bookingPeriod: String,
     val status: String,
-    val requesterName: String
+    val requesterName: String,
+    val bookingStart: String,
+    val bookingEnd: String,
+    val isHourlyBooking: Boolean
 )
 
 data class ApprovalRequestsUiState(
@@ -109,5 +112,8 @@ private fun BookingResponse.toApprovalRequestUiModel() = ApprovalRequestUiModel(
     assetName = asset.name,
     bookingPeriod = "${bookingStart.take(10)} - ${bookingEnd.take(10)}",
     status = status,
-    requesterName = "${user.name} ${user.surname}".trim()
+    requesterName = "${user.name} ${user.surname}".trim(),
+    bookingStart = bookingStart,
+    bookingEnd = bookingEnd,
+    isHourlyBooking = asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
 )

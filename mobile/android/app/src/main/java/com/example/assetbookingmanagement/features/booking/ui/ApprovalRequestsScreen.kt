@@ -22,6 +22,7 @@ import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 
 @Composable
 fun ApprovalRequestsScreen(
+    onApprovalRequestClick: (ApprovalRequestUiModel) -> Unit = {},
     viewModel: ApprovalRequestsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -53,7 +54,10 @@ fun ApprovalRequestsScreen(
                         items = uiState.requests,
                         key = { request -> request.id }
                     ) { request ->
-                        ApprovalRequestCard(request = request)
+                        ApprovalRequestCard(
+                            request = request,
+                            onClick = { onApprovalRequestClick(request) }
+                        )
                     }
                 }
             }
@@ -63,9 +67,10 @@ fun ApprovalRequestsScreen(
 
 @Composable
 private fun ApprovalRequestCard(
-    request: ApprovalRequestUiModel
+    request: ApprovalRequestUiModel,
+    onClick: () -> Unit
 ) {
-    AppCard {
+    AppCard(onClick = onClick) {
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
