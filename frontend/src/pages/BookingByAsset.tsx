@@ -25,6 +25,7 @@ import { Input } from '../components/ui/Input';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
+import { getAssetById } from '../features/asset/api/assetApi';
 
 // TODO: internationalization
 
@@ -36,7 +37,20 @@ export default function BookingsByAsset() {
 
   const { bookings, loading, error, refetch } = useBookingsByAsset(assetId!);
 
-  const asset = bookings?.[0]?.asset;
+  const assetFromBookings = bookings?.[0]?.asset;
+  const [fetchedAsset, setFetchedAsset] = React.useState<Awaited<
+    ReturnType<typeof getAssetById>
+  > | null>(null);
+
+  const asset = assetFromBookings ?? fetchedAsset;
+
+  React.useEffect(() => {
+    if (assetFromBookings || !assetId) return;
+
+    getAssetById(assetId)
+      .then(setFetchedAsset)
+      .catch(() => setFetchedAsset(null));
+  }, [assetFromBookings, assetId]);
 
   const [notes, setNotes] = React.useState('');
   const [selectedBooking, setSelectedBooking] =
@@ -124,7 +138,9 @@ export default function BookingsByAsset() {
             {asset.status}
           </span>
         </div>
-        <p>{t('assets.location')}: {asset.location}</p> 
+        <p>
+          {t('assets.location')}: {asset.location}
+        </p>
       </div>
 
       <div className="mb-6 h-px w-full bg-(--color-table-border)" />
