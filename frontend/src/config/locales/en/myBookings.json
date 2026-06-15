@@ -14,7 +14,25 @@
     "user": "User",
     "asset": "Asset",
     "time": "Booking time",
-    "status": "Status"
+    "status": "Status",
+    "actionsSr": "Booking actions"
+  },
+  "actions": {
+    "cancel": "Cancel"
+  },
+  "cancelModal": {
+    "ariaLabel": "Cancel booking #{{id}}",
+    "title": "Cancel booking?",
+    "description": "Are you sure you want to cancel this booking?",
+    "closeAria": "Close",
+    "keepBooking": "No, keep booking",
+    "confirmCancel": "Yes, cancel booking",
+    "fields": {
+      "asset": "Asset",
+      "time": "Booking time",
+      "status": "Status",
+      "notes": "Notes"
+    }
   },
   "loading": "Loading bookings...",
   "empty": "No bookings found.",

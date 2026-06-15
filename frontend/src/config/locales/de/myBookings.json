@@ -14,7 +14,25 @@
     "user": "Benutzer",
     "asset": "Asset",
     "time": "Buchungszeit",
-    "status": "Status"
+    "status": "Status",
+    "actionsSr": "Buchungsaktionen"
+  },
+  "actions": {
+    "cancel": "Stornieren"
+  },
+  "cancelModal": {
+    "ariaLabel": "Buchung #{{id}} stornieren",
+    "title": "Buchung stornieren?",
+    "description": "Sind Sie sicher, dass Sie diese Buchung stornieren möchten?",
+    "closeAria": "Schließen",
+    "keepBooking": "Nein, Buchung behalten",
+    "confirmCancel": "Ja, Buchung stornieren",
+    "fields": {
+      "asset": "Asset",
+      "time": "Buchungszeit",
+      "status": "Status",
+      "notes": "Notizen"
+    }
   },
   "loading": "Buchungen werden geladen...",
   "empty": "Keine Buchungen gefunden.",

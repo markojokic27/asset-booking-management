@@ -14,7 +14,25 @@
     "user": "Korisnik",
     "asset": "Asset",
     "time": "Vrijeme rezervacije",
-    "status": "Status"
+    "status": "Status",
+    "actionsSr": "Akcije rezervacije"
+  },
+  "actions": {
+    "cancel": "Otkaži"
+  },
+  "cancelModal": {
+    "ariaLabel": "Otkazivanje rezervacije #{{id}}",
+    "title": "Otkazati rezervaciju?",
+    "description": "Jeste li sigurni da želite otkazati ovu rezervaciju?",
+    "closeAria": "Zatvori",
+    "keepBooking": "Ne, zadrži rezervaciju",
+    "confirmCancel": "Da, otkaži rezervaciju",
+    "fields": {
+      "asset": "Asset",
+      "time": "Vrijeme rezervacije",
+      "status": "Status",
+      "notes": "Napomene"
+    }
   },
   "loading": "Učitavanje rezervacija...",
   "empty": "Nema rezervacija.",

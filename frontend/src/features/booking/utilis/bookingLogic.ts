@@ -13,6 +13,20 @@ export const isBookingPastEnd = (
   booking: Pick<BookingWithRelations, 'bookingEnd'>
 ) => new Date(booking.bookingEnd).getTime() < Date.now();
 
+// statuses that cannot be cancelled by the user
+const NON_CANCELLABLE_STATUSES = new Set([
+  'CANCELLED',
+  'REJECTED',
+  'COMPLETED',
+]);
+
+// function to check if a booking can be cancelled by the user
+export const canCancelBooking = (
+  booking: Pick<BookingWithRelations, 'status' | 'bookingEnd'>
+) =>
+  !NON_CANCELLABLE_STATUSES.has(booking.status) &&
+  !isBookingPastEnd(booking);
+
 // function to sort bookings by start date newest first
 export const sortBookingsNewestFirst = (
   bookings: BookingWithRelations[]
