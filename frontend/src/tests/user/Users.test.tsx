@@ -154,7 +154,7 @@ const baseList = {
 const buildUseUsers = (overrides: Record<string, any> = {}) => ({
   list: baseList,
   sorting: { nameSortDir: 'asc' as const, toggleNameSortDir: vi.fn() },
-  pagination: { page: 1, totalPages: 1, items: [1], setPage: vi.fn() },
+  pagination: { page: 1, totalPages: 1, pageSize: 10, paged: [activeUser], items: [1], setPage: vi.fn() },
   selection: { activeUser: null },
   modals: mockModals,
   actions: mockActions,
@@ -222,8 +222,8 @@ describe('Users page', () => {
 
     it.each([
       ['loading', { isLoading: true, pagedUsers: [] }, 'users.empty.loading'],
-      ['error',   { error: 'Failed to load users.', pagedUsers: [] }, 'Failed to load users.'],
-      ['empty',   { pagedUsers: [], filteredUsers: [] }, 'users.empty.none'],
+      ['error', { error: 'Failed to load users.', pagedUsers: [] }, 'Failed to load users.'],
+      ['empty', { pagedUsers: [], filteredUsers: [] }, 'users.empty.none'],
     ])('shows correct message when %s', (_, listOverrides, expectedText) => {
       renderPage({ list: { ...baseList, ...listOverrides } });
       expect(screen.getByText(expectedText)).toBeInTheDocument();
@@ -273,11 +273,11 @@ describe('Users page', () => {
 
   describe('modals render by state', () => {
     it.each([
-      ['view',     'view-modal'],
+      ['view', 'view-modal'],
       ['bookings', 'bookings-modal'],
-      ['report',   'report-modal'],
-      ['create',   'form-modal-create'],
-      ['edit',     'form-modal-edit'],
+      ['report', 'report-modal'],
+      ['create', 'form-modal-create'],
+      ['edit', 'form-modal-edit'],
     ])('renders correct modal for state "%s"', (modalType, ariaLabel) => {
       renderPage({ modals: { ...mockModals, modal: modalType } });
       expect(getDialog(ariaLabel)).toBeInTheDocument();

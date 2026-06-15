@@ -38,7 +38,7 @@ const createInitialValues: FormValues = {
   approval: false,
 };
 
-function getFieldsKey(isCreate: boolean): string {
+function getFieldsKey(isCreate: boolean) {
   return isCreate
     ? 'assetCategories.modals.add.fields'
     : 'assetCategories.modals.edit.fields';
