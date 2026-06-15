@@ -33,7 +33,7 @@ vi.mock('../../features/booking/hooks/useCreateBooking', () => ({
   useCreateBooking: vi.fn(() => ({ isCreating: false, handleCreateBooking: vi.fn() })),
 }));
 
-import { ParkingMap } from '../../pages/ParkingMap';
+import { ParkingMap } from '../../features/booking/components/ParkingMap';
 import { useCreateBooking } from '../../features/booking/hooks/useCreateBooking';
 
 

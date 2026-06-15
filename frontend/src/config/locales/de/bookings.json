@@ -60,6 +60,17 @@
     "taken": "Belegt",
     "noParking": "Parken verboten",
     "stairs": "Treppenhaus"
-  }
+  },
+  "rooms": {
+      "office": "Büro",
+      "meetingRoom": "Besprechungsraum",
+      "kitchenWc": "Küche / WC",
+      "stairs": "Treppenhaus",
+      "corridor": "Flur"
+    }
+  },
+  "officeMap": {
+    "title": "Bürokarte",
+    "closeAria": "Karte schließen"
   }
 }

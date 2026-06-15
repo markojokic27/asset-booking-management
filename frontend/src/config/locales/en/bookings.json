@@ -60,6 +60,17 @@
     "taken": "Taken",
     "noParking": "No parking",
     "stairs": "Stairs"
+  },
+  "rooms": {
+      "office": "Office",
+      "meetingRoom": "Meeting room",
+      "kitchenWc": "Kitchen / WC",
+      "stairs": "Staircase",
+      "corridor": "Corridor"
+    }
+  },
+  "officeMap": {
+    "title": "Office Map",
+    "closeAria": "Close map"
   }
-}
 }

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../components/ui/Button';
-import { FloorMinus1 } from '../assets/Floor-1';
-import { FloorMinus2 } from '../assets/Floor-2';
-import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
-import type { BookingWithRelations, Filters } from '../features/booking/types';
-import type { AssetDto } from '../features/asset/types';
+import { Button } from '../../../components/ui/Button';
+import { FloorMinus1 } from '../../../assets/Floor-1';
+import { FloorMinus2 } from '../../../assets/Floor-2';
+import { useCreateBooking } from '../hooks/useCreateBooking';
+import type { BookingWithRelations, Filters } from '../types';
+import type { AssetDto } from '../../asset/types';
 
 type FloorLevel = '-1' | '-2';
 

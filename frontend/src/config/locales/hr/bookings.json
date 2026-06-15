@@ -60,6 +60,18 @@
     "taken": "Zauzeto",
     "noParking": "Zabranjeno",
     "stairs": "Stubište"
+  },
+   "rooms": {
+      "office": "Ured",
+      "meetingRoom": "Sala za sastanke",
+      "kitchenWc": "Kuhinja / WC",
+      "stairs": "Stubište",
+      "corridor": "Hodnik"
+    }
+  },
+  "officeMap": {
+    "title": "Karta ureda",
+    "closeAria": "Zatvori kartu"
   }
 }
-}
+
