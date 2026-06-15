@@ -3,7 +3,7 @@ package de.bdr.asset.management.report;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,19 +34,9 @@ public class ReportController {
     @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<GeneralReportResponseDTO> getGeneralReport () {
-        return ResponseEntity.ok(bookingService.getGeneralReport());
-    }
-
-    @GetMapping("/users/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<GeneralReportResponseDTO> getUserReport(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.getUserReport(id));
-    }
-
-    @GetMapping("/assets/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<GeneralReportResponseDTO> getAssetReport(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.getAssetReport(id));
+    public ResponseEntity<GeneralReportResponseDTO> getGeneralReport (
+        @ModelAttribute ReportFilter filter
+    ) {
+        return ResponseEntity.ok(bookingService.getGeneralReport(filter));
     }
 }

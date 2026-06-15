@@ -23,11 +23,11 @@ http:
       type: query
       disabled: true
     - name: bookingStart
-      value: 2026-05-08
+      value: 2026-05-08T00:00:00Z
       type: query
       disabled: true
     - name: bookingEnd
-      value: 2026-05-09
+      value: 2026-05-09T00:00:00Z
       type: query
       disabled: true
     - name: assetId

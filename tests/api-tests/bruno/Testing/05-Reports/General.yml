@@ -6,6 +6,23 @@ info:
 http:
   method: GET
   url: "{{baseUrl}}/v1/reports"
+  params:
+    - name: fromDate
+      value: 2026-05-01T00:00:00Z
+      type: query
+      disabled: true
+    - name: toDate
+      value: 2026-06-01T00:00:00Z
+      type: query
+      disabled: true
+    - name: userId
+      value: "1"
+      type: query
+      disabled: true
+    - name: assetId
+      value: "1"
+      type: query
+      disabled: true
   auth: inherit
 
 settings:

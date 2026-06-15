@@ -12,5 +12,7 @@ public record GeneralReportResponseDTO (
     Long totalRejectedBookingCount,
 
     List<TopUserBookingCountDTO> topUsers,
-    List<TopAssetBookingCountDTO> topAssets
+    List<TopAssetBookingCountDTO> topAssets,
+
+    List<MonthlyBookingStatsDTO> monthlyStats
 ) {}

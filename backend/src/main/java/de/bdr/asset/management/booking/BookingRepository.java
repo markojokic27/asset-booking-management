@@ -14,8 +14,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
 import de.bdr.asset.management.report.projections.GeneralReportProjection;
+import de.bdr.asset.management.report.projections.MonthlyBookingStatsProjection;
 import de.bdr.asset.management.report.projections.TopAssetBookingsProjection;
 import de.bdr.asset.management.report.projections.TopUserBookingsProjection;
 
@@ -39,74 +39,115 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
                         @Param("targetStatuses") List<String> targetStatuses);
 
         @Query(value = """
-                SELECT
+        SELECT
                 COUNT(*) AS totalBookingsCount,
 
-                COUNT(*) FILTER (WHERE status = 'COMPLETED') AS totalCompletedBookingCount,
-                COUNT(*) FILTER (WHERE status = 'CANCELLED') AS totalCancelledBookingCount,
-                COUNT(*) FILTER (WHERE status = 'PENDING') AS totalPendingBookingCount,
-                COUNT(*) FILTER (WHERE status = 'APPROVED') AS totalApprovedBookingCount,
-                COUNT(*) FILTER (WHERE status = 'REJECTED') AS totalRejectedBookingCount
+                COUNT(*) FILTER (WHERE b.status = 'COMPLETED') AS totalCompletedBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'CANCELLED') AS totalCancelledBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'PENDING') AS totalPendingBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'APPROVED') AS totalApprovedBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'REJECTED') AS totalRejectedBookingCount
 
-                FROM asset_booking_mgm.booking
-                """, nativeQuery = true)
-        GeneralReportProjection getGeneralStats();
+        FROM asset_booking_mgm.booking b
+
+        WHERE
+                (CAST(:userId as bigint) IS NULL OR b.user_id = :userId)
+                AND (CAST(:assetId as bigint) IS NULL OR b.asset_id = :assetId)
+                AND (CAST(:fromDate AS timestamp) IS NULL OR b.booking_end >= :fromDate)
+                AND (CAST(:toDate AS timestamp) IS NULL OR b.booking_end <= :toDate)
+        """,
+        nativeQuery = true)
+        GeneralReportProjection getGeneralStats(
+                @Param("fromDate") Instant fromDate,
+                @Param("toDate") Instant toDate,
+                @Param("userId") Long userId,
+                @Param("assetId") Long assetId
+        );
 
         @Query(value = """
-                SELECT
+        SELECT
                 u.id AS userId,
                 CONCAT(u.name, ' ', u.surname) AS fullName,
                 COUNT(b.id) AS bookingCount
-                FROM asset_booking_mgm.booking b
-                JOIN asset_booking_mgm.asset_user u ON u.id = b.user_id
-                GROUP BY u.id, u.name, u.surname
-                ORDER BY bookingCount DESC
-                LIMIT 5
-                """, nativeQuery = true)
-        List<TopUserBookingsProjection> getTopUsers();
+
+        FROM asset_booking_mgm.booking b
+        JOIN asset_booking_mgm.asset_user u ON u.id = b.user_id
+
+        WHERE
+                (:assetId is NULL OR b.asset_id = :assetId)
+                AND (CAST(:fromDate AS timestamp) IS NULL OR b.booking_end >= :fromDate)
+                AND (CAST(:toDate AS timestamp) IS NULL OR b.booking_end <= :toDate)
+
+        GROUP BY u.id, u.name, u.surname
+        ORDER BY bookingCount DESC
+        LIMIT 5
+        """,
+        nativeQuery = true)
+        List<TopUserBookingsProjection> getTopUsers(
+                @Param("fromDate") Instant fromDate,
+                @Param("toDate") Instant toDate,
+                @Param("assetId") Long assetId
+        );
 
         @Query(value = """
-                SELECT
+        SELECT
                 a.id AS assetId,
                 a.name AS assetName,
                 COUNT(b.id) AS bookingCount
-                FROM asset_booking_mgm.booking b
-                JOIN asset_booking_mgm.asset a ON a.id = b.asset_id
-                GROUP BY a.id, a.name
-                ORDER BY bookingCount DESC
-                LIMIT 5
-                """, nativeQuery = true)
-        List<TopAssetBookingsProjection> getTopAssets();
+
+        FROM asset_booking_mgm.booking b
+        JOIN asset_booking_mgm.asset a ON a.id = b.asset_id
+
+        WHERE
+                (CAST(:userId as bigint) is NULL OR b.user_id = :userId)
+                AND (CAST(:fromDate AS timestamp) IS NULL OR b.booking_end >= :fromDate)
+                AND (CAST(:toDate AS timestamp) IS NULL OR b.booking_end <= :toDate)
+
+        GROUP BY a.id, a.name
+        ORDER BY bookingCount DESC
+        LIMIT 5
+        """,
+        nativeQuery = true)
+        List<TopAssetBookingsProjection> getTopAssets(
+                @Param("fromDate") Instant fromDate,
+                @Param("toDate") Instant toDate,
+                @Param("userId") Long userId
+        );
 
         @Query(value = """
-                        SELECT
-                            COUNT(*) AS totalBookingsCount,
+        SELECT
+                EXTRACT(YEAR FROM b.booking_end)::int AS year,
+                EXTRACT(MONTH FROM b.booking_end)::int AS month,
 
-                            SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS totalCompletedBookingCount,
-                            SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END) AS totalCancelledBookingCount,
-                            SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) AS totalPendingBookingCount,
-                            SUM(CASE WHEN status = 'APPROVED' THEN 1 ELSE 0 END) AS totalApprovedBookingCount,
-                            SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) AS totalRejectedBookingCount
+                COUNT(*) AS totalBookingsCount,
 
-                            FROM asset_booking_mgm.booking
-                            WHERE user_id = :userId
-                            """, nativeQuery = true)
-        GeneralReportResponseDTO getUserReport(@Param("userId") Long userId);
+                COUNT(*) FILTER (WHERE b.status = 'COMPLETED') AS totalCompletedBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'CANCELLED') AS totalCancelledBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'PENDING') AS totalPendingBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'APPROVED') AS totalApprovedBookingCount,
+                COUNT(*) FILTER (WHERE b.status = 'REJECTED') AS totalRejectedBookingCount
 
-        @Query(value = """
-                            SELECT
-                                COUNT(*) AS totalBookingsCount,
+        FROM asset_booking_mgm.booking b
 
-                                SUM(CASE WHEN status = 'COMPLETED' THEN 1 ELSE 0 END) AS totalCompletedBookingCount,
-                                SUM(CASE WHEN status = 'CANCELLED' THEN 1 ELSE 0 END) AS totalCancelledBookingCount,
-                                SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) AS totalPendingBookingCount,
-                                SUM(CASE WHEN status = 'APPROVED' THEN 1 ELSE 0 END) AS totalApprovedBookingCount,
-                                SUM(CASE WHEN status = 'REJECTED' THEN 1 ELSE 0 END) AS totalRejectedBookingCount
+        WHERE
+                (CAST(:userId as bigint) is NULL OR b.user_id = :userId)
+                AND (CAST(:assetId as bigint) is NULL OR b.asset_id = :assetId)
+                AND (CAST(:fromDate AS timestamp) IS NULL OR b.booking_end >= :fromDate)
+                AND (CAST(:toDate AS timestamp) IS NULL OR b.booking_end <= :toDate)
 
-                            FROM asset_booking_mgm.booking
-                            WHERE asset_id = :assetId
-                        """, nativeQuery = true)
-        GeneralReportResponseDTO getAssetReport(@Param("assetId") Long assetId);
+        GROUP BY
+                EXTRACT(YEAR FROM b.booking_end),
+                EXTRACT(MONTH FROM b.booking_end)
+
+        ORDER BY year, month
+        """,
+        nativeQuery = true)
+        List<MonthlyBookingStatsProjection> getMonthlyStats(
+                @Param("fromDate") Instant fromDate,
+                @Param("toDate") Instant toDate,
+                @Param("userId") Long userId,
+                @Param("assetId") Long assetId
+        );
 
         @Modifying(clearAutomatically = true)
         @Query(value = "UPDATE asset_booking_mgm.booking SET status = 'COMPLETED'" +

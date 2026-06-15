@@ -2,10 +2,13 @@ package de.bdr.asset.management.booking;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.bdr.asset.management.report.ReportFilter;
 import de.bdr.asset.management.booking.dto.*;
 import de.bdr.asset.management.core.email.EmailService;
 import de.bdr.asset.management.user.UserRoleEnum;
@@ -23,6 +26,7 @@ import de.bdr.asset.management.core.exception.InvalidDateRangeException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.core.security.SecurityService;
 import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
+import de.bdr.asset.management.report.dto.MonthlyBookingStatsDTO;
 import de.bdr.asset.management.report.dto.TopAssetBookingCountDTO;
 import de.bdr.asset.management.report.dto.TopUserBookingCountDTO;
 import de.bdr.asset.management.report.projections.GeneralReportProjection;
@@ -279,12 +283,35 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public GeneralReportResponseDTO getGeneralReport() {
+    public GeneralReportResponseDTO getGeneralReport(ReportFilter filter) {
 
-        GeneralReportProjection stats = repository.getGeneralStats();
+        Instant fromDate = filter.getFromDate();
+        Instant toDate = filter.getToDate();
+
+        if (fromDate == null && toDate == null) {
+            fromDate = LocalDateTime.now()
+                    .minusYears(1)
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant();
+
+            toDate = LocalDateTime.now()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant();
+        }
+        
+        GeneralReportProjection stats = repository.getGeneralStats(
+            fromDate,
+            toDate,
+            filter.getUserId(),
+            filter.getAssetId()
+        );
 
         List<TopUserBookingCountDTO> topUsers =
-                repository.getTopUsers()
+                repository.getTopUsers(
+                    fromDate,
+                    toDate,
+                    filter.getAssetId()
+                )
                         .stream()
                         .map(p -> new TopUserBookingCountDTO(
                                 p.getUserId(),
@@ -294,7 +321,11 @@ public class BookingServiceImpl implements BookingService {
                         .toList();
 
         List<TopAssetBookingCountDTO> topAssets =
-                repository.getTopAssets()
+                repository.getTopAssets(
+                    fromDate,
+                    toDate,
+                    filter.getUserId()
+                )
                         .stream()
                         .map(p -> new TopAssetBookingCountDTO(
                                 p.getAssetId(),
@@ -302,6 +333,26 @@ public class BookingServiceImpl implements BookingService {
                                 p.getBookingCount()
                         ))
                         .toList();
+
+        List<MonthlyBookingStatsDTO> monthlyStats =
+            repository.getMonthlyStats(
+                    fromDate,
+                    toDate,
+                    filter.getUserId(),
+                    filter.getAssetId()
+            )
+            .stream()
+            .map(p -> new MonthlyBookingStatsDTO(
+                    p.getYear(),
+                    p.getMonth(),
+                    p.getTotalBookingsCount(),
+                    p.getTotalCompletedBookingCount(),
+                    p.getTotalCancelledBookingCount(),
+                    p.getTotalPendingBookingCount(),
+                    p.getTotalApprovedBookingCount(),
+                    p.getTotalRejectedBookingCount()
+            ))
+            .toList();
 
         return new GeneralReportResponseDTO(
             stats.getTotalBookingsCount(),
@@ -311,23 +362,9 @@ public class BookingServiceImpl implements BookingService {
             stats.getTotalApprovedBookingCount(),
             stats.getTotalRejectedBookingCount(),
             topUsers,
-            topAssets
+            topAssets,
+            monthlyStats
         );
-    }
-
-    // @Override
-    // public GeneralReportResponseDTO getGeneralReport() {
-    //     return repository.getGeneralReport();
-    // }
-
-    @Override
-    public GeneralReportResponseDTO getUserReport(Long userId) {
-        return repository.getUserReport(userId);
-    }
-
-    @Override
-    public GeneralReportResponseDTO getAssetReport(Long assetId) {
-        return repository.getAssetReport(assetId);
     }
 
     private BookingValidationContext validateAndGetContext(Long requestedUserId, Long assetId) {
