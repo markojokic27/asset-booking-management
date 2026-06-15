@@ -15,12 +15,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.assetbookingmanagement.core.ui.components.DetailsRow
 import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
-import java.time.Instant
+import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingDisplayText
 
 @Composable
 fun ApprovalRequestDetailsScreen(
@@ -34,6 +35,8 @@ fun ApprovalRequestDetailsScreen(
     onApproved: () -> Unit,
     onRejected: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,12 +55,12 @@ fun ApprovalRequestDetailsScreen(
             )
             RequestInfoRow(
                 label = "From",
-                value = bookingStart.toDisplayDateTime(isHourlyBooking),
+                value = formatLocalizedBookingDisplayText(bookingStart, context, isHourlyBooking),
                 showDivider = true
             )
             RequestInfoRow(
                 label = "To",
-                value = bookingEnd.toDisplayDateTime(isHourlyBooking),
+                value = formatLocalizedBookingDisplayText(bookingEnd, context, isHourlyBooking),
                 showDivider = true
             )
             RequestStatusRow(
@@ -108,10 +111,6 @@ fun ApprovalRequestDetailsScreen(
         }
     }
 }
-
-private fun String.toDisplayDateTime(isHourlyBooking: Boolean): String =
-    runCatching { Instant.parse(this).toBookingDisplayText(isHourlyBooking = isHourlyBooking) }
-        .getOrDefault(ifBlank { "-" })
 
 @Composable
 private fun RequestInfoRow(

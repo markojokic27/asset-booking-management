@@ -8,12 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingDisplayText
 import com.example.assetbookingmanagement.core.ui.components.DetailsRow
 import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
-import java.time.Instant
 
 @Composable
 fun BookingDetailsScreen(
@@ -25,6 +26,8 @@ fun BookingDetailsScreen(
     categoryName: String,
     isHourlyBooking: Boolean
 ) {
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(20.dp),
@@ -33,8 +36,8 @@ fun BookingDetailsScreen(
         item(key = bookingId) {
             BookingSummarySection(
                 assetName = assetName.ifBlank { "Booking $bookingId" },
-                bookingStart = bookingStart.toDisplayDateTime(isHourlyBooking),
-                bookingEnd = bookingEnd.toDisplayDateTime(isHourlyBooking),
+                bookingStart = formatLocalizedBookingDisplayText(bookingStart, context, isHourlyBooking),
+                bookingEnd = formatLocalizedBookingDisplayText(bookingEnd, context, isHourlyBooking),
                 status = status.ifBlank { "-" },
                 categoryName = categoryName.ifBlank { "-" }
             )
@@ -95,7 +98,3 @@ private fun BookingStatusRow(
         StatusBadge(status = status)
     }
 }
-
-private fun String.toDisplayDateTime(isHourlyBooking: Boolean): String =
-    runCatching { Instant.parse(this).toBookingDisplayText(isHourlyBooking = isHourlyBooking) }
-        .getOrDefault(ifBlank { "-" })

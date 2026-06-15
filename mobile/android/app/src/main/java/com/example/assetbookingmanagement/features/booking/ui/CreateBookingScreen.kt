@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +27,7 @@ import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
 import com.example.assetbookingmanagement.core.ui.components.AvailabilityCalendar
 import com.example.assetbookingmanagement.core.ui.components.DateTimePicker
+import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingDisplayText
 
 @Composable
 fun CreateBookingScreen(
@@ -36,17 +38,29 @@ fun CreateBookingScreen(
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingTab.ChooseDate.ordinal) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(assetId) {
         viewModel.loadBookingPeriod(assetId)
     }
 
     LaunchedEffect(uiState.bookingCreated) {
-        if (uiState.bookingCreated) {
+        val createdBookingStart = uiState.createdBookingStart
+        val createdBookingEnd = uiState.createdBookingEnd
+
+        if (uiState.bookingCreated && createdBookingStart != null && createdBookingEnd != null) {
             onBookNowClick(
                 uiState.assetName,
-                uiState.bookingStartDisplay,
-                uiState.bookingEndDisplay
+                formatLocalizedBookingDisplayText(
+                    dateTimeText = createdBookingStart,
+                    context = context,
+                    isHourlyBooking = uiState.bookingPeriod == "HOUR"
+                ),
+                formatLocalizedBookingDisplayText(
+                    dateTimeText = createdBookingEnd,
+                    context = context,
+                    isHourlyBooking = uiState.bookingPeriod == "HOUR"
+                )
             )
         }
     }

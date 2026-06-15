@@ -17,7 +17,6 @@ import javax.inject.Inject
 data class ApprovalRequestUiModel(
     val id: Long,
     val assetName: String,
-    val bookingPeriod: String,
     val status: String,
     val requesterName: String,
     val bookingStart: String,
@@ -107,13 +106,16 @@ class ApprovalRequestsViewModel @Inject constructor(
     }
 }
 
-private fun BookingResponse.toApprovalRequestUiModel() = ApprovalRequestUiModel(
-    id = id,
-    assetName = asset.name,
-    bookingPeriod = "${bookingStart.take(10)} - ${bookingEnd.take(10)}",
-    status = status,
-    requesterName = "${user.name} ${user.surname}".trim(),
-    bookingStart = bookingStart,
-    bookingEnd = bookingEnd,
-    isHourlyBooking = asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
-)
+private fun BookingResponse.toApprovalRequestUiModel(): ApprovalRequestUiModel {
+    val isHourlyBooking = asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
+
+    return ApprovalRequestUiModel(
+        id = id,
+        assetName = asset.name,
+        status = status,
+        requesterName = "${user.name} ${user.surname}".trim(),
+        bookingStart = bookingStart,
+        bookingEnd = bookingEnd,
+        isHourlyBooking = isHourlyBooking
+    )
+}

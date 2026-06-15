@@ -13,12 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.core.ui.components.AppCard
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
+import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingPeriod
 
 @Composable
 fun ApprovalRequestsScreen(
@@ -70,6 +72,8 @@ private fun ApprovalRequestCard(
     request: ApprovalRequestUiModel,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
     AppCard(onClick = onClick) {
         Column(
             modifier = Modifier.weight(1f),
@@ -87,7 +91,12 @@ private fun ApprovalRequestCard(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = request.bookingPeriod,
+                text = formatLocalizedBookingPeriod(
+                    context = context,
+                    bookingStart = request.bookingStart,
+                    bookingEnd = request.bookingEnd,
+                    isHourlyBooking = request.isHourlyBooking
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
             )

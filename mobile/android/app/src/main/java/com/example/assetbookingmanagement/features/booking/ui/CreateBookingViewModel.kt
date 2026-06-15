@@ -43,8 +43,8 @@ data class CreateBookingUiState(
     val hasSelectedEndTime: Boolean = false,
     val isSubmitting: Boolean = false,
     val bookingCreated: Boolean = false,
-    val bookingStartDisplay: String = "-",
-    val bookingEndDisplay: String = "-",
+    val createdBookingStart: String? = null,
+    val createdBookingEnd: String? = null,
     val errorMessage: String? = null
 )
 
@@ -226,8 +226,8 @@ class CreateBookingViewModel @Inject constructor(
                     it.copy(
                         isSubmitting = false,
                         bookingCreated = true,
-                        bookingStartDisplay = startInstant.toBookingDisplayText(isHourlyBooking),
-                        bookingEndDisplay = endInstant.toBookingDisplayText(isHourlyBooking),
+                        createdBookingStart = startInstant.toString(),
+                        createdBookingEnd = endInstant.toString(),
                         errorMessage = null
                     )
                 }

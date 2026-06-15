@@ -1,5 +1,6 @@
 package com.example.assetbookingmanagement.core.ui.components
 
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,12 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
+import com.example.assetbookingmanagement.core.ui.format.formatLocalizedDate
+import com.example.assetbookingmanagement.core.ui.format.formatLocalizedTime
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
-import java.util.Date
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,6 +58,7 @@ fun DateTimePicker(
     modifier: Modifier = Modifier
 ) {
     var showStartDateDialog by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     val startHourOptions = getAvailableHourOptions(
         selectedDateMillis = dateMillis,
@@ -70,7 +71,7 @@ fun DateTimePicker(
 
     Column(modifier = modifier.fillMaxWidth()) {
         DateField(
-            dateValue = dateMillis?.let(::formatDate).orEmpty(),
+            dateValue = dateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
             dateLabel = "Date",
             dateContentDescription = "Select date",
             onDateClick = { showStartDateDialog = true }
@@ -79,13 +80,21 @@ fun DateTimePicker(
         if (showTimeInputs) {
             Spacer(modifier = Modifier.height(16.dp))
             TimeRangeFieldRow(
-                startTimeValue = if (hasSelectedStartTime) formatTime(startHour, startMinute) else "",
+                startTimeValue = if (hasSelectedStartTime) {
+                    formatLocalizedTime(context, startHour, startMinute)
+                } else {
+                    ""
+                },
                 startTimeLabel = "From time",
                 startTimeContentDescription = "Select from time",
                 startOptions = startHourOptions,
                 startDisabledOptions = unavailableHours,
                 onStartTimeSelected = { hour -> onStartTimeSelected(hour, 0) },
-                endTimeValue = if (hasSelectedEndTime) formatTime(endHour, endMinute) else "",
+                endTimeValue = if (hasSelectedEndTime) {
+                    formatLocalizedTime(context, endHour, endMinute)
+                } else {
+                    ""
+                },
                 endTimeLabel = "To time",
                 endTimeContentDescription = "Select to time",
                 endOptions = endHourOptions,
@@ -223,6 +232,7 @@ private fun TimeDropdownField(
     modifier: Modifier = Modifier
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -268,7 +278,7 @@ private fun TimeDropdownField(
             containerColor = MaterialTheme.colorScheme.surface
         ) {
             options.forEach { hour ->
-                val hourLabel = formatTime(hour, 0)
+                val hourLabel = formatLocalizedTime(context, hour, 0)
                 val isDisabled = hour in disabledOptions
                 DropdownMenuItem(
                     text = {
@@ -335,15 +345,6 @@ private fun AppDatePickerDialog(
             colors = datePickerColors
         )
     }
-}
-
-private fun formatDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    return formatter.format(Date(millis))
-}
-
-private fun formatTime(hour: Int, minute: Int): String {
-    return "%02d:%02d".format(hour, minute)
 }
 
 private fun getAvailableHourOptions(

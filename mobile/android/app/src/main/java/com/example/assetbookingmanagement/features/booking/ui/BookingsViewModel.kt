@@ -16,7 +16,6 @@ import javax.inject.Inject
 data class MyBookingUiModel(
     val id: Long,
     val assetName: String,
-    val bookingPeriod: String,
     val status: String,
     val bookingStart: String,
     val bookingEnd: String,
@@ -69,15 +68,17 @@ class BookingsViewModel @Inject constructor(
                             ?.isBefore(now) == false
                     }
                     .map { booking ->
+                        val isHourlyBooking =
+                            booking.asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
+
                         MyBookingUiModel(
                             id = booking.id,
                             assetName = booking.asset.name,
-                            bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
                             status = booking.status,
                             bookingStart = booking.bookingStart,
                             bookingEnd = booking.bookingEnd,
                             categoryName = booking.asset.category.name.ifBlank { "-" },
-                            isHourlyBooking = booking.asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
+                            isHourlyBooking = isHourlyBooking
                         )
                     }
 
@@ -88,15 +89,17 @@ class BookingsViewModel @Inject constructor(
                             ?.isBefore(now) == true
                     }
                     .map { booking ->
+                        val isHourlyBooking =
+                            booking.asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
+
                         MyBookingUiModel(
                             id = booking.id,
                             assetName = booking.asset.name,
-                            bookingPeriod = "${booking.bookingStart.take(10)} - ${booking.bookingEnd.take(10)}",
                             status = booking.status,
                             bookingStart = booking.bookingStart,
                             bookingEnd = booking.bookingEnd,
                             categoryName = booking.asset.category.name.ifBlank { "-" },
-                            isHourlyBooking = booking.asset.category.bookingPeriod.equals("HOUR", ignoreCase = true)
+                            isHourlyBooking = isHourlyBooking
                         )
                     }
 
