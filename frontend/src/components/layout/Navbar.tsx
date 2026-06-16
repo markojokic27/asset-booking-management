@@ -1,4 +1,5 @@
-import { LayoutColumn } from './Layout';
+// External packages
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import MonitorSharpIcon from '@mui/icons-material/MonitorSharp';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
@@ -10,16 +11,30 @@ import HowToRegSharpIcon from '@mui/icons-material/HowToRegSharp';
 import EventNoteSharpIcon from '@mui/icons-material/EventNoteSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+
+// Components
+import { LayoutColumn } from './Layout';
+
+// Types
+import type { UserDto } from '../../features/user/types';
+
+// API
 import { useAuth } from '../../features/auth/context/AuthContext';
-import {
-  getFullName,
-  isAdmin,
-  isManager,
-} from '../../features/user/utilis/users';
+import { getUserById } from '../../features/user/api/users';
+import { getFullName } from '../../features/user/utilis/users';
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+
+  const [userDto, setUserDto] = useState<UserDto | undefined>();
+
+  useEffect(() => {
+    if (!user) return;
+
+    getUserById(user.id).then(setUserDto).catch(console.error);
+  }, [user]);
+
   const navItems = [
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
     {
@@ -34,12 +49,13 @@ export const Navbar: React.FC = () => {
     },
     {
       to: '/my-bookings',
-      label: isAdmin(user)
-        ? t('layout.navbar.allBookings')
-        : t('layout.navbar.myBookings'),
+      label:
+        userDto?.role === 'ADMIN'
+          ? t('layout.navbar.allBookings')
+          : t('layout.navbar.myBookings'),
       icon: EventNoteSharpIcon,
     },
-    ...(isAdmin(user)
+    ...(userDto?.role === 'ADMIN'
       ? [
           {
             to: '/users',
@@ -53,7 +69,7 @@ export const Navbar: React.FC = () => {
       label: t('layout.navbar.report'),
       icon: AssessmentSharpIcon,
     },
-    ...(isManager(user)
+    ...(userDto?.role === 'MANAGER'
       ? [
           {
             to: '/approvals',
@@ -85,7 +101,7 @@ export const Navbar: React.FC = () => {
   return (
     <LayoutColumn
       mdSpan={3}
-      className="text-text-light fixed left-0 z-20 hidden h-screen min-h-screen w-full flex-col bg-(--color-surface) px-0 pt-20 pb-10 text-base leading-11 tracking-[0.2em] shadow-md sm:text-lg sm:tracking-widest md:flex md:w-[200px] md:max-w-[300px] md:px-0 md:text-xl md:tracking-[0.15em] lg:px-0 lg:text-2xl dark:text-white dark:shadow-black/20"
+      className="text-text-light fixed left-0 z-20 hidden h-screen min-h-screen w-full flex-col bg-(--color-surface) px-0 pt-20 pb-10 text-base leading-11 tracking-[0.2em] shadow-md sm:text-lg sm:tracking-widest md:flex md:w-50 md:max-w-75 md:px-0 md:text-xl md:tracking-[0.15em] lg:px-0 lg:text-2xl dark:text-white dark:shadow-black/20"
     >
       <nav className="flex h-full w-full flex-col justify-between overflow-hidden pt-10">
         <div className="flex w-full flex-col gap-4">
@@ -111,7 +127,7 @@ export const Navbar: React.FC = () => {
               <div className="flex flex-col leading-tight">
                 <div className="tracking-normal">{getFullName(user)}</div>
                 <div className="text-xs tracking-normal text-gray-500 dark:text-gray-400">
-                  {user.role}
+                  {userDto?.role}
                 </div>
               </div>
             ) : (
