@@ -9,11 +9,14 @@ import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { createUserValidationSchema } from '../../user/validation';
 
-// API
-import api, { setAccessToken } from '../../../shared/api';
+// Context
+import { useAuth } from '../context/AuthContext';
 
+// API
+import api from '../../../shared/api';
 
 const LoginForm = () => {
+  const { login } = useAuth();
   const [errors, setErrors] = useState({
     username: '',
     password: '',
@@ -36,27 +39,21 @@ const LoginForm = () => {
     try {
       setLoading(true);
       setServerError('');
-      // TODO: ovo nikako ne moze ovako, plaintext sifra se salje u req
+
       const response = await api.post('/auth/login', {
         username,
         password,
       });
 
-      const { accessToken, refreshToken, username: user, role } = response.data;
+      const { accessToken, refreshToken } = response.data;
 
-      setAccessToken(accessToken);
-      //TODO: ovo nikako ne moze ovako, token se mora spremiti u context ili redux store, a ne u local storage, jer je local storage ranjiv na XSS napade
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-
-      localStorage.setItem('username', user); //TODO user id isto spremi
-      localStorage.setItem('role', role);
+      await login(accessToken, refreshToken);
 
       navigate('/');
     } catch (error: any) {
       if (error.response) {
         setServerError(
-          error.response.data?.message ||
+          error.response.data?.message ??
             t('ui.login.errors.invalidCredentials')
         );
       } else {

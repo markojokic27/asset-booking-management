@@ -1,7 +1,6 @@
 import App from './App';
 import ProtectedLayout from './ProtectedLayout';
 import { createBrowserRouter, redirect } from 'react-router-dom';
-import { initAuth } from '../shared/auth';
 
 import Assets from '../pages/Assets';
 import Bookings from '../pages/Bookings';
@@ -20,7 +19,6 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    loader: initAuth,
     children: [
       {
         index: true,

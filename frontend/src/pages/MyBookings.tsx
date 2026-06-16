@@ -13,7 +13,7 @@ import { MyBookingsTable } from '../features/booking/components/MyBookingsTable'
 // hooks
 import { useBookingCancellation } from '../features/booking/hooks/useBookingCancellation';
 import { useMyBookings } from '../features/booking/hooks/useMyBookings';
-import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { useAuth } from '../features/auth/context/AuthContext';
 import { usePagination } from '../features/user/hooks/usePagination';
 
 // utils
@@ -26,7 +26,7 @@ import { isAdmin } from '../features/user/utilis/users';
 
 export default function MyBookings() {
   const { t } = useTranslation();
-  const { user, isLoading: isUserLoading } = useCurrentUser();
+  const { user, isLoading: isUserLoading } = useAuth();
   const { bookings, loading, error, refetch } = useMyBookings(
     user,
     !isUserLoading && user != null

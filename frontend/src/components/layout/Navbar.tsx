@@ -10,16 +10,28 @@ import HowToRegSharpIcon from '@mui/icons-material/HowToRegSharp';
 import EventNoteSharpIcon from '@mui/icons-material/EventNoteSharp';
 import { AccountCircleSharp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
-import { getFullName, isAdmin, isManager } from '../../features/user/utilis/users';
+import { useAuth } from '../../features/auth/context/AuthContext';
+import {
+  getFullName,
+  isAdmin,
+  isManager,
+} from '../../features/user/utilis/users';
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
-  const { user } = useCurrentUser();
+  const { user } = useAuth();
   const navItems = [
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
-    { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharpIcon },
-    { to: '/bookings', label: t('layout.navbar.bookings'), icon: CalendarTodaySharpIcon },
+    {
+      to: '/categories',
+      label: t('layout.navbar.categories'),
+      icon: DnsSharpIcon,
+    },
+    {
+      to: '/bookings',
+      label: t('layout.navbar.bookings'),
+      icon: CalendarTodaySharpIcon,
+    },
     {
       to: '/my-bookings',
       label: isAdmin(user)
@@ -28,9 +40,19 @@ export const Navbar: React.FC = () => {
       icon: EventNoteSharpIcon,
     },
     ...(isAdmin(user)
-      ? [{ to: '/users', label: t('layout.navbar.users'), icon: PeopleSharpIcon }]
+      ? [
+          {
+            to: '/users',
+            label: t('layout.navbar.users'),
+            icon: PeopleSharpIcon,
+          },
+        ]
       : []),
-    { to: '/report', label: t('layout.navbar.report'), icon: AssessmentSharpIcon },
+    {
+      to: '/report',
+      label: t('layout.navbar.report'),
+      icon: AssessmentSharpIcon,
+    },
     ...(isManager(user)
       ? [
           {
@@ -80,7 +102,10 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="flex w-full flex-col gap-4">
-          <NavLink to="/account-info" className={({ isActive }) => getLinkClass(isActive)}>
+          <NavLink
+            to="/account-info"
+            className={({ isActive }) => getLinkClass(isActive)}
+          >
             <AccountCircleSharp className="mr-3" sx={{ fontSize: 26 }} />
             {user ? (
               <div className="flex flex-col leading-tight">

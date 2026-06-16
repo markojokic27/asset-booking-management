@@ -10,7 +10,7 @@ import { Button } from '../components/ui/Button';
 
 // Hooks
 import { useDepartments } from '../features/department/hooks/useDepartments';
-import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { useAuth } from '../features/auth/context/AuthContext';
 import { ChangePasswordModal } from '../features/user/components/ChangePasswordModal';
 
 // Types
@@ -40,7 +40,7 @@ function getStatusBadgeClass(status: UserDto['status']) {
 
 export default function AccountInfo() {
   const { t } = useTranslation();
-  const { user, isLoading, error } = useCurrentUser();
+  const { user, isLoading, error } = useAuth();
   const { getDepartmentName } = useDepartments();
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 

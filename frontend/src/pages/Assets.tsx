@@ -28,7 +28,7 @@ import { getAllCategories } from '../features/asset-category/api/categoryApi';
 
 // Hooks
 import { usePagination } from '../features/user/hooks/usePagination';
-import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { useAuth } from '../features/auth/context/AuthContext';
 import { isAdmin } from '../features/user/utilis/users';
 
 // Types
@@ -47,7 +47,7 @@ type ModalState =
 
 export default function Assets() {
   const { t } = useTranslation();
-  const { user } = useCurrentUser();
+  const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [modal, setModal] = useState<ModalState>({ type: 'none' });

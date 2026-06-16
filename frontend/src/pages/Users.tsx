@@ -25,7 +25,7 @@ import { getFullName, isAdmin } from '../features/user/utilis/users';
 
 // Custom hooks
 import { useUsers } from '../features/user/hooks/useUsers';
-import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { useAuth } from '../features/auth/context/AuthContext';
 
 // Types
 import type { UserDto } from '../features/user/types';
@@ -34,7 +34,7 @@ type DeleteState = { type: 'none' } | { type: 'delete'; user: UserDto };
 
 export default function Users() {
   // current user
-  const { user, isLoading } = useCurrentUser();
+  const { user, isLoading } = useAuth();
 
   // if the user is not an admin, redirect to the bookings page
   if (!isLoading && !isAdmin(user)) {
@@ -117,18 +117,15 @@ function UsersPage() {
       <div className="mt-6">
         <UsersTable
           data={list.pagedUsers}
-
           // Sorting configuration
           nameSortDir={sorting.nameSortDir}
           onToggleNameSort={sorting.toggleNameSortDir}
-
           // User actions
           onView={(u) => modals.open('view', u)}
           onEdit={(u) => modals.open('edit', u)}
           onBookings={(u) => modals.open('bookings', u)}
           onDelete={(u) => setDeleteState({ type: 'delete', user: u })}
           onReport={(u) => modals.open('report', u)}
-
           // Display loading, error or empty state message
           emptyMessage={
             list.isLoading
@@ -155,16 +152,16 @@ function UsersPage() {
         user={
           selection.activeUser
             ? {
-              id: selection.activeUser.id,
-              name: getFullName(selection.activeUser),
-              email: selection.activeUser.email,
-              username: selection.activeUser.username,
-              role: selection.activeUser.role,
-              status: selection.activeUser.status,
-              departmentId: selection.activeUser.departmentId,
-              managerEmail: selection.activeUser.managerEmail,
-              notes: selection.activeUser.notes,
-            }
+                id: selection.activeUser.id,
+                name: getFullName(selection.activeUser),
+                email: selection.activeUser.email,
+                username: selection.activeUser.username,
+                role: selection.activeUser.role,
+                status: selection.activeUser.status,
+                departmentId: selection.activeUser.departmentId,
+                managerEmail: selection.activeUser.managerEmail,
+                notes: selection.activeUser.notes,
+              }
             : null
         }
       />
@@ -188,9 +185,9 @@ function UsersPage() {
         user={
           selection.activeUser
             ? {
-              id: selection.activeUser.id,
-              fullName: getFullName(selection.activeUser),
-            }
+                id: selection.activeUser.id,
+                fullName: getFullName(selection.activeUser),
+              }
             : null
         }
       />
@@ -202,10 +199,10 @@ function UsersPage() {
         user={
           selection.activeUser
             ? {
-              id: selection.activeUser.id,
-              name: selection.activeUser.name,
-              surname: selection.activeUser.surname,
-            }
+                id: selection.activeUser.id,
+                name: selection.activeUser.name,
+                surname: selection.activeUser.surname,
+              }
             : null
         }
       />

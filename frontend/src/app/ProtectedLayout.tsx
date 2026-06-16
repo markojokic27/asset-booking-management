@@ -1,9 +1,14 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../features/auth/context/AuthContext';
 
 const ProtectedLayout = () => {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const { isAuthenticated, isLoading } = useAuth();
 
-  if (!refreshToken) {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 

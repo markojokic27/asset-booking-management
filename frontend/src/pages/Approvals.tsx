@@ -11,7 +11,7 @@ import { PendingApprovalsTable } from '../features/booking/components/PendingApp
 // hooks
 import { useBookingApproval } from '../features/booking/hooks/useBookingApproval';
 import { usePendingBookings } from '../features/booking/hooks/usePendingBookings';
-import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { useAuth } from '../features/auth/context/AuthContext';
 import { filterPendingBookingsBySearch } from '../features/booking/utilis/approvalFilter';
 import { isManager } from '../features/user/utilis/users';
 
@@ -21,7 +21,7 @@ export default function Approvals() {
   const navigate = useNavigate();
   const { bookingId } = useParams();
 
-  const { user, isLoading } = useCurrentUser();
+  const { user, isLoading } = useAuth();
   const canFetch = !isLoading && user != null && isManager(user);
   const { bookings, loading, error, refetch } = usePendingBookings(user, canFetch);
   const [search, setSearch] = useState('');

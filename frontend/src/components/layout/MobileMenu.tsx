@@ -1,11 +1,14 @@
+// External packages
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
+
+// Components
 import { Button } from '../ui/Button';
 import { Logo } from '../icons/Logo';
 import LanguageSwitcher from '../ui/LanguageSwitcher';
 import ThemeToggle from '../ui/ThemeToggle';
-import { useTranslation } from 'react-i18next';
 import {
   MonitorSharp,
   DnsSharp,
@@ -16,12 +19,18 @@ import {
   HowToRegSharp,
   EventNoteSharp,
 } from '@mui/icons-material';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
-import { getFullName, isAdmin, isManager } from '../../features/user/utilis/users';
+
+// Features
+import { useAuth } from '../../features/auth/context/AuthContext';
+import {
+  getFullName,
+  isAdmin,
+  isManager,
+} from '../../features/user/utilis/users';
 
 export default function MobileMenu() {
   const { t } = useTranslation();
-  const { user } = useCurrentUser();
+  const { user } = useAuth();
   const links = [
     { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharp },
     { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharp },

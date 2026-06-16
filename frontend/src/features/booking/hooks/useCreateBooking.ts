@@ -6,7 +6,7 @@ import { createBooking } from '../api/bookingApi';
 
 // Types
 import type { Filters } from '../types';
-import { useCurrentUser } from '../../user/hooks/useCurrentUser';
+import { useAuth } from '../../auth/context/AuthContext';
 
 export function useCreateBooking({
   assetId,
@@ -26,7 +26,7 @@ export function useCreateBooking({
   availableRecurringDates: string[];
 }) {
   const [isCreating, setIsCreating] = React.useState(false);
-  const { user } = useCurrentUser();
+  const { user } = useAuth();
 
   if (availableRecurringDates.length > 0) {
     console.log(

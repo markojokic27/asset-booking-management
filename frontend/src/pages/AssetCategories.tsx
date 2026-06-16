@@ -23,7 +23,7 @@ import {
 } from '../features/asset-category/api/categoryApi';
 
 // Hooks
-import { useCurrentUser } from '../features/user/hooks/useCurrentUser';
+import { useAuth } from '../features/auth/context/AuthContext';
 import { usePagination } from '../features/user/hooks/usePagination';
 import { isAdmin } from '../features/user/utilis/users';
 
@@ -32,7 +32,7 @@ import AddSharpIcon from '@mui/icons-material/AddSharp';
 
 export default function AssetCategories() {
   const { t } = useTranslation();
-  const { user } = useCurrentUser();
+  const { user } = useAuth();
 
   const [search, setSearch] = useState('');
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
