@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -26,54 +27,55 @@ import com.example.assetbookingmanagement.features.booking.ui.CreateBookingScree
 
 @Composable
 fun NavGraph(isUserLoggedIn: Boolean = false) {
-    val navController = rememberNavController()
-    val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
-    val navBackStackEntry = navController.currentBackStackEntryAsState().value
-    val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar =
-        isBottomNavRoute(currentRoute) ||
-            currentRoute == Routes.ASSET_DETAILS ||
-            currentRoute == Routes.BOOKING_DETAILS ||
-            currentRoute == Routes.APPROVAL_REQUESTS ||
-            currentRoute == Routes.APPROVAL_REQUEST_DETAILS ||
-            currentRoute == Routes.CREATE_BOOKING ||
-            currentRoute == Routes.BOOKING_SUCCESS
+    key(isUserLoggedIn) {
+        val navController = rememberNavController()
+        val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
+        val navBackStackEntry = navController.currentBackStackEntryAsState().value
+        val currentRoute = navBackStackEntry?.destination?.route
+        val showBottomBar =
+            isBottomNavRoute(currentRoute) ||
+                currentRoute == Routes.ASSET_DETAILS ||
+                currentRoute == Routes.BOOKING_DETAILS ||
+                currentRoute == Routes.APPROVAL_REQUESTS ||
+                currentRoute == Routes.APPROVAL_REQUEST_DETAILS ||
+                currentRoute == Routes.CREATE_BOOKING ||
+                currentRoute == Routes.BOOKING_SUCCESS
 
-    val headerTitle = when (currentRoute) {
-        Routes.HOME -> "Home"
-        Routes.ASSETS -> "Assets"
-        Routes.BOOKINGS -> "Bookings"
-        Routes.APPROVAL_REQUESTS -> "Pending Approvals"
-        Routes.APPROVAL_REQUEST_DETAILS -> "Approval request details"
-        Routes.BOOKING_DETAILS -> "Booking details"
-        Routes.PROFILE -> "Profile"
-        Routes.CREATE_BOOKING -> "Create booking"
-        Routes.BOOKING_SUCCESS -> "Booking status"
-        else -> ""
-    }
-    Scaffold(
-        topBar = {
-            if (showBottomBar) {
-                Header(
-                    title = headerTitle,
-                    showBackArrow = currentRoute != Routes.HOME,
-                    onBackClick = {
-                        navController.popBackStack()
-                    }
-                )
-            }
-        },
-        bottomBar = {
-            if (showBottomBar) {
-                BottomNavigationBar(navController = navController)
-            }
+        val headerTitle = when (currentRoute) {
+            Routes.HOME -> "Home"
+            Routes.ASSETS -> "Assets"
+            Routes.BOOKINGS -> "Bookings"
+            Routes.APPROVAL_REQUESTS -> "Pending Approvals"
+            Routes.APPROVAL_REQUEST_DETAILS -> "Approval request details"
+            Routes.BOOKING_DETAILS -> "Booking details"
+            Routes.PROFILE -> "Profile"
+            Routes.CREATE_BOOKING -> "Create booking"
+            Routes.BOOKING_SUCCESS -> "Booking status"
+            else -> ""
         }
-    ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-            modifier = Modifier.padding(innerPadding)
-        ) {
+        Scaffold(
+            topBar = {
+                if (showBottomBar) {
+                    Header(
+                        title = headerTitle,
+                        showBackArrow = currentRoute != Routes.HOME,
+                        onBackClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+            },
+            bottomBar = {
+                if (showBottomBar) {
+                    BottomNavigationBar(navController = navController)
+                }
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                modifier = Modifier.padding(innerPadding)
+            ) {
             composable(Routes.LOGIN) {
                 LoginScreen(
                     onLoginSuccess = {
@@ -304,6 +306,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                     fromDate = backStackEntry.arguments?.getString("fromDate") ?: "-",
                     toDate = backStackEntry.arguments?.getString("toDate") ?: "-"
                 )
+            }
             }
         }
     }

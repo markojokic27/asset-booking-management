@@ -38,6 +38,7 @@ import com.example.assetbookingmanagement.core.ui.format.formatLocalizedDate
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedTime
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -393,11 +394,16 @@ private fun getAvailableHourOptions(
             .toLocalDate()
     }
     val today = LocalDate.now()
-    val currentHour = java.time.LocalTime.now().hour
+    val currentTime = LocalTime.now()
+    val firstAvailableHourToday = if (currentTime.minute == 0 && currentTime.second == 0) {
+        currentTime.hour
+    } else {
+        currentTime.hour + 1
+    }
 
     return (6..22).filter { hour ->
         when {
-            selectedDate == today && hour < currentHour -> false
+            selectedDate == today && hour < firstAvailableHourToday -> false
             minHour != null -> hour > minHour
             else -> true
         }

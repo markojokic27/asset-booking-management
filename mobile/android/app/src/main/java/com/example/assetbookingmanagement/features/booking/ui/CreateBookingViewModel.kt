@@ -308,10 +308,10 @@ private fun toInstant(
 //Generates a list of UTC start-of-day timestamps for each date in the range from startDateTime to endDateTime
 private fun String.toDateMillisRange(endDateTime: String): List<Long> {
     val startDate = Instant.parse(this)
-        .atZone(ZoneOffset.UTC)
+        .atZone(ZoneId.systemDefault())
         .toLocalDate()
     val endDate = Instant.parse(endDateTime)
-        .atZone(ZoneOffset.UTC)
+        .atZone(ZoneId.systemDefault())
         .toLocalDate()
 
     return generateSequence(startDate) { currentDate ->
