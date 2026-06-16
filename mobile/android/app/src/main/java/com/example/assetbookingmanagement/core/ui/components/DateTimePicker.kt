@@ -43,7 +43,8 @@ import java.time.ZoneOffset
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimePicker(
-    dateMillis: Long?,
+    fromDateMillis: Long?,
+    toDateMillis: Long?,
     startHour: Int,
     startMinute: Int,
     endHour: Int,
@@ -51,31 +52,55 @@ fun DateTimePicker(
     hasSelectedStartTime: Boolean = true,
     hasSelectedEndTime: Boolean = true,
     unavailableHours: Set<Int> = emptySet(),
-    onDateSelected: (Long?) -> Unit,
+    onFromDateSelected: (Long?) -> Unit,
+    onToDateSelected: (Long?) -> Unit,
     onStartTimeSelected: (Int, Int) -> Unit,
     onEndTimeSelected: (Int, Int) -> Unit,
     showTimeInputs: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    var showStartDateDialog by rememberSaveable { mutableStateOf(false) }
+    var showFromDateDialog by rememberSaveable { mutableStateOf(false) }
+    var showToDateDialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
     val startHourOptions = getAvailableHourOptions(
-        selectedDateMillis = dateMillis,
+        selectedDateMillis = fromDateMillis,
         minHour = null
     )
     val endHourOptions = getAvailableHourOptions(
-        selectedDateMillis = dateMillis,
+        selectedDateMillis = fromDateMillis,
         minHour = if (hasSelectedStartTime) startHour else null
     )
 
     Column(modifier = modifier.fillMaxWidth()) {
-        DateField(
-            dateValue = dateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-            dateLabel = "Date",
-            dateContentDescription = "Select date",
-            onDateClick = { showStartDateDialog = true }
-        )
+        if (showTimeInputs) {
+            DateField(
+                dateValue = fromDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
+                dateLabel = "Date",
+                dateContentDescription = "Select date",
+                onDateClick = { showFromDateDialog = true }
+            )
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                DateField(
+                    dateValue = fromDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
+                    dateLabel = "From date",
+                    dateContentDescription = "Select from date",
+                    onDateClick = { showFromDateDialog = true },
+                    modifier = Modifier.weight(1f)
+                )
+                DateField(
+                    dateValue = toDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
+                    dateLabel = "To date",
+                    dateContentDescription = "Select to date",
+                    onDateClick = { showToDateDialog = true },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
 
         if (showTimeInputs) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -109,13 +134,24 @@ fun DateTimePicker(
         }
     }
 
-    if (showStartDateDialog) {
+    if (showFromDateDialog) {
         AppDatePickerDialog(
-            initialSelectedDateMillis = dateMillis,
-            onDismiss = { showStartDateDialog = false },
+            initialSelectedDateMillis = fromDateMillis,
+            onDismiss = { showFromDateDialog = false },
             onConfirm = {
-                onDateSelected(it)
-                showStartDateDialog = false
+                onFromDateSelected(it)
+                showFromDateDialog = false
+            }
+        )
+    }
+
+    if (showToDateDialog) {
+        AppDatePickerDialog(
+            initialSelectedDateMillis = toDateMillis,
+            onDismiss = { showToDateDialog = false },
+            onConfirm = {
+                onToDateSelected(it)
+                showToDateDialog = false
             }
         )
     }

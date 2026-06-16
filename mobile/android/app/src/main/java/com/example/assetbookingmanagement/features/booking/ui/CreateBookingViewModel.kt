@@ -34,7 +34,8 @@ data class CreateBookingUiState(
     val approvalRequired: Boolean? = null,
     val availabilityByDate: Map<Long, AvailabilityStatus> = emptyMap(),
     val bookedHoursByDate: Map<Long, Set<Int>> = emptyMap(),
-    val selectedDateMillis: Long? = null,
+    val selectedFromDateMillis: Long? = null,
+    val selectedToDateMillis: Long? = null,
     val startHour: Int = 9,
     val startMinute: Int = 0,
     val endHour: Int = 10,
@@ -107,8 +108,38 @@ class CreateBookingViewModel @Inject constructor(
         }
     }
 
-    fun onDateSelected(dateMillis: Long?) {
-        _uiState.update { it.copy(selectedDateMillis = dateMillis, errorMessage = null) }
+    fun onFromDateSelected(dateMillis: Long?) {
+        _uiState.update { state ->
+            val nextToDateMillis = when {
+                dateMillis == null -> state.selectedToDateMillis
+                state.selectedToDateMillis == null -> dateMillis
+                state.selectedToDateMillis < dateMillis -> dateMillis
+                else -> state.selectedToDateMillis
+            }
+
+            state.copy(
+                selectedFromDateMillis = dateMillis,
+                selectedToDateMillis = nextToDateMillis,
+                errorMessage = null
+            )
+        }
+    }
+
+    fun onToDateSelected(dateMillis: Long?) {
+        _uiState.update { state ->
+            val nextFromDateMillis = when {
+                dateMillis == null -> state.selectedFromDateMillis
+                state.selectedFromDateMillis == null -> dateMillis
+                state.selectedFromDateMillis > dateMillis -> dateMillis
+                else -> state.selectedFromDateMillis
+            }
+
+            state.copy(
+                selectedFromDateMillis = nextFromDateMillis,
+                selectedToDateMillis = dateMillis,
+                errorMessage = null
+            )
+        }
     }
 
     fun onStartTimeSelected(hour: Int, minute: Int) {
@@ -144,41 +175,48 @@ class CreateBookingViewModel @Inject constructor(
         val isHourlyBooking = state.bookingPeriod == "HOUR"
         val startInstant = if (isHourlyBooking) {
             toInstant(
-                dateMillis = state.selectedDateMillis,
+                dateMillis = state.selectedFromDateMillis,
                 hour = state.startHour,
                 minute = state.startMinute
             )
         } else {
             toInstant(
-                dateMillis = state.selectedDateMillis,
+                dateMillis = state.selectedFromDateMillis,
                 hour = 0,
                 minute = 0
             )
         }
         val endInstant = if (isHourlyBooking) {
             toInstant(
-                dateMillis = state.selectedDateMillis,
+                dateMillis = state.selectedFromDateMillis,
                 hour = state.endHour,
                 minute = state.endMinute
             )
         } else {
             toInstant(
-                dateMillis = state.selectedDateMillis,
+                dateMillis = state.selectedToDateMillis,
                 hour = 23,
                 minute = 59
             )
         }
 
         when {
-            state.selectedDateMillis == null -> {
+            state.selectedFromDateMillis == null -> {
                 _uiState.update {
                     it.copy(
                         errorMessage = if (isHourlyBooking) {
-                            "Please select date, from time and to time."
+                            "Select date, from time and to time."
                         } else {
-                            "Please select a date."
+                            "Select from date and to date."
                         }
                     )
+                }
+                return
+            }
+
+            !isHourlyBooking && state.selectedToDateMillis == null -> {
+                _uiState.update {
+                    it.copy(errorMessage = "Select from date and to date.")
                 }
                 return
             }
@@ -192,7 +230,7 @@ class CreateBookingViewModel @Inject constructor(
 
             isHourlyBooking && (!state.hasSelectedStartTime || !state.hasSelectedEndTime) -> {
                 _uiState.update {
-                    it.copy(errorMessage = "Please select from time and to time.")
+                    it.copy(errorMessage = "Select from time and to time.")
                 }
                 return
             }
@@ -238,7 +276,7 @@ class CreateBookingViewModel @Inject constructor(
                         errorMessage = when (error.code()) {
                             401, 403 -> "You aren't authorized to create this booking."
                             409 -> "Selected booking period is already taken."
-                            else -> "Booking failed. Please try again."
+                            else -> "Booking failed. Try again."
                         }
                     )
                 }

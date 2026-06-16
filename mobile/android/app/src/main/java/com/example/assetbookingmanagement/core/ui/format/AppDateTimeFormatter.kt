@@ -64,7 +64,7 @@ fun formatLocalizedDate(
     millis: Long
 ): String =
     Instant.ofEpochMilli(millis)
-        .atZone(ZoneId.systemDefault())
+        .atZone(ZoneId.of("UTC"))
         .toLocalDate()
         .format(dateFormatter())
 

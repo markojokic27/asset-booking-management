@@ -74,15 +74,17 @@ fun CreateBookingScreen(
 
         when (selectedTabIndex) {
             BookingTab.ChooseDate.ordinal -> DateTimePicker(
-                dateMillis = uiState.selectedDateMillis,
+                fromDateMillis = uiState.selectedFromDateMillis,
+                toDateMillis = uiState.selectedToDateMillis,
                 startHour = uiState.startHour,
                 startMinute = uiState.startMinute,
                 endHour = uiState.endHour,
                 endMinute = uiState.endMinute,
                 hasSelectedStartTime = uiState.hasSelectedStartTime,
                 hasSelectedEndTime = uiState.hasSelectedEndTime,
-                unavailableHours = uiState.bookedHoursByDate[uiState.selectedDateMillis].orEmpty(),
-                onDateSelected = viewModel::onDateSelected,
+                unavailableHours = uiState.bookedHoursByDate[uiState.selectedFromDateMillis].orEmpty(),
+                onFromDateSelected = viewModel::onFromDateSelected,
+                onToDateSelected = viewModel::onToDateSelected,
                 onStartTimeSelected = viewModel::onStartTimeSelected,
                 onEndTimeSelected = viewModel::onEndTimeSelected,
                 showTimeInputs = uiState.bookingPeriod == "HOUR"
@@ -90,7 +92,7 @@ fun CreateBookingScreen(
             BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar(
                 availabilityByDate = uiState.availabilityByDate,
                 onDateClick = { dateMillis ->
-                    viewModel.onDateSelected(dateMillis)
+                    viewModel.onFromDateSelected(dateMillis)
                     selectedTabIndex = BookingTab.ChooseDate.ordinal
                 }
             )
