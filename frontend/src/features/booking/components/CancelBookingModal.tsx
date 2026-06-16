@@ -118,6 +118,7 @@ export function CancelBookingModal({
               )}
               <div className="flex flex-wrap items-center justify-end gap-3">
                 <Button
+                  data-testid="keep-booking-button"
                   variant="outline"
                   size="md"
                   onClick={onClose}

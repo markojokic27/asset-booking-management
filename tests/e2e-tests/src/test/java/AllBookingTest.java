@@ -4,6 +4,7 @@ import constants.CommonConstants;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class AllBookingTest extends BaseLogin {
@@ -54,6 +55,21 @@ public class AllBookingTest extends BaseLogin {
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
+    @Test
+    public void cancelBookingConfirm() {
+        myBookingsPage.clickFirstCancelButton();
+        assertTrue(isElementVisible(myBookingsPage.cancelBookingModal));
+        myBookingsPage.confirmCancel();
+        assertFalse(isElementVisible(myBookingsPage.cancelBookingModal));
+    }
+
+    @Test
+    public void cancelBookingKeep() {
+        myBookingsPage.clickFirstCancelButton();
+        assertTrue(isElementVisible(myBookingsPage.cancelBookingModal));
+        myBookingsPage.keepBooking();
+        assertFalse(isElementVisible(myBookingsPage.cancelBookingModal));
+    }
 
 
 }

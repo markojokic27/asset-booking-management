@@ -53,7 +53,7 @@ public class ParkingMapTest extends BaseLogin {
     }
 
     @Test
-    public void selectDateClickSpotAndBook() {
+    public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
         bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
         bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER);
@@ -65,7 +65,7 @@ public class ParkingMapTest extends BaseLogin {
     }
 
     @Test
-    public void selectDateClickSpotAndBookLevel() throws InterruptedException{
+    public void selectDateClickSpotAndBookLevel2() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
         bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
@@ -74,7 +74,6 @@ public class ParkingMapTest extends BaseLogin {
         bookingPage.clickSpotBookButton();
         bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER_LEVEL);
         assertTrue(isElementVisible(bookingPage.spotPopover));
-        Thread.sleep(2000);
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
     }
 

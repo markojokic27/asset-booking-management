@@ -15,6 +15,21 @@ public class MyBookingsPage extends CommonMethods {
     public By inputFromDate = By.id("my-bookings-from-date");
     public By inputToDate   = By.id("my-bookings-to-date");
 
+    public By firstCancelButton = By.cssSelector("[data-testid^='cancel-booking-']");
+    public By cancelBookingModal = By.cssSelector("[role='dialog']");
+    public By confirmCancelButton = By.cssSelector("[data-testid='confirm-cancel-booking-button']");
+    public By keepBookingButton = By.cssSelector("[data-testid='keep-booking-button']");
+    public void clickFirstCancelButton() {
+        clickOnElement(firstCancelButton);
+    }
+
+    public void confirmCancel() {
+        clickOnElement(confirmCancelButton);
+    }
+
+    public void keepBooking() {
+        clickOnElement(keepBookingButton);
+    }
 
 
     public void selectAssetFilter(String asset){
