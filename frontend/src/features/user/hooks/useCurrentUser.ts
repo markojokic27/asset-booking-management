@@ -5,6 +5,8 @@ import { getUserIdFromAccessToken } from '../../../shared/jwt';
 import { getUserById } from '../api/users';
 import type { UserDto } from '../types';
 
+
+// TODO: delete this, not in use
 export function useCurrentUser() {
   const { t } = useTranslation();
   const [user, setUser] = useState<UserDto | null>(null);

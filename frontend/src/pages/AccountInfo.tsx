@@ -1,5 +1,5 @@
 // External packages
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Components
@@ -12,6 +12,7 @@ import { Button } from '../components/ui/Button';
 import { useDepartments } from '../features/department/hooks/useDepartments';
 import { useAuth } from '../features/auth/context/AuthContext';
 import { ChangePasswordModal } from '../features/user/components/ChangePasswordModal';
+import { getUserById } from '../features/user/api/users';
 
 // Types
 import type { UserDto } from '../features/user/types';
@@ -44,6 +45,13 @@ export default function AccountInfo() {
   const { getDepartmentName } = useDepartments();
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
 
+  const [userDto, setUserDto] = useState<UserDto | undefined>();
+
+  useEffect(() => {
+    if (!user) return;
+
+    getUserById(user.id).then(setUserDto).catch(console.error);
+  }, [user]);
   return (
     <LayoutColumn
       span={12}
@@ -72,7 +80,7 @@ export default function AccountInfo() {
         <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6 dark:border-red-900 dark:bg-red-950/30">
           <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
         </div>
-      ) : !user ? (
+      ) : !userDto ? (
         <div className="mt-6 rounded-2xl border border-(--color-table-border) bg-white p-6 shadow-none dark:bg-(--color-surface)">
           <p className="text-sm text-(--color-table-text)">
             {t('account.empty')}
@@ -86,37 +94,37 @@ export default function AccountInfo() {
                 {t('account.sections.profile')}
               </p>
               <h2 className="mt-2 text-xl font-bold text-black dark:text-white">
-                {user.name} {user.surname}
+                {userDto.name} {userDto.surname}
               </h2>
               <p className="mt-1 text-sm text-(--color-table-text)">
-                {user.email}
+                {userDto.email}
               </p>
             </div>
 
             <div className="mt-6 flex-1">
               <InfoRow
                 label={t('account.labels.id')}
-                value={String(user.id)}
+                value={String(userDto.id)}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.firstName')}
-                value={user.name}
+                value={userDto.name}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.lastName')}
-                value={user.surname}
+                value={userDto.surname}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.username')}
-                value={user.username}
+                value={userDto.username}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.email')}
-                value={user.email}
+                value={userDto.email}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
@@ -148,31 +156,34 @@ export default function AccountInfo() {
             <div className="mt-6">
               <BadgeRow
                 label={t('account.labels.role')}
-                value={user.role}
-                badgeClassName={getRoleBadgeClass(user.role)}
+                value={userDto.role}
+                badgeClassName={getRoleBadgeClass(userDto.role)}
                 testId="account-role"
               />
 
               <BadgeRow
                 label={t('account.labels.status')}
-                value={user.status}
-                badgeClassName={getStatusBadgeClass(user.status)}
+                value={userDto.status}
+                badgeClassName={getStatusBadgeClass(userDto.status)}
                 testId="account-status"
               />
 
               <InfoRow
                 label={t('account.labels.department')}
-                value={getDepartmentName(user.departmentId) ?? t('account.common.emptyValue')}
+                value={
+                  getDepartmentName(userDto.departmentId) ??
+                  t('account.common.emptyValue')
+                }
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.managerEmail')}
-                value={user.managerEmail}
+                value={userDto.managerEmail}
                 emptyValue={t('account.common.emptyValue')}
               />
               <InfoRow
                 label={t('account.labels.notes')}
-                value={user.notes ?? t('account.common.emptyValue')}
+                value={userDto.notes ?? t('account.common.emptyValue')}
                 emptyValue={t('account.common.emptyValue')}
               />
             </div>
@@ -180,9 +191,9 @@ export default function AccountInfo() {
         </div>
       )}
 
-      {user && (
+      {userDto && (
         <ChangePasswordModal
-          user={user}
+          user={userDto}
           isOpen={passwordModalOpen}
           onClose={() => setPasswordModalOpen(false)}
         />
