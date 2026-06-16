@@ -104,6 +104,11 @@ public class CommonConstants{
     // Parking
     public static final String FLOOR_LEVEL_MINUS_1 = "-1";
     public static final String FLOOR_LEVEL_MINUS_2 = "-2";
+    public static final String PARKING_TEST_DATE = "2026-06-22";
+    public static final int PARKING_SPOT_NUMBER = 68;
+    public static final int PARKING_SPOT_NUMBER_LEVEL = 8;
+    public static final int PARKING_SPOT_NUMBER121=121;
+
 
     // My bookings list
 

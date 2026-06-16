@@ -21,6 +21,8 @@ export const FloorMinus2: React.FC<Props> = ({ takenSpots = [], onSpotClick }) =
   const spotProps = (num: number) => ({
     onClick: () => onSpotClick?.(num),
     style: { cursor: onSpotClick ? 'pointer' : 'default' },
+    'data-testid': `parking-spot-${num}`
+
   });
 
   return (

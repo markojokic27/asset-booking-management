@@ -122,7 +122,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
               {info.spotNumber}
             </p>
           </div>
-          <button
+          <button data-testid="spot-popover-close-button"
             onClick={onClose}
             className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             aria-label={t('bookings.parkingMap.closeAria')}
@@ -134,7 +134,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
         </div>
 
         <div className="mt-3">
-          <span className={[
+          <span data-testid="parking-spot-status" className={[
             'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
             isTaken ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700',
           ].join(' ')}>
@@ -157,6 +157,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
 
         <div className="mt-4">
           <Button
+            data-testid="spot-book-button"
             className="w-full"
             disabled={isTaken || info.assetId === null || isCreating || noDateSelected}
             onClick={handleBook}
@@ -239,6 +240,7 @@ export const ParkingMap: React.FC<Props> = ({
 
       {isOpen && (
         <div
+          data-testid="spot-popover"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
           role="dialog"

@@ -40,6 +40,29 @@ public class BookingPage extends CommonMethods {
     public By floorLevelMinus2Active = By.cssSelector("[data-testid='level-button--2'].bg-white");
     public By categoryParkingCard = By.cssSelector("[data-testid='category-card-parking']");
 
+    // Parking map - spot popover
+    public By spotPopover = By.cssSelector("[data-testid='spot-popover']");
+    public By parkingSpotStatus = By.cssSelector("[data-testid='parking-spot-status']");
+    public By parkingMapDateInput = By.cssSelector("input[type='date']");
+    public By spotPopoverBookButton = By.cssSelector("[data-testid='spot-book-button']");
+    public By spotPopoverCloseButton = By.cssSelector("[data-testid='spot-popover-close-button']");
+
+    public void closeSpotPopover() {
+        clickOnElement(spotPopoverCloseButton);
+    }
+
+    public void clickSpotBookButton() {
+        clickOnElement(spotPopoverBookButton);
+    }
+
+    public void selectParkingMapDate(String date) {
+        inputDate(parkingMapDateInput, date);
+    }
+
+    public void clickParkingSpot(int spotNumber) {
+        clickOnElement(By.cssSelector("[data-testid='parking-spot-" + spotNumber + "']"));
+    }
+
     // Parking filter
     private By calendarCellLocator(String dateStr) {
         return By.cssSelector("[data-date='" + dateStr + "']");
