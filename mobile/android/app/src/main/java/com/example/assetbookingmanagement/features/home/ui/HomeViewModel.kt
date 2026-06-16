@@ -79,22 +79,17 @@ class HomeViewModel @Inject constructor(
 
             try {
                 val user = userRepository.getUserById(userId)
-                val isAdmin = user.role.equals("ADMIN", ignoreCase = true)
-                val canManageApprovals = isAdmin || user.role.equals("MANAGER", ignoreCase = true)
+                val canManageApprovals = user.role.equals("MANAGER", ignoreCase = true)
 
                 _uiState.update { it.copy(canManageApprovals = canManageApprovals) }
 
                 if (canManageApprovals) {
                     val pendingBookings = bookingRepository.getPendingBookings()
-                    val visiblePendingBookings = if (isAdmin) {
-                        pendingBookings
-                    } else {
-                        val currentUserEmail = user.email.trim().lowercase()
-                        pendingBookings.filter { booking ->
-                            booking.user.managerEmail
-                                ?.trim()
-                                ?.lowercase() == currentUserEmail
-                        }
+                    val currentUserEmail = user.email.trim().lowercase()
+                    val visiblePendingBookings = pendingBookings.filter { booking ->
+                        booking.user.managerEmail
+                            ?.trim()
+                            ?.lowercase() == currentUserEmail
                     }
 
                     _uiState.update {

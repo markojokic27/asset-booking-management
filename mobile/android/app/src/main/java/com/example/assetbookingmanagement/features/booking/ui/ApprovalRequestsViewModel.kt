@@ -60,10 +60,9 @@ class ApprovalRequestsViewModel @Inject constructor(
 
             try {
                 val user = userRepository.getUserById(userId)
-                val isAdmin = user.role.equals("ADMIN", ignoreCase = true)
                 val isManager = user.role.equals("MANAGER", ignoreCase = true)
 
-                if (!isAdmin && !isManager) {
+                if (!isManager) {
                     _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -75,15 +74,11 @@ class ApprovalRequestsViewModel @Inject constructor(
                 }
 
                 val pendingBookings = bookingRepository.getPendingBookings()
-                val visibleBookings = if (isAdmin) {
-                    pendingBookings
-                } else {
-                    val currentUserEmail = user.email.trim().lowercase()
-                    pendingBookings.filter { booking ->
-                        booking.user.managerEmail
-                            ?.trim()
-                            ?.lowercase() == currentUserEmail
-                    }
+                val currentUserEmail = user.email.trim().lowercase()
+                val visibleBookings = pendingBookings.filter { booking ->
+                    booking.user.managerEmail
+                        ?.trim()
+                        ?.lowercase() == currentUserEmail
                 }
 
                 _uiState.update {
