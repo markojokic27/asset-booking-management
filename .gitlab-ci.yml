@@ -455,7 +455,7 @@ backend-dependency-check:
       prefix: maven
     paths:
       - backend/.m2/repository/
-  allow_failure: true         # Don't block dockerize on first runs
+  allow_failure: false         # Don't block dockerize on first runs
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # Auto on nightly schedule
     - if: $CI_COMMIT_BRANCH == "main"         
@@ -508,7 +508,6 @@ osv-scanner:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
     - if: '$CI_COMMIT_BRANCH == "develop"'
-      when: manual
       allow_failure: false
 
 
