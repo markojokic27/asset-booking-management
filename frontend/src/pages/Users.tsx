@@ -36,6 +36,9 @@ export default function Users() {
   // current user
   const { user, isLoading } = useAuth();
 
+  console.log("QQQ", user, isLoading)
+  console
+
   // if the user is not an admin, redirect to the bookings page
   if (!isLoading && !isAdmin(user)) {
     return <Navigate to="/bookings" replace />;

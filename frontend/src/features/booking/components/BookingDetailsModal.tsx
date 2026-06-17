@@ -48,8 +48,9 @@ export function BookingDetailsModal({
     const isValidStatus =
       booking.status === 'APPROVED' || booking.status === 'PENDING';
     const isOwner = currentUserId === booking.user.id;
+    const isPastBooking = new Date() > new Date(booking.bookingEnd);
 
-    return isValidStatus && isOwner;
+    return isValidStatus && isOwner && !isPastBooking;
   };
 
   const cancelBooking = () => {

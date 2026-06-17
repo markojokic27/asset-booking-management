@@ -25,11 +25,11 @@ function userFromToken(token: string): UserDto | null {
     }
 
     const userRole =
-      parsedRole === 'EMPLOYEE' ||
-      parsedRole === 'ADMIN' ||
-      parsedRole === 'MANAGER'
-        ? parsedRole
-        : 'EMPLOYEE';
+      parsedRole === 'ROLE_ADMIN'
+        ? 'ADMIN'
+        : parsedRole === 'ROLE_MANAGER'
+          ? 'MANAGER'
+          : 'EMPLOYEE';
 
     return {
       id: payload.userId ?? payload.sub ?? '',

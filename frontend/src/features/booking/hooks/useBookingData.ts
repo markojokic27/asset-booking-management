@@ -37,7 +37,7 @@ export function useBookingData({ filters }: Props) {
             (c) => c.name === savedCategory
           );
           setSelectedCategory(category ?? categoryRes.content[0]);
-        } else {                      
+        } else {
           if (categoryRes.content.length > 0) {
             setSelectedCategory(categoryRes.content[0]);
           }
@@ -55,9 +55,12 @@ export function useBookingData({ filters }: Props) {
     if (!selectedCategory) return;
     try {
       setLoading(true);
-      const bookingRes = await getAllCategoryBookings(0, 100, selectedCategory.id);
+      const bookingRes = await getAllCategoryBookings(
+        0,
+        100,
+        selectedCategory.id
+      );
       setBookings(bookingRes.content);
-      console.log('Fetched bookings for category', selectedCategory.name, bookingRes.content);
     } catch (err) {
       console.error('Error fetching category bookings:', err);
     } finally {

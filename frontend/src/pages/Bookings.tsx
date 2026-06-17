@@ -1,13 +1,18 @@
+// External packages
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+
+// Components
 import { LayoutColumn } from '../components/layout/Layout';
-import { FiltersBar } from '../features/booking/components/FilterBar';
 import { Button } from '../components/ui/Button';
+import { FiltersBar } from '../features/booking/components/FilterBar';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
 import { BookingTable } from '../features/booking/components/BookingTable';
 import { ParkingMap } from '../features/booking/components/ParkingMap';
 import { OfficeMap } from '../features/booking/components/OfficeMap';
 import { useBookingData } from '../features/booking/hooks/useBookingData';
+
+// Types
 import type { Filters } from '../features/booking/types';
 
 const defaultFilters: Filters = {
@@ -67,7 +72,7 @@ export default function Bookings() {
               setFilters={setFilters}
             />
           )}
-          {selectedCategory?.name === 'Meeting room' && (<OfficeMap/>)}
+          {selectedCategory?.name === 'Meeting room' && <OfficeMap />}
           <Button
             data-testid="reset-filters-button"
             className="border-gray-400 bg-gray-400 hover:border-gray-300 hover:bg-gray-300"
