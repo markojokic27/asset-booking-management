@@ -29,10 +29,10 @@ export function BookingDetailsModal({
   currentUserId,
   refetch,
 }: Props) {
-  if (!booking) return null;
-
-  const { cancel, isCancelling, cancelError, clearCancelError } =
+  const { cancel, isCancelling } =
     useBookingCancellation(refetch);
+
+  if (!booking) return null;
 
   const formatDateTime = (value: string | Date) => {
     const d = new Date(value);

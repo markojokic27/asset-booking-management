@@ -45,19 +45,19 @@ export function PendingApprovalDetailsModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto bg-(--color-modal-overlay) p-4 sm:p-6"
+      className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-label={t('approvals.modal.ariaLabel', { id: booking.id })}
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
     >
-      <div className="flex min-h-full items-center justify-center">
-        <div
-          className="my-auto flex max-h-[calc(100vh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)"
-          onMouseDown={(e) => e.stopPropagation()}
-        >
+      <button
+        type="button"
+        className="fixed inset-0 cursor-default bg-(--color-modal-overlay)"
+        aria-label={t('approvals.modal.closeAria')}
+        onClick={onClose}
+      />
+      <div className="relative z-10 flex min-h-full items-center justify-center">
+        <div className="my-auto flex max-h-[calc(100vh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
           <div className="flex shrink-0 items-center justify-between gap-4 px-6 pt-5 pb-3 sm:px-8 sm:pt-6 sm:pb-4">
             <h2 className="text-2xl font-bold">
               {t('approvals.modal.title', { id: booking.id })}
