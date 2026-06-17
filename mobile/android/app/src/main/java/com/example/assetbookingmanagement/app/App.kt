@@ -36,6 +36,9 @@ fun App(
             }
         }
     } else {
-        NavGraph(isUserLoggedIn = uiState.isUserLoggedIn)
+        NavGraph(
+            isUserLoggedIn = uiState.isUserLoggedIn,
+            onUserLoggedOut = { viewModel.onUserLoggedOut() }
+        )
     }
 }

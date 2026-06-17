@@ -38,4 +38,10 @@ class AppViewModel @Inject constructor(
             }
         }
     }
+
+    fun onUserLoggedOut() {
+        _uiState.update {
+            it.copy(isUserLoggedIn = false)
+        }
+    }
 }

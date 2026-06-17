@@ -27,7 +27,10 @@ import com.example.assetbookingmanagement.features.user.ui.ProfileScreen
 import com.example.assetbookingmanagement.features.booking.ui.CreateBookingScreen
 
 @Composable
-fun NavGraph(isUserLoggedIn: Boolean = false) {
+fun NavGraph(
+    isUserLoggedIn: Boolean = false,
+    onUserLoggedOut: () -> Unit = {}
+) {
     key(isUserLoggedIn) {
         val navController = rememberNavController()
         val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
@@ -259,8 +262,12 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                     },
                     onLogoutSuccess = {
                         navController.navigate(Routes.LOGIN) {
-                            popUpTo(navController.graph.id) { inclusive = true }
+                            popUpTo(navController.graph.id) { 
+                                inclusive = true
+                                saveState = false
+                            }
                         }
+                        onUserLoggedOut()
                     }
                 )
             }
