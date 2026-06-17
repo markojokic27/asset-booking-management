@@ -14,6 +14,7 @@ import com.example.assetbookingmanagement.features.booking.data.BookingRepositor
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
 import com.example.assetbookingmanagement.features.booking.data.CategorySummary
 import com.example.assetbookingmanagement.features.booking.data.UserSummary
+import com.example.assetbookingmanagement.features.user.data.ChangePasswordRequest
 import com.example.assetbookingmanagement.features.user.data.UserApi
 import com.example.assetbookingmanagement.features.user.data.UserRepository
 import com.example.assetbookingmanagement.features.user.data.UserResponse
@@ -362,6 +363,10 @@ class HomeViewModelTest {
         override suspend fun getUserById(id: Long): UserResponse {
             getUserException?.let { throw it }
             return response
+        }
+
+        override suspend fun changePassword(id: Long, request: ChangePasswordRequest) {
+            error("changePassword is not used in HomeViewModel tests.")
         }
     }
 

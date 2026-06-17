@@ -15,6 +15,7 @@ object Routes {
     const val BOOKING_DETAILS =
         "booking_details/{bookingId}?assetName={assetName}&fromDate={fromDate}&toDate={toDate}&status={status}&categoryName={categoryName}&isHourlyBooking={isHourlyBooking}"
     const val PROFILE = "profile"
+    const val CHANGE_PASSWORD = "change_password"
     const val CREATE_BOOKING = "create_booking/{assetId}"
     const val BOOKING_SUCCESS =
         "booking_success?assetName={assetName}&fromDate={fromDate}&toDate={toDate}"

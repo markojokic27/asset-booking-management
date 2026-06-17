@@ -22,6 +22,7 @@ import com.example.assetbookingmanagement.features.booking.ui.BookingSuccessScre
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
 import com.example.assetbookingmanagement.features.booking.ui.ApprovalRequestsScreen
 import com.example.assetbookingmanagement.features.home.ui.HomeScreen
+import com.example.assetbookingmanagement.features.user.ui.ChangePasswordScreen
 import com.example.assetbookingmanagement.features.user.ui.ProfileScreen
 import com.example.assetbookingmanagement.features.booking.ui.CreateBookingScreen
 
@@ -39,7 +40,8 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
                 currentRoute == Routes.APPROVAL_REQUESTS ||
                 currentRoute == Routes.APPROVAL_REQUEST_DETAILS ||
                 currentRoute == Routes.CREATE_BOOKING ||
-                currentRoute == Routes.BOOKING_SUCCESS
+                currentRoute == Routes.BOOKING_SUCCESS ||
+                currentRoute == Routes.CHANGE_PASSWORD
 
         val headerTitle = when (currentRoute) {
             Routes.HOME -> "Home"
@@ -49,6 +51,7 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
             Routes.APPROVAL_REQUEST_DETAILS -> "Approval request details"
             Routes.BOOKING_DETAILS -> "Booking details"
             Routes.PROFILE -> "Profile"
+            Routes.CHANGE_PASSWORD -> "Change password"
             Routes.CREATE_BOOKING -> "Create booking"
             Routes.BOOKING_SUCCESS -> "Booking status"
             else -> ""
@@ -251,10 +254,24 @@ fun NavGraph(isUserLoggedIn: Boolean = false) {
 
             composable(Routes.PROFILE) {
                 ProfileScreen(
+                    onChangePasswordClick = {
+                        navController.navigate(Routes.CHANGE_PASSWORD)
+                    },
                     onLogoutSuccess = {
                         navController.navigate(Routes.LOGIN) {
                             popUpTo(navController.graph.id) { inclusive = true }
                         }
+                    }
+                )
+            }
+
+            composable(Routes.CHANGE_PASSWORD) {
+                ChangePasswordScreen(
+                    onCancelClick = {
+                        navController.popBackStack()
+                    },
+                    onPasswordChanged = {
+                        navController.popBackStack()
                     }
                 )
             }
