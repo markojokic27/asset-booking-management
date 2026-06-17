@@ -97,4 +97,42 @@ class UserDetailsServiceImplTest {
 
         verify(userRepository).findByUsername("ivan.horvat");
     }
+
+    @Test
+    void shouldThrowUsernameNotFoundExceptionWhenUserIsDeleted() {
+        user.setStatus(UserStatusEnum.DELETED);
+        when(userRepository.findByUsername("ivan.horvat")).thenReturn(Optional.of(user));
+
+        assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername("ivan.horvat"));
+    }
+
+    @Test
+    void shouldThrowUsernameNotFoundExceptionWhenUserIsInactive() {
+        user.setStatus(UserStatusEnum.INACTIVE);
+        when(userRepository.findByUsername("ivan.horvat")).thenReturn(Optional.of(user));
+
+        assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername("ivan.horvat"));
+    }
+
+    @Test
+    void shouldThrowUsernameNotFoundExceptionWhenUserLeftCompany() {
+        user.setStatus(UserStatusEnum.LEFT_COMPANY);
+        when(userRepository.findByUsername("ivan.horvat")).thenReturn(Optional.of(user));
+
+        assertThrows(UsernameNotFoundException.class,
+                () -> userDetailsService.loadUserByUsername("ivan.horvat"));
+    }
+
+    @Test
+    void shouldReturnCustomUserDetailsWhenUserIsStudent() {
+        user.setStatus(UserStatusEnum.STUDENT);
+        when(userRepository.findByUsername("ivan.horvat")).thenReturn(Optional.of(user));
+
+        UserDetails result = userDetailsService.loadUserByUsername("ivan.horvat");
+
+        assertThat(result).isNotNull();
+        assertThat(result).isInstanceOf(CustomUserDetails.class);
+    }
 }
