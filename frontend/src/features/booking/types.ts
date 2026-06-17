@@ -60,6 +60,17 @@ export type CreateBookingDto = {
   notes?: string;
 };
 
+export type TimeSlotDto = {
+  bookingStart: string;
+  bookingEnd: string;
+}
+
+export type CreateRecurringBookingDto = {
+  userId: number;
+  assetId: number;
+  timeSlots: TimeSlotDto[];
+  notes?: string;
+}
 export type BookingUpdateDto = {
   status?: BookingStatus;
   bookingStart?: string;

@@ -3,6 +3,7 @@ import * as React from 'react';
 
 // API
 import { createBooking } from '../api/bookingApi';
+import { createRecurringBooking } from '../api/bookingApi';
 
 // Types
 import type { Filters } from '../types';
@@ -28,32 +29,49 @@ export function useCreateBooking({
   const [isCreating, setIsCreating] = React.useState(false);
   const { user } = useAuth();
 
-  if (availableRecurringDates.length > 0) {
-    console.log(
-      'Creating recurring booking with dates:',
-      availableRecurringDates
-    );
-    //TODO new API point
-  }
-
   const handleCreateBooking = React.useCallback(async () => {
-    if (bookingPeriod === 'DAY') {
-      filters.fromHour = '06:00';
-      filters.toHour = '22:00';
-    }
-    if (
-      !filters.fromDate ||
-      !filters.toDate ||
-      !filters.fromHour ||
-      !filters.toHour ||
-      !user?.id
-    ) {
-      console.warn('Missing required fields for booking creation');
+    const userId = user?.id;
+
+    if (!userId) {
+      console.warn('Missing required user id for booking creation');
       return;
     }
 
     try {
       setIsCreating(true);
+
+      if (availableRecurringDates.length > 0) {
+        const timeSlots = availableRecurringDates.map((date) => ({
+          bookingStart: new Date(`${date}T06:00:00`).toISOString(),
+          bookingEnd: new Date(`${date}T22:00:00`).toISOString(),
+        }));
+
+        await createRecurringBooking({
+          userId,
+          assetId,
+          notes,
+          timeSlots,
+        });
+
+        setNotes('');
+        await refetch();
+        return;
+      }
+
+      if (bookingPeriod === 'DAY') {
+        filters.fromHour = '06:00';
+        filters.toHour = '22:00';
+      }
+
+      if (
+        !filters.fromDate ||
+        !filters.toDate ||
+        !filters.fromHour ||
+        !filters.toHour
+      ) {
+        console.warn('Missing required fields for booking creation');
+        return;
+      }
 
       const bookingStart = new Date(
         `${filters.fromDate}T${filters.fromHour}:00`
@@ -62,13 +80,14 @@ export function useCreateBooking({
       const bookingEnd = new Date(`${filters.toDate}T${filters.toHour}:00`);
 
       await createBooking({
-        userId: user.id,
+        userId,
         assetId,
-        status: 'PENDING', //TODO this depends on backend logic - za svaku kategoriju vidi jel triba req, i vidi privilegije
+        status: 'PENDING',
         bookingStart: bookingStart.toISOString(),
         bookingEnd: bookingEnd.toISOString(),
         notes,
       });
+
       setNotes('');
       await refetch();
     } catch (error) {
@@ -76,7 +95,16 @@ export function useCreateBooking({
     } finally {
       setIsCreating(false);
     }
-  }, [assetId, filters, notes, refetch]);
+  }, [
+    assetId,
+    availableRecurringDates,
+    bookingPeriod,
+    filters,
+    notes,
+    refetch,
+    setNotes,
+    user?.id,
+  ]);
 
   return {
     isCreating,

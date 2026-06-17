@@ -3,6 +3,7 @@ import type {
   BookingUpdateDto,
   BookingWithRelations,
   CreateBookingDto,
+  CreateRecurringBookingDto
 } from '../types';
 
 // API
@@ -80,6 +81,15 @@ export const getAllCategoryBookings = async (
 // create booking
 export const createBooking = async (bookingData: CreateBookingDto) => {
   const res = await api.post<CreateBookingDto>('/bookings', bookingData);
+  return res.data;
+};
+
+// create reccuring bookings
+export const createRecurringBooking = async (
+  bookingData: CreateRecurringBookingDto
+) => {
+  const res = await api.post('/bookings/recurring', bookingData);
+
   return res.data;
 };
 
