@@ -59,7 +59,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         {(title != null || headerRight != null) && (
           <div className="flex items-center justify-between gap-4 px-8 pt-6 pb-4">
-            <div className="min-w-0">{title}</div>
+            <div className="min-w-0 w-full">{title}</div>
             {headerRight}
           </div>
         )}

@@ -7,6 +7,7 @@ import { useBookingsByAsset } from '../features/booking/hooks/useBookingByAsset'
 import { useBookingFilters } from '../features/booking/hooks/useBookingFilters';
 import { useBookingAvailability } from '../features/booking/hooks/useBookingAvailability';
 import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
+import { useAuth } from '../features/auth/context/AuthContext';
 
 // Utils
 import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
@@ -32,6 +33,7 @@ import { getAssetById } from '../features/asset/api/assetApi';
 export default function BookingsByAsset() {
   const { assetId } = useParams();
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   const { filters, setFilters, handleCalendarDateClick } = useBookingFilters();
 
@@ -114,7 +116,6 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
-  console.log('FFFF', filters);
   return (
     <LayoutColumn
       span={12}
@@ -214,6 +215,8 @@ export default function BookingsByAsset() {
       <BookingDetailsModal
         booking={selectedBooking}
         onClose={() => setSelectedBooking(null)}
+        currentUserId={user?.id}
+        refetch={refetch}
       />
     </LayoutColumn>
   );

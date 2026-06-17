@@ -1,9 +1,18 @@
+// Components
 import { Modal } from '../../../components/ui/Modal';
+import { Button } from '../../../components/ui/Button';
+
+// Types
 import type { BookingWithRelations } from '../types';
+
+// Hooks
+import { useBookingCancellation } from '../hooks/useBookingCancellation';
 
 type Props = {
   booking: BookingWithRelations | null;
   onClose: () => void;
+  currentUserId: number | undefined;
+  refetch: () => void | Promise<void>;
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -14,8 +23,16 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 // TODO: internationalization and add edit status if user is admin or owner of the booking
-export function BookingDetailsModal({ booking, onClose }: Props) {
+export function BookingDetailsModal({
+  booking,
+  onClose,
+  currentUserId,
+  refetch,
+}: Props) {
   if (!booking) return null;
+
+  const { cancel, isCancelling, cancelError, clearCancelError } =
+    useBookingCancellation(refetch);
 
   const formatDateTime = (value: string | Date) => {
     const d = new Date(value);
@@ -27,11 +44,37 @@ export function BookingDetailsModal({ booking, onClose }: Props) {
     return `${day}.${month}.${year}. ${hours}:${minutes}`;
   };
 
+  const canCancel = () => {
+    const isValidStatus =
+      booking.status === 'APPROVED' || booking.status === 'PENDING';
+    const isOwner = currentUserId === booking.user.id;
+
+    return isValidStatus && isOwner;
+  };
+
+  const cancelBooking = () => {
+    const success = cancel(Number(booking.id));
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={true}
       onClose={onClose}
-      title={<h2 className="text-2xl font-bold">Booking #{booking.id}</h2>}
+      title={
+        <div className="flex w-full items-center justify-between">
+          <h2 className="text-2xl font-bold">Booking #{booking.id}</h2>
+          {canCancel() && (
+            <Button
+              variant="danger"
+              disabled={isCancelling}
+              onClick={cancelBooking}
+            >
+              Cancel
+            </Button>
+          )}
+        </div>
+      }
     >
       <div className="space-y-6">
         <div className="rounded-lg border border-(--color-table-border) p-4">
