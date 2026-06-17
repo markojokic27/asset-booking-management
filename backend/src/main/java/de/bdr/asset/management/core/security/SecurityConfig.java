@@ -1,5 +1,6 @@
 package de.bdr.asset.management.core.security;
 
+import de.bdr.asset.management.core.ratelimit.RateLimitFilter;
 import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,9 +27,14 @@ public class SecurityConfig {
 
     public static final String ADMIN = "ADMIN";
     private final JwtAuthenticationFilter jwtFilter;
+    private final RateLimitFilter rateLimitFilter;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
+    public SecurityConfig(
+            JwtAuthenticationFilter jwtFilter,
+            RateLimitFilter rateLimitFilter
+    ) {
         this.jwtFilter = jwtFilter;
+        this.rateLimitFilter = rateLimitFilter;
     }
 
     @Bean
@@ -160,6 +166,7 @@ public class SecurityConfig {
                 )
                 // JWT filter runs before Spring's username/password filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimitFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 

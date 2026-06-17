@@ -125,3 +125,14 @@ management:
       export:
         otlp:
           endpoint: http://alloy:4318/v1/traces
+
+rate-limit:
+  endpoints:
+    "POST:/v1/auth/login":
+      capacity: 20
+      refill-tokens: 20
+      refill-period: 1m
+    "POST:/v1/auth/refresh":
+      capacity: 30
+      refill-tokens: 30
+      refill-period: 1m
