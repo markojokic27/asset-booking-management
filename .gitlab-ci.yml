@@ -493,10 +493,8 @@ frontend-package-vulnerabilities-check:
 osv-scanner:
   stage: security
   image:
-    name: ghcr.io/google/osv-scanner-action:v2.0.2 #latest stabile
+    name: ghcr.io/google/osv-scanner:v1.9.1 
     # pull_policy: if-not-present
-  # old working version
-  # name: ghcr.io/google/osv-scanner:v1.9.1
     entrypoint: [""]
   script:
     - /osv-scanner --format json -r . > osv-report.json #|| true #when true is ommited, job fails on vulnerability
