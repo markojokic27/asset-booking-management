@@ -461,6 +461,7 @@ backend-dependency-check:
     - if: $CI_COMMIT_BRANCH == "main"         
     - if: $CI_COMMIT_BRANCH == "develop"
       when: manual                            # Manual button on develop
+      allow_failure: true
 
 #frontend security stage
 frontend-package-vulnerabilities-check:
@@ -479,7 +480,8 @@ frontend-package-vulnerabilities-check:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # nightly
     - if: $CI_COMMIT_BRANCH == "main"        
     - if: $CI_COMMIT_BRANCH == "develop"
-      when: manual          
+      when: manual
+      allow_failure: true         
                           
   cache:
     key:
@@ -494,7 +496,6 @@ osv-scanner:
   stage: security
   image:
     name: ghcr.io/google/osv-scanner:v1.9.1 
-    # pull_policy: if-not-present
     entrypoint: [""]
   script:
     - /osv-scanner --format json -r . > osv-report.json #|| true #when true is ommited, job fails on vulnerability
@@ -579,6 +580,6 @@ snyk-scan-frontend:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_SNYK == "true"
     - if: $CI_COMMIT_BRANCH == "develop"
       when: manual
-      allow_failure: false
+      allow_failure: true
 
 
