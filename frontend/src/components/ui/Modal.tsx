@@ -42,17 +42,20 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6"
       role="dialog"
       aria-modal="true"
       aria-label={resolvedAriaLabel}
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
     >
+      <button
+        type="button"
+        className="fixed inset-0 cursor-default bg-(--color-modal-overlay)"
+        aria-label={t('ui.modal.closeAria')}
+        onClick={onClose}
+      />
       <div
         className={twMerge(
-          'w-full overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)',
+          'relative z-10 w-full overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)',
           sizeClassName[size],
           className
         )}

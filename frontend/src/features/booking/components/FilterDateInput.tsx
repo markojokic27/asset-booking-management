@@ -31,11 +31,14 @@ export const FilterDateInput: React.FC<Props> = ({
 
   return (
     <div className={className}>
-      <p className="mb-1 text-sm font-medium text-(--color-table-text)">
+      <label
+        htmlFor={id}
+        className="mb-1 block text-sm font-medium text-(--color-table-text)"
+      >
         {label}
-      </p>
+      </label>
 
-      <div onClick={openDatePicker} className="relative cursor-pointer">
+      <div className="relative">
         <input
           ref={dateRef}
           id={id}
@@ -44,6 +47,7 @@ export const FilterDateInput: React.FC<Props> = ({
           min={min}
           max={max}
           onChange={(e) => onChange(e.target.value)}
+          onClick={openDatePicker}
           className={`date-filter-control h-11 w-full cursor-pointer rounded-lg border-2 border-(--color-table-border) bg-(--color-table-surface) px-3 py-2 text-sm transition outline-none focus:outline-none dark:[&::-webkit-calendar-picker-indicator]:invert ${
             value
               ? 'text-(--color-table-text)'

@@ -1,6 +1,7 @@
 {
   "modal": {
-    "dialogAria": "Dialog"
+    "dialogAria": "Dialog",
+    "closeAria": "Dialog schließen"
   },
   "deleteModal": {
     "closeDialog": "Dialog schließen",
