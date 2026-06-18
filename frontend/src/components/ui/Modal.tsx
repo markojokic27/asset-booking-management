@@ -14,6 +14,8 @@ export type ModalProps = {
   footer?: React.ReactNode;
   headerRight?: React.ReactNode;
   className?: string;
+  testId?: string;
+
 };
 
 const sizeClassName: Record<ModalSize, string> = {
@@ -31,6 +33,7 @@ export const Modal: React.FC<ModalProps> = ({
   footer,
   headerRight,
   className,
+  testId,
 }) => {
   const { t } = useTranslation();
   if (!isOpen) return null;
@@ -54,6 +57,7 @@ export const Modal: React.FC<ModalProps> = ({
         onClick={onClose}
       />
       <div
+        data-testid={testId ?? 'modal-dialog'}
         className={twMerge(
           'relative z-10 w-full overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)',
           sizeClassName[size],

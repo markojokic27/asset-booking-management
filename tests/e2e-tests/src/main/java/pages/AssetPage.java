@@ -15,9 +15,9 @@ public class AssetPage extends CommonMethods {
     public By assetCloseModal = By.cssSelector("[data-testid='close-asset-modal']");
 
     // Edit asset
-    public By assetEditOpenModal = By.cssSelector("[ data-testid='edit-asset-button']");
-    public By assetEditModal = By.cssSelector("[data-testid='asset-modal']");
-    public By assetEditCloseModal = By.cssSelector("[data-testid='close-modal']");
+    public By assetEditOpenModal = By.cssSelector("[data-testid='edit-asset-button']");
+    public By assetEditModal = By.cssSelector("[data-testid='edit-asset-modal']");
+    public By assetEditCloseModal = By.cssSelector("[data-testid='close-edit-modal']");
 
     //View asset
     public By assetViewOpenModal = By.cssSelector("[data-testid='view-asset-button']");
@@ -25,18 +25,15 @@ public class AssetPage extends CommonMethods {
     public By assetViewCloseModal = By.cssSelector("[data-testid='asset-details-close-button']");
 
     //Report asset
-
     public By assetReportOpenModal = By.cssSelector("[data-testid='report-asset-button']");
     public By assetReportCloseModal = By.cssSelector("[data-testid='close-view-modal']");
 
     // Delete asset
-
-    public By asseDeleteOpenModal = By.cssSelector("[ data-testid='delete-asset-button']");
+    public By asseDeleteOpenModal = By.cssSelector("[data-testid='delete-asset-button']");
     public By cancelDeleteButton = By.cssSelector("[data-testid='cancel-delete-button']");
     public By confirmDeleteButton = By.cssSelector("[data-testid='confirm-delete-button']");
 
     // View booking asset
-
     public By assetBookingOpenModal = By.cssSelector("[data-testid='asset-bookings-button']");
     public By assetBookingCloseModal = By.cssSelector("[data-testid='close-asset-bookings-modal']");
 
@@ -58,24 +55,13 @@ public class AssetPage extends CommonMethods {
     public By laptopCategoryCard = By.cssSelector("[data-testid='category-card-laptop']");
 
 
-
-    // Add asset
-    public void assetOpenModal() {
-        clickOnElement(assetOpenModal);
-    }
-
-    public void assetCloseModal(){
-        clickOnElement(assetCloseModal);
-    }
-    public void clickAssetButton(){
-        clickOnElement(assetButton);
-    }
-    public void selectStatus(String status){
+    // Form actions
+    public void selectStatus(String status) {
         selectByVisibleText(assetStatus, status);
     }
 
-    public void selectCategory(String category){
-        clickOnElement(assetCategory);
+    public void selectCategory(String category) {
+        if (category == null || category.isEmpty()) return;
         selectByVisibleText(assetCategory, category);
     }
 
@@ -91,6 +77,30 @@ public class AssetPage extends CommonMethods {
         typeInElement(assetDescriptionField, description);
     }
 
+    private void fillForm(String status, String category, String name, String location, String description) {
+        selectStatus(status);
+        selectCategory(category);
+        typeName(name);
+        typeLocation(location);
+        typeDescription(description);
+    }
+
+
+    // Add asset
+    public void assetOpenModal() {
+        clickOnElement(assetOpenModal);
+    }
+
+    public void assetCloseModal(){
+        clickOnElement(assetCloseModal);
+    }
+
+    public void asset(String status, String category, String name, String location, String description){
+        fillForm(status, category, name, location, description);
+        clickOnElement(assetButton);
+    }
+
+
     // Edit asset
     public void assetEditOpenModal() {
         clickOnElement(assetEditOpenModal);
@@ -104,6 +114,12 @@ public class AssetPage extends CommonMethods {
         clickOnElement(editButton);
     }
 
+    public void editAsset(String status, String category, String name, String location, String description){
+        fillForm(status, category, name, location, description);
+        clickOnElement(editButton);
+    }
+
+
     // View asset
     public void assetViewOpenModal() {
         clickOnElement(assetViewOpenModal);
@@ -113,7 +129,8 @@ public class AssetPage extends CommonMethods {
         clickOnElement(assetViewCloseModal);
     }
 
-    //Report asset
+
+    // Report asset
     public void assetReportOpenModal() {
         clickOnElement(assetReportOpenModal);
     }
@@ -122,8 +139,8 @@ public class AssetPage extends CommonMethods {
         clickOnElement(assetReportCloseModal);
     }
 
-    // Delete asset
 
+    // Delete asset
     public void assetDeleteOpenModal() {
         clickOnElement(asseDeleteOpenModal);
     }
@@ -138,7 +155,6 @@ public class AssetPage extends CommonMethods {
 
 
     // View booking for asset
-
     public void assetBookingOpenModal() {
         clickOnElement(assetBookingOpenModal);
     }
@@ -147,44 +163,19 @@ public class AssetPage extends CommonMethods {
         clickOnElement(assetBookingCloseModal);
     }
 
-    // Toggle deleted assets
 
+    // Toggle deleted assets
     public void clickToggleDeletedAssets() {
         clickOnElement(toggleDeletedAssets);
     }
 
     // Search assets
-     public void searchAssets(String assets){
+    public void searchAssets(String assets){
         typeInElement(searchField, assets);
-     }
+    }
 
     // Asset category filter
-
     public void clickLaptopCategory() {
         clickOnElement(laptopCategoryCard);
     }
-
-
-
-
-
-
-    public void asset(String status, String category, String name, String location, String description){
-        selectStatus(status);
-        selectCategory(category);
-        typeName(name);
-        typeLocation(location);
-        typeDescription(description);
-        clickAssetButton();
-    }
-
-    public void editAsset(String status, String category, String name, String location, String description){
-        selectStatus(status);
-        selectCategory(category);
-        typeName(name);
-        typeLocation(location);
-        typeDescription(description);
-        clickEditButton();
-    }
-
 }

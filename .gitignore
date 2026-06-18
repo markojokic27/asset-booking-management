@@ -6,6 +6,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 backend/target_test-classes/
+out/test/
 
 ### STS ###
 .apt_generated

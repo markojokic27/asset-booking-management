@@ -66,7 +66,7 @@ public class CommonConstants{
     public static final String LONG_ASSET_LOCATION = "r".repeat(256);
     public static final String LONG_DESCRIPTION = "t".repeat(256);
     public static final String CATEGORY="Parking";
-
+    public static final String EMPTY_CATEGORY = "Select category";
     //Asset category
     public static final String VALID_CATEGORY_NAME = "Room";
     public static final String VALID_CATEGORY_DESCRIPTION = "All company rooms ";

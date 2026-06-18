@@ -57,16 +57,15 @@ public class AssetAddModalTest extends BaseLogin {
     }
 
     @Test
-    void assetAddModalWithEmptyCategory() {
+    void assetAddModalWithEmptyCategory(){
         assetPage.asset(
                 CommonConstants.VALID_STATUS,
-                "",
+                CommonConstants.EMPTY_CATEGORY,
                 CommonConstants.VALID_ASSET_NAME,
                 CommonConstants.VALID_LOCATION,
                 CommonConstants.VALID_DESCRIPTION
         );
-
-         assertTrue(isElementVisible(assetPage.assetModal));
+        assertTrue(isElementVisible(assetPage.assetModal));
     }
 
     @Test
@@ -98,8 +97,8 @@ public class AssetAddModalTest extends BaseLogin {
     @Test
     void assetAddModalWithAllEmptyFields() {
         assetPage.asset(
-                "",
-                "",
+                CommonConstants.VALID_STATUS,
+                CommonConstants.EMPTY_CATEGORY,
                 "",
                 "",
                 ""
