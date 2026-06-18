@@ -24,6 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
+import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
+import com.example.assetbookingmanagement.core.ui.components.AppMessageState
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 
 @Composable
@@ -47,16 +49,13 @@ fun AssetDetailsScreen(
     ) {
         when {
             uiState.isLoading -> {
-                Text(
-                    text = "Loading asset details...",
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                AppLoadingState()
             }
 
             uiState.errorMessage != null -> {
-                Text(
-                    text = uiState.errorMessage ?: "",
-                    color = MaterialTheme.colorScheme.error
+                AppMessageState(
+                    title = "Couldn't load asset details",
+                    message = uiState.errorMessage.orEmpty()
                 )
             }
 

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -16,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
+import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
+import com.example.assetbookingmanagement.core.ui.components.AppMessageState
 
 @Composable
 fun BookingsScreen(
@@ -38,7 +40,7 @@ fun BookingsScreen(
                     isLoading = uiState.isLoading,
                     errorMessage = uiState.errorMessage,
                     bookings = uiState.myBookings,
-                    emptyMessage = "No current or upcoming bookings found.",
+                    emptyMessage = "No bookings.",
                     onBookingClick = onBookingClick
                 )
             }
@@ -48,7 +50,7 @@ fun BookingsScreen(
                     isLoading = uiState.isLoading,
                     errorMessage = uiState.errorMessage,
                     bookings = uiState.historyBookings,
-                    emptyMessage = "No bookings found.",
+                    emptyMessage = "No bookings.",
                     onBookingClick = onBookingClick
                 )
             }
@@ -66,15 +68,18 @@ private fun BookingListContent(
 ) {
     when {
         isLoading -> {
-            Text(text = "Loading bookings...")
+            AppLoadingState()
         }
 
         errorMessage != null -> {
-            Text(text = errorMessage)
+            AppMessageState(
+                title = "Couldn't load bookings",
+                message = errorMessage
+            )
         }
 
         bookings.isEmpty() -> {
-            Text(text = emptyMessage)
+            AppEmptyState(text = emptyMessage)
         }
 
         else -> {

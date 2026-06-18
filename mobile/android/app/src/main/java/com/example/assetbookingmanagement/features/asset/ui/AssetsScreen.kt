@@ -30,6 +30,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
+import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
+import com.example.assetbookingmanagement.core.ui.components.AppMessageState
 
 @Composable
 fun AssetsScreen(
@@ -85,16 +88,13 @@ fun AssetsScreen(
 
             when {
                 uiState.isLoading -> {
-                    Text(
-                        text = "Loading asset...",
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                    AppLoadingState()
                 }
 
                 uiState.errorMessage != null -> {
-                    Text(
-                        text = uiState.errorMessage ?: "",
-                        color = MaterialTheme.colorScheme.error
+                    AppMessageState(
+                        title = "Couldn't load assets",
+                        message = uiState.errorMessage.orEmpty()
                     )
                 }
 
@@ -115,10 +115,7 @@ fun AssetsScreen(
                     }
                 }
                 else -> {
-                    Text(
-                        text = "No assets found.",
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                    AppEmptyState(text = "No assets found.")
                 }
             }
         }

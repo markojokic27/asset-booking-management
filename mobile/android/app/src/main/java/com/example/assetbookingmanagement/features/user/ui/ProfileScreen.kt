@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.BorderStroke
+import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
+import com.example.assetbookingmanagement.core.ui.components.AppMessageState
 import com.example.assetbookingmanagement.core.ui.components.DetailsRow
 import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
 import com.example.assetbookingmanagement.core.ui.components.RoleBadge
@@ -57,18 +59,13 @@ fun ProfileScreen(
     ) {
         when {
             uiState.isLoading -> {
-                Text(
-                    text = "Loading...",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                AppLoadingState()
             }
 
             uiState.errorMessage != null -> {
-                Text(
-                    text = uiState.errorMessage.orEmpty(),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyLarge
+                AppMessageState(
+                    title = "Couldn't load profile",
+                    message = uiState.errorMessage.orEmpty()
                 )
             }
 

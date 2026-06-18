@@ -2,9 +2,7 @@ package com.example.assetbookingmanagement.features.booking.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.core.ui.components.AppCard
+import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
+import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
+import com.example.assetbookingmanagement.core.ui.components.AppMessageState
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingPeriod
 
@@ -36,15 +37,18 @@ fun ApprovalRequestsScreen(
     ) {
         when {
             uiState.isLoading -> {
-                Text(text = "Loading approval requests...")
+                AppLoadingState()
             }
 
             uiState.errorMessage != null -> {
-                Text(text = uiState.errorMessage ?: "")
+                AppMessageState(
+                    title = "Couldn't load requests",
+                    message = uiState.errorMessage.orEmpty()
+                )
             }
 
             uiState.requests.isEmpty() -> {
-                Text(text = "No pending requests.")
+                AppEmptyState(text = "No pending requests.")
             }
 
             else -> {
