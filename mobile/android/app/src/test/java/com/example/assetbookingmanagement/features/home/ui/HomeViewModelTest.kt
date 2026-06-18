@@ -340,7 +340,16 @@ class HomeViewModelTest {
         ): BookingListResponse {
             getBookingsCalls++
             getBookingsException?.let { throw it }
-            return response
+
+            val filteredContent = response.content.filter { booking ->
+                val matchesUser = userId == null || booking.user.id == userId
+                val matchesAsset = assetId == null || booking.asset.id == assetId
+                val matchesStatus = status == null || booking.status.equals(status, ignoreCase = true)
+
+                matchesUser && matchesAsset && matchesStatus
+            }
+
+            return response.copy(content = filteredContent.take(size))
         }
 
         override suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
