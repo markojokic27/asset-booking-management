@@ -35,6 +35,7 @@ import de.bdr.asset.management.user.UserRepository;
 import de.bdr.asset.management.user.UserStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Implementation of Booking Service
@@ -44,6 +45,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
+
+    @Value("${app.frontend.base-url}") // Spring resolves this at startup
+    private String frontendBaseUrl;
+
     private final BookingRepository repository;
     private final BookingMapper mapper;
     private final UserRepository userRepository;
@@ -56,7 +61,8 @@ public class BookingServiceImpl implements BookingService {
         return Instant.now(clock);
     }
 
-    private record BookingValidationContext(User user, Asset asset) {}
+    private record BookingValidationContext(User user, Asset asset) {
+    }
 
     /**
      * Create single booking in DB.
@@ -79,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
         boolean requiresApproval = category.isApproval() && !isPrivilegedUser;
 
         Booking booking = mapper.toEntity(bookingRequest);
-        
+
         booking.setUser(user);
         booking.setAsset(asset);
 
@@ -89,14 +95,13 @@ public class BookingServiceImpl implements BookingService {
 
         if (requiresApproval) {
 
-            String approvalLink = "http://localhost:3000/approvals/" + booking.getId();
-
+            String approvalLink = frontendBaseUrl + "/approvals/" + booking.getId();
+            log.debug(">>> APPROVAL LINK BEING SENT: {}", approvalLink);
             emailService.sendApprovalEmail(
                     user.getManagerEmail(),
                     asset.getName(),
                     user.getName() + " " + user.getSurname(),
-                    approvalLink
-            );
+                    approvalLink);
         }
 
         return mapper.toResponse(booking);
@@ -126,7 +131,7 @@ public class BookingServiceImpl implements BookingService {
         List<Booking> bookingsToSave = new ArrayList<>();
 
         for (TimeSlotDTO slot : bookingRequest.timeSlots()) {
-            
+
             Booking booking = new Booking();
             booking.setUser(user);
             booking.setAsset(asset);
@@ -146,14 +151,13 @@ public class BookingServiceImpl implements BookingService {
                     .map(booking -> String.valueOf(booking.getId()))
                     .collect(Collectors.joining(","));
 
-            String approvalLink = "http://localhost:3000/approvals/bulk?ids=" + idsParam;
+            String approvalLink = frontendBaseUrl + "/approvals/bulk?ids=" + idsParam;
 
             emailService.sendApprovalEmail(
                     user.getManagerEmail(),
                     asset.getName() + " (Multiple Dates)",
                     user.getName() + " " + user.getSurname(),
-                    approvalLink
-            );
+                    approvalLink);
         }
 
         return savedBookings.stream()
@@ -191,7 +195,7 @@ public class BookingServiceImpl implements BookingService {
     /**
      * Update and return a specific booking.
      *
-     * @param id - a Long id
+     * @param id             - a Long id
      * @param bookingRequest - an BookingUpdateDTO record
      * @return a BookingResponseDTO record
      */
@@ -244,8 +248,7 @@ public class BookingServiceImpl implements BookingService {
         emailService.sendStatusNotificationEmail(
                 booking.getUser().getEmail(),
                 booking.getAsset().getName(),
-                booking.getStatus().name()
-        );
+                booking.getStatus().name());
 
         return mapper.toResponse(booking);
     }
@@ -267,8 +270,7 @@ public class BookingServiceImpl implements BookingService {
         emailService.sendStatusNotificationEmail(
                 booking.getUser().getEmail(),
                 booking.getAsset().getName(),
-                booking.getStatus().name()
-        );
+                booking.getStatus().name());
 
         return mapper.toResponse(booking);
     }
@@ -298,73 +300,62 @@ public class BookingServiceImpl implements BookingService {
                     .atZone(ZoneId.systemDefault())
                     .toInstant();
         }
-        
+
         GeneralReportProjection stats = repository.getGeneralStats(
-            fromDate,
-            toDate,
-            filter.getUserId(),
-            filter.getAssetId()
-        );
+                fromDate,
+                toDate,
+                filter.getUserId(),
+                filter.getAssetId());
 
-        List<TopUserBookingCountDTO> topUsers =
-                repository.getTopUsers(
-                    fromDate,
-                    toDate,
-                    filter.getAssetId()
-                )
-                        .stream()
-                        .map(p -> new TopUserBookingCountDTO(
-                                p.getUserId(),
-                                p.getFullName(),
-                                p.getBookingCount()
-                        ))
-                        .toList();
+        List<TopUserBookingCountDTO> topUsers = repository.getTopUsers(
+                fromDate,
+                toDate,
+                filter.getAssetId())
+                .stream()
+                .map(p -> new TopUserBookingCountDTO(
+                        p.getUserId(),
+                        p.getFullName(),
+                        p.getBookingCount()))
+                .toList();
 
-        List<TopAssetBookingCountDTO> topAssets =
-                repository.getTopAssets(
-                    fromDate,
-                    toDate,
-                    filter.getUserId()
-                )
-                        .stream()
-                        .map(p -> new TopAssetBookingCountDTO(
-                                p.getAssetId(),
-                                p.getAssetName(),
-                                p.getBookingCount()
-                        ))
-                        .toList();
+        List<TopAssetBookingCountDTO> topAssets = repository.getTopAssets(
+                fromDate,
+                toDate,
+                filter.getUserId())
+                .stream()
+                .map(p -> new TopAssetBookingCountDTO(
+                        p.getAssetId(),
+                        p.getAssetName(),
+                        p.getBookingCount()))
+                .toList();
 
-        List<MonthlyBookingStatsDTO> monthlyStats =
-            repository.getMonthlyStats(
-                    fromDate,
-                    toDate,
-                    filter.getUserId(),
-                    filter.getAssetId()
-            )
-            .stream()
-            .map(p -> new MonthlyBookingStatsDTO(
-                    p.getYear(),
-                    p.getMonth(),
-                    p.getTotalBookingsCount(),
-                    p.getTotalCompletedBookingCount(),
-                    p.getTotalCancelledBookingCount(),
-                    p.getTotalPendingBookingCount(),
-                    p.getTotalApprovedBookingCount(),
-                    p.getTotalRejectedBookingCount()
-            ))
-            .toList();
+        List<MonthlyBookingStatsDTO> monthlyStats = repository.getMonthlyStats(
+                fromDate,
+                toDate,
+                filter.getUserId(),
+                filter.getAssetId())
+                .stream()
+                .map(p -> new MonthlyBookingStatsDTO(
+                        p.getYear(),
+                        p.getMonth(),
+                        p.getTotalBookingsCount(),
+                        p.getTotalCompletedBookingCount(),
+                        p.getTotalCancelledBookingCount(),
+                        p.getTotalPendingBookingCount(),
+                        p.getTotalApprovedBookingCount(),
+                        p.getTotalRejectedBookingCount()))
+                .toList();
 
         return new GeneralReportResponseDTO(
-            stats.getTotalBookingsCount(),
-            stats.getTotalCompletedBookingCount(),
-            stats.getTotalCancelledBookingCount(),
-            stats.getTotalPendingBookingCount(),
-            stats.getTotalApprovedBookingCount(),
-            stats.getTotalRejectedBookingCount(),
-            topUsers,
-            topAssets,
-            monthlyStats
-        );
+                stats.getTotalBookingsCount(),
+                stats.getTotalCompletedBookingCount(),
+                stats.getTotalCancelledBookingCount(),
+                stats.getTotalPendingBookingCount(),
+                stats.getTotalApprovedBookingCount(),
+                stats.getTotalRejectedBookingCount(),
+                topUsers,
+                topAssets,
+                monthlyStats);
     }
 
     private BookingValidationContext validateAndGetContext(Long requestedUserId, Long assetId) {
@@ -375,13 +366,13 @@ public class BookingServiceImpl implements BookingService {
 
         List<UserStatusEnum> validUserStatuses = List.of(
                 UserStatusEnum.ACTIVE,
-                UserStatusEnum.STUDENT
-        );
+                UserStatusEnum.STUDENT);
         User user = userRepository.findByIdAndStatusIn(targetUserId, validUserStatuses)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + targetUserId));
 
         Asset asset = assetRepository.findByIdAndStatus(assetId, AssetStatusEnum.ACTIVE)
-                .orElseThrow(() -> new ResourceNotFoundException("Asset not found with id: " + assetId + " and status ACTIVE"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Asset not found with id: " + assetId + " and status ACTIVE"));
 
         return new BookingValidationContext(user, asset);
     }

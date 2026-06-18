@@ -8,3 +8,6 @@ springdoc:
     enabled: false
   swagger-ui:
     enabled: false
+app:
+  frontend:
+    base-url: ${BASE_URL}
