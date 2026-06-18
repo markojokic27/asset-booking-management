@@ -29,65 +29,49 @@ import { Input } from '../components/ui/Input';
 import type { BookingWithRelations } from '../features/booking/types';
 import { getCategoryById } from '../features/asset-category/api/categoryApi';
 
-// TODO: internationalization
-
 export default function BookingsByAsset() {
   const { assetId } = useParams();
   const { t } = useTranslation();
   const { user } = useAuth();
 
   const { filters, setFilters, handleCalendarDateClick } = useBookingFilters();
-
   const { bookings, loading, error, refetch } = useBookingsByAsset(assetId!);
 
   const assetFromBookings = bookings?.[0]?.asset;
 
-  const [fetchedAsset, setFetchedAsset] = React.useState<any>(null);
+  const [fetchedAsset, setFetchedAsset] = React.useState<Awaited<
+    ReturnType<typeof getAssetById>
+  > | null>(null);
   const [category, setCategory] = React.useState<any>(null);
-
-  const asset = assetFromBookings ?? fetchedAsset;
-
-  React.useEffect(() => {
-    if (assetFromBookings || !assetId) return;
-
-    getAssetById(assetId)
-      .then(setFetchedAsset)
-      .catch(() => setFetchedAsset(null));
-  }, [assetFromBookings, assetId]);
-
-  React.useEffect(() => {
-    if (!asset?.category && asset?.categoryId) {
-      getCategoryById(asset.categoryId)
-        .then(setCategory)
-        .catch(() => setCategory(null));
-    }
-  }, [asset?.categoryId]);
-
-  const resolvedCategory = React.useMemo(() => {
-    if (asset?.category) return asset.category;
-    return category;
-  }, [asset?.category, category]);
-
-  const bookingPeriod: 'HOUR' | 'DAY' =
-    resolvedCategory?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
-
-  React.useEffect(() => {
-    if (assetFromBookings || !assetId) return;
-
-    getAssetById(assetId)
-      .then(setFetchedAsset)
-      .catch(() => setFetchedAsset(null));
-  }, [assetFromBookings, assetId]);
-
   const [notes, setNotes] = React.useState('');
   const [selectedBooking, setSelectedBooking] =
     React.useState<BookingWithRelations | null>(null);
   const [visibleMonth, setVisibleMonth] = React.useState(new Date());
 
-  const recurringDates = getDatesForWeekdays(
-    visibleMonth,
-    filters.selectedWeekdays
-  );
+  const asset = assetFromBookings ?? fetchedAsset;
+
+  // 1. fetch asset ako nema bookinga
+  React.useEffect(() => {
+    if (assetFromBookings || !assetId) return;
+    getAssetById(assetId)
+      .then(setFetchedAsset)
+      .catch(() => setFetchedAsset(null));
+  }, [assetFromBookings, assetId]);
+
+  // 2. fetch kategoriju ako asset nema category objekt
+  React.useEffect(() => {
+    if (!asset?.categoryId || asset?.category) return;
+    getCategoryById(asset.categoryId)
+      .then(setCategory)
+      .catch(() => setCategory(null));
+  }, [asset?.categoryId, asset?.category]);
+
+  const resolvedCategory = asset?.category ?? category;
+  const bookingPeriod: 'HOUR' | 'DAY' =
+    resolvedCategory?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
+
+  const recurringDates = getDatesForWeekdays(visibleMonth, filters.selectedWeekdays);
+
   const availableRecurringDates = React.useMemo(
     () => getAvailableRecurringDates(recurringDates, bookings),
     [recurringDates, bookings]
@@ -98,13 +82,10 @@ export default function BookingsByAsset() {
     [bookings]
   );
 
-  const bookingPeriod = asset?.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
-
   const isButtonDisabled = useBookingAvailability({
     assetStatus: asset?.status,
-    filters: filters,
+    filters,
     bookings,
-    bookingPeriod,
     bookingPeriod,
     reccuringDates: filters.selectedWeekdays,
     availableRecurringDates,
@@ -114,19 +95,11 @@ export default function BookingsByAsset() {
     assetId: Number(assetId),
     notes,
     setNotes,
-    filters: filters,
+    filters,
     refetch,
     bookingPeriod,
-    availableRecurringDates: availableRecurringDates,
+    availableRecurringDates,
   });
-
-  if (!asset || !resolvedCategory) {
-    return (
-      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
-        <div className="pt-35">Loading asset details...</div>
-      </LayoutColumn>
-    );
-  }
 
   if (loading) {
     return (
@@ -135,6 +108,7 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
+
   if (error) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
@@ -144,6 +118,15 @@ export default function BookingsByAsset() {
       </LayoutColumn>
     );
   }
+
+  if (!asset) {
+    return (
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
+        <div className="pt-35">Asset doesnt have booking history.</div>
+      </LayoutColumn>
+    );
+  }
+
   return (
     <LayoutColumn
       span={12}
@@ -156,7 +139,6 @@ export default function BookingsByAsset() {
           <h1 className="text-3xl font-black text-black dark:text-white">
             {asset.name}
           </h1>
-
           <span
             className={`rounded px-3 py-1 text-center text-sm font-medium ${
               asset.status === 'ACTIVE'
@@ -176,13 +158,14 @@ export default function BookingsByAsset() {
 
       <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
-          variant={asset.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAYS'}
+          variant={bookingPeriod === 'HOUR' ? 'HOUR' : 'DAYS'}
           filters={filters}
           setFilters={setFilters}
           showSearch={false}
           className="mt-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2"
         />
       </div>
+
       <div className="mb-6 flex items-end gap-4">
         <div className="flex w-full flex-col">
           <p className="mb-1 text-sm font-medium text-(--color-table-text)">
@@ -206,7 +189,8 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
-      {asset.category?.name === 'Parking' && ( //TODO - allow only to privileged users
+
+      {resolvedCategory?.name === 'Parking' && (
         <RecurringDaysSelector
           selectedDays={filters.selectedWeekdays}
           onChange={(days) =>
@@ -221,6 +205,7 @@ export default function BookingsByAsset() {
           }
         />
       )}
+
       <AvailabilityCalendar
         events={calendarEvents}
         selectedFromDate={filters.fromDate}
@@ -235,7 +220,7 @@ export default function BookingsByAsset() {
             selectedWeekdays: [],
           }))
         }
-        variant={asset.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
+        variant={bookingPeriod}
         onMonthChange={setVisibleMonth}
         availableRecurringDates={availableRecurringDates}
       />
