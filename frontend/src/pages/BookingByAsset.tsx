@@ -27,6 +27,7 @@ import { Input } from '../components/ui/Input';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
+import { getCategoryById } from '../features/asset-category/api/categoryApi';
 
 // TODO: internationalization
 
@@ -40,11 +41,25 @@ export default function BookingsByAsset() {
   const { bookings, loading, error, refetch } = useBookingsByAsset(assetId!);
 
   const assetFromBookings = bookings?.[0]?.asset;
+
   const [fetchedAsset, setFetchedAsset] = React.useState<Awaited<
     ReturnType<typeof getAssetById>
   > | null>(null);
 
+  const [category, setCategory] = React.useState<any>(null);
+
   const asset = assetFromBookings ?? fetchedAsset;
+
+  React.useEffect(() => {
+    if (!asset?.category && asset?.categoryId) {
+      getCategoryById(asset.categoryId)
+        .then(setCategory)
+        .catch(() => setCategory(null));
+    }
+  }, [asset]);
+  const resolvedCategory = asset?.category ?? category;
+  const bookingPeriod =
+    resolvedCategory?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
 
   React.useEffect(() => {
     if (assetFromBookings || !assetId) return;
@@ -72,8 +87,6 @@ export default function BookingsByAsset() {
     () => mapBookingsToCalendarEvents(bookings),
     [bookings]
   );
-  const bookingPeriod =
-    asset?.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
 
   const isButtonDisabled = useBookingAvailability({
     assetStatus: asset?.status,
@@ -149,7 +162,7 @@ export default function BookingsByAsset() {
 
       <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
-          variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAYS'}
+          variant={bookingPeriod}
           filters={filters}
           setFilters={setFilters}
           showSearch={false}
@@ -179,7 +192,7 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
-      {asset.category.name === 'Parking' && ( //TODO - allow only to privileged users
+      {asset?.category?.name === 'Parking' && ( //TODO - allow only to privileged users
         <RecurringDaysSelector
           selectedDays={filters.selectedWeekdays}
           onChange={(days) =>
@@ -208,7 +221,7 @@ export default function BookingsByAsset() {
             selectedWeekdays: [],
           }))
         }
-        variant={asset.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
+        variant={bookingPeriod}
         onMonthChange={setVisibleMonth}
         availableRecurringDates={availableRecurringDates}
       />

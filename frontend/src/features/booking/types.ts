@@ -37,6 +37,7 @@ export type BookingWithRelations = BookingDto & {
     managerEmail: string;
   };
   asset: {
+    categoryId: number;
     id: number;
     name: string;
     category: {
