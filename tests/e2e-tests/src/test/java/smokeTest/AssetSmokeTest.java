@@ -32,6 +32,7 @@ public class AssetSmokeTest extends BaseLogin {
 
             assertTrue(waitForUrlContains(CommonConstants.ASSETS_URL));
         }
-        
+
+
 
 }

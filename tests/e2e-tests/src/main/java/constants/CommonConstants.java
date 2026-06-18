@@ -24,8 +24,8 @@ public class CommonConstants{
     public static final String WRONG_PASSWORD="pass.1234";
     public static final String EMPLOYEE_USERNAME="user_employee";
     public static final String EMPLOYEE_PASS="employee123";
-    public static final String MANAGER_USERNAME="user_manager";
-    public static final String MANAGER_PASS="manager123";
+    public static final String MANAGER_USERNAME="mBanovic";
+    public static final String MANAGER_PASS="mladen123";
     public static final String USERNAME="aMustapic";
     public static final String PASS="andela1234";
     public static final String NEW_PASS="andela123";
@@ -100,18 +100,12 @@ public class CommonConstants{
     public static final String SEARCH_CATEGORY="laptop";
 
     // Booking
-    public static final String FUTURE_DATE_FROM = "2026-08-03";
-    public static final String FUTURE_DATE_TO="2026-08-31";
-    public static final String DATE_FUTURE= "2026-06-28";
-    public static final String PAST_DATE = "2026-05-01";
-    public static final String DATE="25.6.2026.";
-    public static final String FROM_HOUR = "09:00";
-    public static final String TO_HOUR = "11:00";
+    public static final String FUTURE_DATE_FROM = "2026-07-12";
+    public static final String FUTURE_DATE_TO="2026-07-31";
+    public static final String DATE_FUTURE= "2026-06-29";
+    public static final String DATE="2026-06-25";
     public static final String BOOKED_ASSET_ID = "1";
 
-    // Approvals booking
-
-    public static final Integer APPROVALS_ID=17;
 
     // Parking
     public static final String FLOOR_LEVEL_MINUS_1 = "-1";

@@ -59,7 +59,7 @@ public class AssetCategoryPage extends CommonMethods {
     }
 
     public void typeBookingPeriod(String bookingPeriod) {
-        typeInElement(categoryBookingPeriodField, bookingPeriod);
+        selectByVisibleText(categoryBookingPeriodField, bookingPeriod);
     }
 
     public void clickCategoryApproval() {
@@ -102,7 +102,7 @@ public class AssetCategoryPage extends CommonMethods {
     }
 
     public void typeEditBookingPeriod(String bookingPeriod) {
-        typeInElement(categoryEditBookingPeriodField, bookingPeriod);
+        selectByVisibleText(categoryEditBookingPeriodField, bookingPeriod);
     }
 
     public void clickEditCategoryApproval() {

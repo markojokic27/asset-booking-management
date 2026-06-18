@@ -30,7 +30,7 @@ public class BookingPage extends CommonMethods {
     public By calendarPrev = By.cssSelector(".fc-prev-button");
     public By calendarTitle = By.cssSelector(".fc-toolbar-title");
 
-    public By meetingRoomCategoryCard = By.cssSelector("[data-testid='category-card-meeting room']");
+    public By itEquipmentCategoryCard = By.cssSelector("[data-testid='category-card-it equipment']");
 
     // Parking map
     public By parkingMapButton = By.cssSelector("[data-testid='parking-map-button']");
@@ -139,8 +139,8 @@ public class BookingPage extends CommonMethods {
     }
 
     // Meeting room
-    public void clickMeetingRoomCategory() {
-        clickOnElement(meetingRoomCategoryCard);
+    public void clickitEquipmentCategory() {
+        clickOnElement(itEquipmentCategoryCard);
     }
 
     // Parking
