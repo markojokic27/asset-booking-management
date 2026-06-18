@@ -126,7 +126,7 @@ describe('ParkingMap', () => {
   it.each([
     ['close button',   () => fireEvent.click(screen.getByTestId('parking-close-button'))],
     ['Escape key',     () => fireEvent.keyDown(window, { key: 'Escape' })],
-    ['backdrop click', () => fireEvent.click(screen.getByRole('dialog'))],
+    ['backdrop click', () => fireEvent.click(screen.getByTestId('parking-map-backdrop'))],
   ])('closes modal on %s', (_, trigger) => {
     renderMap();
     openModal();
@@ -258,5 +258,26 @@ describe('ParkingMap', () => {
       openModal();
       expect(screen.queryByText('spot-5-taken')).not.toBeInTheDocument();
     });
+
+    it('ignores bookings whose asset name does not match parking spot pattern', () => {
+      const nonParkingBooking = {
+        ...approvedBooking,
+        assetName: 'Desk 5',
+        asset: { ...approvedBooking.asset, name: 'Desk 5' },
+      };
+      renderMap({ ...withDate, bookings: [nonParkingBooking] });
+      openModal();
+      expect(screen.queryByText('spot-5-taken')).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes spot popover on backdrop click', () => {
+    renderMap(withDate);
+    openModal();
+    fireEvent.click(screen.getByText('spot-5'));
+    expect(screen.getByText('bookings.parkingMap.spotNumber')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('spot-popover-backdrop'));
+    expect(screen.queryByText('bookings.parkingMap.spotNumber')).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 });

@@ -49,13 +49,19 @@ export const OfficeMap: React.FC = () => {
 
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
           aria-label={t('bookings.officeMap.title')}
         >
-          <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+          <button
+            type="button"
+            data-testid="office-map-backdrop"
+            className="fixed inset-0 cursor-default bg-black/50"
+            aria-label={t('bookings.officeMap.closeAria')}
+            onClick={closeModal}
+          />
+          <div className="relative z-10 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
 
             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
               <h2 className="text-lg font-bold tracking-wide text-gray-900">

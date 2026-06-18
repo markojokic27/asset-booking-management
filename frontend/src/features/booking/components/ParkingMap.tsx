@@ -40,7 +40,7 @@ function getTakenSpots(bookings: BookingWithRelations[], filters?: Filters): num
     .flatMap((b) => {
       const match = b.asset.name.match(/Parking Spot (\d+)/i);
       if (!match) return [];
-      return [parseInt(match[1], 10)];
+      return [Number.parseInt(match[1], 10)];
     });
 }
 
@@ -48,7 +48,7 @@ function buildSpotAssetMap(assets: AssetDto[]): Map<number, number> {
   const map = new Map<number, number>();
   for (const asset of assets) {
     const match = asset.name.match(/Parking Spot (\d+)/i);
-    if (match) map.set(parseInt(match[1], 10), asset.id);
+    if (match) map.set(Number.parseInt(match[1], 10), asset.id);
   }
   return map;
 }
@@ -107,11 +107,15 @@ const SpotPopover: React.FC<PopoverProps> = ({
   const noDateSelected = !filters?.fromDate;
 
   return (
-    <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/30 p-4"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div className="w-72 rounded-xl bg-white p-6 shadow-2xl">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <button
+        type="button"
+        data-testid="spot-popover-backdrop"
+        className="fixed inset-0 cursor-default bg-black/30"
+        aria-label={t('bookings.parkingMap.closeAria')}
+        onClick={onClose}
+      />
+      <div className="relative z-10 w-72 rounded-xl bg-white p-6 shadow-2xl">
 
         <div className="flex items-start justify-between">
           <div>
@@ -241,13 +245,19 @@ export const ParkingMap: React.FC<Props> = ({
       {isOpen && (
         <div
           data-testid="spot-popover"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           role="dialog"
           aria-modal="true"
           aria-label={t('bookings.parkingMap.title')}
         >
-          <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+          <button
+            type="button"
+            data-testid="parking-map-backdrop"
+            className="fixed inset-0 cursor-default bg-black/50"
+            aria-label={t('bookings.parkingMap.closeAria')}
+            onClick={closeModal}
+          />
+          <div className="relative z-10 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
 
             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
               <div>
