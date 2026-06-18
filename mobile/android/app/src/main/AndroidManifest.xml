@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
         android:name=".AssetBookingManagementApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,11 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AssetBookingManagement"
         android:usesCleartextTraffic="true">
+        <!-- consider deleting the android:usesCleartextTraffic="true" for more security -->
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
-            
+
         <activity
             android:name=".app.MainActivity"
             android:exported="true"

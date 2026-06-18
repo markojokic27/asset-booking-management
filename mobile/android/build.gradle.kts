@@ -9,10 +9,9 @@ plugins {
     id("org.sonarqube") version "7.3.0.8198"
 }
 
-
 sonar {
     properties {
-        property("sonar.projectKey", "AssetBookingManagement-Android")
+        property("sonar.projectKey", "asset-booking-management-android")
         property("sonar.projectName", "AssetBookingManagement Android")
     }
 }

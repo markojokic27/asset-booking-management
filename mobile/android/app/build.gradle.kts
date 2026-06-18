@@ -1,3 +1,11 @@
+import java.util.Properties
+
+// Load local.properties at the top of the file
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) load(f.inputStream())
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -26,18 +34,24 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    
+
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        };
         debug {
             enableUnitTestCoverage = true
+            buildConfigField(
+                "String", "BASE_URL",
+                "\"${localProps.getProperty("BASE_URL", "http://192.168.211.12:8080/v1/")}\"" 
+            )
         }
-
+        release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField(
+                "String", "BASE_URL",
+                "\"${localProps.getProperty("BASE_URL", "https://your-prod-domain.com/v1/")}\"" 
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -45,6 +59,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true 
     }
     lint {
         xmlReport = true
@@ -142,10 +157,11 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     )
 }
 
-
-
-
-
+tasks.withType<Test>().configureEach {
+    if (name == "testDebugUnitTest") {
+        ignoreFailures = false
+    }
+}
 sonar {
     properties {
         property(

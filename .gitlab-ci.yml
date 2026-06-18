@@ -495,7 +495,7 @@ frontend-package-vulnerabilities-check:
 osv-scanner:
   stage: security
   image:
-    name: ghcr.io/google/osv-scanner:v1.9.1 
+    name: ghcr.io/google/osv-scanner:v1.9.1
     entrypoint: [""]
   script:
     - /osv-scanner --format json -r . > osv-report.json #|| true #when true is ommited, job fails on vulnerability
@@ -505,11 +505,11 @@ osv-scanner:
       - osv-report.json
     expire_in: 7 days
   needs: [] 
-  allow_failure: false
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OSV == "true"
-    - if: '$CI_COMMIT_BRANCH == "develop"'
-      allow_failure: false
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+
 
 
 #socket scan
