@@ -74,6 +74,7 @@ const approvedBooking: BookingWithRelations = {
   asset: {
     id: 5,
     name: 'Parking Spot 5',
+    categoryId: 1,
     status: 'ACTIVE',
     description: '',
     location: '',

@@ -84,6 +84,7 @@ const makeBooking = (id: number, assetId: number, assetName: string): BookingWit
   asset: {
     id: assetId,
     name: assetName,
+    categoryId: 1,
     status: 'ACTIVE',
     description: '',
     location: '',

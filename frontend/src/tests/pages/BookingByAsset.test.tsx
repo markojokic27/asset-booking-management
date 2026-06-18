@@ -93,6 +93,7 @@ const makeBooking = (assetOverrides: Partial<BookingWithRelations['asset']> = {}
   asset: {
     id: 42,
     name: 'Test Asset',
+    categoryId: 1,
     status: 'ACTIVE',
     description: 'Test description',
     location: 'Building A',

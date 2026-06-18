@@ -54,7 +54,7 @@ export function BookingDetailsModal({
   };
 
   const cancelBooking = () => {
-    const success = cancel(Number(booking.id));
+    cancel(Number(booking.id));
     onClose();
   };
 
