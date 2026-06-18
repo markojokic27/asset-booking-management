@@ -14,7 +14,7 @@ public class BookingStatusScheduler {
         this.bookingService = bookingService;
     }
 
-    @Scheduled(cron = "0 0 19 * * *", zone = "Europe/Zagreb")
+    @Scheduled(cron = "${booking.scheduler.cron}", zone = "${booking.scheduler.zone}")
     public void closingBooking() {
 
         log.info("Scheduler activated. Starting to check finished bookings.");

@@ -27,8 +27,8 @@ function getInitialTheme(): Theme {
   if (stored === 'light' || stored === 'dark') return stored;
 
   const prefersDark =
-    typeof window !== 'undefined' &&
-    window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    typeof globalThis.window !== 'undefined' &&
+    globalThis.window.matchMedia?.('(prefers-color-scheme: dark)').matches;
 
   return prefersDark ? 'dark' : 'light';
 }

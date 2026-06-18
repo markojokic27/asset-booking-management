@@ -68,13 +68,13 @@ describe('AssetModal', () => {
 
   it('calls onClose when clicking the overlay', () => {
     renderModal();
-    fireEvent.mouseDown(screen.getByRole('dialog'));
+    fireEvent.click(screen.getByTestId('asset-view-modal-backdrop'));
     expect(baseProps.onClose).toHaveBeenCalledTimes(1);
   });
 
   it('does not call onClose when clicking inside the modal', () => {
     renderModal();
-    fireEvent.mouseDown(screen.getByText(asset.name));
+    fireEvent.click(screen.getByText(asset.name));
     expect(baseProps.onClose).not.toHaveBeenCalled();
   });
 });

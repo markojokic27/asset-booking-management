@@ -20,7 +20,7 @@ export function DeleteModal<T>({
   getItemName,
   title,
   description,
-}: DeleteModalProps<T>) {
+}: Readonly<DeleteModalProps<T>>) {
   const { t } = useTranslation();
 
   useEffect(() => {

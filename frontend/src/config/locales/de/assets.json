@@ -70,6 +70,7 @@
     },
     "view": {
       "aria": "Asset-Details",
+      "closeAria": "Asset-Details schließen",
       "category": "Asset-Kategorie"
     },
     "edit": {
