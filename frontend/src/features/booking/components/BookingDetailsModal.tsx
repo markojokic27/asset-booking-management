@@ -1,18 +1,21 @@
 // Components
 import { Modal } from '../../../components/ui/Modal';
 import { Button } from '../../../components/ui/Button';
+import { IconButton } from '../../../components/ui/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 // Types
 import type { BookingWithRelations } from '../types';
 
 // Hooks
-import { useBookingCancellation } from '../hooks/useBookingCancellation';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   booking: BookingWithRelations | null;
   onClose: () => void;
   currentUserId: number | undefined;
   refetch: () => void | Promise<void>;
+  openCancelModal: (booking: BookingWithRelations) => void;
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -27,10 +30,9 @@ export function BookingDetailsModal({
   booking,
   onClose,
   currentUserId,
-  refetch,
+  openCancelModal,
 }: Props) {
-  const { cancel, isCancelling } =
-    useBookingCancellation(refetch);
+  const { t } = useTranslation();
 
   if (!booking) return null;
 
@@ -53,27 +55,33 @@ export function BookingDetailsModal({
     return isValidStatus && isOwner && !isPastBooking;
   };
 
-  const cancelBooking = () => {
-    cancel(Number(booking.id));
-    onClose();
-  };
-
   return (
     <Modal
       isOpen={true}
       onClose={onClose}
       title={
         <div className="flex w-full items-center justify-between">
-          <h2 className="text-2xl font-bold">Booking #{booking.id}</h2>
-          {canCancel() && (
-            <Button
-              variant="danger"
-              disabled={isCancelling}
-              onClick={cancelBooking}
-            >
-              Cancel
-            </Button>
-          )}
+          {' '}
+          <div className="flex items-center gap-8">
+            <h2 className="text-2xl font-bold">Booking #{booking.id}</h2>
+            {canCancel() && (
+              <Button
+                variant="danger"
+                data-testid={`cancel-booking-${booking.id}`}
+                type="button"
+                size="sm"
+                onClick={() => openCancelModal(booking)}
+              >
+                {t('myBookings.actions.cancel')}
+              </Button>
+            )}
+          </div>{' '}
+          <IconButton
+            onClick={onClose}
+            aria-label={t('myBookings.cancelModal.closeAria')}
+          >
+            <CloseIcon className="pointer-events-none" />
+          </IconButton>
         </div>
       }
     >

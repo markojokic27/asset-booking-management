@@ -9,6 +9,7 @@ import { useBookingFilters } from '../features/booking/hooks/useBookingFilters';
 import { useBookingAvailability } from '../features/booking/hooks/useBookingAvailability';
 import { useCreateBooking } from '../features/booking/hooks/useCreateBooking';
 import { useAuth } from '../features/auth/context/AuthContext';
+import { useBookingCancellation } from '../features/booking/hooks/useBookingCancellation';
 
 // Utils
 import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
@@ -24,6 +25,7 @@ import { BookingDetailsModal } from '../features/booking/components/BookingDetai
 import { RecurringDaysSelector } from '../features/booking/components/RecurringDaysSelector';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { CancelBookingModal } from '../features/booking/components/CancelBookingModal';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
@@ -80,12 +82,40 @@ export default function BookingsByAsset() {
   const [notes, setNotes] = React.useState('');
   const [selectedBooking, setSelectedBooking] =
     React.useState<BookingWithRelations | null>(null);
+  const [bookingToCancel, setBookingToCancel] =
+    React.useState<BookingWithRelations | null>(null);
   const [visibleMonth, setVisibleMonth] = React.useState(new Date());
 
   const recurringDates = getDatesForWeekdays(
     visibleMonth,
     filters.selectedWeekdays
   );
+
+  const { cancel, isCancelling, cancelError, clearCancelError } =
+    useBookingCancellation(refetch);
+
+  const openCancelModal = (booking: BookingWithRelations) => {
+    clearCancelError?.();
+
+    setSelectedBooking(null);
+    setBookingToCancel(booking);
+  };
+
+  const closeCancelModal = () => {
+    clearCancelError?.();
+    setBookingToCancel(null);
+  };
+
+  const handleConfirmCancel = async () => {
+    if (!bookingToCancel) return;
+
+    const success = await cancel(Number(bookingToCancel.id));
+
+    if (success) {
+      setBookingToCancel(null);
+    }
+  };
+
   const availableRecurringDates = React.useMemo(
     () => getAvailableRecurringDates(recurringDates, bookings),
     [recurringDates, bookings]
@@ -240,6 +270,15 @@ export default function BookingsByAsset() {
         onClose={() => setSelectedBooking(null)}
         currentUserId={user?.id}
         refetch={refetch}
+        openCancelModal={openCancelModal}
+      />
+
+      <CancelBookingModal
+        booking={bookingToCancel}
+        onClose={closeCancelModal}
+        onConfirm={() => void handleConfirmCancel()}
+        isProcessing={isCancelling}
+        actionError={cancelError}
       />
     </LayoutColumn>
   );

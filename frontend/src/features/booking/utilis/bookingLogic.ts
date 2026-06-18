@@ -24,8 +24,7 @@ const NON_CANCELLABLE_STATUSES = new Set([
 export const canCancelBooking = (
   booking: Pick<BookingWithRelations, 'status' | 'bookingEnd'>
 ) =>
-  !NON_CANCELLABLE_STATUSES.has(booking.status) &&
-  !isBookingPastEnd(booking);
+  !NON_CANCELLABLE_STATUSES.has(booking.status) && !isBookingPastEnd(booking);
 
 // function to sort bookings by start date newest first
 export const sortBookingsNewestFirst = (
@@ -95,8 +94,20 @@ export const hasBookingOverlap = ({
 
 // format the booking time
 export const formatBookingTime = (start: string | Date, end: string | Date) => {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  return `${formatDateTime(start)} – ${formatDateTime(end)}`;
+};
 
-  return `${startDate.toLocaleString()} – ${endDate.toLocaleString()}`;
+const formatDateTime = (value: string | Date) => {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return '';
+
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${day}.${month}.${year}. ${hours}:${minutes}`;
 };

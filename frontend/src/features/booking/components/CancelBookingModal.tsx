@@ -79,10 +79,7 @@ export function CancelBookingModal({
                   {t('myBookings.cancelModal.fields.time')}
                 </p>
                 <p className="font-medium">
-                  {formatBookingTime(
-                    booking.bookingStart,
-                    booking.bookingEnd
-                  )}
+                  {formatBookingTime(booking.bookingStart, booking.bookingEnd)}
                 </p>
               </div>
 
@@ -116,7 +113,7 @@ export function CancelBookingModal({
                   {actionError}
                 </p>
               )}
-              <div className="flex flex-wrap items-center justify-end gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <Button
                   data-testid="keep-booking-button"
                   variant="outline"
