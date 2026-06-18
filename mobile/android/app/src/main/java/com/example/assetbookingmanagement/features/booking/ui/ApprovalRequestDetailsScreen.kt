@@ -14,10 +14,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.core.ui.components.DetailsRow
 import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
@@ -33,9 +36,11 @@ fun ApprovalRequestDetailsScreen(
     status: String,
     isHourlyBooking: Boolean,
     onApproved: () -> Unit,
-    onRejected: () -> Unit
+    onRejected: () -> Unit,
+    viewModel: ApprovalRequestDetailsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -75,7 +80,13 @@ fun ApprovalRequestDetailsScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
-                    onClick = { },
+                    onClick = {
+                        viewModel.rejectBooking(
+                            bookingId = bookingId,
+                            onSuccess = onRejected
+                        )
+                    },
+                    enabled = !uiState.isSubmitting,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -94,7 +105,13 @@ fun ApprovalRequestDetailsScreen(
                 }
 
                 Button(
-                    onClick = { },
+                    onClick = {
+                        viewModel.approveBooking(
+                            bookingId = bookingId,
+                            onSuccess = onApproved
+                        )
+                    },
+                    enabled = !uiState.isSubmitting,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -107,6 +124,14 @@ fun ApprovalRequestDetailsScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
+            }
+            uiState.errorMessage?.let { errorMessage ->
+                Text(
+                    text = errorMessage,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
         }
     }
