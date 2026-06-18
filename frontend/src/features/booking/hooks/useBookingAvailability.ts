@@ -14,14 +14,14 @@ export function useBookingAvailability({
   bookings,
   bookingPeriod,
   reccuringDates,
-  avaibleRecurringDates,
+  availableRecurringDates,
 }: {
   assetStatus?: string;
   filters: Filters;
   bookings: BookingWithRelations[];
   bookingPeriod: 'HOUR' | 'DAY';
   reccuringDates: number[];
-  avaibleRecurringDates: string[];
+  availableRecurringDates: string[];
 }) {
   return React.useMemo(() => {
     if (assetStatus !== 'ACTIVE') {
@@ -29,7 +29,7 @@ export function useBookingAvailability({
     }
 
     if (reccuringDates.length > 0) {
-      if (avaibleRecurringDates.length === 0) {
+      if (availableRecurringDates.length === 0) {
         return true;
       }
       return false;
@@ -51,5 +51,5 @@ export function useBookingAvailability({
       toHour: filters.toHour,
       bookingPeriod,
     });
-  }, [assetStatus, bookings, filters, reccuringDates, avaibleRecurringDates]);
+  }, [assetStatus, bookings, filters, reccuringDates, availableRecurringDates]);
 }

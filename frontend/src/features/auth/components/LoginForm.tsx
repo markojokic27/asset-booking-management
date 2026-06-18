@@ -141,9 +141,9 @@ const LoginForm = () => {
           {serverError}
         </p>
       )}
-      <Button variant="link" onClick={() => navigate('/register')}>
+      {/* <Button variant="link" onClick={() => navigate('/register')}>
         {t('ui.login.registerCta')}
-      </Button>
+      </Button> */}
     </Form.Root>
   );
 };

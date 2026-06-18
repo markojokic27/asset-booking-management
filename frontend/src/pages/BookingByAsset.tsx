@@ -1,6 +1,7 @@
 // External packages
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Hooks
 import { useBookingsByAsset } from '../features/booking/hooks/useBookingByAsset';
@@ -13,7 +14,7 @@ import { useAuth } from '../features/auth/context/AuthContext';
 import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
 import { getDatesForWeekdays } from '../features/booking/utilis/getDatesForWeekdays';
 import { getAvailableRecurringDates } from '../features/booking/utilis/getAvailableRecurringDates';
-import { useTranslation } from 'react-i18next';
+import { getAssetById } from '../features/asset/api/assetApi';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
@@ -26,7 +27,6 @@ import { Input } from '../components/ui/Input';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
-import { getAssetById } from '../features/asset/api/assetApi';
 
 // TODO: internationalization
 
@@ -68,19 +68,20 @@ export default function BookingsByAsset() {
     [recurringDates, bookings]
   );
 
-  console.log('Available recurring dates:', availableRecurringDates);
   const calendarEvents = React.useMemo(
     () => mapBookingsToCalendarEvents(bookings),
     [bookings]
   );
+  const bookingPeriod =
+    asset?.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
 
   const isButtonDisabled = useBookingAvailability({
     assetStatus: asset?.status,
     filters: filters,
     bookings,
-    bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
+    bookingPeriod,
     reccuringDates: filters.selectedWeekdays,
-    avaibleRecurringDates: availableRecurringDates,
+    availableRecurringDates,
   });
 
   const { isCreating, handleCreateBooking } = useCreateBooking({
@@ -89,8 +90,8 @@ export default function BookingsByAsset() {
     setNotes,
     filters: filters,
     refetch,
-    bookingPeriod: asset?.category.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY',
-    availableRecurringDates: availableRecurringDates,
+    bookingPeriod,
+    availableRecurringDates,
   });
 
   if (loading) {
