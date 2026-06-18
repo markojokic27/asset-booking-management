@@ -32,7 +32,7 @@ export const DateInput: React.FC<Props> = ({
   const formatDisplayDate = (dateString: string) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return '';
+    if (Number.isNaN(date.getTime())) return '';
 
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -47,7 +47,7 @@ export const DateInput: React.FC<Props> = ({
         {label}
       </p>
 
-      <div onClick={openDatePicker} className="relative cursor-pointer">
+      <button onClick={openDatePicker} className="relative w-full">
         <input
           ref={dateRef}
           id={id}
@@ -65,7 +65,7 @@ export const DateInput: React.FC<Props> = ({
         >
           {value ? formatDisplayDate(value) : placeholder}
         </div>
-      </div>
+      </button>
     </div>
   );
 };
@@ -92,7 +92,7 @@ export const DateInputNoMin: React.FC<Props> = ({
   const formatDisplayDate = (dateString: string) => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return '';
+    if (Number.isNaN(date.getTime())) return '';
 
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -107,7 +107,7 @@ export const DateInputNoMin: React.FC<Props> = ({
         {label}
       </p>
 
-      <div onClick={openDatePicker} className="relative cursor-pointer">
+      <button onClick={openDatePicker} className="relative w-full">
         <input
           ref={dateRef}
           id={id}
@@ -124,7 +124,7 @@ export const DateInputNoMin: React.FC<Props> = ({
         >
           {value ? formatDisplayDate(value) : placeholder}
         </div>
-      </div>
+      </button>
     </div>
   );
 };
