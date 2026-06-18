@@ -17,8 +17,6 @@ public class BookingPage extends CommonMethods {
     // Filter
     public By fromDateInput = By.cssSelector("[data-testid='from-date-input']");
     public By toDateInput = By.cssSelector("[data-testid='to-date-input']");
-    public By fromHourSelect = By.cssSelector("select[aria-label*='From']");
-    public By toHourSelect = By.cssSelector("select[aria-label*='To']");
     public By checkBoxDays = By.cssSelector("[data-testid='checkbox-days-label']");
 
     // Book button on asset page
@@ -96,18 +94,6 @@ public class BookingPage extends CommonMethods {
         return getDriver().findElement(fromDateInput).getAttribute("value");
     }
 
-    public void selectFromHour(String hour) {
-        clickOnElement(fromHourSelect);
-        selectByVisibleText(fromHourSelect, hour);
-        clickOnElement(fromHourSelect);
-    }
-
-    public void selectToHour(String hour) {
-        clickOnElement(toHourSelect);
-        selectByVisibleText(toHourSelect, hour);
-        clickOnElement(toHourSelect);
-    }
-
     // Calendar
     public boolean isCalendarVisible() {
         return isElementVisible(calendar);
@@ -119,10 +105,6 @@ public class BookingPage extends CommonMethods {
 
     public boolean isCalendarCellSelected(String dateStr) {
         return elementHasClass(calendarCellLocator(dateStr), "ring-2");
-    }
-
-    public boolean isCalendarCellPast(String dateStr) {
-        return elementHasClass(calendarCellLocator(dateStr), "opacity-60");
     }
 
     public void clickNextMonth() {

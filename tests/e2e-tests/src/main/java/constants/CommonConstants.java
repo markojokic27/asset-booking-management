@@ -100,10 +100,8 @@ public class CommonConstants{
     public static final String SEARCH_CATEGORY="laptop";
 
     // Booking
-    public static final String FUTURE_DATE_FROM = "2026-07-12";
+    public static final String FUTURE_DATE_FROM = "2026-07-20";
     public static final String FUTURE_DATE_TO="2026-07-31";
-    public static final String DATE_FUTURE= "2026-06-29";
-    public static final String DATE="2026-06-25";
     public static final String BOOKED_ASSET_ID = "1";
 
 
