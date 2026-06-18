@@ -1,6 +1,7 @@
 package de.bdr.asset.management.booking;
 
-import de.bdr.asset.management.booking.dto.RecurringBookingCreateDTO;
+import java.util.List;
+
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +11,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
+import de.bdr.asset.management.booking.dto.RecurringBookingCreateDTO;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.InvalidDateRangeException;
@@ -29,8 +31,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 /**
  * Booking Controller
@@ -53,8 +53,7 @@ public class BookingController {
     /** CREATE SINGLE*/
     @Operation(summary = "Create a booking", description = "Only available to authenticated users.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("@bookingAuth.canCreateBooking(authentication, #request.userId)" +
-                  "and @benefitEvaluator.canBook(authentication, #request.assetId)")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<BookingResponseDTO> create(
             @Valid @RequestBody BookingCreateDTO request

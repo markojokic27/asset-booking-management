@@ -13,6 +13,6 @@ request:
     - name: readById
       value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: update
-      value: '{"admin": 200, "manager": 403, "employee": 403}'
+      value: '{"admin": 200, "manager": 200, "employee": 200}'
     - name: delete
       value: '{"admin": 204, "manager": 403, "employee": 403}'

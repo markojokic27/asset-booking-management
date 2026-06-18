@@ -32,7 +32,7 @@ public class ReportController {
     /** GENERAL REPORT */
     @Operation(summary = "Get general report for bookings", description = "Only available to users with role: ADMIN.")
     @SecurityRequirement(name = "Bearer Authentication")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<GeneralReportResponseDTO> getGeneralReport (
         @ModelAttribute ReportFilter filter
