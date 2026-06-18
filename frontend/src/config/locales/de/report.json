@@ -4,7 +4,7 @@
     "title": "Buchungen nach Status"
   },
   "bookingStatusBarChart": {
-    "title": "Buchungen nach TODO",
+    "title": "Buchungen nach Monat",
     "yAxisLabel": "Buchungen"
   },
   "noData": "Keine Daten",
