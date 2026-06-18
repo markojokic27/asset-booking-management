@@ -98,10 +98,13 @@ export default function BookingsByAsset() {
     [bookings]
   );
 
+  const bookingPeriod = asset?.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
+
   const isButtonDisabled = useBookingAvailability({
     assetStatus: asset?.status,
     filters: filters,
     bookings,
+    bookingPeriod,
     bookingPeriod,
     reccuringDates: filters.selectedWeekdays,
     availableRecurringDates,
@@ -114,7 +117,7 @@ export default function BookingsByAsset() {
     filters: filters,
     refetch,
     bookingPeriod,
-    availableRecurringDates,
+    availableRecurringDates: availableRecurringDates,
   });
 
   if (!asset || !resolvedCategory) {
@@ -173,7 +176,7 @@ export default function BookingsByAsset() {
 
       <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
-          variant={bookingPeriod === 'DAY' ? 'DAYS' : 'HOUR'}
+          variant={asset.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAYS'}
           filters={filters}
           setFilters={setFilters}
           showSearch={false}
@@ -203,7 +206,7 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
-      {resolvedCategory.name === 'Parking' && ( //TODO - allow only to privileged users
+      {asset.category?.name === 'Parking' && ( //TODO - allow only to privileged users
         <RecurringDaysSelector
           selectedDays={filters.selectedWeekdays}
           onChange={(days) =>
@@ -232,7 +235,7 @@ export default function BookingsByAsset() {
             selectedWeekdays: [],
           }))
         }
-        variant={bookingPeriod}
+        variant={asset.category?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY'}
         onMonthChange={setVisibleMonth}
         availableRecurringDates={availableRecurringDates}
       />

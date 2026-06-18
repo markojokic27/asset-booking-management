@@ -13,6 +13,9 @@ public class CommonConstants{
     public static final String REPORT_URL="/report";
     public static final String MY_BOOKING_URL="/my-bookings";
 
+    public static final String APPROVALS="/approvals";
+
+
     //Login
 
     public static final String ADMIN_USERNAME = "user_admin";
@@ -23,6 +26,9 @@ public class CommonConstants{
     public static final String EMPLOYEE_PASS="employee123";
     public static final String MANAGER_USERNAME="user_manager";
     public static final String MANAGER_PASS="manager123";
+    public static final String USERNAME="aMustapic";
+    public static final String PASS="andela1234";
+    public static final String NEW_PASS="andela123";
 
     // Register and user
 
@@ -67,6 +73,7 @@ public class CommonConstants{
     public static final String LONG_DESCRIPTION = "t".repeat(256);
     public static final String CATEGORY="Parking";
     public static final String EMPTY_CATEGORY = "Select category";
+
     //Asset category
     public static final String VALID_CATEGORY_NAME = "Room";
     public static final String VALID_CATEGORY_DESCRIPTION = "All company rooms ";
@@ -77,8 +84,8 @@ public class CommonConstants{
 
     // Account info
 
-    public static final String PASSWORD = "andela123";
-    public static final String NEW_PASSWORD = "andela1234";
+    public static final String PASSWORD = "employee123";
+    public static final String NEW_PASSWORD = "employee1234";
 
     // Search assets
 
@@ -97,9 +104,14 @@ public class CommonConstants{
     public static final String FUTURE_DATE_TO="2026-08-31";
     public static final String DATE_FUTURE= "2026-06-28";
     public static final String PAST_DATE = "2026-05-01";
+    public static final String DATE="25.6.2026.";
     public static final String FROM_HOUR = "09:00";
     public static final String TO_HOUR = "11:00";
     public static final String BOOKED_ASSET_ID = "1";
+
+    // Approvals booking
+
+    public static final Integer APPROVALS_ID=17;
 
     // Parking
     public static final String FLOOR_LEVEL_MINUS_1 = "-1";

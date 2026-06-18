@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @Log4j2
-public class CommonMethods {
+public class CommonMethods  {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -27,7 +27,7 @@ public class CommonMethods {
     }
 
 
-    //  Browser setup
+    // Browser setup
 
     public static boolean openBrowser() {
         try {
@@ -64,14 +64,11 @@ public class CommonMethods {
     }
 
 
-    //  Private helper
+    // Element helpers
 
     private static WebElement getElement(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
-
-
-    //  Public methods
 
     public static void clickOnElement(By locator) {
         try {
@@ -125,6 +122,17 @@ public class CommonMethods {
         }
     }
 
+    public static void scrollToElement(By locator) {
+        try {
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+        } catch (Exception e) {
+            log.error("scrollToElement failed", e);
+        }
+    }
+
+
+    // Visibility checks
 
     public static boolean isElementVisible(By locator) {
         try {
@@ -152,14 +160,8 @@ public class CommonMethods {
         }
     }
 
-    public static void scrollToElement(By locator) {
-        try {
-            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
-        } catch (Exception e) {
-            log.error("scrollToElement failed", e);
-        }
-    }
+
+    // URL & navigation
 
     public static boolean waitForUrlContains(String extension) {
         try {

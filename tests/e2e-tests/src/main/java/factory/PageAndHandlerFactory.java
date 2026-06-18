@@ -19,6 +19,7 @@ public class PageAndHandlerFactory extends CommonMethods {
     public static BookingPage bookingPage;
     public static ReportPage reportPage;
     public static MyBookingsPage myBookingsPage;
+    public static ApprovalsPage approvalsPage;
 
     public static void setupPagesAndHandlers() {
         loginPage = new LoginPage();
@@ -33,5 +34,6 @@ public class PageAndHandlerFactory extends CommonMethods {
         bookingPage = new BookingPage();
         reportPage = new ReportPage();
         myBookingsPage = new MyBookingsPage();
+        approvalsPage = new ApprovalsPage();
     }
 }

@@ -50,4 +50,11 @@ public class BaseLogin extends PageAndHandlerFactory {
         loginPage.clickLoginButton();
         assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
     }
+
+    protected void loginWithAndela() {
+        loginPage.typeUsername(CommonConstants.USERNAME);
+        loginPage.typePassword(CommonConstants.PASS);
+        loginPage.clickLoginButton();
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
+    }
 }
