@@ -89,7 +89,7 @@ public class BookingServiceImpl implements BookingService {
 
         if (requiresApproval) {
 
-            String approvalLink = "http://localhost:5173/approvals/" + booking.getId();
+            String approvalLink = "http://localhost:3000/approvals/" + booking.getId();
 
             emailService.sendApprovalEmail(
                     user.getManagerEmail(),
@@ -146,7 +146,7 @@ public class BookingServiceImpl implements BookingService {
                     .map(booking -> String.valueOf(booking.getId()))
                     .collect(Collectors.joining(","));
 
-            String approvalLink = "http://localhost:5173/approvals/bulk?ids=" + idsParam;
+            String approvalLink = "http://localhost:3000/approvals/bulk?ids=" + idsParam;
 
             emailService.sendApprovalEmail(
                     user.getManagerEmail(),
