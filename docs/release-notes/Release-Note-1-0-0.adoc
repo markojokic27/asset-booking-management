@@ -1,0 +1,99 @@
+= Release Notes: [Internal Project] Asset Booking Manager v1.0.0
+:toc: left
+:toclevels: 2
+:sectnums:
+:icons: font
+:source-highlighter: coderay
+
+== Executive Summary
+
+[IMPORTANT]
+.Release Type
+This is a *Major* release. It contains new features.
+
+* *Release Date:* June 19, 2026
+* *Target Environment:* Demo
+* *Deployment Risk:* Low
+
+== What's New
+
+=== Key Features
+
+* *[Feature Title]:* Brief 1-2 sentence description of the new feature.
+** *Benefit:* Why this matters to the user/stakeholder.
+** *User Story Link:* `#1234`
+
+* *[Feature Title]:* Brief 1-2 sentence description of the new feature.
+** *Benefit:* Why this matters to the user/stakeholder.
+** *User Story Link:* `#1234`
+
+* *[Feature Title]:* Brief 1-2 sentence description of the new feature.
+** *Benefit:* Why this matters to the user/stakeholder.
+** *User Story Link:* `#1234`
+
+=== Enhancements
+
+* *[System Component]:* Description of the improvement or optimization made to an existing feature.
+
+* *[System Component]:* Description of the improvement or optimization made to an existing feature.
+
+* *[System Component]:* Description of the improvement or optimization made to an existing feature.
+
+== Fixed Issues
+
+[cols="15%,15%,50%,20%", options="header"]
+|===
+
+| Issue ID | Component | Description | Resolution
+
+| #BUG-505 | UI/UX | Login button was unresponsive on mobile Safari browsers. | Resolved responsive CSS layout collision.
+| #BUG-901 | API | High latency during concurrent database queries. | Added database indexing and query caching.
+| #BUG-909 | Backend | Fixed issue with caching assets data. | Cache config changed.
+|===
+
+== Known Issues
+
+[WARNING]
+The following issues are known and will be addressed in a future hotfix or the next sprint.
+
+* *[Issue ID/Title]:* Describe the known bug.
+** *Workaround:* Provide steps users can take to bypass the issue for now.
+
+* *[Issue ID/Title]:* Describe the known bug.
+** *Workaround:* Provide steps users can take to bypass the issue for now.
+
+* *[Issue ID/Title]:* Describe the known bug.
+** *Workaround:* Provide steps users can take to bypass the issue for now.
+
+== Upgrade & Deployment Instructions
+
+=== Prerequisites
+
+* Minimum system dependency version: `[e.g., Node.js v20.x]`
+* Required database migrations: `[Yes / No]`
+
+=== Deployment Steps
+
+[source,bash]
+----
+# Example deployment command
+npm install --production
+npm run db:migrate
+----
+
+=== Verification Steps
+
+. Verify the application health-check endpoint returns `HTTP 200 OK`.
+. Confirm the version number in the footer displays `v[X.Y.Z]`.
+
+== Rollback Procedure
+
+In case of a deployment failure, execute the following commands immediately to revert to version `v[X.Y.Y]`:
+
+[source,bash]
+----
+# Revert to previous build
+docker-compose down
+docker-compose run --rm backup-tool restore --backup=20260618
+docker-compose up -d
+----
