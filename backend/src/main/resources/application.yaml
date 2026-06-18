@@ -97,6 +97,11 @@ benefit:
     - IT EQUIPMENT
   benefit-delimiter: ";"
 
+booking:
+  scheduler:
+    cron: "0 0 19 * * *"
+    zone: "UTC"
+
 management:
   endpoints:
     web:
