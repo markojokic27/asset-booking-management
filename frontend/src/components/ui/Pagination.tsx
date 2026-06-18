@@ -19,7 +19,7 @@ export function Pagination({
   onPageChange,
   ariaLabel,
   className,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const canPrev = page > 1;
   const canNext = page < totalPages;
@@ -43,9 +43,11 @@ export function Pagination({
         <div className="flex items-center gap-2">
           {items.map((item, idx) => {
             if (item === 'ellipsis') {
+              const prev = items[idx - 1];
+              const next = items[idx + 1];
               return (
                 <span
-                  key={`ellipsis-${idx}`}
+                  key={`ellipsis-${String(prev)}-${String(next)}`}
                   className="text-(--color-table-text) select-none"
                   aria-hidden="true"
                 >

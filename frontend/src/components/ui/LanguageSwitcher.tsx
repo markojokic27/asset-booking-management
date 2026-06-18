@@ -32,7 +32,7 @@ type Props = {
   variant?: 'header' | 'mobileMenu';
 };
 
-function LanguageSwitcher({ variant = 'header' }: Props) {
+function LanguageSwitcher({ variant = 'header' }: Readonly<Props>) {
   const { i18n, t } = useTranslation();
 
   const currentLanguage = resolveLanguage(i18n.language);

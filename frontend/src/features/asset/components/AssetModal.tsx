@@ -36,16 +36,21 @@ export const AssetModal: React.FC<AssetModalProps> = ({
   const statusClassName = statusClassNames[asset.status];
 
   return (
-    <div data-testid="asset-view-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-(--color-modal-overlay) p-6"
+    <div
+      data-testid="asset-view-modal"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6"
       role="dialog"
       aria-modal="true"
       aria-label={t('assets.modals.view.aria')}
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
     >
-      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
+      <button
+        type="button"
+        data-testid="asset-view-modal-backdrop"
+        className="fixed inset-0 cursor-default bg-(--color-modal-overlay)"
+        aria-label={t('assets.modals.view.closeAria')}
+        onClick={onClose}
+      />
+      <div className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
         <div className="flex items-center justify-end px-8 pt-6 pb-4">
           <button
             data-testid="asset-details-close-button"
