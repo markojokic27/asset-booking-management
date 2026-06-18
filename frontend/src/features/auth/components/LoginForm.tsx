@@ -130,14 +130,14 @@ const LoginForm = () => {
         <Button
           data-testid="login-button"
           type="submit"
-          className="mt-2 mb-12 font-bold uppercase"
+          className="mt-2 mb-8 font-bold uppercase"
           disabled={loading}
         >
           {loading ? t('ui.login.loading') : t('ui.login.submit')}
         </Button>
       </Form.Submit>
       {serverError && (
-        <p className="absolute bottom-24 self-center text-center font-semibold text-red-500">
+        <p className="absolute bottom-8 self-center text-center font-semibold text-red-500">
           {serverError}
         </p>
       )}

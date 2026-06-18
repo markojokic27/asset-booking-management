@@ -42,13 +42,18 @@ export default function BookingsByAsset() {
 
   const assetFromBookings = bookings?.[0]?.asset;
 
-  const [fetchedAsset, setFetchedAsset] = React.useState<Awaited<
-    ReturnType<typeof getAssetById>
-  > | null>(null);
-
+  const [fetchedAsset, setFetchedAsset] = React.useState<any>(null);
   const [category, setCategory] = React.useState<any>(null);
 
   const asset = assetFromBookings ?? fetchedAsset;
+
+  React.useEffect(() => {
+    if (assetFromBookings || !assetId) return;
+
+    getAssetById(assetId)
+      .then(setFetchedAsset)
+      .catch(() => setFetchedAsset(null));
+  }, [assetFromBookings, assetId]);
 
   React.useEffect(() => {
     if (!asset?.category && asset?.categoryId) {
@@ -56,9 +61,14 @@ export default function BookingsByAsset() {
         .then(setCategory)
         .catch(() => setCategory(null));
     }
-  }, [asset]);
-  const resolvedCategory = asset?.category ?? category;
-  const bookingPeriod =
+  }, [asset?.categoryId]);
+
+  const resolvedCategory = React.useMemo(() => {
+    if (asset?.category) return asset.category;
+    return category;
+  }, [asset?.category, category]);
+
+  const bookingPeriod: 'HOUR' | 'DAY' =
     resolvedCategory?.bookingPeriod === 'HOUR' ? 'HOUR' : 'DAY';
 
   React.useEffect(() => {
@@ -107,6 +117,14 @@ export default function BookingsByAsset() {
     availableRecurringDates,
   });
 
+  if (!asset || !resolvedCategory) {
+    return (
+      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
+        <div className="pt-35">Loading asset details...</div>
+      </LayoutColumn>
+    );
+  }
+
   if (loading) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
@@ -120,13 +138,6 @@ export default function BookingsByAsset() {
         <div className="pt-35 text-red-500">
           Error loading bookings. Please try again later.
         </div>
-      </LayoutColumn>
-    );
-  }
-  if (!asset) {
-    return (
-      <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
-        <div className="pt-35">Asset doesnt have booking history.</div>
       </LayoutColumn>
     );
   }
@@ -162,7 +173,7 @@ export default function BookingsByAsset() {
 
       <div className="mb-2 flex w-full items-end justify-between gap-4">
         <FiltersBar
-          variant={bookingPeriod}
+          variant={bookingPeriod === 'DAY' ? 'DAYS' : 'HOUR'}
           filters={filters}
           setFilters={setFilters}
           showSearch={false}
@@ -192,7 +203,7 @@ export default function BookingsByAsset() {
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
       </div>
-      {asset?.category?.name === 'Parking' && ( //TODO - allow only to privileged users
+      {resolvedCategory.name === 'Parking' && ( //TODO - allow only to privileged users
         <RecurringDaysSelector
           selectedDays={filters.selectedWeekdays}
           onChange={(days) =>
