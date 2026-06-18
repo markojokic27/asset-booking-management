@@ -32,7 +32,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
       onClose={onClose}
       ariaLabel={t('assetCategories.modals.view.ariaLabel')}
       headerRight={
-        <IconButton onClick={onClose} aria-label={t('assetCategories.modals.common.closeAria')}>
+        <IconButton data-testid="category-close-button" onClick={onClose} aria-label={t('assetCategories.modals.common.closeAria')}>
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
