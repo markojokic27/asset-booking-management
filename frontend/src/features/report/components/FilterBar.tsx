@@ -17,6 +17,8 @@ type Props = {
   setFilters: React.Dispatch<React.SetStateAction<Filter>>;
   onReset: () => void;
   className?: string;
+  setSelectedUserName: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedAssetName: React.Dispatch<React.SetStateAction<string>>;
 };
 
 type Option = {
@@ -29,6 +31,8 @@ export default function FiltersBar({
   setFilters,
   onReset,
   className,
+  setSelectedUserName,
+  setSelectedAssetName
 }: Props) {
   const update = (partial: Partial<Filter>) => {
     setFilters((prev) => ({
@@ -97,10 +101,13 @@ export default function FiltersBar({
             value={
               userOptions.find((u) => u.id === filters.userId) ?? null
             }
-            onChange={(_, value) =>
-              update({
-                userId: value?.id ?? null,
-              })
+            onChange={(_, value) => {
+                update({
+                  userId: value?.id ?? null,
+                })
+
+                setSelectedUserName(value?.label ?? '');
+              }
             }
             renderInput={(params) => (
               <TextField
@@ -118,10 +125,13 @@ export default function FiltersBar({
             value={
               assetOptions.find((a) => a.id === filters.assetId) ?? null
             }
-            onChange={(_, value) =>
-              update({
-                assetId: value?.id ?? null,
-              })
+            onChange={(_, value) => {
+                update({
+                  assetId: value?.id ?? null,
+                })
+
+                setSelectedAssetName(value?.label ?? '');
+              }
             }
             renderInput={(params) => (
               <TextField

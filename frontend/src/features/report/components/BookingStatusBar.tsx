@@ -1,5 +1,6 @@
 import { BarChart } from '@mui/x-charts/BarChart';
 import { useTranslation } from 'react-i18next';
+
 import type { GeneralReportResponseDTO } from '../types';
 
 export default function BookingStatusPie({
@@ -12,8 +13,8 @@ export default function BookingStatusPie({
   const chartSetting = {
     yAxis: [
         {
-            label: t('report.bookingStatusBarChart.yAxisLabel'),
-            width: 60,
+          label: t('report.bookingStatusBarChart.yAxisLabel'),
+          width: 60,
         },
     ],
     height: 300,

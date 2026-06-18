@@ -64,7 +64,7 @@ export default function BookingStatusPie({
       >
         {total === 0 ? (
           <div className="flex h-[320px] items-center justify-center text-gray-500">
-            No bookings found
+            { t('report.noData') }
           </div>
         ) : (
           <PieChart

@@ -24,10 +24,14 @@ const defaultFilters: Filter = {
 export default function Report() {
   const { t } = useTranslation();
   const [filters, setFilters] = useState<Filter>(defaultFilters);
-  const { report } = useGeneralReport(filters); //loading is removed because it is breaking the build
+  const [selectedUserName, setSelectedUserName] = useState<string>("")
+  const [selectedAssetName, setSelectedAssetName] = useState<string>("")
+  const { report } = useGeneralReport(filters);
 
   const handleResetFilters = () => {
     setFilters(defaultFilters);
+    setSelectedUserName("");
+    setSelectedAssetName("");
   };
 
   return (
@@ -51,6 +55,8 @@ export default function Report() {
           filters={filters}
           setFilters={setFilters}
           onReset={handleResetFilters}
+          setSelectedUserName={setSelectedUserName}
+          setSelectedAssetName={setSelectedAssetName}
           className="mt-6"
         />
 
@@ -62,10 +68,10 @@ export default function Report() {
             <BookingStatusBar report={report} />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <TopUserBookings report={report} />
+            <TopUserBookings report={report} selectedAssetName={selectedAssetName} />
           </div>
           <div className="dark:bg-bg-dark rounded-2xl border border-(--color-table-border) p-6 shadow-sm dark:shadow-black/20">
-            <TopAssetBookings report={report} />
+            <TopAssetBookings report={report} selectedUserName={selectedUserName}/>
           </div>
         </div>
       </LayoutColumn>

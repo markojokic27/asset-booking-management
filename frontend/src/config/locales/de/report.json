@@ -6,5 +6,12 @@
   "bookingStatusBarChart": {
     "title": "Buchungen nach TODO",
     "yAxisLabel": "Buchungen"
+  },
+  "noData": "Keine Daten",
+  "topUsersChart": {
+    "title": "Top-Nutzer nach Anzahl der Buchungen"
+  },
+  "topAssetsChart": {
+    "title": "Top-Vermögenswerte nach Anzahl der Buchungen"
   }
 }

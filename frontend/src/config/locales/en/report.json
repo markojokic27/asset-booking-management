@@ -6,5 +6,12 @@
   "bookingStatusBarChart": {
     "title": "Bookings by Month",
     "yAxisLabel": "Bookings"
+  },
+  "noData": "No data",
+  "topUsersChart": {
+    "title": "Top users by number of bookings"
+  },
+  "topAssetsChart": {
+    "title": "Top assets by number of bookings"
   }
 }

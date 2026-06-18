@@ -1,11 +1,17 @@
 import { PieChart } from '@mui/x-charts/PieChart';
+import { useTranslation } from 'react-i18next';
+
 import type { GeneralReportResponseDTO } from '../types';
 
 export default function TopUserBookings({
   report,
+  selectedAssetName
 }: {
   report: GeneralReportResponseDTO | null;
+  selectedAssetName: string
 }) {
+  const { t } = useTranslation();
+
   const data =
     report?.topUsers?.map((u) => ({
       id: u.userId,
@@ -19,7 +25,7 @@ export default function TopUserBookings({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <h2 className="text-xl font-black tracking-wide text-black dark:text-white">
-          Top Users by number of Bookings
+          { t('report.topUsersChart.title') } { selectedAssetName }
         </h2>
       </div>
 
@@ -29,7 +35,7 @@ export default function TopUserBookings({
       >
         {total === 0 ? (
           <div className="flex h-[320px] items-center justify-center text-gray-500">
-            No data available
+            { t('report.noData') }
           </div>
         ) : (
           <PieChart
