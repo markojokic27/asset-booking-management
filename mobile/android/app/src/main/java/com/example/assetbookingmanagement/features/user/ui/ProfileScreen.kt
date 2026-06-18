@@ -75,6 +75,7 @@ fun ProfileScreen(
             else -> uiState.profile?.let { profile ->
                 ProfileContent(
                     profile = profile,
+                    departmentName = uiState.departmentName,
                     isLoggingOut = uiState.isLoggingOut,
                     onChangePasswordClick = onChangePasswordClick,
                     onLogoutClick = viewModel::logout
@@ -87,6 +88,7 @@ fun ProfileScreen(
 @Composable
 private fun ProfileContent(
     profile: UserResponse,
+    departmentName: String,
     isLoggingOut: Boolean,
     onChangePasswordClick: () -> Unit,
     onLogoutClick: () -> Unit
@@ -106,7 +108,10 @@ private fun ProfileContent(
         }
 
         item {
-            WorkDetailsSection(profile = profile)
+            WorkDetailsSection(
+                profile = profile,
+                departmentName = departmentName
+            )
         }
     }
 }
@@ -160,7 +165,10 @@ private fun ProfileDetailsSection(
 }
 
 @Composable
-private fun WorkDetailsSection(profile: UserResponse) {
+private fun WorkDetailsSection(
+    profile: UserResponse,
+    departmentName: String
+) {
     DetailsSectionCard(
         title = "WORK DETAILS",
         heading = "Account details"
@@ -183,7 +191,7 @@ private fun WorkDetailsSection(profile: UserResponse) {
         }
         InfoRow(
             label = "Department",
-            value = profile.departmentId.toString(),
+            value = departmentName,
             showDivider = true
         )
         InfoRow(

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.auth.data.AuthRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
+import com.example.assetbookingmanagement.features.department.data.DepartmentRepository
 import com.example.assetbookingmanagement.features.user.data.UserResponse
 import com.example.assetbookingmanagement.features.user.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,12 +31,14 @@ data class ProfileUiState(
     val newPasswordError: String? = null,
     val confirmNewPasswordError: String? = null,
     val changePasswordErrorMessage: String? = null,
+    val departmentName: String = "-",
     val errorMessage: String? = null
 )
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val departmentRepository: DepartmentRepository,
     private val authSession: AuthSession,
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -81,10 +84,14 @@ class ProfileViewModel @Inject constructor(
 
             try {
                 val user = userRepository.getUserById(userId)
+                val departmentName = runCatching {
+                    departmentRepository.getDepartmentById(user.departmentId).name
+                }.getOrNull() ?: user.departmentId.toString()
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        profile = user
+                        profile = user,
+                        departmentName = departmentName
                     )
                 }
             } catch (error: HttpException) {
