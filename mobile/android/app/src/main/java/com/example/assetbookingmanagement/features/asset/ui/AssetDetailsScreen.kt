@@ -82,7 +82,10 @@ fun AssetDetailsScreen(
                     AssetDetailItem(label = "Category", value = uiState.categoryName ?: "-")
                     AssetStatusDetailItem(label = "Status", status = asset.status)
                     AssetDetailItem(label = "Location", value = asset.location)
-                    AssetDetailItem(label = "Description", value = asset.description.ifBlank { "-" })
+                    AssetDetailItem(
+                        label = "Description",
+                        value = asset.description?.ifBlank { "-" } ?: "-"
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(32.dp))

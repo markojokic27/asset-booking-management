@@ -7,8 +7,8 @@ data class AssetResponse(
     val id: Long,
     val name: String,
     val categoryId: Long,
-    val description: String,
-    val code: String,
+    val description: String? = null,
+    val code: String? = null,
     val status: String,
     val location: String
 )

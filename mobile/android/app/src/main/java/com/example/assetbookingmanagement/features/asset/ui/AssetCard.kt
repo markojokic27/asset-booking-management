@@ -24,7 +24,7 @@ fun AssetCard(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = asset.code,
+                text = asset.code?.ifBlank { "-" } ?: "-",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
