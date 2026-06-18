@@ -5,7 +5,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
-import  BarChartIcon from '@mui/icons-material/BarChart';
+// import  BarChartIcon from '@mui/icons-material/BarChart';
 
 // Components
 import { Table, type TableColumn } from '../../../components/ui/Table';
@@ -133,13 +133,13 @@ export function AssetsTable({
                 className="pointer-events-none"
               />
             </IconButton>
-            <IconButton
+            {/* <IconButton
               type="button"
               aria-label={t('assets.table.ariaReport')}
               onClick={() => onReport(asset)}
             >
               <BarChartIcon fontSize="small" className="pointer-events-none" />
-            </IconButton>
+            </IconButton> */}
 
             {onEdit && (
               <IconButton
@@ -184,7 +184,7 @@ export function AssetsTable({
       onEdit,
       onDelete,
       onBookings,
-      onReport,
+      // onReport,
     ]
   );
 
