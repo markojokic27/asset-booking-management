@@ -1,3 +1,544 @@
-= User Manual
+= Asset Booking Management — User Manual
+:author: Maurer Internship 2026
+:revdate: 2026-05-25
+:revnumber: 1.0
+:toc:
+:toc-title: Table of Contents
+:toclevels: 3
+:sectnums:
+:icons: font
+:tip-caption: 💡 TIP
+:note-caption: 📝 NOTE
+:warning-caption: ⚠️ WARNING
+:imagesdir: ../Screenshots25_05
 
-TODO...
+---
+
+== Introduction
+
+=== What Is This Application?
+
+The *Asset Booking Management* system is an internal web application developed for
+Maurer Electronics employees. It provides a simple, unified interface for discovering,
+reserving, and managing workplace assets — including laptops, parking spots, desks,
+meeting rooms, books, and IT equipment.
+
+The system ensures that no asset can be double-booked, gives employees real-time
+visibility of asset availability, and allows managers to approve or reject booking
+requests where required.
+
+=== Who Is This Manual For?
+
+This manual is intended for all Maurer Electronics employees who need to:
+
+* Browse and search available workplace assets
+* Make, view, or cancel reservations
+* Manage their account profile
+
+A separate section covers functionality available only to users with the *Admin* role
+(user management and category management).
+
+=== How to Access the Application
+
+The application is accessible through any modern web browser. No installation is required.
+
+. Open your web browser (Google Chrome, Mozilla Firefox, or Microsoft Edge recommended).
+. Navigate to the internal application URL provided by your IT department.
+. You will be presented with the login screen.
+
+NOTE: The application is also available as a mobile app for booking assets via QR code.
+Contact your IT department for the mobile app link.
+
+---
+
+== Getting Started
+
+=== Logging In
+
+image::LoginPage.png[Login screen — Prijava]
+
+. On the login screen, enter your *Korisničko ime* (username) in the first field.
+. Enter your *Lozinka* (password) in the second field.
+. Click the *PRIJAVA* (Login) button.
+
+NOTE: Your username and password are the same credentials used for your Maurer
+corporate account. If you do not have login credentials, contact your manager or the IT department.
+
+If you do not yet have an account, click the *"Nemate račun? Registrirajte se ovdje."*
+link at the bottom of the login card to request registration.
+
+The application supports both *light and dark mode*, as well as *language switching*
+(Croatian/English), using the controls in the top-right corner of every page.
+
+=== First-Time Login
+
+No additional setup is required after your first login. Your account is pre-configured
+by your system administrator with the appropriate role and department.
+
+After logging in you will be taken directly to the main application.
+
+=== Logging Out
+
+To log out of the application:
+
+. Locate your name at the bottom of the left-hand navigation sidebar.
+. Click *Odjava* (Logout) below your name.
+
+You will be returned to the login screen.
+
+---
+
+== Navigating the Application
+
+=== Application Layout
+
+image::AccountInfo.png[Main application layout — Account Info page]
+
+The application is divided into two main areas:
+
+*Left sidebar — Navigation menu*::
+The sidebar is always visible and provides links to all main sections of the application.
+Your name and role are displayed at the bottom of the sidebar.
+
+*Main content area*::
+The right-hand panel displays the content of whichever section you have selected.
+
+*Top-right controls*::
+The top-right corner contains the light/dark mode toggle, and the language selector
+(Croatian flag / dropdown).
+
+=== Navigation Menu Items
+
+[cols="1,3", options="header"]
+|===
+| Menu item | Description
+
+| *Imovina* | Assets — browse all bookable workplace assets by category
+| *Kategorije* | Categories — view and manage asset categories (Admin only)
+| *Rezervacije* | Reservations — browse assets and make a booking
+| *Korisnici* | Users — manage user accounts (Admin only)
+| *Report* | Reports — view booking statistics and charts
+| *Odjava* | Logout — end your session
+
+|===
+
+Your current section is highlighted with a blue bar on the left edge of the sidebar.
+
+---
+
+== Browsing and Searching Assets
+
+=== The Reservations Page
+
+image::Reservations.png[Reservations page — asset category tiles and asset list]
+
+The *Rezervacije* (Reservations) page is the main starting point for finding and
+booking an asset. It is divided into two parts:
+
+*Category tiles (top)*::
+Visual cards representing each asset category. Click a tile to filter the asset list
+below to that category. Available categories include:
+
+* Laptop
+* Parking
+* Book
+* Desk
+* Meeting room
+* IT equipment
+
+*Asset list (bottom)*::
+A table showing all assets in the selected category, with the following columns:
+
+[cols="1,3", options="header"]
+|===
+| Column | Description
+
+| *ID* | Unique identifier for the asset
+| *Naziv* (Name) | The name of the specific asset (e.g. MacBook Pro 16)
+| *Status* | Whether the asset is currently active (Aktivno) or inactive (Neaktivno)
+| *Odobrenje* (Approval) | Indicates whether manager approval is required for this asset
+| *(Action button)* | Blue *Rezerviraj* (Book) button to initiate a reservation
+
+|===
+
+=== Filtering by Category
+
+. On the *Rezervacije* page, click any category tile at the top of the page.
+. The asset list below will update to show only assets belonging to that category.
+. The selected category name appears as the heading above the asset list.
+. To clear the filter and show all assets, click the *Poništi filtere* (Reset filters) button
+  in the top-right of the asset list area.
+
+=== Filtering by Date
+
+Use the *Datum* (Date) date picker above the asset list to filter assets by a specific date.
+This shows only assets that are available on the selected day.
+
+=== Searching for an Asset
+
+Use the *Pretraži imovinu...* (Search assets...) search box in the top-right of the asset
+list to search by asset name. Results update as you type.
+
+NOTE: You can combine category filtering with the search box and date picker at the same time.
+
+---
+
+== Making a Booking
+
+=== Step 1 — Find the Asset
+
+. Navigate to *Rezervacije* in the left sidebar.
+. Click the category tile that matches the type of asset you need
+  (e.g. *Laptop* to book a laptop).
+. Review the asset list. Check the *Status* column — only assets with status *Aktivno*
+  can be booked.
+. Optionally use the date picker or search box to narrow your results.
+
+=== Step 2 — Open the Booking Calendar
+
+image::Reserve.png[Booking calendar — MacBook Pro 16, May 2026]
+
+. Click the *Rezerviraj* (Book) button next to the asset you want to reserve.
+. A dedicated booking page will open, showing:
+  * The asset name and its current status badge (e.g. *ACTIVE*)
+  * Its location (e.g. *Location: Office 3*)
+  * A monthly calendar view showing the current month
+  * A *Datum* date picker at the top
+  * Navigation arrows to move between months
+  * A *today* button to jump back to the current date
+
+=== Step 3 — Select a Date
+
+. Use the calendar to find the date you want to book the asset.
+. Today's date is highlighted on the calendar.
+. Click the *Datum* date picker field above the calendar and enter or select your
+  desired date, or click directly on a date in the calendar grid.
+
+NOTE: Dates that are already booked by another user will appear marked on the calendar.
+You cannot select an already-booked date.
+
+=== Step 4 — Confirm the Booking
+
+. Once you have selected your date, click the *Book* button in the top-right corner
+  of the booking page.
+. Your reservation will be submitted.
+
+NOTE: For some asset categories, a manager approval may be required before the booking
+is confirmed. In that case, your booking status will initially show as *Na čekanju*
+(Pending) until your manager reviews it. You will be notified once a decision is made.
+
+---
+
+== Managing Your Bookings
+
+=== Viewing the Categories Page
+
+image::Categories.png[Asset categories list — Kategorije imovine]
+
+The *Kategorije* (Categories) page shows all defined asset categories in a table with
+the following columns:
+
+[cols="1,3", options="header"]
+|===
+| Column | Description
+
+| *Naziv* (Name) | The category name (e.g. Laptop, Parking, Desk)
+| *Opis* (Description) | A short description of the category
+| *Period rezervacije* | The booking period unit for this category: Dan (Day), Sat (Hour), or Mjesec (Month)
+| *(Actions)* | Eye icon to view details; pencil icon to edit (Admin only)
+
+|===
+
+Regular employees can view categories. Creating or editing categories requires the
+*Admin* role.
+
+=== Viewing Your Account Information
+
+image::AccountInfo.png[Account information — Podaci o računu]
+
+Click your name at the bottom of the left sidebar to open the *Podaci o računu*
+(Account Information) page. This page displays two cards:
+
+*Profile card (left)*::
+Shows your personal details:
+
+* ID
+* First name (*Ime*) and last name (*Prezime*)
+* Username (*Korisničko ime*)
+* Email (*E-mail*)
+* A *Promijeni lozinku* (Change password) button
+
+*Work details card (right)*::
+Shows your organisational details:
+
+* Role (*Uloga*) — e.g. ADMIN or EMPLOYEE
+* Status — e.g. ACTIVE
+* Department ID (*Odjel*)
+* Manager email (*E-mail voditelja*)
+* Notes (*Napomene*)
+
+=== Changing Your Password
+
+. Open the *Podaci o računu* page by clicking your name in the sidebar.
+. In the Profile card, click the *Promijeni lozinku* (Change password) button.
+. Follow the on-screen instructions to set a new password.
+
+NOTE: Your password must meet the minimum security requirements set by your
+IT department. Contact IT support if you are locked out of your account.
+
+---
+
+== Admin Functions
+
+This section covers features that are only available to users with the *Admin* role.
+If you do not have admin access, these menu items will not be available to you.
+
+=== Managing Users
+
+image::Users.png[Users list — Korisnici]
+
+The *Korisnici* (Users) page shows a list of all registered users. For each user
+you can see their full name and email address. The following actions are available
+per row:
+
+[cols="1,3", options="header"]
+|===
+| Icon | Action
+
+| 📅 *Rezervacije* (blue button) | View all bookings made by this user
+| 👁 (eye icon) | View full user details
+| 📊 (chart icon) | View usage statistics for this user
+| ✏️ (pencil icon) | Edit user details
+| 🗑 (red bin icon) | Delete the user
+
+|===
+
+Additional controls at the top of the page:
+
+* *Izvoz* (Export) — download the user list
+* *+ Novi* (New) — create a new user
+* *Prikaži obrisane* (Show deleted) — toggle to include deleted users in the list
+* *Pretraži korisnike...* (Search users) — filter the list by name
+
+=== Adding a New User
+
+image::AddNewUser.png[Add new user modal — form fields]
+
+. On the *Korisnici* page, click the *+ Novi* button in the top-right corner.
+. A modal dialog will appear with the following fields:
+
+[cols="1,1,2", options="header"]
+|===
+| Field | Required | Description
+
+| *Uloga* (Role) | Yes | Select EMPLOYEE or ADMIN from the dropdown
+| *Status* | Yes | Select Aktivan (Active) or another status
+| *Korisničko ime* (Username) | Yes | The login username for the new user
+| *Ime* (First name) | Yes | User's first name
+| *Prezime* (Last name) | Yes | User's last name
+| *Email* | Yes | User's email address
+| *Lozinka* (Password) | Yes | Initial password for the account
+| *ID Odjela* (Department ID) | Yes | Numeric department identifier
+| *Email voditelja* (Manager email) | No | Email of the user's manager
+| *Bilješke* (Notes) | No | Any additional notes about the user
+
+|===
+
+. Fill in all required fields.
+. Click *Spremi* (Save) to create the user, or click *×* to cancel.
+
+NOTE: Fields highlighted in yellow indicate they already contain a pre-filled value.
+Review these carefully before saving.
+
+=== Managing Asset Categories
+
+image::Categories.png[Asset categories — Kategorije imovine]
+
+. Navigate to *Kategorije* in the left sidebar.
+. The category list shows all existing categories with their booking period.
+. Use the *pencil icon* on any row to edit an existing category.
+. Use the *eye icon* to view category details without editing.
+
+=== Adding a New Category
+
+image::NewCategory.png[Add new category modal — Dodaj novu kategoriju]
+
+. On the *Kategorije* page, click the *+ Novo* button in the top-right corner.
+. A modal dialog will appear with the following fields:
+
+[cols="1,1,2", options="header"]
+|===
+| Field | Required | Description
+
+| *Naziv* (Name) | Yes | The category name (e.g. "Conference Room")
+| *Opis* (Description) | Yes | A short description of the category
+| *Period rezervacije* (Booking period) | Yes | The time unit for bookings: Dan (Day), Sat (Hour), or Mjesec (Month)
+| *Approval checkbox* | No | Check this box if bookings in this category require manager approval before confirmation
+
+|===
+
+. Fill in the required fields and select the appropriate booking period.
+. If assets in this category require manager sign-off, tick the checkbox labelled
+  *"Sva imovina iz ove kategorije treba odobrenje voditelja"*
+  (All assets in this category require manager approval).
+. Click *Dodaj* (Add) to save the new category.
+
+=== Viewing Reports
+
+image::Reports.png[Reports page — Rezervacije po Statusu donut chart]
+
+. Navigate to *Report* in the left sidebar.
+. The reports page displays a *Rezervacije po Statusu* (Bookings by Status) donut chart.
+. The chart segments represent the following booking statuses:
+
+[cols="1,1,2", options="header"]
+|===
+| Colour | Status | Meaning
+
+| 🟡 Yellow | *Na čekanju* | Pending — awaiting manager approval
+| 🟢 Green | *Odobreno* | Approved — booking confirmed
+| 🔴 Red | *Otkazano* | Cancelled — booking was cancelled
+| 🟣 Purple | *Odbijeno* | Rejected — manager declined the request
+| 🔵 Blue | *Dovršeno* | Completed — booking period has passed
+
+|===
+
+Hover over any segment of the chart to see the exact count for that status.
+
+---
+
+== Troubleshooting and FAQ
+
+=== I cannot log in
+
+*Q: I entered my username and password but the login fails.*
+
+A: Check the following:
+
+* Make sure your Caps Lock key is off — passwords are case-sensitive.
+* Confirm you are using your Maurer corporate username (not your email address).
+* If you have recently changed your corporate password, use the new password here as well.
+* If the problem persists, contact your IT helpdesk to reset your account.
+
+---
+
+*Q: I see "Nemate račun? Registrirajte se ovdje." — should I register?*
+
+A: Only if you do not yet have an account in the system. Most employees are
+pre-provisioned by the administrator. Try logging in first. If that fails, contact
+your IT department rather than self-registering.
+
+=== I cannot find the asset I am looking for
+
+*Q: The asset list is empty or does not show what I need.*
+
+A: Try the following:
+
+* Click *Poništi filtere* (Reset filters) to clear any active category filter.
+* Clear any text you have typed in the search box.
+* Clear the date filter by removing the selected date.
+* The asset may be listed as *Neaktivno* (Inactive) — inactive assets cannot be booked.
+  Contact your manager if you believe an asset should be active.
+
+=== The Book button is not working
+
+*Q: I click Rezerviraj but nothing happens.*
+
+A: Ensure the asset status is *Aktivno*. Inactive assets display the Rezerviraj
+button but the booking page may indicate the asset is unavailable. If the issue
+continues, try refreshing the page or using a different browser.
+
+=== My booking shows "Na čekanju" (Pending)
+
+*Q: I made a booking but it says Pending. Is it confirmed?*
+
+A: Pending means the asset category requires manager approval. Your booking is
+submitted and reserved, but it is not fully confirmed until your manager approves it.
+You will receive a notification when a decision is made. Contact your manager directly
+if approval is taking longer than expected.
+
+=== I cannot see the Korisnici or Kategorije menu items
+
+*Q: The Users and Categories sections are missing from my menu.*
+
+A: These sections are only accessible to users with the *Admin* role. If you believe
+you need admin access, contact your system administrator.
+
+=== I want to cancel a booking
+
+*Q: How do I cancel a booking I have already made?*
+
+A: Navigate to your bookings via *Korisnici → Rezervacije* (if you are an admin viewing
+your own record) or by contacting an administrator who can cancel it on your behalf.
+Self-service cancellation from the reservation calendar may be available — select the
+booked date on the asset's calendar and look for a cancel option.
+
+=== The page looks different from this manual
+
+*Q: The language on screen is Croatian but I need English.*
+
+A: Click the flag icon (🇭🇷) in the top-right corner of any page and select your
+preferred language from the dropdown.
+
+*Q: The screen is dark and hard to read.*
+
+A: Click the 🌙 (moon) icon in the top-right corner to toggle between dark mode and
+light mode.
+
+---
+
+== Glossary
+
+[cols="1,3", options="header"]
+|===
+| Term | Definition
+
+| *Asset (Imovina)* | Any bookable workplace item or space managed by the system, such as a laptop, desk, parking spot, meeting room, or IT equipment.
+
+| *Booking / Reservation (Rezervacija)* | A time-bound claim on an asset made by an employee, preventing others from using it during that period.
+
+| *Category (Kategorija)* | A grouping of similar assets (e.g. Laptop, Parking, Meeting room). Each category has a defined booking period unit (day, hour, or month).
+
+| *Booking period (Period rezervacije)* | The unit of time used for reservations in a given category. Can be Dan (Day), Sat (Hour), or Mjesec (Month).
+
+| *Status — Aktivno* | An asset that is currently available and can be booked.
+
+| *Status — Neaktivno* | An asset that is currently unavailable for booking (e.g. under maintenance).
+
+| *Approval (Odobrenje)* | Some asset categories require a manager to approve a booking before it is confirmed. These bookings start in Pending status.
+
+| *Na čekanju (Pending)* | A booking that has been submitted but is awaiting manager approval.
+
+| *Odobreno (Approved)* | A booking that has been confirmed, either automatically or by a manager.
+
+| *Otkazano (Cancelled)* | A booking that was cancelled by the employee or administrator.
+
+| *Odbijeno (Rejected)* | A booking that a manager declined to approve.
+
+| *Dovršeno (Completed)* | A booking whose reservation period has ended.
+
+| *Role (Uloga)* | The permission level of a user account. EMPLOYEE can browse and book assets. ADMIN can also manage users, categories, and view reports.
+
+| *Department (Odjel)* | The organisational unit a user belongs to, identified by a numeric ID.
+
+| *Manager email (E-mail voditelja)* | The email address of the user's direct manager, used for approval notifications.
+
+| *QR code booking* | A feature of the mobile app that allows employees to scan a QR code on a physical asset to quickly book it on the spot.
+
+|===
+
+---
+
+== Document Revision History
+
+[cols="1,1,2,3", options="header"]
+|===
+| Version | Date | Author | Notes
+
+| 1.0 | 2026-05-25 | Maurer Internship 2026 | Initial version generated from application screenshots (LoginPage, AccountInfo, Categories, NewCategory, Reservations, Reserve, Users, AddNewUser, Reports).
+
+|===
+
+NOTE: Screenshots in this manual were captured from the Croatian-language version of
+the application. Field labels are shown in Croatian as they appear on screen, with
+English translations provided in parentheses throughout this document.
