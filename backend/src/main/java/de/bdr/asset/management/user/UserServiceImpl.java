@@ -138,4 +138,12 @@ public class UserServiceImpl implements UserService {
         );
         bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
     }
+
+    @Override
+    public User getActiveOrStudentUserById(Long id) {
+        return userRepository.findByIdAndStatusIn(
+                id,
+                List.of(UserStatusEnum.ACTIVE, UserStatusEnum.STUDENT)
+        ).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_WITH_ID + id));
+    }
 }

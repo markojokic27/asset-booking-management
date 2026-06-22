@@ -67,4 +67,6 @@ public interface UserService {
      * @throws ResourceNotFoundException If the specified user identity does not exist.
      */
     void softDeleteUser(Long id);
+
+    User getActiveOrStudentUserById(Long id);
 }

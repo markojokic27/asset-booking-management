@@ -8,18 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.bdr.asset.management.asset.AssetService;
 import de.bdr.asset.management.report.ReportFilter;
 import de.bdr.asset.management.booking.dto.*;
 import de.bdr.asset.management.core.email.EmailService;
-import de.bdr.asset.management.user.UserRoleEnum;
+import de.bdr.asset.management.user.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.bdr.asset.management.asset.Asset;
-import de.bdr.asset.management.asset.AssetRepository;
-import de.bdr.asset.management.asset.AssetStatusEnum;
 import de.bdr.asset.management.assetcategory.AssetCategory;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.InvalidDateRangeException;
@@ -30,9 +29,6 @@ import de.bdr.asset.management.report.dto.MonthlyBookingStatsDTO;
 import de.bdr.asset.management.report.dto.TopAssetBookingCountDTO;
 import de.bdr.asset.management.report.dto.TopUserBookingCountDTO;
 import de.bdr.asset.management.report.projections.GeneralReportProjection;
-import de.bdr.asset.management.user.User;
-import de.bdr.asset.management.user.UserRepository;
-import de.bdr.asset.management.user.UserStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,8 +47,8 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository repository;
     private final BookingMapper mapper;
-    private final UserRepository userRepository;
-    private final AssetRepository assetRepository;
+    private final UserService userService;
+    private final AssetService assetService;
     private final SecurityService securityService;
     private final Clock clock;
     private final EmailService emailService;
@@ -364,15 +360,8 @@ public class BookingServiceImpl implements BookingService {
                 ? requestedUserId
                 : securityService.getCurrentUserId();
 
-        List<UserStatusEnum> validUserStatuses = List.of(
-                UserStatusEnum.ACTIVE,
-                UserStatusEnum.STUDENT);
-        User user = userRepository.findByIdAndStatusIn(targetUserId, validUserStatuses)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + targetUserId));
-
-        Asset asset = assetRepository.findByIdAndStatus(assetId, AssetStatusEnum.ACTIVE)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Asset not found with id: " + assetId + " and status ACTIVE"));
+        User user = userService.getActiveOrStudentUserById(targetUserId);
+        Asset asset = assetService.getActiveAssetById(assetId);
 
         return new BookingValidationContext(user, asset);
     }

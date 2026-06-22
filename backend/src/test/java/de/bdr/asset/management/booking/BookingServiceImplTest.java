@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import de.bdr.asset.management.asset.AssetService;
 import de.bdr.asset.management.core.email.EmailService;
+import de.bdr.asset.management.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,25 +28,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import de.bdr.asset.management.asset.Asset;
-import de.bdr.asset.management.asset.AssetRepository;
-import de.bdr.asset.management.asset.AssetStatusEnum;
 import static de.bdr.asset.management.booking.TestConstants.ASSET_ID;
 import static de.bdr.asset.management.booking.TestConstants.BOOKING_ID;
 import static de.bdr.asset.management.booking.TestConstants.USER_ID;
-import static de.bdr.asset.management.booking.TestConstants.validUpdateUserStatuses;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.core.security.SecurityService;
-import de.bdr.asset.management.report.ReportFilter;
-import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
-import de.bdr.asset.management.report.projections.GeneralReportProjection;
-import de.bdr.asset.management.report.projections.TopAssetBookingsProjection;
-import de.bdr.asset.management.report.projections.TopUserBookingsProjection;
 import de.bdr.asset.management.user.User;
-import de.bdr.asset.management.user.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
@@ -61,10 +52,10 @@ class BookingServiceImplTest {
     private SecurityService securityService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Mock
-    private AssetRepository assetRepository;
+    private AssetService assetService;
 
     @Mock
     private EmailService emailService;
@@ -82,8 +73,8 @@ class BookingServiceImplTest {
         service = new BookingServiceImpl(
                 repository,
                 mapper,
-                userRepository,
-                assetRepository,
+                userService,
+                assetService,
                 securityService,
                 fixedClock,
                 emailService
@@ -106,8 +97,8 @@ class BookingServiceImplTest {
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();
         BookingResponseDTO response = BookingServiceImplTestData.response();
 
-        when(userRepository.findByIdAndStatusIn(USER_ID, validUpdateUserStatuses)).thenReturn(Optional.of(user));
-        when(assetRepository.findByIdAndStatus(ASSET_ID, AssetStatusEnum.ACTIVE)).thenReturn(Optional.of(asset));
+        when(userService.getActiveOrStudentUserById(USER_ID)).thenReturn(user);
+        when(assetService.getActiveAssetById(ASSET_ID)).thenReturn(asset);
         when(mapper.toEntity(request)).thenReturn(booking);
         when(repository.save(booking)).thenReturn(booking);
         when(mapper.toResponse(booking)).thenReturn(response);
@@ -123,8 +114,7 @@ class BookingServiceImplTest {
 
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();
 
-        when(userRepository.findByIdAndStatusIn(USER_ID, validUpdateUserStatuses)).thenReturn(Optional.empty());
-
+        when(userService.getActiveOrStudentUserById(USER_ID)).thenThrow(new ResourceNotFoundException("User not found with id: " + USER_ID));
         assertThrows(ResourceNotFoundException.class,
                 () -> service.createBooking(request));
 
@@ -139,8 +129,8 @@ class BookingServiceImplTest {
 
         BookingCreateDTO request = BookingServiceImplTestData.createRequest();
 
-        when(userRepository.findByIdAndStatusIn(USER_ID, validUpdateUserStatuses)).thenReturn(Optional.of(user));
-        when(assetRepository.findByIdAndStatus(ASSET_ID, AssetStatusEnum.ACTIVE)).thenReturn(Optional.empty());
+        when(userService.getActiveOrStudentUserById(USER_ID)).thenReturn(user);
+        when(assetService.getActiveAssetById(ASSET_ID)).thenThrow(new ResourceNotFoundException("Asset not found with id: " + ASSET_ID));
 
         assertThrows(ResourceNotFoundException.class,
                 () -> service.createBooking(request));

@@ -21,4 +21,6 @@ public interface AssetService {
 
     /** DELETE */
     void softDeleteAsset(Long id);
+
+    Asset getActiveAssetById(Long id);
 }

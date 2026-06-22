@@ -162,4 +162,11 @@ public class AssetServiceImpl implements AssetService {
 
         repository.save(asset);
     }
+
+    @Override
+    public Asset getActiveAssetById(Long id) {
+        return repository.findByIdAndStatus(id, AssetStatusEnum.ACTIVE)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ASSET_NOT_FOUND_WITH_ID + id + " and status ACTIVE"));
+    }
 }
