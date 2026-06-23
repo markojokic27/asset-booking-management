@@ -12,12 +12,11 @@ public class AllBookingTest extends BaseLogin {
     @BeforeMethod
     public void setUpBookingPage() {
         login();
-        getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.MY_BOOKING_URL
-        );
+        getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.MY_BOOKING_URL);
     }
 
     @Test
-    public void viewMyBookingPage(){
+    public void viewMyBookingPage() {
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
@@ -26,32 +25,29 @@ public class AllBookingTest extends BaseLogin {
         myBookingsPage.searchAssets(CommonConstants.SEARCH_ASSET);
         assertTrue(waitForUrlContains(CommonConstants.MY_BOOKING_URL));
     }
-    
+
     @Test
-    public void selectAssetFilter(){
+    public void selectAssetFilter() {
         myBookingsPage.selectAssetFilter(CommonConstants.ASSET);
         assertTrue(waitForUrlContains(CommonConstants.MY_BOOKING_URL));
-
     }
 
     @Test
-    public void filterBookingsByDateRange() throws InterruptedException{
-        myBookingsPage.inputFromDate(CommonConstants.DATE_FROM);
-        myBookingsPage.inputToDate(CommonConstants.DATE_TO);
-        Thread.sleep(2000);
+    public void filterBookingsByDateRange() {
+        myBookingsPage.inputFromDate(CommonConstants.getDateFrom());
+        myBookingsPage.inputToDate(CommonConstants.getDateTo());
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
-    public void filterBookingsByFromDateOnly(){
-        myBookingsPage.inputFromDate(CommonConstants.DATE_FROM);
+    public void filterBookingsByFromDateOnly() {
+        myBookingsPage.inputFromDate(CommonConstants.getDateFrom());
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
-    public void filterBookingsByToDateOnly()throws  InterruptedException{
-        myBookingsPage.inputToDate(CommonConstants.DATE_TO);
-        Thread.sleep(2000);
+    public void filterBookingsByToDateOnly()  {
+        myBookingsPage.inputToDate(CommonConstants.getDateTo());
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
@@ -64,12 +60,10 @@ public class AllBookingTest extends BaseLogin {
     }
 
     @Test
-    public void cancelBookingKeep() {
+    public void cancelBookingKeep(){
         myBookingsPage.clickFirstCancelButton();
         assertTrue(isElementVisible(myBookingsPage.cancelBookingModal));
         myBookingsPage.keepBooking();
         assertFalse(isElementVisible(myBookingsPage.cancelBookingModal));
     }
-
-
 }

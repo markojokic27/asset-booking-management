@@ -2,6 +2,9 @@ package pages;
 
 import commonmethods.CommonMethods;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class BookingPage extends CommonMethods {
 
@@ -32,7 +35,6 @@ public class BookingPage extends CommonMethods {
 
     // Parking map
     public By parkingMapButton = By.cssSelector("[data-testid='parking-map-button']");
-    public By parkingMapModal = By.cssSelector("[aria-label='Parking map']");
     public By parkingMapCloseButton = By.cssSelector("[data-testid='parking-close-button']");
     public By floorLevelMinus1Active = By.cssSelector("[data-testid='level-button--1'].bg-white");
     public By floorLevelMinus2Active = By.cssSelector("[data-testid='level-button--2'].bg-white");
@@ -44,9 +46,14 @@ public class BookingPage extends CommonMethods {
     public By parkingMapDateInput = By.cssSelector("input[type='date']");
     public By spotPopoverBookButton = By.cssSelector("[data-testid='spot-book-button']");
     public By spotPopoverCloseButton = By.cssSelector("[data-testid='spot-popover-close-button']");
+    public By spotPopoverBackdrop = By.cssSelector("[data-testid='spot-popover-backdrop']");
 
     public void closeSpotPopover() {
-        clickOnElement(spotPopoverCloseButton);
+        if (isElementVisible(spotPopoverBackdrop)) {
+            clickOnElement(spotPopoverBackdrop);
+        } else if (isElementVisible(spotPopoverCloseButton)) {
+            clickOnElement(spotPopoverCloseButton);
+        }
     }
 
     public void clickSpotBookButton() {
@@ -59,6 +66,26 @@ public class BookingPage extends CommonMethods {
 
     public void clickParkingSpot(int spotNumber) {
         clickOnElement(By.cssSelector("[data-testid='parking-spot-" + spotNumber + "']"));
+    }
+
+    public int getFirstAvailableParkingSpot() {
+        List<WebElement> allSpots = getDriver().findElements(
+                By.cssSelector("[data-testid^='parking-spot-']"));
+
+        for (WebElement spot : allSpots) {
+            String testId = spot.getAttribute("data-testid");
+            if (testId == null || !testId.matches("parking-spot-\\d+")) continue;
+
+            List<WebElement> rects = spot.findElements(By.tagName("rect"));
+            if (rects.isEmpty()) continue;
+
+            String fill = rects.getFirst().getAttribute("fill");
+            if (fill != null && fill.equalsIgnoreCase("#F97316")) continue;
+
+            String numberStr = testId.replace("parking-spot-", "");
+            return Integer.parseInt(numberStr);
+        }
+        throw new RuntimeException("Nema slobodnih parking spotova za odabrani datum!");
     }
 
     // Parking filter
@@ -86,6 +113,7 @@ public class BookingPage extends CommonMethods {
     public void enterFromDate(String date) {
         inputDate(fromDateInput, date);
     }
+
     public void enterToDate(String date) {
         inputDate(toDateInput, date);
     }
@@ -145,6 +173,7 @@ public class BookingPage extends CommonMethods {
     public void clickBookButtonForInactiveAsset() {
         clickOnElement(By.xpath("//td[normalize-space()='Inactive']/following-sibling::td//button"));
     }
+
     public void selectAllRecurringDays() {
         getDriver().findElements(checkBoxDays).forEach(BookingPage::jsClick);
     }
@@ -152,6 +181,4 @@ public class BookingPage extends CommonMethods {
     public void clickCheckBoxDays() {
         clickOnElement(checkBoxDays);
     }
-
-
 }

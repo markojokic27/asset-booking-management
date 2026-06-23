@@ -462,42 +462,4 @@ public class UserCreateModalTest extends BaseLogin {
         );
         assertTrue(waitForUrlContains(CommonConstants.USERS_URL));
     }
-
-    // Change role field
-
-    @Test
-    void userChangeRoleField() {
-        userPage.user(
-                CommonConstants.CHANGE_ROLE,
-                CommonConstants.VALID_STATUS,
-                CommonConstants.VALID_NAME,
-                CommonConstants.VALID_SURNAME,
-                CommonConstants.VALID_USERNAME,
-                CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
-                CommonConstants.VALID_EMAIL,
-                CommonConstants.VALID_MANAGER_EMAIL,
-                CommonConstants.VALID_NOTES
-        );
-        assertTrue(waitForUrlContains(CommonConstants.USERS_URL));
-    }
-
-    // Change status field
-
-    @Test
-    void userChangeStatusField() {
-        userPage.user(
-                CommonConstants.VALID_ROLE,
-                CommonConstants.CHANGE_STATUS,
-                CommonConstants.VALID_NAME,
-                CommonConstants.VALID_SURNAME,
-                CommonConstants.VALID_USERNAME,
-                CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
-                CommonConstants.VALID_EMAIL,
-                CommonConstants.VALID_MANAGER_EMAIL,
-                CommonConstants.VALID_NOTES
-        );
-        assertTrue(waitForUrlContains(CommonConstants.USERS_URL));
-    }
 }

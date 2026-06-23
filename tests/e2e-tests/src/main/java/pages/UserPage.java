@@ -24,7 +24,7 @@ public class UserPage extends CommonMethods {
     public By userNotesField = By.cssSelector("[data-testid='user-note']");
     public By addUserButton = By.cssSelector("[data-testid='create-user-button']");
 
-    //View asset
+    //View users
     public By userViewOpenModal = By.cssSelector("[data-testid='view-user-button']");
     public By userViewCloseModal = By.cssSelector("[data-testid='user-close-button']");
 
@@ -32,15 +32,15 @@ public class UserPage extends CommonMethods {
     public By userBookingOpenModal = By.cssSelector("[data-testid='user-bookings-button']");
     public By userBookingCloseModal = By.cssSelector("[data-testid='user-booking-close-button']");
 
-    // Search assets
+    // Search users
     public By searchField = By.cssSelector("[data-testid='search-input']");
 
-    // View deleted assets
+    // View deleted users
 
     public By checkBoxDeletedAssets = By.cssSelector("[data-testid='checkbox']");
 
 
-    // Toggle deleted assets
+    // Toggle deleted users
     public By toggleDeletedUsers = By.cssSelector("[data-testid='toggle-deleted']");
 
     public void userOpenModal() {
@@ -114,19 +114,19 @@ public class UserPage extends CommonMethods {
         clickOnElement(userBookingCloseModal);
     }
 
-    // View deleted assets
+    // View deleted users
 
     public void clickCheckBox (){
         clickOnElement(checkBoxDeletedAssets);
     }
 
-    // Toggle deleted assets
+    // Toggle deleted users
 
     public void clickToggleDeletedUsers (){
         clickOnElement(toggleDeletedUsers);
     }
 
-    // Search assets
+    // Search users
     public void searchUsers(String users){
         typeInElement(searchField, users);
     }

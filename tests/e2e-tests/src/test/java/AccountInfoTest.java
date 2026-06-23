@@ -10,7 +10,7 @@ public class AccountInfoTest extends BaseLogin {
 
     @BeforeMethod
     public void setUpAccountPage(){
-        login();
+        loginWithEmployee();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + (CommonConstants.ACCOUNT_INFO));
 
         accountPage.openHeadingModal();
@@ -26,6 +26,23 @@ public class AccountInfoTest extends BaseLogin {
         );
 
         assertTrue(waitForUrlContains(CommonConstants.ACCOUNT_INFO));
+        logoutPage.clickLogoutButton();
+        loginPage.login(
+                CommonConstants.EMPLOYEE_USERNAME,
+                CommonConstants.NEW_PASSWORD
+        );
+        assertTrue(waitForUrlContains(CommonConstants.LOGIN_URL_EXTENSION));
+
+        getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + (CommonConstants.ACCOUNT_INFO));
+        accountPage.openHeadingModal();
+
+        accountPage.account(
+                CommonConstants.NEW_PASSWORD,
+                CommonConstants.PASSWORD,
+                CommonConstants.PASSWORD
+        );
+        assertTrue(waitForUrlContains(CommonConstants.ACCOUNT_INFO));
+
     }
 
     @Test

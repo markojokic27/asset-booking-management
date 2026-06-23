@@ -39,7 +39,7 @@ public class BaseLogin extends PageAndHandlerFactory {
 
     protected void loginWithEmployee() {
         loginPage.typeUsername(CommonConstants.EMPLOYEE_USERNAME);
-        loginPage.typePassword(CommonConstants.EMPLOYEE_PASS);
+        loginPage.typePassword(CommonConstants.PASSWORD);
         loginPage.clickLoginButton();
         assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
     }

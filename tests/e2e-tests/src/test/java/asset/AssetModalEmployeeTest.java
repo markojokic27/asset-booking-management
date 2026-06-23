@@ -12,7 +12,7 @@ public class AssetModalEmployeeTest extends BaseLogin {
 
         @BeforeMethod
         void setUpAssetPage(){
-            loginWithEmployee();
+            loginWithAndela();
             getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.ASSETS_URL);
         }
 

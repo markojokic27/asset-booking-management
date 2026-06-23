@@ -16,9 +16,8 @@ public class ApproveBookingSmokeTest extends BaseLogin {
 
         bookingPage.clickitEquipmentCategory();
         bookingPage.clickBookButton();
-        bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
+        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
         bookingPage.clickBookAssetButton();
         assertTrue(bookingPage.isCalendarVisible());
 
@@ -27,12 +26,9 @@ public class ApproveBookingSmokeTest extends BaseLogin {
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.APPROVALS);
         approvalsPage.clickApproveInModal();
 
-
         logoutPage.clickLogoutButton();
         loginWithAndela();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.MY_BOOKING_URL);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
-
-
 }

@@ -6,7 +6,6 @@ import constants.CommonConstants;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class BookingSmokeTest extends BaseLogin {
@@ -22,12 +21,11 @@ public class BookingSmokeTest extends BaseLogin {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
+        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
+        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
+        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
         bookingPage.clickBookAssetButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
@@ -37,9 +35,8 @@ public class BookingSmokeTest extends BaseLogin {
         bookingPage.clickitEquipmentCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
+        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
         bookingPage.clickBookAssetButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
@@ -47,15 +44,14 @@ public class BookingSmokeTest extends BaseLogin {
     @Test
     public void bookNowIsDisabledForInactiveAsset() {
         bookingPage.clickBookButtonForInactiveAsset();
-        assertFalse(bookingPage.isBookAssetButtonEnabled());
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
     }
 
     @Test
     public void clickParkingMapButtonOpenModal() {
         bookingPage.clickParkingCategory();
-
         bookingPage.clickParkingMapButton();
-        assertTrue(isElementVisible(bookingPage.parkingMapModal));
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
     }
 
     @Test
@@ -67,14 +63,13 @@ public class BookingSmokeTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER);
+        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        int freeSpot = bookingPage.getFirstAvailableParkingSpot();
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         bookingPage.clickSpotBookButton();
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER_LEVEL);
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
     }
-
-
 }

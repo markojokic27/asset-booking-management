@@ -22,25 +22,22 @@ public class BookingCalendarTest extends BaseLogin {
         assertTrue(bookingPage.isCalendarVisible());
     }
 
-
     @Test
     public void clickFutureDateHighlightsCell() {
         bookingPage.clickNextMonth();
-        bookingPage.clickNextMonth();
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
-        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE_FROM));
+        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
+        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.getFutureDateFrom()));
     }
 
     @Test
     public void clickFutureDatePopulatesDateFilter() {
         bookingPage.clickNextMonth();
-        bookingPage.clickNextMonth();
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
-        assertEquals(CommonConstants.FUTURE_DATE_FROM, bookingPage.getFromDateValue());
+        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
+        assertEquals(CommonConstants.getFutureDateFrom(), bookingPage.getFromDateValue());
     }
 
     @Test
-    public void nextMonthButtonChangesCalendarTitle(){
+    public void nextMonthButtonChangesCalendarTitle() {
         bookingPage.clickNextMonth();
         assertTrue(isElementVisible(bookingPage.calendarTitle));
     }
@@ -50,5 +47,4 @@ public class BookingCalendarTest extends BaseLogin {
         bookingPage.clickPrevMonth();
         assertTrue(isElementVisible(bookingPage.calendarTitle));
     }
-
 }

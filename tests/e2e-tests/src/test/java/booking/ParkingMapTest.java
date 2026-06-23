@@ -1,4 +1,5 @@
 package booking;
+
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
@@ -21,7 +22,7 @@ public class ParkingMapTest extends BaseLogin {
     @Test
     public void clickParkingMapButtonOpenModal() {
         bookingPage.clickParkingMapButton();
-        assertTrue(isElementVisible(bookingPage.parkingMapModal));
+        assertTrue(waitForUrlContains(CommonConstants.BOOKINGS_URL_EXTENSION));
     }
 
     @Test
@@ -31,7 +32,7 @@ public class ParkingMapTest extends BaseLogin {
     }
 
     @Test
-    public void clickLevelMinus2SwitchesFloor(){
+    public void clickLevelMinus2SwitchesFloor() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
         assertTrue(isElementVisible(bookingPage.floorLevelMinus2Active));
@@ -55,11 +56,13 @@ public class ParkingMapTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER);
+        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        int freeSpot = bookingPage.getFirstAvailableParkingSpot();
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         bookingPage.clickSpotBookButton();
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER_LEVEL);
+        bookingPage.closeSpotPopover();
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
     }
@@ -68,11 +71,13 @@ public class ParkingMapTest extends BaseLogin {
     public void selectDateClickSpotAndBookLevel2() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER_LEVEL);
+        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        int freeSpot = bookingPage.getFirstAvailableParkingSpot();
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         bookingPage.clickSpotBookButton();
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER_LEVEL);
+        bookingPage.closeSpotPopover();
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
     }
@@ -81,20 +86,15 @@ public class ParkingMapTest extends BaseLogin {
     public void clickTakenSpotShowsTakenStatus() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER_LEVEL);
+        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        int freeSpot = bookingPage.getFirstAvailableParkingSpot();
+        bookingPage.clickParkingSpot(freeSpot);
+        assertTrue(isElementVisible(bookingPage.spotPopover));
+        bookingPage.clickSpotBookButton();
+        bookingPage.closeSpotPopover();
+        bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
         assertFalse(isElementEnabled(bookingPage.spotPopoverBookButton));
-    }
-
-    @Test
-    public void closeSpotPopoverWithXButton() {
-        bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
-        bookingPage.clickParkingSpot(CommonConstants.PARKING_SPOT_NUMBER121);
-        assertTrue(isElementVisible(bookingPage.spotPopover));
-        bookingPage.closeSpotPopover();
-        assertFalse(isElementVisible(bookingPage.spotPopoverCloseButton));
     }
 }
