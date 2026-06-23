@@ -65,36 +65,16 @@ class CreateBookingViewModel @Inject constructor(
             try {
                 val asset = assetRepository.getAssetById(assetId)
                 val assetCategory = assetCategoryRepository.getAssetCategoryById(asset.categoryId)
-                val bookedDateStatus = if (assetCategory.bookingPeriod == "HOUR") {
-                    AvailabilityStatus.HOUR_BOOKED
-                } else {
-                    AvailabilityStatus.DAY_BOOKED
-                }
-                val availabilityByDate = bookingRepository.getAssetBookings(assetId)
-                    .filter { it.status == "APPROVED" || it.status == "PENDING" }
-                    .flatMap { booking ->
-                        booking.bookingStart.toDateMillisRange(booking.bookingEnd)
-                    }
-                    .associateWith { bookedDateStatus }
-                val bookedHoursByDate = if (assetCategory.bookingPeriod == "HOUR") {
-                    bookingRepository.getAssetBookings(assetId)
-                        .filter { it.status == "APPROVED" || it.status == "PENDING" }
-                        .flatMap { booking -> booking.toBookedHoursByDate().entries }
-                        .groupBy({ it.key }, { it.value })
-                        .mapValues { (_, hourSets) -> hourSets.flatten().toSet() }
-                } else {
-                    emptyMap()
-                }
 
                 _uiState.update {
                     it.copy(
                         assetName = asset.name,
                         bookingPeriod = assetCategory.bookingPeriod,
-                        approvalRequired = assetCategory.approval,
-                        availabilityByDate = availabilityByDate,
-                        bookedHoursByDate = bookedHoursByDate
+                        approvalRequired = assetCategory.approval
                     )
                 }
+
+                refreshAvailability(assetId, assetCategory.bookingPeriod)
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
@@ -260,6 +240,8 @@ class CreateBookingViewModel @Inject constructor(
                     )
                 )
 
+                refreshAvailability(assetId, state.bookingPeriod)
+
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
@@ -288,6 +270,37 @@ class CreateBookingViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private suspend fun refreshAvailability(
+        assetId: Long,
+        bookingPeriod: String?
+    ) {
+        val blockingBookings = bookingRepository.getAssetBookings(assetId)
+            .filter { it.blocksAvailability() }
+        val bookedDateStatus = if (bookingPeriod == "HOUR") {
+            AvailabilityStatus.HOUR_BOOKED
+        } else {
+            AvailabilityStatus.DAY_BOOKED
+        }
+        val availabilityByDate = blockingBookings
+            .flatMap { booking -> booking.bookingStart.toDateMillisRange(booking.bookingEnd) }
+            .associateWith { bookedDateStatus }
+        val bookedHoursByDate = if (bookingPeriod == "HOUR") {
+            blockingBookings
+                .flatMap { booking -> booking.toBookedHoursByDate().entries }
+                .groupBy({ it.key }, { it.value })
+                .mapValues { (_, hourSets) -> hourSets.flatten().toSet() }
+        } else {
+            emptyMap()
+        }
+
+        _uiState.update {
+            it.copy(
+                availabilityByDate = availabilityByDate,
+                bookedHoursByDate = bookedHoursByDate
+            )
         }
     }
 }
@@ -338,3 +351,6 @@ private fun BookingResponse.toBookedHoursByDate(): Map<Long, Set<Int>> {
             (startDateTime.hour until endDateTime.hour).toSet()
     )
 }
+
+private fun BookingResponse.blocksAvailability(): Boolean =
+    status == "APPROVED" || status == "PENDING"

@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
@@ -40,8 +41,10 @@ fun CreateBookingScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(assetId) {
+    LifecycleResumeEffect(assetId) {
         viewModel.loadBookingPeriod(assetId)
+
+        onPauseOrDispose { }
     }
 
     LaunchedEffect(uiState.bookingCreated) {
