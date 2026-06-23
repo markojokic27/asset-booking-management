@@ -1,7 +1,5 @@
 package de.bdr.asset.management.user;
 
-import de.bdr.asset.management.booking.BookingRepository;
-import de.bdr.asset.management.booking.BookingStatusEnum;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.department.DepartmentEnum;
@@ -19,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -45,7 +44,7 @@ class UserServiceImplTest {
     private DepartmentRepository departmentRepository;
 
     @Mock
-    private BookingRepository bookingRepository;
+    private ApplicationEventPublisher eventPublisher;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -243,11 +242,6 @@ class UserServiceImplTest {
     @Test
     void shouldSoftDeleteUser() {
 
-        List<String> statusesToCancel = List.of(
-                BookingStatusEnum.APPROVED.name(),
-                BookingStatusEnum.PENDING.name()
-        );
-
         when(repository.findById(1L)).thenReturn(Optional.of(user));
 
         service.softDeleteUser(1L);
@@ -256,7 +250,7 @@ class UserServiceImplTest {
 
         verify(repository).findById(1L);
         verify(repository).save(user);
-        verify(bookingRepository).cancelNotFinishedBookingsForUser(1L, statusesToCancel);
+        verify(eventPublisher).publishEvent(any(UserSoftDeletedEvent.class));
     }
 
     // Tests softDeleteUser(): throws exception if user does not exist
@@ -270,7 +264,7 @@ class UserServiceImplTest {
 
         verify(repository).findById(1L);
         verify(repository, never()).save(any());
-        verify(bookingRepository, never()).cancelNotFinishedBookingsForUser(anyLong(), any());
+        verify(eventPublisher, never()).publishEvent(any());
     }
 
     // Tests changePassword(): user exists, active, old password matches -> encode new, save user

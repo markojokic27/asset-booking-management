@@ -2,6 +2,7 @@ package de.bdr.asset.management.user;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.bdr.asset.management.booking.BookingRepository;
-import de.bdr.asset.management.booking.BookingStatusEnum;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.user.department.Department;
@@ -34,9 +33,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
-    private final BookingRepository bookingRepository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     /** {@inheritDoc} */
     @Override
@@ -132,11 +131,8 @@ public class UserServiceImpl implements UserService {
 
         user.setStatus(UserStatusEnum.DELETED);
         userRepository.save(user);
-        List<String> statusesToCancel = List.of(
-                BookingStatusEnum.APPROVED.name(),
-                BookingStatusEnum.PENDING.name()
-        );
-        bookingRepository.cancelNotFinishedBookingsForUser(id, statusesToCancel);
+
+        eventPublisher.publishEvent(new UserSoftDeletedEvent(this, id));
     }
 
     @Override
