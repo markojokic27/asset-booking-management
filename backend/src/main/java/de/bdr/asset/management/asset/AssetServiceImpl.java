@@ -3,6 +3,7 @@ package de.bdr.asset.management.asset;
 import de.bdr.asset.management.asset.dtos.AssetRequestDTO;
 import de.bdr.asset.management.asset.dtos.AssetResponseDTO;
 import de.bdr.asset.management.asset.dtos.AssetUpdateRequestDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,18 +20,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AssetServiceImpl implements AssetService {
+
     public static final String ASSET_NOT_FOUND_WITH_ID = "Asset not found with id: ";
+
     private final AssetRepository repository;
     private final AssetMapper mapper;
     private final AssetCategoryRepository assetCategoryRepository;
-
-    public AssetServiceImpl(AssetRepository repository, AssetMapper mapper, AssetCategoryRepository assetCategoryRepository) {
-        this.repository = repository;
-        this.mapper = mapper;
-        this.assetCategoryRepository = assetCategoryRepository;
-    }
 
     /**
      * Create asset in DB.
