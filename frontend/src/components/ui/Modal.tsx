@@ -15,7 +15,6 @@ export type ModalProps = {
   headerRight?: React.ReactNode;
   className?: string;
   testId?: string;
-
 };
 
 const sizeClassName: Record<ModalSize, string> = {
@@ -66,7 +65,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         {(title != null || headerRight != null) && (
           <div className="flex items-center justify-between gap-4 px-8 pt-6 pb-4">
-            <div className="min-w-0 w-full">{title}</div>
+            <div className="w-full min-w-0">{title}</div>
             {headerRight}
           </div>
         )}

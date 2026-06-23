@@ -15,8 +15,8 @@ export type Asset = {
   code?: string;
   status: AssetStatus;
   location: string;
-  createdAt: Date;
-  lastModifiedAt: Date;
+  createdAt?: Date;
+  lastModifiedAt?: Date;
 };
 
 export type AssetDto = Asset & {

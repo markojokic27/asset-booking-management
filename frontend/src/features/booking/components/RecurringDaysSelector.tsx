@@ -27,7 +27,7 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
 
   return (
     <div className="mb-6">
-      <p className=" mb-2 text-sm font-medium text-(--color-table-text)">
+      <p className="mb-2 text-sm font-medium text-(--color-table-text)">
         {t('bookings.recurringDays.bookEvery')}
       </p>
 
@@ -41,7 +41,7 @@ export function RecurringDaysSelector({ selectedDays, onChange }: Props) {
             <input
               data-testid="checkbox-days"
               type="checkbox"
-              className="h-5 w-5 rounded border-gray-300 text-blue-600 hover:cursor-pointer focus:ring-blue-500"
+              className="h-5 w-5 rounded-lg border-gray-300 text-blue-600 hover:cursor-pointer focus:ring-blue-500"
               checked={selectedDays.includes(day.value)}
               onChange={() => toggleDay(day.value)}
             />

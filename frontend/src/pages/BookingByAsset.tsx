@@ -19,13 +19,14 @@ import { getAssetById } from '../features/asset/api/assetApi';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
-import { FiltersBar } from '../features/booking/components/FilterBar';
-import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
-import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
-import { RecurringDaysSelector } from '../features/booking/components/RecurringDaysSelector';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { FiltersBar } from '../features/booking/components/FilterBar';
+import { AvailabilityCalendar } from '../features/booking/components/AvailabilityCalendar';
+import { RecurringDaysSelector } from '../features/booking/components/RecurringDaysSelector';
 import { CancelBookingModal } from '../features/booking/components/CancelBookingModal';
+import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
+import { BookingModal } from '../features/booking/components/BookingModal';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
@@ -45,7 +46,7 @@ export default function BookingsByAsset() {
   const [fetchedAsset, setFetchedAsset] = React.useState<any>(null);
   const [category, setCategory] = React.useState<any>(null);
 
-  const asset = assetFromBookings ?? fetchedAsset;
+  const asset = (assetFromBookings ?? fetchedAsset) as any;
 
   React.useEffect(() => {
     if (assetFromBookings || !assetId) return;
@@ -85,6 +86,7 @@ export default function BookingsByAsset() {
   const [bookingToCancel, setBookingToCancel] =
     React.useState<BookingWithRelations | null>(null);
   const [visibleMonth, setVisibleMonth] = React.useState(new Date());
+  const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(true);
 
   const recurringDates = getDatesForWeekdays(
     visibleMonth,
@@ -263,6 +265,13 @@ export default function BookingsByAsset() {
         variant={bookingPeriod}
         onMonthChange={setVisibleMonth}
         availableRecurringDates={availableRecurringDates}
+      />
+
+      <BookingModal
+        open={isBookingModalOpen}
+        onClose={() => setIsBookingModalOpen(false)}
+        filters={filters}
+        asset={asset}
       />
 
       <BookingDetailsModal
