@@ -49,6 +49,20 @@ class AssetCardTest {
         assertEquals(1, clickCalls)
     }
 
+    @Test
+    fun testShowsDashWhenCodeIsBlank() {
+        setAssetCard(asset = buildAsset(code = ""))
+
+        composeRule.onNodeWithText("-").assertIsDisplayed()
+    }
+
+    @Test
+    fun testShowsDashWhenCodeIsNull() {
+        setAssetCard(asset = buildAsset(code = null))
+
+        composeRule.onNodeWithText("-").assertIsDisplayed()
+    }
+
     private fun setAssetCard(
         asset: AssetResponse,
         onClick: () -> Unit = {}
@@ -63,12 +77,14 @@ class AssetCardTest {
         }
     }
 
-    private fun buildAsset() = AssetResponse(
+    private fun buildAsset(
+        code: String? = "QR-LAPTOP-001"
+    ) = AssetResponse(
         id = 1L,
         name = "Hp 15",
         categoryId = 1L,
         description = "Laptop located in room 301",
-        code = "QR-LAPTOP-001",
+        code = code,
         status = "ACTIVE",
         location = "Room 301"
     )

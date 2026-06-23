@@ -64,6 +64,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(fakeUserApi)
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(3, viewModel.uiState.value.assetCount)
@@ -87,6 +88,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(FakeUserApi())
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(0, viewModel.uiState.value.myBookingsCount)
@@ -118,6 +120,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(fakeUserApi)
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(0, viewModel.uiState.value.assetCount)
@@ -147,6 +150,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(fakeUserApi)
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(1, viewModel.uiState.value.assetCount)
@@ -180,6 +184,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(fakeUserApi)
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(true, viewModel.uiState.value.canManageApprovals)
@@ -207,6 +212,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(fakeUserApi)
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(false, viewModel.uiState.value.canManageApprovals)
@@ -241,6 +247,7 @@ class HomeViewModelTest {
             authSession = authSession,
             userRepository = UserRepository(fakeUserApi)
         )
+        viewModel.refreshHomeData()
         advanceUntilIdle()
 
         assertEquals(true, viewModel.uiState.value.canManageApprovals)
