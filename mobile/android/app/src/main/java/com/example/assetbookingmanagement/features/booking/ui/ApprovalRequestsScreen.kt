@@ -21,6 +21,7 @@ import com.example.assetbookingmanagement.core.ui.components.AppCard
 import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
 import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
 import com.example.assetbookingmanagement.core.ui.components.AppMessageState
+import com.example.assetbookingmanagement.core.ui.components.SearchBar
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingPeriod
 
@@ -38,8 +39,16 @@ fun ApprovalRequestsScreen(
     Column(
         modifier = Modifier
             .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        if (uiState.requests.isNotEmpty()) {
+            SearchBar(
+                value = uiState.searchText,
+                onValueChange = viewModel::onSearchTextChange,
+                placeholder = "Search..."
+            )
+        }
+
         when {
             uiState.isLoading -> {
                 AppLoadingState()
@@ -52,8 +61,14 @@ fun ApprovalRequestsScreen(
                 )
             }
 
-            uiState.requests.isEmpty() -> {
-                AppEmptyState(text = "No pending requests.")
+            uiState.filteredRequests.isEmpty() -> {
+                AppEmptyState(
+                    text = if (uiState.requests.isEmpty()) {
+                        "No pending requests."
+                    } else {
+                        "No matching requests found."
+                    }
+                )
             }
 
             else -> {
@@ -62,7 +77,7 @@ fun ApprovalRequestsScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(
-                        items = uiState.requests,
+                        items = uiState.filteredRequests,
                         key = { request -> request.id }
                     ) { request ->
                         ApprovalRequestCard(

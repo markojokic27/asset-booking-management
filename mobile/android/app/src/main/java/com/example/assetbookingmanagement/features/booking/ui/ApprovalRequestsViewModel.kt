@@ -27,8 +27,20 @@ data class ApprovalRequestUiModel(
 data class ApprovalRequestsUiState(
     val isLoading: Boolean = false,
     val requests: List<ApprovalRequestUiModel> = emptyList(),
+    val searchText: String = "",
     val errorMessage: String? = null
-)
+) {
+    val filteredRequests: List<ApprovalRequestUiModel>
+        get() = requests.filter { request ->
+            val matchesSearch =
+                request.id.toString().contains(searchText, ignoreCase = true) ||
+                    request.assetName.contains(searchText, ignoreCase = true) ||
+                    request.requesterName.contains(searchText, ignoreCase = true) ||
+                    request.status.contains(searchText, ignoreCase = true)
+
+            matchesSearch
+        }
+}
 
 @HiltViewModel
 class ApprovalRequestsViewModel @Inject constructor(
@@ -42,6 +54,10 @@ class ApprovalRequestsViewModel @Inject constructor(
 
     init {
         loadApprovalRequests()
+    }
+
+    fun onSearchTextChange(text: String) {
+        _uiState.update { it.copy(searchText = text) }
     }
 
     fun loadApprovalRequests() {

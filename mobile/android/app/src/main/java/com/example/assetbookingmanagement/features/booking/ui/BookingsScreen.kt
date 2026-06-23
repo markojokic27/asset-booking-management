@@ -2,8 +2,8 @@ package com.example.assetbookingmanagement.features.booking.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
 import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
 import com.example.assetbookingmanagement.core.ui.components.AppMessageState
+import com.example.assetbookingmanagement.core.ui.components.SearchBar
 
 @Composable
 fun BookingsScreen(
@@ -26,6 +27,11 @@ fun BookingsScreen(
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingsTab.MyBookings.ordinal) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val selectedTab = BookingsTab.entries[selectedTabIndex]
+    val hasBookingsForSelectedTab = when (selectedTab) {
+        BookingsTab.MyBookings -> uiState.myBookings.isNotEmpty()
+        BookingsTab.History -> uiState.historyBookings.isNotEmpty()
+    }
 
     BookingTabsLayout(
         selectedTabIndex = selectedTabIndex,
@@ -33,14 +39,22 @@ fun BookingsScreen(
         onTabSelected = { selectedTabIndex = it }
     ) {
         Spacer(modifier = Modifier.height(16.dp))
+        if (hasBookingsForSelectedTab) {
+            SearchBar(
+                value = uiState.searchText,
+                onValueChange = viewModel::onSearchTextChange,
+                placeholder = "Search..."
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-        when (BookingsTab.entries[selectedTabIndex]) {
+        when (selectedTab) {
             BookingsTab.MyBookings -> {
                 BookingListContent(
                     isLoading = uiState.isLoading,
                     errorMessage = uiState.errorMessage,
-                    bookings = uiState.myBookings,
-                    emptyMessage = "No bookings.",
+                    bookings = uiState.filteredMyBookings,
+                    emptyMessage = if (uiState.myBookings.isEmpty()) "No bookings." else "No matching bookings found.",
                     onBookingClick = onBookingClick
                 )
             }
@@ -49,8 +63,8 @@ fun BookingsScreen(
                 BookingListContent(
                     isLoading = uiState.isLoading,
                     errorMessage = uiState.errorMessage,
-                    bookings = uiState.historyBookings,
-                    emptyMessage = "No bookings.",
+                    bookings = uiState.filteredHistoryBookings,
+                    emptyMessage = if (uiState.historyBookings.isEmpty()) "No bookings." else "No matching bookings found.",
                     onBookingClick = onBookingClick
                 )
             }

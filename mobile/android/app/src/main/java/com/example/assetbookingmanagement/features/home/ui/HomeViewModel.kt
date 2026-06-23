@@ -32,7 +32,7 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    init {
+    fun refreshHomeData() {
         getAssetCount()
         getMyBookingsCount()
         getCurrentUserRole()

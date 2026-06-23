@@ -25,10 +25,33 @@ data class MyBookingUiModel(
 
 data class BookingsUiState(
     val isLoading: Boolean = false,
+    val searchText: String = "",
     val myBookings: List<MyBookingUiModel> = emptyList(),
     val historyBookings: List<MyBookingUiModel> = emptyList(),
     val errorMessage: String? = null
-)
+) {
+    val filteredMyBookings: List<MyBookingUiModel>
+        get() = myBookings.filter { booking ->
+            val matchesSearch =
+                booking.id.toString().contains(searchText, ignoreCase = true) ||
+                    booking.assetName.contains(searchText, ignoreCase = true) ||
+                    booking.categoryName.contains(searchText, ignoreCase = true) ||
+                    booking.status.contains(searchText, ignoreCase = true)
+
+            matchesSearch
+        }
+
+    val filteredHistoryBookings: List<MyBookingUiModel>
+        get() = historyBookings.filter { booking ->
+            val matchesSearch =
+                booking.id.toString().contains(searchText, ignoreCase = true) ||
+                    booking.assetName.contains(searchText, ignoreCase = true) ||
+                    booking.categoryName.contains(searchText, ignoreCase = true) ||
+                    booking.status.contains(searchText, ignoreCase = true)
+
+            matchesSearch
+        }
+}
 
 @HiltViewModel
 class BookingsViewModel @Inject constructor(
@@ -41,6 +64,10 @@ class BookingsViewModel @Inject constructor(
 
     init {
         getMyBookings()
+    }
+
+    fun onSearchTextChange(text: String) {
+        _uiState.update { it.copy(searchText = text) }
     }
 
     fun getMyBookings() {
