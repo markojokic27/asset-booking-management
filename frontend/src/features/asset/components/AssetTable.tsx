@@ -15,6 +15,7 @@ import { Button } from '../../../components/ui/Button';
 
 // Types
 import { type AssetDto } from '../../../features/asset/types';
+import { AssetStatusBadge } from './AssetStatusBadge';
 
 type Props = {
   assets: AssetDto[];
@@ -93,7 +94,7 @@ export function AssetsTable({
       {
         key: 'status',
         header: t('assets.table.status'),
-        accessor: 'status',
+        render: (asset) => <AssetStatusBadge status={asset.status} />,
       },
       {
         key: 'bookings',

@@ -68,8 +68,23 @@ vi.mock('../../components/ui/DeleteModal', () => ({
   },
 }));
 vi.mock('../../features/asset/components/AssetCategoryGrid', () => ({
-  AssetCategoryGrid: ({ categories, onSelectCategory }: { categories: string[]; onSelectCategory: (c: string) => void }) => (
-    <div>{categories.map((c) => <button key={c} onClick={() => onSelectCategory(c)}>{c}</button>)}</div>
+  AssetCategoryGrid: ({
+    categories,
+    onSelectCategory,
+    allCategory,
+  }: {
+    categories: string[];
+    onSelectCategory: (c: string) => void;
+    allCategory?: { label: string; value: string };
+  }) => (
+    <div>
+      {allCategory && (
+        <button onClick={() => onSelectCategory(allCategory.value)}>
+          {allCategory.label}
+        </button>
+      )}
+      {categories.map((c) => <button key={c} onClick={() => onSelectCategory(c)}>{c}</button>)}
+    </div>
   ),
 }));
 vi.mock('../../features/asset/components/AssetTable', () => ({

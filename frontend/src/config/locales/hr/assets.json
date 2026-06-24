@@ -2,7 +2,7 @@
   "label": "Imovina",
   "location": "Lokacija",
   "categories": {
-    "all": "$t(assets.label)"
+    "all": "Sva imovina"
   },
   "actions": {
     "new": "Novo"
@@ -11,7 +11,9 @@
     "placeholder": "Pretraži imovinu..."
   },
   "filters": {
-    "showDeleted": "Prikaži obrisane"
+    "showDeleted": "Prikaži obrisane",
+    "status": "Status",
+    "allStatuses": "Svi statusi"
   },
   "empty": {
     "loading": "Učitavanje imovine..."

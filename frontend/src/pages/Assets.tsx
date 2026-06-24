@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { LayoutColumn } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { DeleteModal } from '../components/ui/DeleteModal';
+import { FormDropdown } from '../components/ui/FormDropdown';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Pagination } from '../components/ui/Pagination';
 import { AssetCategoryGrid } from '../features/asset/components/AssetCategoryGrid';
@@ -33,6 +34,7 @@ import { isAdmin } from '../features/user/utilis/users';
 
 // Types
 import type { AssetDto } from '../features/asset/types';
+import { ALL_ASSETS_CATEGORY, assetStatuses } from '../features/asset/types';
 import type { AssetCategoryDto } from '../features/asset-category/types';
 
 type ModalState =
@@ -48,10 +50,11 @@ type ModalState =
 export default function Assets() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState<string>('Assets');
+  const [selectedCategory, setSelectedCategory] = useState<string>(ALL_ASSETS_CATEGORY);
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [search, setSearch] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
   const [showDeleted, setShowDeleted] = useState(false);
   const [nameSortDir, setNameSortDir] = useState<'asc' | 'desc'>('asc');
   const [loading, setLoading] = useState(true);
@@ -106,8 +109,22 @@ export default function Assets() {
     [assetCategories]
   );
 
+  const statusFilterOptions = useMemo(() => {
+    const statuses = isAdmin(user)
+      ? assetStatuses
+      : assetStatuses.filter((status) => status !== 'DELETED');
+
+    return [
+      { value: '', label: t('assets.filters.allStatuses') },
+      ...statuses.map((status) => ({
+        value: status,
+        label: t(`assets.status.${status}`),
+      })),
+    ];
+  }, [t, user]);
+
   const pageTitle =
-    selectedCategory === 'Assets'
+    selectedCategory === ALL_ASSETS_CATEGORY
       ? t('assets.categories.all')
       : selectedCategory;
 
@@ -124,17 +141,21 @@ export default function Assets() {
           .includes(search.trim().toLowerCase());
 
         const matchesCategory =
-          selectedCategory === 'Assets'
+          selectedCategory === ALL_ASSETS_CATEGORY
             ? true
             : (asset.categoryName ?? categoryMap[asset.categoryId] ?? '-') ===
               selectedCategory;
 
         const matchesDeleted =
-          (isAdmin(user) && showDeleted) || asset.status !== 'DELETED';
+          asset.status !== 'DELETED' ||
+          (isAdmin(user) && (showDeleted || selectedStatus === 'DELETED'));
 
-        return matchesSearch && matchesCategory && matchesDeleted;
+        const matchesStatus =
+          !selectedStatus || asset.status === selectedStatus;
+
+        return matchesSearch && matchesCategory && matchesDeleted && matchesStatus;
       }),
-    [assets, search, selectedCategory, categoryMap, showDeleted, user]
+    [assets, search, selectedCategory, categoryMap, showDeleted, selectedStatus, user]
   );
 
   const sortedAssets = useMemo(() => {
@@ -146,6 +167,10 @@ export default function Assets() {
   }, [filteredAssets, nameSortDir, collator]);
 
   const pagination = usePagination(sortedAssets, 10);
+
+  useEffect(() => {
+    pagination.setPage(1);
+  }, [search, selectedCategory, selectedStatus, showDeleted]);
 
   const closeModal = () => {
     setModal({ type: 'none' });
@@ -176,6 +201,10 @@ export default function Assets() {
         categories={categoryNames}
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
+        allCategory={{
+          label: t('assets.categories.all'),
+          value: ALL_ASSETS_CATEGORY,
+        }}
       />
 
       <div className="mt-12 flex w-full flex-col sm:items-center sm:justify-between gap-4 sm:flex-row">
@@ -200,23 +229,36 @@ export default function Assets() {
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
       <div
-        className={`mt-6 flex w-full items-center ${isAdmin(user) ? 'justify-between' : 'justify-end'}`}
+        className={`mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center ${isAdmin(user) ? 'sm:justify-between' : 'sm:justify-end'}`}
       >
-        {isAdmin(user) && (
-          <div className="flex items-center">
+        <div className="flex flex-wrap items-center gap-3">
+          {isAdmin(user) && (
             <ShowDeletedFilter
               checked={showDeleted}
               onToggle={() => setShowDeleted((v) => !v)}
               labelKey="assets.filters.showDeleted"
+              className="border-2 border-(--color-table-border) bg-(--color-table-surface) shadow-none ring-0 hover:bg-(--color-surface-hover) dark:bg-(--color-table-surface) dark:ring-0 dark:hover:bg-(--color-surface-hover)"
+            />
+          )}
+
+          <div className="relative w-full sm:w-44">
+            <FormDropdown
+              data-testid="asset-status-filter"
+              id="assets-status-filter"
+              aria-label={t('assets.filters.status')}
+              value={selectedStatus}
+              onChange={(event) => setSelectedStatus(event.target.value)}
+              options={statusFilterOptions}
+              className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
             />
           </div>
-        )}
+        </div>
 
         <SearchInput
           value={search}
           onChange={setSearch}
           placeholder={t('assets.search.placeholder')}
-          className="w-70"
+          className="w-full sm:w-70"
         />
       </div>
 

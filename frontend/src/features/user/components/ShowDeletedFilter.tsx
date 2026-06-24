@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { twMerge } from 'tailwind-merge';
 
 type ShowDeletedFilterProps = {
   checked: boolean;
@@ -17,12 +18,10 @@ export function ShowDeletedFilter({
 
   return (
     <label data-testid="toggle-deleted"
-      className={[
-        'relative inline-flex items-center gap-2.5 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-black/5 transition-colors hover:bg-gray-50 hover:cursor-pointer focus-within:ring-2 focus-within:ring-black/10 dark:bg-gray-900 dark:text-gray-100 dark:ring-white/10 dark:hover:bg-gray-800 dark:focus-within:ring-white/20',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={twMerge(
+        'relative inline-flex h-10 items-center gap-2.5 rounded-lg bg-white px-4 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-black/5 transition-colors hover:bg-gray-50 hover:cursor-pointer focus-within:ring-2 focus-within:ring-black/10 dark:bg-gray-900 dark:text-gray-100 dark:ring-white/10 dark:hover:bg-gray-800 dark:focus-within:ring-white/20',
+        className
+      )}
     >
       <input data-testid="toggle-deleted-assets"
         type="checkbox"

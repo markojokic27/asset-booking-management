@@ -12,6 +12,8 @@ export type AssetCategoryCardProps = {
   isSelected?: boolean;
   onClick?: () => void;
   className?: string;
+  showBackgroundImage?: boolean;
+  'data-testid'?: string;
 };
 
 export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
@@ -19,37 +21,60 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
   isSelected = false,
   onClick,
   className,
+  showBackgroundImage = true,
+  'data-testid': dataTestId,
 }) => {
   const { t } = useTranslation();
+  const isPlainCard = !showBackgroundImage;
 
   return (
     <button 
       type="button"
       onClick={onClick}
-      data-testid={`category-card-${title.toLowerCase()}`}
+      data-testid={dataTestId ?? `category-card-${title.toLowerCase()}`}
       className={twMerge(
-        'group min-h-24 cursor-pointer overflow-hidden rounded-lg border border-(--color-table-border) bg-(--color-table-surface) text-left text-white shadow-(--shadow-card) transition duration-100 dark:text-(--color-text)',
-        isSelected
-          ? 'bg-(--color-surface-hover)'
-          : 'hover:-translate-y-0.5 hover:bg-(--color-surface-hover)',
+        'group min-h-24 cursor-pointer overflow-hidden rounded-lg border border-(--color-table-border) text-left shadow-(--shadow-card) transition duration-100',
+        isPlainCard
+          ? twMerge(
+              'bg-(--color-surface) text-black dark:text-white',
+              !isSelected && 'hover:-translate-y-0.5 hover:bg-(--color-bg)'
+            )
+          : twMerge(
+              'bg-(--color-table-surface) text-white dark:text-(--color-text)',
+              isSelected
+                ? 'bg-(--color-surface-hover)'
+                : 'hover:-translate-y-0.5 hover:bg-(--color-surface-hover)'
+            ),
         className
       )}
     >
       <div className="relative flex h-full p-4">
-        <img
-          src={getCategoryIconSrc(title)}
-          alt=""
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70 dark:opacity-40"
-          onError={(e) => {
-            const img = e.currentTarget;
-            img.onerror = null;
-            img.src = CATEGORY_ICON_DEFAULT_SRC;
-          }}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-black/25 dark:bg-(--color-table-surface)/25" />
+        {showBackgroundImage && (
+          <>
+            <img
+              src={getCategoryIconSrc(title)}
+              alt=""
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-70 dark:opacity-40"
+              onError={(e) => {
+                const img = e.currentTarget;
+                img.onerror = null;
+                img.src = CATEGORY_ICON_DEFAULT_SRC;
+              }}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-black/25 dark:bg-(--color-table-surface)/25" />
+          </>
+        )}
 
         <div className="relative z-10 flex flex-1 flex-col justify-between">
-          <span className="text-[10px] font-semibold tracking-[0.22em] text-white/70 uppercase dark:text-(--color-table-head-text) dark:opacity-50">
+          <span
+            className={twMerge(
+              'text-[10px] font-semibold tracking-[0.22em] uppercase',
+              isPlainCard
+                ? 'invisible text-black/70 dark:text-white/70'
+                : 'text-white/70 dark:text-(--color-table-head-text) dark:opacity-50'
+            )}
+            aria-hidden={isPlainCard}
+          >
             {t('assets.categoryCard.badge')}
           </span>
           <div>

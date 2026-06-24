@@ -4,23 +4,13 @@ import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 
 // Components
-import type { AssetDto, AssetStatus } from '../types';
+import type { AssetDto } from '../types';
+import { AssetStatusBadge } from './AssetStatusBadge';
 
 export type AssetModalProps = {
   isOpen: boolean;
   onClose: () => void;
   asset: AssetDto | null;
-};
-
-const statusClassNames: Record<AssetStatus, string> = {
-  ACTIVE:
-    'bg-(--color-status-active-bg) text-(--color-status-active-text)',
-  INACTIVE:
-    'bg-(--color-status-inactive-bg) text-(--color-status-inactive-text)',
-  DAMAGED:
-    'bg-(--color-status-damaged-bg) text-(--color-status-damaged-text)',
-  DELETED:
-    'bg-(--color-status-deleted-bg) text-(--color-status-deleted-text)',
 };
 
 export const AssetModal: React.FC<AssetModalProps> = ({
@@ -31,9 +21,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
   const { t } = useTranslation();
 
   if (!isOpen || !asset) return null;
-
-  const statusLabel = t(`assets.status.${asset.status}`);
-  const statusClassName = statusClassNames[asset.status];
 
   return (
     <div
@@ -66,15 +53,7 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         <div className="mx-8 h-px bg-(--color-table-border)" />
         <div className="flex gap-10 px-8 py-8">
           <div className="flex flex-1 flex-col items-stretch space-y-5">
-            <span
-              data-testid="asset-status"
-              className={[
-                'inline-flex w-fit rounded-full px-3 py-1 text-sm font-medium',
-                statusClassName,
-              ].join(' ')}
-            >
-              {statusLabel}
-            </span>
+            <AssetStatusBadge status={asset.status} />
             <div>
               <p
                 data-testid="asset-category"

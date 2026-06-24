@@ -80,7 +80,7 @@ describe('AssetsTable', () => {
   it('renders asset name, status and category', () => {
     renderTable();
     expect(screen.getByText(activeAsset.name)).toBeInTheDocument();
-    expect(screen.getByText(activeAsset.status)).toBeInTheDocument();
+    expect(screen.getByText(`assets.status.${activeAsset.status}`)).toBeInTheDocument();
     expect(screen.getByText(activeAsset.categoryName!)).toBeInTheDocument();
   });
 

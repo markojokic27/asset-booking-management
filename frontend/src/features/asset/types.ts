@@ -1,5 +1,7 @@
 export type AssetStatus = 'ACTIVE' | 'INACTIVE' | 'DAMAGED' | 'DELETED';
 
+export const ALL_ASSETS_CATEGORY = 'Assets' as const;
+
 export const assetStatuses = [
   'ACTIVE',
   'INACTIVE',
