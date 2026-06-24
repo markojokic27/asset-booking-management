@@ -187,7 +187,12 @@ export const AssetFormModal = ({
       isOpen={isOpen}
       onClose={onClose}
       testId={isCreate ? "add-asset-modal" : "edit-asset-modal"}
-      ariaLabel={isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.aria')}
+      ariaLabel={isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.title')}
+      title={
+        <h2 className="text-2xl font-bold">
+          {isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.title')}
+        </h2>
+      }
       headerRight={
         <IconButton data-testid={isCreate ? "close-asset-modal" : "close-edit-modal"} onClick={onClose} aria-label={t('assets.modals.close')}>
           <CloseIcon className="pointer-events-none" />

@@ -44,7 +44,7 @@ describe('AssetModal', () => {
 
   it('renders asset details', () => {
     renderModal();
-    expect(screen.getByText(asset.name)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: asset.name })).toBeInTheDocument();
     expect(screen.getByText(asset.description!)).toBeInTheDocument();
     expect(screen.getByText(asset.categoryName!)).toBeInTheDocument();
     expect(screen.getByText(`assets.status.${asset.status}`)).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe('AssetModal', () => {
 
   it('does not call onClose when clicking inside the modal', () => {
     renderModal();
-    fireEvent.click(screen.getByText(asset.name));
+    fireEvent.click(screen.getByText(asset.description!));
     expect(baseProps.onClose).not.toHaveBeenCalled();
   });
 });

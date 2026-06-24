@@ -50,6 +50,7 @@
     },
     "edit": {
       "ariaLabel": "Uredi korisnika",
+      "title": "Uredi korisnika",
       "submitError": "Spremanje promjena nije uspjelo. Pokušajte ponovno.",
       "fields": {
         "role": "Uloga",
@@ -65,6 +66,7 @@
     },
     "create": {
       "ariaLabel": "Kreiraj korisnika",
+      "title": "Dodaj novog korisnika",
       "submitError": "Kreiranje korisnika nije uspjelo. Pokušajte ponovno.",
       "fields": {
         "role": "Uloga",

@@ -74,10 +74,11 @@
       "category": "Asset-Kategorie"
     },
     "edit": {
-      "aria": "Asset bearbeiten"
+      "aria": "Asset bearbeiten",
+      "title": "Asset bearbeiten"
     },
     "add": {
-      "title": "Asset hinzufügen",
+      "title": "Neues Asset hinzufügen",
       "selectCategory": "Kategorie auswählen"
     },
     "bookings": {

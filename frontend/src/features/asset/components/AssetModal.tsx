@@ -51,7 +51,8 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         onClick={onClose}
       />
       <div className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)">
-        <div className="flex items-center justify-end px-8 pt-6 pb-4">
+        <div className="flex items-center justify-between gap-4 px-8 pt-6 pb-4">
+          <h2 className="text-2xl font-bold">{asset.name}</h2>
           <button
             data-testid="asset-details-close-button"
             type="button"

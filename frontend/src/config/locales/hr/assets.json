@@ -74,10 +74,11 @@
       "category": "Kategorija imovine"
     },
     "edit": {
-      "aria": "Uredi imovinu"
+      "aria": "Uredi imovinu",
+      "title": "Uredi imovinu"
     },
     "add": {
-      "title": "Dodaj imovinu",
+      "title": "Dodaj novu imovinu",
       "selectCategory": "Odaberite kategoriju"
     },
     "bookings": {

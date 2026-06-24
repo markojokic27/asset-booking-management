@@ -74,10 +74,11 @@
       "category": "Asset category"
     },
     "edit": {
-      "aria": "Edit asset"
+      "aria": "Edit asset",
+      "title": "Edit asset"
     },
     "add": {
-      "title": "Add asset",
+      "title": "Add New Asset",
       "selectCategory": "Select category"
     },
     "bookings": {

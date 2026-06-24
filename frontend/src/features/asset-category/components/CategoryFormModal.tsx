@@ -147,6 +147,13 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
           ? t('assetCategories.modals.add.ariaLabel')
           : t('assetCategories.modals.edit.ariaLabel')
       }
+      title={
+        <h2 className="text-2xl font-bold">
+          {isCreate
+            ? t('assetCategories.modals.add.title')
+            : t('assetCategories.modals.edit.title')}
+        </h2>
+      }
       headerRight={
         <IconButton
           data-testid={isCreate ? 'category-close-button' : 'category-close-modal'}

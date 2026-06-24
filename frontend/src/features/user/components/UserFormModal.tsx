@@ -263,6 +263,11 @@ export const UserFormModal = ({
       ariaLabel={
         isCreate ? t('users.modals.create.ariaLabel') : t('users.modals.edit.ariaLabel')
       }
+      title={
+        <h2 className="text-2xl font-bold">
+          {isCreate ? t('users.modals.create.title') : t('users.modals.edit.title')}
+        </h2>
+      }
       headerRight={
         <IconButton
           data-testid={isCreate ? 'close-button' : undefined}
