@@ -61,6 +61,8 @@ public class CommonConstants {
 
     // User and asset
     public static final String CHANGE_STATUS = "Inactive";
+    public static final String EDIT_USER_USERNAME = "john.doe";
+    public static final String DELETE_USER_USERNAME = "ivanivic";
 
     // Asset
     public static final String VALID_ASSET_NAME = "Parking Spot 16";

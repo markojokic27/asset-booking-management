@@ -140,6 +140,7 @@ export const UsersTable = ({
             />
           </IconButton>
           <IconButton
+            data-testid="delete-user-button"
             type="button"
             variant="danger"
             aria-label={t('users.table.rowActions.deleteAria')}

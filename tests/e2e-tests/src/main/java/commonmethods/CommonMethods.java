@@ -81,7 +81,7 @@ public class CommonMethods  {
     public static void typeInElement(By locator, String text) {
         try {
             WebElement element = getElement(locator);
-            element.click();
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             element.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
             if (text != null && !text.isEmpty()) {
                 element.sendKeys(text);

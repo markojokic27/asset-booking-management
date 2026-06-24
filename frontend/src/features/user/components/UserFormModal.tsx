@@ -257,7 +257,7 @@ export const UserFormModal = ({
 
   return (
     <Modal
-      data-testid={isCreate ? undefined : 'user-edit'}
+      testId={isCreate ? undefined : 'user-edit'}
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel={
@@ -270,7 +270,7 @@ export const UserFormModal = ({
       }
       headerRight={
         <IconButton
-          data-testid={isCreate ? 'close-button' : undefined}
+          data-testid={isCreate ? 'close-button' : 'edit-close-button'}
           onClick={onClose}
           aria-label={t('users.modals.common.closeAria')}
         >
