@@ -228,7 +228,7 @@ export default function BookingsByAsset() {
           className="h-11 min-w-40"
           size="md"
           disabled={isButtonDisabled || isCreating}
-          onClick={handleCreateBooking}
+          onClick={() => setIsBookingModalOpen(true)}
         >
           {isCreating ? 'Booking...' : 'Book'}
         </Button>
@@ -272,6 +272,7 @@ export default function BookingsByAsset() {
         onClose={() => setIsBookingModalOpen(false)}
         filters={filters}
         asset={asset}
+        handleCreateBooking={handleCreateBooking}
       />
 
       <BookingDetailsModal

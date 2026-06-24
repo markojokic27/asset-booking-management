@@ -14,6 +14,7 @@ type BookingModalProps = {
   onClose: () => void;
   asset?: AssetDto | null;
   filters: Filters;
+  handleCreateBooking: () => Promise<void>;
 };
 
 export function BookingModal({
@@ -21,6 +22,7 @@ export function BookingModal({
   onClose,
   asset,
   filters,
+  handleCreateBooking,
 }: BookingModalProps) {
   const selectedFrom = `${filters.fromDate || '-'} ${filters.fromHour || ''}`;
   const selectedTo = `${filters.toDate || '-'} ${filters.toHour || ''}`;
@@ -73,11 +75,8 @@ export function BookingModal({
           variant="solid"
           size="md"
           onClick={() => {
-            console.log('BOOK', {
-              asset,
-              from: filters.fromDate,
-              to: filters.toDate,
-            });
+            handleCreateBooking();
+            onClose();
           }}
         >
           Book now
