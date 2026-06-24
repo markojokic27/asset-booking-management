@@ -8,7 +8,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(properties = {
         "JWT_SECRET=1111111111111111111111111111111111111111",
         "JWT_EXPIRY_SECONDS=3600",
-        "JWT_REFRESH_SECONDS=86400"
+        "JWT_REFRESH_SECONDS=86400",
+        "BASE_URL=http://localhost:5173"
 })
 @ActiveProfiles("test")
 @Testcontainers(disabledWithoutDocker = true)
