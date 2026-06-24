@@ -3,6 +3,7 @@ package de.bdr.asset.management.user;
 import de.bdr.asset.management.user.department.Department;
 import de.bdr.asset.management.user.dtos.UserCreateRequestDTO;
 import de.bdr.asset.management.user.dtos.UserResponseDTO;
+import de.bdr.asset.management.user.dtos.UserUpdateRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -229,5 +230,56 @@ public class UserMapperTest {
     void shouldReturnNullWhenUserIsNull() {
         UserResponseDTO result = userMapper.toResponse(null);
         assertThat(result).isNull();
+    }
+
+    // --- updateEntityFromDto ---
+
+    @Test
+    void shouldUpdateEntityFieldsFromDto() {
+        User user = buildUser();
+        user.setNotes("original note");
+
+        UserUpdateRequestDTO dto = new UserUpdateRequestDTO(
+                "NewSurname",
+                "NewName",
+                "new@example.com",
+                UserRoleEnum.MANAGER,
+                UserStatusEnum.INACTIVE,
+                99L,
+                "newmanager@example.com",
+                "updated note",
+                "NEW_BENEFIT"
+        );
+
+        userMapper.updateEntityFromDto(dto, user);
+
+        assertThat(user.getSurname()).isEqualTo("NewSurname");
+        assertThat(user.getName()).isEqualTo("NewName");
+        assertThat(user.getEmail()).isEqualTo("new@example.com");
+        assertThat(user.getRole()).isEqualTo(UserRoleEnum.MANAGER);
+        assertThat(user.getStatus()).isEqualTo(UserStatusEnum.INACTIVE);
+        assertThat(user.getManagerEmail()).isEqualTo("newmanager@example.com");
+        assertThat(user.getNotes()).isEqualTo("updated note");
+        assertThat(user.getBenefit()).isEqualTo("NEW_BENEFIT");
+    }
+
+    @Test
+    void shouldIgnoreNullFieldsWhenUpdatingEntity() {
+        User user = buildUser();
+        user.setSurname("OriginalSurname");
+        user.setName("OriginalName");
+        user.setEmail("original@example.com");
+        user.setNotes("original note");
+
+        UserUpdateRequestDTO dto = new UserUpdateRequestDTO(
+                null, null, null, null, null, null, null, null, null
+        );
+
+        userMapper.updateEntityFromDto(dto, user);
+
+        assertThat(user.getSurname()).isEqualTo("OriginalSurname");
+        assertThat(user.getName()).isEqualTo("OriginalName");
+        assertThat(user.getEmail()).isEqualTo("original@example.com");
+        assertThat(user.getNotes()).isEqualTo("original note");
     }
 }

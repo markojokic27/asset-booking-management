@@ -340,4 +340,101 @@ class UserServiceImplTest {
         verify(passwordEncoder, never()).encode(any());
         verify(repository, never()).save(any());
     }
+
+    // Tests getActiveOrStudentUserById(): user found with ACTIVE status
+    @Test
+    void shouldReturnActiveUser() {
+
+        user.setStatus(UserStatusEnum.ACTIVE);
+
+        when(repository.findByIdAndStatusIn(1L, List.of(UserStatusEnum.ACTIVE, UserStatusEnum.STUDENT)))
+                .thenReturn(Optional.of(user));
+
+        User result = service.getActiveOrStudentUserById(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        verify(repository).findByIdAndStatusIn(1L, List.of(UserStatusEnum.ACTIVE, UserStatusEnum.STUDENT));
+    }
+
+    // Tests getActiveOrStudentUserById(): user found with STUDENT status
+    @Test
+    void shouldReturnStudentUser() {
+
+        user.setStatus(UserStatusEnum.STUDENT);
+
+        when(repository.findByIdAndStatusIn(1L, List.of(UserStatusEnum.ACTIVE, UserStatusEnum.STUDENT)))
+                .thenReturn(Optional.of(user));
+
+        User result = service.getActiveOrStudentUserById(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(UserStatusEnum.STUDENT, result.getStatus());
+    }
+
+    // Tests getActiveOrStudentUserById(): throws if not found
+    @Test
+    void shouldThrowExceptionWhenActiveOrStudentUserNotFound() {
+
+        when(repository.findByIdAndStatusIn(1L, List.of(UserStatusEnum.ACTIVE, UserStatusEnum.STUDENT)))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.getActiveOrStudentUserById(1L));
+
+        verify(repository).findByIdAndStatusIn(1L, List.of(UserStatusEnum.ACTIVE, UserStatusEnum.STUDENT));
+    }
+
+    // Tests updateUser(): throws if user is DELETED
+    @Test
+    void shouldThrowExceptionWhenUpdatingDeletedUser() {
+
+        user.setStatus(UserStatusEnum.DELETED);
+        when(repository.findById(1L)).thenReturn(Optional.of(user));
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.updateUser(1L, userUpdateRequestDTO));
+
+        verify(repository).findById(1L);
+        verify(repository, never()).save(any());
+    }
+
+    // Tests updateUser(): throws if new department not found
+    @Test
+    void shouldThrowExceptionWhenUpdatingWithNonExistingDepartment() {
+
+        user.setStatus(UserStatusEnum.ACTIVE);
+        when(repository.findById(1L)).thenReturn(Optional.of(user));
+        when(departmentRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.updateUser(1L, userUpdateRequestDTO));
+
+        verify(repository).findById(1L);
+        verify(departmentRepository).findById(1L);
+        verify(repository, never()).save(any());
+    }
+
+    // Tests updateUser(): departmentId is null → skip department lookup
+    @Test
+    void shouldUpdateUserWithoutDepartmentChange() {
+
+        user.setStatus(UserStatusEnum.ACTIVE);
+
+        UserUpdateRequestDTO requestWithoutDept = new UserUpdateRequestDTO(
+                "ivic", "ivan", null, null, null, null, null, "just notes", null
+        );
+
+        when(repository.findById(1L)).thenReturn(Optional.of(user));
+        when(repository.save(user)).thenReturn(user);
+        when(mapper.toResponse(user)).thenReturn(responseDTO);
+
+        UserResponseDTO result = service.updateUser(1L, requestWithoutDept);
+
+        assertEquals("ivan", result.name());
+        verify(repository).findById(1L);
+        verify(departmentRepository, never()).findById(any());
+        verify(repository).save(user);
+    }
 }
