@@ -2,6 +2,7 @@ package de.bdr.asset.management.assetcategory;
 
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
+import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -151,5 +152,52 @@ public class AssetCategoryMapperTest {
 
         AssetCategoryResponseDTO result = assetCategoryMapper.toResponse(category);
         assertThat(result.approval()).isFalse();
+    }
+
+    // --- updateEntityFromDto ---
+
+    @Test
+    void shouldUpdateAllFieldsFromDto() {
+        AssetCategoryUpdateRequestDTO updateDto = new AssetCategoryUpdateRequestDTO(
+                "UpdatedName", "Updated description", BookingPeriodEnum.WEEK, false
+        );
+        AssetCategory entity = buildCategory();
+
+        assetCategoryMapper.updateEntityFromDto(updateDto, entity);
+
+        assertThat(entity.getName()).isEqualTo("UpdatedName");
+        assertThat(entity.getDescription()).isEqualTo("Updated description");
+        assertThat(entity.getBookingPeriod()).isEqualTo(BookingPeriodEnum.WEEK);
+        assertThat(entity.isApproval()).isFalse();
+    }
+
+    @Test
+    void shouldOnlyUpdateNonNullFields() {
+        AssetCategoryUpdateRequestDTO updateDto = new AssetCategoryUpdateRequestDTO(
+                "OnlyName", null, null, null
+        );
+        AssetCategory entity = buildCategory();
+
+        assetCategoryMapper.updateEntityFromDto(updateDto, entity);
+
+        assertThat(entity.getName()).isEqualTo("OnlyName");
+        assertThat(entity.getDescription()).isEqualTo("A category for electronic devices");
+        assertThat(entity.getBookingPeriod()).isEqualTo(BookingPeriodEnum.DAY);
+        assertThat(entity.isApproval()).isTrue();
+    }
+
+    @Test
+    void shouldNotChangeEntityWhenAllFieldsAreNull() {
+        AssetCategoryUpdateRequestDTO updateDto = new AssetCategoryUpdateRequestDTO(
+                null, null, null, null
+        );
+        AssetCategory entity = buildCategory();
+
+        assetCategoryMapper.updateEntityFromDto(updateDto, entity);
+
+        assertThat(entity.getName()).isEqualTo("Electronics");
+        assertThat(entity.getDescription()).isEqualTo("A category for electronic devices");
+        assertThat(entity.getBookingPeriod()).isEqualTo(BookingPeriodEnum.DAY);
+        assertThat(entity.isApproval()).isTrue();
     }
 }

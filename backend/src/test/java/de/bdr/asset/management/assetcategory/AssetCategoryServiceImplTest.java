@@ -1,8 +1,10 @@
 package de.bdr.asset.management.assetcategory;
 
+import de.bdr.asset.management.asset.AssetRepository;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryRequestDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryResponseDTO;
 import de.bdr.asset.management.assetcategory.dto.AssetCategoryUpdateRequestDTO;
+import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.DuplicateResourceException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 
@@ -29,6 +31,9 @@ class AssetCategoryServiceImplTest {
 
     @Mock
     private AssetCategoryMapper mapper;
+
+    @Mock
+    private AssetRepository assetRepository;
 
     @InjectMocks
     private AssetCategoryServiceImpl service;
@@ -179,5 +184,39 @@ class AssetCategoryServiceImplTest {
         verify(repository).findById(1L);
         verify(repository).existsByNameAndIdNot(requestDTO.name(), 1L);
         verify(repository, never()).save(any());
+    }
+
+    // Tests deleteAssetCategory(): category exists, no assets assigned, should delete
+    @Test
+    void shouldDeleteAssetCategory() {
+        when(repository.findById(1L)).thenReturn(Optional.of(category));
+        when(assetRepository.existsByCategoryId(1L)).thenReturn(false);
+
+        service.deleteAssetCategory(1L);
+
+        verify(repository).findById(1L);
+        verify(assetRepository).existsByCategoryId(1L);
+        verify(repository).delete(category);
+    }
+
+    // Tests deleteAssetCategory(): category not found
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistingCategory() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.deleteAssetCategory(1L));
+    }
+
+    // Tests deleteAssetCategory(): category has assets assigned
+    @Test
+    void shouldThrowExceptionWhenCategoryHasAssets() {
+        when(repository.findById(1L)).thenReturn(Optional.of(category));
+        when(assetRepository.existsByCategoryId(1L)).thenReturn(true);
+
+        assertThrows(ActionNotAllowedException.class,
+                () -> service.deleteAssetCategory(1L));
+
+        verify(repository, never()).delete(any());
     }
 }
