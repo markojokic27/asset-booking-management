@@ -51,11 +51,11 @@ public class DepartmentRequestDTOTestValidation {
 
     //managerId
 
-    //ManagerId is null
+    //ManagerId is null (optional field — should be allowed)
     @Test
-    void nullManagerId_shouldFailNotNull(){
+    void nullManagerId_shouldBeAllowed(){
         DepartmentRequestDTO dto=new DepartmentRequestDTO( DepartmentEnum.DEVOPS, null);
-        assertThat(validator.validate(dto)).anyMatch(v -> v.getPropertyPath().toString().equals("managerId"));
+        assertThat(validator.validate(dto)).noneMatch(v -> v.getPropertyPath().toString().equals("managerId"));
     }
 
 

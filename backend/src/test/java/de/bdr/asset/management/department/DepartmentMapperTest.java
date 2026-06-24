@@ -4,6 +4,7 @@ import de.bdr.asset.management.user.User;
 import de.bdr.asset.management.user.department.*;
 import de.bdr.asset.management.user.department.dtos.DepartmentRequestDTO;
 import de.bdr.asset.management.user.department.dtos.DepartmentResponseDTO;
+import de.bdr.asset.management.user.department.dtos.DepartmentUpdateRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -115,5 +116,49 @@ public class DepartmentMapperTest {
 
         Department result = departmentMapper.toEntity(request);
         assertThat(result.getManager()).isNull();
+    }
+
+    // --- updateEntityFromDto ---
+
+    @Test
+    void shouldUpdateNameWhenUpdatingFromDto() {
+        DepartmentUpdateRequestDTO update = new DepartmentUpdateRequestDTO(DepartmentEnum.SECURE_SERVICES, 1L);
+        Department entity = buildDepartment();
+
+        departmentMapper.updateEntityFromDto(update, entity);
+
+        assertThat(entity.getName()).isEqualTo(DepartmentEnum.SECURE_SERVICES);
+    }
+
+    @Test
+    void shouldIgnoreManagerWhenUpdatingFromDto() {
+        DepartmentUpdateRequestDTO update = new DepartmentUpdateRequestDTO(DepartmentEnum.SECURE_SERVICES, 2L);
+        Department entity = buildDepartment();
+
+        departmentMapper.updateEntityFromDto(update, entity);
+
+        assertThat(entity.getManager()).isNotNull();
+        assertThat(entity.getManager().getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void shouldKeepExistingNameWhenUpdateNameIsNull() {
+        DepartmentUpdateRequestDTO update = new DepartmentUpdateRequestDTO(null, 1L);
+        Department entity = buildDepartment();
+
+        departmentMapper.updateEntityFromDto(update, entity);
+
+        assertThat(entity.getName()).isEqualTo(DepartmentEnum.DEVOPS);
+    }
+
+    @Test
+    void shouldKeepExistingManagerWhenUpdateManagerIdIsNull() {
+        DepartmentUpdateRequestDTO update = new DepartmentUpdateRequestDTO(DepartmentEnum.SECURE_SERVICES, null);
+        Department entity = buildDepartment();
+
+        departmentMapper.updateEntityFromDto(update, entity);
+
+        assertThat(entity.getManager()).isNotNull();
+        assertThat(entity.getManager().getId()).isEqualTo(1L);
     }
 }

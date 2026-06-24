@@ -201,4 +201,83 @@ class DepartmentServiceImplTest {
 
         verify(repository, never()).save(any());
     }
+
+    // Tests createDepartment(): throws if name already exists
+    @Test
+    void shouldThrowExceptionWhenCreatingDepartmentWithDuplicateName() {
+        when(repository.existsByName(requestDTO.name())).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.createDepartment(requestDTO));
+
+        verify(repository).existsByName(requestDTO.name());
+        verify(repository, never()).save(any());
+    }
+
+    // Tests createDepartment(): throws if manager already assigned to another department
+    @Test
+    void shouldThrowExceptionWhenCreatingDepartmentWithManagerAlreadyAssigned() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(manager));
+        when(repository.existsByName(requestDTO.name())).thenReturn(false);
+        when(repository.existsByManagerId(1L)).thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> service.createDepartment(requestDTO));
+
+        verify(repository, never()).save(any());
+    }
+
+    // Tests createDepartment(): succeeds with null managerId (manager is optional)
+    @Test
+    void shouldCreateDepartmentWithNullManagerId() {
+        DepartmentRequestDTO requestWithoutManager = new DepartmentRequestDTO(DepartmentEnum.DEVOPS, null);
+
+        when(repository.existsByName(requestWithoutManager.name())).thenReturn(false);
+        when(mapper.toEntity(requestWithoutManager)).thenReturn(department);
+        when(repository.save(department)).thenReturn(department);
+        when(mapper.toResponse(department)).thenReturn(responseDTO);
+
+        DepartmentResponseDTO result = service.createDepartment(requestWithoutManager);
+
+        assertNotNull(result);
+        verify(repository).save(department);
+        verify(userRepository, never()).findById(any());
+    }
+
+    // Tests updateDepartment(): skips duplicate name check when name is null
+    @Test
+    void shouldUpdateDepartmentWithNullName() {
+        DepartmentUpdateRequestDTO updateWithoutName = new DepartmentUpdateRequestDTO(null, 1L);
+
+        when(repository.findById(1L)).thenReturn(Optional.of(department));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(manager));
+        when(repository.existsByManagerIdAndIdNot(1L, 1L)).thenReturn(false);
+        when(repository.save(department)).thenReturn(department);
+        when(mapper.toResponse(department)).thenReturn(responseDTO);
+
+        DepartmentResponseDTO result = service.updateDepartment(1L, updateWithoutName);
+
+        assertEquals(DepartmentEnum.DEVOPS, result.name());
+        verify(mapper).updateEntityFromDto(updateWithoutName, department);
+        verify(repository).save(department);
+        verify(repository, never()).existsByNameAndIdNot(any(), any());
+    }
+
+    // Tests updateDepartment(): skips manager lookup when managerId is null
+    @Test
+    void shouldUpdateDepartmentWithNullManagerId() {
+        DepartmentUpdateRequestDTO updateWithoutManager = new DepartmentUpdateRequestDTO(DepartmentEnum.DEVOPS, null);
+
+        when(repository.findById(1L)).thenReturn(Optional.of(department));
+        when(repository.existsByNameAndIdNot(DepartmentEnum.DEVOPS, 1L)).thenReturn(false);
+        when(repository.save(department)).thenReturn(department);
+        when(mapper.toResponse(department)).thenReturn(responseDTO);
+
+        DepartmentResponseDTO result = service.updateDepartment(1L, updateWithoutManager);
+
+        assertEquals(DepartmentEnum.DEVOPS, result.name());
+        verify(mapper).updateEntityFromDto(updateWithoutManager, department);
+        verify(repository).save(department);
+        verify(userRepository, never()).findById(any());
+    }
 }
