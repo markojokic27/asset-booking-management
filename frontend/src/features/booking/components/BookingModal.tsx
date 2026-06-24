@@ -1,6 +1,3 @@
-// External packages
-import { useState } from 'react';
-
 // Components
 import { Button } from '../../../components/ui/Button';
 import { Modal } from '../../../components/ui/Modal';
@@ -8,12 +5,20 @@ import { Modal } from '../../../components/ui/Modal';
 // Types
 import type { Filters } from '../types';
 import type { AssetDto } from '../../asset/types';
+import type { UserDto } from '../../user/types';
+
+// Utilis
+import { getBookingMessage } from '../utilis/getBookingMessage';
 
 type BookingModalProps = {
   open: boolean;
   onClose: () => void;
   asset?: AssetDto | null;
   filters: Filters;
+  user: UserDto | null;
+  needApproval: boolean;
+  availableRecurringDates: string[];
+  variant: string;
   handleCreateBooking: () => Promise<void>;
 };
 
@@ -22,12 +27,15 @@ export function BookingModal({
   onClose,
   asset,
   filters,
+  user,
+  needApproval,
+  availableRecurringDates,
+  variant,
   handleCreateBooking,
 }: BookingModalProps) {
-  const selectedFrom = `${filters.fromDate || '-'} ${filters.fromHour || ''}`;
-  const selectedTo = `${filters.toDate || '-'} ${filters.toHour || ''}`;
-
   if (!open || !asset) return null;
+
+  console.log('DDD', asset);
 
   return (
     <Modal
@@ -35,31 +43,15 @@ export function BookingModal({
       onClose={onClose}
       title={<h2 className="text-xl font-semibold">Book {asset.name}</h2>}
     >
-      <div className="mb-5 text-sm">
-        <p className="font-semibold">{asset.name}</p>
-        <p>Model: {asset.name ?? '-'}</p>
-        <p>Location: {asset.location ?? '-'}</p>
+      <div className="text-lg">
+        {getBookingMessage({
+          filters,
+          availableRecurringDates,
+          needApproval,
+          user,
+          variant,
+        })}
       </div>
-
-      <div className="space-y-6">
-        <div className="flex items-start gap-3 text-sm">
-          <span className="bg---color-status-active-bg flex h-5 w-5 items-center justify-center text-(--color-status-active-text)">
-            ✓
-          </span>
-
-          <p>
-            {asset.name} is
-            <span
-              data-testid="availability-badge"
-              className="rounded bg-(--color-status-active-bg) px-2 py-0.5 text-(--color-status-active-text)"
-            >
-              available
-            </span>
-            from {selectedFrom} to {selectedTo}
-          </p>
-        </div>
-      </div>
-
       <div className="mt-10 flex justify-end gap-4">
         <Button
           data-testid="cancel-button"
@@ -79,7 +71,9 @@ export function BookingModal({
             onClose();
           }}
         >
-          Book now
+          {needApproval && user?.role === 'EMPLOYEE'
+            ? 'Send request'
+            : 'Book now'}
         </Button>
       </div>
     </Modal>

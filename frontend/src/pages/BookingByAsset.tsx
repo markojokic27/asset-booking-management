@@ -16,6 +16,7 @@ import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingL
 import { getDatesForWeekdays } from '../features/booking/utilis/getDatesForWeekdays';
 import { getAvailableRecurringDates } from '../features/booking/utilis/getAvailableRecurringDates';
 import { getAssetById } from '../features/asset/api/assetApi';
+import { getCategoryById } from '../features/asset-category/api/categoryApi';
 
 // Components
 import { LayoutColumn } from '../components/layout/Layout';
@@ -30,7 +31,7 @@ import { BookingModal } from '../features/booking/components/BookingModal';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
-import { getCategoryById } from '../features/asset-category/api/categoryApi';
+import type { AssetCategoryDto } from '../features/asset-category/types';
 
 export default function BookingsByAsset() {
   const { assetId } = useParams();
@@ -44,7 +45,7 @@ export default function BookingsByAsset() {
   const assetFromBookings = bookings?.[0]?.asset;
 
   const [fetchedAsset, setFetchedAsset] = React.useState<any>(null);
-  const [category, setCategory] = React.useState<any>(null);
+  const [category, setCategory] = React.useState<AssetCategoryDto | null>(null);
 
   const asset = (assetFromBookings ?? fetchedAsset) as any;
 
@@ -86,7 +87,7 @@ export default function BookingsByAsset() {
   const [bookingToCancel, setBookingToCancel] =
     React.useState<BookingWithRelations | null>(null);
   const [visibleMonth, setVisibleMonth] = React.useState(new Date());
-  const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(true);
+  const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(false);
 
   const recurringDates = getDatesForWeekdays(
     visibleMonth,
@@ -272,7 +273,11 @@ export default function BookingsByAsset() {
         onClose={() => setIsBookingModalOpen(false)}
         filters={filters}
         asset={asset}
+        user={user}
         handleCreateBooking={handleCreateBooking}
+        needApproval={category?.approval === true}
+        availableRecurringDates={availableRecurringDates}
+        variant={bookingPeriod}
       />
 
       <BookingDetailsModal
