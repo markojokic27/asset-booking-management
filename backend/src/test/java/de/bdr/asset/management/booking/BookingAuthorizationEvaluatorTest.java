@@ -124,4 +124,97 @@ class BookingAuthorizationEvaluatorTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Booking not found");
     }
+
+    // ──────────────────────────────────────────────
+    // canCreateBooking
+    // ──────────────────────────────────────────────
+
+    @Test
+    void anyoneCanCreateBookingWhenTargetUserIdIsNull() {
+        boolean result = evaluator.canCreateBooking(authentication, null);
+        assertThat(result).isTrue();
+        verifyNoInteractions(bookingRepository);
+    }
+
+    @Test
+    void adminCanCreateBookingForAnyUser() {
+        doReturn(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                .when(authentication).getAuthorities();
+        boolean result = evaluator.canCreateBooking(authentication, 99L);
+        assertThat(result).isTrue();
+        verifyNoInteractions(bookingRepository);
+    }
+
+    @Test
+    void userCanCreateBookingForSelf() {
+        var principal = loggedInUser("employee@company.com");
+        when(authentication.getAuthorities()).thenReturn(List.of());
+        when(authentication.getPrincipal()).thenReturn(principal);
+        boolean result = evaluator.canCreateBooking(authentication, 2L);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void userCannotCreateBookingForOthers() {
+        var principal = loggedInUser("employee@company.com");
+        when(authentication.getAuthorities()).thenReturn(List.of());
+        when(authentication.getPrincipal()).thenReturn(principal);
+        boolean result = evaluator.canCreateBooking(authentication, 99L);
+        assertThat(result).isFalse();
+    }
+
+    // ──────────────────────────────────────────────
+    // canUpdateBooking
+    // ──────────────────────────────────────────────
+
+    private CustomUserDetails employeeUserDetails() {
+        var user = User.builder()
+                .username("emp")
+                .name("Emp")
+                .surname("Loyee")
+                .email("emp@company.com")
+                .password("pwd")
+                .role(UserRoleEnum.EMPLOYEE)
+                .status(UserStatusEnum.ACTIVE)
+                .department(null)
+                .managerEmail("manager@company.com")
+                .benefit("DESK")
+                .build();
+        user.setId(10L);
+        return new CustomUserDetails(user);
+    }
+
+    @Test
+    void adminCanUpdateAnyBooking() {
+        doReturn(List.of(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                .when(authentication).getAuthorities();
+        boolean result = evaluator.canUpdateBooking(authentication, 1L);
+        assertThat(result).isTrue();
+        verifyNoInteractions(bookingRepository);
+    }
+
+    @Test
+    void ownerCanUpdateOwnBooking() {
+        var employee = employeeWithManager("manager@company.com");
+        var booking = Booking.builder().user(employee).build();
+        var principal = employeeUserDetails();
+        when(authentication.getAuthorities()).thenReturn(List.of());
+        when(authentication.getPrincipal()).thenReturn(principal);
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        boolean result = evaluator.canUpdateBooking(authentication, 1L);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void nonOwnerCannotUpdateBooking() {
+        var employee = employeeWithManager("manager@company.com");
+        var booking = Booking.builder().user(employee).build();
+        booking.getUser().setId(99L);
+        var principal = employeeUserDetails();
+        when(authentication.getAuthorities()).thenReturn(List.of());
+        when(authentication.getPrincipal()).thenReturn(principal);
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+        boolean result = evaluator.canUpdateBooking(authentication, 1L);
+        assertThat(result).isFalse();
+    }
 }

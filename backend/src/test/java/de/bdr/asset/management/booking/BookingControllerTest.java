@@ -21,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
+import de.bdr.asset.management.booking.dto.RecurringBookingCreateDTO;
+
+import static org.mockito.ArgumentMatchers.eq;
 
 @ExtendWith(MockitoExtension.class)
 class BookingControllerTest {
@@ -92,5 +95,48 @@ class BookingControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).isEqualTo(response);
+    }
+
+    /** CREATE RECURRING */
+    @Test
+    void createRecurring_returnsCreated() {
+        RecurringBookingCreateDTO request = BookingControllerTestData.recurringCreateRequest();
+        List<BookingResponseDTO> responses = List.of(BookingControllerTestData.response());
+
+        when(bookingService.createRecurringBookings(request)).thenReturn(responses);
+
+        ResponseEntity<List<BookingResponseDTO>> result = bookingController.createRecurring(request);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(result.getBody()).hasSize(1);
+        verify(bookingService).createRecurringBookings(request);
+    }
+
+    /** APPROVE */
+    @Test
+    void approve_returnsOk() {
+        BookingResponseDTO response = BookingControllerTestData.approvedResponse();
+
+        when(bookingService.approveBooking(1L)).thenReturn(response);
+
+        ResponseEntity<BookingResponseDTO> result = bookingController.approve(1L);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody()).isEqualTo(response);
+        verify(bookingService).approveBooking(1L);
+    }
+
+    /** REJECT */
+    @Test
+    void reject_returnsOk() {
+        BookingResponseDTO response = BookingControllerTestData.rejectedResponse();
+
+        when(bookingService.rejectBooking(1L)).thenReturn(response);
+
+        ResponseEntity<BookingResponseDTO> result = bookingController.reject(1L);
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody()).isEqualTo(response);
+        verify(bookingService).rejectBooking(1L);
     }
 }

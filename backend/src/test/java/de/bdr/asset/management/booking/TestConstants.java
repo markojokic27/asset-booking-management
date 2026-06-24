@@ -18,7 +18,9 @@ public final class TestConstants {
     public static final Long USER_ID = 1L;
     public static final Long ASSET_ID = 1L;
     public static final Long BOOKING_ID = 1L;
+    public static final Long BOOKING_ID_2 = 2L;
     public static final Long CATEGORY_ID = 10L;
+    public static final Long CATEGORY_ID_WITH_APPROVAL = 11L;
     
     public static final String USER_NAME = "Ivan";
     public static final String USER_SURNAME = "Ivić";
@@ -68,6 +70,38 @@ public final class TestConstants {
             ASSET_DESCRIPTION,
             ASSET_LOCATION
     );
+
+    // Recurring — second time slot starts one day later
+    public static final Instant START_2 = START.plus(1, ChronoUnit.DAYS);
+    public static final Instant END_2 = START_2.plus(1, ChronoUnit.HOURS);
+
+    public static final CategorySummaryDTO CATEGORY_SUMMARY_WITH_APPROVAL = new CategorySummaryDTO(
+            CATEGORY_ID_WITH_APPROVAL,
+            "Approval Required",
+            BOOKING_PERIOD,
+            true
+    );
+
+    public static final AssetSummaryDTO ASSET_SUMMARY_WITH_APPROVAL = new AssetSummaryDTO(
+            ASSET_ID,
+            ASSET_NAME,
+            CATEGORY_SUMMARY_WITH_APPROVAL,
+            ASSET_STATUS,
+            ASSET_DESCRIPTION,
+            ASSET_LOCATION
+    );
+
+    public static final UserSummaryDTO MANAGER_SUMMARY = new UserSummaryDTO(
+            2L,
+            "Manager",
+            "User",
+            "manager@example.com",
+            UserRoleEnum.MANAGER,
+            "boss@example.com"
+    );
+
+    // For users requiring approval:
+    public static final String MANAGER_EMAIL_APPROVAL = "approver@example.com";
 
     public static final List<UserStatusEnum> validUpdateUserStatuses = List.of(
         UserStatusEnum.ACTIVE,

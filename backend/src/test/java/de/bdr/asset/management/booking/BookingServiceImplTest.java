@@ -34,10 +34,20 @@ import static de.bdr.asset.management.booking.TestConstants.USER_ID;
 import de.bdr.asset.management.booking.dto.BookingCreateDTO;
 import de.bdr.asset.management.booking.dto.BookingResponseDTO;
 import de.bdr.asset.management.booking.dto.BookingUpdateDTO;
+import de.bdr.asset.management.booking.dto.RecurringBookingCreateDTO;
 import de.bdr.asset.management.core.exception.ActionNotAllowedException;
 import de.bdr.asset.management.core.exception.ResourceNotFoundException;
 import de.bdr.asset.management.core.security.SecurityService;
+import de.bdr.asset.management.report.ReportFilter;
+import de.bdr.asset.management.report.dto.GeneralReportResponseDTO;
+import de.bdr.asset.management.report.projections.GeneralReportProjection;
+import de.bdr.asset.management.report.projections.MonthlyBookingStatsProjection;
+import de.bdr.asset.management.report.projections.TopAssetBookingsProjection;
+import de.bdr.asset.management.report.projections.TopUserBookingsProjection;
 import de.bdr.asset.management.user.User;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {
@@ -298,45 +308,218 @@ class BookingServiceImplTest {
         verify(repository, never()).save(any());
     }
 
-    // Tests getGeneralReport(): delegates to repository
-    // @Test
-    // void shouldGetGeneralReport() {
+    // ──────────────────────────────────────────────
+    // createRecurringBookings
+    // ──────────────────────────────────────────────
 
-    //     GeneralReportProjection stats = mock(GeneralReportProjection.class);
+    @Test
+    void shouldCreateRecurringBookings() {
 
-    //     when(stats.getTotalBookingsCount()).thenReturn(10L);
-    //     when(stats.getTotalCompletedBookingCount()).thenReturn(5L);
-    //     when(stats.getTotalCancelledBookingCount()).thenReturn(1L);
-    //     when(stats.getTotalPendingBookingCount()).thenReturn(2L);
-    //     when(stats.getTotalApprovedBookingCount()).thenReturn(1L);
-    //     when(stats.getTotalRejectedBookingCount()).thenReturn(1L);
+        User user = BookingServiceImplTestData.user();
+        Asset asset = BookingServiceImplTestData.asset();
+        RecurringBookingCreateDTO request = BookingServiceImplTestData.recurringCreateRequest();
 
-    //     TopUserBookingsProjection userProjection = mock(TopUserBookingsProjection.class);
-    //     when(userProjection.getUserId()).thenReturn(1L);
-    //     when(userProjection.getFullName()).thenReturn("John Doe");
-    //     when(userProjection.getBookingCount()).thenReturn(7L);
+        Booking booking1 = BookingServiceImplTestData.booking(user, asset);
+        Booking booking2 = BookingServiceImplTestData.booking(user, asset);
+        booking2.setId(TestConstants.BOOKING_ID_2);
+        booking2.setBookingStart(TestConstants.START_2);
+        booking2.setBookingEnd(TestConstants.END_2);
 
-    //     TopAssetBookingsProjection assetProjection = mock(TopAssetBookingsProjection.class);
-    //     when(assetProjection.getAssetId()).thenReturn(1L);
-    //     when(assetProjection.getAssetName()).thenReturn("Laptop");
-    //     when(assetProjection.getBookingCount()).thenReturn(4L);
+        BookingResponseDTO response1 = BookingServiceImplTestData.response();
+        BookingResponseDTO response2 = BookingServiceImplTestData.approvedResponse();
 
-    //     when(repository.getGeneralStats()).thenReturn(stats);
-    //     when(repository.getTopUsers()).thenReturn(List.of(userProjection));
-    //     when(repository.getTopAssets()).thenReturn(List.of(assetProjection));
+        when(userService.getActiveOrStudentUserById(USER_ID)).thenReturn(user);
+        when(assetService.getActiveAssetById(ASSET_ID)).thenReturn(asset);
+        when(securityService.isAdmin()).thenReturn(true);
 
-    //     ReportFilter filter = new ReportFilter();
+        List<Booking> saved = List.of(booking1, booking2);
+        when(repository.saveAll(any())).thenReturn(saved);
+        when(mapper.toResponse(booking1)).thenReturn(response1);
+        when(mapper.toResponse(booking2)).thenReturn(response2);
 
-    //     GeneralReportResponseDTO actual = service.getGeneralReport(filter);
+        List<BookingResponseDTO> result = service.createRecurringBookings(request);
 
-    //     assertNotNull(actual);
+        assertEquals(2, result.size());
+        assertEquals(response1, result.get(0));
 
-    //     assertEquals(10L, actual.totalBookingsCount());
-    //     assertEquals(1, actual.topUsers().size());
-    //     assertEquals(1, actual.topAssets().size());
+        verify(repository).saveAll(any());
+        verify(emailService, never()).sendApprovalEmail(any(), any(), any(), any());
+    }
 
-    //     verify(repository).getGeneralStats();
-    //     verify(repository).getTopUsers();
-    //     verify(repository).getTopAssets();
-    // }
+    @Test
+    void shouldCreateRecurringBookingsAndSendApprovalEmail() {
+
+        User user = BookingServiceImplTestData.user();
+        Asset asset = BookingServiceImplTestData.assetWithApprovalRequired();
+        RecurringBookingCreateDTO request = BookingServiceImplTestData.recurringCreateRequest();
+
+        Booking booking1 = BookingServiceImplTestData.booking(user, asset);
+        Booking booking2 = BookingServiceImplTestData.booking(user, asset);
+        booking2.setId(TestConstants.BOOKING_ID_2);
+        booking2.setBookingStart(TestConstants.START_2);
+        booking2.setBookingEnd(TestConstants.END_2);
+
+        when(userService.getActiveOrStudentUserById(USER_ID)).thenReturn(user);
+        when(assetService.getActiveAssetById(ASSET_ID)).thenReturn(asset);
+        when(securityService.isAdmin()).thenReturn(false);
+
+        when(repository.saveAll(any())).thenReturn(List.of(booking1, booking2));
+        when(mapper.toResponse(booking1)).thenReturn(BookingServiceImplTestData.response());
+        when(mapper.toResponse(booking2)).thenReturn(BookingServiceImplTestData.approvedResponse());
+
+        service.createRecurringBookings(request);
+
+        verify(emailService).sendApprovalEmail(any(), any(), any(), any());
+    }
+
+    // ──────────────────────────────────────────────
+    // approveBooking
+    // ──────────────────────────────────────────────
+
+    @Test
+    void shouldApproveBooking() {
+
+        User user = BookingServiceImplTestData.user();
+        Asset asset = BookingServiceImplTestData.asset();
+        Booking booking = BookingServiceImplTestData.booking(user, asset);
+
+        when(repository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+        when(repository.save(booking)).thenReturn(booking);
+        when(mapper.toResponse(booking)).thenReturn(BookingServiceImplTestData.approvedResponse());
+
+        BookingResponseDTO result = service.approveBooking(BOOKING_ID);
+
+        assertEquals(BookingStatusEnum.APPROVED, result.status());
+        verify(emailService).sendStatusNotificationEmail(
+                user.getEmail(), asset.getName(), BookingStatusEnum.APPROVED.name());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenApprovingNonPendingBooking() {
+
+        Booking booking = BookingServiceImplTestData.booking(
+                BookingServiceImplTestData.user(),
+                BookingServiceImplTestData.asset()
+        );
+        booking.setStatus(BookingStatusEnum.APPROVED);
+
+        when(repository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+
+        assertThrows(IllegalStateException.class,
+                () -> service.approveBooking(BOOKING_ID));
+
+        verify(repository, never()).save(any());
+    }
+
+    // ──────────────────────────────────────────────
+    // rejectBooking
+    // ──────────────────────────────────────────────
+
+    @Test
+    void shouldRejectBooking() {
+
+        User user = BookingServiceImplTestData.user();
+        Asset asset = BookingServiceImplTestData.asset();
+        Booking booking = BookingServiceImplTestData.booking(user, asset);
+
+        when(repository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+        when(repository.save(booking)).thenReturn(booking);
+        when(mapper.toResponse(booking)).thenReturn(BookingServiceImplTestData.rejectedResponse());
+
+        BookingResponseDTO result = service.rejectBooking(BOOKING_ID);
+
+        assertEquals(BookingStatusEnum.REJECTED, result.status());
+        verify(emailService).sendStatusNotificationEmail(
+                user.getEmail(), asset.getName(), BookingStatusEnum.REJECTED.name());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRejectingNonPendingBooking() {
+
+        Booking booking = BookingServiceImplTestData.booking(
+                BookingServiceImplTestData.user(),
+                BookingServiceImplTestData.asset()
+        );
+        booking.setStatus(BookingStatusEnum.APPROVED);
+
+        when(repository.findById(BOOKING_ID)).thenReturn(Optional.of(booking));
+
+        assertThrows(IllegalStateException.class,
+                () -> service.rejectBooking(BOOKING_ID));
+
+        verify(repository, never()).save(any());
+    }
+
+    // ──────────────────────────────────────────────
+    // bookingStatusToCompleted
+    // ──────────────────────────────────────────────
+
+    @Test
+    void shouldUpdateCompletedBookings() {
+
+        when(repository.updateCompletedBookings(any())).thenReturn(3);
+
+        int count = service.bookingStatusToCompleted();
+
+        assertEquals(3, count);
+        verify(repository).updateCompletedBookings(any());
+    }
+
+    // ──────────────────────────────────────────────
+    // getGeneralReport
+    // ──────────────────────────────────────────────
+
+    @Test
+    void shouldGetGeneralReport() {
+
+        GeneralReportProjection stats = mock(GeneralReportProjection.class);
+        when(stats.getTotalBookingsCount()).thenReturn(10L);
+        when(stats.getTotalCompletedBookingCount()).thenReturn(5L);
+        when(stats.getTotalCancelledBookingCount()).thenReturn(1L);
+        when(stats.getTotalPendingBookingCount()).thenReturn(2L);
+        when(stats.getTotalApprovedBookingCount()).thenReturn(1L);
+        when(stats.getTotalRejectedBookingCount()).thenReturn(1L);
+
+        TopUserBookingsProjection userProjection = mock(TopUserBookingsProjection.class);
+        when(userProjection.getUserId()).thenReturn(1L);
+        when(userProjection.getFullName()).thenReturn("John Doe");
+        when(userProjection.getBookingCount()).thenReturn(7L);
+
+        TopAssetBookingsProjection assetProjection = mock(TopAssetBookingsProjection.class);
+        when(assetProjection.getAssetId()).thenReturn(1L);
+        when(assetProjection.getAssetName()).thenReturn("Laptop");
+        when(assetProjection.getBookingCount()).thenReturn(4L);
+
+        MonthlyBookingStatsProjection monthlyProjection = mock(MonthlyBookingStatsProjection.class);
+        when(monthlyProjection.getYear()).thenReturn(2026);
+        when(monthlyProjection.getMonth()).thenReturn(4);
+        when(monthlyProjection.getTotalBookingsCount()).thenReturn(10L);
+        when(monthlyProjection.getTotalCompletedBookingCount()).thenReturn(5L);
+        when(monthlyProjection.getTotalCancelledBookingCount()).thenReturn(1L);
+        when(monthlyProjection.getTotalPendingBookingCount()).thenReturn(2L);
+        when(monthlyProjection.getTotalApprovedBookingCount()).thenReturn(1L);
+        when(monthlyProjection.getTotalRejectedBookingCount()).thenReturn(1L);
+
+        ReportFilter filter = new ReportFilter();
+        filter.setFromDate(TestConstants.BASE_NOW);
+        filter.setToDate(TestConstants.BASE_NOW.plusSeconds(86400));
+
+        when(repository.getGeneralStats(any(), any(), any(), any())).thenReturn(stats);
+        when(repository.getTopUsers(any(), any(), any())).thenReturn(List.of(userProjection));
+        when(repository.getTopAssets(any(), any(), any())).thenReturn(List.of(assetProjection));
+        when(repository.getMonthlyStats(any(), any(), any(), any())).thenReturn(List.of(monthlyProjection));
+
+        GeneralReportResponseDTO actual = service.getGeneralReport(filter);
+
+        assertNotNull(actual);
+        assertEquals(10L, actual.totalBookingsCount());
+        assertEquals(1, actual.topUsers().size());
+        assertEquals(1, actual.topAssets().size());
+        assertEquals(1, actual.monthlyStats().size());
+
+        verify(repository).getGeneralStats(any(), any(), any(), any());
+        verify(repository).getTopUsers(any(), any(), any());
+        verify(repository).getTopAssets(any(), any(), any());
+        verify(repository).getMonthlyStats(any(), any(), any(), any());
+    }
 }
