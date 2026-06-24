@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Selenium Tests">
+    <test name="Selenium">
+        <packages>
+            <package name="asset"/>
+            <package name="assetCategory"/>
+            <package name="auth"/>
+            <package name="booking"/>
+            <package name="report"/>
+            <package name="smokeTest"/>
+            <package name="user"/>
+        </packages>
+    </test>
+</suite>
