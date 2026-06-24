@@ -22,6 +22,11 @@ interface BookingApi {
         @Body request: BookingCreateRequest
     ): BookingResponse
 
+    @POST("bookings/recurring")
+    suspend fun createRecurringBooking(
+        @Body request: RecurringBookingCreateRequest
+    ): List<BookingResponse>
+
     @POST("bookings/{bookingId}/approve")
     suspend fun approveBooking(
         @Path("bookingId") bookingId: Long

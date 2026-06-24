@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import java.util.Locale
 fun AvailabilityCalendar(
     availabilityByDate: Map<Long, AvailabilityStatus>,
     onDateClick: (Long) -> Unit,
+    onMonthChange: (YearMonth) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var currentMonth by remember { mutableStateOf(YearMonth.now()) }
@@ -56,6 +58,10 @@ fun AvailabilityCalendar(
     }
     val calendarWeeks = remember(currentMonth) {
         createMonthGrid(currentMonth).chunked(7)
+    }
+
+    LaunchedEffect(currentMonth) {
+        onMonthChange(currentMonth)
     }
 
     Surface(

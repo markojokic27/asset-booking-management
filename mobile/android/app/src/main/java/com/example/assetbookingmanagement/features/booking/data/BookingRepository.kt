@@ -21,6 +21,10 @@ class BookingRepository @Inject constructor(
         return bookingApi.createBooking(request)
     }
 
+    suspend fun createRecurringBooking(request: RecurringBookingCreateRequest): List<BookingResponse> {
+        return bookingApi.createRecurringBooking(request)
+    }
+
     suspend fun approveBooking(bookingId: Long): BookingResponse {
         return bookingApi.approveBooking(bookingId)
     }

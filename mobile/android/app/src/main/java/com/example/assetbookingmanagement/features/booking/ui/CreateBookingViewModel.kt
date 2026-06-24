@@ -6,8 +6,10 @@ import com.example.assetbookingmanagement.features.asset.data.AssetRepository
 import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
 import com.example.assetbookingmanagement.features.booking.data.BookingCreateRequest
+import com.example.assetbookingmanagement.features.booking.data.RecurringBookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
+import com.example.assetbookingmanagement.features.booking.data.TimeSlotRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +21,7 @@ import java.io.IOException
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.YearMonth
 import java.time.ZoneId
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -30,10 +33,14 @@ enum class AvailabilityStatus {
 
 data class CreateBookingUiState(
     val assetName: String = "",
+    val categoryName: String = "",
     val bookingPeriod: String? = null,
     val approvalRequired: Boolean? = null,
     val availabilityByDate: Map<Long, AvailabilityStatus> = emptyMap(),
     val bookedHoursByDate: Map<Long, Set<Int>> = emptyMap(),
+    val selectedWeekdays: Set<Int> = emptySet(),
+    val visibleMonth: YearMonth = YearMonth.now(),
+    val availableRecurringDates: List<LocalDate> = emptyList(),
     val selectedFromDateMillis: Long? = null,
     val selectedToDateMillis: Long? = null,
     val startHour: Int = 9,
@@ -59,6 +66,7 @@ class CreateBookingViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(CreateBookingUiState())
     val uiState: StateFlow<CreateBookingUiState> = _uiState.asStateFlow()
+    private var blockingBookings: List<BookingResponse> = emptyList()
 
     fun loadBookingPeriod(assetId: Long) {
         viewModelScope.launch {
@@ -69,6 +77,7 @@ class CreateBookingViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         assetName = asset.name,
+                        categoryName = assetCategory.name,
                         bookingPeriod = assetCategory.bookingPeriod,
                         approvalRequired = assetCategory.approval
                     )
@@ -78,10 +87,12 @@ class CreateBookingViewModel @Inject constructor(
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
+                        categoryName = "",
                         bookingPeriod = null,
                         approvalRequired = null,
                         availabilityByDate = emptyMap(),
-                        bookedHoursByDate = emptyMap()
+                        bookedHoursByDate = emptyMap(),
+                        availableRecurringDates = emptyList()
                     )
                 }
             }
@@ -100,6 +111,7 @@ class CreateBookingViewModel @Inject constructor(
             state.copy(
                 selectedFromDateMillis = dateMillis,
                 selectedToDateMillis = nextToDateMillis,
+                selectedWeekdays = emptySet(),
                 errorMessage = null
             )
         }
@@ -117,6 +129,7 @@ class CreateBookingViewModel @Inject constructor(
             state.copy(
                 selectedFromDateMillis = nextFromDateMillis,
                 selectedToDateMillis = dateMillis,
+                selectedWeekdays = emptySet(),
                 errorMessage = null
             )
         }
@@ -144,6 +157,33 @@ class CreateBookingViewModel @Inject constructor(
         }
     }
 
+    fun onVisibleMonthChanged(month: YearMonth) {
+        _uiState.update { current ->
+            if (current.visibleMonth == month) current else current.copy(visibleMonth = month)
+        }
+        updateRecurringAvailability()
+    }
+
+    fun onRecurringWeekdayToggled(day: Int) {
+        _uiState.update { current ->
+            val nextDays = current.selectedWeekdays.toMutableSet().apply {
+                if (!add(day)) {
+                    remove(day)
+                }
+            }
+
+            current.copy(
+                selectedWeekdays = nextDays,
+                selectedFromDateMillis = null,
+                selectedToDateMillis = null,
+                hasSelectedStartTime = false,
+                hasSelectedEndTime = false,
+                errorMessage = null
+            )
+        }
+        updateRecurringAvailability()
+    }
+
     fun createBooking(assetId: Long) {
         val userId = authSession.getCurrentUserId()
         if (userId == null) {
@@ -152,6 +192,11 @@ class CreateBookingViewModel @Inject constructor(
         }
 
         val state = uiState.value
+        if (state.selectedWeekdays.isNotEmpty()) {
+            createRecurringBooking(assetId = assetId, userId = userId, state = state)
+            return
+        }
+
         val isHourlyBooking = state.bookingPeriod == "HOUR"
         val startInstant = if (isHourlyBooking) {
             toInstant(
@@ -273,11 +318,82 @@ class CreateBookingViewModel @Inject constructor(
         }
     }
 
+    private fun createRecurringBooking(
+        assetId: Long,
+        userId: Long,
+        state: CreateBookingUiState
+    ) {
+        val availableRecurringDates = state.availableRecurringDates
+        if (availableRecurringDates.isEmpty()) {
+            _uiState.update {
+                it.copy(errorMessage = "No available recurring dates in the selected month.")
+            }
+            return
+        }
+
+        val timeSlots = availableRecurringDates.map { date ->
+            TimeSlotRequest(
+                bookingStart = date.atTime(6, 0).atZone(ZoneId.systemDefault()).toInstant().toString(),
+                bookingEnd = date.atTime(22, 0).atZone(ZoneId.systemDefault()).toInstant().toString()
+            )
+        }
+
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isSubmitting = true,
+                    bookingCreated = false,
+                    errorMessage = null
+                )
+            }
+
+            try {
+                bookingRepository.createRecurringBooking(
+                    RecurringBookingCreateRequest(
+                        userId = userId,
+                        assetId = assetId,
+                        timeSlots = timeSlots
+                    )
+                )
+
+                refreshAvailability(assetId, state.bookingPeriod)
+
+                _uiState.update {
+                    it.copy(
+                        isSubmitting = false,
+                        bookingCreated = true,
+                        createdBookingStart = timeSlots.firstOrNull()?.bookingStart,
+                        createdBookingEnd = timeSlots.lastOrNull()?.bookingEnd,
+                        errorMessage = null
+                    )
+                }
+            } catch (error: HttpException) {
+                _uiState.update {
+                    it.copy(
+                        isSubmitting = false,
+                        errorMessage = when (error.code()) {
+                            401, 403 -> "You aren't authorized to create this booking."
+                            409 -> "One or more selected recurring dates are already taken."
+                            else -> "Booking failed. Try again."
+                        }
+                    )
+                }
+            } catch (_: IOException) {
+                _uiState.update {
+                    it.copy(
+                        isSubmitting = false,
+                        errorMessage = "Cannot reach backend."
+                    )
+                }
+            }
+        }
+    }
+
     private suspend fun refreshAvailability(
         assetId: Long,
         bookingPeriod: String?
     ) {
-        val blockingBookings = bookingRepository.getAssetBookings(assetId)
+        blockingBookings = bookingRepository.getAssetBookings(assetId)
             .filter { it.blocksAvailability() }
         val bookedDateStatus = if (bookingPeriod == "HOUR") {
             AvailabilityStatus.HOUR_BOOKED
@@ -301,6 +417,20 @@ class CreateBookingViewModel @Inject constructor(
                 availabilityByDate = availabilityByDate,
                 bookedHoursByDate = bookedHoursByDate
             )
+        }
+        updateRecurringAvailability()
+    }
+
+    private fun updateRecurringAvailability() {
+        val state = _uiState.value
+        val recurringDates = getAvailableRecurringDates(
+            month = state.visibleMonth,
+            weekdays = state.selectedWeekdays,
+            bookings = blockingBookings
+        )
+
+        _uiState.update {
+            it.copy(availableRecurringDates = recurringDates)
         }
     }
 }
@@ -354,3 +484,33 @@ private fun BookingResponse.toBookedHoursByDate(): Map<Long, Set<Int>> {
 
 private fun BookingResponse.blocksAvailability(): Boolean =
     status == "APPROVED" || status == "PENDING"
+
+private fun getAvailableRecurringDates(
+    month: YearMonth,
+    weekdays: Set<Int>,
+    bookings: List<BookingResponse>
+): List<LocalDate> {
+    if (weekdays.isEmpty()) {
+        return emptyList()
+    }
+
+    val today = LocalDate.now()
+    val zoneId = ZoneId.systemDefault()
+
+    return (1..month.lengthOfMonth())
+        .asSequence()
+        .map(month::atDay)
+        .filter { date -> date.dayOfWeek.value in weekdays }
+        .filter { date -> !date.isBefore(today) }
+        .filter { date ->
+            val dayStart = date.atStartOfDay(zoneId).toInstant()
+            val dayEnd = date.atTime(23, 59, 59).atZone(zoneId).toInstant()
+
+            bookings.none { booking ->
+                val bookingStart = Instant.parse(booking.bookingStart)
+                val bookingEnd = Instant.parse(booking.bookingEnd)
+                dayStart < bookingEnd && dayEnd > bookingStart
+            }
+        }
+        .toList()
+}
