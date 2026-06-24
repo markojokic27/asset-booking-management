@@ -346,6 +346,31 @@ class AssetServiceImplTest {
         verify(mapper, never()).toResponse(any());
     }
 
+    // Tests getActiveAssetById(): active asset exists → returns asset entity
+    @Test
+    void shouldGetActiveAssetById() {
+
+        when(repository.findByIdAndStatus(1L, AssetStatusEnum.ACTIVE)).thenReturn(Optional.of(asset));
+
+        Asset result = service.getActiveAssetById(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        verify(repository).findByIdAndStatus(1L, AssetStatusEnum.ACTIVE);
+    }
+
+    // Tests getActiveAssetById(): throws exception if no active asset found
+    @Test
+    void shouldThrowExceptionWhenActiveAssetNotFound() {
+
+        when(repository.findByIdAndStatus(1L, AssetStatusEnum.ACTIVE)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.getActiveAssetById(1L));
+
+        verify(repository).findByIdAndStatus(1L, AssetStatusEnum.ACTIVE);
+    }
+
     private void mockLoggedUser(String user) {
 
         Authentication authentication = mock(Authentication.class);
