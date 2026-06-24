@@ -94,10 +94,19 @@ fun CreateBookingScreen(
             )
             BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar(
                 availabilityByDate = uiState.availabilityByDate,
+                onMonthChange = viewModel::onVisibleMonthChanged,
                 onDateClick = { dateMillis ->
                     viewModel.onFromDateSelected(dateMillis)
                     selectedTabIndex = BookingTab.ChooseDate.ordinal
                 }
+            )
+        }
+
+        if (uiState.categoryName.equals("Parking", ignoreCase = true)) {
+            Spacer(modifier = Modifier.height(16.dp))
+            RecurringDaysSelector(
+                selectedDays = uiState.selectedWeekdays,
+                onDayToggle = viewModel::onRecurringWeekdayToggled
             )
         }
 
