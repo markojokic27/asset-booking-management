@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
@@ -58,19 +59,24 @@ fun LoginScreen(
 
         LoginCard {
             Text(
-                text = "Login",
+                text = stringResource(R.string.login_title),
                 fontSize = if (isLandscape) 24.sp else 32.sp,
                 fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = spacing)
             )
 
-            LabeledInput("Username", username, "Enter username", isLandscape) { username = it }
+            LabeledInput(
+                label = stringResource(R.string.login_field_username),
+                value = username,
+                placeholder = stringResource(R.string.login_placeholder_username),
+                isLandscape = isLandscape
+            ) { username = it }
             Spacer(modifier = Modifier.height(spacing))
             LabeledInput(
-                label = "Password",
+                label = stringResource(R.string.login_field_password),
                 value = password,
-                placeholder = "Enter password",
+                placeholder = stringResource(R.string.login_placeholder_password),
                 isLandscape = isLandscape,
                 isPassword = true,
                 passwordVisible = passwordVisible,
@@ -79,12 +85,20 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(spacing * 1.5f))
 
-            uiState.errorMessage?.let {
-                Text(it, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+            uiState.errorMessageRes?.let {
+                Text(
+                    text = stringResource(it),
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 12.sp
+                )
             }
 
             AppButton(
-                text = if (uiState.isLoading) "LOGGING IN..." else "LOGIN",
+                text = if (uiState.isLoading) {
+                    stringResource(R.string.login_loading)
+                } else {
+                    stringResource(R.string.login_submit)
+                },
                 enabled = !uiState.isLoading,
                 onClick = { viewModel.login(username, password) }
             )
@@ -107,7 +121,7 @@ fun LoginHeader(isLandscape: Boolean, isDarkTheme: Boolean) {
             )
             Spacer(Modifier.width(12.dp))
             Text(
-                text = "Asset Booking Management",
+                text = stringResource(R.string.app_name),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -122,7 +136,7 @@ fun LoginHeader(isLandscape: Boolean, isDarkTheme: Boolean) {
             colorFilter = logoColorFilter
         )
         Text(
-            text = "Asset Booking Management",
+            text = stringResource(R.string.app_name),
             fontSize = 17.sp,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onBackground
@@ -158,7 +172,11 @@ fun LabeledInput(
                 IconButton(onClick = passwordVisibilityToggle) {
                     Icon(
                         imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                        contentDescription = if (passwordVisible) {
+                            stringResource(R.string.login_hide_password)
+                        } else {
+                            stringResource(R.string.login_show_password)
+                        }
                     )
                 }
             }

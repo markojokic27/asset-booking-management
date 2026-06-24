@@ -109,7 +109,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Cannot reach backend."
+                        errorMessage = "Unable to connect to the server. Please try again."
                     )
                 }
             }
@@ -252,7 +252,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isChangingPassword = false,
-                        changePasswordErrorMessage = "Cannot reach backend."
+                        changePasswordErrorMessage = "Unable to connect to the server. Please try again."
                     )
                 }
             }

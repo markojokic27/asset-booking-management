@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.auth.ui
 
+import androidx.annotation.StringRes
+import com.example.assetbookingmanagement.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.auth.data.AuthRepository
@@ -17,7 +19,7 @@ import javax.inject.Inject
 data class LoginUiState(
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
-    val errorMessage: String? = null
+    @param:StringRes val errorMessageRes: Int? = null
 )
 
 // Handles login actions and exposes state for the LoginScreen
@@ -30,7 +32,7 @@ class LoginViewModel @Inject constructor(
 
     fun login(username: String, password: String) {
         if (username.isBlank() || password.isBlank()) {
-            _uiState.update { it.copy(errorMessage = "Username and password are required.") }
+            _uiState.update { it.copy(errorMessageRes = R.string.login_error_required) }
             return
         }
 
@@ -39,7 +41,7 @@ class LoginViewModel @Inject constructor(
                 it.copy(
                     isLoading = true,
                     isLoggedIn = false,
-                    errorMessage = null
+                    errorMessageRes = null
                 )
             }
 
@@ -49,16 +51,16 @@ class LoginViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         isLoggedIn = true,
-                        errorMessage = null
+                        errorMessageRes = null
                     )
                 }
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "Wrong username or password."
-                            else -> "Login failed. Please try again."
+                        errorMessageRes = when (error.code()) {
+                            401, 403 -> R.string.login_error_invalid_credentials
+                            else -> R.string.login_error_server
                         }
                     )
                 }
@@ -66,7 +68,7 @@ class LoginViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Cannot reach backend."
+                        errorMessageRes = R.string.login_error_server_unreachable
                     )
                 }
             }

@@ -97,7 +97,7 @@ class AssetsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Cannot reach backend."
+                        errorMessage = "Unable to connect to the server. Please try again."
                     )
                 }
             }
@@ -123,7 +123,7 @@ class AssetsViewModel @Inject constructor(
                 }
             } catch (_: IOException) {
                 _uiState.update {
-                    it.copy(errorMessage = "Cannot reach backend.")
+                    it.copy(errorMessage = "Unable to connect to the server. Please try again.")
                 }
             }
         }

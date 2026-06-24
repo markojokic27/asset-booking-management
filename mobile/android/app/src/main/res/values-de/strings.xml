@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Asset-Booking-Verwaltung</string>
+    <string name="login_title">Anmelden</string>
+    <string name="login_field_username">Benutzername</string>
+    <string name="login_field_password">Passwort</string>
+    <string name="login_placeholder_username">Benutzernamen eingeben</string>
+    <string name="login_placeholder_password">Passwort eingeben</string>
+    <string name="login_submit">Anmelden</string>
+    <string name="login_loading">Wird geladen…</string>
+    <string name="login_error_required">Benutzername und Passwort sind erforderlich.</string>
+    <string name="login_error_invalid_credentials">Falscher Benutzername oder falsches Passwort</string>
+    <string name="login_error_server">Serverfehler.</string>
+    <string name="login_error_server_unreachable">Verbindung zum Server nicht möglich. Bitte versuchen Sie es erneut.</string>
+    <string name="login_show_password">Passwort anzeigen</string>
+    <string name="login_hide_password">Passwort ausblenden</string>
+</resources>

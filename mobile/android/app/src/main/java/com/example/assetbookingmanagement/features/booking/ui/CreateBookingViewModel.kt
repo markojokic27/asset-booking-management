@@ -311,7 +311,7 @@ class CreateBookingViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = "Cannot reach backend."
+                        errorMessage = "Unable to connect to the server. Please try again."
                     )
                 }
             }
@@ -382,7 +382,7 @@ class CreateBookingViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = "Cannot reach backend."
+                        errorMessage = "Unable to connect to the server. Please try again."
                     )
                 }
             }

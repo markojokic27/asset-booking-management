@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Upravljanje rezervacijama</string>
+    <string name="login_title">Prijava</string>
+    <string name="login_field_username">Korisničko ime</string>
+    <string name="login_field_password">Lozinka</string>
+    <string name="login_placeholder_username">Unesite korisničko ime</string>
+    <string name="login_placeholder_password">Unesite lozinku</string>
+    <string name="login_submit">Prijava</string>
+    <string name="login_loading">Učitavanje...</string>
+    <string name="login_error_required">Korisničko ime i lozinka su obavezni.</string>
+    <string name="login_error_invalid_credentials">Pogrešno korisničko ime ili lozinka</string>
+    <string name="login_error_server">Greška na serveru.</string>
+    <string name="login_error_server_unreachable">Nije moguće povezati se sa serverom. Pokušajte ponovno.</string>
+    <string name="login_show_password">Prikaži lozinku</string>
+    <string name="login_hide_password">Sakrij lozinku</string>
+</resources>

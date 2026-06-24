@@ -144,7 +144,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Cannot reach backend.", viewModel.uiState.value.errorMessage)
+        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
     }
 
     @Test
@@ -204,7 +204,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Cannot reach backend.", viewModel.uiState.value.errorMessage)
+        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
     }
 
     private fun buildViewModel(

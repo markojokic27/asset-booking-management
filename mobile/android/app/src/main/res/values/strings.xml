@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Asset Booking Management</string>
+    <string name="login_title">Login</string>
+    <string name="login_field_username">Username</string>
+    <string name="login_field_password">Password</string>
+    <string name="login_placeholder_username">Enter your username</string>
+    <string name="login_placeholder_password">Enter your password</string>
+    <string name="login_submit">Login</string>
+    <string name="login_loading">Loading...</string>
+    <string name="login_error_required">Username and password are required.</string>
+    <string name="login_error_invalid_credentials">Wrong username or password</string>
+    <string name="login_error_server">Server error.</string>
+    <string name="login_error_server_unreachable">Unable to connect to the server. Please try again.</string>
+    <string name="login_show_password">Show password</string>
+    <string name="login_hide_password">Hide password</string>
 </resources>

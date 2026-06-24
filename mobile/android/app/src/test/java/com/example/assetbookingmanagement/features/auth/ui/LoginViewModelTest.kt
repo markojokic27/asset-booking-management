@@ -126,7 +126,7 @@ class LoginViewModelTest {
         assertEquals(listOf(LoginRequest(username, password)), fakeAuthApi.loginRequests)
         assertFalse(viewModel.uiState.value.isLoading)
         assertFalse(viewModel.uiState.value.isLoggedIn)
-        assertEquals("Cannot reach backend.", viewModel.uiState.value.errorMessage)
+        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
     }
 
     private fun buildAuthRepository(
