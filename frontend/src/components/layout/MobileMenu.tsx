@@ -25,6 +25,7 @@ import { useAuth } from '../../features/auth/context/AuthContext';
 import {
   getFullName,
   isAdmin,
+  isEmployee,
   isManager,
 } from '../../features/user/utilis/users';
 
@@ -32,8 +33,12 @@ export default function MobileMenu() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const links = [
-    { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharp },
-    { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharp },
+    ...(user && !isEmployee(user)
+      ? [
+          { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharp },
+          { to: '/categories', label: t('layout.navbar.categories'), icon: DnsSharp },
+        ]
+      : []),
     {
       to: '/bookings',
       label: t('layout.navbar.bookings'),

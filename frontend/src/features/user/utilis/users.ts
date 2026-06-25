@@ -35,3 +35,10 @@ export function isManager(
 ): boolean {
   return user?.role === 'MANAGER';
 }
+
+// function to check if the user is an employee
+export function isEmployee(
+  user: Pick<UserDto, 'role'> | null | undefined
+): boolean {
+  return user?.role === 'EMPLOYEE';
+}

@@ -21,7 +21,7 @@ import type { UserDto } from '../../features/user/types';
 // API
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { getUserById } from '../../features/user/api/users';
-import { getFullName } from '../../features/user/utilis/users';
+import { getFullName, isAdmin, isEmployee, isManager } from '../../features/user/utilis/users';
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();
@@ -36,12 +36,16 @@ export const Navbar: React.FC = () => {
   }, [user]);
 
   const navItems = [
-    { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
-    {
-      to: '/categories',
-      label: t('layout.navbar.categories'),
-      icon: DnsSharpIcon,
-    },
+    ...(user && !isEmployee(user)
+      ? [
+          { to: '/assets', label: t('layout.navbar.assets'), icon: MonitorSharpIcon },
+          {
+            to: '/categories',
+            label: t('layout.navbar.categories'),
+            icon: DnsSharpIcon,
+          },
+        ]
+      : []),
     {
       to: '/bookings',
       label: t('layout.navbar.bookings'),
@@ -49,13 +53,12 @@ export const Navbar: React.FC = () => {
     },
     {
       to: '/my-bookings',
-      label:
-        userDto?.role === 'ADMIN'
-          ? t('layout.navbar.allBookings')
-          : t('layout.navbar.myBookings'),
+      label: isAdmin(user)
+        ? t('layout.navbar.allBookings')
+        : t('layout.navbar.myBookings'),
       icon: EventNoteSharpIcon,
     },
-    ...(userDto?.role === 'ADMIN'
+    ...(isAdmin(user)
       ? [
           {
             to: '/users',
@@ -69,7 +72,7 @@ export const Navbar: React.FC = () => {
       label: t('layout.navbar.report'),
       icon: AssessmentSharpIcon,
     },
-    ...(userDto?.role === 'MANAGER'
+    ...(isManager(user)
       ? [
           {
             to: '/approvals',

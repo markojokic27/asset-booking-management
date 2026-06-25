@@ -1,5 +1,6 @@
 // External packages
 import { useState, useEffect, useMemo } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 // Components
@@ -25,12 +26,22 @@ import {
 // Hooks
 import { useAuth } from '../features/auth/context/AuthContext';
 import { usePagination } from '../features/user/hooks/usePagination';
-import { isAdmin } from '../features/user/utilis/users';
+import { isAdmin, isEmployee } from '../features/user/utilis/users';
 
 // Assets
 import AddSharpIcon from '@mui/icons-material/AddSharp';
 
 export default function AssetCategories() {
+  const { user, isLoading } = useAuth();
+
+  if (!isLoading && isEmployee(user)) {
+    return <Navigate to="/bookings" replace />;
+  }
+
+  return <AssetCategoriesPage />;
+}
+
+function AssetCategoriesPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
 

@@ -1,5 +1,6 @@
 // External packages
 import { useState, useEffect, useMemo } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -30,7 +31,7 @@ import { getAllCategories } from '../features/asset-category/api/categoryApi';
 // Hooks
 import { usePagination } from '../features/user/hooks/usePagination';
 import { useAuth } from '../features/auth/context/AuthContext';
-import { isAdmin } from '../features/user/utilis/users';
+import { isAdmin, isEmployee } from '../features/user/utilis/users';
 
 // Types
 import type { AssetDto } from '../features/asset/types';
@@ -48,6 +49,16 @@ type ModalState =
 
 
 export default function Assets() {
+  const { user, isLoading } = useAuth();
+
+  if (!isLoading && isEmployee(user)) {
+    return <Navigate to="/bookings" replace />;
+  }
+
+  return <AssetsPage />;
+}
+
+function AssetsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState<string>(ALL_ASSETS_CATEGORY);
