@@ -1554,3 +1554,1304 @@ a|
 |User is logged out and redirected to the login page
 
 |===
+
+== Edit User
+
+== 76. Successful edit of a user [POSITIVE]
+Admin edits an existing user with valid data
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Select a valid role
+4. Select a valid status
+5. Enter a valid first name
+6. Enter a valid last name
+7. Enter a valid email
+8. Enter a valid manager email
+9. Enter notes
+10. Click Save
+|User is updated successfully
+
+|===
+
+== 77. Edit user modal closes on close button [POSITIVE]
+Admin closes the edit modal without saving
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Click the "Close" button
+|Modal is closed and no changes are saved
+
+|===
+
+== 78. Attempt to edit a user with an empty first name [NEGATIVE]
+Admin attempts to save an edited user without a first name and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Clear the first name field
+4. Click Save
+|Error message is displayed: "Name is required"
+
+|===
+
+== 79. Attempt to edit a user with a short first name [NEGATIVE]
+Admin attempts to save an edited user with a first name that is too short and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter a short first name
+4. Click Save
+|Error message is displayed: "Name must be at least 3 characters long"
+
+|===
+
+== 80. Attempt to edit a user with a long first name [NEGATIVE]
+Admin attempts to save an edited user with a first name that is too long and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter a long first name
+4. Click Save
+|Error message is displayed: "Name must be at most 100 characters long"
+
+|===
+
+== 81. Attempt to edit a user with an empty last name [NEGATIVE]
+Admin attempts to save an edited user without a last name and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Clear the last name field
+4. Click Save
+|Error message is displayed: "Surname is required"
+
+|===
+
+== 82. Attempt to edit a user with a short last name [NEGATIVE]
+Admin attempts to save an edited user with a last name that is too short and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter a short last name
+4. Click Save
+|Error message is displayed: "Surname must be at least 3 characters long"
+
+|===
+
+== 83. Attempt to edit a user with a long last name [NEGATIVE]
+Admin attempts to save an edited user with a last name that is too long and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter a long last name
+4. Click Save
+|Error message is displayed: "Surname must be at most 100 characters long"
+
+|===
+
+== 84. Attempt to edit a user with an empty email [NEGATIVE]
+Admin attempts to save an edited user without an email and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Clear the email field
+4. Click Save
+|Error message is displayed: "Email is not in a valid format"
+
+|===
+
+== 85. Attempt to edit a user with an invalid email [NEGATIVE]
+Admin attempts to save an edited user with an invalid email and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter an invalid email
+4. Click Save
+|Error message is displayed: "Email is not in a valid format"
+
+|===
+
+== 86. Attempt to edit a user with a long email [NEGATIVE]
+Admin attempts to save an edited user with an email that is too long and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter a long email
+4. Click Save
+|Error message is displayed: "Email must be at most 254 characters long"
+
+|===
+
+== 87. Attempt to edit a user with an empty manager email [NEGATIVE]
+Admin attempts to save an edited user without a manager email and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Clear the manager email field
+4. Click Save
+|Error message is displayed: "Manager's email is not in a valid format"
+
+|===
+
+== 88. Attempt to edit a user with an invalid manager email [NEGATIVE]
+Admin attempts to save an edited user with an invalid manager email and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter an invalid manager email
+4. Click Save
+|Error message is displayed: "Manager's email is not in a valid format"
+
+|===
+
+== 89. Attempt to edit a user with a long manager email [NEGATIVE]
+Admin attempts to save an edited user with a manager email that is too long and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter a long manager email
+4. Click Save
+|Error message is displayed: "Manager's email must be at most 254 characters long"
+
+|===
+
+== 90. Edit user with empty notes [POSITIVE]
+Admin successfully saves an edited user without notes
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Clear the notes field
+4. Click Save
+|User is updated successfully
+
+|===
+
+== 91. Attempt to edit a user with long notes [NEGATIVE]
+Admin attempts to save an edited user with notes that are too long and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Edit" button for an existing user
+3. Enter long notes
+4. Click Save
+|Error message is displayed: "Notes must be at most X characters long"
+
+|===
+
+= Delete User
+
+== 92. Successful deletion of a user [POSITIVE]
+Admin deletes an existing user successfully
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Delete" button for an existing user
+3. Click the "Confirm" button
+|User is deleted successfully
+
+|===
+
+== 93. Cancel deletion of a user [POSITIVE]
+Admin cancels the deletion of a user and the user remains
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Admin
+|Admin
+a|
+1. Open the Users page
+2. Click the "Delete" button for an existing user
+3. Click the "Cancel" button
+|Modal is closed and user is not deleted
+
+|===
+
+= View Bookings Report
+
+== 94. View bookings by status [POSITIVE]
+User views bookings filtered by status
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Admin
+a|
+1. Open the Report page
+2. Select a status filter
+|Bookings filtered by the selected status are displayed
+
+|===
+
+== 95. View bookings by month [POSITIVE]
+User views bookings filtered by month
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Admin
+a|
+1. Open the Report page
+2. Select a month filter
+|Bookings filtered by the selected month are displayed
+
+|===
+
+== 96. View top assets by number of bookings [POSITIVE]
+User views the top assets ranked by number of bookings
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Admin
+a|
+1. Open the Report page
+2. View the top assets section
+|Top assets ranked by number of bookings are displayed
+
+|===
+
+== 97. View top users by number of bookings [POSITIVE]
+User views the top users ranked by number of bookings
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Admin
+a|
+1. Open the Report page
+2. View the top users section
+|Top users ranked by number of bookings are displayed
+
+|===
+
+= Account Info
+
+== 98. Successful password change [POSITIVE]
+User changes their account password with valid data
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter the current password
+4. Enter a valid new password
+5. Enter the same password in the confirm password field
+6. Click Save
+|Password is changed successfully
+
+|===
+
+== 99. Attempt to change password with empty current password [NEGATIVE]
+User attempts to change their password without entering the current password and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Leave the current password field empty
+4. Enter a valid new password
+5. Enter the same password in the confirm password field
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 100. Attempt to change password with empty new password [NEGATIVE]
+User attempts to change their password without entering a new password and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter the current password
+4. Leave the new password field empty
+5. Enter a password in the confirm password field
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 101. Attempt to change password with empty confirm password [NEGATIVE]
+User attempts to change their password without entering the confirm password and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter the current password
+4. Enter a valid new password
+5. Leave the confirm password field empty
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 102. Attempt to change password with all fields empty [NEGATIVE]
+User attempts to change their password without entering any data and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Leave all fields empty
+4. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 103. Attempt to change password with invalid current password [NEGATIVE]
+User attempts to change their password by entering an incorrect current password and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter an incorrect current password
+4. Enter a valid new password
+5. Enter the same password in the confirm password field
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 104. Attempt to change password with a long new password [NEGATIVE]
+User attempts to change their password by entering a new password that is too long and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter the current password
+4. Enter a long new password
+5. Enter a password in the confirm password field
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 105. Attempt to change password with a short new password [NEGATIVE]
+User attempts to change their password by entering a new password that is too short and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter the current password
+4. Enter a short new password
+5. Enter a password in the confirm password field
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+== 106. Attempt to change password when new password and confirm password do not match [NEGATIVE]
+User attempts to change their password by entering different values in the new password and confirm password fields and is prevented from saving it
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in as Employee
+|Employee
+a|
+1. Open the Account Info page
+2. Open the change password modal
+3. Enter the current password
+4. Enter a new password
+5. Enter a different password in the confirm password field
+6. Click Save
+|Error message is displayed and modal remains open
+
+|===
+
+= Language Switcher
+
+== 107. Switch language to English [POSITIVE]
+User switches the application language to English
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Open the language menu
+3. Select English
+|Application language is changed to English
+
+|===
+
+== 108. Switch language to Croatian [POSITIVE]
+User switches the application language to Croatian
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Open the language menu
+3. Select Croatian
+|Application language is changed to Croatian
+
+|===
+
+== 109. Switch language to German [POSITIVE]
+User switches the application language to German
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Open the language menu
+3. Select German
+|Application language is changed to German
+
+|===
+
+= Theme Toggle
+
+== 110. Theme toggle changes the theme [POSITIVE]
+User toggles the application theme
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Click the theme toggle button
+|Application theme is changed
+
+|===
+
+= Booking Modal
+
+== 111. Click Book button navigates to Asset Bookings page [POSITIVE]
+User clicks the Book button and is navigated to the Asset Bookings page
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Click the "Book" button
+|User is navigated to the Asset Bookings page
+
+|===
+
+== 112. Book Now button is disabled without a selected date [NEGATIVE]
+User opens the booking modal without selecting a date and the Book Now button is disabled
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Click the "Book" button
+|Book Now button is disabled
+
+|===
+
+== 113. Book Now button is enabled after selecting a free slot [POSITIVE]
+User selects a free date slot and the Book Now button becomes enabled
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Navigate to the next month
+7. Select a to date
+|Book Now button is enabled
+
+|===
+
+== 114. Book Now button is enabled after selecting a date on an hourly asset [POSITIVE]
+User selects a date on an hourly asset and the Book Now button becomes enabled
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the IT Equipment category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Navigate to the next month
+7. Select a to date
+|Book Now button is enabled
+
+|===
+
+== 115. Successful booking of a parking spot adds event to calendar [POSITIVE]
+User successfully books a parking spot and the event is added to the calendar
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Navigate to the next month
+7. Select a to date
+8. Click the "Book Asset" button
+9. Click the "Book Spot" button
+|Booking is created and event is visible on the calendar
+
+|===
+
+== 116. Successful booking of IT equipment adds event to calendar [POSITIVE]
+User successfully books IT equipment and the event is added to the calendar
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the IT Equipment category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Click the "Book Asset" button
+7. Click the "Book Now" button
+|Booking is created and event is visible on the calendar
+
+|===
+
+== 117. Cancel booking of IT equipment keeps calendar visible [POSITIVE]
+User cancels a booking of IT equipment and the calendar remains visible
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the IT Equipment category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Click the "Book Asset" button
+7. Click the "Cancel" button
+|Booking is cancelled and calendar remains visible
+
+|===
+
+== 118. Book Now button is disabled for an inactive asset [NEGATIVE]
+User attempts to book an inactive asset and the Book Now button is disabled
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Click the "Book" button for an inactive asset
+|Book Now button is disabled
+
+|===
+
+== 119. Successful booking with all recurring days selected adds event to calendar [POSITIVE]
+User selects all recurring days and successfully books an asset
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Navigate to the next month
+7. Select a to date
+8. Select all recurring days
+9. Click the "Book Asset" button
+10. Click the "Book Now" button
+|Booking is created and event is visible on the calendar
+
+|===
+
+== 120. Successful booking with one recurring day selected adds event to calendar [POSITIVE]
+User selects one recurring day and successfully books an asset
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Book" button
+4. Select one recurring day
+5. Navigate to the next month
+6. Select a from date
+7. Navigate to the next month
+8. Select a to date
+9. Click the "Book Asset" button
+10. Click the "Book Now" button
+|Booking is created and event is visible on the calendar
+
+|===
+
+== 121. Deselecting all recurring days removes the Book button [NEGATIVE]
+User selects and then deselects all recurring days and the Book button is removed
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Navigate to the next month
+7. Select a to date
+8. Select all recurring days
+9. Deselect all recurring days
+|Book button is no longer visible
+
+|===
+
+== 122. Deselecting one recurring day removes the Book button [NEGATIVE]
+User selects all recurring days, then deselects one and the Book button is removed
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Book" button
+4. Navigate to the next month
+5. Select a from date
+6. Navigate to the next month
+7. Select a to date
+8. Select all recurring days
+9. Deselect one recurring day
+|Book button is no longer visible
+
+|===
+
+= Booking Calendar
+
+== 123. Calendar is visible on page load [POSITIVE]
+User opens the asset bookings page and the calendar is visible
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Asset Bookings page
+|Calendar is visible
+
+|===
+
+== 124. Click on a future date highlights the cell [POSITIVE]
+User clicks on a future date and the calendar cell is highlighted
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Asset Bookings page
+2. Navigate to the next month
+3. Click on a future date
+|Selected date cell is highlighted
+
+|===
+
+== 125. Click on a future date populates the date filter [POSITIVE]
+User clicks on a future date and the from date filter is populated
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Asset Bookings page
+2. Navigate to the next month
+3. Click on a future date
+|From date filter is populated with the selected date
+
+|===
+
+== 126. Next month button changes the calendar title [POSITIVE]
+User clicks the next month button and the calendar title changes
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Asset Bookings page
+2. Click the next month button
+|Calendar title is updated to the next month
+
+|===
+
+== 127. Previous month button navigates to the previous month [POSITIVE]
+User clicks the previous month button and the calendar navigates to the previous month
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Asset Bookings page
+2. Click the previous month button
+|Calendar title is updated to the previous month
+
+|===
+
+= Booking Search
+
+== 128. Search assets filters the table [POSITIVE]
+User searches for an asset and the table is filtered
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Enter an asset name in the search field
+|Table is filtered to show matching assets
+
+|===
+
+== 129. Reset filters after search clears the input [POSITIVE]
+User searches for an asset and then resets the filters
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Enter an asset name in the search field
+3. Click the "Reset Filters" button
+|Search input is cleared and all assets are displayed
+
+|===
+
+= Parking Map
+
+== 130. Click Parking Map button opens the modal [POSITIVE]
+User clicks the Parking Map button and the modal opens
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+|Parking map modal is opened
+
+|===
+
+== 131. Parking map modal shows level minus 1 by default [POSITIVE]
+User opens the parking map modal and level minus 1 is shown by default
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+|Floor level minus 1 is active by default
+
+|===
+
+== 132. Click level minus 2 switches the floor [POSITIVE]
+User clicks on level minus 2 and the floor switches
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+4. Click on floor level minus 2
+|Floor level minus 2 is active
+
+|===
+
+== 133. Click level minus 1 after minus 2 switches back [POSITIVE]
+User switches to level minus 2 and then back to level minus 1
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+4. Click on floor level minus 2
+5. Click on floor level minus 1
+|Floor level minus 1 is active
+
+|===
+
+== 134. Close parking map modal with close button [POSITIVE]
+User closes the parking map modal using the close button
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+4. Click the "Close" button
+|Parking map modal is closed
+
+|===
+
+== 135. Select date, click spot and book on level minus 1 [POSITIVE]
+User selects a date, clicks a free parking spot on level minus 1 and books it successfully
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+4. Select a date
+5. Click on a free parking spot on level minus 1
+6. Click the "Book" button in the popover
+|Parking spot is booked and shown as taken
+
+|===
+
+== 136. Select date, click spot and book on level minus 2 [POSITIVE]
+User selects a date, clicks a free parking spot on level minus 2 and books it successfully
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+4. Click on floor level minus 2
+5. Select a date
+6. Click on a free parking spot on level minus 2
+7. Click the "Book" button in the popover
+|Parking spot is booked and shown as taken
+
+|===
+
+== 137. Click on a taken parking spot shows taken status [NEGATIVE]
+User clicks on a taken parking spot and the spot is shown as unavailable
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the Bookings page
+2. Select the Parking category
+3. Click the "Parking Map" button
+4. Click on floor level minus 2
+5. Select a date
+6. Book a parking spot
+7. Click on the same parking spot again
+|Spot is shown as taken and the Book button is disabled
+
+|===
+
+= My Bookings
+
+== 138. View My Bookings page [POSITIVE]
+User opens the My Bookings page and the booking list is visible
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+|Booking list is visible
+
+|===
+
+== 139. Search bookings filters the table [POSITIVE]
+User searches for a booking and the table is filtered
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Enter an asset name in the search field
+|Table is filtered to show matching bookings
+
+|===
+
+== 140. Select asset filter filters the table [POSITIVE]
+User selects an asset filter and the table is filtered
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Select an asset from the asset filter
+|Table is filtered to show bookings for the selected asset
+
+|===
+
+== 141. Filter bookings by date range [POSITIVE]
+User filters bookings by entering a from date and a to date
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Enter a from date
+3. Enter a to date
+|Booking list is filtered by the selected date range
+
+|===
+
+== 142. Filter bookings by from date only [POSITIVE]
+User filters bookings by entering only a from date
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Enter a from date
+|Booking list is filtered from the selected date
+
+|===
+
+== 143. Filter bookings by to date only [POSITIVE]
+User filters bookings by entering only a to date
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Enter a to date
+|Booking list is filtered up to the selected date
+
+|===
+
+== 144. Cancel booking confirm cancels the booking [POSITIVE]
+User confirms the cancellation of a booking and the booking is cancelled
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in and has at least one booking
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Click the "Cancel" button for a booking
+3. Click the "Confirm" button in the modal
+|Booking is cancelled and the modal is closed
+
+|===
+
+== 145. Cancel booking keep dismisses the modal [POSITIVE]
+User clicks Keep in the cancellation modal and the booking is not cancelled
+
+[cols="1,1,1,1", options="header"]
+|===
+|Preconditions|Actor|Steps|Expected Result
+
+|User is logged in and has at least one booking
+|Employee, Manager, Admin
+a|
+1. Open the My Bookings page
+2. Click the "Cancel" button for a booking
+3. Click the "Keep" button in the modal
+|Modal is closed and booking is not cancelled
+
+|===
