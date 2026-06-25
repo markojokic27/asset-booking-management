@@ -3,7 +3,7 @@
 # The image we will use to build the modules and 
 # copy to the actual image
 # Using Node 24 as per the requirements
-FROM node:24.14-alpine AS builder
+FROM student-harbor.tn.internal/docker-remote/node:24.14-alpine AS builder
 
 # Set the working directory so that we 
 # know where the files are generated
@@ -38,7 +38,7 @@ RUN npm run build
 
 
 ### RUNNER STAGE START ###
-FROM nginx:1.27-alpine AS runner
+FROM student-harbor.tn.internal/docker-remote/nginx:1.27-alpine AS runner
 
 # Copy built assets
 COPY --from=builder /app/dist /usr/share/nginx/html

@@ -1,5 +1,5 @@
 # Stage 1: Build the Spring Boot JAR
-FROM maven:3.9.4-eclipse-temurin-21 AS build
+FROM student-harbor.tn.internal/docker-remote/maven:3.9.4-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copy Maven wrapper and pom.xml first (for caching dependencies)
@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn -B -q package
 
 # Stage 2: Run the Spring Boot application
-FROM eclipse-temurin:21-jre-alpine
+FROM student-harbor.tn.internal/docker-remote/eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copy JAR from the build stage
