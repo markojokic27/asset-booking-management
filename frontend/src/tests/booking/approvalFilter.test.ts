@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   filterBookingsByAsset,
   filterBookingsByDateRange,
+  filterBookingsByStatus,
   filterPendingBookingsBySearch,
   filterPendingBookingsForApprover,
 } from '../../features/booking/utilis/approvalFilter';
@@ -178,6 +179,29 @@ describe('filterBookingsByDateRange', () => {
     );
 
     expect(result).toHaveLength(1);
+  });
+});
+
+describe('filterBookingsByStatus', () => {
+  it('returns all bookings when status is empty', () => {
+    const bookings = [
+      baseBooking('mark.jones@example.com'),
+      { ...baseBooking('mark.jones@example.com'), status: 'APPROVED' },
+    ] as BookingWithRelations[];
+
+    expect(filterBookingsByStatus(bookings, '')).toHaveLength(2);
+  });
+
+  it('filters bookings by status', () => {
+    const bookings = [
+      baseBooking('mark.jones@example.com'),
+      { ...baseBooking('mark.jones@example.com'), status: 'APPROVED' },
+    ] as BookingWithRelations[];
+
+    const result = filterBookingsByStatus(bookings, 'PENDING');
+
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe('PENDING');
   });
 });
 

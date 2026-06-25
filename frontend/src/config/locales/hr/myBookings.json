@@ -7,6 +7,8 @@
   "filter": {
     "asset": "Asset",
     "allAssets": "Svi asseti",
+    "status": "Status",
+    "allStatuses": "Svi statusi",
     "fromDate": "Od",
     "toDate": "Do"
   },

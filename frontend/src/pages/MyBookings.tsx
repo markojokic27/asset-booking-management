@@ -20,8 +20,11 @@ import { usePagination } from '../features/user/hooks/usePagination';
 import {
   filterBookingsByAsset,
   filterBookingsByDateRange,
+  filterBookingsByStatus,
   filterPendingBookingsBySearch,
 } from '../features/booking/utilis/approvalFilter';
+import { bookingStatuses } from '../features/booking/types';
+import type { BookingStatus } from '../features/booking/types';
 import { isAdmin } from '../features/user/utilis/users';
 
 export default function MyBookings() {
@@ -33,10 +36,25 @@ export default function MyBookings() {
   );
   const { cancel, isCancelling, cancelError, clearCancelError } =
     useBookingCancellation(refetch);
+  const isUserAdmin = isAdmin(user);
   const [search, setSearch] = useState('');
   const [selectedAssetId, setSelectedAssetId] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<BookingStatus | ''>('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+
+  const statusFilterOptions = useMemo(
+    () => [
+      { value: '', label: t('myBookings.filter.allStatuses') },
+      ...bookingStatuses.map((status) => ({
+        value: status,
+        label: t(`bookings.status.${status.toLowerCase()}`, {
+          defaultValue: status,
+        }),
+      })),
+    ],
+    [t]
+  );
 
   const assetOptions = useMemo(() => {
     const assets = new Map<number, string>();
@@ -53,16 +71,19 @@ export default function MyBookings() {
   const filteredBookings = useMemo(() => {
     const assetId = selectedAssetId ? Number(selectedAssetId) : null;
     const byAsset = filterBookingsByAsset(bookings, assetId);
-    const byDate = filterBookingsByDateRange(byAsset, fromDate, toDate);
+    const byStatus = isUserAdmin
+      ? filterBookingsByStatus(byAsset, selectedStatus)
+      : byAsset;
+    const byDate = filterBookingsByDateRange(byStatus, fromDate, toDate);
 
     return filterPendingBookingsBySearch(byDate, search);
-  }, [bookings, fromDate, search, selectedAssetId, toDate]);
+  }, [bookings, fromDate, isUserAdmin, search, selectedAssetId, selectedStatus, toDate]);
 
   const pagination = usePagination(filteredBookings, 10);
 
   useEffect(() => {
     pagination.setPage(1);
-  }, [fromDate, search, selectedAssetId, toDate]);
+  }, [fromDate, isUserAdmin, search, selectedAssetId, selectedStatus, toDate]);
 
   return (
     <LayoutColumn
@@ -115,6 +136,21 @@ export default function MyBookings() {
                 className="border-2 py-2.5 text-(--color-table-text) shadow-none"
               />
             </div>
+            {isUserAdmin && (
+              <div className="relative w-full pt-1 sm:w-44">
+                <FormDropdown
+                  data-testid="my-booking-status-filter"
+                  id="my-bookings-status-filter"
+                  aria-label={t('myBookings.filter.status')}
+                  value={selectedStatus}
+                  onChange={(event) =>
+                    setSelectedStatus(event.target.value as BookingStatus | '')
+                  }
+                  options={statusFilterOptions}
+                  className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+                />
+              </div>
+            )}
           </div>
           <SearchInput data-testid="search-input"
             value={search}

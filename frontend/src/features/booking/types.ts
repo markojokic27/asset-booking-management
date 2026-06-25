@@ -1,13 +1,16 @@
 import type { AssetDto } from '../asset/types';
 
 // TODO fix this, changes in Database are needed
-export type BookingStatus =
-  | 'APPROVED'
-  | 'PENDING'
-  | 'REJECTED'
-  | 'ACTIVE'
-  | 'COMPLETED'
-  | 'CANCELLED';
+export const bookingStatuses = [
+  'APPROVED',
+  'PENDING',
+  'REJECTED',
+  'ACTIVE',
+  'COMPLETED',
+  'CANCELLED',
+] as const;
+
+export type BookingStatus = (typeof bookingStatuses)[number];
 
 export type Booking = {
   id: string;

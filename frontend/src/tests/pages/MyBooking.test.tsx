@@ -14,6 +14,7 @@ vi.mock('../../features/user/utilis/users', () => ({ isAdmin: vi.fn() }));
 vi.mock('../../features/booking/utilis/approvalFilter', () => ({
   filterBookingsByAsset: vi.fn((b: unknown[]) => b),
   filterBookingsByDateRange: vi.fn((b: unknown[]) => b),
+  filterBookingsByStatus: vi.fn((b: unknown[]) => b),
   filterPendingBookingsBySearch: vi.fn((b: unknown[]) => b),
 }));
 vi.mock('../../components/layout/Layout', () => ({
@@ -61,6 +62,7 @@ import { isAdmin } from '../../features/user/utilis/users';
 import {
   filterBookingsByAsset,
   filterBookingsByDateRange,
+  filterBookingsByStatus,
   filterPendingBookingsBySearch,
 } from '../../features/booking/utilis/approvalFilter';
 
@@ -130,6 +132,9 @@ describe('MyBookings', () => {
       expect(screen.getByLabelText('myBookings.filter.fromDate')).toBeInTheDocument();
       expect(screen.getByLabelText('myBookings.filter.toDate')).toBeInTheDocument();
       expect(screen.getByLabelText('myBookings.filter.asset')).toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('myBookings.filter.status')
+      ).not.toBeInTheDocument();
     });
 
     it('renders bookings in table', () => {
@@ -143,6 +148,12 @@ describe('MyBookings', () => {
       vi.mocked(isAdmin).mockReturnValue(true);
       renderPage();
       expect(screen.getByText('myBookings.titleAdmin')).toBeInTheDocument();
+    });
+
+    it('shows status filter for admin user', () => {
+      vi.mocked(isAdmin).mockReturnValue(true);
+      renderPage();
+      expect(screen.getByLabelText('myBookings.filter.status')).toBeInTheDocument();
     });
 
     it.each([
@@ -205,6 +216,28 @@ describe('MyBookings', () => {
       renderPage();
       fireEvent.change(screen.getByLabelText('myBookings.filter.toDate'), { target: { value: '2025-06-30' } });
       expect(filterBookingsByDateRange).toHaveBeenCalledWith(expect.any(Array), '', '2025-06-30');
+    });
+  });
+
+  describe('status filter', () => {
+    beforeEach(() => {
+      vi.mocked(isAdmin).mockReturnValue(true);
+    });
+
+    it('calls filterBookingsByStatus with selected status', () => {
+      renderPage();
+      fireEvent.change(screen.getByLabelText('myBookings.filter.status'), {
+        target: { value: 'PENDING' },
+      });
+      expect(filterBookingsByStatus).toHaveBeenCalledWith(expect.any(Array), 'PENDING');
+    });
+
+    it('calls filterBookingsByStatus with empty string when all statuses selected', () => {
+      renderPage();
+      fireEvent.change(screen.getByLabelText('myBookings.filter.status'), {
+        target: { value: '' },
+      });
+      expect(filterBookingsByStatus).toHaveBeenCalledWith(expect.any(Array), '');
     });
   });
 

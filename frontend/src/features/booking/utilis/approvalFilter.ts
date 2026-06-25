@@ -3,7 +3,7 @@ import { getFullName, isAdmin } from '../../user/utilis/users';
 
 // types
 import type { UserDto } from '../../user/types';
-import type { BookingWithRelations } from '../types';
+import type { BookingStatus, BookingWithRelations } from '../types';
 
 export function filterPendingBookingsForApprover(
   bookings: BookingWithRelations[],
@@ -25,6 +25,17 @@ export function filterPendingBookingsForApprover(
     (booking) =>
       booking.user.managerEmail?.trim().toLowerCase() === approverEmail
   );
+}
+
+export function filterBookingsByStatus(
+  bookings: BookingWithRelations[],
+  status: BookingStatus | ''
+): BookingWithRelations[] {
+  if (!status) {
+    return bookings;
+  }
+
+  return bookings.filter((booking) => booking.status === status);
 }
 
 export function filterBookingsByAsset(
