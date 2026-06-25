@@ -12,9 +12,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
 import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
 import com.example.assetbookingmanagement.core.ui.components.AppMessageState
@@ -28,6 +30,12 @@ fun BookingsScreen(
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingsTab.MyBookings.ordinal) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val selectedTab = BookingsTab.entries[selectedTabIndex]
+    val tabLabels = BookingsTab.entries.map { tab ->
+        when (tab) {
+            BookingsTab.MyBookings -> stringResource(R.string.home_my_bookings_label)
+            BookingsTab.History -> stringResource(R.string.bookings_tab_history)
+        }
+    }
     val hasBookingsForSelectedTab = when (selectedTab) {
         BookingsTab.MyBookings -> uiState.myBookings.isNotEmpty()
         BookingsTab.History -> uiState.historyBookings.isNotEmpty()
@@ -35,7 +43,7 @@ fun BookingsScreen(
 
     BookingTabsLayout(
         selectedTabIndex = selectedTabIndex,
-        tabLabels = BookingsTab.entries.map { it.label },
+        tabLabels = tabLabels,
         onTabSelected = { selectedTabIndex = it }
     ) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -43,7 +51,7 @@ fun BookingsScreen(
             SearchBar(
                 value = uiState.searchText,
                 onValueChange = viewModel::onSearchTextChange,
-                placeholder = "Search..."
+                placeholder = stringResource(R.string.bookings_search_placeholder)
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -52,9 +60,13 @@ fun BookingsScreen(
             BookingsTab.MyBookings -> {
                 BookingListContent(
                     isLoading = uiState.isLoading,
-                    errorMessage = uiState.errorMessage,
+                    errorMessageResId = uiState.errorMessageResId,
                     bookings = uiState.filteredMyBookings,
-                    emptyMessage = if (uiState.myBookings.isEmpty()) "No bookings." else "No matching bookings found.",
+                    emptyMessage = if (uiState.myBookings.isEmpty()) {
+                        stringResource(R.string.bookings_empty_no_bookings)
+                    } else {
+                        stringResource(R.string.bookings_empty_no_matching)
+                    },
                     onBookingClick = onBookingClick
                 )
             }
@@ -62,9 +74,13 @@ fun BookingsScreen(
             BookingsTab.History -> {
                 BookingListContent(
                     isLoading = uiState.isLoading,
-                    errorMessage = uiState.errorMessage,
+                    errorMessageResId = uiState.errorMessageResId,
                     bookings = uiState.filteredHistoryBookings,
-                    emptyMessage = if (uiState.historyBookings.isEmpty()) "No bookings." else "No matching bookings found.",
+                    emptyMessage = if (uiState.historyBookings.isEmpty()) {
+                        stringResource(R.string.bookings_empty_no_bookings)
+                    } else {
+                        stringResource(R.string.bookings_empty_no_matching)
+                    },
                     onBookingClick = onBookingClick
                 )
             }
@@ -75,7 +91,7 @@ fun BookingsScreen(
 @Composable
 private fun BookingListContent(
     isLoading: Boolean,
-    errorMessage: String?,
+    errorMessageResId: Int?,
     bookings: List<MyBookingUiModel>,
     emptyMessage: String,
     onBookingClick: (MyBookingUiModel) -> Unit
@@ -85,10 +101,10 @@ private fun BookingListContent(
             AppLoadingState()
         }
 
-        errorMessage != null -> {
+        errorMessageResId != null -> {
             AppMessageState(
-                title = "Couldn't load bookings",
-                message = errorMessage
+                title = stringResource(R.string.bookings_error_load_title),
+                message = stringResource(errorMessageResId)
             )
         }
 
@@ -115,7 +131,7 @@ private fun BookingListContent(
     }
 }
 
-private enum class BookingsTab(val label: String) {
-    MyBookings("My bookings"),
-    History("History")
+private enum class BookingsTab {
+    MyBookings,
+    History
 }

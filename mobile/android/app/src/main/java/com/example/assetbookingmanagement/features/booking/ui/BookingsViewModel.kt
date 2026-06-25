@@ -2,6 +2,7 @@ package com.example.assetbookingmanagement.features.booking.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,7 @@ data class BookingsUiState(
     val searchText: String = "",
     val myBookings: List<MyBookingUiModel> = emptyList(),
     val historyBookings: List<MyBookingUiModel> = emptyList(),
-    val errorMessage: String? = null
+    val errorMessageResId: Int? = null
 ) {
     val filteredMyBookings: List<MyBookingUiModel>
         get() = myBookings.filter { booking ->
@@ -72,13 +73,13 @@ class BookingsViewModel @Inject constructor(
 
     fun getMyBookings() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            _uiState.update { it.copy(isLoading = true, errorMessageResId = null) }
 
             val userId = authSession.getCurrentUserId() ?: run {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Missing logged in user."
+                        errorMessageResId = R.string.bookings_error_missing_logged_in_user
                     )
                 }
                 return@launch
@@ -134,14 +135,15 @@ class BookingsViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         myBookings = myBookings,
-                        historyBookings = historyBookings
+                        historyBookings = historyBookings,
+                        errorMessageResId = null
                     )
                 }
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Error loading bookings."
+                        errorMessageResId = R.string.bookings_error_load_message
                     )
                 }
             }

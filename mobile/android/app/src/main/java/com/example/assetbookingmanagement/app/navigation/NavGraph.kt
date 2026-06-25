@@ -6,12 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.Header
 import com.example.assetbookingmanagement.features.asset.ui.AssetDetailsScreen
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
@@ -36,6 +38,7 @@ fun NavGraph(
         val startDestination = if (isUserLoggedIn) Routes.HOME else Routes.LOGIN
         val navBackStackEntry = navController.currentBackStackEntryAsState().value
         val currentRoute = navBackStackEntry?.destination?.route
+        val currentBookingId = navBackStackEntry?.arguments?.getLong("bookingId")
         val showBottomBar =
             isBottomNavRoute(currentRoute) ||
                 currentRoute == Routes.ASSET_DETAILS ||
@@ -47,16 +50,18 @@ fun NavGraph(
                 currentRoute == Routes.CHANGE_PASSWORD
 
         val headerTitle = when (currentRoute) {
-            Routes.HOME -> "Home"
-            Routes.ASSETS -> "Assets"
-            Routes.BOOKINGS -> "Bookings"
-            Routes.APPROVAL_REQUESTS -> "Pending Approvals"
-            Routes.APPROVAL_REQUEST_DETAILS -> "Approval request details"
-            Routes.BOOKING_DETAILS -> "Booking details"
-            Routes.PROFILE -> "Profile"
-            Routes.CHANGE_PASSWORD -> "Change password"
-            Routes.CREATE_BOOKING -> "Create booking"
-            Routes.BOOKING_SUCCESS -> "Booking status"
+            Routes.HOME -> stringResource(R.string.nav_home_label)
+            Routes.ASSETS -> stringResource(R.string.nav_assets_label)
+            Routes.BOOKINGS -> stringResource(R.string.nav_bookings_label)
+            Routes.APPROVAL_REQUESTS -> stringResource(R.string.nav_approvals_title)
+            Routes.APPROVAL_REQUEST_DETAILS -> currentBookingId?.let {
+                stringResource(R.string.nav_approval_request_details_title, it)
+            } ?: stringResource(R.string.nav_booking_label)
+            Routes.BOOKING_DETAILS -> stringResource(R.string.nav_booking_details_title)
+            Routes.PROFILE -> stringResource(R.string.nav_profile_label)
+            Routes.CHANGE_PASSWORD -> stringResource(R.string.nav_change_password_title)
+            Routes.CREATE_BOOKING -> stringResource(R.string.nav_create_booking_title)
+            Routes.BOOKING_SUCCESS -> stringResource(R.string.nav_booking_status_title)
             else -> ""
         }
         Scaffold(

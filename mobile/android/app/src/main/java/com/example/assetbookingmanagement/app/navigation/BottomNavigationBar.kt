@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -30,29 +31,29 @@ import com.example.assetbookingmanagement.core.ui.theme.PrimaryBlue
 
 private data class BottomNavItem(
     val route: String,
-    val label: String,
+    val labelResId: Int,
     @param:DrawableRes val iconRes: Int
 )
 
 private val bottomNavItems = listOf(
     BottomNavItem(
         route = Routes.HOME,
-        label = "Home",
+        labelResId = R.string.nav_home_label,
         iconRes = R.drawable.home_24
     ),
     BottomNavItem(
         route = Routes.ASSETS,
-        label = "Assets",
+        labelResId = R.string.nav_assets_label,
         iconRes = R.drawable.computer_24
     ),
     BottomNavItem(
         route = Routes.BOOKINGS,
-        label = "Bookings",
+        labelResId = R.string.nav_bookings_label,
         iconRes = R.drawable.calendar_today_24
     ),
     BottomNavItem(
         route = Routes.PROFILE,
-        label = "Profile",
+        labelResId = R.string.nav_profile_label,
         iconRes = R.drawable.person_24
     )
 )
@@ -98,6 +99,7 @@ fun BottomNavigationBar(
             windowInsets = NavigationBarDefaults.windowInsets
         ) {
             bottomNavItems.forEach { item ->
+                val label = stringResource(item.labelResId)
                 val selected = currentDestination
                     ?.hierarchy
                     ?.any { it.route == item.route } == true
@@ -110,13 +112,13 @@ fun BottomNavigationBar(
                     icon = {
                         Icon(
                             painter = painterResource(id = item.iconRes),
-                            contentDescription = item.label,
+                            contentDescription = label,
                             modifier = Modifier.size(30.dp)
                         )
                     },
                     label = {
                         Text(
-                            text = item.label,
+                            text = label,
                             fontSize = 10.sp
                         )
                     },
