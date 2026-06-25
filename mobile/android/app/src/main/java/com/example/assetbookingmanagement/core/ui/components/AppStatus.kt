@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.theme.*
 
 data class AppStatusStyle(
@@ -48,7 +50,7 @@ fun StatusBadge(
     modifier: Modifier = Modifier
 ) {
     AppStatus(
-        text = status,
+        text = localizedStatusText(status),
         statusStyle = statusBadgeStyle(status),
         modifier = modifier
     )
@@ -113,6 +115,20 @@ private fun themedStatusStyle(
     darkStyle: AppStatusStyle,
     lightStyle: AppStatusStyle
 ): AppStatusStyle = if (isDark) darkStyle else lightStyle
+
+@Composable
+private fun localizedStatusText(status: String): String = when (status.uppercase()) {
+    "ACTIVE" -> stringResource(R.string.status_active)
+    "INACTIVE" -> stringResource(R.string.status_inactive)
+    "DAMAGED" -> stringResource(R.string.status_damaged)
+    "DELETED" -> stringResource(R.string.status_deleted)
+    "APPROVED" -> stringResource(R.string.status_approved)
+    "REJECTED" -> stringResource(R.string.status_rejected)
+    "CANCELLED" -> stringResource(R.string.status_cancelled)
+    "PENDING" -> stringResource(R.string.status_pending)
+    "COMPLETED" -> stringResource(R.string.status_completed)
+    else -> status
+}
 
 @Composable
 private fun roleBadgeStyle(role: String): AppStatusStyle {

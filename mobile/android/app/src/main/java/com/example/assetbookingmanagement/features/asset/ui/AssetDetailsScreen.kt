@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,7 +55,7 @@ fun AssetDetailsScreen(
 
             uiState.errorMessage != null -> {
                 AppMessageState(
-                    title = "Couldn't load asset details",
+                    title = stringResource(R.string.asset_error_load_details_title),
                     message = uiState.errorMessage.orEmpty()
                 )
             }
@@ -79,11 +80,20 @@ fun AssetDetailsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    AssetDetailItem(label = "Category", value = uiState.categoryName ?: "-")
-                    AssetStatusDetailItem(label = "Status", status = asset.status)
-                    AssetDetailItem(label = "Location", value = asset.location)
                     AssetDetailItem(
-                        label = "Description",
+                        label = stringResource(R.string.asset_details_category_label),
+                        value = uiState.categoryName ?: "-"
+                    )
+                    AssetStatusDetailItem(
+                        label = stringResource(R.string.asset_details_status_label),
+                        status = asset.status
+                    )
+                    AssetDetailItem(
+                        label = stringResource(R.string.asset_details_location_label),
+                        value = asset.location
+                    )
+                    AssetDetailItem(
+                        label = stringResource(R.string.asset_details_description_label),
                         value = asset.description?.ifBlank { "-" } ?: "-"
                     )
                 }
@@ -91,7 +101,7 @@ fun AssetDetailsScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 AppButton(
-                    text = "Book now",
+                    text = stringResource(R.string.asset_action_book_now),
                     iconRes = R.drawable.calendar_today_24,
                     enabled = asset.status == "ACTIVE",
                     onClick = onBookClick

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryResponse
@@ -44,7 +45,7 @@ fun AssetFilterSideSheet(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Filters",
+                text = stringResource(R.string.asset_filters_title),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
@@ -55,7 +56,7 @@ fun AssetFilterSideSheet(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.close_24),
-                    contentDescription = "Close filters",
+                    contentDescription = stringResource(R.string.asset_filters_close_content_description),
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(24.dp)
                 )
@@ -67,7 +68,7 @@ fun AssetFilterSideSheet(
         )
 
         Text(
-            text = "Category",
+            text = stringResource(R.string.asset_filters_category_label),
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface
         )

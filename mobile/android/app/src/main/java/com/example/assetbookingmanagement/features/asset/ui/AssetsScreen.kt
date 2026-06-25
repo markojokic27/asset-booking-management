@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,7 +69,7 @@ fun AssetsScreen(
                     SearchBar(
                         value = uiState.searchText,
                         onValueChange = viewModel::onSearchTextChange,
-                        placeholder = "Search..."
+                        placeholder = stringResource(R.string.asset_search_placeholder)
                     )
                 }
 
@@ -79,7 +80,7 @@ fun AssetsScreen(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.filter_alt_24),
-                        contentDescription = "Filter",
+                        contentDescription = stringResource(R.string.asset_filters_open_content_description),
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(24.dp)
                     )
@@ -93,7 +94,7 @@ fun AssetsScreen(
 
                 uiState.errorMessage != null -> {
                     AppMessageState(
-                        title = "Couldn't load assets",
+                        title = stringResource(R.string.asset_error_load_assets_title),
                         message = uiState.errorMessage.orEmpty()
                     )
                 }
@@ -115,7 +116,7 @@ fun AssetsScreen(
                     }
                 }
                 else -> {
-                    AppEmptyState(text = "No assets found.")
+                    AppEmptyState(text = stringResource(R.string.asset_empty_no_assets))
                 }
             }
         }

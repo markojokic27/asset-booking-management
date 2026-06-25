@@ -13,4 +13,27 @@
     <string name="login_error_server_unreachable">Nije moguće povezati se sa serverom. Pokušajte ponovno.</string>
     <string name="login_show_password">Prikaži lozinku</string>
     <string name="login_hide_password">Sakrij lozinku</string>
+    <string name="search_content_description">Pretraži</string>
+    <string name="asset_search_placeholder">Pretraži imovinu...</string>
+    <string name="asset_filters_open_content_description">Otvori filtere</string>
+    <string name="asset_filters_title">Filteri</string>
+    <string name="asset_filters_close_content_description">Zatvori filtere</string>
+    <string name="asset_filters_category_label">Kategorija</string>
+    <string name="asset_error_load_assets_title">Učitavanje imovine nije uspjelo</string>
+    <string name="asset_error_load_details_title">Učitavanje detalja imovine nije uspjelo</string>
+    <string name="asset_empty_no_assets">Imovina nije pronađena.</string>
+    <string name="asset_details_category_label">Kategorija</string>
+    <string name="asset_details_status_label">Status</string>
+    <string name="asset_details_location_label">Lokacija</string>
+    <string name="asset_details_description_label">Opis</string>
+    <string name="asset_action_book_now">Rezerviraj</string>
+    <string name="status_active">Aktivno</string>
+    <string name="status_inactive">Neaktivno</string>
+    <string name="status_damaged">Oštećeno</string>
+    <string name="status_deleted">Obrisano</string>
+    <string name="status_approved">Odobreno</string>
+    <string name="status_rejected">Odbijeno</string>
+    <string name="status_cancelled">Otkazano</string>
+    <string name="status_pending">Na čekanju</string>
+    <string name="status_completed">Dovršeno</string>
 </resources>

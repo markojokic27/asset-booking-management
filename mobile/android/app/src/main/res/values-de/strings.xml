@@ -13,4 +13,27 @@
     <string name="login_error_server_unreachable">Verbindung zum Server nicht möglich. Bitte versuchen Sie es erneut.</string>
     <string name="login_show_password">Passwort anzeigen</string>
     <string name="login_hide_password">Passwort ausblenden</string>
+    <string name="search_content_description">Suchen</string>
+    <string name="asset_search_placeholder">Assets suchen…</string>
+    <string name="asset_filters_open_content_description">Filter öffnen</string>
+    <string name="asset_filters_title">Filter</string>
+    <string name="asset_filters_close_content_description">Filter schließen</string>
+    <string name="asset_filters_category_label">Kategorie</string>
+    <string name="asset_error_load_assets_title">Assets konnten nicht geladen werden</string>
+    <string name="asset_error_load_details_title">Asset-Details konnten nicht geladen werden</string>
+    <string name="asset_empty_no_assets">Keine Assets gefunden.</string>
+    <string name="asset_details_category_label">Kategorie</string>
+    <string name="asset_details_status_label">Status</string>
+    <string name="asset_details_location_label">Standort</string>
+    <string name="asset_details_description_label">Beschreibung</string>
+    <string name="asset_action_book_now">Buchen</string>
+    <string name="status_active">Aktiv</string>
+    <string name="status_inactive">Inaktiv</string>
+    <string name="status_damaged">Beschädigt</string>
+    <string name="status_deleted">Gelöscht</string>
+    <string name="status_approved">Genehmigt</string>
+    <string name="status_rejected">Abgelehnt</string>
+    <string name="status_cancelled">Storniert</string>
+    <string name="status_pending">Ausstehend</string>
+    <string name="status_completed">Abgeschlossen</string>
 </resources>

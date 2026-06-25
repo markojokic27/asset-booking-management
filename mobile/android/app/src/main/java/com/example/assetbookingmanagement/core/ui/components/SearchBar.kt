@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.theme.InputFocusBorder
@@ -26,7 +27,8 @@ import com.example.assetbookingmanagement.core.ui.theme.InputFocusBorder
 fun SearchBar(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String = "Search..."
+    placeholder: String,
+    contentDescription: String = stringResource(R.string.search_content_description)
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -51,7 +53,7 @@ fun SearchBar(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.search_24),
-                contentDescription = "Search",
+                contentDescription = contentDescription,
                 tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.45f),
                 modifier = Modifier.size(20.dp)
             )
