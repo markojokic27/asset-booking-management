@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
 
+
+    <suppress>
+        <notes><![CDATA[
+            Wrong-ecosystem false positives for io.opentelemetry Java artifacts
+            (proto, semconv, api, ...). Each CVE below targets opentelemetry-go,
+            opentelemetry-dotnet, or opentelemetry-cpp, not the Java runtime.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/io\.opentelemetry.*$</packageUrl>
+        <cve>CVE-2026-29181</cve> <!-- opentelemetry-go -->
+        <cve>CVE-2026-39882</cve> <!-- opentelemetry-go, OTLP HTTP exporter -->
+        <cve>CVE-2026-39883</cve> <!-- opentelemetry-go, Darwin ioreg PATH hijack -->
+        <cve>CVE-2026-40894</cve> <!-- opentelemetry-dotnet, baggage parsing -->
+        <cve>CVE-2026-41178</cve> <!-- opentelemetry-go -->
+        <cve>CVE-2026-44967</cve> <!-- opentelemetry-cpp -->
+    </suppress>
+
+
     <!-- FALSE POSITIVE: CVE-2025-7962 targets angus-mail (email transport),
          NOT angus-activation (MIME type activation framework).
          CPE mismatch: cpe for eclipse:angus_mail matched wrong artifact. -->
