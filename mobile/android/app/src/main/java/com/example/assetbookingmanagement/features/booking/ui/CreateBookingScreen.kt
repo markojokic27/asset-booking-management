@@ -34,7 +34,7 @@ import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingD
 fun CreateBookingScreen(
     assetId: Long,
     onCancelClick: () -> Unit = {},
-    onBookNowClick: (assetName: String, fromDate: String, toDate: String) -> Unit = { _, _, _ -> },
+    onBookNowClick: (assetName: String, fromDate: String, toDate: String, approvalRequired: Boolean) -> Unit = { _, _, _, _ -> },
     viewModel: CreateBookingViewModel = hiltViewModel()
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingTab.ChooseDate.ordinal) }
@@ -63,7 +63,8 @@ fun CreateBookingScreen(
                     dateTimeText = createdBookingEnd,
                     context = context,
                     isHourlyBooking = uiState.bookingPeriod == "HOUR"
-                )
+                ),
+                uiState.approvalRequired == true
             )
         }
     }

@@ -299,12 +299,13 @@ fun NavGraph(
                     onCancelClick = {
                         navController.popBackStack()
                     },
-                    onBookNowClick = { assetName, fromDate, toDate ->
+                    onBookNowClick = { assetName, fromDate, toDate, approvalRequired ->
                         navController.navigate(
                             Routes.bookingSuccess(
                                 assetName = assetName,
                                 fromDate = fromDate,
-                                toDate = toDate
+                                toDate = toDate,
+                                approvalRequired = approvalRequired
                             )
                         ) {
                             popUpTo(Routes.CREATE_BOOKING) { inclusive = true }
@@ -327,13 +328,18 @@ fun NavGraph(
                     navArgument("toDate") {
                         type = NavType.StringType
                         defaultValue = "-"
+                    },
+                    navArgument("approvalRequired") {
+                        type = NavType.BoolType
+                        defaultValue = false
                     }
                 )
             ) { backStackEntry ->
                 BookingSuccessScreen(
                     assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
                     fromDate = backStackEntry.arguments?.getString("fromDate") ?: "-",
-                    toDate = backStackEntry.arguments?.getString("toDate") ?: "-"
+                    toDate = backStackEntry.arguments?.getString("toDate") ?: "-",
+                    showApprovalMessage = backStackEntry.arguments?.getBoolean("approvalRequired") ?: false
                 )
             }
             }

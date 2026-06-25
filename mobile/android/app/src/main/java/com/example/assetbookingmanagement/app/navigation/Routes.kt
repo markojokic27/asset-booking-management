@@ -18,7 +18,7 @@ object Routes {
     const val CHANGE_PASSWORD = "change_password"
     const val CREATE_BOOKING = "create_booking/{assetId}"
     const val BOOKING_SUCCESS =
-        "booking_success?assetName={assetName}&fromDate={fromDate}&toDate={toDate}"
+        "booking_success?assetName={assetName}&fromDate={fromDate}&toDate={toDate}&approvalRequired={approvalRequired}"
 
     fun assetDetails(assetId: Long) = "asset_details/$assetId"
 
@@ -47,6 +47,7 @@ object Routes {
     fun bookingSuccess(
         assetName: String,
         fromDate: String,
-        toDate: String
-    ) = "booking_success?assetName=${Uri.encode(assetName)}&fromDate=${Uri.encode(fromDate)}&toDate=${Uri.encode(toDate)}"
+        toDate: String,
+        approvalRequired: Boolean
+    ) = "booking_success?assetName=${Uri.encode(assetName)}&fromDate=${Uri.encode(fromDate)}&toDate=${Uri.encode(toDate)}&approvalRequired=$approvalRequired"
 }

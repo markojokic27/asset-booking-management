@@ -25,6 +25,7 @@
     <string name="nav_booking_status_title">Booking Status</string>
     <string name="nav_change_password_title">Change Password</string>
     <string name="nav_create_booking_title">Book</string>
+    <string name="booking_success_pending_approval_message">This booking is pending approval.</string>
     <string name="home_all_assets_label">All assets</string>
     <string name="home_my_bookings_label">My bookings</string>
     <string name="home_pending_approvals_title">Pending approvals</string>

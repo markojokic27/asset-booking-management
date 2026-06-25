@@ -25,6 +25,7 @@
     <string name="nav_booking_status_title">Status rezervacije</string>
     <string name="nav_change_password_title">Promjena lozinke</string>
     <string name="nav_create_booking_title">Rezerviraj</string>
+    <string name="booking_success_pending_approval_message">Ova rezervacija čeka odobrenje.</string>
     <string name="home_all_assets_label">Sva imovina</string>
     <string name="home_my_bookings_label">Moje rezervacije</string>
     <string name="home_pending_approvals_title">Zahtjevi na čekanju</string>
