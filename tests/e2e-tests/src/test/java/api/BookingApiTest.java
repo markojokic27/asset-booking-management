@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 import static org.hamcrest.Matchers.*;
 
-public class BookingApi extends BaseApi {
+public class BookingApiTest extends BaseApi {
 
     private static final int VALID_BOOKING_ID = 1;
     private static Integer createdBookingId = null;

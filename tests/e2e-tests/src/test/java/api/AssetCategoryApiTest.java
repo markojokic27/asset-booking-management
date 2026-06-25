@@ -5,17 +5,20 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.*;
 
-public class AssetCategoryApi extends BaseApi {
+public class AssetCategoryApiTest extends BaseApi {
 
     private static final int VALID_ASSET_CATEGORY_ID = 1;
     private static Integer createdAssetCategoryId = null;
+    private static final String CATEGORY_NAME = "Room_" + System.currentTimeMillis();
 
     @AfterClass(alwaysRun = true)
     public void cleanup() {
         if (createdAssetCategoryId != null) {
             given()
                     .when()
-                    .delete("/v1/asset-categories/" + createdAssetCategoryId);
+                    .delete("/v1/asset-categories/" + createdAssetCategoryId)
+                    .then()
+                    .statusCode(anyOf(equalTo(204), equalTo(404)));
             createdAssetCategoryId = null;
         }
     }
@@ -47,12 +50,12 @@ public class AssetCategoryApi extends BaseApi {
         createdAssetCategoryId = given()
                 .body("""
                 {
-                  "name": "Room",
+                  "name": "%s",
                   "description": "All rooms in company",
                   "bookingPeriod": "HOUR",
                   "approval": false
                 }
-                """)
+                """.formatted(CATEGORY_NAME))
                 .when()
                 .post("/v1/asset-categories")
                 .then()
@@ -67,12 +70,12 @@ public class AssetCategoryApi extends BaseApi {
         given()
                 .body("""
                 {
-                  "name": "Room",
+                  "name": "%s",
                   "description": "All rooms in company",
                   "bookingPeriod": "HOUR",
                   "approval": true
                 }
-                """)
+                """.formatted(CATEGORY_NAME))
                 .when()
                 .patch("/v1/asset-categories/" + createdAssetCategoryId)
                 .then()

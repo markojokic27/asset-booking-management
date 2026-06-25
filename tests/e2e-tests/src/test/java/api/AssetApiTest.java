@@ -5,17 +5,20 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.*;
 
-public class AssetApi extends BaseApi {
+public class AssetApiTest extends BaseApi {
 
     private static final int VALID_ASSET_ID = 1;
     private static Integer createdAssetId = null;
+    private static final String ASSET_NAME = "Mac_" + System.currentTimeMillis();
 
     @AfterClass(alwaysRun = true)
     public void cleanup() {
         if (createdAssetId != null) {
             given()
                     .when()
-                    .delete("/v1/assets/" + createdAssetId);
+                    .delete("/v1/assets/" + createdAssetId)
+                    .then()
+                    .statusCode(anyOf(equalTo(204), equalTo(404)));
             createdAssetId = null;
         }
     }
@@ -47,13 +50,13 @@ public class AssetApi extends BaseApi {
         createdAssetId = given()
                 .body("""
                 {
-                  "name": "Mac",
+                  "name": "%s",
                   "categoryId": 1,
                   "description": "Lightweight laptop",
                   "status": "ACTIVE",
                   "location": "Room 2"
                 }
-                """)
+                """.formatted(ASSET_NAME))
                 .when()
                 .post("/v1/assets")
                 .then()
@@ -68,13 +71,13 @@ public class AssetApi extends BaseApi {
         given()
                 .body("""
                 {
-                  "name": "Mac",
+                  "name": "%s",
                   "categoryId": 1,
                   "description": "Lightweight laptop",
                   "status": "ACTIVE",
                   "location": "Room 3"
                 }
-                """)
+                """.formatted(ASSET_NAME))
                 .when()
                 .patch("/v1/assets/" + createdAssetId)
                 .then()

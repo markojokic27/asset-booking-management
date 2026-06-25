@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.notNullValue;
 
-public class AuthApi extends BaseApi{
+public class AuthApiTest extends BaseApi{
 
         private static String refreshToken = null;
 

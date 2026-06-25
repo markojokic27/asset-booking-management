@@ -3,7 +3,7 @@ package api;
 import org.testng.annotations.Test;
 
 
-public class ReportApi extends BaseApi {
+public class ReportApiTest extends BaseApi {
 
     @Test
     void getReportsReturns200() {

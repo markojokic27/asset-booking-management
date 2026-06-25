@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.*;
 
-public class DepartmentApi extends BaseApi {
+public class DepartmentApiTest extends BaseApi {
 
     private static final int VALID_DEPARTMENT_ID = 1;
 
