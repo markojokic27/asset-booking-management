@@ -2,6 +2,7 @@ package com.example.assetbookingmanagement.features.asset.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.asset.data.AssetRepository
 import com.example.assetbookingmanagement.features.asset.data.AssetResponse
 import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryRepository
@@ -19,7 +20,7 @@ data class AssetDetailsUiState(
     val isLoading: Boolean = false,
     val asset: AssetResponse? = null,
     val categoryName: String? = null,
-    val errorMessage: String? = null
+    val errorMessageResId: Int? = null
 )
 
 @HiltViewModel
@@ -35,7 +36,7 @@ class AssetDetailsViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isLoading = true,
-                    errorMessage = null
+                    errorMessageResId = null
                 )
             }
 
@@ -48,17 +49,17 @@ class AssetDetailsViewModel @Inject constructor(
                         isLoading = false,
                         asset = asset,
                         categoryName = category.name,
-                        errorMessage = null
+                        errorMessageResId = null
                     )
                 }
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You are not authorized to view this asset."
-                            404 -> "Asset not found."
-                            else -> "Failed to load asset details."
+                        errorMessageResId = when (error.code()) {
+                            401, 403 -> R.string.asset_error_not_authorized
+                            404 -> R.string.asset_error_not_found
+                            else -> R.string.asset_error_load_details_message
                         }
                     )
                 }
@@ -66,7 +67,7 @@ class AssetDetailsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Unable to connect to the server. Please try again."
+                        errorMessageResId = R.string.login_error_server_unreachable
                     )
                 }
             }

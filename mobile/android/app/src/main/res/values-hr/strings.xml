@@ -14,6 +14,12 @@
     <string name="login_show_password">Prikaži lozinku</string>
     <string name="login_hide_password">Sakrij lozinku</string>
     <string name="search_content_description">Pretraži</string>
+    <string name="home_all_assets_label">Sva imovina</string>
+    <string name="home_my_bookings_label">Moje rezervacije</string>
+    <string name="home_pending_approvals_title">Zahtjevi na čekanju</string>
+    <string name="home_open_all_assets_content_description">Prikaži svu imovinu</string>
+    <string name="home_open_my_bookings_content_description">Prikaži moje rezervacije</string>
+    <string name="home_open_pending_approvals_content_description">Prikaži zahtjeve na čekanju</string>
     <string name="asset_search_placeholder">Pretraži imovinu...</string>
     <string name="asset_filters_open_content_description">Otvori filtere</string>
     <string name="asset_filters_title">Filteri</string>
@@ -21,12 +27,16 @@
     <string name="asset_filters_category_label">Kategorija</string>
     <string name="asset_error_load_assets_title">Učitavanje imovine nije uspjelo</string>
     <string name="asset_error_load_details_title">Učitavanje detalja imovine nije uspjelo</string>
+    <string name="asset_error_load_details_message">Učitavanje detalja imovine nije uspjelo.</string>
+    <string name="asset_error_not_authorized">Nemate ovlasti za pregled ove imovine.</string>
+    <string name="asset_error_not_found">Imovina nije pronađena.</string>
     <string name="asset_empty_no_assets">Imovina nije pronađena.</string>
     <string name="asset_details_category_label">Kategorija</string>
     <string name="asset_details_status_label">Status</string>
     <string name="asset_details_location_label">Lokacija</string>
     <string name="asset_details_description_label">Opis</string>
     <string name="asset_action_book_now">Rezerviraj</string>
+    <string name="common_value_unavailable">Nije dostupno</string>
     <string name="status_active">Aktivno</string>
     <string name="status_inactive">Neaktivno</string>
     <string name="status_damaged">Oštećeno</string>
@@ -36,4 +46,9 @@
     <string name="status_cancelled">Otkazano</string>
     <string name="status_pending">Na čekanju</string>
     <string name="status_completed">Dovršeno</string>
+    <plurals name="home_pending_approvals_requests">
+        <item quantity="one">%d zahtjev</item>
+        <item quantity="few">%d zahtjeva</item>
+        <item quantity="other">%d zahtjeva</item>
+    </plurals>
 </resources>

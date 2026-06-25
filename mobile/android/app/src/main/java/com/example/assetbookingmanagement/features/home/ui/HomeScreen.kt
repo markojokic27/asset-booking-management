@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,7 +60,8 @@ fun HomeScreen(
                 iconRes = R.drawable.computer_24,
                 primaryColor = PrimaryBlue,
                 count = uiState.assetCount.toString(),
-                label = "All assets",
+                label = stringResource(R.string.home_all_assets_label),
+                arrowContentDescription = stringResource(R.string.home_open_all_assets_content_description),
                 onArrowClick = onAssetsClick
             )
 
@@ -68,7 +71,8 @@ fun HomeScreen(
                 iconRes = R.drawable.calendar_today_24,
                 primaryColor = BookingsPrimary,
                 count = uiState.myBookingsCount.toString(),
-                label = "My bookings",
+                label = stringResource(R.string.home_my_bookings_label),
+                arrowContentDescription = stringResource(R.string.home_open_my_bookings_content_description),
                 onArrowClick = onBookingsClick
             )
         }
@@ -90,6 +94,7 @@ private fun HomeCard(
     primaryColor: Color,
     count: String,
     label: String,
+    arrowContentDescription: String,
     onArrowClick: () -> Unit
 ) {
     Surface(
@@ -137,7 +142,7 @@ private fun HomeCard(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_right_alt_24),
-                        contentDescription = "Open $label",
+                        contentDescription = arrowContentDescription,
                         tint = TextLight,
                         modifier = Modifier.size(20.dp)
                     )
@@ -165,13 +170,13 @@ private fun ApprovalRequestsCard(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = "Pending Approvals",
+                    text = stringResource(R.string.home_pending_approvals_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "$pendingCount requests",
+                    text = pluralStringResource(R.plurals.home_pending_approvals_requests, pendingCount, pendingCount),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -183,7 +188,7 @@ private fun ApprovalRequestsCard(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.arrow_right_alt_24),
-                    contentDescription = "Open pending approvals",
+                    contentDescription = stringResource(R.string.home_open_pending_approvals_content_description),
                     tint = TextLight,
                     modifier = Modifier.size(20.dp)
                 )

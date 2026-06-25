@@ -37,6 +37,8 @@ fun AssetDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val asset = uiState.asset
+    val errorMessageResId = uiState.errorMessageResId
+    val unavailableText = stringResource(R.string.common_value_unavailable)
     //Fetch asset details when screen is opened or when assetId changes
     LaunchedEffect(assetId) {
         viewModel.getAssetDetails(assetId)
@@ -53,10 +55,10 @@ fun AssetDetailsScreen(
                 AppLoadingState()
             }
 
-            uiState.errorMessage != null -> {
+            errorMessageResId != null -> {
                 AppMessageState(
                     title = stringResource(R.string.asset_error_load_details_title),
-                    message = uiState.errorMessage.orEmpty()
+                    message = stringResource(errorMessageResId)
                 )
             }
 
@@ -82,7 +84,7 @@ fun AssetDetailsScreen(
                 ) {
                     AssetDetailItem(
                         label = stringResource(R.string.asset_details_category_label),
-                        value = uiState.categoryName ?: "-"
+                        value = uiState.categoryName?.ifBlank { unavailableText } ?: unavailableText
                     )
                     AssetStatusDetailItem(
                         label = stringResource(R.string.asset_details_status_label),
@@ -90,11 +92,11 @@ fun AssetDetailsScreen(
                     )
                     AssetDetailItem(
                         label = stringResource(R.string.asset_details_location_label),
-                        value = asset.location
+                        value = asset.location.ifBlank { unavailableText }
                     )
                     AssetDetailItem(
                         label = stringResource(R.string.asset_details_description_label),
-                        value = asset.description?.ifBlank { "-" } ?: "-"
+                        value = asset.description?.ifBlank { unavailableText } ?: unavailableText
                     )
                 }
 
