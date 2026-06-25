@@ -34,6 +34,23 @@ vi.mock('../../components/ui/SearchBar', () => ({
   ),
 }));
 
+vi.mock('../../components/ui/FormDropdown', () => ({
+  FormDropdown: ({ value, onChange, options, 'aria-label': ariaLabel }: any) => (
+    <select
+      data-testid="user-role-filter"
+      aria-label={ariaLabel}
+      value={value}
+      onChange={onChange}
+    >
+      {options.map((option: { value: string; label: string }) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  ),
+}));
+
 vi.mock('../../components/ui/Pagination', () => ({
   Pagination: ({ page, totalPages, onPageChange }: any) => (
     <nav aria-label="ui.pagination.ariaLabel">
@@ -149,6 +166,8 @@ const baseList = {
   setSearch: vi.fn(),
   showDeleted: false,
   toggleShowDeleted: vi.fn(),
+  selectedRole: '' as const,
+  setSelectedRole: vi.fn(),
 };
 
 const buildUseUsers = (overrides: Record<string, any> = {}) => ({
@@ -216,6 +235,7 @@ describe('Users page', () => {
       expect(screen.getByText('users.title')).toBeInTheDocument();
       expect(screen.getByTestId('search-input')).toBeInTheDocument();
       expect(screen.getByRole('checkbox', { name: 'show-deleted' })).toBeInTheDocument();
+      expect(screen.getByTestId('user-role-filter')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /users.actions.new/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /users.actions.export/i })).toBeInTheDocument();
     });

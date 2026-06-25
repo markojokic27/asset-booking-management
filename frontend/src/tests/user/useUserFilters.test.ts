@@ -24,8 +24,8 @@ function user(overrides: Partial<UserDto> & Pick<UserDto, 'id'>): UserDto {
 
 const sampleUsers: UserDto[] = [
   user({ id: 1, name: 'Ana', surname: 'Babić', email: 'ana@example.com' }),
-  user({ id: 2, name: 'Ivan', surname: 'Anić', email: 'ivan@example.com' }),
-  user({ id: 3, name: 'Marko', surname: 'Babić', email: 'marko@example.com' }),
+  user({ id: 2, name: 'Ivan', surname: 'Anić', email: 'ivan@example.com', role: 'ADMIN' }),
+  user({ id: 3, name: 'Marko', surname: 'Babić', email: 'marko@example.com', role: 'MANAGER' }),
   user({
     id: 4,
     name: 'Obrisani',
@@ -162,6 +162,47 @@ describe('useUserFilters', () => {
       });
 
       expect(harness.current.data.map((u) => u.id)).toEqual([4]);
+    });
+  });
+
+  describe('role', () => {
+    it('returns all roles when no role is selected', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      expect(harness.current.selectedRole).toBe('');
+      expect(harness.current.data.map((u) => u.id)).toEqual([2, 1, 3]);
+    });
+
+    it('filters by EMPLOYEE role', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      act(() => {
+        harness.current.setSelectedRole('EMPLOYEE');
+      });
+
+      expect(harness.current.selectedRole).toBe('EMPLOYEE');
+      expect(harness.current.data.map((u) => u.id)).toEqual([1]);
+    });
+
+    it('filters by ADMIN role', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      act(() => {
+        harness.current.setSelectedRole('ADMIN');
+      });
+
+      expect(harness.current.data.map((u) => u.id)).toEqual([2]);
+    });
+
+    it('combines role filter with search', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      act(() => {
+        harness.current.setSelectedRole('EMPLOYEE');
+        harness.current.setSearch('ana');
+      });
+
+      expect(harness.current.data.map((u) => u.id)).toEqual([1]);
     });
   });
 

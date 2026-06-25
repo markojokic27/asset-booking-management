@@ -8,7 +8,14 @@
     "placeholder": "Pretraži korisnike..."
   },
   "filters": {
-    "showDeleted": "Prikaži obrisane"
+    "showDeleted": "Prikaži obrisane",
+    "role": "Uloga",
+    "allRoles": "Sve uloge"
+  },
+  "roles": {
+    "EMPLOYEE": "Zaposlenik",
+    "ADMIN": "Administrator",
+    "MANAGER": "Menadžer"
   },
   "empty": {
     "loading": "Učitavanje korisnika...",

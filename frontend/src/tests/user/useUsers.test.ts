@@ -32,6 +32,8 @@ const mockFilters = {
   setSearch: vi.fn(),
   showDeleted: false,
   toggleShowDeleted: vi.fn(),
+  selectedRole: '' as const,
+  setSelectedRole: vi.fn(),
   sortDir: 'asc' as const,
   toggleSort: vi.fn(),
 };

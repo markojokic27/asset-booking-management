@@ -24,6 +24,8 @@ export function useUsers() {
       setSearch: filters.setSearch,
       showDeleted: filters.showDeleted,
       toggleShowDeleted: filters.toggleShowDeleted,
+      selectedRole: filters.selectedRole,
+      setSelectedRole: filters.setSelectedRole,
     },
 
     sorting: {

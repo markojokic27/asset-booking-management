@@ -8,7 +8,14 @@
     "placeholder": "Benutzer suchen…"
   },
   "filters": {
-    "showDeleted": "Gelöschte anzeigen"
+    "showDeleted": "Gelöschte anzeigen",
+    "role": "Rolle",
+    "allRoles": "Alle Rollen"
+  },
+  "roles": {
+    "EMPLOYEE": "Mitarbeiter",
+    "ADMIN": "Administrator",
+    "MANAGER": "Manager"
   },
   "empty": {
     "loading": "Benutzer werden geladen…",

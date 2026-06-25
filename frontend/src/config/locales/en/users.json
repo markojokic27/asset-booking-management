@@ -8,7 +8,14 @@
     "placeholder": "Search users..."
   },
   "filters": {
-    "showDeleted": "Show deleted"
+    "showDeleted": "Show deleted",
+    "role": "Role",
+    "allRoles": "All roles"
+  },
+  "roles": {
+    "EMPLOYEE": "Employee",
+    "ADMIN": "Admin",
+    "MANAGER": "Manager"
   },
   "empty": {
     "loading": "Loading users...",

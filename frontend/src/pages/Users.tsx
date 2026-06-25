@@ -1,5 +1,5 @@
 // External packages
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,6 +11,7 @@ import { Button } from '../components/ui/Button';
 import { SearchInput } from '../components/ui/SearchBar';
 import { Pagination } from '../components/ui/Pagination';
 import { DeleteModal } from '../components/ui/DeleteModal';
+import { FormDropdown } from '../components/ui/FormDropdown';
 
 // User-related feature components
 import { UserModal } from '../features/user/components/UserModal';
@@ -28,7 +29,8 @@ import { useUsers } from '../features/user/hooks/useUsers';
 import { useAuth } from '../features/auth/context/AuthContext';
 
 // Types
-import type { UserDto } from '../features/user/types';
+import type { UserDto, UserRole } from '../features/user/types';
+import { userRoleSchema } from '../features/user/validation';
 
 type DeleteState = { type: 'none' } | { type: 'delete'; user: UserDto };
 
@@ -54,6 +56,18 @@ function UsersPage() {
   });
 
   const closeDeleteModal = () => setDeleteState({ type: 'none' });
+
+  // resolve role filter options
+  const roleFilterOptions = useMemo(
+    () => [
+      { value: '', label: t('users.filters.allRoles') },
+      ...userRoleSchema.options.map((role) => ({
+        value: role,
+        label: t(`users.roles.${role}`),
+      })),
+    ],
+    [t]
+  );
 
   return (
     <LayoutColumn
@@ -95,21 +109,34 @@ function UsersPage() {
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
       {/* Filters and search section */}
-      <div className="mt-6 flex w-full items-center justify-between">
-        {/* Toggle visibility of deleted users */}
-        <div className="flex items-center">
+      <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
           <ShowDeletedFilter
             checked={list.showDeleted}
             onToggle={list.toggleShowDeleted}
           />
+
+          {/* Role filter */}
+          <div className="relative w-full sm:w-44">
+            <FormDropdown
+              data-testid="user-role-filter"
+              id="users-role-filter"
+              aria-label={t('users.filters.role')}
+              value={list.selectedRole}
+              onChange={(event) =>
+                list.setSelectedRole(event.target.value as UserRole | '')
+              }
+              options={roleFilterOptions}
+              className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+            />
+          </div>
         </div>
 
-        {/* Search users by input value */}
         <SearchInput
           value={list.search}
           onChange={list.setSearch}
           placeholder={t('users.search.placeholder')}
-          className="w-70"
+          className="w-full sm:w-70"
         />
       </div>
 
