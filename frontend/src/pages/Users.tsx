@@ -121,43 +121,46 @@ function UsersPage() {
       <div className="mt-6 h-px w-full bg-(--color-table-border)" />
 
       {/* Filters and search section */}
-      <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col items-start gap-3">
           <ShowDeletedFilter
             checked={list.showDeleted}
             onToggle={list.toggleShowDeleted}
           />
 
-          {/* Role filter */}
-          <div className="relative w-full sm:w-44">
-            <FormDropdown
-              data-testid="user-role-filter"
-              id="users-role-filter"
-              aria-label={t('users.filters.role')}
-              value={list.selectedRole}
-              onChange={(event) =>
-                list.setSelectedRole(event.target.value as UserRole | '')
-              }
-              options={roleFilterOptions}
-              className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
-            />
-          </div>
+          {/* Role and department filters */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Role filter */}
+            <div className="relative w-full sm:w-44">
+              <FormDropdown
+                data-testid="user-role-filter"
+                id="users-role-filter"
+                aria-label={t('users.filters.role')}
+                value={list.selectedRole}
+                onChange={(event) =>
+                  list.setSelectedRole(event.target.value as UserRole | '')
+                }
+                options={roleFilterOptions}
+                className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+              />
+            </div>
 
-          {/* Department filter */}
-          <div className="relative w-full sm:w-52">
-            <FormDropdown
-              data-testid="user-department-filter"
-              id="users-department-filter"
-              aria-label={t('users.filters.department')}
-              value={list.selectedDepartment}
-              onChange={(event) =>
-                list.setSelectedDepartment(
-                  event.target.value === '' ? '' : Number(event.target.value)
-                )
-              }
-              options={departmentFilterOptions}
-              className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
-            />
+            {/* Department filter */}
+            <div className="relative w-full sm:w-52">
+              <FormDropdown
+                data-testid="user-department-filter"
+                id="users-department-filter"
+                aria-label={t('users.filters.department')}
+                value={list.selectedDepartment}
+                onChange={(event) =>
+                  list.setSelectedDepartment(
+                    event.target.value === '' ? '' : Number(event.target.value)
+                  )
+                }
+                options={departmentFilterOptions}
+                className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+              />
+            </div>
           </div>
         </div>
 

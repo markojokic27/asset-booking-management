@@ -102,24 +102,37 @@ export default function MyBookings() {
         {/* divider for the my bookings page */}
         <div className="h-px w-full bg-(--color-table-border)" />
 
-        <div className="flex w-full flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex w-full flex-col gap-3">
+          {/* top row: from/to date filters + search */}
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end">
+              <FilterDateInput 
+                id="my-bookings-from-date"
+                label={t('myBookings.filter.fromDate')}
+                value={fromDate}
+                onChange={setFromDate}
+                max={toDate || undefined}
+                className="w-full sm:w-40"
+              />
+              <FilterDateInput 
+                id="my-bookings-to-date"
+                label={t('myBookings.filter.toDate')}
+                value={toDate}
+                onChange={setToDate}
+                min={fromDate || undefined}
+                className="w-full sm:w-40"
+              />
+            </div>
+            <SearchInput data-testid="search-input"
+              value={search}
+              onChange={setSearch}
+              placeholder={t('myBookings.search.placeholder')}
+              className="w-full lg:w-70"
+            />
+          </div>
+
+          {/* bottom row: dropdown filters */}
           <div className="flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
-            <FilterDateInput 
-              id="my-bookings-from-date"
-              label={t('myBookings.filter.fromDate')}
-              value={fromDate}
-              onChange={setFromDate}
-              max={toDate || undefined}
-              className="w-full sm:w-40"
-            />
-            <FilterDateInput 
-              id="my-bookings-to-date"
-              label={t('myBookings.filter.toDate')}
-              value={toDate}
-              onChange={setToDate}
-              min={fromDate || undefined}
-              className="w-full sm:w-40"
-            />
             <div className="relative w-full pt-1 sm:w-40">
               <FormDropdown data-testid="my-booking-asset-filter"
                 id="my-bookings-asset-filter"
@@ -152,12 +165,6 @@ export default function MyBookings() {
               </div>
             )}
           </div>
-          <SearchInput data-testid="search-input"
-            value={search}
-            onChange={setSearch}
-            placeholder={t('myBookings.search.placeholder')}
-            className="w-full lg:w-70"
-          />
         </div>
 
         {/* my bookings table */}
