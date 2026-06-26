@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.booking.ui
 
+import androidx.annotation.StringRes
+import com.example.assetbookingmanagement.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
@@ -13,7 +15,7 @@ import javax.inject.Inject
 
 data class ApprovalRequestDetailsUiState(
     val isSubmitting: Boolean = false,
-    val errorMessage: String? = null
+    @param:StringRes val errorMessageResId: Int? = null
 )
 
 @HiltViewModel
@@ -49,17 +51,17 @@ class ApprovalRequestDetailsViewModel @Inject constructor(
         onSuccess: () -> Unit
     ) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isSubmitting = true, errorMessage = null) }
+            _uiState.update { it.copy(isSubmitting = true, errorMessageResId = null) }
 
             try {
                 action()
-                _uiState.update { it.copy(isSubmitting = false) }
+                _uiState.update { it.copy(isSubmitting = false, errorMessageResId = null) }
                 onSuccess()
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = "Unable to update request."
+                        errorMessageResId = R.string.approvals_action_error
                     )
                 }
             }

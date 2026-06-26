@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.booking.ui
 
+import androidx.compose.ui.res.stringResource
+import com.example.assetbookingmanagement.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,7 +47,7 @@ fun ApprovalRequestsScreen(
             SearchBar(
                 value = uiState.searchText,
                 onValueChange = viewModel::onSearchTextChange,
-                placeholder = "Search..."
+                placeholder = stringResource(R.string.approvals_search_placeholder)
             )
         }
 
@@ -54,19 +56,20 @@ fun ApprovalRequestsScreen(
                 AppLoadingState()
             }
 
-            uiState.errorMessage != null -> {
+            uiState.errorMessageResId != null -> {
+                val errorMessageResId = uiState.errorMessageResId ?: return@Column
                 AppMessageState(
-                    title = "Couldn't load requests",
-                    message = uiState.errorMessage.orEmpty()
+                    title = stringResource(R.string.approvals_error_load_title),
+                    message = stringResource(errorMessageResId)
                 )
             }
 
             uiState.filteredRequests.isEmpty() -> {
                 AppEmptyState(
                     text = if (uiState.requests.isEmpty()) {
-                        "No pending requests."
+                        stringResource(R.string.approvals_empty_no_requests)
                     } else {
-                        "No matching requests found."
+                        stringResource(R.string.approvals_empty_no_matching)
                     }
                 )
             }

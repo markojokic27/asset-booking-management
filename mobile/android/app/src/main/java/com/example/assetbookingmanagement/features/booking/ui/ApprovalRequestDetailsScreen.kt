@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.booking.ui
 
+import androidx.compose.ui.res.stringResource
+import com.example.assetbookingmanagement.R
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +43,7 @@ fun ApprovalRequestDetailsScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val unavailableText = stringResource(R.string.common_value_unavailable)
 
     Column(
         modifier = Modifier
@@ -50,27 +53,30 @@ fun ApprovalRequestDetailsScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         DetailsSectionCard(
-            title = "REQUEST DETAILS",
-            heading = assetName.ifBlank { "Request #$bookingId" }
+            title = stringResource(R.string.approvals_details_section_title),
+            heading = assetName.ifBlank {
+                stringResource(R.string.nav_approval_request_details_title, bookingId)
+            }
         ) {
             RequestInfoRow(
-                label = "Booked by",
-                value = requesterName.ifBlank { "-" },
+                label = stringResource(R.string.approvals_details_booked_by_label),
+                value = requesterName.ifBlank { unavailableText },
                 showDivider = true
             )
             RequestInfoRow(
-                label = "From",
+                label = stringResource(R.string.approvals_details_from_label),
                 value = formatLocalizedBookingDisplayText(bookingStart, context, isHourlyBooking),
                 showDivider = true
             )
             RequestInfoRow(
-                label = "To",
+                label = stringResource(R.string.approvals_details_to_label),
                 value = formatLocalizedBookingDisplayText(bookingEnd, context, isHourlyBooking),
                 showDivider = true
             )
             RequestStatusRow(
-                status = status.ifBlank { "-" },
-                showDivider = false
+                label = stringResource(R.string.approvals_details_status_label),
+                status = status.ifBlank { unavailableText },
+                showDivider = uiState.errorMessageResId == null
             )
 
             Row(
@@ -99,7 +105,7 @@ fun ApprovalRequestDetailsScreen(
                     )
                 ) {
                     Text(
-                        text = "Reject",
+                        text = stringResource(R.string.approvals_action_reject),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -120,14 +126,14 @@ fun ApprovalRequestDetailsScreen(
                     )
                 ) {
                     Text(
-                        text = "Approve",
+                        text = stringResource(R.string.approvals_action_approve),
                         fontWeight = FontWeight.SemiBold
                     )
                 }
             }
-            uiState.errorMessage?.let { errorMessage ->
+            uiState.errorMessageResId?.let { errorMessageResId ->
                 Text(
-                    text = errorMessage,
+                    text = stringResource(errorMessageResId),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(top = 8.dp)
@@ -159,12 +165,13 @@ private fun RequestInfoRow(
 
 @Composable
 private fun RequestStatusRow(
+    label: String,
     status: String,
     showDivider: Boolean
 ) {
     DetailsRow(showDivider = showDivider) {
         Text(
-            text = "Status",
+            text = label,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

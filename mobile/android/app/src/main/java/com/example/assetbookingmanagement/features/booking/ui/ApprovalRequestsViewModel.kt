@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.booking.ui
 
+import androidx.annotation.StringRes
+import com.example.assetbookingmanagement.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
@@ -28,7 +30,7 @@ data class ApprovalRequestsUiState(
     val isLoading: Boolean = false,
     val requests: List<ApprovalRequestUiModel> = emptyList(),
     val searchText: String = "",
-    val errorMessage: String? = null
+    @param:StringRes val errorMessageResId: Int? = null
 ) {
     val filteredRequests: List<ApprovalRequestUiModel>
         get() = requests.filter { request ->
@@ -62,13 +64,13 @@ class ApprovalRequestsViewModel @Inject constructor(
 
     fun loadApprovalRequests() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            _uiState.update { it.copy(isLoading = true, errorMessageResId = null) }
 
             val userId = authSession.getCurrentUserId() ?: run {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Missing logged in user."
+                        errorMessageResId = R.string.approvals_error_missing_logged_in_user
                     )
                 }
                 return@launch
@@ -84,7 +86,7 @@ class ApprovalRequestsViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             requests = emptyList(),
-                            errorMessage = "You do not have access to approval requests."
+                            errorMessageResId = R.string.approvals_error_no_access
                         )
                     }
                     return@launch
@@ -107,14 +109,15 @@ class ApprovalRequestsViewModel @Inject constructor(
                         isLoading = false,
                         requests = visibleBookings.map { booking ->
                             booking.toApprovalRequestUiModel()
-                        }
+                        },
+                        errorMessageResId = null
                     )
                 }
             } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Error loading approval requests."
+                        errorMessageResId = R.string.approvals_error_load_message
                     )
                 }
             }
