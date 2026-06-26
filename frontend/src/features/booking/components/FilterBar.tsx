@@ -111,7 +111,7 @@ export function FiltersBar({
         <>
           <DateInput
             id="date"
-            label={t('ui.filters.fromTime')}
+            label={t('ui.filters.fromDate')}
             placeholder={t('ui.filters.selectDate')}
             value={filters.fromDate}
             testId="from-date-input"
@@ -120,7 +120,7 @@ export function FiltersBar({
           />
           <DateInput
             id="date"
-            label={t('ui.filters.toTime')}
+            label={t('ui.filters.toDate')}
             placeholder={t('ui.filters.selectDate')}
             value={filters.toDate}
             testId="to-date-input"

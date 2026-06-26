@@ -34,7 +34,9 @@
     "fromTime": "From time",
     "toTime": "To time",
     "date": "Date",
-    "selectDate": "Select date..."
+    "selectDate": "Select date...",
+    "fromDate":"From date",
+    "toDate":"To date"
   },
   "notes": {
     "label": "Notes",

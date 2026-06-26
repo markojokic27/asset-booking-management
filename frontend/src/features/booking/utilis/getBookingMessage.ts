@@ -1,3 +1,7 @@
+// External packages
+import { useTranslation } from 'react-i18next';
+
+// Types
 import type { UserDto } from '../../user/types';
 import type { Filters } from '../types';
 
@@ -15,59 +19,83 @@ export function getBookingMessage({
   variant: string;
 }) {
   let message = '';
+  const { t, i18n } = useTranslation();
 
   const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('en-US', {
+    new Date(date).toLocaleDateString(i18n.language, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
 
   const weekDayNames: Record<number, string> = {
-    1: 'Monday',
-    2: 'Tuesday',
-    3: 'Wednesday',
-    4: 'Thursday',
-    5: 'Friday',
-    6: 'Saturday',
-    7: 'Sunday',
+    1: t('bookings.recurringDays.monday'),
+    2: t('bookings.recurringDays.tuesday'),
+    3: t('bookings.recurringDays.wednesday'),
+    4: t('bookings.recurringDays.thursday'),
+    5: t('bookings.recurringDays.friday'),
+    6: t('bookings.recurringDays.saturday'),
+    7: t('bookings.recurringDays.sunday'),
   };
 
   // Recurring booking
   if (filters.selectedWeekdays.length > 0) {
     const firstRecurringDate = new Date(availableRecurringDates[0]);
 
-    const monthYear = firstRecurringDate.toLocaleDateString('en-US', {
+    const monthYear = firstRecurringDate.toLocaleDateString(i18n.language, {
       month: 'long',
       year: 'numeric',
     });
 
-    const days = filters.selectedWeekdays
-      .map((day) => weekDayNames[day])
-      .join(' and ');
+    const weekdayNames = filters.selectedWeekdays.map(
+      (day) => weekDayNames[day]
+    );
 
-    message = `Do you want to book this asset every ${days} in ${monthYear}?`;
+    let days = '';
+    const andWord = t('bookings.confirmation.and');
+
+    if (weekdayNames.length === 1) {
+      days = weekdayNames[0];
+    } else if (weekdayNames.length === 2) {
+      days = weekdayNames.join(` ${andWord} `);
+    } else {
+      days = `${weekdayNames.slice(0, -1).join(', ')} ${andWord} ${
+        weekdayNames[weekdayNames.length - 1]
+      }`;
+    }
+
+    message = t('bookings.confirmation.recurring', {
+      days,
+      month: monthYear,
+    });
   }
+
   // Single day booking
   else if (filters.fromDate === filters.toDate) {
     const date = formatDate(filters.fromDate);
 
     if (variant === 'HOUR') {
-      message = `Do you want to book this asset on ${date}, from ${filters.fromHour} to ${filters.toHour}?`;
+      message = t('bookings.confirmation.singleHour', {
+        date,
+        from: filters.fromHour,
+        to: filters.toHour,
+      });
     } else {
-      message = `Do you want to book this asset for ${date}?`;
+      message = t('bookings.confirmation.singleDay', {
+        date,
+      });
     }
   }
   // Multi-day booking
   else {
-    message = `Do you want to book this asset from ${formatDate(
-      filters.fromDate
-    )} to ${formatDate(filters.toDate)}?`;
+    message = t('bookings.confirmation.multiDay', {
+      from: formatDate(filters.fromDate),
+      to: formatDate(filters.toDate),
+    });
   }
 
   if (needApproval && user?.role === 'EMPLOYEE') {
-    message +=
-      ' This booking requires manager approval. An email notification will be sent to your manager for review.';
+    message += ` ${t('bookings.confirmation.needApproval')}`;
   }
 
   return message;

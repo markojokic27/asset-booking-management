@@ -34,7 +34,9 @@
     "fromTime": "Von",
     "toTime": "Bis",
     "date": "Datum",
-    "selectDate": "Datum auswählen..."
+    "selectDate": "Datum auswählen...",
+    "fromDate": "Von-Datum",
+    "toDate": "Bis-Datum"
   },
   "notes": {
     "label": "Notizen",

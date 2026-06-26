@@ -51,17 +51,17 @@
     "clearDate": "Očisti"
   },
   "floorMap": {
-  "stairs": "Stubište",
-  "level": "Kat",
-  "entrance": "Ulaz",
-  "directionOfTravel": "Smjer vožnje",
-  "legend": {
-    "maurerSpot": "Maurer Spot",
-    "taken": "Zauzeto",
-    "noParking": "Zabranjeno",
-    "stairs": "Stubište"
-  },
-   "rooms": {
+    "stairs": "Stubište",
+    "level": "Kat",
+    "entrance": "Ulaz",
+    "directionOfTravel": "Smjer vožnje",
+    "legend": {
+      "maurerSpot": "Maurer Spot",
+      "taken": "Zauzeto",
+      "noParking": "Zabranjeno",
+      "stairs": "Stubište"
+    },
+    "rooms": {
       "office": "Ured",
       "meetingRoom": "Sala za sastanke",
       "kitchenWc": "Kuhinja / WC",
@@ -72,6 +72,13 @@
   "officeMap": {
     "title": "Karta ureda",
     "closeAria": "Zatvori kartu"
+  },
+  "confirmation": {
+    "and": "i",
+    "recurring": "Želite li rezervirati ovaj resurs svakog {{days}} tijekom {{month}}?",
+    "singleHour": "Želite li rezervirati ovaj resurs za {{date}}, od {{from}} do {{to}}?",
+    "singleDay": "Želite li rezervirati ovaj resurs za {{date}}?",
+    "multiDay": "Želite li rezervirati ovaj resurs od {{from}} do {{to}}?",
+    "needApproval": "Ova rezervacija zahtijeva odobrenje nadređenog. Obavijest e-poštom bit će poslana vašem nadređenom na pregled."
   }
 }
-

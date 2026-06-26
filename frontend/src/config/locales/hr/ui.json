@@ -34,7 +34,9 @@
     "fromTime": "Od",
     "toTime": "Do",
     "date": "Datum",
-    "selectDate": "Odaberi datum..."
+    "selectDate": "Odaberi datum...",
+    "fromDate": "Od datuma",
+    "toDate": "Do datuma"
   },
   "notes": {
     "label": "Bilješke",

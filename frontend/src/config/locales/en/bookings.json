@@ -51,17 +51,17 @@
     "clearDate": "Clear"
   },
   "floorMap": {
-  "stairs": "Stairs",
-  "level": "Level",
-  "entrance": "Entrance",
-  "directionOfTravel": "Direction of travel",
-  "legend": {
-    "maurerSpot": "Maurer Spot",
-    "taken": "Taken",
-    "noParking": "No parking",
-    "stairs": "Stairs"
-  },
-  "rooms": {
+    "stairs": "Stairs",
+    "level": "Level",
+    "entrance": "Entrance",
+    "directionOfTravel": "Direction of travel",
+    "legend": {
+      "maurerSpot": "Maurer Spot",
+      "taken": "Taken",
+      "noParking": "No parking",
+      "stairs": "Stairs"
+    },
+    "rooms": {
       "office": "Office",
       "meetingRoom": "Meeting room",
       "kitchenWc": "Kitchen / WC",
@@ -72,5 +72,13 @@
   "officeMap": {
     "title": "Office Map",
     "closeAria": "Close map"
+  },
+  "confirmation": {
+    "and": "i",
+    "recurring": "Do you want to book this asset every {{days}} in {{month}}?",
+    "singleHour": "Do you want to book this asset on {{date}}, from {{from}} to {{to}}?",
+    "singleDay": "Do you want to book this asset for {{date}}?",
+    "multiDay": "Do you want to book this asset from {{from}} to {{to}}?",
+    "needApproval": "This booking requires manager approval. An email notification will be sent to your manager for review."
   }
 }

@@ -51,17 +51,17 @@
     "clearDate": "Löschen"
   },
   "floorMap": {
-  "stairs": "Treppenhaus",
-  "level": "Ebene",
-  "entrance": "Einfahrt",
-  "directionOfTravel": "Fahrtrichtung",
-  "legend": {
-    "maurerSpot": "Maurer Spot",
-    "taken": "Belegt",
-    "noParking": "Parken verboten",
-    "stairs": "Treppenhaus"
-  },
-  "rooms": {
+    "stairs": "Treppenhaus",
+    "level": "Ebene",
+    "entrance": "Einfahrt",
+    "directionOfTravel": "Fahrtrichtung",
+    "legend": {
+      "maurerSpot": "Maurer Spot",
+      "taken": "Belegt",
+      "noParking": "Parken verboten",
+      "stairs": "Treppenhaus"
+    },
+    "rooms": {
       "office": "Büro",
       "meetingRoom": "Besprechungsraum",
       "kitchenWc": "Küche / WC",
@@ -72,5 +72,14 @@
   "officeMap": {
     "title": "Bürokarte",
     "closeAria": "Karte schließen"
+  },
+
+  "confirmation": {
+    "and": "und",
+    "recurring": "Möchten Sie diese Ressource jeden {{days}} im {{month}} buchen?",
+    "singleHour": "Möchten Sie diese Ressource am {{date}} von {{from}} bis {{to}} buchen?",
+    "singleDay": "Möchten Sie diese Ressource für den {{date}} buchen?",
+    "multiDay": "Möchten Sie diese Ressource vom {{from}} bis zum {{to}} buchen?",
+    "needApproval": "Für diese Buchung ist die Genehmigung Ihres Vorgesetzten erforderlich. Eine E-Mail-Benachrichtigung wird zur Überprüfung an Ihren Vorgesetzten gesendet."
   }
 }
