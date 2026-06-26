@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.user.ui
 
+import androidx.compose.ui.res.stringResource
+import com.example.assetbookingmanagement.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +48,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val unavailableText = stringResource(R.string.common_value_unavailable)
 
     LaunchedEffect(uiState.isLoggedOut) {
         if (uiState.isLoggedOut) {
@@ -62,10 +65,11 @@ fun ProfileScreen(
                 AppLoadingState()
             }
 
-            uiState.errorMessage != null -> {
+            uiState.errorMessageResId != null -> {
+                val errorMessageResId = uiState.errorMessageResId ?: return@Surface
                 AppMessageState(
-                    title = "Couldn't load profile",
-                    message = uiState.errorMessage.orEmpty()
+                    title = stringResource(R.string.profile_error_load_title),
+                    message = stringResource(errorMessageResId)
                 )
             }
 
@@ -74,6 +78,7 @@ fun ProfileScreen(
                     profile = profile,
                     departmentName = uiState.departmentName,
                     isLoggingOut = uiState.isLoggingOut,
+                    unavailableText = unavailableText,
                     onChangePasswordClick = onChangePasswordClick,
                     onLogoutClick = viewModel::logout
                 )
@@ -87,6 +92,7 @@ private fun ProfileContent(
     profile: UserResponse,
     departmentName: String,
     isLoggingOut: Boolean,
+    unavailableText: String,
     onChangePasswordClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
@@ -99,6 +105,7 @@ private fun ProfileContent(
             ProfileDetailsSection(
                 profile = profile,
                 isLoggingOut = isLoggingOut,
+                unavailableText = unavailableText,
                 onChangePasswordClick = onChangePasswordClick,
                 onLogoutClick = onLogoutClick
             )
@@ -107,7 +114,8 @@ private fun ProfileContent(
         item {
             WorkDetailsSection(
                 profile = profile,
-                departmentName = departmentName
+                departmentName = departmentName,
+                unavailableText = unavailableText
             )
         }
     }
@@ -117,24 +125,26 @@ private fun ProfileContent(
 private fun ProfileDetailsSection(
     profile: UserResponse,
     isLoggingOut: Boolean,
+    unavailableText: String,
     onChangePasswordClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
     DetailsSectionCard(
-        title = "PROFILE DETAILS",
+        title = stringResource(R.string.profile_details_section_title),
         heading = listOf(profile.name, profile.surname)
             .filter { it.isNotBlank() }
-            .joinToString(" "),
+            .joinToString(" ")
+            .ifBlank { stringResource(R.string.nav_profile_label) },
         subtitle = profile.email
     ) {
-        InfoRow(label = "ID", value = profile.id.toString(), showDivider = true)
-        InfoRow(label = "First name", value = profile.name.ifBlank { "-" }, showDivider = true)
-        InfoRow(label = "Last name", value = profile.surname.ifBlank { "-" }, showDivider = true)
-        InfoRow(label = "Username", value = profile.username.ifBlank { "-" }, showDivider = true)
-        InfoRow(label = "Email", value = profile.email.ifBlank { "-" }, showDivider = true)
+        InfoRow(label = stringResource(R.string.profile_label_id), value = profile.id.toString(), showDivider = true)
+        InfoRow(label = stringResource(R.string.profile_label_first_name), value = profile.name.ifBlank { unavailableText }, showDivider = true)
+        InfoRow(label = stringResource(R.string.profile_label_last_name), value = profile.surname.ifBlank { unavailableText }, showDivider = true)
+        InfoRow(label = stringResource(R.string.profile_label_username), value = profile.username.ifBlank { unavailableText }, showDivider = true)
+        InfoRow(label = stringResource(R.string.profile_label_email), value = profile.email.ifBlank { unavailableText }, showDivider = true)
         DetailsRow(showDivider = false) {
             Text(
-                text = "Password",
+                text = stringResource(R.string.login_field_password),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -149,7 +159,7 @@ private fun ProfileDetailsSection(
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Text(
-                    text = "Change password",
+                    text = stringResource(R.string.nav_change_password_title),
                     style = MaterialTheme.typography.labelMedium
                 )
             }
@@ -164,41 +174,42 @@ private fun ProfileDetailsSection(
 @Composable
 private fun WorkDetailsSection(
     profile: UserResponse,
-    departmentName: String
+    departmentName: String,
+    unavailableText: String
 ) {
     DetailsSectionCard(
-        title = "WORK DETAILS",
-        heading = "Account details"
+        title = stringResource(R.string.profile_work_section_title),
+        heading = stringResource(R.string.profile_details_section_title)
     ) {
         DetailsRow(showDivider = true) {
             Text(
-                text = "Role",
+                text = stringResource(R.string.profile_label_role),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            RoleBadge(role = profile.role.ifBlank { "-" })
+            RoleBadge(role = profile.role.ifBlank { unavailableText })
         }
         DetailsRow(showDivider = true) {
             Text(
-                text = "Status",
+                text = stringResource(R.string.approvals_details_status_label),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            StatusBadge(status = profile.status.ifBlank { "-" })
+            StatusBadge(status = profile.status.ifBlank { unavailableText })
         }
         InfoRow(
-            label = "Department",
-            value = departmentName,
+            label = stringResource(R.string.profile_label_department),
+            value = departmentName.ifBlank { unavailableText },
             showDivider = true
         )
         InfoRow(
-            label = "Manager email",
-            value = profile.managerEmail.ifBlank { "-" },
+            label = stringResource(R.string.profile_label_manager_email),
+            value = profile.managerEmail.ifBlank { unavailableText },
             showDivider = true
         )
         InfoRow(
-            label = "Notes",
-            value = profile.notes.orEmpty().ifBlank { "-" },
+            label = stringResource(R.string.profile_label_notes),
+            value = profile.notes.orEmpty().ifBlank { unavailableText },
             showDivider = false
         )
     }
@@ -245,13 +256,17 @@ private fun LogoutRow(
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Outlined.Logout,
-            contentDescription = "Logout",
+            contentDescription = stringResource(R.string.profile_logout),
             tint = logoutColor,
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(
-            text = if (isLoggingOut) "Logging out..." else "Logout",
+            text = if (isLoggingOut) {
+                stringResource(R.string.profile_logging_out)
+            } else {
+                stringResource(R.string.profile_logout)
+            },
             style = MaterialTheme.typography.bodyLarge,
             color = logoutColor,
             fontWeight = FontWeight.Medium

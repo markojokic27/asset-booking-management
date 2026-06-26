@@ -1,5 +1,8 @@
 package com.example.assetbookingmanagement.features.user.ui
 
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.stringResource
+import com.example.assetbookingmanagement.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -53,33 +56,33 @@ fun ChangePasswordScreen(
             .padding(horizontal = 20.dp, vertical = 24.dp)
     ) {
         PasswordFieldSection(
-            label = "Current password",
+            label = stringResource(R.string.change_password_current_label),
             value = uiState.currentPassword,
             enabled = !uiState.isChangingPassword,
-            error = uiState.currentPasswordError,
+            errorMessageResId = uiState.currentPasswordErrorResId,
             onValueChange = viewModel::onCurrentPasswordChange
         )
         Spacer(modifier = Modifier.height(16.dp))
         PasswordFieldSection(
-            label = "New password",
+            label = stringResource(R.string.change_password_new_label),
             value = uiState.newPassword,
             enabled = !uiState.isChangingPassword,
-            error = uiState.newPasswordError,
+            errorMessageResId = uiState.newPasswordErrorResId,
             onValueChange = viewModel::onNewPasswordChange
         )
         Spacer(modifier = Modifier.height(16.dp))
         PasswordFieldSection(
-            label = "Confirm new password",
+            label = stringResource(R.string.change_password_confirm_label),
             value = uiState.confirmNewPassword,
             enabled = !uiState.isChangingPassword,
-            error = uiState.confirmNewPasswordError,
+            errorMessageResId = uiState.confirmNewPasswordErrorResId,
             onValueChange = viewModel::onConfirmNewPasswordChange
         )
 
-        uiState.changePasswordErrorMessage?.let { message ->
+        uiState.changePasswordErrorMessageResId?.let { messageResId ->
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = message,
+                text = stringResource(messageResId),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -107,11 +110,15 @@ fun ChangePasswordScreen(
                     contentColor = MaterialTheme.colorScheme.onSurface
                 )
             ) {
-                Text("Cancel", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.common_cancel), fontWeight = FontWeight.Bold)
             }
 
             AppButton(
-                text = if (uiState.isChangingPassword) "Saving..." else "Save",
+                text = if (uiState.isChangingPassword) {
+                    stringResource(R.string.common_saving)
+                } else {
+                    stringResource(R.string.common_save)
+                },
                 enabled = !uiState.isChangingPassword,
                 onClick = viewModel::changePassword
             )
@@ -124,7 +131,7 @@ private fun PasswordFieldSection(
     label: String,
     value: String,
     enabled: Boolean,
-    error: String?,
+    @StringRes errorMessageResId: Int?,
     onValueChange: (String) -> Unit
 ) {
     Column {
@@ -167,10 +174,10 @@ private fun PasswordFieldSection(
                 }
             }
         )
-        error?.let {
+        errorMessageResId?.let {
             Spacer(modifier = Modifier.height(6.dp))
             Text(
-                text = it,
+                text = stringResource(it),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )

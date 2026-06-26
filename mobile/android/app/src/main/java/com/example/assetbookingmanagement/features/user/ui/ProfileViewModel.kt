@@ -1,5 +1,7 @@
 package com.example.assetbookingmanagement.features.user.ui
 
+import androidx.annotation.StringRes
+import com.example.assetbookingmanagement.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.assetbookingmanagement.features.auth.data.AuthRepository
@@ -27,12 +29,12 @@ data class ProfileUiState(
     val currentPassword: String = "",
     val newPassword: String = "",
     val confirmNewPassword: String = "",
-    val currentPasswordError: String? = null,
-    val newPasswordError: String? = null,
-    val confirmNewPasswordError: String? = null,
-    val changePasswordErrorMessage: String? = null,
+    @param:StringRes val currentPasswordErrorResId: Int? = null,
+    @param:StringRes val newPasswordErrorResId: Int? = null,
+    @param:StringRes val confirmNewPasswordErrorResId: Int? = null,
+    @param:StringRes val changePasswordErrorMessageResId: Int? = null,
     val departmentName: String = "-",
-    val errorMessage: String? = null
+    @param:StringRes val errorMessageResId: Int? = null
 )
 
 @HiltViewModel
@@ -58,10 +60,10 @@ class ProfileViewModel @Inject constructor(
         currentPassword = "",
         newPassword = "",
         confirmNewPassword = "",
-        currentPasswordError = null,
-        newPasswordError = null,
-        confirmNewPasswordError = null,
-        changePasswordErrorMessage = null
+        currentPasswordErrorResId = null,
+        newPasswordErrorResId = null,
+        confirmNewPasswordErrorResId = null,
+        changePasswordErrorMessageResId = null
     )
 
     init {
@@ -70,13 +72,13 @@ class ProfileViewModel @Inject constructor(
 
     private fun getCurrentUser() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            _uiState.update { it.copy(isLoading = true, errorMessageResId = null) }
 
             val userId = authSession.getCurrentUserId() ?: run {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Missing logged in user."
+                        errorMessageResId = R.string.profile_error_missing_logged_in_user
                     )
                 }
                 return@launch
@@ -91,17 +93,18 @@ class ProfileViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         profile = user,
-                        departmentName = departmentName
+                        departmentName = departmentName,
+                        errorMessageResId = null
                     )
                 }
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You aren't authorized to view this user."
-                            404 -> "User not found."
-                            else -> "Failed to load user."
+                        errorMessageResId = when (error.code()) {
+                            401, 403 -> R.string.profile_error_not_authorized
+                            404 -> R.string.profile_error_not_found
+                            else -> R.string.profile_error_load_message
                         }
                     )
                 }
@@ -109,7 +112,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Unable to connect to the server. Please try again."
+                        errorMessageResId = R.string.login_error_server_unreachable
                     )
                 }
             }
@@ -118,7 +121,7 @@ class ProfileViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoggingOut = true, errorMessage = null) }
+            _uiState.update { it.copy(isLoggingOut = true, errorMessageResId = null) }
 
             authRepository.logout()
 
@@ -143,8 +146,8 @@ class ProfileViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 currentPassword = value,
-                currentPasswordError = null,
-                changePasswordErrorMessage = null
+                currentPasswordErrorResId = null,
+                changePasswordErrorMessageResId = null
             )
         }
     }
@@ -153,9 +156,9 @@ class ProfileViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 newPassword = value,
-                newPasswordError = null,
-                confirmNewPasswordError = null,
-                changePasswordErrorMessage = null
+                newPasswordErrorResId = null,
+                confirmNewPasswordErrorResId = null,
+                changePasswordErrorMessageResId = null
             )
         }
     }
@@ -164,8 +167,8 @@ class ProfileViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 confirmNewPassword = value,
-                confirmNewPasswordError = null,
-                changePasswordErrorMessage = null
+                confirmNewPasswordErrorResId = null,
+                changePasswordErrorMessageResId = null
             )
         }
     }
@@ -176,34 +179,34 @@ class ProfileViewModel @Inject constructor(
         val newPassword = currentState.newPassword
         val confirmNewPassword = currentState.confirmNewPassword
 
-        val currentPasswordError = if (currentPassword.isBlank()) {
-            "Current password is required."
+        val currentPasswordErrorResId = if (currentPassword.isBlank()) {
+            R.string.change_password_error_current_required
         } else {
             null
         }
-        val newPasswordError = when {
+        val newPasswordErrorResId = when {
             newPassword.length < MIN_PASSWORD_LENGTH ->
-                "New password must be at least $MIN_PASSWORD_LENGTH characters."
+                R.string.change_password_error_new_too_short
             newPassword.length > MAX_PASSWORD_LENGTH ->
-                "New password must be at most $MAX_PASSWORD_LENGTH characters."
+                R.string.change_password_error_new_too_long
             else -> null
         }
-        val confirmNewPasswordError = if (newPassword != confirmNewPassword) {
-            "New passwords do not match."
+        val confirmNewPasswordErrorResId = if (newPassword != confirmNewPassword) {
+            R.string.change_password_error_confirm_mismatch
         } else {
             null
         }
 
         if (
-            currentPasswordError != null ||
-            newPasswordError != null ||
-            confirmNewPasswordError != null
+            currentPasswordErrorResId != null ||
+            newPasswordErrorResId != null ||
+            confirmNewPasswordErrorResId != null
         ) {
             _uiState.update {
                 it.copy(
-                    currentPasswordError = currentPasswordError,
-                    newPasswordError = newPasswordError,
-                    confirmNewPasswordError = confirmNewPasswordError
+                    currentPasswordErrorResId = currentPasswordErrorResId,
+                    newPasswordErrorResId = newPasswordErrorResId,
+                    confirmNewPasswordErrorResId = confirmNewPasswordErrorResId
                 )
             }
             return
@@ -213,10 +216,10 @@ class ProfileViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isChangingPassword = true,
-                    currentPasswordError = null,
-                    newPasswordError = null,
-                    confirmNewPasswordError = null,
-                    changePasswordErrorMessage = null
+                    currentPasswordErrorResId = null,
+                    newPasswordErrorResId = null,
+                    confirmNewPasswordErrorResId = null,
+                    changePasswordErrorMessageResId = null
                 )
             }
 
@@ -224,7 +227,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isChangingPassword = false,
-                        changePasswordErrorMessage = "Missing logged in user."
+                        changePasswordErrorMessageResId = R.string.profile_error_missing_logged_in_user
                     )
                 }
                 return@launch
@@ -241,10 +244,10 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isChangingPassword = false,
-                        changePasswordErrorMessage = when (error.code()) {
-                            401 -> "Current password is incorrect."
-                            404 -> "User not found."
-                            else -> "Failed to change password."
+                        changePasswordErrorMessageResId = when (error.code()) {
+                            401 -> R.string.change_password_error_current_incorrect
+                            404 -> R.string.profile_error_not_found
+                            else -> R.string.change_password_error_save_failed
                         }
                     )
                 }
@@ -252,7 +255,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isChangingPassword = false,
-                        changePasswordErrorMessage = "Unable to connect to the server. Please try again."
+                        changePasswordErrorMessageResId = R.string.login_error_server_unreachable
                     )
                 }
             }
