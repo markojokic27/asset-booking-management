@@ -35,20 +35,36 @@ vi.mock('../../components/ui/SearchBar', () => ({
 }));
 
 vi.mock('../../components/ui/FormDropdown', () => ({
-  FormDropdown: ({ value, onChange, options, 'aria-label': ariaLabel }: any) => (
+  FormDropdown: ({
+    value,
+    onChange,
+    options,
+    'aria-label': ariaLabel,
+    'data-testid': testId,
+  }: any) => (
     <select
-      data-testid="user-role-filter"
+      data-testid={testId}
       aria-label={ariaLabel}
       value={value}
       onChange={onChange}
     >
-      {options.map((option: { value: string; label: string }) => (
+      {options.map((option: { value: string | number; label: string }) => (
         <option key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}
     </select>
   ),
+}));
+
+vi.mock('../../features/department/hooks/useDepartments', () => ({
+  useDepartments: () => ({
+    getDepartmentName: (id: number) => `Department ${id}`,
+    departmentOptions: [
+      { value: 1, label: 'Department 1' },
+      { value: 2, label: 'Department 2' },
+    ],
+  }),
 }));
 
 vi.mock('../../components/ui/Pagination', () => ({
@@ -168,6 +184,8 @@ const baseList = {
   toggleShowDeleted: vi.fn(),
   selectedRole: '' as const,
   setSelectedRole: vi.fn(),
+  selectedDepartment: '' as const,
+  setSelectedDepartment: vi.fn(),
 };
 
 const buildUseUsers = (overrides: Record<string, any> = {}) => ({
@@ -236,6 +254,7 @@ describe('Users page', () => {
       expect(screen.getByTestId('search-input')).toBeInTheDocument();
       expect(screen.getByRole('checkbox', { name: 'show-deleted' })).toBeInTheDocument();
       expect(screen.getByTestId('user-role-filter')).toBeInTheDocument();
+      expect(screen.getByTestId('user-department-filter')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /users.actions.new/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /users.actions.export/i })).toBeInTheDocument();
     });

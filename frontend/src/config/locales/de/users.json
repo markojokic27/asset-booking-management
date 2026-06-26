@@ -10,7 +10,9 @@
   "filters": {
     "showDeleted": "Gelöschte anzeigen",
     "role": "Rolle",
-    "allRoles": "Alle Rollen"
+    "allRoles": "Alle Rollen",
+    "department": "Abteilung",
+    "allDepartments": "Alle Abteilungen"
   },
   "roles": {
     "EMPLOYEE": "Mitarbeiter",

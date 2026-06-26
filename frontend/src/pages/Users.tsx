@@ -26,6 +26,7 @@ import { getFullName, isAdmin } from '../features/user/utilis/users';
 
 // Custom hooks
 import { useUsers } from '../features/user/hooks/useUsers';
+import { useDepartments } from '../features/department/hooks/useDepartments';
 import { useAuth } from '../features/auth/context/AuthContext';
 
 // Types
@@ -51,6 +52,8 @@ function UsersPage() {
 
   const { list, sorting, pagination, selection, modals, actions } = useUsers();
 
+  const { departmentOptions } = useDepartments();
+
   const [deleteState, setDeleteState] = useState<DeleteState>({
     type: 'none',
   });
@@ -67,6 +70,15 @@ function UsersPage() {
       })),
     ],
     [t]
+  );
+
+  // resolve department filter options
+  const departmentFilterOptions = useMemo(
+    () => [
+      { value: '', label: t('users.filters.allDepartments') },
+      ...departmentOptions,
+    ],
+    [departmentOptions, t]
   );
 
   return (
@@ -130,8 +142,26 @@ function UsersPage() {
               className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
             />
           </div>
+
+          {/* Department filter */}
+          <div className="relative w-full sm:w-52">
+            <FormDropdown
+              data-testid="user-department-filter"
+              id="users-department-filter"
+              aria-label={t('users.filters.department')}
+              value={list.selectedDepartment}
+              onChange={(event) =>
+                list.setSelectedDepartment(
+                  event.target.value === '' ? '' : Number(event.target.value)
+                )
+              }
+              options={departmentFilterOptions}
+              className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+            />
+          </div>
         </div>
 
+        {/* Search users by input value */}
         <SearchInput
           value={list.search}
           onChange={list.setSearch}

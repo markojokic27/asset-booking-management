@@ -23,15 +23,16 @@ function user(overrides: Partial<UserDto> & Pick<UserDto, 'id'>): UserDto {
 }
 
 const sampleUsers: UserDto[] = [
-  user({ id: 1, name: 'Ana', surname: 'Babić', email: 'ana@example.com' }),
-  user({ id: 2, name: 'Ivan', surname: 'Anić', email: 'ivan@example.com', role: 'ADMIN' }),
-  user({ id: 3, name: 'Marko', surname: 'Babić', email: 'marko@example.com', role: 'MANAGER' }),
+  user({ id: 1, name: 'Ana', surname: 'Babić', email: 'ana@example.com', departmentId: 1 }),
+  user({ id: 2, name: 'Ivan', surname: 'Anić', email: 'ivan@example.com', role: 'ADMIN', departmentId: 2 }),
+  user({ id: 3, name: 'Marko', surname: 'Babić', email: 'marko@example.com', role: 'MANAGER', departmentId: 1 }),
   user({
     id: 4,
     name: 'Obrisani',
     surname: 'Korisnik',
     email: 'deleted@example.com',
     status: 'DELETED',
+    departmentId: 2,
   }),
 ];
 
@@ -203,6 +204,37 @@ describe('useUserFilters', () => {
       });
 
       expect(harness.current.data.map((u) => u.id)).toEqual([1]);
+    });
+  });
+
+  describe('department', () => {
+    it('returns all departments when none is selected', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      expect(harness.current.selectedDepartment).toBe('');
+      expect(harness.current.data.map((u) => u.id)).toEqual([2, 1, 3]);
+    });
+
+    it('filters by selected department', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      act(() => {
+        harness.current.setSelectedDepartment(1);
+      });
+
+      expect(harness.current.selectedDepartment).toBe(1);
+      expect(harness.current.data.map((u) => u.id)).toEqual([1, 3]);
+    });
+
+    it('combines department filter with role', () => {
+      harness = renderUserFilters(sampleUsers);
+
+      act(() => {
+        harness.current.setSelectedDepartment(1);
+        harness.current.setSelectedRole('MANAGER');
+      });
+
+      expect(harness.current.data.map((u) => u.id)).toEqual([3]);
     });
   });
 

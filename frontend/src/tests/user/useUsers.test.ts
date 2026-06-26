@@ -34,6 +34,8 @@ const mockFilters = {
   toggleShowDeleted: vi.fn(),
   selectedRole: '' as const,
   setSelectedRole: vi.fn(),
+  selectedDepartment: '' as const,
+  setSelectedDepartment: vi.fn(),
   sortDir: 'asc' as const,
   toggleSort: vi.fn(),
 };
@@ -81,6 +83,10 @@ describe('useUsers', () => {
     expect(current.list.setSearch).toBe(mockFilters.setSearch);
     expect(current.list.showDeleted).toBe(false);
     expect(current.list.toggleShowDeleted).toBe(mockFilters.toggleShowDeleted);
+    expect(current.list.selectedRole).toBe('');
+    expect(current.list.setSelectedRole).toBe(mockFilters.setSelectedRole);
+    expect(current.list.selectedDepartment).toBe('');
+    expect(current.list.setSelectedDepartment).toBe(mockFilters.setSelectedDepartment);
   });
 
   it('returns correct sorting controls', () => {

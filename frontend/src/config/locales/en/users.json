@@ -10,7 +10,9 @@
   "filters": {
     "showDeleted": "Show deleted",
     "role": "Role",
-    "allRoles": "All roles"
+    "allRoles": "All roles",
+    "department": "Department",
+    "allDepartments": "All departments"
   },
   "roles": {
     "EMPLOYEE": "Employee",

@@ -9,6 +9,7 @@ export function useUserFilters(users: UserDto[]) {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [showDeleted, setShowDeleted] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole | ''>('');
+  const [selectedDepartment, setSelectedDepartment] = useState<number | ''>('');
 
   const collator = useMemo(
     () => new Intl.Collator('hr', { sensitivity: 'base' }),
@@ -22,12 +23,13 @@ export function useUserFilters(users: UserDto[]) {
       (u) =>
         (showDeleted || u.status !== 'DELETED') &&
         (!selectedRole || u.role === selectedRole) &&
+        (selectedDepartment === '' || u.departmentId === selectedDepartment) &&
         (!q ||
           u.name.toLowerCase().includes(q) ||
           u.surname.toLowerCase().includes(q) ||
           u.email.toLowerCase().includes(q))
     );
-  }, [users, search, showDeleted, selectedRole]);
+  }, [users, search, showDeleted, selectedRole, selectedDepartment]);
 
   const sorted = useMemo(() => {
     const dir = sortDir === 'asc' ? 1 : -1;
@@ -51,6 +53,8 @@ export function useUserFilters(users: UserDto[]) {
     toggleShowDeleted: () => setShowDeleted((v) => !v),
     selectedRole,
     setSelectedRole,
+    selectedDepartment,
+    setSelectedDepartment,
     sortDir,
     toggleSort: () => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc')),
   };

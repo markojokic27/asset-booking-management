@@ -10,7 +10,9 @@
   "filters": {
     "showDeleted": "Prikaži obrisane",
     "role": "Uloga",
-    "allRoles": "Sve uloge"
+    "allRoles": "Sve uloge",
+    "department": "Odjel",
+    "allDepartments": "Svi odjeli"
   },
   "roles": {
     "EMPLOYEE": "Zaposlenik",
