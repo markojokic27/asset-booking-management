@@ -83,11 +83,11 @@ fun AssetDetailsScreen(
                     verticalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
                     AssetDetailItem(
-                        label = stringResource(R.string.asset_details_category_label),
+                        label = stringResource(R.string.common_category),
                         value = uiState.categoryName?.ifBlank { unavailableText } ?: unavailableText
                     )
                     AssetStatusDetailItem(
-                        label = stringResource(R.string.asset_details_status_label),
+                        label = stringResource(R.string.common_status),
                         status = asset.status
                     )
                     AssetDetailItem(

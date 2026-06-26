@@ -10,7 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingDisplayText
 import com.example.assetbookingmanagement.core.ui.components.DetailsRow
 import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
@@ -27,6 +29,7 @@ fun BookingDetailsScreen(
     isHourlyBooking: Boolean
 ) {
     val context = LocalContext.current
+    val unavailableText = stringResource(R.string.common_value_unavailable)
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -35,11 +38,12 @@ fun BookingDetailsScreen(
     ) {
         item(key = bookingId) {
             BookingSummarySection(
-                assetName = assetName.ifBlank { "Booking $bookingId" },
+                bookingId = bookingId,
+                assetName = assetName.ifBlank { stringResource(R.string.nav_approval_request_details_title, bookingId) },
                 bookingStart = formatLocalizedBookingDisplayText(bookingStart, context, isHourlyBooking),
                 bookingEnd = formatLocalizedBookingDisplayText(bookingEnd, context, isHourlyBooking),
-                status = status.ifBlank { "-" },
-                categoryName = categoryName.ifBlank { "-" }
+                status = status.ifBlank { unavailableText },
+                categoryName = categoryName.ifBlank { unavailableText }
             )
         }
     }
@@ -47,6 +51,7 @@ fun BookingDetailsScreen(
 
 @Composable
 private fun BookingSummarySection(
+    bookingId: Long,
     assetName: String,
     bookingStart: String,
     bookingEnd: String,
@@ -54,13 +59,13 @@ private fun BookingSummarySection(
     categoryName: String
 ) {
     DetailsSectionCard(
-        title = "BOOKING SUMMARY",
+        title = stringResource(R.string.nav_approval_request_details_title, bookingId),
         heading = assetName
     ) {
-        BookingInfoRow(label = "From", value = bookingStart, showDivider = true)
-        BookingInfoRow(label = "To", value = bookingEnd, showDivider = true)
+        BookingInfoRow(label = stringResource(R.string.common_from), value = bookingStart, showDivider = true)
+        BookingInfoRow(label = stringResource(R.string.common_to), value = bookingEnd, showDivider = true)
         BookingStatusRow(status = status, showDivider = true)
-        BookingInfoRow(label = "Category", value = categoryName, showDivider = false)
+        BookingInfoRow(label = stringResource(R.string.common_category), value = categoryName, showDivider = false)
     }
 }
 
@@ -91,7 +96,7 @@ private fun BookingStatusRow(
 ) {
     DetailsRow(showDivider = showDivider) {
         Text(
-            text = "Status",
+            text = stringResource(R.string.common_status),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

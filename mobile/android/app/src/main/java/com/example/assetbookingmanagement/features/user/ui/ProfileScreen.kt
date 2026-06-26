@@ -191,7 +191,7 @@ private fun WorkDetailsSection(
         }
         DetailsRow(showDivider = true) {
             Text(
-                text = stringResource(R.string.approvals_details_status_label),
+                text = stringResource(R.string.common_status),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

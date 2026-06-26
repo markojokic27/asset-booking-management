@@ -68,7 +68,7 @@ fun AssetFilterSideSheet(
         )
 
         Text(
-            text = stringResource(R.string.asset_filters_category_label),
+            text = stringResource(R.string.common_category),
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface
         )

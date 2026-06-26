@@ -64,17 +64,17 @@ fun ApprovalRequestDetailsScreen(
                 showDivider = true
             )
             RequestInfoRow(
-                label = stringResource(R.string.approvals_details_from_label),
+                label = stringResource(R.string.common_from),
                 value = formatLocalizedBookingDisplayText(bookingStart, context, isHourlyBooking),
                 showDivider = true
             )
             RequestInfoRow(
-                label = stringResource(R.string.approvals_details_to_label),
+                label = stringResource(R.string.common_to),
                 value = formatLocalizedBookingDisplayText(bookingEnd, context, isHourlyBooking),
                 showDivider = true
             )
             RequestStatusRow(
-                label = stringResource(R.string.approvals_details_status_label),
+                label = stringResource(R.string.common_status),
                 status = status.ifBlank { unavailableText },
                 showDivider = uiState.errorMessageResId == null
             )

@@ -48,7 +48,7 @@ fun BookingSuccessScreen(
         ) {
             Icon(
                 imageVector = Icons.Default.Check,
-                contentDescription = "Booking successful",
+                contentDescription = stringResource(R.string.booking_success_icon_content_description),
                 tint = Color(0xFF1F1F1F),
                 modifier = Modifier
                     .size(76.dp)
@@ -63,7 +63,7 @@ fun BookingSuccessScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Successful booking!",
+            text = stringResource(R.string.booking_success_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -103,7 +103,7 @@ fun BookingSuccessScreen(
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             },
-            label = "From",
+            label = stringResource(R.string.common_from),
             value = fromDate
         )
 
@@ -117,7 +117,7 @@ fun BookingSuccessScreen(
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             },
-            label = "To",
+            label = stringResource(R.string.common_to),
             value = toDate
         )
     }
