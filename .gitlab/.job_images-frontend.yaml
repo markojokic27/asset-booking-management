@@ -1,0 +1,25 @@
+# Included only when BUILD_DOCKER_IMAGES == "true" (see root include rule),
+# so this job no longer needs its own $BUILD_DOCKER_IMAGES rule.
+images-frontend:
+  stage: images
+  image: student-harbor.tn.internal/docker-remote/mgoltzsche/podman:minimal
+  needs:
+    - job: frontend:build
+      artifacts: true
+    # currently frontend tests are allowed to fail, in future make those tests tighter
+    - job: frontend:test
+  dependencies:
+    - frontend:build
+  interruptible: false
+  script:
+    - echo "Prepare images for frontend"
+    - cd ./frontend
+    - whoami
+    - id
+    - podman info
+    - podman build --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ -f ./docker/Dockerfile -t $IMG_PUSH_FE_REPO:$IMG_TAG .
+    - echo "Now pushing to $IMAGEPUSHREGISTRY with user $BUILDUSR"
+    - podman login $IMAGEPUSHREGISTRY --username $BUILDUSR --password $BUILDUSR_PWD
+    - podman push --storage-driver=vfs --root $HOME/.local/share/containers/vfs-storage/ $IMG_PUSH_FE_REPO:$IMG_TAG
+  rules:
+    - !reference [.standard_rules, rules]

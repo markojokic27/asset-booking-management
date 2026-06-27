@@ -1,0 +1,29 @@
+# frontend security: npm audit
+frontend-package-vulnerabilities-check:
+  stage: security
+  image:
+    name: student-harbor.tn.internal/docker-remote/node:24-alpine
+  needs:
+    - job: frontend:build
+  script:
+    - cd frontend
+    # - npm ci --legacy-peer-deps
+    - npm audit --audit-level=high --omit=dev
+  allow_failure: false
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # scheduled
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
+      allow_failure: true
+    - if: '$CI_COMMIT_BRANCH =~ /^(feature|refactor|fix|hotfix|test)\//'
+      when: manual
+      allow_failure: true
+    
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
+    paths:
+      - frontend/node_modules/

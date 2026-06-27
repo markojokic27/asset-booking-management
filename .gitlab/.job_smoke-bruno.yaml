@@ -1,0 +1,86 @@
+bruno:smoke:
+  stage: bruno
+  image:
+    name: node:24-alpine
+    # pull_policy: if-not-present
+  services:
+    - name: postgres:18
+      alias: postgres
+      # pull_policy: if-not-present
+  variables:
+    BRUNO_BASE_URL: "http://localhost:8080/API"
+    BRUNO_ENV_FILE: "environments/Admin.yml"
+    BASE_URL: "http://localhost:3000"
+    # PostgreSQL service container
+    POSTGRES_DB: asset_mgm
+    POSTGRES_USER: asset_mgm_user
+    POSTGRES_PASSWORD: $BRUNO_DB_PASSWORD
+    # Spring datasource
+    DB_HOST: postgres
+    DB_PORT: "5432"
+    DB_NAME: asset_mgm
+    DB_USER: asset_mgm_user
+    DB_PASSWORD: $BRUNO_DB_PASSWORD
+    # JWT
+    JWT_SECRET: $BRUNO_JWT_SECRET
+    JWT_EXPIRY_SECONDS: "3600"
+    JWT_REFRESH_SECONDS: "86400"
+  before_script:
+    - apk add --no-cache --quiet openjdk21-jre maven curl > /dev/null 2>&1
+    - npm install -g @usebruno/cli@3.3.0 --silent
+  script:
+    - cd backend
+    - |
+      mvn -q spring-boot:run \
+        -Dspring-boot.run.profiles=dev \
+        -Dmaven.repo.local=.m2/repository \
+        > /tmp/backend.log 2>&1 &
+      echo $! > /tmp/backend.pid
+    - cd ..
+    - |
+      echo "Waiting for backend..."
+      READY=0
+      for i in $(seq 1 40); do
+        STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${BRUNO_BASE_URL}/v1/auth/login" || echo "000")
+        if echo "$STATUS" | grep -qE "200|400|401|403|404|405"; then
+          echo "Backend is up (HTTP $STATUS)."
+          READY=1
+          break
+        fi
+        echo "Not ready (status $STATUS), retry $i/40..."
+        sleep 3
+      done
+      if [ "$READY" = "0" ]; then
+        echo "=== BACKEND FAILED TO START ==="
+        cat /tmp/backend.log
+        exit 1
+      fi
+    - cd tests/api-tests/bruno/Testing
+    - |
+      bru run \
+        --env-file "${BRUNO_ENV_FILE}" \
+        --reporter-junit ./bruno-smoke-results.xml
+  after_script:
+    # - echo "=== BACKEND LOG ===" && cat /tmp/backend.log || true
+    # - kill $(cat /tmp/backend.pid 2>/dev/null) 2>/dev/null || true
+    - echo "=== BACKEND LOG (INFO+ only) ==="
+    # - grep -E " (INFO|WARN|ERROR) " /tmp/backend.log || true
+    - awk '/ INFO / {print "\033[32m" $0 "\033[0m"} / WARN / {print "\033[33m" $0 "\033[0m"} / ERROR / {print "\033[31m" $0 "\033[0m"}' /tmp/backend.log || true
+    - kill $(cat /tmp/backend.pid) 2>/dev/null || true
+  cache:
+    key:
+      files:
+        - backend/pom.xml
+      prefix: maven
+    paths:
+      - backend/.m2/repository/
+    policy: pull
+  artifacts:
+    when: always
+    reports:
+      junit: tests/api-tests/bruno/Testing/bruno-smoke-results.xml
+    paths:
+      - tests/api-tests/bruno/Testing/bruno-smoke-results.xml
+  allow_failure: true
+  rules:
+    - !reference [.standard_rules, rules]

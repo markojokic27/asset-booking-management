@@ -1,0 +1,31 @@
+# socket scan
+socket-security:
+  stage: security
+  image:
+    name: socketdev/cli:2.4.6
+    entrypoint: [""]
+  variables:
+    SOCKET_SECURITY_API_KEY: $SOCKET_SECURITY_API_KEY
+    GITLAB_TOKEN: $GITLAB_TOKEN
+  allow_failure: false
+  # hardcoded 0 instead of ${CI_MERGE_REQUEST_IID:-0} for omitting MR comments
+  interruptible: false
+  script:
+    - |
+      socketcli \
+        --target-path $CI_PROJECT_DIR \
+        --scm gitlab \
+        --pr-number 0
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $RUN_SOCKET == "true"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - "**/package.json"
+        - "**/package-lock.json"
+        - "**/pom.xml"
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      changes:
+        - "**/package.json"
+        - "**/package-lock.json"
+        - "**/pom.xml"
+    - when: never

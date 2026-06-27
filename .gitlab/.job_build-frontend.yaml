@@ -1,0 +1,21 @@
+frontend:build:
+  stage: build
+  image: student-harbor.tn.internal/docker-remote/node:24-alpine
+  script:
+    - cd frontend
+    - npm ci --legacy-peer-deps
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist/
+      # - frontend/node_modules/
+    expire_in: 2 hour
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
+    paths:
+      - frontend/node_modules/
+  rules:
+    - !reference [.standard_rules, rules]

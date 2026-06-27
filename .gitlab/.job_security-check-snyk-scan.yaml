@@ -1,0 +1,41 @@
+snyk-scan:
+#frontend
+  stage: security
+  image:
+    name: student-harbor.tn.internal/docker-remote/node:24-alpine
+  needs:
+    - job: frontend:build
+      artifacts: true
+  variables:
+    SNYK_API: "https://api.eu.snyk.io"
+  interruptible: false
+  before_script:
+    - npm install -g snyk snyk-to-html
+    - echo "Token starts with $(echo $SNYK_TOKEN | cut -c1-4)..."
+  script:
+    - snyk test --file=frontend/package.json --json-file-output=snyk_data_file.json || true
+    - snyk-to-html -i snyk_data_file.json -o snyk_results.html
+    - snyk monitor --file=frontend/package.json --target-reference="$CI_COMMIT_REF_NAME"
+  cache:
+    key:
+      files:
+        - frontend/package-lock.json
+      prefix: npm
+    paths:
+      - frontend/node_modules/
+    policy: pull
+  artifacts:
+    when: always
+    paths:
+      - snyk_data_file.json
+      - snyk_results.html
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_SNYK == "true"
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
+      allow_failure: false
+    - if: '$CI_COMMIT_BRANCH =~ /^(feature|refactor|fix|hotfix|test)\//'
+      when: manual
+      allow_failure: true
+    

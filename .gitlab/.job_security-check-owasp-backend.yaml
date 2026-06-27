@@ -1,0 +1,46 @@
+# backend OWASP dependency check
+backend-dependency-check:
+  stage: security
+  image:
+    name: student-harbor.tn.internal/docker-remote/maven:3.9-eclipse-temurin-21
+    # pull_policy: if-not-present
+  needs:
+    - job: backend:build    # Reuses backend/target/ artifact, skips recompile
+      artifacts: true
+  interruptible: false
+  script:
+    - echo "Cache size before build:"
+    - du -sh "$CI_PROJECT_DIR/backend/.m2/repository/" 2>/dev/null || echo "Cache empty or not restored"
+    - cd backend
+    # GitHub is unreachable from Internal network, also this is backend dependency check, Js already included in npm audit
+    - mvn clean verify -Powasp
+        -DnvdApiKeyEnvironmentVariable=NVD_API_KEY
+        -Dmaven.repo.local=.m2/repository
+        -DretireJsAnalyzerEnabled=false
+    - echo "Cache size after build:"
+    - du -sh "$CI_PROJECT_DIR/backend/.m2/repository/"
+  artifacts:
+    when: always              # Save report even if CVSS >=7 fails job
+    paths:
+      - backend/target/dependency-check-report/dependency-check-report.html
+      - backend/target/dependency-check-report/dependency-check-report.json
+    expire_in: 7 days
+  cache:
+    key:
+      files:
+        - backend/pom.xml
+      prefix: maven
+    paths:
+      - backend/.m2/repository/
+    when: always
+  allow_failure: false
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $RUN_OWASP == "true"  # scheduled
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "develop"
+      when: manual
+      allow_failure: true
+    - if: '$CI_COMMIT_BRANCH =~ /^(feature|refactor|fix|hotfix|test)\//'
+      when: manual
+      allow_failure: true
+    

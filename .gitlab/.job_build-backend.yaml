@@ -1,0 +1,20 @@
+backend:build:
+  stage: build
+  image: student-harbor.tn.internal/docker-remote/maven:3.9-eclipse-temurin-21
+  script:
+    - echo "Building backend..."
+    - cd backend
+    - mvn clean install -DskipTests -Dmaven.repo.local=.m2/repository
+  artifacts:
+    paths:
+      - backend/target/*.jar
+    expire_in: 2 hour
+  cache:
+    key:
+      files:
+        - backend/pom.xml
+      prefix: maven
+    paths:
+      - backend/.m2/repository/
+  rules:
+    - !reference [.standard_rules, rules]
