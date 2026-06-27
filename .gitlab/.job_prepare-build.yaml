@@ -1,0 +1,41 @@
+prepare-build:
+  stage: build
+  image: student-harbor.tn.internal/docker-remote/maven:3.9-eclipse-temurin-21
+  script:
+    - |
+      echo "==============================================="
+      echo "  PREPARE-BUILD  --  Environment Info"
+      echo "==============================================="
+      echo ""
+      echo "-- Java --"
+      java -version 2>&1
+      echo ""
+      echo "-- Maven --"
+      mvn --version
+      echo ""
+      echo "-- OS --"
+      cat /etc/os-release | head -4
+      uname -a
+      echo ""
+      echo "-- System resources --"
+      echo "CPUs:   $(nproc)"
+      echo "Memory: $(free -h | awk '/Mem:/{print $2}')"
+      echo "Disk:   $(df -h / | awk 'NR==2{print $4 " free of " $2}')"
+      echo ""
+      echo "-- GitLab context --"
+      echo "Project:   $CI_PROJECT_NAME"
+      echo "Branch:    $CI_COMMIT_REF_NAME"
+      echo "Commit:    $CI_COMMIT_SHORT_SHA"
+      echo "Pipeline:  $CI_PIPELINE_ID"
+      echo "Source:    $CI_PIPELINE_SOURCE"
+      echo "Runner:    $CI_RUNNER_DESCRIPTION"
+      echo ""
+      echo "-- Workspace --"
+      echo "Working dir: $(pwd)"
+      ls -la
+      echo ""
+      echo "==============================================="
+      echo "  DONE"
+      echo "==============================================="
+  rules:
+    - !reference [.standard_rules, rules]

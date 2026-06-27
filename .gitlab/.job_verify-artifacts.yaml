@@ -1,0 +1,33 @@
+artifacts:verify:
+  stage: test
+  image: student-harbor.tn.internal/docker-remote/node:24-alpine
+  needs:
+    - job: backend:build
+      artifacts: true
+    - job: frontend:build
+      artifacts: true
+  script:
+    - echo "=== Verifying artifacts received from build stage ==="
+
+    - echo "--- Backend artifact check ---"
+    - ls -lh backend/target/*.jar
+    - |
+      JAR_COUNT=$(ls backend/target/*.jar 2>/dev/null | wc -l)
+      echo "Found $JAR_COUNT JAR file(s)"
+      if [ "$JAR_COUNT" -eq 0 ]; then
+        echo "ERROR: No JAR artifact found in backend/target/"
+        exit 1
+      fi
+
+    - echo "--- Frontend artifact check ---"
+    - ls -lh frontend/dist/
+    - |
+      if [ ! -d "frontend/dist" ] || [ -z "$(ls -A frontend/dist)" ]; then
+        echo "ERROR: frontend/dist/ is missing or empty"
+        exit 1
+      fi
+      echo "Frontend dist contains $(ls frontend/dist | wc -l) file(s)/dir(s)"
+
+    - echo "=== All artifacts verified successfully ==="
+  rules:
+    - !reference [.standard_rules, rules]

@@ -1,0 +1,25 @@
+frontend:test:
+  stage: test
+  image:
+    name: student-harbor.tn.internal/docker-remote/node:24-slim
+  needs:
+    - job: frontend:build
+      artifacts: true
+  script:
+    - cd frontend
+    - npm ci --legacy-peer-deps
+    - npx playwright install --with-deps chromium
+    - npm run test
+  allow_failure: true
+  cache:
+    - key:
+        files:
+          - frontend/package-lock.json
+        prefix: npm
+      paths:
+        - frontend/node_modules/
+    - key: playwright-chromium-$CI_COMMIT_REF_SLUG
+      paths:
+        - /root/.cache/ms-playwright/
+  rules:
+    - !reference [.standard_rules, rules]
