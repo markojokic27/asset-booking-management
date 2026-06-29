@@ -35,16 +35,20 @@ import com.example.assetbookingmanagement.core.ui.theme.InputShadow
 import com.example.assetbookingmanagement.core.ui.theme.InputTextDark
 import com.example.assetbookingmanagement.core.ui.theme.InputTextLight
 
+data class AppInputConfig(
+    val enabled: Boolean = true,
+    val keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    val visualTransformation: VisualTransformation = VisualTransformation.None,
+    val passwordVisibilityToggle: @Composable (() -> Unit)? = null
+)
+
 @Composable
 fun AppInput(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    passwordVisibilityToggle: @Composable (() -> Unit)? = null
+    config: AppInputConfig = AppInputConfig()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused = interactionSource.collectIsFocusedAsState().value
@@ -60,7 +64,7 @@ fun AppInput(
             modifier = Modifier
                 .fillMaxWidth()
                 .drawWithContent {
-                    if (enabled) {
+                    if (config.enabled) {
                         drawIntoCanvas { canvas ->
                             val paint = android.graphics.Paint().apply {
                                 color = android.graphics.Color.TRANSPARENT
@@ -88,14 +92,14 @@ fun AppInput(
                     color = containerColor,
                     shape = RoundedCornerShape(8.dp)
                 )
-                .alpha(if (enabled) 1f else 0.5f)
+                .alpha(if (config.enabled) 1f else 0.5f)
         ) {
             // Each color must be defined for all three states: focused, unfocused and disabled
             TextField(
                 value = value,
                 onValueChange = onValueChange,
                 modifier = Modifier.fillMaxWidth(),
-                enabled = enabled,
+                enabled = config.enabled,
                 singleLine = true,
                 textStyle = TextStyle(
                     color = textColor,
@@ -110,9 +114,9 @@ fun AppInput(
                         letterSpacing = 2.8.sp
                     )
                 },
-                trailingIcon = passwordVisibilityToggle,
-                keyboardOptions = keyboardOptions,
-                visualTransformation = visualTransformation,
+                trailingIcon = config.passwordVisibilityToggle,
+                keyboardOptions = config.keyboardOptions,
+                visualTransformation = config.visualTransformation,
                 interactionSource = interactionSource,
                 shape = RoundedCornerShape(8.dp),
                 colors = TextFieldDefaults.colors(

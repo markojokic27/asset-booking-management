@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
+import com.example.assetbookingmanagement.core.ui.components.AppInputConfig
 import com.example.assetbookingmanagement.core.ui.components.*
 
 @Composable
@@ -165,24 +166,36 @@ fun LabeledInput(
         value = value,
         onValueChange = onValueChange,
         placeholder = placeholder,
-        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text),
-        passwordVisibilityToggle = if (isPassword && passwordVisibilityToggle != null) {
-            {
-                IconButton(onClick = passwordVisibilityToggle) {
-                    Icon(
-                        imageVector = if (passwordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                        contentDescription = if (passwordVisible) {
-                            stringResource(R.string.login_hide_password)
-                        } else {
-                            stringResource(R.string.login_show_password)
-                        }
-                    )
+        config = AppInputConfig(
+            keyboardOptions = KeyboardOptions(
+                keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text
+            ),
+            visualTransformation = if (isPassword && !passwordVisible) {
+                PasswordVisualTransformation()
+            } else {
+                VisualTransformation.None
+            },
+            passwordVisibilityToggle = if (isPassword && passwordVisibilityToggle != null) {
+                {
+                    IconButton(onClick = passwordVisibilityToggle) {
+                        Icon(
+                            imageVector = if (passwordVisible) {
+                                Icons.Filled.VisibilityOff
+                            } else {
+                                Icons.Filled.Visibility
+                            },
+                            contentDescription = if (passwordVisible) {
+                                stringResource(R.string.login_hide_password)
+                            } else {
+                                stringResource(R.string.login_show_password)
+                            }
+                        )
+                    }
                 }
+            } else {
+                null
             }
-        } else {
-            null
-        }
+        )
     )
 }
 

@@ -29,6 +29,15 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.theme.*
 
+private data class HomeCardUiModel(
+    val backgroundColor: Color,
+    val iconRes: Int,
+    val primaryColor: Color,
+    val count: String,
+    val label: String,
+    val arrowContentDescription: String
+)
+
 @Composable
 fun HomeScreen(
     onAssetsClick: () -> Unit = {},
@@ -37,6 +46,22 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val assetsCard = HomeCardUiModel(
+        backgroundColor = AssetsCardBg,
+        iconRes = R.drawable.computer_24,
+        primaryColor = PrimaryBlue,
+        count = uiState.assetCount.toString(),
+        label = stringResource(R.string.home_all_assets_label),
+        arrowContentDescription = stringResource(R.string.home_open_all_assets_content_description)
+    )
+    val bookingsCard = HomeCardUiModel(
+        backgroundColor = BookingsCardBg,
+        iconRes = R.drawable.calendar_today_24,
+        primaryColor = BookingsPrimary,
+        count = uiState.myBookingsCount.toString(),
+        label = stringResource(R.string.home_my_bookings_label),
+        arrowContentDescription = stringResource(R.string.home_open_my_bookings_content_description)
+    )
 
     LifecycleResumeEffect(Unit) {
         viewModel.refreshHomeData()
@@ -56,23 +81,13 @@ fun HomeScreen(
         ) {
             HomeCard(
                 modifier = Modifier.weight(1f),
-                backgroundColor = AssetsCardBg,
-                iconRes = R.drawable.computer_24,
-                primaryColor = PrimaryBlue,
-                count = uiState.assetCount.toString(),
-                label = stringResource(R.string.home_all_assets_label),
-                arrowContentDescription = stringResource(R.string.home_open_all_assets_content_description),
+                card = assetsCard,
                 onArrowClick = onAssetsClick
             )
 
             HomeCard(
                 modifier = Modifier.weight(1f),
-                backgroundColor = BookingsCardBg,
-                iconRes = R.drawable.calendar_today_24,
-                primaryColor = BookingsPrimary,
-                count = uiState.myBookingsCount.toString(),
-                label = stringResource(R.string.home_my_bookings_label),
-                arrowContentDescription = stringResource(R.string.home_open_my_bookings_content_description),
+                card = bookingsCard,
                 onArrowClick = onBookingsClick
             )
         }
@@ -89,18 +104,13 @@ fun HomeScreen(
 @Composable
 private fun HomeCard(
     modifier: Modifier = Modifier,
-    backgroundColor: Color,
-    iconRes: Int,
-    primaryColor: Color,
-    count: String,
-    label: String,
-    arrowContentDescription: String,
+    card: HomeCardUiModel,
     onArrowClick: () -> Unit
 ) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(14.dp),
-        color = backgroundColor
+        color = card.backgroundColor
     ) {
         Column(
             modifier = Modifier
@@ -109,9 +119,9 @@ private fun HomeCard(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Icon(
-                painter = painterResource(id = iconRes),
-                contentDescription = label,
-                tint = primaryColor,
+                painter = painterResource(id = card.iconRes),
+                contentDescription = card.label,
+                tint = card.primaryColor,
                 modifier = Modifier.size(24.dp)
             )
 
@@ -124,13 +134,13 @@ private fun HomeCard(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = count,
-                        color = primaryColor,
+                        text = card.count,
+                        color = card.primaryColor,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = label,
+                        text = card.label,
                         color = TextLight,
                         fontSize = 12.sp
                     )
@@ -142,7 +152,7 @@ private fun HomeCard(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_right_alt_24),
-                        contentDescription = arrowContentDescription,
+                        contentDescription = card.arrowContentDescription,
                         tint = TextLight,
                         modifier = Modifier.size(20.dp)
                     )
