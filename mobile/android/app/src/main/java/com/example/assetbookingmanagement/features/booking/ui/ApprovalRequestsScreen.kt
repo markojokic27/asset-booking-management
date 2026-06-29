@@ -47,7 +47,7 @@ fun ApprovalRequestsScreen(
             SearchBar(
                 value = uiState.searchText,
                 onValueChange = viewModel::onSearchTextChange,
-                placeholder = stringResource(R.string.approvals_search_placeholder)
+                placeholder = stringResource(R.string.common_search_bookings_placeholder)
             )
         }
 

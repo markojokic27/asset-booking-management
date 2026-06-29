@@ -15,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.R
 
 @Composable
 fun RecurringDaysSelector(
@@ -25,19 +27,19 @@ fun RecurringDaysSelector(
     onDayToggle: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val days = listOf(
-        1 to "Monday",
-        2 to "Tuesday",
-        3 to "Wednesday",
-        4 to "Thursday",
-        5 to "Friday"
+    val days: List<Pair<Int, Int>> = listOf(
+        1 to R.string.create_booking_recurring_monday,
+        2 to R.string.create_booking_recurring_tuesday,
+        3 to R.string.create_booking_recurring_wednesday,
+        4 to R.string.create_booking_recurring_thursday,
+        5 to R.string.create_booking_recurring_friday
     )
 
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Book every",
+            text = stringResource(R.string.create_booking_recurring_label),
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold
         )
@@ -53,7 +55,7 @@ fun RecurringDaysSelector(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    columnDays.forEach { (value, label) ->
+                    columnDays.forEach { (value, labelRes) ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -70,7 +72,7 @@ fun RecurringDaysSelector(
                                 onCheckedChange = null
                             )
                             Text(
-                                text = label,
+                                text = stringResource(labelRes),
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.wrapContentWidth()
                             )

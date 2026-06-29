@@ -1,7 +1,9 @@
 package com.example.assetbookingmanagement.features.booking.ui
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.asset.data.AssetRepository
 import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
@@ -53,7 +55,7 @@ data class CreateBookingUiState(
     val bookingCreated: Boolean = false,
     val createdBookingStart: String? = null,
     val createdBookingEnd: String? = null,
-    val errorMessage: String? = null
+    @param:StringRes val errorMessageRes: Int? = null
 )
 
 @HiltViewModel
@@ -112,7 +114,7 @@ class CreateBookingViewModel @Inject constructor(
                 selectedFromDateMillis = dateMillis,
                 selectedToDateMillis = nextToDateMillis,
                 selectedWeekdays = emptySet(),
-                errorMessage = null
+                errorMessageRes = null
             )
         }
     }
@@ -130,7 +132,7 @@ class CreateBookingViewModel @Inject constructor(
                 selectedFromDateMillis = nextFromDateMillis,
                 selectedToDateMillis = dateMillis,
                 selectedWeekdays = emptySet(),
-                errorMessage = null
+                errorMessageRes = null
             )
         }
     }
@@ -141,7 +143,7 @@ class CreateBookingViewModel @Inject constructor(
                 startHour = hour,
                 startMinute = minute,
                 hasSelectedStartTime = true,
-                errorMessage = null
+                errorMessageRes = null
             )
         }
     }
@@ -152,7 +154,7 @@ class CreateBookingViewModel @Inject constructor(
                 endHour = hour,
                 endMinute = minute,
                 hasSelectedEndTime = true,
-                errorMessage = null
+                errorMessageRes = null
             )
         }
     }
@@ -178,7 +180,7 @@ class CreateBookingViewModel @Inject constructor(
                 selectedToDateMillis = null,
                 hasSelectedStartTime = false,
                 hasSelectedEndTime = false,
-                errorMessage = null
+                errorMessageRes = null
             )
         }
         updateRecurringAvailability()
@@ -187,7 +189,7 @@ class CreateBookingViewModel @Inject constructor(
     fun createBooking(assetId: Long) {
         val userId = authSession.getCurrentUserId()
         if (userId == null) {
-            _uiState.update { it.copy(errorMessage = "Missing logged in user.") }
+            _uiState.update { it.copy(errorMessageRes = R.string.common_error_missing_logged_in_user) }
             return
         }
 
@@ -229,10 +231,10 @@ class CreateBookingViewModel @Inject constructor(
             state.selectedFromDateMillis == null -> {
                 _uiState.update {
                     it.copy(
-                        errorMessage = if (isHourlyBooking) {
-                            "Select date, from time and to time."
+                        errorMessageRes = if (isHourlyBooking) {
+                            R.string.create_booking_error_select_date_from_time_to_time
                         } else {
-                            "Select from date and to date."
+                            R.string.create_booking_error_select_from_date_to_date
                         }
                     )
                 }
@@ -241,27 +243,27 @@ class CreateBookingViewModel @Inject constructor(
 
             !isHourlyBooking && state.selectedToDateMillis == null -> {
                 _uiState.update {
-                    it.copy(errorMessage = "Select from date and to date.")
+                    it.copy(errorMessageRes = R.string.create_booking_error_select_from_date_to_date)
                 }
                 return
             }
 
             startInstant == null || endInstant == null -> {
                 _uiState.update {
-                    it.copy(errorMessage = "Booking period cannot be created from the selected date.")
+                    it.copy(errorMessageRes = R.string.create_booking_error_invalid_selected_date)
                 }
                 return
             }
 
             isHourlyBooking && (!state.hasSelectedStartTime || !state.hasSelectedEndTime) -> {
                 _uiState.update {
-                    it.copy(errorMessage = "Select from time and to time.")
+                    it.copy(errorMessageRes = R.string.create_booking_error_select_from_time_to_time)
                 }
                 return
             }
 
             isHourlyBooking && !endInstant.isAfter(startInstant) -> {
-                _uiState.update { it.copy(errorMessage = "End time must be after start time.") }
+                _uiState.update { it.copy(errorMessageRes = R.string.create_booking_error_end_time_after_start) }
                 return
             }
         }
@@ -271,7 +273,7 @@ class CreateBookingViewModel @Inject constructor(
                 it.copy(
                     isSubmitting = true,
                     bookingCreated = false,
-                    errorMessage = null
+                    errorMessageRes = null
                 )
             }
 
@@ -293,17 +295,17 @@ class CreateBookingViewModel @Inject constructor(
                         bookingCreated = true,
                         createdBookingStart = startInstant.toString(),
                         createdBookingEnd = endInstant.toString(),
-                        errorMessage = null
+                        errorMessageRes = null
                     )
                 }
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You aren't authorized to create this booking."
-                            409 -> "Selected booking period is already taken."
-                            else -> "Booking failed. Try again."
+                        errorMessageRes = when (error.code()) {
+                            401, 403 -> R.string.create_booking_error_not_authorized
+                            409 -> R.string.create_booking_error_period_taken
+                            else -> R.string.create_booking_error_failed
                         }
                     )
                 }
@@ -311,7 +313,7 @@ class CreateBookingViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = "Unable to connect to the server. Please try again."
+                        errorMessageRes = R.string.login_error_server_unreachable
                     )
                 }
             }
@@ -326,7 +328,7 @@ class CreateBookingViewModel @Inject constructor(
         val availableRecurringDates = state.availableRecurringDates
         if (availableRecurringDates.isEmpty()) {
             _uiState.update {
-                it.copy(errorMessage = "No available recurring dates in the selected month.")
+                it.copy(errorMessageRes = R.string.create_booking_error_no_recurring_dates)
             }
             return
         }
@@ -343,7 +345,7 @@ class CreateBookingViewModel @Inject constructor(
                 it.copy(
                     isSubmitting = true,
                     bookingCreated = false,
-                    errorMessage = null
+                    errorMessageRes = null
                 )
             }
 
@@ -364,17 +366,17 @@ class CreateBookingViewModel @Inject constructor(
                         bookingCreated = true,
                         createdBookingStart = timeSlots.firstOrNull()?.bookingStart,
                         createdBookingEnd = timeSlots.lastOrNull()?.bookingEnd,
-                        errorMessage = null
+                        errorMessageRes = null
                     )
                 }
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You aren't authorized to create this booking."
-                            409 -> "One or more selected recurring dates are already taken."
-                            else -> "Booking failed. Try again."
+                        errorMessageRes = when (error.code()) {
+                            401, 403 -> R.string.create_booking_error_not_authorized
+                            409 -> R.string.create_booking_error_recurring_dates_taken
+                            else -> R.string.create_booking_error_failed
                         }
                     )
                 }
@@ -382,7 +384,7 @@ class CreateBookingViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessage = "Unable to connect to the server. Please try again."
+                        errorMessageRes = R.string.login_error_server_unreachable
                     )
                 }
             }

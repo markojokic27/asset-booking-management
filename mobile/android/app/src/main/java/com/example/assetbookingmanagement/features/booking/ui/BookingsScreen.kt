@@ -51,7 +51,7 @@ fun BookingsScreen(
             SearchBar(
                 value = uiState.searchText,
                 onValueChange = viewModel::onSearchTextChange,
-                placeholder = stringResource(R.string.bookings_search_placeholder)
+                placeholder = stringResource(R.string.common_search_bookings_placeholder)
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

@@ -30,9 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.booking.ui.AvailabilityStatus
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -76,7 +78,10 @@ fun AvailabilityCalendar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }) {
-                    Icon(Icons.Default.ChevronLeft, contentDescription = "Previous month")
+                    Icon(
+                        Icons.Default.ChevronLeft,
+                        contentDescription = stringResource(R.string.create_booking_previous_month)
+                    )
                 }
 
                 Text(
@@ -86,7 +91,10 @@ fun AvailabilityCalendar(
                 )
 
                 IconButton(onClick = { currentMonth = currentMonth.plusMonths(1) }) {
-                    Icon(Icons.Default.ChevronRight, contentDescription = "Next month")
+                    Icon(
+                        Icons.Default.ChevronRight,
+                        contentDescription = stringResource(R.string.create_booking_next_month)
+                    )
                 }
             }
 

@@ -140,7 +140,7 @@ private fun ProfileDetailsSection(
         InfoRow(label = stringResource(R.string.profile_label_id), value = profile.id.toString(), showDivider = true)
         InfoRow(label = stringResource(R.string.profile_label_first_name), value = profile.name.ifBlank { unavailableText }, showDivider = true)
         InfoRow(label = stringResource(R.string.profile_label_last_name), value = profile.surname.ifBlank { unavailableText }, showDivider = true)
-        InfoRow(label = stringResource(R.string.profile_label_username), value = profile.username.ifBlank { unavailableText }, showDivider = true)
+        InfoRow(label = stringResource(R.string.common_username), value = profile.username.ifBlank { unavailableText }, showDivider = true)
         InfoRow(label = stringResource(R.string.profile_label_email), value = profile.email.ifBlank { unavailableText }, showDivider = true)
         DetailsRow(showDivider = false) {
             Text(

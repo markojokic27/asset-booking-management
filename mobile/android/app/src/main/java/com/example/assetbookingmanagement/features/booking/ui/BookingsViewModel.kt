@@ -79,7 +79,7 @@ class BookingsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessageResId = R.string.bookings_error_missing_logged_in_user
+                        errorMessageResId = R.string.common_error_missing_logged_in_user
                     )
                 }
                 return@launch

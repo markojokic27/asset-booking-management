@@ -19,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -71,7 +72,7 @@ fun CreateBookingScreen(
 
     BookingTabsLayout(
         selectedTabIndex = selectedTabIndex,
-        tabLabels = BookingTab.entries.map { it.label },
+        tabLabels = BookingTab.entries.map { stringResource(it.labelRes) },
         onTabSelected = { selectedTabIndex = it }
     ) {
         Spacer(modifier = Modifier.height(32.dp))
@@ -111,10 +112,10 @@ fun CreateBookingScreen(
             )
         }
 
-        uiState.errorMessage?.let { message ->
+        uiState.errorMessageRes?.let { messageRes ->
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = message,
+                text = stringResource(messageRes),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -155,14 +156,17 @@ private fun BookingButtons(
                 contentColor = MaterialTheme.colorScheme.onSurface
             )
         ) {
-            Text("Cancel", fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(R.string.common_cancel),
+                fontWeight = FontWeight.Bold
+            )
         }
 
         AppButton(
             text = when {
-                isSubmitting -> "Booking..."
-                approvalRequired -> "Request booking"
-                else -> "Book now"
+                isSubmitting -> stringResource(R.string.create_booking_submit_loading)
+                approvalRequired -> stringResource(R.string.create_booking_submit_request)
+                else -> stringResource(R.string.create_booking_submit_now)
             },
             iconRes = R.drawable.calendar_today_24,
             enabled = !isSubmitting,
@@ -171,7 +175,7 @@ private fun BookingButtons(
     }
 }
 
-private enum class BookingTab(val label: String) {
-    ChooseDate("Choose date"),
-    ShowAvailability("Show Availability")
+private enum class BookingTab(val labelRes: Int) {
+    ChooseDate(R.string.create_booking_tab_choose_date),
+    ShowAvailability(R.string.create_booking_tab_show_availability)
 }

@@ -78,7 +78,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessageResId = R.string.profile_error_missing_logged_in_user
+                        errorMessageResId = R.string.common_error_missing_logged_in_user
                     )
                 }
                 return@launch
@@ -227,7 +227,7 @@ class ProfileViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isChangingPassword = false,
-                        changePasswordErrorMessageResId = R.string.profile_error_missing_logged_in_user
+                        changePasswordErrorMessageResId = R.string.common_error_missing_logged_in_user
                     )
                 }
                 return@launch

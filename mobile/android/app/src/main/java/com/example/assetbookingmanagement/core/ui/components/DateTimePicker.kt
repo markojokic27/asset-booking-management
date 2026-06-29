@@ -1,6 +1,5 @@
 package com.example.assetbookingmanagement.core.ui.components
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,8 +31,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedDate
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedTime
 import java.time.Instant
@@ -77,8 +79,8 @@ fun DateTimePicker(
         if (showTimeInputs) {
             DateField(
                 dateValue = fromDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-                dateLabel = "Date",
-                dateContentDescription = "Select date",
+                dateLabel = stringResource(R.string.create_booking_date),
+                dateContentDescription = stringResource(R.string.create_booking_select_date),
                 onDateClick = { showFromDateDialog = true }
             )
         } else {
@@ -88,15 +90,15 @@ fun DateTimePicker(
             ) {
                 DateField(
                     dateValue = fromDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-                    dateLabel = "From date",
-                    dateContentDescription = "Select from date",
+                    dateLabel = stringResource(R.string.common_from),
+                    dateContentDescription = stringResource(R.string.create_booking_select_from_date),
                     onDateClick = { showFromDateDialog = true },
                     modifier = Modifier.weight(1f)
                 )
                 DateField(
                     dateValue = toDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-                    dateLabel = "To date",
-                    dateContentDescription = "Select to date",
+                    dateLabel = stringResource(R.string.common_to),
+                    dateContentDescription = stringResource(R.string.create_booking_select_to_date),
                     onDateClick = { showToDateDialog = true },
                     modifier = Modifier.weight(1f)
                 )
@@ -111,8 +113,8 @@ fun DateTimePicker(
                 } else {
                     ""
                 },
-                startTimeLabel = "From time",
-                startTimeContentDescription = "Select from time",
+                startTimeLabel = stringResource(R.string.common_from),
+                startTimeContentDescription = stringResource(R.string.create_booking_select_from_time),
                 startOptions = startHourOptions,
                 startDisabledOptions = unavailableHours,
                 onStartTimeSelected = { hour -> onStartTimeSelected(hour, 0) },
@@ -121,8 +123,8 @@ fun DateTimePicker(
                 } else {
                     ""
                 },
-                endTimeLabel = "To time",
-                endTimeContentDescription = "Select to time",
+                endTimeLabel = stringResource(R.string.common_to),
+                endTimeContentDescription = stringResource(R.string.create_booking_select_to_time),
                 endOptions = endHourOptions,
                 endDisabledOptions = getUnavailableEndHours(
                     endOptions = endHourOptions,
@@ -367,12 +369,12 @@ private fun AppDatePickerDialog(
         colors = datePickerColors,
         confirmButton = {
             TextButton(onClick = { onConfirm(datePickerState.selectedDateMillis) }) {
-                Text("OK")
+                Text(stringResource(R.string.common_ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.common_cancel))
             }
         }
     ) {

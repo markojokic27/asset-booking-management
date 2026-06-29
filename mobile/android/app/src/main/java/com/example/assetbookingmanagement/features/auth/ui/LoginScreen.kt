@@ -67,7 +67,7 @@ fun LoginScreen(
             )
 
             LabeledInput(
-                label = stringResource(R.string.login_field_username),
+                label = stringResource(R.string.common_username),
                 value = username,
                 placeholder = stringResource(R.string.login_placeholder_username),
                 isLandscape = isLandscape
