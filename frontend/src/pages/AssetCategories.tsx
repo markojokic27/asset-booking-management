@@ -144,6 +144,41 @@ function AssetCategoriesPage() {
     );
   };
 
+  const editProps = isAdmin(user) ? { onEdit: handleEdit } : {};
+
+  let categoriesContent;
+  if (loading) {
+    categoriesContent = (
+      <p className="text-sm text-gray-500">
+        {t('assetCategories.empty.loading')}
+      </p>
+    );
+  } else if (serverError) {
+    categoriesContent = (
+      <p className="bottom-24 self-center text-center font-semibold text-red-500 p-5">
+        {serverError}
+      </p>
+    );
+  } else if (categories.length === 0) {
+    categoriesContent = (
+      <p className="text-sm text-gray-500">
+        {t('assetCategories.empty.none')}
+      </p>
+    );
+  } else {
+    categoriesContent = (
+      <AssetCategoriesTable
+        data={pagination.paged}
+        nameSortDir={nameSortDir}
+        onToggleNameSort={() =>
+          setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+        }
+        onView={handleView}
+        {...editProps}
+      />
+    );
+  }
+
   return (
     <LayoutColumn
       span={12}
@@ -181,31 +216,7 @@ function AssetCategoriesPage() {
           />
         </div>
 
-        <div className="mt-6 w-full">
-          {loading ? (
-            <p className="text-sm text-gray-500">
-              {t('assetCategories.empty.loading')}
-            </p>
-          ) : serverError ? (
-            <p className="bottom-24 self-center text-center font-semibold text-red-500 p-5">
-              {serverError}
-            </p>
-          ) : categories.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              {t('assetCategories.empty.none')}
-            </p>
-          ) : (
-            <AssetCategoriesTable
-              data={pagination.paged}
-              nameSortDir={nameSortDir}
-              onToggleNameSort={() =>
-                setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
-              }
-              onView={handleView}
-              {...(isAdmin(user) ? { onEdit: handleEdit } : {})}
-            />
-          )}
-        </div>
+        <div className="mt-6 w-full">{categoriesContent}</div>
 
         {sortedCategories.length > 0 && !loading && !serverError && (
           <Pagination

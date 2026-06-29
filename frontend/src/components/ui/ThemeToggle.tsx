@@ -8,7 +8,7 @@ type ThemeToggleProps = {
   className?: string;
 };
 
-export default function ThemeToggle({ className }: ThemeToggleProps) {
+export default function ThemeToggle({ className }: Readonly<ThemeToggleProps>) {
   const { theme, toggleTheme } = useTheme();
   const { t } = useTranslation();
   const isDark = theme === 'dark';

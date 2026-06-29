@@ -111,6 +111,15 @@ export function MyBookingsTable({
     [isCancelling, t]
   );
 
+  let emptyMessage: string;
+  if (isLoading) {
+    emptyMessage = t('myBookings.loading');
+  } else if (error) {
+    emptyMessage = error;
+  } else {
+    emptyMessage = t('myBookings.empty');
+  }
+
   return (
     <>
       <Table
@@ -121,13 +130,7 @@ export function MyBookingsTable({
           isBookingPastEnd(booking) ? 'opacity-55' : undefined
         }
         className="w-full"
-        emptyMessage={
-          isLoading
-            ? t('myBookings.loading')
-            : error
-              ? error
-              : t('myBookings.empty')
-        }
+        emptyMessage={emptyMessage}
       />
 
       <CancelBookingModal

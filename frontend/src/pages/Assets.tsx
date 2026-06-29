@@ -201,6 +201,35 @@ function AssetsPage() {
     }
   };
 
+  const adminTableProps = isAdmin(user)
+    ? {
+        onEdit: (asset: AssetDto) => setModal({ type: 'edit', asset }),
+        onDelete: (asset: AssetDto) => setModal({ type: 'delete', asset }),
+      }
+    : {};
+
+  let assetsContent;
+  if (loading) {
+    assetsContent = <div>{t('assets.empty.loading')}</div>;
+  } else if (serverError) {
+    assetsContent = <div className="text-red-600">{serverError}</div>;
+  } else {
+    assetsContent = (
+      <AssetsTable
+        assets={pagination.paged}
+        categoryMap={categoryMap}
+        nameSortDir={nameSortDir}
+        onToggleNameSort={() =>
+          setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
+        }
+        onView={(asset) => setModal({ type: 'view', asset })}
+        {...adminTableProps}
+        onBookings={(asset) => setModal({ type: 'bookings', asset })}
+        onReport={(asset) => setModal({ type: 'report', asset })}
+      />
+    );
+  }
+
   return (
     <LayoutColumn
       span={12}
@@ -273,31 +302,7 @@ function AssetsPage() {
         />
       </div>
 
-      <div className="mt-6 w-full">
-        {loading ? (
-          <div>{t('assets.empty.loading')}</div>
-        ) : serverError ? (
-          <div className="text-red-600">{serverError}</div>
-        ) : (
-          <AssetsTable
-            assets={pagination.paged}
-            categoryMap={categoryMap}
-            nameSortDir={nameSortDir}
-            onToggleNameSort={() =>
-              setNameSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
-            }
-            onView={(asset) => setModal({ type: 'view', asset })}
-            {...(isAdmin(user)
-              ? {
-                  onEdit: (asset) => setModal({ type: 'edit', asset }),
-                  onDelete: (asset) => setModal({ type: 'delete', asset }),
-                }
-              : {})}
-            onBookings={(asset) => setModal({ type: 'bookings', asset })}
-            onReport={(asset) => setModal({type: 'report', asset})}
-          />
-        )}
-      </div>
+      <div className="mt-6 w-full">{assetsContent}</div>
 
       {filteredAssets.length > 0 && !loading && !serverError && (
         <Pagination

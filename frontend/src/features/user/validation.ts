@@ -17,14 +17,14 @@ export function createUserValidationSchema(t: TFunction) {
       .min(1, t('users.validation.surname.required'))
       .min(3, t('users.validation.surname.min'))
       .max(100, t('users.validation.surname.max'))
-      .regex(/^[\p{L}]+(?:[ -][\p{L}]+)*$/u, t('users.validation.surname.pattern')),
+      .regex(/^\p{L}+(?:[ -]\p{L}+)*$/u, t('users.validation.surname.pattern')),
     name: z
       .string()
       .trim()
       .min(1, t('users.validation.name.required'))
       .min(3, t('users.validation.name.min'))
       .max(100, t('users.validation.name.max'))
-      .regex(/^[\p{L}]+(?:[ -][\p{L}]+)*$/u, t('users.validation.name.pattern')),
+      .regex(/^\p{L}+(?:[ -]\p{L}+)*$/u, t('users.validation.name.pattern')),
     email: z
       .email(t('users.validation.email.invalid'))
       .max(254, t('users.validation.email.max')),
