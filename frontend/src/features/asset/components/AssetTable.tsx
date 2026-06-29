@@ -5,7 +5,6 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
-// import  BarChartIcon from '@mui/icons-material/BarChart';
 
 // Components
 import { Table, type TableColumn } from '../../../components/ui/Table';

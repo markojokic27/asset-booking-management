@@ -2,7 +2,6 @@
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-// import BarChartIcon from '@mui/icons-material/BarChart';
 import CalendarTodaySharpIcon from '@mui/icons-material/CalendarTodaySharp';
 import { useTranslation } from 'react-i18next';
 

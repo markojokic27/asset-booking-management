@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 
@@ -33,6 +34,18 @@ export function PendingApprovalDetailsModal({
   actionError = null,
 }: Props) {
   const { t } = useTranslation();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (booking) {
+      if (!dialog.open) dialog.showModal();
+    } else if (dialog.open) {
+      dialog.close();
+    }
+  }, [booking]);
 
   if (!booking) return null;
 
@@ -44,11 +57,14 @@ export function PendingApprovalDetailsModal({
     | 'bookings.status.completed';
 
   return (
-    <div
-      className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6"
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
+      className="fixed inset-0 z-50 m-0 h-full max-h-full w-full max-w-full overflow-y-auto border-0 bg-transparent p-4 backdrop:bg-transparent sm:p-6"
       aria-label={t('approvals.modal.ariaLabel', { id: booking.id })}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
     >
       <button
         type="button"
@@ -219,6 +235,6 @@ export function PendingApprovalDetailsModal({
           </div>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

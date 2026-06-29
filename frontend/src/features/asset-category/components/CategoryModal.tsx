@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import { Modal } from '../../../components/ui/Modal';
 import { IconButton } from '../../../components/ui/IconButton';
-import type { AssetCategoryDto } from '../types';
+import type { AssetCategoryDto, BookingPeriod } from '../types';
 import { CATEGORY_ICON_DEFAULT_SRC, getCategoryIconSrc } from '../utils/categoryIcon';
 
 export type CategoryModalProps = {
@@ -17,14 +17,14 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
 
   if (!isOpen || !category) return null;
 
-  const bookingPeriodLabel =
-    category.bookingPeriod === 'HOUR'
-      ? t('assetCategories.bookingPeriod.hour')
-      : category.bookingPeriod === 'DAY'
-        ? t('assetCategories.bookingPeriod.day')
-        : category.bookingPeriod === 'WEEK'
-          ? t('assetCategories.bookingPeriod.week')
-          : t('assetCategories.bookingPeriod.month');
+  const bookingPeriodLabelKeys = {
+    HOUR: 'assetCategories.bookingPeriod.hour',
+    DAY: 'assetCategories.bookingPeriod.day',
+    WEEK: 'assetCategories.bookingPeriod.week',
+    MONTH: 'assetCategories.bookingPeriod.month',
+  } as const satisfies Record<BookingPeriod, string>;
+
+  const bookingPeriodLabel = t(bookingPeriodLabelKeys[category.bookingPeriod]);
 
   return (
     <Modal

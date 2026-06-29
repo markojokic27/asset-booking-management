@@ -88,6 +88,15 @@ export function PendingApprovalsTable({
     [t, onApprove, onReject, processingId]
   );
 
+  let emptyMessage: string;
+  if (isLoading) {
+    emptyMessage = t('approvals.loading');
+  } else if (error) {
+    emptyMessage = error;
+  } else {
+    emptyMessage = t('approvals.empty');
+  }
+
   return (
     <>
       <Table
@@ -96,13 +105,7 @@ export function PendingApprovalsTable({
         getRowKey={(booking) => String(booking.id)}
         className="w-full"
         onRowClick={(booking) => onOpenBooking(booking.id)}
-        emptyMessage={
-          isLoading
-            ? t('approvals.loading')
-            : error
-              ? error
-              : t('approvals.empty')
-        }
+        emptyMessage={emptyMessage}
       />
 
       <PendingApprovalDetailsModal

@@ -1,5 +1,5 @@
 import { Table, type TableColumn } from '../../../components/ui/Table'
-import type { AssetCategoryDto } from '../types'
+import type { AssetCategoryDto, BookingPeriod } from '../types'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { useTranslation } from 'react-i18next'
@@ -75,16 +75,14 @@ export const AssetCategoriesTable = ({
             accessor: 'bookingPeriod'
             ,
             render: (category) => {
-                const label =
-                    category.bookingPeriod === 'HOUR'
-                        ? t('assetCategories.bookingPeriod.hour')
-                        : category.bookingPeriod === 'DAY'
-                            ? t('assetCategories.bookingPeriod.day')
-                            : category.bookingPeriod === 'WEEK'
-                                ? t('assetCategories.bookingPeriod.week')
-                                : t('assetCategories.bookingPeriod.month')
+                const bookingPeriodLabelKeys = {
+                    HOUR: 'assetCategories.bookingPeriod.hour',
+                    DAY: 'assetCategories.bookingPeriod.day',
+                    WEEK: 'assetCategories.bookingPeriod.week',
+                    MONTH: 'assetCategories.bookingPeriod.month',
+                } as const satisfies Record<BookingPeriod, string>
 
-                return <span>{label}</span>
+                return <span>{t(bookingPeriodLabelKeys[category.bookingPeriod])}</span>
             }
         },
         {

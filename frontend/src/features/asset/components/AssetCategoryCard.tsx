@@ -27,6 +27,22 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
   const { t } = useTranslation();
   const isPlainCard = !showBackgroundImage;
 
+  let variantClassName: string;
+  if (isPlainCard) {
+    variantClassName = twMerge(
+      'bg-(--color-surface) text-black dark:text-white',
+      !isSelected && 'hover:-translate-y-0.5 hover:bg-(--color-bg)'
+    );
+  } else {
+    const imageCardStateClassName = isSelected
+      ? 'bg-(--color-surface-hover)'
+      : 'hover:-translate-y-0.5 hover:bg-(--color-surface-hover)';
+    variantClassName = twMerge(
+      'bg-(--color-table-surface) text-white dark:text-(--color-text)',
+      imageCardStateClassName
+    );
+  }
+
   return (
     <button 
       type="button"
@@ -34,17 +50,7 @@ export const AssetCategoryCard: React.FC<AssetCategoryCardProps> = ({
       data-testid={dataTestId ?? `category-card-${title.toLowerCase()}`}
       className={twMerge(
         'group min-h-24 cursor-pointer overflow-hidden rounded-lg border border-(--color-table-border) text-left shadow-(--shadow-card) transition duration-100',
-        isPlainCard
-          ? twMerge(
-              'bg-(--color-surface) text-black dark:text-white',
-              !isSelected && 'hover:-translate-y-0.5 hover:bg-(--color-bg)'
-            )
-          : twMerge(
-              'bg-(--color-table-surface) text-white dark:text-(--color-text)',
-              isSelected
-                ? 'bg-(--color-surface-hover)'
-                : 'hover:-translate-y-0.5 hover:bg-(--color-surface-hover)'
-            ),
+        variantClassName,
         className
       )}
     >

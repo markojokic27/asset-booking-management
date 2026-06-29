@@ -19,16 +19,31 @@ export const AssetModal: React.FC<AssetModalProps> = ({
   asset,
 }) => {
   const { t } = useTranslation();
+  const dialogRef = React.useRef<HTMLDialogElement>(null);
+
+  React.useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen && asset) {
+      if (!dialog.open) dialog.showModal();
+    } else if (dialog.open) {
+      dialog.close();
+    }
+  }, [isOpen, asset]);
 
   if (!isOpen || !asset) return null;
 
   return (
-    <div
+    <dialog
+      ref={dialogRef}
       data-testid="asset-view-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-6"
-      role="dialog"
-      aria-modal="true"
+      className="fixed inset-0 z-50 m-0 flex h-full max-h-full w-full max-w-full items-center justify-center border-0 bg-transparent p-6 backdrop:bg-transparent"
       aria-label={t('assets.modals.view.aria')}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
     >
       <button
         type="button"
@@ -107,6 +122,6 @@ export const AssetModal: React.FC<AssetModalProps> = ({
         <div className="mx-8 h-px bg-(--color-table-border)" />
         <div className="px-8 py-5" />
       </div>
-    </div>
+    </dialog>
   );
 };
