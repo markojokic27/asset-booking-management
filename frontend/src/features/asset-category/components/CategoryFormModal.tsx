@@ -44,6 +44,36 @@ function getFieldsKey(isCreate: boolean) {
     : 'assetCategories.modals.edit.fields';
 }
 
+function getModalConfig(isCreate: boolean) {
+  return isCreate
+    ? ({
+        containerTestId: 'category-modal',
+        closeTestId: 'category-close-button',
+        nameTestId: 'category-name',
+        nameId: 'asset-category-name',
+        bookingTestId: 'category-booking-period',
+        descriptionTestId: 'category-description',
+        descriptionId: 'asset-category-description',
+        approvalTestId: 'category-approval-checkbox',
+        approvalId: 'asset-category-approval',
+        ariaLabelKey: 'assetCategories.modals.add.ariaLabel',
+        titleKey: 'assetCategories.modals.add.title',
+      } as const)
+    : ({
+        containerTestId: 'assetCategory-modal',
+        closeTestId: 'category-close-modal',
+        nameTestId: 'edit-category-name',
+        nameId: 'edit-category-name',
+        bookingTestId: 'edit-category-booking-period',
+        descriptionTestId: 'edit-category-description',
+        descriptionId: 'edit-category-description',
+        approvalTestId: 'edit-category-approval-checkbox',
+        approvalId: 'edit-category-approval',
+        ariaLabelKey: 'assetCategories.modals.edit.ariaLabel',
+        titleKey: 'assetCategories.modals.edit.title',
+      } as const);
+}
+
 export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
   isOpen,
   mode,
@@ -55,6 +85,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
   const { t } = useTranslation();
   const isCreate = mode === 'create';
   const fieldsKey = getFieldsKey(isCreate);
+  const config = getModalConfig(isCreate);
 
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -142,21 +173,13 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      ariaLabel={
-        isCreate
-          ? t('assetCategories.modals.add.ariaLabel')
-          : t('assetCategories.modals.edit.ariaLabel')
-      }
+      ariaLabel={t(config.ariaLabelKey)}
       title={
-        <h2 className="text-2xl font-bold">
-          {isCreate
-            ? t('assetCategories.modals.add.title')
-            : t('assetCategories.modals.edit.title')}
-        </h2>
+        <h2 className="text-2xl font-bold">{t(config.titleKey)}</h2>
       }
       headerRight={
         <IconButton
-          data-testid={isCreate ? 'category-close-button' : 'category-close-modal'}
+          data-testid={config.closeTestId}
           onClick={onClose}
           aria-label={t('assetCategories.modals.common.closeAria')}
         >
@@ -186,7 +209,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
         noValidate
       >
         <div
-          data-testid={isCreate ? 'category-modal' : 'assetCategory-modal'}
+          data-testid={config.containerTestId}
           className="flex flex-col gap-5"
         >
           {submitError && (
@@ -197,8 +220,8 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <FormInput
-              data-testid={isCreate ? 'category-name' : 'edit-category-name'}
-              id={isCreate ? 'asset-category-name' : 'edit-category-name'}
+              data-testid={config.nameTestId}
+              id={config.nameId}
               label={t(`${fieldsKey}.name`)}
               error={!!errors.name}
               errorMessage={errors.name?.message}
@@ -208,9 +231,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
             />
 
             <FormDropdown
-              data-testid={
-                isCreate ? 'category-booking-period' : 'edit-category-booking-period'
-              }
+              data-testid={config.bookingTestId}
               label={t(`${fieldsKey}.bookingPeriod`)}
               options={bookingPeriodOptions}
               error={!!errors.bookingPeriod}
@@ -222,8 +243,8 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
           </div>
 
           <FormInput
-            data-testid={isCreate ? 'category-description' : 'edit-category-description'}
-            id={isCreate ? 'asset-category-description' : 'edit-category-description'}
+            data-testid={config.descriptionTestId}
+            id={config.descriptionId}
             label={t(`${fieldsKey}.description`)}
             error={!!errors.description}
             errorMessage={errors.description?.message}
@@ -234,10 +255,8 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
             className="m-0 items-start gap-2"
             control={
               <Checkbox
-                data-testid={
-                  isCreate ? 'category-approval-checkbox' : 'edit-category-approval-checkbox'
-                }
-                id={isCreate ? 'asset-category-approval' : 'edit-category-approval'}
+                data-testid={config.approvalTestId}
+                id={config.approvalId}
                 checked={approvalChecked}
                 onChange={(e) =>
                   setValue('approval', e.target.checked, { shouldDirty: true })
