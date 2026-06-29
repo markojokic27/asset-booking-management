@@ -13,6 +13,7 @@ import com.example.assetbookingmanagement.features.booking.data.BookingListRespo
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
 import com.example.assetbookingmanagement.features.booking.data.CategorySummary
+import com.example.assetbookingmanagement.features.booking.data.RecurringBookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.UserSummary
 import com.example.assetbookingmanagement.features.user.data.ChangePasswordRequest
 import com.example.assetbookingmanagement.features.user.data.UserApi
@@ -361,6 +362,10 @@ class HomeViewModelTest {
 
         override suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
             error("createBooking is not used in HomeViewModel tests.")
+        }
+
+        override suspend fun createRecurringBooking(request: RecurringBookingCreateRequest): List<BookingResponse> {
+            error("createRecurringBooking is not used in HomeViewModel tests.")
         }
 
         override suspend fun approveBooking(bookingId: Long): BookingResponse {

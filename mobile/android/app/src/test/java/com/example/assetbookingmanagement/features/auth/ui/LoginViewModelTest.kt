@@ -1,5 +1,6 @@
 package com.example.assetbookingmanagement.features.auth.ui
 
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.auth.data.AuthApi
 import com.example.assetbookingmanagement.features.auth.data.AuthRepository
 import com.example.assetbookingmanagement.features.auth.data.AuthSession
@@ -47,8 +48,8 @@ class LoginViewModelTest {
         viewModel.login(username = "", password = "")
 
         assertEquals(
-            "Username and password are required.",
-            viewModel.uiState.value.errorMessage
+            R.string.login_error_required,
+            viewModel.uiState.value.errorMessageRes
         )
         assertFalse(viewModel.uiState.value.isLoading)
         assertFalse(viewModel.uiState.value.isLoggedIn)
@@ -72,7 +73,7 @@ class LoginViewModelTest {
         assertEquals(listOf(LoginRequest(username, password)), fakeAuthApi.loginRequests)
         assertFalse(viewModel.uiState.value.isLoading)
         assertEquals(true, viewModel.uiState.value.isLoggedIn)
-        assertNull(viewModel.uiState.value.errorMessage)
+        assertNull(viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -90,7 +91,7 @@ class LoginViewModelTest {
         assertEquals(listOf(LoginRequest(username, password)), fakeAuthApi.loginRequests)
         assertFalse(viewModel.uiState.value.isLoading)
         assertFalse(viewModel.uiState.value.isLoggedIn)
-        assertEquals("Wrong username or password.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.login_error_invalid_credentials, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -108,7 +109,7 @@ class LoginViewModelTest {
         assertEquals(listOf(LoginRequest(username, password)), fakeAuthApi.loginRequests)
         assertFalse(viewModel.uiState.value.isLoading)
         assertFalse(viewModel.uiState.value.isLoggedIn)
-        assertEquals("Login failed. Please try again.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.login_error_server, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -126,7 +127,7 @@ class LoginViewModelTest {
         assertEquals(listOf(LoginRequest(username, password)), fakeAuthApi.loginRequests)
         assertFalse(viewModel.uiState.value.isLoading)
         assertFalse(viewModel.uiState.value.isLoggedIn)
-        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageRes)
     }
 
     private fun buildAuthRepository(

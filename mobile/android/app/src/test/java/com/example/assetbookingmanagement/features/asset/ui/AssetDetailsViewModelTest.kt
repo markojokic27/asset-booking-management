@@ -1,5 +1,6 @@
 package com.example.assetbookingmanagement.features.asset.ui
 
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.asset.data.AssetApi
 import com.example.assetbookingmanagement.features.asset.data.AssetRepository
 import com.example.assetbookingmanagement.features.asset.data.AssetResponse
@@ -48,7 +49,7 @@ class AssetDetailsViewModelTest {
         assertFalse(viewModel.uiState.value.isLoading)
         assertEquals(fakeAssetApi.assetByIdResponse, viewModel.uiState.value.asset)
         assertEquals("Laptops", viewModel.uiState.value.categoryName)
-        assertEquals(null, viewModel.uiState.value.errorMessage)
+        assertEquals(null, viewModel.uiState.value.errorMessageResId)
     }
 
     @Test
@@ -67,8 +68,8 @@ class AssetDetailsViewModelTest {
         assertEquals(1, fakeAssetApi.getAssetByIdCalls)
         assertFalse(viewModel.uiState.value.isLoading)
         assertEquals(
-            "You are not authorized to view this asset.",
-            viewModel.uiState.value.errorMessage
+            R.string.asset_error_not_authorized,
+            viewModel.uiState.value.errorMessageResId
         )
     }
 
@@ -85,7 +86,7 @@ class AssetDetailsViewModelTest {
         viewModel.getAssetDetails(assetId = 1)
         advanceUntilIdle()
 
-        assertEquals("Asset not found.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_not_found, viewModel.uiState.value.errorMessageResId)
     }
 
     @Test
@@ -101,7 +102,7 @@ class AssetDetailsViewModelTest {
         viewModel.getAssetDetails(assetId = 1)
         advanceUntilIdle()
 
-        assertEquals("Failed to load asset details.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_load_details_message, viewModel.uiState.value.errorMessageResId)
     }
 
     @Test
@@ -117,7 +118,7 @@ class AssetDetailsViewModelTest {
         viewModel.getAssetDetails(assetId = 1)
         advanceUntilIdle()
 
-        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageResId)
     }
 
     @Test
@@ -138,7 +139,7 @@ class AssetDetailsViewModelTest {
 
         assertEquals(1, fakeAssetApi.getAssetByIdCalls)
         assertEquals(1, fakeCategoryApi.getAssetCategoryByIdCalls)
-        assertEquals("Asset not found.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_not_found, viewModel.uiState.value.errorMessageResId)
     }
 
     private fun buildHttpException(code: Int): HttpException {

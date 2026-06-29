@@ -65,6 +65,20 @@ fun DateTimePicker(
     var showFromDateDialog by rememberSaveable { mutableStateOf(false) }
     var showToDateDialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val fromDateValue = fromDateMillis?.let(::formatLocalizedDate).orEmpty()
+    val toDateValue = toDateMillis?.let(::formatLocalizedDate).orEmpty()
+    val startTimeValue = selectedTimeValue(
+        hasSelectedTime = hasSelectedStartTime,
+        context = context,
+        hour = startHour,
+        minute = startMinute
+    )
+    val endTimeValue = selectedTimeValue(
+        hasSelectedTime = hasSelectedEndTime,
+        context = context,
+        hour = endHour,
+        minute = endMinute
+    )
 
     val startHourOptions = getAvailableHourOptions(
         selectedDateMillis = fromDateMillis,
@@ -76,53 +90,24 @@ fun DateTimePicker(
     )
 
     Column(modifier = modifier.fillMaxWidth()) {
-        if (showTimeInputs) {
-            DateField(
-                dateValue = fromDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-                dateLabel = stringResource(R.string.create_booking_date),
-                dateContentDescription = stringResource(R.string.create_booking_select_date),
-                onDateClick = { showFromDateDialog = true }
-            )
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                DateField(
-                    dateValue = fromDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-                    dateLabel = stringResource(R.string.common_from),
-                    dateContentDescription = stringResource(R.string.create_booking_select_from_date),
-                    onDateClick = { showFromDateDialog = true },
-                    modifier = Modifier.weight(1f)
-                )
-                DateField(
-                    dateValue = toDateMillis?.let { formatLocalizedDate(it) }.orEmpty(),
-                    dateLabel = stringResource(R.string.common_to),
-                    dateContentDescription = stringResource(R.string.create_booking_select_to_date),
-                    onDateClick = { showToDateDialog = true },
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
+        DateSection(
+            showTimeInputs = showTimeInputs,
+            fromDateValue = fromDateValue,
+            toDateValue = toDateValue,
+            onFromDateClick = { showFromDateDialog = true },
+            onToDateClick = { showToDateDialog = true }
+        )
 
         if (showTimeInputs) {
             Spacer(modifier = Modifier.height(16.dp))
             TimeRangeFieldRow(
-                startTimeValue = if (hasSelectedStartTime) {
-                    formatLocalizedTime(context, startHour, startMinute)
-                } else {
-                    ""
-                },
+                startTimeValue = startTimeValue,
                 startTimeLabel = stringResource(R.string.common_from),
                 startTimeContentDescription = stringResource(R.string.create_booking_select_from_time),
                 startOptions = startHourOptions,
                 startDisabledOptions = unavailableHours,
                 onStartTimeSelected = { hour -> onStartTimeSelected(hour, 0) },
-                endTimeValue = if (hasSelectedEndTime) {
-                    formatLocalizedTime(context, endHour, endMinute)
-                } else {
-                    ""
-                },
+                endTimeValue = endTimeValue,
                 endTimeLabel = stringResource(R.string.common_to),
                 endTimeContentDescription = stringResource(R.string.create_booking_select_to_time),
                 endOptions = endHourOptions,
@@ -158,6 +143,58 @@ fun DateTimePicker(
             }
         )
     }
+}
+
+@Composable
+private fun DateSection(
+    showTimeInputs: Boolean,
+    fromDateValue: String,
+    toDateValue: String,
+    onFromDateClick: () -> Unit,
+    onToDateClick: () -> Unit
+) {
+    if (showTimeInputs) {
+        DateField(
+            dateValue = fromDateValue,
+            dateLabel = stringResource(R.string.create_booking_date),
+            dateContentDescription = stringResource(R.string.create_booking_select_date),
+            onDateClick = onFromDateClick
+        )
+        return
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        DateField(
+            dateValue = fromDateValue,
+            dateLabel = stringResource(R.string.common_from),
+            dateContentDescription = stringResource(R.string.create_booking_select_from_date),
+            onDateClick = onFromDateClick,
+            modifier = Modifier.weight(1f)
+        )
+        DateField(
+            dateValue = toDateValue,
+            dateLabel = stringResource(R.string.common_to),
+            dateContentDescription = stringResource(R.string.create_booking_select_to_date),
+            onDateClick = onToDateClick,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+private fun selectedTimeValue(
+    hasSelectedTime: Boolean,
+    context: android.content.Context,
+    hour: Int,
+    minute: Int
+): String {
+    if (!hasSelectedTime) {
+        return ""
+    }
+
+    return formatLocalizedTime(context, hour, minute)
 }
 
 @Composable
