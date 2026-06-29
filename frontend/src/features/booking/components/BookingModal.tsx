@@ -9,6 +9,7 @@ import type { UserDto } from '../../user/types';
 
 // Utilis
 import { getBookingMessage } from '../utilis/getBookingMessage';
+import { useTranslation } from 'react-i18next';
 
 type BookingModalProps = {
   open: boolean;
@@ -35,8 +36,7 @@ export function BookingModal({
 }: BookingModalProps) {
   if (!open || !asset) return null;
 
-  console.log('DDD', asset);
-
+  const { t, i18n } = useTranslation();
   return (
     <Modal
       isOpen={true}
@@ -50,6 +50,8 @@ export function BookingModal({
           needApproval,
           user,
           variant,
+          t,
+          language: i18n.language,
         })}
       </div>
       <div className="mt-10 flex justify-end gap-4">

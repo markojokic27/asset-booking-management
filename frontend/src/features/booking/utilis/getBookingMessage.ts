@@ -1,5 +1,5 @@
 // External packages
-import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 // Types
 import type { UserDto } from '../../user/types';
@@ -11,18 +11,21 @@ export function getBookingMessage({
   needApproval,
   user,
   variant,
+  t,
+  language,
 }: {
   filters: Filters;
   availableRecurringDates: string[];
   needApproval: boolean;
   user: UserDto | null;
   variant: string;
+  t: TFunction;
+  language: string;
 }) {
   let message = '';
-  const { t, i18n } = useTranslation();
 
   const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString(i18n.language, {
+    new Date(date).toLocaleDateString(language, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -42,7 +45,7 @@ export function getBookingMessage({
   if (filters.selectedWeekdays.length > 0) {
     const firstRecurringDate = new Date(availableRecurringDates[0]);
 
-    const monthYear = firstRecurringDate.toLocaleDateString(i18n.language, {
+    const monthYear = firstRecurringDate.toLocaleDateString(language, {
       month: 'long',
       year: 'numeric',
     });
