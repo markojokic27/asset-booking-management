@@ -10,7 +10,6 @@ type Props = {
   onToggleNameSort: () => void;
   onView: (category: AssetCategoryDto) => void;
   onEdit?: (category: AssetCategoryDto) => void;
-  onDelete?: (category: AssetCategoryDto) => void;
 };
 
 export const AssetCategoriesTable = ({

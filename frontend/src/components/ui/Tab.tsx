@@ -17,7 +17,7 @@ export function Tab<T extends string>({
   value,
   onChange,
   className,
-}: TabsProps<T>) {
+}: Readonly<TabsProps<T>>) {
   return (
     <div className={twMerge('flex border-b border-gray-200', className)}>
       {tabs.map((tab) => {

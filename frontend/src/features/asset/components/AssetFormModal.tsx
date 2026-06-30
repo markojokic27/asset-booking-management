@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Form from '@radix-ui/react-form';
 import CloseIcon from '@mui/icons-material/Close';
+import { z } from 'zod';
 
 // Components
 import { Button } from '../../../components/ui/Button';
@@ -140,7 +141,7 @@ export const AssetFormModal = ({
     const result = validationSchema.safeParse(payload);
 
     if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
+      const fieldErrors = z.flattenError(result.error).fieldErrors;
       setErrors({
         name: fieldErrors.name?.[0] || '',
         categoryId: fieldErrors.categoryId?.[0] || '',

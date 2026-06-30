@@ -56,7 +56,7 @@ export function Table<T>({
   rowClassName,
   emptyMessage,
   onRowClick,
-}: TableProps<T>) {
+}: Readonly<TableProps<T>>) {
   const { t } = useTranslation();
   const resolvedEmptyMessage = emptyMessage ?? t('ui.table.emptyMessage');
   return (
