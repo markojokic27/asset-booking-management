@@ -38,7 +38,7 @@ export function MyBookingsTable({
   isCancelling = false,
   cancelError = null,
   onClearCancelError,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const [bookingToCancel, setBookingToCancel] =
     useState<BookingWithRelations | null>(null);

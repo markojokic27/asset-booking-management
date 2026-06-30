@@ -17,7 +17,7 @@ type AssetStatusBadgeProps = {
   status: AssetStatus;
 };
 
-export function AssetStatusBadge({ status }: AssetStatusBadgeProps) {
+export function AssetStatusBadge({ status }: Readonly<AssetStatusBadgeProps>) {
   const { t } = useTranslation();
 
   const label = t(`assets.status.${status}`);

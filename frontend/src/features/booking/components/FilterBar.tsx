@@ -27,7 +27,7 @@ export function FiltersBar({
   showSearch = true,
   variant,
   className,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
 
   const update = (partial: Partial<Filters>) => {

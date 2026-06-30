@@ -32,7 +32,7 @@ export function PendingApprovalDetailsModal({
   onReject,
   processingId = null,
   actionError = null,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const dialogRef = useRef<HTMLDialogElement>(null);
 

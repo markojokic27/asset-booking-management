@@ -40,7 +40,7 @@ export function PendingApprovalsTable({
   onReject,
   processingId = null,
   actionError = null,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
 
   const columns: TableColumn<BookingWithRelations>[] = useMemo(

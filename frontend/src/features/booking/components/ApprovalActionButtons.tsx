@@ -29,7 +29,7 @@ export function ApprovalActionButtons({
   className,
   size = 'md',
   showLabels = false,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const isProcessing = processingId === bookingId;
   const isDisabled = processingId != null;

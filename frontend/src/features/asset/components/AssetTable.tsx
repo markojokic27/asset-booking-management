@@ -38,7 +38,7 @@ export function AssetsTable({
   onDelete,
   onBookings,
   onReport: _onReport,
-}: Props) {
+}: Readonly<Props>) {
   const { t } = useTranslation();
   const nextSortDirKey = nameSortDir === 'asc' ? 'descending' : 'ascending';
 
