@@ -1,17 +1,19 @@
-import { ToastContainer } from 'react-toastify';
+import { ZoomIn } from '@mui/icons-material';
+import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function ToastProvider() {
   return (
     <ToastContainer
       position="bottom-right"
-      autoClose={4000}
+      autoClose={5000}
       hideProgressBar={false}
       newestOnTop
       closeOnClick
       pauseOnHover
       draggable
       theme="colored"
+      transition={Slide}
     />
   );
 }
