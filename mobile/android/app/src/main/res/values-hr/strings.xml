@@ -70,9 +70,14 @@
     <string name="common_category">Kategorija</string>
     <string name="common_value_unavailable">Nije dostupno</string>
     <string name="common_cancel">Odustani</string>
+    <string name="common_back">Natrag</string>
     <string name="common_ok">OK</string>
     <string name="common_save">Spremi</string>
     <string name="common_saving">Spremanje...</string>
+    <string name="qr_scanner_action">Skeniraj QR kod</string>
+    <string name="qr_scanner_error_empty_code">QR kod je prazan.</string>
+    <string name="qr_scanner_cancelled">Skeniranje QR koda je otkazano.</string>
+    <string name="qr_scanner_error_failed">Skeniranje QR koda nije uspjelo.</string>
     <string name="create_booking_tab_choose_date">Odaberi datum</string>
     <string name="create_booking_tab_show_availability">Dostupnost</string>
     <string name="create_booking_date">Datum</string>

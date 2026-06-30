@@ -70,9 +70,14 @@
     <string name="common_category">Category</string>
     <string name="common_value_unavailable">Not available</string>
     <string name="common_cancel">Cancel</string>
+    <string name="common_back">Back</string>
     <string name="common_ok">OK</string>
     <string name="common_save">Save</string>
     <string name="common_saving">Saving...</string>
+    <string name="qr_scanner_action">Scan QR</string>
+    <string name="qr_scanner_error_empty_code">QR code is empty.</string>
+    <string name="qr_scanner_cancelled">QR scan cancelled.</string>
+    <string name="qr_scanner_error_failed">Failed to scan QR code.</string>
     <string name="create_booking_tab_choose_date">Choose date</string>
     <string name="create_booking_tab_show_availability">Show availability</string>
     <string name="create_booking_date">Date</string>

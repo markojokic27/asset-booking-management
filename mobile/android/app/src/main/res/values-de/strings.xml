@@ -70,9 +70,14 @@
     <string name="common_category">Kategorie</string>
     <string name="common_value_unavailable">Nicht verfügbar</string>
     <string name="common_cancel">Abbrechen</string>
+    <string name="common_back">Zurück</string>
     <string name="common_ok">OK</string>
     <string name="common_save">Speichern</string>
     <string name="common_saving">Wird gespeichert…</string>
+    <string name="qr_scanner_action">QR-Code scannen</string>
+    <string name="qr_scanner_error_empty_code">Der QR-Code ist leer.</string>
+    <string name="qr_scanner_cancelled">QR-Code-Scan wurde abgebrochen.</string>
+    <string name="qr_scanner_error_failed">QR-Code konnte nicht gescannt werden.</string>
     <string name="create_booking_tab_choose_date">Datum wählen</string>
     <string name="create_booking_tab_show_availability">Verfügbarkeit anzeigen</string>
     <string name="create_booking_date">Datum</string>

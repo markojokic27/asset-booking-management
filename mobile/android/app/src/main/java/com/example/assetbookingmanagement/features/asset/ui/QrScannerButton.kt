@@ -18,7 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.assetbookingmanagement.R
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
@@ -59,21 +61,33 @@ fun QrScannerButton(
                         if (!scannedValue.isNullOrBlank()) {
                             onQrScanned(scannedValue)
                         } else {
-                            Toast.makeText(context, "QR code is empty.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.qr_scanner_error_empty_code),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         }
                         .addOnCanceledListener {
-                            Toast.makeText(context, "QR scan cancelled.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.qr_scanner_cancelled),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, "Failed to scan QR code.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.qr_scanner_error_failed),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     },
         contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = Icons.Outlined.QrCodeScanner,
-            contentDescription = "Scan QR",
+            contentDescription = stringResource(R.string.qr_scanner_action),
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(30.dp)
         )

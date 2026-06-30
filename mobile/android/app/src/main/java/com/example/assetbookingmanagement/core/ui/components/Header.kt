@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.assetbookingmanagement.R
 
@@ -23,7 +24,6 @@ fun Header(
     title: String,
     showBackArrow: Boolean = false,
     onBackClick: () -> Unit = {},
-    onNotificationClick: () -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -41,7 +41,7 @@ fun Header(
                 IconButton(onClick = onBackClick) {
                     Icon(
                         painter = painterResource(id = R.drawable.arrow_back_24),
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.common_back),
                         tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(20.dp)
                     )
@@ -52,14 +52,6 @@ fun Header(
                 text = title,
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-
-        IconButton(onClick = onNotificationClick) {
-            Icon(
-                painter = painterResource(id = R.drawable.notifications_24),
-                contentDescription = "Notifications",
-                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     }
