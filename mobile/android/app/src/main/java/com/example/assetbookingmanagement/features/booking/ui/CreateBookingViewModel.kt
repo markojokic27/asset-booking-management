@@ -168,10 +168,10 @@ class CreateBookingViewModel @Inject constructor(
 
     fun onRecurringWeekdayToggled(day: Int) {
         _uiState.update { current ->
-            val nextDays = current.selectedWeekdays.toMutableSet().apply {
-                if (!add(day)) {
-                    remove(day)
-                }
+            val nextDays = if (day in current.selectedWeekdays) {
+                current.selectedWeekdays - day
+            } else {
+                current.selectedWeekdays + day
             }
 
             current.copy(

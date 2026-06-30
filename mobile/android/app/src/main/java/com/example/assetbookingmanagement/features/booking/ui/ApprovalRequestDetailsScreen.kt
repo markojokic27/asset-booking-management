@@ -28,15 +28,19 @@ import com.example.assetbookingmanagement.core.ui.components.DetailsSectionCard
 import com.example.assetbookingmanagement.core.ui.components.StatusBadge
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingDisplayText
 
+data class ApprovalRequestDetailsUiModel(
+    val bookingId: Long,
+    val assetName: String,
+    val requesterName: String,
+    val bookingStart: String,
+    val bookingEnd: String,
+    val status: String,
+    val isHourlyBooking: Boolean
+)
+
 @Composable
 fun ApprovalRequestDetailsScreen(
-    bookingId: Long,
-    assetName: String,
-    requesterName: String,
-    bookingStart: String,
-    bookingEnd: String,
-    status: String,
-    isHourlyBooking: Boolean,
+    details: ApprovalRequestDetailsUiModel,
     onApproved: () -> Unit,
     onRejected: () -> Unit,
     viewModel: ApprovalRequestDetailsViewModel = hiltViewModel()
@@ -54,28 +58,36 @@ fun ApprovalRequestDetailsScreen(
     ) {
         DetailsSectionCard(
             title = stringResource(R.string.approvals_details_section_title),
-            heading = assetName.ifBlank {
-                stringResource(R.string.nav_approval_request_details_title, bookingId)
+            heading = details.assetName.ifBlank {
+                stringResource(R.string.nav_approval_request_details_title, details.bookingId)
             }
         ) {
             RequestInfoRow(
                 label = stringResource(R.string.approvals_details_booked_by_label),
-                value = requesterName.ifBlank { unavailableText },
+                value = details.requesterName.ifBlank { unavailableText },
                 showDivider = true
             )
             RequestInfoRow(
                 label = stringResource(R.string.common_from),
-                value = formatLocalizedBookingDisplayText(bookingStart, context, isHourlyBooking),
+                value = formatLocalizedBookingDisplayText(
+                    details.bookingStart,
+                    context,
+                    details.isHourlyBooking
+                ),
                 showDivider = true
             )
             RequestInfoRow(
                 label = stringResource(R.string.common_to),
-                value = formatLocalizedBookingDisplayText(bookingEnd, context, isHourlyBooking),
+                value = formatLocalizedBookingDisplayText(
+                    details.bookingEnd,
+                    context,
+                    details.isHourlyBooking
+                ),
                 showDivider = true
             )
             RequestStatusRow(
                 label = stringResource(R.string.common_status),
-                status = status.ifBlank { unavailableText },
+                status = details.status.ifBlank { unavailableText },
                 showDivider = uiState.errorMessageResId == null
             )
 
@@ -88,7 +100,7 @@ fun ApprovalRequestDetailsScreen(
                 Button(
                     onClick = {
                         viewModel.rejectBooking(
-                            bookingId = bookingId,
+                            bookingId = details.bookingId,
                             onSuccess = onRejected
                         )
                     },
@@ -113,7 +125,7 @@ fun ApprovalRequestDetailsScreen(
                 Button(
                     onClick = {
                         viewModel.approveBooking(
-                            bookingId = bookingId,
+                            bookingId = details.bookingId,
                             onSuccess = onApproved
                         )
                     },

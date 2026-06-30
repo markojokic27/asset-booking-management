@@ -19,6 +19,7 @@ import com.example.assetbookingmanagement.features.asset.ui.AssetDetailsScreen
 import com.example.assetbookingmanagement.features.asset.ui.AssetsScreen
 import com.example.assetbookingmanagement.features.auth.ui.LoginScreen
 import com.example.assetbookingmanagement.features.booking.ui.ApprovalRequestDetailsScreen
+import com.example.assetbookingmanagement.features.booking.ui.ApprovalRequestDetailsUiModel
 import com.example.assetbookingmanagement.features.booking.ui.BookingDetailsScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingSuccessScreen
 import com.example.assetbookingmanagement.features.booking.ui.BookingsScreen
@@ -161,13 +162,15 @@ fun NavGraph(
             ) { backStackEntry ->
                 val bookingId = backStackEntry.arguments?.getLong("bookingId") ?: return@composable
                 ApprovalRequestDetailsScreen(
-                    bookingId = bookingId,
-                    assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
-                    requesterName = backStackEntry.arguments?.getString("requesterName").orEmpty(),
-                    bookingStart = backStackEntry.arguments?.getString("fromDate") ?: "-",
-                    bookingEnd = backStackEntry.arguments?.getString("toDate") ?: "-",
-                    status = backStackEntry.arguments?.getString("status") ?: "-",
-                    isHourlyBooking = backStackEntry.arguments?.getBoolean("isHourlyBooking") ?: false,
+                    details = ApprovalRequestDetailsUiModel(
+                        bookingId = bookingId,
+                        assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
+                        requesterName = backStackEntry.arguments?.getString("requesterName").orEmpty(),
+                        bookingStart = backStackEntry.arguments?.getString("fromDate") ?: "-",
+                        bookingEnd = backStackEntry.arguments?.getString("toDate") ?: "-",
+                        status = backStackEntry.arguments?.getString("status") ?: "-",
+                        isHourlyBooking = backStackEntry.arguments?.getBoolean("isHourlyBooking") ?: false
+                    ),
                     onApproved = {
                         navController.popBackStack()
                     },
