@@ -92,10 +92,10 @@ fun AssetsScreen(
                     AppLoadingState()
                 }
 
-                uiState.errorMessage != null -> {
+                uiState.errorMessageRes != null -> {
                     AppMessageState(
                         title = stringResource(R.string.asset_error_load_assets_title),
-                        message = uiState.errorMessage.orEmpty()
+                        message = stringResource(uiState.errorMessageRes!!)
                     )
                 }
 

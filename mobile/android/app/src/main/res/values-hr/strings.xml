@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Upravljanje rezervacijama</string>
-    <string name="login_title">Prijava</string>
+    <string name="common_login">Prijava</string>
     <string name="common_username">Korisničko ime</string>
     <string name="login_field_password">Lozinka</string>
     <string name="login_placeholder_username">Unesite korisničko ime</string>
     <string name="login_placeholder_password">Unesite lozinku</string>
-    <string name="login_submit">Prijava</string>
     <string name="login_loading">Učitavanje...</string>
     <string name="login_error_required">Korisničko ime i lozinka su obavezni.</string>
     <string name="login_error_invalid_credentials">Pogrešno korisničko ime ili lozinka</string>
@@ -55,6 +54,12 @@
     <string name="asset_filters_title">Filteri</string>
     <string name="asset_filters_close_content_description">Zatvori filtere</string>
     <string name="asset_error_load_assets_title">Učitavanje imovine nije uspjelo</string>
+    <string name="asset_error_assets_not_authorized">Nemate ovlasti za pregled imovine.</string>
+    <string name="asset_error_assets_not_found">Imovina nije pronađena.</string>
+    <string name="asset_error_assets_load_failed">Učitavanje imovine nije uspjelo.</string>
+    <string name="asset_error_categories_not_authorized">Nemate ovlasti za pregled kategorija.</string>
+    <string name="asset_error_categories_not_found">Kategorije nisu pronađene.</string>
+    <string name="asset_error_categories_load_failed">Učitavanje kategorija nije uspjelo.</string>
     <string name="asset_error_load_details_title">Učitavanje detalja imovine nije uspjelo</string>
     <string name="asset_error_load_details_message">Učitavanje detalja imovine nije uspjelo.</string>
     <string name="asset_error_not_authorized">Nemate ovlasti za pregled ove imovine.</string>
@@ -62,7 +67,7 @@
     <string name="asset_empty_no_assets">Imovina nije pronađena.</string>
     <string name="asset_details_location_label">Lokacija</string>
     <string name="asset_details_description_label">Opis</string>
-    <string name="asset_action_book_now">Rezerviraj</string>
+    <string name="common_book">Rezerviraj</string>
     <string name="common_from">Od</string>
     <string name="common_to">Do</string>
     <string name="common_error_missing_logged_in_user">Prijavljeni korisnik nije pronađen.</string>

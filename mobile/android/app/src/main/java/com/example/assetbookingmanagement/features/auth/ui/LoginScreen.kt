@@ -60,7 +60,7 @@ fun LoginScreen(
 
         LoginCard {
             Text(
-                text = stringResource(R.string.login_title),
+                text = stringResource(R.string.common_login),
                 fontSize = if (isLandscape) 24.sp else 32.sp,
                 fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -98,7 +98,7 @@ fun LoginScreen(
                 text = if (uiState.isLoading) {
                     stringResource(R.string.login_loading)
                 } else {
-                    stringResource(R.string.login_submit)
+                    stringResource(R.string.common_login)
                 },
                 enabled = !uiState.isLoading,
                 onClick = { viewModel.login(username, password) }

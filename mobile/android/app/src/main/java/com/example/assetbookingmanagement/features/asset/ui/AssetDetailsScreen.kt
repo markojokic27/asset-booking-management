@@ -103,7 +103,7 @@ fun AssetDetailsScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 AppButton(
-                    text = stringResource(R.string.asset_action_book_now),
+                    text = stringResource(R.string.common_book),
                     iconRes = R.drawable.calendar_today_24,
                     enabled = asset.status == "ACTIVE",
                     onClick = onBookClick

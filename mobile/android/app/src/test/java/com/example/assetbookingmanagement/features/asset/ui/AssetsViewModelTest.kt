@@ -1,5 +1,6 @@
 package com.example.assetbookingmanagement.features.asset.ui
 
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.asset.data.AssetApi
 import com.example.assetbookingmanagement.features.asset.data.AssetListResponse
 import com.example.assetbookingmanagement.features.asset.data.AssetRepository
@@ -61,7 +62,7 @@ class AssetsViewModelTest {
         assertFalse(viewModel.uiState.value.isLoading)
         assertEquals(fakeAssetApi.response.content, viewModel.uiState.value.assets)
         assertEquals(fakeCategoryApi.response, viewModel.uiState.value.categories)
-        assertEquals(null, viewModel.uiState.value.errorMessage)
+        assertEquals(null, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -100,8 +101,8 @@ class AssetsViewModelTest {
         assertEquals(1, fakeAssetApi.getAssetsCalls)
         assertFalse(viewModel.uiState.value.isLoading)
         assertEquals(
-            "You aren't authorized to view assets.",
-            viewModel.uiState.value.errorMessage
+            R.string.asset_error_assets_not_authorized,
+            viewModel.uiState.value.errorMessageRes
         )
     }
 
@@ -116,7 +117,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Assets not found.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_assets_not_found, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -130,7 +131,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Failed to load assets.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_assets_load_failed, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -144,7 +145,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -160,8 +161,8 @@ class AssetsViewModelTest {
 
         assertEquals(1, fakeCategoryApi.getCategoriesCalls)
         assertEquals(
-            "You aren't authorized to view categories.",
-            viewModel.uiState.value.errorMessage
+            R.string.asset_error_categories_not_authorized,
+            viewModel.uiState.value.errorMessageRes
         )
     }
 
@@ -176,7 +177,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Categories not found.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_categories_not_found, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -190,7 +191,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Failed to load categories.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.asset_error_categories_load_failed, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -204,7 +205,7 @@ class AssetsViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Unable to connect to the server. Please try again.", viewModel.uiState.value.errorMessage)
+        assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageRes)
     }
 
     private fun buildViewModel(

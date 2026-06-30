@@ -1,7 +1,9 @@
 package com.example.assetbookingmanagement.features.asset.ui
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryRepository
 import com.example.assetbookingmanagement.features.assetcategory.data.AssetCategoryResponse
 import com.example.assetbookingmanagement.features.asset.data.AssetResponse
@@ -22,7 +24,7 @@ data class AssetsUiState(
     val categories: List<AssetCategoryResponse> = emptyList(),
     val selectedCategoryIds: Set<Long> = emptySet(),
     val searchText: String = "",
-    val errorMessage: String? = null
+    @param:StringRes val errorMessageRes: Int? = null
 ){
     val filteredAssets: List<AssetResponse>
         get() = assets.filter { asset ->
@@ -70,7 +72,7 @@ class AssetsViewModel @Inject constructor(
     fun getAssets() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(isLoading = true, errorMessage = null)
+                it.copy(isLoading = true, errorMessageRes = null)
             }
 
             try {
@@ -86,10 +88,10 @@ class AssetsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You aren't authorized to view assets."
-                            404 -> "Assets not found."
-                            else -> "Failed to load assets."
+                        errorMessageRes = when (error.code()) {
+                            401, 403 -> R.string.asset_error_assets_not_authorized
+                            404 -> R.string.asset_error_assets_not_found
+                            else -> R.string.asset_error_assets_load_failed
                         }
                     )
                 }
@@ -97,7 +99,7 @@ class AssetsViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = "Unable to connect to the server. Please try again."
+                        errorMessageRes = R.string.login_error_server_unreachable
                     )
                 }
             }
@@ -114,16 +116,16 @@ class AssetsViewModel @Inject constructor(
             } catch (error: HttpException) {
                 _uiState.update {
                     it.copy(
-                        errorMessage = when (error.code()) {
-                            401, 403 -> "You aren't authorized to view categories."
-                            404 -> "Categories not found."
-                            else -> "Failed to load categories."
+                        errorMessageRes = when (error.code()) {
+                            401, 403 -> R.string.asset_error_categories_not_authorized
+                            404 -> R.string.asset_error_categories_not_found
+                            else -> R.string.asset_error_categories_load_failed
                         }
                     )
                 }
             } catch (_: IOException) {
                 _uiState.update {
-                    it.copy(errorMessage = "Unable to connect to the server. Please try again.")
+                    it.copy(errorMessageRes = R.string.login_error_server_unreachable)
                 }
             }
         }
