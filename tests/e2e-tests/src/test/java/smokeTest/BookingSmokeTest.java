@@ -18,26 +18,29 @@ public class BookingSmokeTest extends BaseLogin {
 
     @Test
     public void successfulBookingLaptopAddsEventToCalendar() {
-        bookingPage.clickParkingCategory();
+        bookingPage.clickLaptopCategory();
         bookingPage.clickBookButton();
+        bookingPage.enterFromDate(CommonConstants.SMOKE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.enterToDate(CommonConstants.SMOKE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_TO);
         bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
 
     @Test
     public void successfulBookingItEquipmentAddsEventToCalendar() {
-        bookingPage.clickitEquipmentCategory();
+        bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
+        bookingPage.enterFromDate(CommonConstants.SMOKE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
+        bookingPage.enterToDate(CommonConstants.SMOKE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_TO);
         bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
 
@@ -56,6 +59,7 @@ public class BookingSmokeTest extends BaseLogin {
 
     @Test
     public void parkingMapModalShowsLevelMinus1ByDefault() {
+        bookingPage.clickParkingCategory();
         bookingPage.clickParkingMapButton();
         assertTrue(isElementVisible(bookingPage.floorLevelMinus1Active));
     }
@@ -63,7 +67,7 @@ public class BookingSmokeTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
@@ -71,5 +75,17 @@ public class BookingSmokeTest extends BaseLogin {
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
+    }
+
+    @Test
+    public void successfulBookAssetButtonIsVisibleAfterSelectingRecurringDays() {
+        bookingPage.clickParkingCategory();
+        bookingPage.clickBookButton();
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCheckBoxDays();
+        bookingPage.selectAllRecurringDays();
+        bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
+        assertTrue(bookingPage.isCalendarVisible());
     }
 }

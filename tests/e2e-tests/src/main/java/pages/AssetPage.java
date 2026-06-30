@@ -26,8 +26,7 @@ public class AssetPage extends CommonMethods {
 
     //Report asset
     public By assetReportOpenModal = By.cssSelector("[data-testid='report-asset-button']");
-    public By assetReportCloseModal = By.cssSelector("[data-testid='close-view-modal']");
-
+    public By assetReportCloseModal = By.cssSelector("button[aria-label='Close modal']");
     // Delete asset
     public By asseDeleteOpenModal = By.cssSelector("[data-testid='delete-asset-button']");
     public By cancelDeleteButton = By.cssSelector("[data-testid='cancel-delete-button']");

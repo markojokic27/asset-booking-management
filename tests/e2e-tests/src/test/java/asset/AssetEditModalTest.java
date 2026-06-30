@@ -68,7 +68,7 @@ public class AssetEditModalTest extends BaseLogin {
     @Test
     void assetEditModalWithAllEmptyFields() {
         assetPage.editAsset(
-                "",
+                CommonConstants.VALID_STATUS,
                 CommonConstants.CATEGORY,
                 "",
                 "",

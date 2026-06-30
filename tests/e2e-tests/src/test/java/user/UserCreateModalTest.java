@@ -37,7 +37,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -56,7 +55,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -73,7 +71,6 @@ public class UserCreateModalTest extends BaseLogin {
                 "",
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -90,7 +87,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 "",
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -107,7 +103,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 "",
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -124,7 +119,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 "",
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -141,7 +135,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 "",
                 CommonConstants.VALID_NOTES
@@ -158,7 +151,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 ""
@@ -175,7 +167,6 @@ public class UserCreateModalTest extends BaseLogin {
                 "",
                 "",
                 "",
-                CommonConstants.VALID_ID,
                 "",
                 "",
                 ""
@@ -194,7 +185,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.INVALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -211,7 +201,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -228,7 +217,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.INVALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -245,7 +233,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.INVALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -262,7 +249,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.INVALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -282,7 +268,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.LONG_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -299,7 +284,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -316,7 +300,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.LONG_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -333,7 +316,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.LONG_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -350,7 +332,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.LONG_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -367,7 +348,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.LONG_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -384,7 +364,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.LONG_NOTES
@@ -404,7 +383,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.SHORT_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -421,7 +399,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -438,7 +415,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.SHORT_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES
@@ -455,7 +431,6 @@ public class UserCreateModalTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.SHORT_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES

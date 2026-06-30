@@ -3,17 +3,53 @@ package baselogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
 import factory.PageAndHandlerFactory;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.testng.annotations.*;
 
 import static org.testng.Assert.assertTrue;
 
 public class BaseLogin extends PageAndHandlerFactory {
 
+    @BeforeSuite
+    public void resetDatabase() {
+        System.out.println(">>> STARTING DATABASE RESET <<<");
+        try {
+            Dotenv dotenv = Dotenv.configure()
+                    .directory("/home/andelmus/asset-booking-management")
+                    .filename(".env")
+                    .ignoreIfMissing()
+                    .load();
+
+            String user = dotenv.get("DB_USER");
+            String db = dotenv.get("DB_NAME");
+            String password = dotenv.get("DB_PASSWORD");
+            String dumpFile = dotenv.get("DB_DUMP_FILE", "initial_state.sql");
+            java.io.File file = new java.io.File(dumpFile);
+
+            ProcessBuilder pb = new ProcessBuilder("docker", "exec", "-i", "postgres-db",
+                    "psql", "-q", "-U", user, "-d", db);
+            pb.redirectInput(ProcessBuilder.Redirect.from(new java.io.File(dumpFile)));
+            pb.environment().put("PGPASSWORD", password);
+            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+
+            System.out.println("Resetting database, please wait...");
+            Process process = pb.start();
+            boolean finished = process.waitFor(30, java.util.concurrent.TimeUnit.SECONDS);
+            if (!finished) {
+                process.destroyForcibly();
+                System.err.println("Database reset timed out!");
+            } else {
+                System.out.println("Database reset done!");
+            }
+        } catch (Exception e) {
+            System.err.println("Database reset failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     @BeforeClass
     public void setUpBeforeTestClass() {
-
         assertTrue(openBrowser());
         setupPagesAndHandlers();
     }
@@ -23,10 +59,8 @@ public class BaseLogin extends PageAndHandlerFactory {
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.LOGIN_URL_EXTENSION);
     }
 
-
     @AfterClass
     public void tearDownAfterTestClass() {
-
         closeBrowser();
     }
 

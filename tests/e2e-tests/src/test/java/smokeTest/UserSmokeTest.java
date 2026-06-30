@@ -30,7 +30,6 @@ public class UserSmokeTest extends BaseLogin {
                 CommonConstants.VALID_SURNAME,
                 CommonConstants.VALID_USERNAME,
                 CommonConstants.VALID_PASSWORD,
-                CommonConstants.VALID_ID,
                 CommonConstants.VALID_EMAIL,
                 CommonConstants.VALID_MANAGER_EMAIL,
                 CommonConstants.VALID_NOTES

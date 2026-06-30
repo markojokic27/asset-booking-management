@@ -2,7 +2,9 @@ package pages;
 
 import commonmethods.CommonMethods;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class BookingPage extends CommonMethods {
 
     // Book button on asset page
     public By bookAssetButton = By.cssSelector("[data-testid='book-asset-button']");
+    public By bookNowButton = By.cssSelector("[data-testid='book-now-button']");
+    public By cancelBookButton = By.cssSelector("[role='dialog'] [data-testid='cancel-button']");
 
     // Calendar
     public By calendar = By.cssSelector(".fc-dayGridMonth-view");
@@ -32,6 +36,8 @@ public class BookingPage extends CommonMethods {
     public By calendarTitle = By.cssSelector(".fc-toolbar-title");
 
     public By itEquipmentCategoryCard = By.cssSelector("[data-testid='category-card-it equipment']");
+    public By laptopCategoryCard = By.cssSelector("[data-testid='category-card-laptop']");
+
 
     // Parking map
     public By parkingMapButton = By.cssSelector("[data-testid='parking-map-button']");
@@ -45,17 +51,6 @@ public class BookingPage extends CommonMethods {
     public By parkingSpotStatus = By.cssSelector("[data-testid='parking-spot-status']");
     public By parkingMapDateInput = By.cssSelector("input[type='date']");
     public By spotPopoverBookButton = By.cssSelector("[data-testid='spot-book-button']");
-    public By spotPopoverCloseButton = By.cssSelector("[data-testid='spot-popover-close-button']");
-    public By spotPopoverBackdrop = By.cssSelector("[data-testid='spot-popover-backdrop']");
-
-    public void closeSpotPopover() {
-        if (isElementVisible(spotPopoverBackdrop)) {
-            clickOnElement(spotPopoverBackdrop);
-        } else if (isElementVisible(spotPopoverCloseButton)) {
-            clickOnElement(spotPopoverCloseButton);
-        }
-    }
-
     public void clickSpotBookButton() {
         clickOnElement(spotPopoverBookButton);
     }
@@ -64,8 +59,121 @@ public class BookingPage extends CommonMethods {
         inputDate(parkingMapDateInput, date);
     }
 
+    // Parking filter
+    private By calendarCellLocator(String dateStr) {
+        return By.cssSelector("[data-date='" + dateStr + "']");
+    }
+
+    public void clickBookButton() {
+        clickOnElement(bookButton);
+        isElementVisible(bookAssetButton);
+    }
+
+    public void searchAssets(String keyword) {
+        typeInElement(searchField, keyword);
+    }
+
+    public void clickResetFilters() {
+        WebElement element = driver.findElement(resetFiltersButton);
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
+    }
+
+    // Filter
+    public void enterFromDate(String date) {
+        inputDate(fromDateInput, date);
+    }
+
+    public void enterToDate(String date) {
+        inputDate(toDateInput, date);
+    }
+
+    // Calendar
+    public boolean isCalendarVisible() {
+        return isElementVisible(calendar);
+    }
+
+    public void clickCalendarDate(String dateStr) {
+        WebElement element = driver.findElement(calendarCellLocator(dateStr));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
+    }
+
+    public boolean isCalendarCellSelected(String dateStr) {
+        return elementHasClass(calendarCellLocator(dateStr), "ring-2");
+    }
+
+    public void clickNextMonth() {
+        WebElement element = driver.findElement(calendarNext);
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
+    }
+
+    public void clickPrevMonth() {
+        clickOnElement(calendarPrev);
+    }
+
+    // Book asset button
+    public boolean isBookAssetButtonEnabled() {
+        return isElementEnabled(bookAssetButton);
+    }
+
+    // Meeting room
+    public void clickItEquipmentCategory() {
+        clickOnElement(itEquipmentCategoryCard);
+    }
+
+    public void clickLaptopCategory (){clickOnElement(laptopCategoryCard);}
+
+    // Parking
+    public void clickParkingCategory() {
+        isElementVisible(categoryParkingCard);
+        clickOnElement(categoryParkingCard);
+    }
+
+    public void clickParkingMapButton() {
+        clickOnElement(parkingMapButton);
+    }
+
+    public void closeParkingMapModal() {
+        clickOnElement(parkingMapCloseButton);
+    }
+
+    public void clickFloorLevel(String level) {
+        clickOnElement(By.cssSelector("[data-testid='level-button-" + level + "']"));
+    }
+
+    public void clickBookButtonForInactiveAsset() {
+        clickOnElement(By.xpath("//td[normalize-space()='Inactive']/following-sibling::td//button"));
+    }
+
+    public void selectAllRecurringDays() {
+        getDriver().findElements(checkBoxDays).forEach(BookingPage::jsClick);
+
+
+    }
+
     public void clickParkingSpot(int spotNumber) {
         clickOnElement(By.cssSelector("[data-testid='parking-spot-" + spotNumber + "']"));
+    }
+
+    public void clickCheckBoxDays() {
+        WebElement element = driver.findElement(checkBoxDays);
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
+    }
+    public void clickCancelBookButton() {
+        List<WebElement> buttons = driver.findElements(cancelBookButton);
+        for (WebElement btn : buttons) {
+            if (btn.isDisplayed()) {
+                jsClick(btn);
+                return;
+            }
+        }
     }
 
     public int getFirstAvailableParkingSpot() {
@@ -88,97 +196,19 @@ public class BookingPage extends CommonMethods {
         throw new RuntimeException("Nema slobodnih parking spotova za odabrani datum!");
     }
 
-    // Parking filter
-    private By calendarCellLocator(String dateStr) {
-        return By.cssSelector("[data-date='" + dateStr + "']");
-    }
-
-    public void clickBookButton() {
-        clickOnElement(bookButton);
-    }
-
     public void clickBookAssetButton() {
-        clickOnElement(bookAssetButton);
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(bookAssetButton));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
     }
 
-    public void searchAssets(String keyword) {
-        typeInElement(searchField, keyword);
+    public void clickBookNowButton() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(bookNowButton));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
     }
 
-    public void clickResetFilters() {
-        clickOnElement(resetFiltersButton);
-    }
 
-    // Filter
-    public void enterFromDate(String date) {
-        inputDate(fromDateInput, date);
-    }
-
-    public void enterToDate(String date) {
-        inputDate(toDateInput, date);
-    }
-
-    public String getFromDateValue() {
-        return getDriver().findElement(fromDateInput).getAttribute("value");
-    }
-
-    // Calendar
-    public boolean isCalendarVisible() {
-        return isElementVisible(calendar);
-    }
-
-    public void clickCalendarDate(String dateStr) {
-        clickOnElement(calendarCellLocator(dateStr));
-    }
-
-    public boolean isCalendarCellSelected(String dateStr) {
-        return elementHasClass(calendarCellLocator(dateStr), "ring-2");
-    }
-
-    public void clickNextMonth() {
-        clickOnElement(calendarNext);
-    }
-
-    public void clickPrevMonth() {
-        clickOnElement(calendarPrev);
-    }
-
-    // Book asset button
-    public boolean isBookAssetButtonEnabled() {
-        return isElementEnabled(bookAssetButton);
-    }
-
-    // Meeting room
-    public void clickitEquipmentCategory() {
-        clickOnElement(itEquipmentCategoryCard);
-    }
-
-    // Parking
-    public void clickParkingCategory() {
-        clickOnElement(categoryParkingCard);
-    }
-
-    public void clickParkingMapButton() {
-        clickOnElement(parkingMapButton);
-    }
-
-    public void closeParkingMapModal() {
-        clickOnElement(parkingMapCloseButton);
-    }
-
-    public void clickFloorLevel(String level) {
-        clickOnElement(By.cssSelector("[data-testid='level-button-" + level + "']"));
-    }
-
-    public void clickBookButtonForInactiveAsset() {
-        clickOnElement(By.xpath("//td[normalize-space()='Inactive']/following-sibling::td//button"));
-    }
-
-    public void selectAllRecurringDays() {
-        getDriver().findElements(checkBoxDays).forEach(BookingPage::jsClick);
-    }
-
-    public void clickCheckBoxDays() {
-        clickOnElement(checkBoxDays);
-    }
 }

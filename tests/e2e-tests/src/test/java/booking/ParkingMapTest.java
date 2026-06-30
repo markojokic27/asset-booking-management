@@ -56,12 +56,11 @@ public class ParkingMapTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         bookingPage.clickSpotBookButton();
-        bookingPage.closeSpotPopover();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
@@ -71,12 +70,11 @@ public class ParkingMapTest extends BaseLogin {
     public void selectDateClickSpotAndBookLevel2() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
-        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         bookingPage.clickSpotBookButton();
-        bookingPage.closeSpotPopover();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));
@@ -86,12 +84,11 @@ public class ParkingMapTest extends BaseLogin {
     public void clickTakenSpotShowsTakenStatus() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
-        bookingPage.selectParkingMapDate(CommonConstants.getParkingTestDate());
+        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         bookingPage.clickSpotBookButton();
-        bookingPage.closeSpotPopover();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
         assertTrue(elementHasClass(bookingPage.parkingSpotStatus, "bg-orange-100"));

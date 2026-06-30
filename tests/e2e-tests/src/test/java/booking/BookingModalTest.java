@@ -32,50 +32,63 @@ public class BookingModalTest extends BaseLogin {
     public void bookNowIsEnabledAfterSelectingFreeSlot() {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
     @Test
     public void bookButtonIsEnabledAfterSelectingDateOnHourlyAsset() {
-        bookingPage.clickitEquipmentCategory();
+        bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
     @Test
     public void successfulBookingLaptopAddsEventToCalendar() {
-        bookingPage.clickParkingCategory();
+        bookingPage.clickLaptopCategory();
         bookingPage.clickBookButton();
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
         bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
 
     @Test
     public void successfulBookingItEquipmentAddsEventToCalendar() {
-        bookingPage.clickitEquipmentCategory();
+        bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
+        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
         bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
+        assertTrue(bookingPage.isCalendarVisible());
+    }
+
+    @Test
+    public void cancelBookingItEquipmentAddsEventToCalendar() {
+        bookingPage.clickItEquipmentCategory();
+        bookingPage.clickBookButton();
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickNextMonth();
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickBookAssetButton();
+        bookingPage.clickCancelBookButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
 
@@ -90,13 +103,13 @@ public class BookingModalTest extends BaseLogin {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
+        bookingPage.clickCheckBoxDays();
         bookingPage.selectAllRecurringDays();
         bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
 
@@ -104,15 +117,13 @@ public class BookingModalTest extends BaseLogin {
     public void successfulBookAssetAfterSelectingRecurringOneDays() {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
         bookingPage.clickCheckBoxDays();
-        bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
         bookingPage.clickBookAssetButton();
-        bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
     }
 
@@ -121,11 +132,9 @@ public class BookingModalTest extends BaseLogin {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
         bookingPage.selectAllRecurringDays();
         bookingPage.selectAllRecurringDays();
         assertTrue(bookingPage.isCalendarVisible());
@@ -136,11 +145,9 @@ public class BookingModalTest extends BaseLogin {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.getFutureDateTo());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateTo());
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
         bookingPage.selectAllRecurringDays();
         bookingPage.clickCheckBoxDays();
         assertTrue(bookingPage.isCalendarVisible());

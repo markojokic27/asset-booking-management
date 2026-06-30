@@ -1,8 +1,5 @@
 package constants;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class CommonConstants {
 
     public static final String BASE_URL = "BASE_URL";
@@ -28,7 +25,7 @@ public class CommonConstants {
     public static final String MANAGER_USERNAME = "mBanovic";
     public static final String MANAGER_PASS = "mladen123";
     public static final String USERNAME = "aMustapic";
-    public static final String PASS = "andela1234";
+    public static final String PASS = "andela123";
 
     // Register and user
     public static final String VALID_NAME = "Ivan";
@@ -62,7 +59,7 @@ public class CommonConstants {
     // User and asset
     public static final String CHANGE_STATUS = "Inactive";
     public static final String EDIT_USER_USERNAME = "john.doe";
-    public static final String DELETE_USER_USERNAME = "ivanivic";
+    public static final String DELETE_USER_USERNAME = "katarina";
 
     // Asset
     public static final String VALID_ASSET_NAME = "Parking Spot 16";
@@ -75,7 +72,7 @@ public class CommonConstants {
     public static final String EMPTY_CATEGORY = "Select category";
 
     // Asset category
-    public static final String VALID_CATEGORY_NAME = "Room";
+    public static final String VALID_CATEGORY_NAME = "Rooms";
     public static final String VALID_CATEGORY_DESCRIPTION = "All company rooms ";
     public static final String VALID_BOOKING_PERIOD = "Day";
     public static final String LONG_CATEGORY_NAME = "t".repeat(101);
@@ -98,36 +95,21 @@ public class CommonConstants {
     // Booking
     public static final String BOOKED_ASSET_ID = "1";
 
-    public static String getFutureDateFrom() {
-        return LocalDate.now().plusDays(30)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
+    public static final String FUTURE_DATE_FROM = "2026-07-02";
+    public static final String FUTURE_DATE_TO = "2026-08-15";
+    public static final String PARKING_TEST_DATE = "2026-07-20";
+    public static final String APPROVAL_DATE_FROM="2026-09-01";
+    public static final String APPROVAL_DATE_TO="2026-09-18";
+    public static final String SMOKE_DATE_FROM = "2026-07-10";
+    public static final String SMOKE_DATE_TO = "2026-08-20";
 
-    public static String getFutureDateTo() {
-        return LocalDate.now().plusDays(41)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
 
     // Parking
     public static final String FLOOR_LEVEL_MINUS_1 = "-1";
     public static final String FLOOR_LEVEL_MINUS_2 = "-2";
-    public static String getParkingTestDate() {
-        return LocalDate.now().plusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
 
     // My bookings list
     public static final String ASSET = "Desk A1";
-
-    public static String getDateFrom() {
-        return LocalDate.now().plusDays(3)
-                .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-    }
-
-    public static String getDateTo() {
-        return LocalDate.now().plusDays(10)
-                .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-    }
     public static final String BROWSER = "BROWSER";
 
     // Drivers constants

@@ -34,20 +34,24 @@ public class AllBookingTest extends BaseLogin {
 
     @Test
     public void filterBookingsByDateRange() {
-        myBookingsPage.inputFromDate(CommonConstants.getDateFrom());
-        myBookingsPage.inputToDate(CommonConstants.getDateTo());
+        bookingPage.clickNextMonth();
+        myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
+        myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_FROM);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
     public void filterBookingsByFromDateOnly() {
-        myBookingsPage.inputFromDate(CommonConstants.getDateFrom());
+        bookingPage.clickNextMonth();
+        myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
     public void filterBookingsByToDateOnly()  {
-        myBookingsPage.inputToDate(CommonConstants.getDateTo());
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
+        myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_TO);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 

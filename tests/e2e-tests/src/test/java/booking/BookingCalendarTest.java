@@ -15,6 +15,7 @@ public class BookingCalendarTest extends BaseLogin {
         login();
         getDriver().get(
                 ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.ASSETS_URL + "/" + CommonConstants.BOOKED_ASSET_ID + CommonConstants.BOOKINGS_URL_EXTENSION);
+        isElementVisible(bookingPage.calendar);
     }
 
     @Test
@@ -24,16 +25,16 @@ public class BookingCalendarTest extends BaseLogin {
 
     @Test
     public void clickFutureDateHighlightsCell() {
-        bookingPage.clickNextMonth();
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.getFutureDateFrom()));
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE_FROM));
     }
 
     @Test
-    public void clickFutureDatePopulatesDateFilter() {
-        bookingPage.clickNextMonth();
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
-        assertEquals(CommonConstants.getFutureDateFrom(), bookingPage.getFromDateValue());
+    public void clickFutureDatePopulatesDateFilter(){
+        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE_FROM));
     }
 
     @Test

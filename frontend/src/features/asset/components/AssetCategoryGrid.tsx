@@ -31,14 +31,14 @@ export const AssetCategoryGrid: React.FC<AssetCategoryGridProps> = ({
         />
       )}
       {categories.map((category) => (
-        <AssetCategoryCard
-          key={category}
-          title={category}
-          isSelected={selectedCategory === category}
-          onClick={() => onSelectCategory(category)}
-          data-testid="asset-category-card"
-        />
-      ))}
+  <AssetCategoryCard
+    key={category}
+    title={category}
+    isSelected={selectedCategory === category}
+    onClick={() => onSelectCategory(category)}
+    data-testid={`category-card-${category.toLowerCase()}`}
+  />
+  ))}
     </div>
   );
 };

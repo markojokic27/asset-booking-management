@@ -1,15 +1,6 @@
-= Test Plan document
+== QA Test Plan
 
-TODO Define and specify which kind of test we will have.
-
-- End To End Tests
-- API tests 
-- Smoke Tests (API tests + most important E2E tests)
-- Load / Performance tests  
-
-= QA Test Plan
----
-== Maurer Internship 2026
+== Asset Booking Management — Maurer Internship 2026
 [cols="1,2"]
 |===
 2+| Document Summary
@@ -19,14 +10,19 @@ TODO Define and specify which kind of test we will have.
 | Date          | March 2026
 |===
 ---
-= 1. Introduction
-This document defines the QA Test Plan for the Maurer Asset Booking Management — a web and mobile application designed to streamline the booking and management of working assets including laptops, parking spots, desks, meeting rooms, and books.
-The system is developed as part of Maurer Internship 2026. This test plan covers all 37 use cases defined in the system specification.
 
+= 1. Introduction
+
+This document defines the QA Test Plan for the Maurer Asset Booking Management — a web and mobile application designed to streamline the booking and management of working assets including laptops, parking spots, desks, meeting rooms, and books.
+
+The system is developed as part of Maurer Internship 2026. This test plan covers all use cases defined in the system specification and includes 145 test cases across all major modules.
+
+---
 
 = 2. Test Strategy
+
 == 2.1 Test Levels
-[cols="1, 2, 2", options="header"]
+[cols="1,2,2", options="header"]
 |===
 | Level | Description | Tools
 | Unit Testing | Individual functions, services, repository methods | JUnit 5, Jest, Mockito
@@ -36,7 +32,7 @@ The system is developed as part of Maurer Internship 2026. This test plan covers
 |===
 
 == 2.2 Test Types
-[cols="1, 2", options="header"]
+[cols="1,2", options="header"]
 |===
 | Type | Coverage
 | Functional | Core feature behavior per use case flows
@@ -48,77 +44,233 @@ The system is developed as part of Maurer Internship 2026. This test plan covers
 |===
 
 == 2.3 Automation Strategy
+
 Target: 85%+ automation coverage for functional and integration tests. The following categories will be automated:
 
-    - All API-level tests (booking CRUD, user management, asset management)
-    - Authentication flows including session timeout
-    - Double-booking concurrency checks
-    - Email and calendar integration
-    - Role-based access control verification
+- All API-level tests (booking CRUD, user management, asset management)
+- Authentication flows including session timeout
+- Double-booking concurrency checks
+- Email and calendar integration
+- Role-based access control verification
 
 The following tests remain manual:
 
-    - Biometric login — requires physical hardware
-    - QR code camera scanning — requires device camera
+- QR code camera scanning — requires device camera
 
 ---
+
 = 3. Test Coverage Summary
 
 == Priority Legend
-    - *Critical* — system correctness at risk (e.g. double booking prevention)
-    - *High* — core user-facing features that must work for each release
-    - *Medium* — important features; failures cause degraded experience
-    - *Low* — minor or cosmetic features
-    
+
+- *Critical* — system correctness at risk (e.g. double booking prevention)
+- *High* — core user-facing features that must work for each release
+- *Medium* — important features; failures cause degraded experience
+- *Low* — minor or cosmetic features
+
 ---
 
 = 4. Smoke Test
 
 Smoke test suite includes:
- 
-    - Successful login 
-    - Successful creation of a new asset category 
-    - Successful biometric login — manual only 
-    - Successful asset booking 
+
+- Successful login
+- Successful creation of a new asset category
+- Successful biometric login — manual only
+- Successful asset booking
+
+---
 
 = 5. Test Cases
 
-[cols="1,1,2,1,1,1", options="header"]
+[cols="1,1,2,1,1", options="header"]
 |===
-| TC ID | Module | Test Case Name | UC | Type | Automated
-| TC-01 | Authentication | Successful login with valid credentials | UC-01 | Functional | Yes
-| TC-02 | Authentication | Login with incorrect password | UC-01 | Functional | Yes
-| TC-03 | Authentication | Login with incorrect username | UC-01 | Functional | Yes
-| TC-04 | Authentication | Login with both fields empty | UC-01 | Functional | Yes
-| TC-05 | Authentication | Login with empty username | UC-01 | Functional | Yes
-| TC-06 | Authentication | Login with empty password | UC-01 | Functional | Yes
-| TC-07 | Authentication | Successful biometric login | UC-03 | Functional | No
-| TC-08 | Authentication | Biometric login with unregistered biometric | UC-03 | Functional | No
-| TC-09 | Authentication | Successful adding of biometric parameters | UC-04 | Functional | No
-| TC-10 | Booking | Successful booking | UC-13, UC-14, UC-15, UC-16 | Functional | Yes
-| TC-11 | Booking | Attempt to book an already booked asset | UC-25 | Functional | Yes
-| TC-12 | Booking | Booking without a selected date | UC-13, UC-14, UC-15, UC-16 | Functional | Yes
-| TC-13 | Booking | Booking an inactive asset | UC-09 | Functional | Yes
-| TC-14 | Booking | Successful booking cancellation | UC-18 | Functional | Yes
-| TC-15 | Booking | Attempt to cancel a booking that has already started | UC-18 | Functional | Yes
-| TC-16 | Booking | Successful modification of a booking | UC-20 | Functional | Yes
-| TC-17 | Booking | Attempt to modify a booking to an unavailable time slot | UC-20, UC-25 | Functional | Yes
-| TC-18 | Booking | Successful quick booking via QR code | UC-21 | Functional | No
-| TC-19 | Booking | QR code not recognized | UC-21 | Functional | No
-| TC-20 | Booking | Manager approves a booking request | UC-30 | Functional | Yes
-| TC-21 | Booking | Manager rejects a booking request | UC-31 | Functional | Yes
-| TC-22 | Category Management | Successful creation of a new asset category | UC-10 | Functional | Yes
-| TC-23 | Category Management | Create category with missing required fields | UC-10 | Functional | Yes
-| TC-24 | Category Management | Create category with an existing name | UC-10 | Functional | Yes
-| TC-25 | Category Management | Successful update of an existing asset category | UC-11 | Functional | Yes
-| TC-26 | Category Management | Successful deletion of an asset category | UC-11 | Functional | Yes
-| TC-27 | Category Management | Delete category with active bookings blocked | UC-11 | Functional | Yes
-| TC-28 | Category Management | Attempt to save invalid data in category | UC-11 | Functional | Yes
+| TC ID | Module | Test Case Name | Type | Automated
+
+5+| *Login*
+| TC-01 | Login | Successful login with valid data | Positive | Yes
+| TC-02 | Login | Login with incorrect password | Negative | Yes
+| TC-03 | Login | Login with incorrect username | Negative | Yes
+| TC-04 | Login | Login with both fields empty | Negative | Yes
+| TC-05 | Login | Login with empty username | Negative | Yes
+| TC-06 | Login | Login with empty password | Negative | Yes
+| TC-07 | Login | Login with short password | Negative | Yes
+| TC-08 | Login | Login with long password | Negative | Yes
+| TC-09 | Login | Login with long username | Negative | Yes
+| TC-10 | Login | Login with short username | Negative | Yes
+
+5+| *Register*
+| TC-11 | Register | Successful registration with valid data | Positive | Yes
+| TC-12 | Register | Register with all fields empty | Negative | Yes
+| TC-13 | Register | Register with empty name | Negative | Yes
+| TC-14 | Register | Register with empty surname | Negative | Yes
+| TC-15 | Register | Register with empty username | Negative | Yes
+| TC-16 | Register | Register with empty password | Negative | Yes
+| TC-17 | Register | Register with short name | Negative | Yes
+| TC-18 | Register | Register with short surname | Negative | Yes
+| TC-19 | Register | Register with short username | Negative | Yes
+| TC-20 | Register | Register with short password | Negative | Yes
+| TC-21 | Register | Register with long name | Negative | Yes
+| TC-22 | Register | Register with long surname | Negative | Yes
+| TC-23 | Register | Register with long username | Negative | Yes
+| TC-24 | Register | Register with long password | Negative | Yes
+
+5+| *Categories*
+| TC-25 | Categories | Successful creation of a new asset category | Positive | Yes
+| TC-26 | Categories | Attempt to create a category with an empty name | Negative | Yes
+| TC-27 | Categories | Attempt to create a category with a long name | Negative | Yes
+| TC-28 | Categories | Create a category with an empty description | Positive | Yes
+| TC-29 | Categories | Attempt to create a category with a long description | Negative | Yes
+| TC-30 | Categories | Attempt to create a category with an existing name | Negative | Yes
+| TC-31 | Categories | Attempt to create a category without manager approval enabled | Negative | Yes
+| TC-32 | Categories | View an asset category | Positive | Yes
+| TC-33 | Categories | Successfully edit the name of an asset category | Positive | Yes
+| TC-34 | Categories | Successfully edit the description of an asset category | Positive | Yes
+| TC-35 | Categories | Attempt to edit a category with an empty name | Negative | Yes
+| TC-36 | Categories | Edit a category with an empty description | Positive | Yes
+| TC-37 | Categories | Attempt to edit a category with a long name | Negative | Yes
+| TC-38 | Categories | Attempt to edit a category with a long description | Negative | Yes
+| TC-39 | Categories | Attempt to edit a category without manager approval enabled | Negative | Yes
+
+5+| *Assets*
+| TC-40 | Assets | Successful creation of a new asset | Positive | Yes
+| TC-41 | Assets | Attempt to create an asset with an empty name | Negative | Yes
+| TC-42 | Assets | Attempt to create an asset with a long name | Negative | Yes
+| TC-43 | Assets | Create an asset with an empty description | Positive | Yes
+| TC-44 | Assets | Attempt to create an asset with a long description | Negative | Yes
+| TC-45 | Assets | View an asset | Positive | Yes
+| TC-46 | Assets | Successfully edit the name of an asset | Positive | Yes
+| TC-47 | Assets | Successfully edit the status of an asset | Positive | Yes
+| TC-48 | Assets | Successfully edit the description of an asset | Positive | Yes
+| TC-49 | Assets | Successfully edit the location of an asset | Positive | Yes
+| TC-50 | Assets | Attempt to edit an asset with an empty location | Negative | Yes
+| TC-51 | Assets | Edit an asset with an empty description | Positive | Yes
+| TC-52 | Assets | Attempt to edit an asset with an empty name | Negative | Yes
+| TC-53 | Assets | Attempt to edit an asset with a long name | Negative | Yes
+| TC-54 | Assets | Attempt to edit an asset with a long description | Negative | Yes
+| TC-55 | Assets | Attempt to edit an asset with a long location | Negative | Yes
+| TC-56 | Assets | Successfully delete an asset | Positive | Yes
+| TC-57 | Assets | Cancel asset deletion | Positive | Yes
+
+5+| *Users — Create*
+| TC-58 | Users | Successful creation of a new user | Positive | Yes
+| TC-59 | Users | Attempt to create a user with an empty username | Negative | Yes
+| TC-60 | Users | Attempt to create a user with a short username | Negative | Yes
+| TC-61 | Users | Attempt to create a user with a long username | Negative | Yes
+| TC-62 | Users | Attempt to create a user with an empty first name | Negative | Yes
+| TC-63 | Users | Attempt to create a user with a short first name | Negative | Yes
+| TC-64 | Users | Attempt to create a user with a long first name | Negative | Yes
+| TC-65 | Users | Attempt to create a user with an empty last name | Negative | Yes
+| TC-66 | Users | Attempt to create a user with a short last name | Negative | Yes
+| TC-67 | Users | Attempt to create a user with a long last name | Negative | Yes
+| TC-68 | Users | Attempt to create a user with a long email | Negative | Yes
+| TC-69 | Users | Attempt to create a user with an invalid email | Negative | Yes
+| TC-70 | Users | Attempt to create a user with an empty email | Negative | Yes
+| TC-71 | Users | Attempt to create a user with an empty manager email | Negative | Yes
+| TC-72 | Users | Attempt to create a user with a long manager email | Negative | Yes
+| TC-73 | Users | Attempt to create a user with an invalid manager email | Negative | Yes
+| TC-74 | Users | Create a user with empty notes | Positive | Yes
+
+5+| *Logout*
+| TC-75 | Logout | Successful logout | Positive | Yes
+
+5+| *Users — Edit*
+| TC-76 | Users | Successful edit of a user | Positive | Yes
+| TC-77 | Users | Edit user modal closes on close button | Positive | Yes
+| TC-78 | Users | Attempt to edit a user with an empty first name | Negative | Yes
+| TC-79 | Users | Attempt to edit a user with a short first name | Negative | Yes
+| TC-80 | Users | Attempt to edit a user with a long first name | Negative | Yes
+| TC-81 | Users | Attempt to edit a user with an empty last name | Negative | Yes
+| TC-82 | Users | Attempt to edit a user with a short last name | Negative | Yes
+| TC-83 | Users | Attempt to edit a user with a long last name | Negative | Yes
+| TC-84 | Users | Attempt to edit a user with an empty email | Negative | Yes
+| TC-85 | Users | Attempt to edit a user with an invalid email | Negative | Yes
+| TC-86 | Users | Attempt to edit a user with a long email | Negative | Yes
+| TC-87 | Users | Attempt to edit a user with an empty manager email | Negative | Yes
+| TC-88 | Users | Attempt to edit a user with an invalid manager email | Negative | Yes
+| TC-89 | Users | Attempt to edit a user with a long manager email | Negative | Yes
+| TC-90 | Users | Edit user with empty notes | Positive | Yes
+| TC-91 | Users | Attempt to edit a user with long notes | Negative | Yes
+
+5+| *Users — Delete*
+| TC-92 | Users | Successful deletion of a user | Positive | Yes
+| TC-93 | Users | Cancel deletion of a user | Positive | Yes
+
+5+| *View Bookings Report*
+| TC-94 | Report | View bookings by status | Positive | Yes
+| TC-95 | Report | View bookings by month | Positive | Yes
+| TC-96 | Report | View top assets by number of bookings | Positive | Yes
+| TC-97 | Report | View top users by number of bookings | Positive | Yes
+
+5+| *Account Info*
+| TC-98  | Account | Successful password change | Positive | Yes
+| TC-99  | Account | Attempt to change password with empty current password | Negative | Yes
+| TC-100 | Account | Attempt to change password with empty new password | Negative | Yes
+| TC-101 | Account | Attempt to change password with empty confirm password | Negative | Yes
+| TC-102 | Account | Attempt to change password with all fields empty | Negative | Yes
+| TC-103 | Account | Attempt to change password with invalid current password | Negative | Yes
+| TC-104 | Account | Attempt to change password with a long new password | Negative | Yes
+| TC-105 | Account | Attempt to change password with a short new password | Negative | Yes
+| TC-106 | Account | Attempt to change password when passwords do not match | Negative | Yes
+
+5+| *Language Switcher*
+| TC-107 | Language Switcher | Switch language to English | Positive | Yes
+| TC-108 | Language Switcher | Switch language to Croatian | Positive | Yes
+| TC-109 | Language Switcher | Switch language to German | Positive | Yes
+
+5+| *Theme Toggle*
+| TC-110 | Theme Toggle | Theme toggle changes the theme | Positive | Yes
+
+5+| *Booking Modal*
+| TC-111 | Booking | Click Book button navigates to Asset Bookings page | Positive | Yes
+| TC-112 | Booking | Book Now button is disabled without a selected date | Negative | Yes
+| TC-113 | Booking | Book Now button is enabled after selecting a free slot | Positive | Yes
+| TC-114 | Booking | Book Now button is enabled after selecting a date on an hourly asset | Positive | Yes
+| TC-115 | Booking | Successful booking of a parking spot adds event to calendar | Positive | Yes
+| TC-116 | Booking | Successful booking of IT equipment adds event to calendar | Positive | Yes
+| TC-117 | Booking | Cancel booking of IT equipment keeps calendar visible | Positive | Yes
+| TC-118 | Booking | Book Now button is disabled for an inactive asset | Negative | Yes
+| TC-119 | Booking | Successful booking with all recurring days selected adds event to calendar | Positive | Yes
+| TC-120 | Booking | Successful booking with one recurring day selected adds event to calendar | Positive | Yes
+| TC-121 | Booking | Deselecting all recurring days removes the Book button | Negative | Yes
+| TC-122 | Booking | Deselecting one recurring day removes the Book button | Negative | Yes
+
+5+| *Booking Calendar*
+| TC-123 | Booking Calendar | Calendar is visible on page load | Positive | Yes
+| TC-124 | Booking Calendar | Click on a future date highlights the cell | Positive | Yes
+| TC-125 | Booking Calendar | Click on a future date populates the date filter | Positive | Yes
+| TC-126 | Booking Calendar | Next month button changes the calendar title | Positive | Yes
+| TC-127 | Booking Calendar | Previous month button navigates to the previous month | Positive | Yes
+
+5+| *Booking Search*
+| TC-128 | Booking Search | Search assets filters the table | Positive | Yes
+| TC-129 | Booking Search | Reset filters after search clears the input | Positive | Yes
+
+5+| *Parking Map*
+| TC-130 | Parking Map | Click Parking Map button opens the modal | Positive | Yes
+| TC-131 | Parking Map | Parking map modal shows level minus 1 by default | Positive | Yes
+| TC-132 | Parking Map | Click level minus 2 switches the floor | Positive | Yes
+| TC-133 | Parking Map | Click level minus 1 after minus 2 switches back | Positive | Yes
+| TC-134 | Parking Map | Close parking map modal with close button | Positive | Yes
+| TC-135 | Parking Map | Select date, click spot and book on level minus 1 | Positive | Yes
+| TC-136 | Parking Map | Select date, click spot and book on level minus 2 | Positive | Yes
+| TC-137 | Parking Map | Click on a taken parking spot shows taken status | Negative | Yes
+
+5+| *My Bookings*
+| TC-138 | My Bookings | View My Bookings page | Positive | Yes
+| TC-139 | My Bookings | Search bookings filters the table | Positive | Yes
+| TC-140 | My Bookings | Select asset filter filters the table | Positive | Yes
+| TC-141 | My Bookings | Filter bookings by date range | Positive | Yes
+| TC-142 | My Bookings | Filter bookings by from date only | Positive | Yes
+| TC-143 | My Bookings | Filter bookings by to date only | Positive | Yes
+| TC-144 | My Bookings | Cancel booking confirm cancels the booking | Positive | Yes
+| TC-145 | My Bookings | Cancel booking keep dismisses the modal | Positive | Yes
+
 |===
 
 ---
 
-= 6. API Test
+= 6. API Tests
 
 [cols="1,2,2", options="header"]
 |===
@@ -130,32 +282,38 @@ Smoke test suite includes:
 | GET    | {{baseUrl}}/v1/users/:id  | Get user by ID
 | PUT    | {{baseUrl}}/v1/users/:id  | Update user
 | PATCH  | {{baseUrl}}/v1/users/:id  | Partially update user
+
 3+| *Assets*
-| GET    | {{baseUrl}}/v1/assets   | List all assets
+| GET    | {{baseUrl}}/v1/assets     | List all assets
 | POST   | {{baseUrl}}/v1/assets     | Create a new asset
-| GET    | {{baseUrl}}/v1/assets/:id  | Get asset by ID
-| PUT    | {{baseUrl}}/v1/assets/:id  | Update asset
+| GET    | {{baseUrl}}/v1/assets/:id | Get asset by ID
+| PUT    | {{baseUrl}}/v1/assets/:id | Update asset
+
 3+| *Asset Categories*
-| GET    | {{baseUrl}}/v1/asset-categories   | List all asset categories
-| POST   | {{baseUrl}}/v1/asset-categories     | Create a new asset category
+| GET    | {{baseUrl}}/v1/asset-categories      | List all asset categories
+| POST   | {{baseUrl}}/v1/asset-categories      | Create a new asset category
 | GET    | {{baseUrl}}/v1/asset-categories/:id  | Get asset category by ID
 | PUT    | {{baseUrl}}/v1/asset-categories/:id  | Update asset category
 | DELETE | {{baseUrl}}/v1/asset-categories/:id  | Delete asset category by ID
+
 3+| *Bookings*
-| GET    | {{baseUrl}}/v1/bookings   | List all bookings
-| POST   | {{baseUrl}}/v1/bookings     | Create a new booking
-| GET    | {{baseUrl}}/v1/bookings/:id  | Get booking by ID
-| PUT    | {{baseUrl}}/v1/bookings/:id  | Update booking
-| PUT    | {{baseUrl}}/v1/bookings/:id/cancel-booking | Cancel booking
+| GET    | {{baseUrl}}/v1/bookings                       | List all bookings
+| POST   | {{baseUrl}}/v1/bookings                       | Create a new booking
+| GET    | {{baseUrl}}/v1/bookings/:id                   | Get booking by ID
+| PUT    | {{baseUrl}}/v1/bookings/:id                   | Update booking
+| PUT    | {{baseUrl}}/v1/bookings/:id/cancel-booking    | Cancel booking
+
 3+| *Departments*
-| GET    | {{baseUrl}}/v1/departments   | List all departments
-| POST   | {{baseUrl}}/v1/departments     | Create a new department
+| GET    | {{baseUrl}}/v1/departments      | List all departments
+| POST   | {{baseUrl}}/v1/departments      | Create a new department
 | GET    | {{baseUrl}}/v1/departments/:id  | Get department by ID
 | PUT    | {{baseUrl}}/v1/departments/:id  | Update department
 |===
 
+---
 
 = 7. Test Environment
+
 [cols="1,1", options="header"]
 |===
 | Component | Specification
@@ -164,10 +322,31 @@ Smoke test suite includes:
 | Mobile App | Android
 | Database | PostgreSQL 16
 | Calendar | Google Calendar API
+| Browser | Google Chrome (latest)
+| Test Framework | Selenium, TestNG
+| API Testing Tool | Bruno
 |===
 
 ---
-= 8. Defect Management
+
+= 8. Entry and Exit Criteria
+
+== 8.1 Entry Criteria
+- Application build is successfully deployed to the test environment
+- All required test data is prepared and available
+- Test environment is stable and accessible
+- All test cases are reviewed and approved
+
+== 8.2 Exit Criteria
+- All critical and high priority test cases have been executed
+- No open Critical severity defects
+- At least 95% of test cases passed
+- All failed test cases have been documented and reported
+
+---
+
+= 9. Defect Management
+
 [cols="1,2,2", options="header"]
 |===
 | Severity | Definition | Target Resolution
@@ -175,4 +354,28 @@ Smoke test suite includes:
 | High | Core feature broken, booking/approval flow fails | Within 2 business days
 | Medium | Feature degraded, workaround available | Within 1 sprint
 | Low | Minor UX issue, cosmetic defect | Backlog — next available sprint
+|===
+
+---
+
+= 10. Roles and Responsibilities
+
+[cols="1,2", options="header"]
+|===
+| Role | Responsibility
+| QA Engineer | Write and execute test cases, report defects, maintain test documentation
+| Developer | Fix reported defects, support QA with environment setup
+|===
+
+---
+
+= 11. Risks
+
+[cols="1,2,2", options="header"]
+|===
+| Risk | Impact | Mitigation
+| Test environment unavailable | Testing blocked | Maintain a backup environment, notify team early
+| Incomplete requirements | Missing test coverage | Regular sync with developers and stakeholders
+| Time constraints | Reduced test coverage | Prioritize critical and high priority test cases
+| Data dependencies between tests | Test failures due to state | Use independent test data per test, clean up after each run
 |===

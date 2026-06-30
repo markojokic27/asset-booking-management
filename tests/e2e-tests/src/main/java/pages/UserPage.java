@@ -107,14 +107,13 @@ public class UserPage extends CommonMethods {
         typeInElement(userNotesField, notes);
     }
 
-    public void user(String role, String status, String name, String surname, String username, String password, String id, String email, String managerEmail, String notes) {
+    public void user(String role, String status, String name, String surname, String username, String password, String email, String managerEmail, String notes) {
         selectRole(role);
         selectStatus(status);
         typeName(name);
         typeSurname(surname);
         typeUsername(username);
         typePassword(password);
-        typeId(id);
         typeEmail(email);
         typeManagerEmail(managerEmail);
         typeNotes(notes);
@@ -145,11 +144,6 @@ public class UserPage extends CommonMethods {
 
 
     // Edit user
-
-    public void userOpenEditModal() {
-        clickOnElement(userOpenEditModal);
-    }
-
     public void userOpenEditModalByUsername(String username) {
         searchUsers(username);
         clickOnElement(userOpenEditModal);

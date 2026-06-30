@@ -17,12 +17,12 @@ import java.time.Duration;
 @Log4j2
 public class CommonMethods  {
 
-    private static WebDriver driver;
-    private static WebDriverWait wait;
+    protected static WebDriver driver;
+    protected static WebDriverWait wait;
 
     protected CommonMethods() {}
 
-    public static WebDriver getDriver() {
+    public WebDriver getDriver() {
         return driver;
     }
 
@@ -72,6 +72,13 @@ public class CommonMethods  {
 
     public static void clickOnElement(By locator) {
         try {
+            By overlay = By.cssSelector("button[aria-label='Close dialog']");
+            try {
+                WebElement overlayEl = driver.findElement(overlay);
+                if (overlayEl.isDisplayed()) {
+                    overlayEl.click();
+                }
+            } catch (Exception ignored) {}
             wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
         } catch (Exception e) {
             log.error("clickOnElement failed", e);

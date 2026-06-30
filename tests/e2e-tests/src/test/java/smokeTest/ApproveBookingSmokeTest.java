@@ -11,22 +11,29 @@ public class ApproveBookingSmokeTest extends BaseLogin {
 
     @Test
     public void successfulBookingMeetingRoomAddsEventToCalendar() {
-        loginWithAndela();
+        loginWithEmployee();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.BOOKINGS_URL_EXTENSION);
 
-        bookingPage.clickitEquipmentCategory();
+        bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.getFutureDateFrom());
-        bookingPage.clickCalendarDate(CommonConstants.getFutureDateFrom());
+        bookingPage.clickNextMonth();
+        bookingPage.clickNextMonth();
+        bookingPage.enterFromDate(CommonConstants.APPROVAL_DATE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.APPROVAL_DATE_FROM);
+        bookingPage.enterToDate(CommonConstants.APPROVAL_DATE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.APPROVAL_DATE_TO);
         bookingPage.clickBookAssetButton();
+        bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
 
         logoutPage.clickLogoutButton();
+        waitForUrlContains(CommonConstants.LOGIN_URL_EXTENSION);
         loginWithManager();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.APPROVALS);
         approvalsPage.clickApproveInModal();
 
         logoutPage.clickLogoutButton();
+        waitForUrlContains(CommonConstants.LOGIN_URL_EXTENSION);
         loginWithAndela();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.MY_BOOKING_URL);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
