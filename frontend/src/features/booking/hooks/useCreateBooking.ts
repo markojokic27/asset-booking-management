@@ -1,6 +1,9 @@
 // External packages
 import * as React from 'react';
 
+// Components
+import { Toast } from '../../../components/ui/toast';
+
 // API
 import { createBooking } from '../api/bookingApi';
 import { createRecurringBooking } from '../api/bookingApi';
@@ -55,6 +58,8 @@ export function useCreateBooking({
 
         setNotes('');
         await refetch();
+        Toast.success('Booking successfully created.');
+
         return;
       }
 
@@ -89,9 +94,12 @@ export function useCreateBooking({
       });
 
       setNotes('');
+      Toast.success('Booking successfully created.');
+
       await refetch();
     } catch (error) {
       console.error('Failed to create booking', error);
+      Toast.error('Failed to create booking');
     } finally {
       setIsCreating(false);
     }

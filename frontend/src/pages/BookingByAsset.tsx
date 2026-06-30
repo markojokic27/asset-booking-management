@@ -28,6 +28,7 @@ import { RecurringDaysSelector } from '../features/booking/components/RecurringD
 import { CancelBookingModal } from '../features/booking/components/CancelBookingModal';
 import { BookingDetailsModal } from '../features/booking/components/BookingDetailsModal';
 import { BookingModal } from '../features/booking/components/BookingModal';
+import { Toast } from '../components/ui/toast';
 
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
@@ -115,6 +116,7 @@ export default function BookingsByAsset() {
     const success = await cancel(Number(bookingToCancel.id));
 
     if (success) {
+      Toast.success('Booking successfully cancelled.');
       setBookingToCancel(null);
     }
   };

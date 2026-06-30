@@ -34,9 +34,10 @@ export function BookingModal({
   variant,
   handleCreateBooking,
 }: BookingModalProps) {
+  const { t, i18n } = useTranslation();
+
   if (!open || !asset) return null;
 
-  const { t, i18n } = useTranslation();
   return (
     <Modal
       isOpen={true}
