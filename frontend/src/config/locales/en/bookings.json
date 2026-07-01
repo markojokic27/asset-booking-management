@@ -80,5 +80,17 @@
     "singleDay": "Do you want to book this asset for {{date}}?",
     "multiDay": "Do you want to book this asset from {{from}} to {{to}}?",
     "needApproval": "This booking requires manager approval. An email notification will be sent to your manager for review."
+  },
+  "buttons": {
+    "book": "Book",
+    "booking": "Booking...",
+    "bookNow": "Book now",
+    "sendRequest": "Send request",
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "loadingAsset": "Loading asset details...",
+    "loading": "Loading...",
+    "errorLoadingBookings": "Error loading bookings. Please try again later."
   }
 }

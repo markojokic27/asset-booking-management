@@ -154,7 +154,7 @@ export default function BookingsByAsset() {
   if (!asset || !resolvedCategory) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
-        <div className="pt-35">Loading asset details...</div>
+        <div className="pt-35">{t('bookings.buttons.loadingAsset')}</div>
       </LayoutColumn>
     );
   }
@@ -162,7 +162,7 @@ export default function BookingsByAsset() {
   if (loading) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
-        <div className="pt-35">Loading...</div>
+        <div className="pt-35">{t('bookings.buttons.loading')}</div>
       </LayoutColumn>
     );
   }
@@ -170,7 +170,7 @@ export default function BookingsByAsset() {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
         <div className="pt-35 text-red-500">
-          Error loading bookings. Please try again later.
+          {t('bookings.buttons.errorLoadingBookings')}
         </div>
       </LayoutColumn>
     );
@@ -234,7 +234,9 @@ export default function BookingsByAsset() {
           disabled={isButtonDisabled || isCreating}
           onClick={() => setIsBookingModalOpen(true)}
         >
-          {isCreating ? 'Booking...' : 'Book'}
+          {isCreating
+            ? t('bookings.buttons.booking')
+            : t('bookings.buttons.book')}
         </Button>
       </div>
       {resolvedCategory.name === 'Parking' && (
@@ -278,7 +280,7 @@ export default function BookingsByAsset() {
         asset={asset}
         user={user}
         handleCreateBooking={handleCreateBooking}
-        needApproval={category?.approval === true}
+        needApproval={resolvedCategory?.approval === true}
         availableRecurringDates={availableRecurringDates}
         variant={bookingPeriod}
       />

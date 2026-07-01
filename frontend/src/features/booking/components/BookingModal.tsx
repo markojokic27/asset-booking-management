@@ -42,7 +42,11 @@ export function BookingModal({
     <Modal
       isOpen={true}
       onClose={onClose}
-      title={<h2 className="text-xl font-semibold">Book {asset.name}</h2>}
+      title={
+        <h2 className="text-xl font-semibold">
+          {t('bookings.buttons.book')} {asset.name}
+        </h2>
+      }
     >
       <div className="text-lg">
         {getBookingMessage({
@@ -62,7 +66,7 @@ export function BookingModal({
           size="md"
           onClick={onClose}
         >
-          Cancel
+          {t('bookings.buttons.cancel')}
         </Button>
 
         <Button
@@ -76,8 +80,8 @@ export function BookingModal({
           }}
         >
           {needApproval && user?.role === 'EMPLOYEE'
-            ? 'Send request'
-            : 'Book now'}
+            ? t('bookings.buttons.sendRequest')
+            : t('bookings.buttons.bookNow')}
         </Button>
       </div>
     </Modal>

@@ -75,10 +75,22 @@
   },
   "confirmation": {
     "and": "i",
-    "recurring": "Želite li rezervirati ovaj resurs svakog {{days}} tijekom {{month}}?",
-    "singleHour": "Želite li rezervirati ovaj resurs za {{date}}, od {{from}} do {{to}}?",
-    "singleDay": "Želite li rezervirati ovaj resurs za {{date}}?",
-    "multiDay": "Želite li rezervirati ovaj resurs od {{from}} do {{to}}?",
+    "recurring": "Želite li rezervirati ovo svaki {{days}} tijekom {{month}}?",
+    "singleHour": "Želite li rezervirati ovo za {{date}}, od {{from}} do {{to}}?",
+    "singleDay": "Želite li rezervirati ovo za {{date}}?",
+    "multiDay": "Želite li rezervirati ovo od {{from}} do {{to}}?",
     "needApproval": "Ova rezervacija zahtijeva odobrenje nadređenog. Obavijest e-poštom bit će poslana vašem nadređenom na pregled."
+  },
+  "buttons": {
+    "book": "Rezerviraj",
+    "booking": "Rezerviranje...",
+    "bookNow": "Rezerviraj sada",
+    "sendRequest": "Pošalji zahtjev",
+    "cancel": "Otkaži",
+    "close": "Zatvori",
+    "confirm": "Potvrdi",
+    "loadingAsset": "Učitavanje detalja imovine...",
+    "loading": "Učitavanje...",
+    "errorLoadingBookings": "Pogreška pri učitavanju rezervacija. Molimo pokušajte ponovo kasnije."
   }
 }

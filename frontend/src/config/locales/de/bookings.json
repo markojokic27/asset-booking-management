@@ -81,5 +81,17 @@
     "singleDay": "Möchten Sie diese Ressource für den {{date}} buchen?",
     "multiDay": "Möchten Sie diese Ressource vom {{from}} bis zum {{to}} buchen?",
     "needApproval": "Für diese Buchung ist die Genehmigung Ihres Vorgesetzten erforderlich. Eine E-Mail-Benachrichtigung wird zur Überprüfung an Ihren Vorgesetzten gesendet."
+  },
+  "buttons": {
+    "book": "Buchen",
+    "booking": "Buchen...",
+    "bookNow": "Jetzt buchen",
+    "sendRequest": "Antrag senden",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "loadingAsset": "Lade Asset-Details...",
+    "loading": "Laden...",
+    "errorLoadingBookings": "Fehler beim Laden der Buchungen. Bitte versuchen Sie es später erneut."
   }
 }
