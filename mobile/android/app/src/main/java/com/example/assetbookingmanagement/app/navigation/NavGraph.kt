@@ -7,7 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.core.os.bundleOf
 import androidx.navigation.NavType
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.navArgument
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -132,44 +135,18 @@ fun NavGraph(
 
             composable(
                 route = Routes.APPROVAL_REQUEST_DETAILS,
-                arguments = listOf(
-                    navArgument("bookingId") { type = NavType.LongType },
-                    navArgument("assetName") {
-                        type = NavType.StringType
-                        defaultValue = ""
-                    },
-                    navArgument("requesterName") {
-                        type = NavType.StringType
-                        defaultValue = ""
-                    },
-                    navArgument("fromDate") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("toDate") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("status") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("isHourlyBooking") {
-                        type = NavType.BoolType
-                        defaultValue = false
-                    }
-                )
+                arguments = approvalRequestDetailsArguments
             ) { backStackEntry ->
                 val bookingId = backStackEntry.arguments?.getLong("bookingId") ?: return@composable
                 ApprovalRequestDetailsScreen(
                     details = ApprovalRequestDetailsUiModel(
                         bookingId = bookingId,
-                        assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
-                        requesterName = backStackEntry.arguments?.getString("requesterName").orEmpty(),
-                        bookingStart = backStackEntry.arguments?.getString("fromDate") ?: "-",
-                        bookingEnd = backStackEntry.arguments?.getString("toDate") ?: "-",
-                        status = backStackEntry.arguments?.getString("status") ?: "-",
-                        isHourlyBooking = backStackEntry.arguments?.getBoolean("isHourlyBooking") ?: false
+                        assetName = backStackEntry.stringArg("assetName"),
+                        requesterName = backStackEntry.stringArg("requesterName"),
+                        bookingStart = backStackEntry.stringArg("fromDate", "-"),
+                        bookingEnd = backStackEntry.stringArg("toDate", "-"),
+                        status = backStackEntry.stringArg("status", "-"),
+                        isHourlyBooking = backStackEntry.boolArg("isHourlyBooking")
                     ),
                     onApproved = {
                         navController.popBackStack()
@@ -223,43 +200,17 @@ fun NavGraph(
 
             composable(
                 route = Routes.BOOKING_DETAILS,
-                arguments = listOf(
-                    navArgument("bookingId") { type = NavType.LongType },
-                    navArgument("assetName") {
-                        type = NavType.StringType
-                        defaultValue = ""
-                    },
-                    navArgument("fromDate") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("toDate") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("status") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("categoryName") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("isHourlyBooking") {
-                        type = NavType.BoolType
-                        defaultValue = false
-                    }
-                )
+                arguments = bookingDetailsArguments
             ) { backStackEntry ->
                 val bookingId = backStackEntry.arguments?.getLong("bookingId") ?: return@composable
                 BookingDetailsScreen(
                     bookingId = bookingId,
-                    assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
-                    bookingStart = backStackEntry.arguments?.getString("fromDate") ?: "-",
-                    bookingEnd = backStackEntry.arguments?.getString("toDate") ?: "-",
-                    status = backStackEntry.arguments?.getString("status") ?: "-",
-                    categoryName = backStackEntry.arguments?.getString("categoryName") ?: "-",
-                    isHourlyBooking = backStackEntry.arguments?.getBoolean("isHourlyBooking") ?: false
+                    assetName = backStackEntry.stringArg("assetName"),
+                    bookingStart = backStackEntry.stringArg("fromDate", "-"),
+                    bookingEnd = backStackEntry.stringArg("toDate", "-"),
+                    status = backStackEntry.stringArg("status", "-"),
+                    categoryName = backStackEntry.stringArg("categoryName", "-"),
+                    isHourlyBooking = backStackEntry.boolArg("isHourlyBooking")
                 )
             }
 
@@ -319,33 +270,69 @@ fun NavGraph(
 
             composable(
                 route = Routes.BOOKING_SUCCESS,
-                arguments = listOf(
-                    navArgument("assetName") {
-                        type = NavType.StringType
-                        defaultValue = ""
-                    },
-                    navArgument("fromDate") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("toDate") {
-                        type = NavType.StringType
-                        defaultValue = "-"
-                    },
-                    navArgument("approvalRequired") {
-                        type = NavType.BoolType
-                        defaultValue = false
-                    }
-                )
+                arguments = bookingSuccessArguments
             ) { backStackEntry ->
                 BookingSuccessScreen(
-                    assetName = backStackEntry.arguments?.getString("assetName").orEmpty(),
-                    fromDate = backStackEntry.arguments?.getString("fromDate") ?: "-",
-                    toDate = backStackEntry.arguments?.getString("toDate") ?: "-",
-                    showApprovalMessage = backStackEntry.arguments?.getBoolean("approvalRequired") ?: false
+                    assetName = backStackEntry.stringArg("assetName"),
+                    fromDate = backStackEntry.stringArg("fromDate", "-"),
+                    toDate = backStackEntry.stringArg("toDate", "-"),
+                    showApprovalMessage = backStackEntry.boolArg("approvalRequired")
                 )
             }
             }
         }
     }
 }
+
+private fun longNavArg(name: String): NamedNavArgument =
+    navArgument(name) { type = NavType.LongType }
+
+private fun stringNavArg(
+    name: String,
+    defaultValue: String = ""
+): NamedNavArgument =
+    navArgument(name) {
+        type = NavType.StringType
+        this.defaultValue = defaultValue
+    }
+
+private fun boolNavArg(
+    name: String,
+    defaultValue: Boolean = false
+): NamedNavArgument =
+    navArgument(name) {
+        type = NavType.BoolType
+        this.defaultValue = defaultValue
+    }
+
+private val bookingBaseArguments = listOf(
+    longNavArg("bookingId"),
+    stringNavArg("assetName"),
+    stringNavArg("fromDate", "-"),
+    stringNavArg("toDate", "-"),
+    stringNavArg("status", "-"),
+    boolNavArg("isHourlyBooking")
+)
+
+private val approvalRequestDetailsArguments = bookingBaseArguments + listOf(
+    stringNavArg("requesterName")
+)
+
+private val bookingDetailsArguments = bookingBaseArguments + listOf(
+    stringNavArg("categoryName", "-")
+)
+
+private val bookingSuccessArguments = listOf(
+    stringNavArg("assetName"),
+    stringNavArg("fromDate", "-"),
+    stringNavArg("toDate", "-"),
+    boolNavArg("approvalRequired")
+)
+
+private fun NavBackStackEntry.stringArg(
+    name: String,
+    defaultValue: String = ""
+): String = arguments?.getString(name) ?: defaultValue
+
+private fun NavBackStackEntry.boolArg(name: String): Boolean =
+    arguments?.getBoolean(name) ?: false
