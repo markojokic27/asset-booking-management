@@ -33,6 +33,11 @@
     "bookingCreateFailed": "Die Buchung konnte nicht erstellt werden.",
     "bookingCancelFailed": "Die Buchung konnte nicht storniert werden.",
     "invalidBookingPeriod": "Bitte wählen Sie einen gültigen Buchungszeitraum aus.",
-    "missingUser": "Benutzerinformationen fehlen. Die Buchung kann nicht erstellt werden."
+    "missingUser": "Benutzerinformationen fehlen. Die Buchung kann nicht erstellt werden.",
+    "assetCreated": "Das Asset wurde erfolgreich erstellt.",
+    "assetCreateFailed": "Das Asset konnte nicht erstellt werden.",
+    "assetUpdated": "Das Asset wurde erfolgreich aktualisiert.",
+    "assetUpdateFailed": "Das Asset konnte nicht aktualisiert werden.",
+    "assetDeleted": "Das Asset wurde erfolgreich gelöscht."
   }
 }

@@ -33,6 +33,11 @@
     "bookingCreateFailed": "Kreiranje rezervacije nije uspjelo.",
     "bookingCancelFailed": "Otkazivanje rezervacije nije uspjelo.",
     "invalidBookingPeriod": "Odaberite valjano razdoblje rezervacije.",
-    "missingUser": "Korisnički podaci nisu dostupni. Rezervaciju nije moguće kreirati."
+    "missingUser": "Korisnički podaci nisu dostupni. Rezervaciju nije moguće kreirati.",
+    "assetCreated": "Imovina je uspješno kreirana.",
+    "assetCreateFailed": "Kreiranje imovine nije uspjelo.",
+    "assetUpdated": "Imovina je uspješno ažurirana.",
+    "assetUpdateFailed": "Ažuriranje imovine nije uspjelo.",
+    "assetDeleted": "Imovina je uspješno obrisana."
   }
 }

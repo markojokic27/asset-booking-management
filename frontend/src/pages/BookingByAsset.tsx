@@ -239,21 +239,23 @@ export default function BookingsByAsset() {
             : t('bookings.buttons.book')}
         </Button>
       </div>
-      {resolvedCategory.name === 'Parking' && (
-        <RecurringDaysSelector
-          selectedDays={filters.selectedWeekdays}
-          onChange={(days) =>
-            setFilters((prev) => ({
-              ...prev,
-              selectedWeekdays: days,
-              fromDate: '',
-              toDate: '',
-              fromHour: '',
-              toHour: '',
-            }))
-          }
-        />
-      )}
+      {resolvedCategory.name === 'Parking' &&
+        user &&
+        user.role !== 'EMPLOYEE' && (
+          <RecurringDaysSelector
+            selectedDays={filters.selectedWeekdays}
+            onChange={(days) =>
+              setFilters((prev) => ({
+                ...prev,
+                selectedWeekdays: days,
+                fromDate: '',
+                toDate: '',
+                fromHour: '',
+                toHour: '',
+              }))
+            }
+          />
+        )}
       <AvailabilityCalendar
         events={calendarEvents}
         selectedFromDate={filters.fromDate}

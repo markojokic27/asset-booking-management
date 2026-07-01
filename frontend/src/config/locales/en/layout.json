@@ -33,6 +33,11 @@
     "bookingCancelled": "Booking successfully canceled.",
     "bookingCancelFailed": "Failed to cancel booking.",
     "invalidBookingPeriod": "Please select a valid booking period.",
-    "missingUser": "Unable to create booking. User information is missing."
+    "missingUser": "Unable to create booking. User information is missing.",
+    "assetCreated": "Asset successfully created.",
+    "assetCreateFailed": "Failed to create asset.",
+    "assetUpdated": "Asset successfully updated.",
+    "assetUpdateFailed": "Failed to update asset.",
+    "assetDeleted": "Asset successfully deleted."
   }
 }

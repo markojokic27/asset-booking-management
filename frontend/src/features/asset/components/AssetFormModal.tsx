@@ -11,6 +11,7 @@ import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
+import { Toast } from '../../../components/ui/toast';
 
 // Types
 import { type AssetDto, type AssetStatus } from '../types';
@@ -121,7 +122,9 @@ export const AssetFormModal = ({
   if (!isOpen || (!isCreate && !asset)) return null;
 
   const formValues = isCreate ? createInitialValues : asset!;
-  const formId = isCreate ? 'asset-create-form' : `asset-edit-form-${asset!.id}`;
+  const formId = isCreate
+    ? 'asset-create-form'
+    : `asset-edit-form-${asset!.id}`;
   const formKey = isCreate ? 'create' : String(asset!.id);
 
   const statusOptions = assetStatusSchema.options.map((status) => ({
@@ -163,6 +166,7 @@ export const AssetFormModal = ({
           status: result.data.status,
           location: result.data.location.trim(),
         });
+        Toast.success(t('layout.toast.assetCreated'));
       } else {
         await onSave({
           ...asset!,
@@ -172,11 +176,19 @@ export const AssetFormModal = ({
           status: result.data.status,
           location: result.data.location.trim(),
         });
+        Toast.success(t('layout.toast.assetUpdated'));
       }
       onClose();
     } catch {
       setSubmitError(
-        isCreate ? t('assets.errors.createAsset') : t('assets.errors.updateAsset')
+        isCreate
+          ? t('assets.errors.createAsset')
+          : t('assets.errors.updateAsset')
+      );
+      Toast.error(
+        isCreate
+          ? t('layout.toast.assetCreateFailed')
+          : t('layout.toast.assetUpdateFailed')
       );
     } finally {
       setIsSaving(false);
@@ -187,15 +199,23 @@ export const AssetFormModal = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      testId={isCreate ? "add-asset-modal" : "edit-asset-modal"}
-      ariaLabel={isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.title')}
+      testId={isCreate ? 'add-asset-modal' : 'edit-asset-modal'}
+      ariaLabel={
+        isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.title')
+      }
       title={
         <h2 className="text-2xl font-bold">
-          {isCreate ? t('assets.modals.add.title') : t('assets.modals.edit.title')}
+          {isCreate
+            ? t('assets.modals.add.title')
+            : t('assets.modals.edit.title')}
         </h2>
       }
       headerRight={
-        <IconButton data-testid={isCreate ? "close-asset-modal" : "close-edit-modal"} onClick={onClose} aria-label={t('assets.modals.close')}>
+        <IconButton
+          data-testid={isCreate ? 'close-asset-modal' : 'close-edit-modal'}
+          onClick={onClose}
+          aria-label={t('assets.modals.close')}
+        >
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
