@@ -20,7 +20,7 @@ type BookingModalProps = {
   needApproval: boolean;
   availableRecurringDates: string[];
   variant: string;
-  handleCreateBooking: () => Promise<void>;
+  handleCreateBooking: () => Promise<boolean>;
 };
 
 export function BookingModal({
@@ -70,8 +70,9 @@ export function BookingModal({
           variant="solid"
           size="md"
           onClick={() => {
-            handleCreateBooking();
-            onClose();
+            handleCreateBooking().then(() => {
+              onClose();
+            });
           }}
         >
           {needApproval && user?.role === 'EMPLOYEE'

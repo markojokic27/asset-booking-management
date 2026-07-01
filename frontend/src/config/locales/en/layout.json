@@ -26,5 +26,13 @@
     "descriptionLine1": "Simple powerful web and mobile software",
     "descriptionLine2": "for asset booking management of",
     "descriptionLine3": "Maurer workplace assets"
+  },
+  "toast": {
+    "bookingCreated": "Booking successfully created.",
+    "bookingCreateFailed": "Failed to create booking.",
+    "bookingCancelled": "Booking successfully canceled.",
+    "bookingCancelFailed": "Failed to cancel booking.",
+    "invalidBookingPeriod": "Please select a valid booking period.",
+    "missingUser": "Unable to create booking. User information is missing."
   }
 }

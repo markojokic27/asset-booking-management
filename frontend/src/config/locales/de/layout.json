@@ -26,5 +26,13 @@
     "descriptionLine1": "Einfache, leistungsstarke Web- und Mobile-Software",
     "descriptionLine2": "für die Verwaltung von Asset-Buchungen",
     "descriptionLine3": "von Maurer Workplace-Assets"
+  },
+  "toast": {
+    "bookingCreated": "Die Buchung wurde erfolgreich erstellt.",
+    "bookingCancelled": "Die Buchung wurde erfolgreich storniert.",
+    "bookingCreateFailed": "Die Buchung konnte nicht erstellt werden.",
+    "bookingCancelFailed": "Die Buchung konnte nicht storniert werden.",
+    "invalidBookingPeriod": "Bitte wählen Sie einen gültigen Buchungszeitraum aus.",
+    "missingUser": "Benutzerinformationen fehlen. Die Buchung kann nicht erstellt werden."
   }
 }

@@ -11,6 +11,7 @@ import { createRecurringBooking } from '../api/bookingApi';
 // Types
 import type { Filters } from '../types';
 import { useAuth } from '../../auth/context/AuthContext';
+import type { TFunction } from 'i18next';
 
 export function useCreateBooking({
   assetId,
@@ -20,6 +21,7 @@ export function useCreateBooking({
   refetch,
   bookingPeriod,
   availableRecurringDates,
+  t,
 }: {
   assetId: number;
   filters: Filters;
@@ -28,16 +30,18 @@ export function useCreateBooking({
   refetch: () => Promise<unknown>;
   bookingPeriod: 'HOUR' | 'DAY';
   availableRecurringDates: string[];
+  t: TFunction;
 }) {
   const [isCreating, setIsCreating] = React.useState(false);
   const { user } = useAuth();
 
-  const handleCreateBooking = React.useCallback(async () => {
+  const handleCreateBooking = React.useCallback(async (): Promise<boolean> => {
     const userId = user?.id;
 
     if (!userId) {
       console.warn('Missing required user id for booking creation');
-      return;
+      Toast.error(t('layout.toast.missingUser'));
+      return false;
     }
 
     try {
@@ -58,9 +62,9 @@ export function useCreateBooking({
 
         setNotes('');
         await refetch();
-        Toast.success('Booking successfully created.');
+        Toast.success(t('layout.toast.bookingCreated'));
 
-        return;
+        return true;
       }
 
       if (bookingPeriod === 'DAY') {
@@ -75,7 +79,8 @@ export function useCreateBooking({
         !filters.toHour
       ) {
         console.warn('Missing required fields for booking creation');
-        return;
+        Toast.error(t('layout.toast.invalidBookingPeriod'));
+        return false;
       }
 
       const bookingStart = new Date(
@@ -94,12 +99,14 @@ export function useCreateBooking({
       });
 
       setNotes('');
-      Toast.success('Booking successfully created.');
-
       await refetch();
+
+      Toast.success(t('layout.toast.bookingCreated'));
+      return true;
     } catch (error) {
       console.error('Failed to create booking', error);
-      Toast.error('Failed to create booking');
+      Toast.error(t('layout.toast.bookingCreateFailed'));
+      return false;
     } finally {
       setIsCreating(false);
     }
@@ -112,6 +119,7 @@ export function useCreateBooking({
     refetch,
     setNotes,
     user?.id,
+    t,
   ]);
 
   return {

@@ -116,7 +116,7 @@ export default function BookingsByAsset() {
     const success = await cancel(Number(bookingToCancel.id));
 
     if (success) {
-      Toast.success('Booking successfully cancelled.');
+      Toast.success(t('layout.toast.bookingCancelled'));
       setBookingToCancel(null);
     }
   };
@@ -148,6 +148,7 @@ export default function BookingsByAsset() {
     refetch,
     bookingPeriod,
     availableRecurringDates,
+    t,
   });
 
   if (!asset || !resolvedCategory) {

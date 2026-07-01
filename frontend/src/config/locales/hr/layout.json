@@ -26,5 +26,13 @@
     "descriptionLine1": "Jednostavan i moćan web i mobilni softver",
     "descriptionLine2": "za upravljanje rezervacijama",
     "descriptionLine3": "Maurer imovine na radnom mjestu"
+  },
+  "toast": {
+    "bookingCreated": "Rezervacija je uspješno kreirana.",
+    "bookingCancelled": "Rezervacija je uspješno otkazana.",
+    "bookingCreateFailed": "Kreiranje rezervacije nije uspjelo.",
+    "bookingCancelFailed": "Otkazivanje rezervacije nije uspjelo.",
+    "invalidBookingPeriod": "Odaberite valjano razdoblje rezervacije.",
+    "missingUser": "Korisnički podaci nisu dostupni. Rezervaciju nije moguće kreirati."
   }
 }
