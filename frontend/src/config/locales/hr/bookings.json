@@ -92,5 +92,20 @@
     "loadingAsset": "Učitavanje detalja imovine...",
     "loading": "Učitavanje...",
     "errorLoadingBookings": "Pogreška pri učitavanju rezervacija. Molimo pokušajte ponovo kasnije."
+  },
+  "bookingDetailsModal": {
+    "booking": "Rezervacija",
+    "user": "Korisnik",
+    "name": "Ime",
+    "role": "Uloga",
+    "email": "E-mail",
+    "asset": "Imovina",
+    "status": "Status",
+    "category": "Kategorija",
+    "location": "Lokacija",
+    "bookingId": "ID rezervacije",
+    "start": "Početak",
+    "end": "Kraj",
+    "notes": "Bilješke"
   }
 }

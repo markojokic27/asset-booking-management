@@ -96,7 +96,6 @@ export function getBookingMessage({
       to: formatDate(filters.toDate),
     });
   }
-  console.log('needApproval', needApproval, 'user?.role', user?.role);
   if (needApproval && user?.role === 'EMPLOYEE') {
     message += ` ${t('bookings.confirmation.needApproval')}`;
   }

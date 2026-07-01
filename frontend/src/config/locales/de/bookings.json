@@ -93,5 +93,20 @@
     "loadingAsset": "Lade Asset-Details...",
     "loading": "Laden...",
     "errorLoadingBookings": "Fehler beim Laden der Buchungen. Bitte versuchen Sie es später erneut."
+  },
+  "bookingDetailsModal": {
+    "booking": "Buchung",
+    "user": "Benutzer",
+    "name": "Name",
+    "role": "Rolle",
+    "email": "E-Mail",
+    "asset": "Asset",
+    "status": "Status",
+    "category": "Kategorie",
+    "location": "Lokation",
+    "bookingId": "Buchungs-ID",
+    "start": "Start",
+    "end": "Ende",
+    "notes": "Notizen"
   }
 }

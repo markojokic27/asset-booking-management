@@ -25,7 +25,6 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: '#6b7280',
 };
 
-// TODO: internationalization and add edit status if user is admin or owner of the booking
 export function BookingDetailsModal({
   booking,
   onClose,
@@ -63,7 +62,9 @@ export function BookingDetailsModal({
         <div className="flex w-full items-center justify-between">
           {' '}
           <div className="flex items-center gap-8">
-            <h2 className="text-2xl font-bold">Booking #{booking.id}</h2>
+            <h2 className="text-2xl font-bold">
+              {t('bookings.bookingDetailsModal.booking')} #{booking.id}
+            </h2>
             {canCancel() && (
               <Button
                 variant="danger"
@@ -88,24 +89,30 @@ export function BookingDetailsModal({
       <div className="space-y-6">
         <div className="rounded-lg border border-(--color-table-border) p-4">
           <h3 className="mb-3 text-lg font-semibold tracking-wide text-gray-500 uppercase">
-            User
+            {t('bookings.bookingDetailsModal.user')}
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-gray-500">Name</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.name')}
+              </p>
               <p className="text-lg font-medium">
                 {booking.user.name} {booking.user.surname}
               </p>
             </div>
 
             <div>
-              <p className="text-gray-500">Role</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.role')}
+              </p>
               <p className="text-lg font-medium">{booking.user.role}</p>
             </div>
 
             <div className="col-span-2">
-              <p className="text-gray-500">Email</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.email')}
+              </p>
               <p className="text-lg font-medium">{booking.user.email}</p>
             </div>
           </div>
@@ -113,29 +120,37 @@ export function BookingDetailsModal({
 
         <div className="rounded-lg border border-(--color-table-border) p-4">
           <h3 className="mb-3 text-lg font-semibold tracking-wide text-gray-500 uppercase">
-            Asset
+            {t('bookings.bookingDetailsModal.asset')}
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-gray-500">Name</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.name')}
+              </p>
               <p className="text-lg font-medium">{booking.asset.name}</p>
             </div>
 
             <div>
-              <p className="text-gray-500">Status</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.status')}
+              </p>
               <p className="text-lg font-medium">{booking.asset.status}</p>
             </div>
 
             <div>
-              <p className="text-gray-500">Category</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.category')}
+              </p>
               <p className="text-lg font-medium">
                 {booking.asset.category.name}
               </p>
             </div>
 
             <div>
-              <p className="text-gray-500">Location</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.location')}
+              </p>
               <p className="text-lg font-medium">{booking.asset.location}</p>
             </div>
           </div>
@@ -143,12 +158,14 @@ export function BookingDetailsModal({
 
         <div className="rounded-lg border border-(--color-table-border) p-4">
           <h3 className="mb-3 text-lg font-semibold tracking-wide text-gray-500 uppercase">
-            Booking
+            {t('bookings.bookingDetailsModal.booking')}
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-gray-500">Status</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.status')}
+              </p>
 
               <span
                 className="inline-flex rounded px-2 py-1 font-medium text-white"
@@ -161,19 +178,25 @@ export function BookingDetailsModal({
             </div>
 
             <div>
-              <p className="text-gray-500">Booking ID</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.bookingId')}
+              </p>
               <p className="text-lg font-medium">#{booking.id}</p>
             </div>
 
             <div>
-              <p className="text-gray-500">Start</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.start')}
+              </p>
               <p className="text-lg font-medium">
                 {formatDateTime(booking.bookingStart)}
               </p>
             </div>
 
             <div>
-              <p className="text-gray-500">End</p>
+              <p className="text-gray-500">
+                {t('bookings.bookingDetailsModal.end')}
+              </p>
               <p className="text-lg font-medium">
                 {formatDateTime(booking.bookingEnd)}
               </p>
@@ -184,7 +207,7 @@ export function BookingDetailsModal({
         {booking.notes && (
           <div className="rounded-lg border border-(--color-table-border) p-4">
             <h3 className="mb-3 text-lg font-semibold tracking-wide text-gray-500 uppercase">
-              Notes
+              {t('bookings.bookingDetailsModal.notes')}
             </h3>
 
             <p className="whitespace-pre-wrap">{booking.notes}</p>

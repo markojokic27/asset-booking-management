@@ -92,5 +92,20 @@
     "loadingAsset": "Loading asset details...",
     "loading": "Loading...",
     "errorLoadingBookings": "Error loading bookings. Please try again later."
+  },
+  "bookingDetailsModal": {
+    "booking": "Booking",
+    "user": "User",
+    "name": "Name",
+    "role": "Role",
+    "email": "Email",
+    "asset": "Asset",
+    "status": "Status",
+    "category": "Category",
+    "location": "Location",
+    "bookingId": "Booking ID",
+    "start": "Start",
+    "end": "End",
+    "notes": "Notes"
   }
 }
