@@ -38,6 +38,7 @@
     "assetCreateFailed": "Failed to create asset.",
     "assetUpdated": "Asset successfully updated.",
     "assetUpdateFailed": "Failed to update asset.",
-    "assetDeleted": "Asset successfully deleted."
+    "assetDeleted": "Asset successfully deleted.",
+    "assetDeleteFailed": "Failed to delete asset."
   }
 }

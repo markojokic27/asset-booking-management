@@ -38,6 +38,7 @@
     "assetCreateFailed": "Das Asset konnte nicht erstellt werden.",
     "assetUpdated": "Das Asset wurde erfolgreich aktualisiert.",
     "assetUpdateFailed": "Das Asset konnte nicht aktualisiert werden.",
-    "assetDeleted": "Das Asset wurde erfolgreich gelöscht."
+    "assetDeleted": "Das Asset wurde erfolgreich gelöscht.",
+    "assetDeleteFailed": "Das Asset konnte nicht gelöscht werden."
   }
 }

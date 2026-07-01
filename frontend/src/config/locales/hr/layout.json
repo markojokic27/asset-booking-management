@@ -38,6 +38,7 @@
     "assetCreateFailed": "Kreiranje imovine nije uspjelo.",
     "assetUpdated": "Imovina je uspješno ažurirana.",
     "assetUpdateFailed": "Ažuriranje imovine nije uspjelo.",
-    "assetDeleted": "Imovina je uspješno obrisana."
+    "assetDeleted": "Imovina je uspješno obrisana.",
+    "assetDeleteFailed": "Brisanje imovine nije uspjelo."
   }
 }

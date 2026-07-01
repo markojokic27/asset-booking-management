@@ -18,6 +18,7 @@ import { AssetsTable } from '../features/asset/components/AssetTable';
 import { AssetReportModal } from '../features/asset/components/AssetReportModal';
 import { AssetFormModal } from '../features/asset/components/AssetFormModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
+import { Toast } from '../components/ui/toast';
 
 // API
 import {
@@ -47,7 +48,6 @@ type ModalState =
   | { type: 'delete'; asset: AssetDto }
   | { type: 'report'; asset: AssetDto };
 
-
 export default function Assets() {
   const { user, isLoading } = useAuth();
 
@@ -61,7 +61,8 @@ export default function Assets() {
 function AssetsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState<string>(ALL_ASSETS_CATEGORY);
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>(ALL_ASSETS_CATEGORY);
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [modal, setModal] = useState<ModalState>({ type: 'none' });
   const [search, setSearch] = useState('');
@@ -164,9 +165,19 @@ function AssetsPage() {
         const matchesStatus =
           !selectedStatus || asset.status === selectedStatus;
 
-        return matchesSearch && matchesCategory && matchesDeleted && matchesStatus;
+        return (
+          matchesSearch && matchesCategory && matchesDeleted && matchesStatus
+        );
       }),
-    [assets, search, selectedCategory, categoryMap, showDeleted, selectedStatus, user]
+    [
+      assets,
+      search,
+      selectedCategory,
+      categoryMap,
+      showDeleted,
+      selectedStatus,
+      user,
+    ]
   );
 
   const sortedAssets = useMemo(() => {
@@ -191,6 +202,8 @@ function AssetsPage() {
     try {
       await deleteAsset(asset.id);
 
+      Toast.success(t('layout.toast.assetDeleted'));
+
       setAssets((current) =>
         current.map((a) =>
           a.id === asset.id ? { ...a, status: 'DELETED' as const } : a
@@ -198,6 +211,7 @@ function AssetsPage() {
       );
     } catch (err) {
       console.error('Failed to delete asset:', err);
+      Toast.error(t('layout.toast.assetDeleteFailed'));
     }
   };
 
@@ -247,7 +261,7 @@ function AssetsPage() {
         }}
       />
 
-      <div className="mt-12 flex w-full flex-col sm:items-center sm:justify-between gap-4 sm:flex-row">
+      <div className="mt-12 flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-3xl leading-11 font-black tracking-[0.2em] text-black dark:text-white">
           {pageTitle}
         </h1>
@@ -337,7 +351,9 @@ function AssetsPage() {
               {
                 ...newAsset,
                 categoryName:
-                  newAsset.categoryName ?? categoryMap[newAsset.categoryId] ?? '-',
+                  newAsset.categoryName ??
+                  categoryMap[newAsset.categoryId] ??
+                  '-',
               },
               ...current,
             ]);
@@ -386,6 +402,7 @@ function AssetsPage() {
           onConfirm={async () => {
             if (modal.type === 'delete') {
               await handleDelete(modal.asset);
+
               closeModal();
             }
           }}

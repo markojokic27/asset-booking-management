@@ -60,7 +60,7 @@ export function DeleteModal<T>({
             onClick={onClose}
           />
           <div className="relative z-10 w-full max-w-md rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) p-6 shadow-(--shadow-card)">
-            <h2 className="text-xl font-bold text-(--color-text)">
+            <h2 className="text-2xl font-bold text-(--color-text)">
               {title ?? t('ui.deleteModal.defaultTitle')}
             </h2>
 
