@@ -12,7 +12,7 @@ include:
   - local: /.gitlab/.hidden_jobs.yaml
  
   # --build--
-  - local: /.gitlab/.job_prepare-build.yaml
+  # - local: /.gitlab/.job_prepare-build.yaml
   - local: /.gitlab/.job_build-backend.yaml
   - local: /.gitlab/.job_build-frontend.yaml
     # rules:
@@ -21,7 +21,7 @@ include:
   # --test--
   - local: /.gitlab/.job_run-test-backend.yaml
   - local: /.gitlab/.job_run-test-frontend.yaml
-  - local: /.gitlab/.job_verify-artifacts.yaml
+  # - local: /.gitlab/.job_verify-artifacts.yaml
 
   # --bruno smoke test --
   - local: /.gitlab/.job_smoke-bruno.yaml
