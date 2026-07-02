@@ -1,4 +1,4 @@
-export type BookingPeriod = 'HOUR' | 'DAY' | 'WEEK' | 'MONTH';
+export type BookingPeriod = 'HOUR' | 'DAY';
 
 export type AssetCategoryDto = {
   id: number;

@@ -20,8 +20,6 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({ isOpen, onClose, c
   const bookingPeriodLabelKeys = {
     HOUR: 'assetCategories.bookingPeriod.hour',
     DAY: 'assetCategories.bookingPeriod.day',
-    WEEK: 'assetCategories.bookingPeriod.week',
-    MONTH: 'assetCategories.bookingPeriod.month',
   } as const satisfies Record<BookingPeriod, string>;
 
   const bookingPeriodLabel = t(bookingPeriodLabelKeys[category.bookingPeriod]);

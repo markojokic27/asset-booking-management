@@ -72,8 +72,6 @@ export const AssetCategoriesTable = ({
         const bookingPeriodLabelKeys = {
           HOUR: 'assetCategories.bookingPeriod.hour',
           DAY: 'assetCategories.bookingPeriod.day',
-          WEEK: 'assetCategories.bookingPeriod.week',
-          MONTH: 'assetCategories.bookingPeriod.month',
         } as const satisfies Record<BookingPeriod, string>;
 
         return <span>{t(bookingPeriodLabelKeys[category.bookingPeriod])}</span>;

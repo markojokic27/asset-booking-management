@@ -15,7 +15,7 @@ import { Modal } from '../../../components/ui/Modal';
 import { Toast } from '../../../components/ui/toast';
 
 // Types
-import type { AssetCategoryDto } from '../types';
+import type { AssetCategoryDto, BookingPeriod } from '../types';
 
 // API
 import type { CreateCategoryRequest } from '../api/categoryApi';
@@ -25,7 +25,7 @@ type CategoryFormModalMode = 'create' | 'edit';
 type FormValues = {
   name: string;
   description: string;
-  bookingPeriod: 'DAY' | 'HOUR' | 'WEEK' | 'MONTH';
+  bookingPeriod: BookingPeriod;
   approval: boolean;
 };
 
@@ -100,8 +100,6 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
   const bookingPeriodOptions = [
     { value: 'HOUR', label: t('assetCategories.bookingPeriod.hour') },
     { value: 'DAY', label: t('assetCategories.bookingPeriod.day') },
-    { value: 'WEEK', label: t('assetCategories.bookingPeriod.week') },
-    { value: 'MONTH', label: t('assetCategories.bookingPeriod.month') },
   ] as const;
 
   const {

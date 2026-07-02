@@ -88,9 +88,7 @@
   },
   "bookingPeriod": {
     "hour": "Sat",
-    "day": "Dan",
-    "week": "Tjedan",
-    "month": "Mjesec"
+    "day": "Dan"
   },
   "validation": {
     "nameRequired": "Naziv kategorije je obavezan",

@@ -1,4 +1,4 @@
-import type { AssetCategoryDto } from '../types';
+import type { AssetCategoryDto, BookingPeriod } from '../types';
 import api from '../../../shared/api';
 
 export type PageResponse<T> = {
@@ -28,7 +28,7 @@ export const getCategoryById = async (id: number) => {
 export type CreateCategoryRequest = {
   name: string;
   description: string;
-  bookingPeriod: 'HOUR' | 'DAY' | 'WEEK' | 'MONTH';
+  bookingPeriod: BookingPeriod;
   approval: boolean;
   photo?: string;
 };
@@ -41,8 +41,7 @@ export const createCategory = async (data: CreateCategoryRequest) => {
 export type UpdateCategoryRequest = {
   name: string;
   description?: string;
-  bookingPeriod: 'HOUR' |
-  'DAY' | 'WEEK' | 'MONTH';
+  bookingPeriod: BookingPeriod;
   approval: boolean;
   photo?: string;
 };

@@ -1,7 +1,7 @@
 import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
-export const bookingPeriodSchema = z.enum(['HOUR', 'DAY', 'WEEK', 'MONTH']);
+export const bookingPeriodSchema = z.enum(['HOUR', 'DAY']);
 
 export function createAssetCategoryValidationSchema(t: TFunction) {
   return z.object({

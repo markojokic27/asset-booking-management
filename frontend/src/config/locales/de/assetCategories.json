@@ -86,9 +86,7 @@
   },
   "bookingPeriod": {
     "hour": "Stunde",
-    "day": "Tag",
-    "week": "Woche",
-    "month": "Monat"
+    "day": "Tag"
   },
   "validation": {
     "nameRequired": "Kategoriename ist erforderlich",
