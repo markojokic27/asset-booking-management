@@ -40,6 +40,11 @@
     <string name="bookings_error_load_message">Fehler beim Laden der Buchungen.</string>
     <string name="bookings_empty_no_bookings">Keine Buchungen.</string>
     <string name="bookings_empty_no_matching">Keine passenden Buchungen gefunden.</string>
+    <string name="bookings_cancel_action">Stornieren</string>
+    <string name="bookings_cancel_action_loading">Wird storniert...</string>
+    <string name="bookings_cancel_dialog_title">Diese Buchung stornieren?</string>
+    <string name="bookings_cancel_dialog_message">Möchten Sie diese Buchung wirklich stornieren?</string>
+    <string name="bookings_cancel_error">Die Buchung konnte nicht storniert werden. Bitte versuchen Sie es erneut.</string>
     <string name="approvals_error_load_title">Anfragen konnten nicht geladen werden</string>
     <string name="approvals_error_no_access">Sie haben keinen Zugriff auf Freigabeanfragen.</string>
     <string name="approvals_error_load_message">Ausstehende Buchungen konnten nicht geladen werden.</string>

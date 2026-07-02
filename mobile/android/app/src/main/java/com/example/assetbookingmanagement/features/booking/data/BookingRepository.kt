@@ -32,4 +32,11 @@ class BookingRepository @Inject constructor(
     suspend fun rejectBooking(bookingId: Long): BookingResponse {
         return bookingApi.rejectBooking(bookingId)
     }
+
+    suspend fun cancelBooking(bookingId: Long): BookingResponse {
+        return bookingApi.updateBooking(
+            bookingId = bookingId,
+            request = BookingStatusUpdateRequest(status = "CANCELLED")
+        )
+    }
 }

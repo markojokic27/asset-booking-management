@@ -2,6 +2,7 @@ package com.example.assetbookingmanagement.features.booking.data
 
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.Path
@@ -35,5 +36,11 @@ interface BookingApi {
     @POST("bookings/{bookingId}/reject")
     suspend fun rejectBooking(
         @Path("bookingId") bookingId: Long
+    ): BookingResponse
+
+    @PATCH("bookings/{bookingId}")
+    suspend fun updateBooking(
+        @Path("bookingId") bookingId: Long,
+        @Body request: BookingStatusUpdateRequest
     ): BookingResponse
 }

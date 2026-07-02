@@ -3,11 +3,9 @@ package com.example.assetbookingmanagement.app.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.navigation.NavType
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NamedNavArgument
@@ -210,7 +208,10 @@ fun NavGraph(
                     bookingEnd = backStackEntry.stringArg("toDate", "-"),
                     status = backStackEntry.stringArg("status", "-"),
                     categoryName = backStackEntry.stringArg("categoryName", "-"),
-                    isHourlyBooking = backStackEntry.boolArg("isHourlyBooking")
+                    isHourlyBooking = backStackEntry.boolArg("isHourlyBooking"),
+                    onCancelled = {
+                        navController.popBackStack()
+                    }
                 )
             }
 

@@ -40,6 +40,11 @@
     <string name="bookings_error_load_message">Failed to load bookings.</string>
     <string name="bookings_empty_no_bookings">No bookings.</string>
     <string name="bookings_empty_no_matching">No matching bookings found.</string>
+    <string name="bookings_cancel_action">Cancel</string>
+    <string name="bookings_cancel_action_loading">Cancelling...</string>
+    <string name="bookings_cancel_dialog_title">Cancel this booking?</string>
+    <string name="bookings_cancel_dialog_message">Are you sure you want to cancel this booking?</string>
+    <string name="bookings_cancel_error">Could not cancel the booking. Please try again.</string>
     <string name="approvals_error_load_title">Couldn\'t load requests</string>
     <string name="approvals_error_no_access">You do not have access to approval requests.</string>
     <string name="approvals_error_load_message">Failed to load pending bookings.</string>

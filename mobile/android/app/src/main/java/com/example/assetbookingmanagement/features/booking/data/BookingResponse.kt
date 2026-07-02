@@ -45,3 +45,8 @@ data class CategorySummary(
 data class BookingListResponse(
     val content: List<BookingResponse>
 )
+
+@Serializable
+data class BookingStatusUpdateRequest(
+    val status: String
+)

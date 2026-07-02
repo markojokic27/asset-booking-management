@@ -11,11 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppEmptyState
 import com.example.assetbookingmanagement.core.ui.components.AppLoadingState
@@ -30,6 +31,12 @@ fun BookingsScreen(
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(BookingsTab.MyBookings.ordinal) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val selectedTab = BookingsTab.entries[selectedTabIndex]
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.refreshBookingsData()
+        onPauseOrDispose { }
+    }
+
     val tabLabels = BookingsTab.entries.map { tab ->
         when (tab) {
             BookingsTab.MyBookings -> stringResource(R.string.home_my_bookings_label)

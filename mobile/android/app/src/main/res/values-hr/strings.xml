@@ -40,6 +40,11 @@
     <string name="bookings_error_load_message">Učitavanje rezervacija nije uspjelo.</string>
     <string name="bookings_empty_no_bookings">Nema rezervacija.</string>
     <string name="bookings_empty_no_matching">Nema rezervacija koje odgovaraju pretrazi.</string>
+    <string name="bookings_cancel_action">Otkaži</string>
+    <string name="bookings_cancel_action_loading">Otkazivanje...</string>
+    <string name="bookings_cancel_dialog_title">Otkazati ovu rezervaciju?</string>
+    <string name="bookings_cancel_dialog_message">Jeste li sigurni da želite otkazati ovu rezervaciju?</string>
+    <string name="bookings_cancel_error">Rezervaciju nije moguće otkazati. Pokušajte ponovno.</string>
     <string name="approvals_error_load_title">Učitavanje zahtjeva nije uspjelo</string>
     <string name="approvals_error_no_access">Nemate pristup zahtjevima za odobravanje.</string>
     <string name="approvals_error_load_message">Učitavanje rezervacija na čekanju nije uspjelo.</string>

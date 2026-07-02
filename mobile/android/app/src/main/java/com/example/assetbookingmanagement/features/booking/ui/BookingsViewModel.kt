@@ -63,17 +63,21 @@ class BookingsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(BookingsUiState())
     val uiState: StateFlow<BookingsUiState> = _uiState.asStateFlow()
 
-    init {
-        getMyBookings()
-    }
-
     fun onSearchTextChange(text: String) {
         _uiState.update { it.copy(searchText = text) }
     }
 
-    fun getMyBookings() {
+    fun refreshBookingsData() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, errorMessageResId = null) }
+            val hasExistingData =
+                _uiState.value.myBookings.isNotEmpty() ||
+                    _uiState.value.historyBookings.isNotEmpty()
+
+            if (!hasExistingData) {
+                _uiState.update { it.copy(isLoading = true, errorMessageResId = null) }
+            } else {
+                _uiState.update { it.copy(errorMessageResId = null) }
+            }
 
             val userId = authSession.getCurrentUserId() ?: run {
                 _uiState.update {
@@ -140,11 +144,15 @@ class BookingsViewModel @Inject constructor(
                     )
                 }
             } catch (_: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessageResId = R.string.bookings_error_load_message
-                    )
+                if (!hasExistingData) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessageResId = R.string.bookings_error_load_message
+                        )
+                    }
+                } else {
+                    _uiState.update { it.copy(isLoading = false, errorMessageResId = null) }
                 }
             }
         }
