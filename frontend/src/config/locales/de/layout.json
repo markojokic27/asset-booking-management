@@ -39,6 +39,8 @@
     "assetUpdated": "Das Asset wurde erfolgreich aktualisiert.",
     "assetUpdateFailed": "Das Asset konnte nicht aktualisiert werden.",
     "assetDeleted": "Das Asset wurde erfolgreich gelöscht.",
-    "assetDeleteFailed": "Das Asset konnte nicht gelöscht werden."
+    "assetDeleteFailed": "Das Asset konnte nicht gelöscht werden.",
+    "categoryCreated": "Die Kategorie wurde erfolgreich erstellt.",
+    "categoryCreateFailed": "Die Kategorie konnte nicht erstellt werden."
   }
 }

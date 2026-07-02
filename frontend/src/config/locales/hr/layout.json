@@ -39,6 +39,8 @@
     "assetUpdated": "Imovina je uspješno ažurirana.",
     "assetUpdateFailed": "Ažuriranje imovine nije uspjelo.",
     "assetDeleted": "Imovina je uspješno obrisana.",
-    "assetDeleteFailed": "Brisanje imovine nije uspjelo."
+    "assetDeleteFailed": "Brisanje imovine nije uspjelo.",
+    "categoryCreated": "Kategorija je uspješno kreirana.",
+    "categoryCreateFailed": "Kreiranje kategorije nije uspjelo."
   }
 }

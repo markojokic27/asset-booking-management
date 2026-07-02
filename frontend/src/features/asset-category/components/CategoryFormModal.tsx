@@ -1,3 +1,4 @@
+// External packages
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -5,13 +6,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
+// Components
 import { Button } from '../../../components/ui/Button';
 import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
-import type { CreateCategoryRequest } from '../api/categoryApi';
+import { Toast } from '../../../components/ui/toast';
+
+// Types
 import type { AssetCategoryDto } from '../types';
+
+// API
+import type { CreateCategoryRequest } from '../api/categoryApi';
 
 type CategoryFormModalMode = 'create' | 'edit';
 
@@ -131,7 +138,9 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
 
   if (!isOpen || (!isCreate && !category)) return null;
 
-  const formId = isCreate ? 'asset-category-create-form' : `asset-category-edit-form-${category!.id}`;
+  const formId = isCreate
+    ? 'asset-category-create-form'
+    : `asset-category-edit-form-${category!.id}`;
   const formKey = isCreate ? 'create' : String(category!.id);
   const approvalChecked = watch('approval');
 
@@ -146,6 +155,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
           bookingPeriod: data.bookingPeriod,
           approval: data.approval,
         });
+        Toast.success(t('layout.toast.categoryCreated'));
       } else {
         await onSave({
           ...category!,
@@ -155,14 +165,23 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
           approval: data.approval,
           lastModifiedAt: new Date(),
         });
+        Toast.success(t('layout.toast.categoryUpdated'));
       }
       onClose();
     } catch (err) {
-      console.error(`Error ${isCreate ? 'creating' : 'updating'} category:`, err);
+      console.error(
+        `Error ${isCreate ? 'creating' : 'updating'} category:`,
+        err
+      );
       setSubmitError(
         isCreate
           ? t('assetCategories.errors.createFailed')
-          : t('assetCategories.modals.edit.submitError'),
+          : t('assetCategories.modals.edit.submitError')
+      );
+      Toast.error(
+        isCreate
+          ? t('layout.toast.categoryCreateFailed')
+          : t('layout.toast.categoryUpdateFailed')
       );
     } finally {
       setIsSaving(false);
@@ -174,9 +193,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel={t(config.ariaLabelKey)}
-      title={
-        <h2 className="text-2xl font-bold">{t(config.titleKey)}</h2>
-      }
+      title={<h2 className="text-2xl font-bold">{t(config.titleKey)}</h2>}
       headerRight={
         <IconButton
           data-testid={config.closeTestId}

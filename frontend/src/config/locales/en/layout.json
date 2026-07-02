@@ -39,6 +39,10 @@
     "assetUpdated": "Asset successfully updated.",
     "assetUpdateFailed": "Failed to update asset.",
     "assetDeleted": "Asset successfully deleted.",
-    "assetDeleteFailed": "Failed to delete asset."
+    "assetDeleteFailed": "Failed to delete asset.",
+    "categoryCreated": "Category successfully created.",
+    "categoryCreateFailed": "Failed to create category.",
+    "categoryUpdated": "Category successfully updated.",
+    "categoryUpdateFailed": "Failed to update category."
   }
 }
