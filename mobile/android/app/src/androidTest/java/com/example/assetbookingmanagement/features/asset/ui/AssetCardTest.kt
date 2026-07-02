@@ -27,7 +27,7 @@ class AssetCardTest {
         setAssetCard(asset = asset)
 
         composeRule.onNodeWithText(asset.name).assertIsDisplayed()
-        composeRule.onNodeWithText(asset.code).assertIsDisplayed()
+        composeRule.onNodeWithText(asset.code ?: "-").assertIsDisplayed()
         composeRule.onNodeWithText(asset.location).assertIsDisplayed()
         composeRule.onNodeWithText(asset.status).assertIsDisplayed()
     }

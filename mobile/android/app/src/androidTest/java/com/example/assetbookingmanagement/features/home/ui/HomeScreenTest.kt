@@ -19,8 +19,14 @@ import com.example.assetbookingmanagement.features.booking.data.BookingCreateReq
 import com.example.assetbookingmanagement.features.booking.data.BookingListResponse
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
+import com.example.assetbookingmanagement.features.booking.data.BookingStatusUpdateRequest
 import com.example.assetbookingmanagement.features.booking.data.CategorySummary
+import com.example.assetbookingmanagement.features.booking.data.RecurringBookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.UserSummary
+import com.example.assetbookingmanagement.features.user.data.ChangePasswordRequest
+import com.example.assetbookingmanagement.features.user.data.UserApi
+import com.example.assetbookingmanagement.features.user.data.UserRepository
+import com.example.assetbookingmanagement.features.user.data.UserResponse
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +64,8 @@ class HomeScreenTest {
                     )
                 )
             ),
-            authSession = authSession
+            authSession = authSession,
+            userRepository = UserRepository(FakeUserApi())
         )
         var assetsClicks = 0
         var bookingsClicks = 0
@@ -142,12 +149,52 @@ class HomeScreenTest {
         override suspend fun getBookings(
             userId: Long?,
             assetId: Long?,
+            status: String?,
             page: Int,
             size: Int
         ): BookingListResponse = response
 
         override suspend fun createBooking(request: BookingCreateRequest): BookingResponse {
             error("createBooking is not used in HomeScreen tests.")
+        }
+
+        override suspend fun createRecurringBooking(request: RecurringBookingCreateRequest): List<BookingResponse> {
+            error("createRecurringBooking is not used in HomeScreen tests.")
+        }
+
+        override suspend fun approveBooking(bookingId: Long): BookingResponse {
+            error("approveBooking is not used in HomeScreen tests.")
+        }
+
+        override suspend fun rejectBooking(bookingId: Long): BookingResponse {
+            error("rejectBooking is not used in HomeScreen tests.")
+        }
+
+        override suspend fun updateBooking(
+            bookingId: Long,
+            request: BookingStatusUpdateRequest
+        ): BookingResponse {
+            error("updateBooking is not used in HomeScreen tests.")
+        }
+    }
+
+    private class FakeUserApi : UserApi {
+        override suspend fun getUserById(id: Long): UserResponse = UserResponse(
+            id = id,
+            username = "ivan.horvat",
+            surname = "Horvat",
+            name = "Ivan",
+            email = "ivan@example.com",
+            role = "USER",
+            status = "ACTIVE",
+            departmentId = 1L,
+            managerEmail = "manager@example.com",
+            notes = null,
+            benefit = null
+        )
+
+        override suspend fun changePassword(id: Long, request: ChangePasswordRequest) {
+            error("changePassword is not used in HomeScreen tests.")
         }
     }
 }
