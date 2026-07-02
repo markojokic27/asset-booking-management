@@ -24,17 +24,17 @@ interface Props {
 
 function getTakenSpots(bookings: BookingWithRelations[], filters?: Filters): number[] {
   const referenceDate = filters?.fromDate ? new Date(filters.fromDate) : new Date();
-  const refYear  = referenceDate.getFullYear();
+  const refYear = referenceDate.getFullYear();
   const refMonth = referenceDate.getMonth();
-  const refDay   = referenceDate.getDate();
+  const refDay = referenceDate.getDate();
   const refStart = new Date(refYear, refMonth, refDay, 0, 0, 0);
-  const refEnd   = new Date(refYear, refMonth, refDay, 23, 59, 59);
+  const refEnd = new Date(refYear, refMonth, refDay, 23, 59, 59);
 
   return bookings
     .filter((b) => {
       if (b.status !== 'APPROVED' && b.status !== 'ACTIVE') return false;
       const start = new Date(b.bookingStart);
-      const end   = new Date(b.bookingEnd);
+      const end = new Date(b.bookingEnd);
       return start <= refEnd && end >= refStart;
     })
     .flatMap((b) => {
@@ -83,9 +83,9 @@ const SpotPopover: React.FC<PopoverProps> = ({
   const parkingFilters: Filters = {
     search: '',
     fromDate: filters?.fromDate ?? '',
-    toDate:   filters?.fromDate ?? '',
+    toDate: filters?.fromDate ?? '',
     fromHour: '06:00',
-    toHour:   '22:00',
+    toHour: '22:00',
     selectedWeekdays: [],
   };
 
@@ -97,6 +97,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
     refetch: refetchBookings,
     bookingPeriod: 'DAY',
     availableRecurringDates: [],
+    t,
   });
 
   const handleBook = async () => {
@@ -132,7 +133,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
             aria-label={t('bookings.parkingMap.closeAria')}
           >
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
           </button>
         </div>
@@ -145,7 +146,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
             <span className={[
               'h-1.5 w-1.5 rounded-full',
               isTaken ? 'bg-orange-500' : 'bg-blue-500',
-            ].join(' ')}/>
+            ].join(' ')} />
             {isTaken ? t('bookings.parkingMap.taken') : t('bookings.parkingMap.available')}
           </span>
         </div>
@@ -188,13 +189,13 @@ export const ParkingMap: React.FC<Props> = ({
   setFilters,
 }) => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen]             = React.useState(false);
-  const [activeFloor, setActiveFloor]   = React.useState<FloorLevel>('-1');
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [activeFloor, setActiveFloor] = React.useState<FloorLevel>('-1');
   const [selectedSpot, setSelectedSpot] = React.useState<SpotClickInfo | null>(null);
 
-  const takenSpots   = React.useMemo(() => getTakenSpots(bookings, filters), [bookings, filters]);
+  const takenSpots = React.useMemo(() => getTakenSpots(bookings, filters), [bookings, filters]);
   const spotAssetMap = React.useMemo(() => buildSpotAssetMap(assets), [assets]);
-  const dateLabel    = formatDate(filters);
+  const dateLabel = formatDate(filters);
 
   const handleSpotClick = (spotNumber: number) => {
     setSelectedSpot({
@@ -203,7 +204,7 @@ export const ParkingMap: React.FC<Props> = ({
     });
   };
 
-  const openModal  = () => setIsOpen(true);
+  const openModal = () => setIsOpen(true);
   const closeModal = () => { setIsOpen(false); setSelectedSpot(null); };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -211,7 +212,7 @@ export const ParkingMap: React.FC<Props> = ({
     setFilters((prev) => ({
       ...prev,
       fromDate: date,
-      toDate:   date,
+      toDate: date,
     }));
   };
 
@@ -310,7 +311,7 @@ export const ParkingMap: React.FC<Props> = ({
                 aria-label={t('bookings.parkingMap.closeAria')}
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
