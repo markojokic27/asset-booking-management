@@ -41,6 +41,14 @@
     "assetDeleted": "Imovina je uspješno obrisana.",
     "assetDeleteFailed": "Brisanje imovine nije uspjelo.",
     "categoryCreated": "Kategorija je uspješno kreirana.",
-    "categoryCreateFailed": "Kreiranje kategorije nije uspjelo."
+    "categoryCreateFailed": "Kreiranje kategorije nije uspjelo.",
+    "categoryUpdated": "Kategorija je uspješno ažurirana.",
+    "categoryUpdateFailed": "Ažuriranje kategorije nije uspjelo.",
+    "userCreated": "Korisnik \"{{name}}\" je uspješno kreiran.",
+    "userUpdated": "Korisnik \"{{name}}\" je uspješno ažuriran.",
+    "userDeleted": "Korisnik \"{{name}}\" je uspješno obrisan.",
+    "userCreateFailed": "Kreiranje korisnika nije uspjelo.",
+    "userUpdateFailed": "Ažuriranje korisnika nije uspjelo.",
+    "userDeleteFailed": "Brisanje korisnika nije uspjelo."
   }
 }

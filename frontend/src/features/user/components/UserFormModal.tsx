@@ -12,12 +12,18 @@ import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
+import { Toast } from '../../../components/ui/toast';
 
 // hooks
 import { useDepartments } from '../../department/hooks/useDepartments';
+import { getFullName } from '../utilis/users';
 
 // validation
-import { createUserValidationSchema, userRoleSchema, userStatusSchema } from '../validation';
+import {
+  createUserValidationSchema,
+  userRoleSchema,
+  userStatusSchema,
+} from '../validation';
 
 // types
 import type { UserDto, UserUpsertRequest } from '../types';
@@ -97,7 +103,9 @@ export const UserFormModal = ({
   const { t } = useTranslation();
   const { getDepartmentName, departmentOptions } = useDepartments();
   const isCreate = mode === 'create';
-  const fieldsKey = isCreate ? 'users.modals.create.fields' : 'users.modals.edit.fields';
+  const fieldsKey = isCreate
+    ? 'users.modals.create.fields'
+    : 'users.modals.edit.fields';
 
   const validationSchema = useMemo(() => {
     const base = createUserValidationSchema(t).extend({
@@ -237,18 +245,44 @@ export const UserFormModal = ({
           ...createData,
           notes: createData.notes?.trim() || null,
         });
+        Toast.success(
+          t('layout.toast.userCreated', {
+            name: getFullName({
+              name: createData.name,
+              surname: createData.surname,
+            }),
+          })
+        );
       } else {
-        const editData = result.data as Omit<UserFormModalCreatePayload, 'username' | 'password'>;
+        const editData = result.data as Omit<
+          UserFormModalCreatePayload,
+          'username' | 'password'
+        >;
         await onSave({
           ...user!,
           ...editData,
           notes: editData.notes?.trim() || null,
         });
+        Toast.success(
+          t('layout.toast.userUpdated', {
+            name: getFullName({
+              name: editData.name,
+              surname: editData.surname,
+            }),
+          })
+        );
       }
       onClose();
     } catch {
       setSubmitError(
-        isCreate ? t('users.modals.create.submitError') : t('users.modals.edit.submitError'),
+        isCreate
+          ? t('users.modals.create.submitError')
+          : t('users.modals.edit.submitError')
+      );
+      Toast.error(
+        isCreate
+          ? t('layout.toast.userCreateFailed')
+          : t('layout.toast.userUpdateFailed')
       );
     } finally {
       setIsSaving(false);
@@ -261,11 +295,15 @@ export const UserFormModal = ({
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel={
-        isCreate ? t('users.modals.create.ariaLabel') : t('users.modals.edit.ariaLabel')
+        isCreate
+          ? t('users.modals.create.ariaLabel')
+          : t('users.modals.edit.ariaLabel')
       }
       title={
         <h2 className="text-2xl font-bold">
-          {isCreate ? t('users.modals.create.title') : t('users.modals.edit.title')}
+          {isCreate
+            ? t('users.modals.create.title')
+            : t('users.modals.edit.title')}
         </h2>
       }
       headerRight={
@@ -286,7 +324,9 @@ export const UserFormModal = ({
             className="shadow-none"
             disabled={isSaving}
           >
-            {isSaving ? t('users.modals.common.saving') : t('users.modals.common.save')}
+            {isSaving
+              ? t('users.modals.common.saving')
+              : t('users.modals.common.save')}
           </Button>
         </div>
       }

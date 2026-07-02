@@ -43,6 +43,12 @@
     "categoryCreated": "Category successfully created.",
     "categoryCreateFailed": "Failed to create category.",
     "categoryUpdated": "Category successfully updated.",
-    "categoryUpdateFailed": "Failed to update category."
+    "categoryUpdateFailed": "Failed to update category.",
+    "userCreated": "User \"{{name}}\" successfully created.",
+    "userUpdated": "User \"{{name}}\" successfully updated.",
+    "userDeleted": "User \"{{name}}\" successfully deleted.",
+    "userCreateFailed": "Failed to create user.",
+    "userUpdateFailed": "Failed to update user.",
+    "userDeleteFailed": "Failed to delete user."
   }
 }

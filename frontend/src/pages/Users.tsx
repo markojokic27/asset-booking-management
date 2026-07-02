@@ -32,6 +32,7 @@ import { useAuth } from '../features/auth/context/AuthContext';
 // Types
 import type { UserDto, UserRole } from '../features/user/types';
 import { userRoleSchema } from '../features/user/validation';
+import { Toast } from '../components/ui/toast';
 
 type DeleteState = { type: 'none' } | { type: 'delete'; user: UserDto };
 
@@ -282,6 +283,9 @@ function UsersPage() {
           // Delete selected user and close modal
           if (deleteState.type === 'delete') {
             await actions.remove(deleteState.user.id);
+            Toast.success(t('layout.toast.userDeleted', {
+              name: getFullName(deleteState.user),
+            }));
             closeDeleteModal();
           }
         }}

@@ -41,6 +41,14 @@
     "assetDeleted": "Das Asset wurde erfolgreich gelöscht.",
     "assetDeleteFailed": "Das Asset konnte nicht gelöscht werden.",
     "categoryCreated": "Die Kategorie wurde erfolgreich erstellt.",
-    "categoryCreateFailed": "Die Kategorie konnte nicht erstellt werden."
+    "categoryCreateFailed": "Die Kategorie konnte nicht erstellt werden.",
+    "categoryUpdated": "Die Kategorie wurde erfolgreich aktualisiert.",
+    "categoryUpdateFailed": "Die Kategorie konnte nicht aktualisiert werden.",
+    "userCreated": "Der Benutzer \"{{name}}\" wurde erfolgreich erstellt.",
+    "userUpdated": "Der Benutzer \"{{name}}\" wurde erfolgreich aktualisiert.",
+    "userDeleted": "Der Benutzer \"{{name}}\" wurde erfolgreich gelöscht.",
+    "userCreateFailed": "Der Benutzer konnte nicht erstellt werden.",
+    "userUpdateFailed": "Der Benutzer konnte nicht aktualisiert werden.",
+    "userDeleteFailed": "Der Benutzer konnte nicht gelöscht werden."
   }
 }
