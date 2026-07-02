@@ -49,6 +49,7 @@
     "userDeleted": "User \"{{name}}\" successfully deleted.",
     "userCreateFailed": "Failed to create user.",
     "userUpdateFailed": "Failed to update user.",
-    "userDeleteFailed": "Failed to delete user."
+    "userDeleteFailed": "Failed to delete user.",
+    "passwordChanged": "Password successfully changed."
   }
 }

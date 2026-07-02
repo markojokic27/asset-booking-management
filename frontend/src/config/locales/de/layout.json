@@ -49,6 +49,7 @@
     "userDeleted": "Der Benutzer \"{{name}}\" wurde erfolgreich gelöscht.",
     "userCreateFailed": "Der Benutzer konnte nicht erstellt werden.",
     "userUpdateFailed": "Der Benutzer konnte nicht aktualisiert werden.",
-    "userDeleteFailed": "Der Benutzer konnte nicht gelöscht werden."
+    "userDeleteFailed": "Der Benutzer konnte nicht gelöscht werden.",
+    "passwordChanged": "Das Passwort wurde erfolgreich geändert."
   }
 }

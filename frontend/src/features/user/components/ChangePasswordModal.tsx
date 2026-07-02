@@ -19,6 +19,7 @@ import { createUserValidationSchema } from '../validation';
 
 // types
 import type { UserDto } from '../types';
+import { Toast } from '../../../components/ui/toast';
 
 type ChangePasswordFieldErrors = {
   currentPassword: string;
@@ -95,6 +96,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordMod
         currentPassword: raw.currentPassword.trim(),
         newPassword: raw.newPassword,
       });
+      Toast.success(t('layout.toast.passwordChanged'));
       onClose();
     } catch (err) {
       if (isAxiosError(err) && err.response?.status === 401) {

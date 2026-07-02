@@ -49,6 +49,7 @@
     "userDeleted": "Korisnik \"{{name}}\" je uspješno obrisan.",
     "userCreateFailed": "Kreiranje korisnika nije uspjelo.",
     "userUpdateFailed": "Ažuriranje korisnika nije uspjelo.",
-    "userDeleteFailed": "Brisanje korisnika nije uspjelo."
+    "userDeleteFailed": "Brisanje korisnika nije uspjelo.",
+    "passwordChanged": "Lozinka je uspješno promijenjena."
   }
 }
