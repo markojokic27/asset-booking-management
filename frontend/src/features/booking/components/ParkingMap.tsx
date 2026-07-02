@@ -32,7 +32,7 @@ function getTakenSpots(bookings: BookingWithRelations[], filters?: Filters): num
 
   return bookings
     .filter((b) => {
-      if (b.status !== 'APPROVED' && b.status !== 'ACTIVE') return false;
+      if (b.status !== 'APPROVED') return false;
       const start = new Date(b.bookingStart);
       const end = new Date(b.bookingEnd);
       return start <= refEnd && end >= refStart;

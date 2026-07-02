@@ -9,7 +9,7 @@ describe("Booking Schema Validation", () => {
         const result = bookingValidationSchema.safeParse({
             userId: 2,
             assetId: 1,
-            status: "ACTIVE",
+            status: "APPROVED",
             bookingStart: new Date("2026-01-04T09:00"),
             bookingEnd: new Date("2026-01-14T09:00"),
             note: "Some optional notes"
@@ -24,7 +24,7 @@ describe("Booking Schema Validation", () => {
             const result = bookingValidationSchema.safeParse({
                 userId: null,
                 assetId: 1,
-                status: "ACTIVE",
+                status: "APPROVED",
                 bookingStart: new Date("2026-01-04T09:00"),
                 bookingEnd: new Date("2026-01-14T09:00"),
                 note: "Some optional notes"
@@ -40,7 +40,7 @@ describe("Booking Schema Validation", () => {
             const result = bookingValidationSchema.safeParse({
                 userId: 2,
                 assetId: null,
-                status: "ACTIVE",
+                status: "APPROVED",
                 bookingStart: new Date("2026-01-04T09:00"),
                 bookingEnd: new Date("2026-01-14T09:00"),
                 note: "Some optional notes"
@@ -72,7 +72,7 @@ describe("Booking Schema Validation", () => {
             const result = bookingValidationSchema.safeParse({
                 userId: 2,
                 assetId: 1,
-                status: "ACTIVE",
+                status: "APPROVED",
                 bookingStart: null,
                 bookingEnd: new Date("2026-01-14T09:00"),
                 note: "Some optional notes"
@@ -90,7 +90,7 @@ describe("Booking Schema Validation", () => {
             const result = bookingValidationSchema.safeParse({
                 userId: 2,
                 assetId: 1,
-                status: "ACTIVE",
+                status: "APPROVED",
                 bookingStart: new Date("2026-01-04T09:00"),
                 bookingEnd: null,
                 note: "Some optional notes"
@@ -107,7 +107,7 @@ describe("Booking Schema Validation", () => {
             const result = bookingValidationSchema.safeParse({
                 userId: 2,
                 assetId: 1,
-                status: "ACTIVE",
+                status: "APPROVED",
                 bookingStart: new Date("2026-01-04T09:00"),
                 bookingEnd: new Date("2026-01-14T09:00"),
                 note: ""
@@ -121,7 +121,7 @@ describe("Booking Schema Validation", () => {
             const result = bookingValidationSchema.safeParse({
                 userId: 2,
                 assetId: 1,
-                status: "ACTIVE",
+                status: "APPROVED",
                 bookingStart: new Date("2026-01-04T09:00"),
                 bookingEnd: new Date("2026-01-14T09:00"),
                 note: "a".repeat(1001)

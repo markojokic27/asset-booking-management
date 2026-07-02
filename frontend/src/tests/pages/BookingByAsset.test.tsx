@@ -82,7 +82,7 @@ const makeBooking = (assetOverrides: Partial<BookingWithRelations['asset']> = {}
   assetId: 42,
   bookingStart: new Date('2025-06-01T09:00:00'),
   bookingEnd: new Date('2025-06-01T17:00:00'),
-  status: 'ACTIVE',
+  status: 'APPROVED',
   notes: '',
   createdAt: new Date('2025-05-01'),
   lastModifiedAt: new Date('2025-05-01'),

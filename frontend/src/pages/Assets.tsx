@@ -303,7 +303,7 @@ function AssetsPage() {
               value={selectedStatus}
               onChange={(event) => setSelectedStatus(event.target.value)}
               options={statusFilterOptions}
-              className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+              className="h-10 cursor-pointer border-2 py-0 text-(--color-table-text) shadow-none"
             />
           </div>
         </div>

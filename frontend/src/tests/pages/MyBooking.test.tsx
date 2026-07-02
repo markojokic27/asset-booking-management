@@ -73,7 +73,7 @@ const makeBooking = (id: number, assetId: number, assetName: string): BookingWit
   id: String(id),
   userId: 1,
   assetId,
-  status: 'ACTIVE',
+  status: 'APPROVED',
   notes: '',
   createdAt: new Date(),
   lastModifiedAt: new Date(),

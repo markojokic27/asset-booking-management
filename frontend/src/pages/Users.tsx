@@ -142,7 +142,7 @@ function UsersPage() {
                   list.setSelectedRole(event.target.value as UserRole | '')
                 }
                 options={roleFilterOptions}
-                className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+                className="h-10 cursor-pointer border-2 py-0 text-(--color-table-text) shadow-none"
               />
             </div>
 
@@ -159,7 +159,7 @@ function UsersPage() {
                   )
                 }
                 options={departmentFilterOptions}
-                className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+                className="h-10 cursor-pointer border-2 py-0 text-(--color-table-text) shadow-none"
               />
             </div>
           </div>

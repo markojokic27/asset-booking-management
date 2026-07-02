@@ -146,7 +146,7 @@ export default function MyBookings() {
                     label: asset.name,
                   })),
                 ]}
-                className="border-2 py-2.5 text-(--color-table-text) shadow-none"
+                className="cursor-pointer border-2 py-2.5 text-(--color-table-text) shadow-none"
               />
             </div>
             {isUserAdmin && (
@@ -160,7 +160,7 @@ export default function MyBookings() {
                     setSelectedStatus(event.target.value as BookingStatus | '')
                   }
                   options={statusFilterOptions}
-                  className="h-10 border-2 py-0 text-(--color-table-text) shadow-none"
+                  className="h-10 cursor-pointer border-2 py-0 text-(--color-table-text) shadow-none"
                 />
               </div>
             )}

@@ -16,8 +16,6 @@ const statusClassNameConfig: Record<BookingStatus, string> = {
     'bg-(--color-status-deleted-bg) text-(--color-status-deleted-text)',
   COMPLETED:
     'bg-(--color-status-completed-bg) text-(--color-status-completed-text)',
-  ACTIVE:
-    'bg-(--color-status-active-bg) text-(--color-status-active-text)',
 };
 
 // generate translation key for status

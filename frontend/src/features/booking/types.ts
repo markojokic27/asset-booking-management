@@ -1,11 +1,9 @@
 import type { AssetDto } from '../asset/types';
 
-// TODO fix this, changes in Database are needed
 export const bookingStatuses = [
   'APPROVED',
   'PENDING',
   'REJECTED',
-  'ACTIVE',
   'COMPLETED',
   'CANCELLED',
 ] as const;
