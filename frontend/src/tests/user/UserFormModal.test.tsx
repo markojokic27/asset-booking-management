@@ -176,8 +176,20 @@ describe('UserFormModal', () => {
       expect(screen.getByTestId('user-manager-email')).toHaveValue('manager@example.com');
     });
 
+    it('disables save button until a field is changed', () => {
+      renderModal({ mode: 'edit', user: activeUser });
+      expect(screen.getByTestId('button-save')).toBeDisabled();
+      fireEvent.change(screen.getByTestId('user-name'), {
+        target: { value: 'Alicia' },
+      });
+      expect(screen.getByTestId('button-save')).not.toBeDisabled();
+    });
+
     it('calls onSave and onClose with valid data', async () => {
       renderModal({ mode: 'edit', user: activeUser });
+      fireEvent.change(screen.getByTestId('user-name'), {
+        target: { value: 'Alicia' },
+      });
       submitEdit();
       await waitFor(() => {
         expect(defaultProps.onSave).toHaveBeenCalledTimes(1);
@@ -188,6 +200,9 @@ describe('UserFormModal', () => {
     it('shows submit error when onSave throws', async () => {
       defaultProps.onSave.mockRejectedValueOnce(new Error());
       renderModal({ mode: 'edit', user: activeUser });
+      fireEvent.change(screen.getByTestId('user-name'), {
+        target: { value: 'Alicia' },
+      });
       submitEdit();
       await waitFor(() =>
         expect(screen.getByText('users.modals.edit.submitError')).toBeInTheDocument(),

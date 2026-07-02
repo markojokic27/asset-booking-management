@@ -108,7 +108,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
     setValue,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FormValues>({
     defaultValues: createInitialValues,
   });
@@ -208,7 +208,7 @@ export const CategoryFormModal: React.FC<CategoryFormModalProps> = ({
             type="submit"
             form={formId}
             className="shadow-none"
-            disabled={isSaving}
+            disabled={isSaving || (!isCreate && !isDirty)}
           >
             {isSaving
               ? t('assetCategories.modals.common.saving')

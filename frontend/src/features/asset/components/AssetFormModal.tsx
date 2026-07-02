@@ -22,6 +22,9 @@ import type { CreateAssetRequest } from '../api/assetApi';
 // API
 import { getAllCategories } from '../../asset-category/api/categoryApi';
 
+// hooks
+import { useEditFormChanges } from '../../../hooks/useEditFormChanges';
+
 export type AssetFormModalCreatePayload = CreateAssetRequest;
 
 type AssetFormModalMode = 'create' | 'edit';
@@ -85,6 +88,11 @@ export const AssetFormModal = ({
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  const { onFormChange, isSaveDisabled } = useEditFormChanges(
+    !isCreate,
+    `${isOpen}-${asset?.id ?? ''}`
+  );
 
   const [categories, setCategories] = useState<AssetCategoryDto[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(false);
@@ -224,6 +232,7 @@ export const AssetFormModal = ({
         noValidate
         id={formId}
         key={formKey}
+        onChange={onFormChange}
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
@@ -342,7 +351,7 @@ export const AssetFormModal = ({
               data-testid={isCreate ? 'save-asset-button' : 'save-edit-button'}
               type="submit"
               className="shadow-none"
-              disabled={isSaving}
+              disabled={isSaving || isSaveDisabled}
             >
               {isSaving ? t('assets.modals.saving') : t('assets.modals.save')}
             </Button>

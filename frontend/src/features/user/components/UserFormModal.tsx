@@ -15,6 +15,7 @@ import { Modal } from '../../../components/ui/Modal';
 import { Toast } from '../../../components/ui/toast';
 
 // hooks
+import { useEditFormChanges } from '../../../hooks/useEditFormChanges';
 import { useDepartments } from '../../department/hooks/useDepartments';
 import { getFullName } from '../utilis/users';
 
@@ -142,6 +143,11 @@ export const UserFormModal = ({
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  const { onFormChange, isSaveDisabled } = useEditFormChanges(
+    !isCreate,
+    `${isOpen}-${user?.id ?? ''}`
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -322,7 +328,7 @@ export const UserFormModal = ({
             type="submit"
             form={formId}
             className="shadow-none"
-            disabled={isSaving}
+            disabled={isSaving || isSaveDisabled}
           >
             {isSaving
               ? t('users.modals.common.saving')
@@ -335,6 +341,7 @@ export const UserFormModal = ({
         noValidate
         id={formId}
         key={formKey}
+        onChange={onFormChange}
         onSubmit={(event) => {
           event.preventDefault();
           const formData = new FormData(event.currentTarget);
