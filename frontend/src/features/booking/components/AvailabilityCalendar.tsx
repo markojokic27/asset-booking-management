@@ -7,7 +7,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 // Types
 import type { BookingWithRelations } from '../types';
 
-//import hrLocale from '@fullcalendar/core/locales/hr';
+// Internationalization
+import hrLocale from '@fullcalendar/core/locales/hr';
+import enGbLocale from '@fullcalendar/core/locales/en-gb';
+import deLocale from '@fullcalendar/core/locales/de';
+import { useTranslation } from 'react-i18next';
 
 type CalendarEvent = {
   id: string;
@@ -33,8 +37,6 @@ type Props = {
   onMonthChange?: (date: Date) => void;
 };
 
-// TODO: internationalization on calendar (weekdays, month, today...)
-
 export function AvailabilityCalendar({
   events,
   selectedFromDate,
@@ -46,6 +48,19 @@ export function AvailabilityCalendar({
   availableRecurringDates = [],
   variant = 'DAY',
 }: Props) {
+  const { i18n } = useTranslation();
+
+  const calendarLocale = React.useMemo(() => {
+    switch (i18n.resolvedLanguage) {
+      case 'hr':
+        return hrLocale;
+      case 'de':
+        return deLocale;
+      default:
+        return enGbLocale;
+    }
+  }, [i18n.resolvedLanguage]);
+
   const isPastDate = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -98,7 +113,17 @@ export function AvailabilityCalendar({
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        //locale={hrLocale}
+        locale={calendarLocale}
+        titleFormat={(date) => {
+          const formatted = new Intl.DateTimeFormat(i18n.resolvedLanguage, {
+            month: 'long',
+            year: 'numeric',
+          }).format(date.date.marker);
+
+          return i18n.resolvedLanguage === 'hr'
+            ? formatted.charAt(0).toUpperCase() + formatted.slice(1)
+            : formatted;
+        }}
         firstDay={1}
         height="auto"
         fixedWeekCount={false}

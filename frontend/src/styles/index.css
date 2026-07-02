@@ -698,4 +698,9 @@
   p {
     color: var(--color-text);
   }
+  .fc .fc-button:focus,
+  .fc .fc-button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
 }
