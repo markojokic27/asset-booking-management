@@ -1,14 +1,15 @@
-// external imports
+// External imports
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-// components
+// Components
 import { Button } from '../../../components/ui/Button';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { BookingStatusBadge } from './BookingStatusBadge';
 import { CancelBookingModal } from './CancelBookingModal';
+import { Toast } from '../../../components/ui/toast';
 
-// utils
+// Utils
 import {
   canCancelBooking,
   formatBookingTime,
@@ -16,7 +17,7 @@ import {
 } from '../utilis/bookingLogic';
 import { getFullName } from '../../user/utilis/users';
 
-// types
+// Types
 import type { BookingWithRelations } from '../types';
 
 // props of the component
@@ -59,6 +60,7 @@ export function MyBookingsTable({
     const success = await onCancelBooking(Number(bookingToCancel.id));
     if (success) {
       setBookingToCancel(null);
+      Toast.success(t('layout.toast.bookingCancelled'));
     }
   };
 
