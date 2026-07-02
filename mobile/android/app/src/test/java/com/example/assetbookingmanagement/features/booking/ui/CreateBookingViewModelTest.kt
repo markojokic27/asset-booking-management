@@ -17,6 +17,7 @@ import com.example.assetbookingmanagement.features.booking.data.BookingCreateReq
 import com.example.assetbookingmanagement.features.booking.data.BookingListResponse
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
+import com.example.assetbookingmanagement.features.booking.data.BookingStatusUpdateRequest
 import com.example.assetbookingmanagement.features.booking.data.CategorySummary
 import com.example.assetbookingmanagement.features.booking.data.RecurringBookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.TimeSlotRequest
@@ -134,6 +135,58 @@ class CreateBookingViewModelTest {
     }
 
     @Test
+    fun testCreateBookingCreatesDayBookingForLaptopAcrossSelectedDateRange() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
+
+        val fakeBookingApi = FakeBookingApi().apply {
+            createBookingResponse = dayBooking(
+                assetId = 1L,
+                assetName = "Hp 15",
+                categoryId = 1L,
+                categoryName = "Laptops",
+                bookingStart = "2026-07-14T00:00:00Z",
+                bookingEnd = "2026-07-16T23:59:00Z",
+                status = "PENDING"
+            )
+        }
+        val viewModel = viewModel(
+            bookingApi = fakeBookingApi,
+            authSession = authSession
+        )
+
+        viewModel.loadBookingPeriod(assetId = 1L)
+        advanceUntilIdle()
+
+        val fromDateMillis = LocalDate.of(2026, 7, 14).toUtcStartOfDayMillis()
+        val toDateMillis = LocalDate.of(2026, 7, 16).toUtcStartOfDayMillis()
+        viewModel.onFromDateSelected(fromDateMillis)
+        viewModel.onToDateSelected(toDateMillis)
+
+        viewModel.createBooking(assetId = 1L)
+        advanceUntilIdle()
+
+        val expectedStart = expectedInstant(fromDateMillis, hour = 0, minute = 0)
+        val expectedEnd = expectedInstant(toDateMillis, hour = 23, minute = 59)
+
+        assertEquals(
+            listOf(
+                BookingCreateRequest(
+                    userId = USER_ID,
+                    assetId = 1L,
+                    bookingStart = expectedStart.toString(),
+                    bookingEnd = expectedEnd.toString()
+                )
+            ),
+            fakeBookingApi.createBookingRequests
+        )
+        assertTrue(viewModel.uiState.value.bookingCreated)
+        assertEquals(expectedStart.toString(), viewModel.uiState.value.createdBookingStart)
+        assertEquals(expectedEnd.toString(), viewModel.uiState.value.createdBookingEnd)
+        assertEquals(null, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
     fun testCreateBookingCreatesHourlyMeetingRoomBooking() = runTest {
         val authSession = mock(AuthSession::class.java)
         `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
@@ -228,6 +281,64 @@ class CreateBookingViewModelTest {
     }
 
     @Test
+    fun testCreateBookingShowsErrorWhenHourlyBookingIsMissingTimes() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi()
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+
+        viewModel.onFromDateSelected(LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis())
+        viewModel.createBooking(assetId = 12L)
+
+        assertEquals(
+            R.string.create_booking_error_select_from_time_to_time,
+            viewModel.uiState.value.errorMessageRes
+        )
+        assertTrue(fakeBookingApi.createBookingRequests.isEmpty())
+    }
+
+    @Test
+    fun testCreateBookingShowsErrorWhenHourlyBookingEndIsBeforeStart() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi()
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+
+        viewModel.onFromDateSelected(LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis())
+        viewModel.onStartTimeSelected(hour = 11, minute = 0)
+        viewModel.onEndTimeSelected(hour = 10, minute = 30)
+        viewModel.createBooking(assetId = 12L)
+
+        assertEquals(
+            R.string.create_booking_error_end_time_after_start,
+            viewModel.uiState.value.errorMessageRes
+        )
+        assertTrue(fakeBookingApi.createBookingRequests.isEmpty())
+    }
+
+    @Test
     fun testCreateBookingCreatesRecurringParkingBookingForVisibleMonth() = runTest {
         val authSession = mock(AuthSession::class.java)
         `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
@@ -279,6 +390,65 @@ class CreateBookingViewModelTest {
     }
 
     @Test
+    fun testCreateBookingShowsErrorWhenRecurringSelectionHasNoAvailableDates() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
+
+        val month = YearMonth.now().plusMonths(1)
+        val weekday = month.atDay(1).dayOfWeek.value
+        val fullyBookedDates = (1..month.lengthOfMonth())
+            .asSequence()
+            .map(month::atDay)
+            .filter { it.dayOfWeek.value == weekday }
+            .toList()
+
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = parkingAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = parkingCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            getBookingsResponse = BookingListResponse(
+                content = fullyBookedDates.mapIndexed { index, date ->
+                    dayBooking(
+                        id = index + 1L,
+                        assetId = 16L,
+                        assetName = "Parking Spot 16",
+                        categoryId = 3L,
+                        categoryName = "Parking",
+                        bookingStart = date.atTime(6, 0).atZone(ZoneId.systemDefault()).toInstant().toString(),
+                        bookingEnd = date.atTime(22, 0).atZone(ZoneId.systemDefault()).toInstant().toString(),
+                        status = "APPROVED"
+                    )
+                }
+            )
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi,
+            authSession = authSession
+        )
+
+        viewModel.loadBookingPeriod(assetId = 16L)
+        advanceUntilIdle()
+        viewModel.onVisibleMonthChanged(month)
+        viewModel.onRecurringWeekdayToggled(weekday)
+
+        assertTrue(viewModel.uiState.value.availableRecurringDates.isEmpty())
+
+        viewModel.createBooking(assetId = 16L)
+
+        assertEquals(
+            R.string.create_booking_error_no_recurring_dates,
+            viewModel.uiState.value.errorMessageRes
+        )
+        assertTrue(fakeBookingApi.createRecurringBookingRequests.isEmpty())
+    }
+
+    @Test
     fun testCreateBookingShowsServerErrorWhenRecurringParkingRequestFails() = runTest {
         val authSession = mock(AuthSession::class.java)
         `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
@@ -314,6 +484,39 @@ class CreateBookingViewModelTest {
         assertFalse(viewModel.uiState.value.bookingCreated)
         assertFalse(viewModel.uiState.value.isSubmitting)
         assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testLoadBookingPeriodIgnoresRejectedBookingsInAvailability() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            getBookingsResponse = BookingListResponse(
+                content = listOf(
+                    meetingRoomBooking(
+                        bookingStart = "2026-07-10T09:00:00Z",
+                        bookingEnd = "2026-07-10T12:00:00Z",
+                        status = "REJECTED"
+                    )
+                )
+            )
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value.availabilityByDate.isEmpty())
+        assertTrue(viewModel.uiState.value.bookedHoursByDate.isEmpty())
     }
 
     private fun viewModel(
@@ -402,6 +605,44 @@ class CreateBookingViewModelTest {
             ),
             status = "ACTIVE",
             description = "Small meeting room",
+            location = "Floor 2"
+        ),
+        status = status,
+        bookingStart = bookingStart,
+        bookingEnd = bookingEnd,
+        notes = null
+    )
+
+    private fun dayBooking(
+        id: Long = 1L,
+        assetId: Long,
+        assetName: String,
+        categoryId: Long,
+        categoryName: String,
+        bookingStart: String,
+        bookingEnd: String,
+        status: String
+    ) = BookingResponse(
+        id = id,
+        user = UserSummary(
+            id = USER_ID,
+            name = "Ivan",
+            surname = "Horvat",
+            email = "ivan@example.com",
+            role = "USER",
+            managerEmail = "manager@example.com"
+        ),
+        asset = AssetSummary(
+            id = assetId,
+            name = assetName,
+            category = CategorySummary(
+                id = categoryId,
+                name = categoryName,
+                bookingPeriod = "DAY",
+                approval = false
+            ),
+            status = "ACTIVE",
+            description = "Description",
             location = "Floor 2"
         ),
         status = status,
@@ -540,6 +781,13 @@ class CreateBookingViewModelTest {
 
         override suspend fun rejectBooking(bookingId: Long): BookingResponse {
             error("rejectBooking is not used in CreateBookingViewModel tests.")
+        }
+
+        override suspend fun updateBooking(
+            bookingId: Long,
+            request: BookingStatusUpdateRequest
+        ): BookingResponse {
+            error("updateBooking is not used in CreateBookingViewModel tests.")
         }
     }
 

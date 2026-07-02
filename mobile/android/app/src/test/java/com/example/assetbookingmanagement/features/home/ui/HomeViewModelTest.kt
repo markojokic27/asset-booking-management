@@ -12,6 +12,7 @@ import com.example.assetbookingmanagement.features.booking.data.BookingCreateReq
 import com.example.assetbookingmanagement.features.booking.data.BookingListResponse
 import com.example.assetbookingmanagement.features.booking.data.BookingRepository
 import com.example.assetbookingmanagement.features.booking.data.BookingResponse
+import com.example.assetbookingmanagement.features.booking.data.BookingStatusUpdateRequest
 import com.example.assetbookingmanagement.features.booking.data.CategorySummary
 import com.example.assetbookingmanagement.features.booking.data.RecurringBookingCreateRequest
 import com.example.assetbookingmanagement.features.booking.data.UserSummary
@@ -374,6 +375,13 @@ class HomeViewModelTest {
 
         override suspend fun rejectBooking(bookingId: Long): BookingResponse {
             error("rejectBooking is not used in HomeViewModel tests.")
+        }
+
+        override suspend fun updateBooking(
+            bookingId: Long,
+            request: BookingStatusUpdateRequest
+        ): BookingResponse {
+            error("updateBooking is not used in HomeViewModel tests.")
         }
     }
 
