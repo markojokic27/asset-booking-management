@@ -1,7 +1,7 @@
 = ADR 003: CI/CD Pipelines
 David Jezidzic / Internship 2026
 2026-03-20
-:status: Proposed
+:status: Accepted
 :tags: deployment, documentation
 
 == Status
@@ -27,8 +27,7 @@ Pipelines provide fast feedback on merge safety.
 
 For CD:
 
-Successful CI builds deploy automatically to QA.
-
+Successful CI builds deploy automatically.
 Passing builds promote to staging.
 
 Staging → production uses a controlled, auditable “go/no‑go” step.

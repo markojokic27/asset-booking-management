@@ -267,19 +267,19 @@ There is currently no DB Dockerfile. It is contained in the compose as a service
 
 ## CI-CD
 
-TODO Add or link content...
+Full pipeline documentation: [CI/CD Pipeline](/docs/CI-CD.md)
 
 ### Pipeline, Builds
 
-[CI-CD](/docs/adr/ADR-005-CI%20-%20CD%20Pipelines.adoc)
+[CI/CD Pipeline — Pipeline Architecture](/docs/CI-CD.md#pipeline-architecture) · [ADR-005: CI/CD Pipelines](/docs/adr/ADR-005-CI%20-%20CD%20Pipelines.adoc)
 
 ### Tests
 
-TODO Add or link content...
+[CI/CD Pipeline — Pipeline Stages in Detail](/docs/CI-CD.md#pipeline-stages-in-detail)
 
 ### Deployment to VM
 
-TODO Add or link content...
+[CI/CD Pipeline — Deployment](/docs/CI-CD.md#deployment)
 
 ## Demo VM
 
