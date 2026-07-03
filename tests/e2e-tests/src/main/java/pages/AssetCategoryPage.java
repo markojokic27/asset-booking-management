@@ -2,6 +2,10 @@ package pages;
 
 import commonmethods.CommonMethods;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import java.util.List;
 
 public class AssetCategoryPage extends CommonMethods {
 
@@ -37,9 +41,20 @@ public class AssetCategoryPage extends CommonMethods {
     public By searchField = By.cssSelector("[data-testid='search-input']");
 
 
+    public void closeAnyOpenModal() {
+        By overlay = By.cssSelector("button[aria-label='Close dialog']");
+        List<WebElement> overlays = driver.findElements(overlay);
+        if (!overlays.isEmpty() && overlays.getFirst().isDisplayed()) {
+            jsClick(overlays.getFirst());
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(overlay));
+        }
+    }
+
     // Add category
     public void openCategoryModal() {
+        closeAnyOpenModal();
         clickOnElement(openCategoryModal);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(categoryModal));
     }
 
     public void closeCategoryModal() {
@@ -63,7 +78,8 @@ public class AssetCategoryPage extends CommonMethods {
     }
 
     public void clickCategoryApproval() {
-        clickOnElement(categoryApprovalField);
+        WebElement input = driver.findElement(categoryApprovalField);
+        jsClick(input);
     }
 
     public void category(String name, String description, String bookingPeriod) {
@@ -76,7 +92,10 @@ public class AssetCategoryPage extends CommonMethods {
 
     // View category
     public void assetCategoryViewOpenModal() {
+        closeAnyOpenModal();
         clickOnElement(assetCategoryViewOpenModal);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[data-testid='category-name']")));
     }
 
     public void assetCategoryViewCloseModal() {
@@ -86,7 +105,9 @@ public class AssetCategoryPage extends CommonMethods {
 
     // Edit category
     public void assetCategoryEditOpenModal() {
+        closeAnyOpenModal();
         clickOnElement(assetCategoryEditOpenModal);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(assetCategoryEditModal));
     }
 
     public void assetCategoryEditCloseModal() {
@@ -106,13 +127,13 @@ public class AssetCategoryPage extends CommonMethods {
     }
 
     public void clickEditCategoryApproval() {
-        clickOnElement(categoryEditApprovalField);
+        WebElement input = driver.findElement(categoryEditApprovalField);
+        jsClick(input);
     }
 
     public void clickEditCategoryButton() {
         clickOnElement(editCategoryButton);
     }
-
     public void editCategory(String name, String description, String bookingPeriod) {
         typeEditName(name);
         typeEditDescription(description);

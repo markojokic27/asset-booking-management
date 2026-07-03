@@ -18,7 +18,6 @@ public class UserPage extends CommonMethods {
     public By userSurnameField = By.cssSelector("[data-testid='user-surname']");
     public By userUsernameField = By.cssSelector("[data-testid='user-username']");
     public By userPasswordField = By.cssSelector("[data-testid='user-password']");
-    public By userIdField = By.cssSelector("[data-testid='user-department-id']");
     public By userEmailField = By.cssSelector("[data-testid='user-email']");
     public By userManagerEmailField = By.cssSelector("[data-testid='user-manager-email']");
     public By userNotesField = By.cssSelector("[data-testid='user-note']");
@@ -51,6 +50,10 @@ public class UserPage extends CommonMethods {
 
     // Locators - Search
     public By searchField = By.cssSelector("[data-testid='search-input']");
+    public By filterRole = By.cssSelector("[data-testid='user-role-filter']");
+    public By filterDepartment = By.cssSelector("[data-testid='user-department-filter']");
+
+
 
 
     // Add user
@@ -89,10 +92,6 @@ public class UserPage extends CommonMethods {
 
     public void typePassword(String password) {
         typeInElement(userPasswordField, password);
-    }
-
-    public void typeId(String id) {
-        typeInElement(userIdField, id);
     }
 
     public void typeEmail(String email) {
@@ -219,5 +218,8 @@ public class UserPage extends CommonMethods {
     public void searchUsers(String users) {
         typeInElement(searchField, users);
     }
+    public void selectUserRole(String role){selectByVisibleText(filterRole, role);}
+    public void selectUserDepartment(String department){selectByVisibleText(filterDepartment, department);}
+
 
 }

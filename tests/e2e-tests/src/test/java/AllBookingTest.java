@@ -34,7 +34,6 @@ public class AllBookingTest extends BaseLogin {
 
     @Test
     public void filterBookingsByDateRange() {
-        bookingPage.clickNextMonth();
         myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
         myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_FROM);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
@@ -42,14 +41,12 @@ public class AllBookingTest extends BaseLogin {
 
     @Test
     public void filterBookingsByFromDateOnly() {
-        bookingPage.clickNextMonth();
         myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
     public void filterBookingsByToDateOnly()  {
-        bookingPage.clickNextMonth();
         bookingPage.clickNextMonth();
         myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_TO);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
@@ -69,5 +66,18 @@ public class AllBookingTest extends BaseLogin {
         assertTrue(isElementVisible(myBookingsPage.cancelBookingModal));
         myBookingsPage.keepBooking();
         assertFalse(isElementVisible(myBookingsPage.cancelBookingModal));
+    }
+
+    @Test
+    public void selectStatusFilter(){
+        myBookingsPage.selectMyBookingStatus(CommonConstants.MY_BOOKING_STATUS);
+        assertTrue(isElementVisible(myBookingsPage.bookingList));
+    }
+
+
+    @Test
+    public void selectAssetFilterField(){
+        myBookingsPage.selectMyBookingAsset(CommonConstants.ASSETS);
+        assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 }

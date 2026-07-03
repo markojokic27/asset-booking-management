@@ -15,7 +15,7 @@ public class BaseLogin extends PageAndHandlerFactory {
         System.out.println(">>> STARTING DATABASE RESET <<<");
         try {
             Dotenv dotenv = Dotenv.configure()
-                    .directory("/home/andelmus/asset-booking-management")
+                    .directory(".")
                     .filename(".env")
                     .ignoreIfMissing()
                     .load();
@@ -24,7 +24,7 @@ public class BaseLogin extends PageAndHandlerFactory {
             String db = dotenv.get("DB_NAME");
             String password = dotenv.get("DB_PASSWORD");
             String dumpFile = dotenv.get("DB_DUMP_FILE", "initial_state.sql");
-            java.io.File file = new java.io.File(dumpFile);
+
 
             ProcessBuilder pb = new ProcessBuilder("docker", "exec", "-i", "postgres-db",
                     "psql", "-q", "-U", user, "-d", db);
@@ -44,7 +44,6 @@ public class BaseLogin extends PageAndHandlerFactory {
             }
         } catch (Exception e) {
             System.err.println("Database reset failed: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

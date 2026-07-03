@@ -20,9 +20,9 @@ public class BookingSmokeTest extends BaseLogin {
     public void successfulBookingLaptopAddsEventToCalendar() {
         bookingPage.clickLaptopCategory();
         bookingPage.clickBookButton();
+        bookingPage.clickNextMonth();
         bookingPage.enterFromDate(CommonConstants.SMOKE_DATE_FROM);
         bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
-        bookingPage.clickNextMonth();
         bookingPage.enterToDate(CommonConstants.SMOKE_DATE_TO);
         bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_TO);
         bookingPage.clickBookAssetButton();
@@ -34,9 +34,9 @@ public class BookingSmokeTest extends BaseLogin {
     public void successfulBookingItEquipmentAddsEventToCalendar() {
         bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
+        bookingPage.clickNextMonth();
         bookingPage.enterFromDate(CommonConstants.SMOKE_DATE_FROM);
         bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
-        bookingPage.clickNextMonth();
         bookingPage.enterToDate(CommonConstants.SMOKE_DATE_TO);
         bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_TO);
         bookingPage.clickBookAssetButton();
@@ -67,7 +67,7 @@ public class BookingSmokeTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
+        bookingPage.selectParkingMapDate(CommonConstants.PARKING_SMOKE);
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
@@ -81,7 +81,8 @@ public class BookingSmokeTest extends BaseLogin {
     public void successfulBookAssetButtonIsVisibleAfterSelectingRecurringDays() {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickNextMonth();
+        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
         bookingPage.clickCheckBoxDays();
         bookingPage.selectAllRecurringDays();
         bookingPage.clickBookAssetButton();

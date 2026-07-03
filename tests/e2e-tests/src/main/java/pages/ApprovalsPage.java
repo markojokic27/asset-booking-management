@@ -9,12 +9,9 @@ public class ApprovalsPage extends CommonMethods {
         super();
     }
 
-    // Locators
-    public By modalApproveButton = By.cssSelector("[aria-modal='true'] [data-testid^='approve-booking-']");
-
+    public By tableApproveButton = By.cssSelector("[data-testid^='approve-booking-']");
 
     public void clickApproveInModal() {
-        isElementVisible(modalApproveButton);
-        clickOnElement(modalApproveButton);
+        clickOnElement(tableApproveButton);
     }
 }

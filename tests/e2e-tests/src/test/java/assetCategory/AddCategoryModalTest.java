@@ -58,7 +58,7 @@ public class AddCategoryModalTest extends BaseLogin {
         assetCategoryPage.category(
                 "",
                 "",
-                ""
+                CommonConstants.VALID_BOOKING_PERIOD
         );
 
        assertTrue(isElementVisible(assetCategoryPage.categoryModal));
@@ -117,13 +117,12 @@ public class AddCategoryModalTest extends BaseLogin {
 
     @Test
     void addCategoryWitApproval() {
-        assetCategoryPage.category(
-                CommonConstants.VALID_CATEGORY_NAME,
-                CommonConstants.VALID_CATEGORY_DESCRIPTION,
-                CommonConstants.VALID_BOOKING_PERIOD
-        );
-
+        assetCategoryPage.openCategoryModal();
+        assetCategoryPage.typeName(CommonConstants.CATEGORY_NAME);
+        assetCategoryPage.typeDescription(CommonConstants.VALID_CATEGORY_DESCRIPTION);
+        assetCategoryPage.typeBookingPeriod(CommonConstants.VALID_BOOKING_PERIOD);
         assetCategoryPage.clickCategoryApproval();
+        assetCategoryPage.clickCategoryButton();
         assertTrue(waitForUrlContains(CommonConstants.CATEGORY_URL));
     }
 }

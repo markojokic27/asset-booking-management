@@ -95,7 +95,14 @@ public class BookingPage extends CommonMethods {
     }
 
     public void clickCalendarDate(String dateStr) {
-        WebElement element = driver.findElement(calendarCellLocator(dateStr));
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(calendarCellLocator(dateStr)));
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", element);
+        jsClick(element);
+    }
+
+    public void clickNextMonth() {
+        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(calendarNext));
         ((JavascriptExecutor) driver).executeScript(
                 "arguments[0].scrollIntoView({block: 'center'});", element);
         jsClick(element);
@@ -103,13 +110,6 @@ public class BookingPage extends CommonMethods {
 
     public boolean isCalendarCellSelected(String dateStr) {
         return elementHasClass(calendarCellLocator(dateStr), "ring-2");
-    }
-
-    public void clickNextMonth() {
-        WebElement element = driver.findElement(calendarNext);
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block: 'center'});", element);
-        jsClick(element);
     }
 
     public void clickPrevMonth() {
@@ -157,6 +157,12 @@ public class BookingPage extends CommonMethods {
     }
 
     public void clickParkingSpot(int spotNumber) {
+        By backdrop = By.cssSelector("[data-testid='spot-popover-backdrop']");
+        List<WebElement> backdrops = driver.findElements(backdrop);
+        if (!backdrops.isEmpty() && backdrops.get(0).isDisplayed()) {
+            jsClick(backdrops.get(0));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(backdrop));
+        }
         clickOnElement(By.cssSelector("[data-testid='parking-spot-" + spotNumber + "']"));
     }
 

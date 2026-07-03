@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict IG5BWWnRtKAcsdlNYej1p1i7NsvfWtwGDrXoFrevmsLGu9npwDA9LSWDBj5RZvb
+\restrict AQIWbnUcrPCfyMIbHYep2xiBfGyIYLbRG8rcX8q8Meq8yUGkqiacQXQieYcZQZo
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg13+1)
 -- Dumped by pg_dump version 18.3 (Debian 18.3-1.pgdg13+1)
@@ -19,38 +19,38 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-ALTER TABLE ONLY asset_booking_mgm.department DROP CONSTRAINT fk_manager_user;
-ALTER TABLE ONLY asset_booking_mgm.asset_user DROP CONSTRAINT fk_department;
-ALTER TABLE ONLY asset_booking_mgm.booking DROP CONSTRAINT fk_booking_user;
-ALTER TABLE ONLY asset_booking_mgm.booking DROP CONSTRAINT fk_booking_asset;
-ALTER TABLE ONLY asset_booking_mgm.asset DROP CONSTRAINT fk_asset_category;
-DROP INDEX asset_booking_mgm.idx_user_username;
-DROP INDEX asset_booking_mgm.idx_booking_user;
-DROP INDEX asset_booking_mgm.idx_booking_asset;
-DROP INDEX asset_booking_mgm.idx_asset_status;
-DROP INDEX asset_booking_mgm.idx_asset_category;
-DROP INDEX asset_booking_mgm.flyway_schema_history_s_idx;
-ALTER TABLE ONLY asset_booking_mgm.booking DROP CONSTRAINT no_overlapping_bookings;
-ALTER TABLE ONLY asset_booking_mgm.flyway_schema_history DROP CONSTRAINT flyway_schema_history_pk;
-ALTER TABLE ONLY asset_booking_mgm.department DROP CONSTRAINT department_pkey;
-ALTER TABLE ONLY asset_booking_mgm.department DROP CONSTRAINT department_name_key;
-ALTER TABLE ONLY asset_booking_mgm.department DROP CONSTRAINT department_manager_id_key;
-ALTER TABLE ONLY asset_booking_mgm.booking DROP CONSTRAINT booking_pkey;
-ALTER TABLE ONLY asset_booking_mgm.asset_user DROP CONSTRAINT asset_user_username_key;
-ALTER TABLE ONLY asset_booking_mgm.asset_user DROP CONSTRAINT asset_user_pkey;
-ALTER TABLE ONLY asset_booking_mgm.asset_user DROP CONSTRAINT asset_user_email_key;
-ALTER TABLE ONLY asset_booking_mgm.asset DROP CONSTRAINT asset_pkey;
-ALTER TABLE ONLY asset_booking_mgm.asset DROP CONSTRAINT asset_code_key;
-ALTER TABLE ONLY asset_booking_mgm.asset_category DROP CONSTRAINT asset_category_pkey;
-ALTER TABLE ONLY asset_booking_mgm.asset_category DROP CONSTRAINT asset_category_name_key;
-DROP TABLE asset_booking_mgm.flyway_schema_history;
-DROP TABLE asset_booking_mgm.department;
-DROP TABLE asset_booking_mgm.booking;
-DROP TABLE asset_booking_mgm.asset_user;
-DROP TABLE asset_booking_mgm.asset_category;
-DROP TABLE asset_booking_mgm.asset;
-DROP EXTENSION btree_gist;
-DROP SCHEMA asset_booking_mgm;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.department DROP CONSTRAINT IF EXISTS fk_manager_user;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset_user DROP CONSTRAINT IF EXISTS fk_department;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.booking DROP CONSTRAINT IF EXISTS fk_booking_user;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.booking DROP CONSTRAINT IF EXISTS fk_booking_asset;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset DROP CONSTRAINT IF EXISTS fk_asset_category;
+DROP INDEX IF EXISTS asset_booking_mgm.idx_user_username;
+DROP INDEX IF EXISTS asset_booking_mgm.idx_booking_user;
+DROP INDEX IF EXISTS asset_booking_mgm.idx_booking_asset;
+DROP INDEX IF EXISTS asset_booking_mgm.idx_asset_status;
+DROP INDEX IF EXISTS asset_booking_mgm.idx_asset_category;
+DROP INDEX IF EXISTS asset_booking_mgm.flyway_schema_history_s_idx;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.booking DROP CONSTRAINT IF EXISTS no_overlapping_bookings;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.flyway_schema_history DROP CONSTRAINT IF EXISTS flyway_schema_history_pk;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.department DROP CONSTRAINT IF EXISTS department_pkey;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.department DROP CONSTRAINT IF EXISTS department_name_key;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.department DROP CONSTRAINT IF EXISTS department_manager_id_key;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.booking DROP CONSTRAINT IF EXISTS booking_pkey;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset_user DROP CONSTRAINT IF EXISTS asset_user_username_key;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset_user DROP CONSTRAINT IF EXISTS asset_user_pkey;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset_user DROP CONSTRAINT IF EXISTS asset_user_email_key;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset DROP CONSTRAINT IF EXISTS asset_pkey;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset DROP CONSTRAINT IF EXISTS asset_code_key;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset_category DROP CONSTRAINT IF EXISTS asset_category_pkey;
+ALTER TABLE IF EXISTS ONLY asset_booking_mgm.asset_category DROP CONSTRAINT IF EXISTS asset_category_name_key;
+DROP TABLE IF EXISTS asset_booking_mgm.flyway_schema_history;
+DROP TABLE IF EXISTS asset_booking_mgm.department;
+DROP TABLE IF EXISTS asset_booking_mgm.booking;
+DROP TABLE IF EXISTS asset_booking_mgm.asset_user;
+DROP TABLE IF EXISTS asset_booking_mgm.asset_category;
+DROP TABLE IF EXISTS asset_booking_mgm.asset;
+DROP EXTENSION IF EXISTS btree_gist;
+DROP SCHEMA IF EXISTS asset_booking_mgm;
 --
 -- Name: asset_booking_mgm; Type: SCHEMA; Schema: -; Owner: asset_mgm_user
 --
@@ -696,7 +696,7 @@ COPY asset_booking_mgm.asset_category (id, name, description, booking_period, ap
 3	Book	All company books	DAY	f	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
 5	Meeting room	All company meeting rooms	HOUR	f	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
 2	Parking	All company parkings	DAY	f	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
-6	IT equipment	All company IT equipments	DAY	f	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
+6	IT equipment	All company IT equipments	DAY	t	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
 4	Desk	All company desks	DAY	f	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
 1	Laptop	All company laptops	DAY	t	2026-06-26 13:44:21.443301+00	2026-06-26 13:44:21.443301+00
 \.
@@ -729,6 +729,27 @@ COPY asset_booking_mgm.asset_user (id, username, password, name, surname, email,
 --
 
 COPY asset_booking_mgm.booking (id, user_id, asset_id, booking_start, booking_end, status, notes, created_at, last_modified_at) FROM stdin;
+26	1	1	2026-04-24 14:00:00+00	2026-04-25 14:00:00+00	APPROVED	MacBook Air approved	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+27	3	2	2026-04-25 08:00:00+00	2026-04-26 08:00:00+00	CANCELLED	ThinkPad booking cancelled	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+28	2	3	2026-04-24 13:00:00+00	2026-04-25 13:00:00+00	PENDING	Waiting approval for Dell XPS	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+29	1	4	2026-04-24 09:00:00+00	2026-04-25 09:00:00+00	APPROVED	MacBook Pro booking for dev work	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+30	3	9	2026-04-24 16:00:00+00	2026-04-25 16:00:00+00	PENDING	Waiting approval for refactoring book	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+31	2	10	2026-04-24 14:00:00+00	2026-04-25 14:00:00+00	APPROVED	Design Patterns reading session	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+32	1	11	2026-04-24 11:00:00+00	2026-04-25 11:00:00+00	COMPLETED	Book returned	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+33	3	12	2026-04-24 13:00:00+00	2026-04-24 14:00:00+00	APPROVED	Desk approved booking	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+34	2	13	2026-04-24 09:00:00+00	2026-04-24 10:00:00+00	CANCELLED	Desk cancelled	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+35	1	14	2026-04-24 09:00:00+00	2026-04-24 10:00:00+00	APPROVED	Desk A1 full day booking	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+36	3	15	2026-04-25 15:00:00+00	2026-04-25 16:00:00+00	APPROVED	Large meeting room approved	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+37	2	16	2026-04-25 12:00:00+00	2026-04-25 13:00:00+00	REJECTED	Meeting room rejected	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+38	1	17	2026-04-25 09:00:00+00	2026-04-25 10:00:00+00	APPROVED	Meeting Room booking	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+39	3	18	2026-04-24 12:00:00+00	2026-05-24 12:00:00+00	APPROVED	Router setup	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+40	2	19	2026-04-24 10:00:00+00	2026-05-24 10:00:00+00	COMPLETED	Switch maintenance done	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+41	1	20	2026-04-24 08:00:00+00	2026-05-24 08:00:00+00	APPROVED	Projector use	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+42	2	29	2026-04-24 16:00:00+00	2026-05-24 16:00:00+00	PENDING	Parking removed	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+43	3	6	2026-04-24 11:00:00+00	2026-05-24 11:00:00+00	APPROVED	Outdoor parking use	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+44	2	5	2026-04-24 16:00:00+00	2026-05-24 16:00:00+00	PENDING	Parking removed	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+45	2	7	2026-04-24 09:00:00+00	2026-05-24 09:00:00+00	REJECTED	Parking request rejected	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
+46	1	8	2026-04-24 10:00:00+00	2026-05-24 10:00:00+00	APPROVED	Parking approved	2026-07-03 12:54:38.544661+00	2026-07-03 12:54:38.544661+00
 \.
 
 
@@ -802,7 +823,7 @@ SELECT pg_catalog.setval('asset_booking_mgm.asset_user_id_seq', 14, true);
 -- Name: booking_id_seq; Type: SEQUENCE SET; Schema: asset_booking_mgm; Owner: asset_mgm_user
 --
 
-SELECT pg_catalog.setval('asset_booking_mgm.booking_id_seq', 20, true);
+SELECT pg_catalog.setval('asset_booking_mgm.booking_id_seq', 46, true);
 
 
 --
@@ -941,7 +962,7 @@ ALTER TABLE ONLY asset_booking_mgm.flyway_schema_history
 --
 
 ALTER TABLE ONLY asset_booking_mgm.booking
-    ADD CONSTRAINT no_overlapping_bookings EXCLUDE USING gist (asset_id WITH =, tstzrange(booking_start, booking_end) WITH &&) WHERE (((status)::text = ANY ((ARRAY['PENDING'::character varying, 'APPROVED'::character varying])::text[])));
+    ADD CONSTRAINT no_overlapping_bookings EXCLUDE USING gist (asset_id WITH =, tstzrange(booking_start, booking_end) WITH &&) WHERE (((status)::text = ANY (ARRAY[('PENDING'::character varying)::text, ('APPROVED'::character varying)::text])));
 
 
 --
@@ -1100,5 +1121,5 @@ COMMENT ON CONSTRAINT fk_manager_user ON asset_booking_mgm.department IS 'Links 
 -- PostgreSQL database dump complete
 --
 
-\unrestrict IG5BWWnRtKAcsdlNYej1p1i7NsvfWtwGDrXoFrevmsLGu9npwDA9LSWDBj5RZvb
+\unrestrict AQIWbnUcrPCfyMIbHYep2xiBfGyIYLbRG8rcX8q8Meq8yUGkqiacQXQieYcZQZo
 

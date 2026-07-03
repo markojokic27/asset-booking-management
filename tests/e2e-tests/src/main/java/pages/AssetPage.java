@@ -24,9 +24,6 @@ public class AssetPage extends CommonMethods {
     public By assetViewModal = By.cssSelector("[data-testid='asset-view-modal']");
     public By assetViewCloseModal = By.cssSelector("[data-testid='asset-details-close-button']");
 
-    //Report asset
-    public By assetReportOpenModal = By.cssSelector("[data-testid='report-asset-button']");
-    public By assetReportCloseModal = By.cssSelector("button[aria-label='Close modal']");
     // Delete asset
     public By asseDeleteOpenModal = By.cssSelector("[data-testid='delete-asset-button']");
     public By cancelDeleteButton = By.cssSelector("[data-testid='cancel-delete-button']");
@@ -46,6 +43,8 @@ public class AssetPage extends CommonMethods {
 
     // Search assets
     public By searchField = By.cssSelector("[data-testid='search-input']");
+    public By filterStatus= By.cssSelector("[data-testid='asset-status-filter']");
+
 
     // Toggle deleted assets
     public By toggleDeletedAssets = By.cssSelector("[data-testid='toggle-deleted']");
@@ -129,16 +128,6 @@ public class AssetPage extends CommonMethods {
     }
 
 
-    // Report asset
-    public void assetReportOpenModal() {
-        clickOnElement(assetReportOpenModal);
-    }
-
-    public void assetReportCloseModal() {
-        clickOnElement(assetReportCloseModal);
-    }
-
-
     // Delete asset
     public void assetDeleteOpenModal() {
         clickOnElement(asseDeleteOpenModal);
@@ -172,6 +161,7 @@ public class AssetPage extends CommonMethods {
     public void searchAssets(String assets){
         typeInElement(searchField, assets);
     }
+    public void selectAssetStatus(String status){selectByVisibleText(filterStatus, status);}
 
     // Asset category filter
     public void clickLaptopCategory() {

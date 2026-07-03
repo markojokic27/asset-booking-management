@@ -88,7 +88,7 @@ export const AssetCategoriesTable = ({
       render: (category) => (
         <div className="flex items-center gap-1">
           <button
-            data-testid="view-assetCategory-button "
+            data-testid="view-assetCategory-button"
             className="p-1.5 hover:cursor-pointer hover:text-(--color-primaryblue)"
             onClick={() => onView(category)}
             aria-label={t('assetCategories.table.rowActions.viewAria')}

@@ -11,17 +11,17 @@ public class ApproveBookingSmokeTest extends BaseLogin {
 
     @Test
     public void successfulBookingMeetingRoomAddsEventToCalendar() {
-        loginWithEmployee();
+        loginWithAndela();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + CommonConstants.BOOKINGS_URL_EXTENSION);
 
         bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.APPROVAL_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.APPROVAL_DATE_FROM);
-        bookingPage.enterToDate(CommonConstants.APPROVAL_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.APPROVAL_DATE_TO);
+        bookingPage.enterFromDate(CommonConstants.APPROVAL_SMOKE_FROM);
+        bookingPage.clickCalendarDate(CommonConstants.APPROVAL_SMOKE_FROM);
+        bookingPage.enterToDate(CommonConstants.APPROVAL_SMOKE_TO);
+        bookingPage.clickCalendarDate(CommonConstants.APPROVAL_SMOKE_TO);
         bookingPage.clickBookAssetButton();
         bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());

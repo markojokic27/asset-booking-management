@@ -14,7 +14,6 @@ public class AssetCategoryEditModalTest extends BaseLogin {
     public void setUpCategoryPage() {
         login();
         getDriver().get(ConfigFromFile.getParameters().get(CommonConstants.BASE_URL) + (CommonConstants.CATEGORY_URL));
-
         assetCategoryPage.assetCategoryEditOpenModal();
     }
 
@@ -97,13 +96,13 @@ public class AssetCategoryEditModalTest extends BaseLogin {
 
     @Test
     void editCategoryWitApproval() {
-        assetCategoryPage.editCategory(
-                CommonConstants.VALID_CATEGORY_NAME,
-                CommonConstants.VALID_CATEGORY_DESCRIPTION,
-                CommonConstants.VALID_BOOKING_PERIOD
-        );
-
+        assetCategoryPage.assetCategoryEditOpenModal();
+        assetCategoryPage.typeEditName(CommonConstants.VALID_CATEGORY_NAME);
+        assetCategoryPage.typeEditDescription(CommonConstants.VALID_CATEGORY_DESCRIPTION);
+        assetCategoryPage.typeEditBookingPeriod(CommonConstants.VALID_BOOKING_PERIOD);
         assetCategoryPage.clickEditCategoryApproval();
+        assetCategoryPage.clickEditCategoryButton();
+
         assertTrue(waitForUrlContains(CommonConstants.CATEGORY_URL));
     }
 }

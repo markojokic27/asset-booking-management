@@ -19,6 +19,9 @@ public class MyBookingsPage extends CommonMethods {
     public By cancelBookingModal = By.cssSelector("[role='dialog']");
     public By confirmCancelButton = By.cssSelector("[data-testid='confirm-cancel-booking-button']");
     public By keepBookingButton = By.cssSelector("[data-testid='keep-booking-button']");
+
+    public By selectMyBookingStatus = By.cssSelector("[data-testid='my-booking-status-filter']");
+    public By selectMyBookingAsset = By.cssSelector("[data-testid='my-booking-asset-filter']");
     public void clickFirstCancelButton() {
         clickOnElement(firstCancelButton);
     }
@@ -46,5 +49,8 @@ public class MyBookingsPage extends CommonMethods {
     public void inputToDate(String date){
         inputDate(inputToDate, date);
     }
+
+    public void selectMyBookingStatus(String status){selectByVisibleText(selectMyBookingStatus, status);}
+    public void selectMyBookingAsset(String asset){selectByVisibleText(selectMyBookingAsset, asset);}
 
 }

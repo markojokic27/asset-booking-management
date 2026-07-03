@@ -54,7 +54,6 @@ public class CommonConstants {
     public static final String LONG_NOTES = "i".repeat(1001);
     public static final String VALID_ROLE = "ADMIN";
     public static final String VALID_STATUS = "Active";
-    public static final String VALID_ID = "1";
 
     // User and asset
     public static final String CHANGE_STATUS = "Inactive";
@@ -73,6 +72,7 @@ public class CommonConstants {
 
     // Asset category
     public static final String VALID_CATEGORY_NAME = "Rooms";
+    public static final String CATEGORY_NAME="Test";
     public static final String VALID_CATEGORY_DESCRIPTION = "All company rooms ";
     public static final String VALID_BOOKING_PERIOD = "Day";
     public static final String LONG_CATEGORY_NAME = "t".repeat(101);
@@ -88,6 +88,8 @@ public class CommonConstants {
 
     // Search users
     public static final String SEARCH_USERS = "doe";
+    public static final String SEARCH_ROLE="Admin";
+    public static final String SEARCH_DEPARTMENT="DevOps";
 
     // Search category
     public static final String SEARCH_CATEGORY = "laptop";
@@ -95,13 +97,14 @@ public class CommonConstants {
     // Booking
     public static final String BOOKED_ASSET_ID = "1";
 
-    public static final String FUTURE_DATE_FROM = "2026-07-02";
+    public static final String FUTURE_DATE_FROM = "2026-07-20";
     public static final String FUTURE_DATE_TO = "2026-08-15";
-    public static final String PARKING_TEST_DATE = "2026-07-20";
-    public static final String APPROVAL_DATE_FROM="2026-09-01";
-    public static final String APPROVAL_DATE_TO="2026-09-18";
-    public static final String SMOKE_DATE_FROM = "2026-07-10";
-    public static final String SMOKE_DATE_TO = "2026-08-20";
+    public static final String PARKING_TEST_DATE = "2026-07-21";
+    public static final String SMOKE_DATE_FROM = "2026-08-16";
+    public static final String SMOKE_DATE_TO = "2026-08-31";
+    public static final String PARKING_SMOKE = "2026-10-05";
+    public static final String APPROVAL_SMOKE_FROM = "2026-09-19";
+    public static final String APPROVAL_SMOKE_TO = "2026-09-30";
 
 
     // Parking
@@ -111,6 +114,9 @@ public class CommonConstants {
     // My bookings list
     public static final String ASSET = "Desk A1";
     public static final String BROWSER = "BROWSER";
+    public static final String MY_BOOKING_STATUS = "ACTIVE";
+    public static final String ASSETS="Parking Spot 5";
+
 
     // Drivers constants
     public static final String FIREFOX = "FirefoxWebDriver";
