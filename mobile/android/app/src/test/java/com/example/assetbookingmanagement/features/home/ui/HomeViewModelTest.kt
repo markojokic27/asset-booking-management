@@ -166,7 +166,7 @@ class HomeViewModelTest {
             response = BookingListResponse(
                 content = listOf(
                     buildBookingResponse(id = 10L, managerEmail = "manager@example.com"),
-                    buildBookingResponse(id = 11L, managerEmail = "manager2@example.com"),
+                    buildBookingResponse(id = 11L, managerEmail = "ivan@example.com"),
                     buildBookingResponse(id = 12L, managerEmail = "manager@example.com")
                 )
             )
@@ -192,6 +192,40 @@ class HomeViewModelTest {
         assertEquals(true, viewModel.uiState.value.canManageApprovals)
         assertEquals(2, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(2, fakeBookingApi.getBookingsCalls)
+    }
+
+    @Test
+    fun testMatchesManagerPendingApprovalsIgnoringEmailCaseAndSpaces() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(
+                    buildBookingResponse(id = 10L, managerEmail = "  MANAGER@EXAMPLE.COM  "),
+                    buildBookingResponse(id = 11L, managerEmail = "ivan@example.com"),
+                    buildBookingResponse(id = 12L, managerEmail = " manager@example.com ")
+                )
+            )
+        }
+        val fakeUserApi = FakeUserApi().apply {
+            response = buildUserResponse(
+                role = "MANAGER",
+                email = " Manager@Example.com "
+            )
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(FakeAssetApi()),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
+        )
+        viewModel.refreshHomeData()
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.value.canManageApprovals)
+        assertEquals(2, viewModel.uiState.value.pendingApprovalsCount)
     }
 
     @Test
@@ -229,7 +263,7 @@ class HomeViewModelTest {
             response = BookingListResponse(
                 content = listOf(
                     buildBookingResponse(id = 20L, managerEmail = "manager@example.com"),
-                    buildBookingResponse(id = 21L, managerEmail = "manager2@example.com"),
+                    buildBookingResponse(id = 21L, managerEmail = "ivan@example.com"),
                     buildBookingResponse(id = 22L, managerEmail = null)
                 )
             )
@@ -255,6 +289,33 @@ class HomeViewModelTest {
         assertEquals(true, viewModel.uiState.value.canManageApprovals)
         assertEquals(3, viewModel.uiState.value.pendingApprovalsCount)
         assertEquals(2, fakeBookingApi.getBookingsCalls)
+    }
+
+    @Test
+    fun testResetsApprovalStateWhenUserRoleRequestFails() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(buildBookingResponse(id = 1L))
+            )
+        }
+        val fakeUserApi = FakeUserApi().apply {
+            getUserException = RuntimeException("User request failed")
+        }
+
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val viewModel = HomeViewModel(
+            assetRepository = AssetRepository(FakeAssetApi()),
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession,
+            userRepository = UserRepository(fakeUserApi)
+        )
+        viewModel.refreshHomeData()
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.value.canManageApprovals)
+        assertEquals(0, viewModel.uiState.value.pendingApprovalsCount)
     }
 
     private fun buildAssetResponse(
@@ -285,7 +346,7 @@ class HomeViewModelTest {
         ),
         asset = AssetSummary(
             id = 1L,
-            name = "Parking A-01",
+            name = "Parking Spot 10",
             category = CategorySummary(
                 id = 3L,
                 name = "Parking",
@@ -294,7 +355,7 @@ class HomeViewModelTest {
             ),
             status = "ACTIVE",
             description = "Outdoor parking",
-            location = "Garage A"
+            location = "Level -2"
         ),
         status = "PENDING",
         bookingStart = "2026-01-04T09:00:00Z",
