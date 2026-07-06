@@ -92,6 +92,29 @@
   "overrides": {
     "form-data": "4.0.6",
     "js-yaml": "$js-yaml",
-    "babel-plugin-istanbul": "^8.0.0"
+    "babel-plugin-istanbul": "^8.0.0",
+    "eslint": {
+      "brace-expansion": "5.0.7"
+    },
+    "jest": {
+      "glob": {
+        "minimatch": {
+          "brace-expansion": "5.0.7"
+        }
+      }
+    },
+    "ts-jest": {
+      "@jest/transform": {
+        "babel-plugin-istanbul": {
+          "test-exclude": {
+            "glob": {
+              "minimatch": {
+                "brace-expansion": "5.0.7"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
