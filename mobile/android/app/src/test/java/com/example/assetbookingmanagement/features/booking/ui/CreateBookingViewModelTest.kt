@@ -99,6 +99,31 @@ class CreateBookingViewModelTest {
     }
 
     @Test
+    fun testClearsCategoryDataWhenBookingPeriodLoadFails() = runTest {
+        val failingAssetApi = object : AssetApi {
+            override suspend fun getAssets(page: Int, size: Int): AssetListResponse {
+                error("getAssets is not used in CreateBookingViewModel tests.")
+            }
+
+            override suspend fun getAssetById(id: Long): AssetResponse {
+                throw IOException("Server unreachable")
+            }
+        }
+
+        val viewModel = viewModel(assetApi = failingAssetApi)
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+
+        assertEquals("", viewModel.uiState.value.categoryName)
+        assertEquals(null, viewModel.uiState.value.bookingPeriod)
+        assertEquals(null, viewModel.uiState.value.approvalRequired)
+        assertTrue(viewModel.uiState.value.availabilityByDate.isEmpty())
+        assertTrue(viewModel.uiState.value.bookedHoursByDate.isEmpty())
+        assertTrue(viewModel.uiState.value.availableRecurringDates.isEmpty())
+    }
+
+    @Test
     fun testCreateBookingShowsErrorWhenLoggedInUserIsMissing() = runTest {
         val authSession = mock(AuthSession::class.java)
         `when`(authSession.getCurrentUserId()).thenReturn(null)
@@ -126,6 +151,24 @@ class CreateBookingViewModelTest {
         viewModel.loadBookingPeriod(assetId = 1L)
         advanceUntilIdle()
 
+        viewModel.createBooking(assetId = 1L)
+
+        assertEquals(
+            R.string.create_booking_error_select_from_date_to_date,
+            viewModel.uiState.value.errorMessageRes
+        )
+    }
+
+    @Test
+    fun testCreateBookingShowsErrorWhenDayBookingIsMissingToDate() = runTest {
+        val viewModel = viewModel()
+
+        viewModel.loadBookingPeriod(assetId = 1L)
+        advanceUntilIdle()
+
+        val fromDateMillis = LocalDate.of(2026, 7, 14).toUtcStartOfDayMillis()
+        viewModel.onFromDateSelected(fromDateMillis)
+        viewModel.onToDateSelected(null)
         viewModel.createBooking(assetId = 1L)
 
         assertEquals(
@@ -183,6 +226,41 @@ class CreateBookingViewModelTest {
         assertTrue(viewModel.uiState.value.bookingCreated)
         assertEquals(expectedStart.toString(), viewModel.uiState.value.createdBookingStart)
         assertEquals(expectedEnd.toString(), viewModel.uiState.value.createdBookingEnd)
+        assertEquals(null, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testRecurringWeekdayToggleRemovesAlreadySelectedDayAndClearsManualSelection() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = parkingAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = parkingCategory()
+        }
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 16L)
+        advanceUntilIdle()
+
+        val weekday = 1
+        val fromDateMillis = LocalDate.of(2026, 7, 14).toUtcStartOfDayMillis()
+        val toDateMillis = LocalDate.of(2026, 7, 16).toUtcStartOfDayMillis()
+
+        viewModel.onFromDateSelected(fromDateMillis)
+        viewModel.onToDateSelected(toDateMillis)
+        viewModel.onStartTimeSelected(hour = 9, minute = 0)
+        viewModel.onEndTimeSelected(hour = 10, minute = 0)
+        viewModel.onRecurringWeekdayToggled(weekday)
+        viewModel.onRecurringWeekdayToggled(weekday)
+
+        assertTrue(viewModel.uiState.value.selectedWeekdays.isEmpty())
+        assertEquals(null, viewModel.uiState.value.selectedFromDateMillis)
+        assertEquals(null, viewModel.uiState.value.selectedToDateMillis)
+        assertFalse(viewModel.uiState.value.hasSelectedStartTime)
+        assertFalse(viewModel.uiState.value.hasSelectedEndTime)
         assertEquals(null, viewModel.uiState.value.errorMessageRes)
     }
 
@@ -281,6 +359,33 @@ class CreateBookingViewModelTest {
     }
 
     @Test
+    fun testShowsErrorWhenHourlyBookingIsMissingDate() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+        viewModel.onStartTimeSelected(hour = 9, minute = 0)
+        viewModel.onEndTimeSelected(hour = 10, minute = 0)
+
+        viewModel.createBooking(assetId = 12L)
+
+        assertEquals(
+            R.string.create_booking_error_select_date_from_time_to_time,
+            viewModel.uiState.value.errorMessageRes
+        )
+    }
+
+    @Test
     fun testCreateBookingShowsErrorWhenHourlyBookingIsMissingTimes() = runTest {
         val fakeAssetApi = FakeAssetApi().apply {
             assetByIdResponse = meetingRoomAsset()
@@ -299,6 +404,35 @@ class CreateBookingViewModelTest {
         advanceUntilIdle()
 
         viewModel.onFromDateSelected(LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis())
+        viewModel.createBooking(assetId = 12L)
+
+        assertEquals(
+            R.string.create_booking_error_select_from_time_to_time,
+            viewModel.uiState.value.errorMessageRes
+        )
+        assertTrue(fakeBookingApi.createBookingRequests.isEmpty())
+    }
+
+    @Test
+    fun testCreateBookingShowsErrorWhenHourlyBookingIsMissingEndTime() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi()
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+
+        viewModel.onFromDateSelected(LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis())
+        viewModel.onStartTimeSelected(hour = 9, minute = 0)
         viewModel.createBooking(assetId = 12L)
 
         assertEquals(
@@ -336,6 +470,102 @@ class CreateBookingViewModelTest {
             viewModel.uiState.value.errorMessageRes
         )
         assertTrue(fakeBookingApi.createBookingRequests.isEmpty())
+    }
+
+    @Test
+    fun testShowsNotAuthorizedErrorWhenBackendReturns401() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            createBookingException = buildHttpException(401)
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+        val dateMillis = LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis()
+        viewModel.onFromDateSelected(dateMillis)
+        viewModel.onStartTimeSelected(hour = 9, minute = 0)
+        viewModel.onEndTimeSelected(hour = 11, minute = 0)
+
+        viewModel.createBooking(assetId = 12L)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.bookingCreated)
+        assertEquals(R.string.create_booking_error_not_authorized, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testShowsGenericErrorWhenBackendReturnsUnexpectedCode() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            createBookingException = buildHttpException(500)
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+        val dateMillis = LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis()
+        viewModel.onFromDateSelected(dateMillis)
+        viewModel.onStartTimeSelected(hour = 9, minute = 0)
+        viewModel.onEndTimeSelected(hour = 11, minute = 0)
+
+        viewModel.createBooking(assetId = 12L)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.bookingCreated)
+        assertEquals(R.string.create_booking_error_failed, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testShowsServerUnreachableErrorWhenRequestFails() = runTest {
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = meetingRoomAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = meetingRoomCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            createBookingException = IOException("Server unreachable")
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi
+        )
+
+        viewModel.loadBookingPeriod(assetId = 12L)
+        advanceUntilIdle()
+        val dateMillis = LocalDate.of(2026, 7, 10).toUtcStartOfDayMillis()
+        viewModel.onFromDateSelected(dateMillis)
+        viewModel.onStartTimeSelected(hour = 9, minute = 0)
+        viewModel.onEndTimeSelected(hour = 11, minute = 0)
+
+        viewModel.createBooking(assetId = 12L)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.bookingCreated)
+        assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
@@ -484,6 +714,117 @@ class CreateBookingViewModelTest {
         assertFalse(viewModel.uiState.value.bookingCreated)
         assertFalse(viewModel.uiState.value.isSubmitting)
         assertEquals(R.string.login_error_server_unreachable, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testShowsNotAuthorizedErrorWhenRecurringBookingReturns401() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
+
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = parkingAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = parkingCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            createRecurringBookingException = buildHttpException(401)
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi,
+            authSession = authSession
+        )
+
+        viewModel.loadBookingPeriod(assetId = 16L)
+        advanceUntilIdle()
+
+        val month = YearMonth.now().plusMonths(1)
+        val weekday = month.atDay(1).dayOfWeek.value
+        viewModel.onVisibleMonthChanged(month)
+        viewModel.onRecurringWeekdayToggled(weekday)
+
+        viewModel.createBooking(assetId = 16L)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.bookingCreated)
+        assertEquals(R.string.create_booking_error_not_authorized, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testShowsConflictErrorWhenRecurringBookingReturns409() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
+
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = parkingAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = parkingCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            createRecurringBookingException = buildHttpException(409)
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi,
+            authSession = authSession
+        )
+
+        viewModel.loadBookingPeriod(assetId = 16L)
+        advanceUntilIdle()
+
+        val month = YearMonth.now().plusMonths(1)
+        val weekday = month.atDay(1).dayOfWeek.value
+        viewModel.onVisibleMonthChanged(month)
+        viewModel.onRecurringWeekdayToggled(weekday)
+
+        viewModel.createBooking(assetId = 16L)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.bookingCreated)
+        assertEquals(R.string.create_booking_error_recurring_dates_taken, viewModel.uiState.value.errorMessageRes)
+    }
+
+    @Test
+    fun testShowsGenericErrorWhenRecurringBookingReturnsUnexpectedCode() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
+
+        val fakeAssetApi = FakeAssetApi().apply {
+            assetByIdResponse = parkingAsset()
+        }
+        val fakeCategoryApi = FakeAssetCategoryApi().apply {
+            categoryByIdResponse = parkingCategory()
+        }
+        val fakeBookingApi = FakeBookingApi().apply {
+            createRecurringBookingException = buildHttpException(500)
+        }
+
+        val viewModel = viewModel(
+            assetApi = fakeAssetApi,
+            categoryApi = fakeCategoryApi,
+            bookingApi = fakeBookingApi,
+            authSession = authSession
+        )
+
+        viewModel.loadBookingPeriod(assetId = 16L)
+        advanceUntilIdle()
+
+        val month = YearMonth.now().plusMonths(1)
+        val weekday = month.atDay(1).dayOfWeek.value
+        viewModel.onVisibleMonthChanged(month)
+        viewModel.onRecurringWeekdayToggled(weekday)
+
+        viewModel.createBooking(assetId = 16L)
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.bookingCreated)
+        assertEquals(R.string.create_booking_error_failed, viewModel.uiState.value.errorMessageRes)
     }
 
     @Test
