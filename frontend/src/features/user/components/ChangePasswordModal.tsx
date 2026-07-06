@@ -19,7 +19,7 @@ import { createUserValidationSchema } from '../validation';
 
 // types
 import type { UserDto } from '../types';
-import { Toast } from '../../../components/ui/toast';
+import { Toast } from '../../../components/ui/Toast';
 
 type ChangePasswordFieldErrors = {
   currentPassword: string;
@@ -41,7 +41,9 @@ export type ChangePasswordModalProps = {
 
 export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePasswordModalProps>) {
   const { t } = useTranslation();
-  const [fieldErrors, setFieldErrors] = useState<ChangePasswordFieldErrors>(emptyPasswordFieldErrors);
+  const [fieldErrors, setFieldErrors] = useState<ChangePasswordFieldErrors>(
+    emptyPasswordFieldErrors
+  );
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -58,7 +60,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePa
   if (!isOpen) return null;
 
   const handleSubmit = async (data: FormData) => {
-     // Extract raw form values before validation
+    // Extract raw form values before validation
     const raw = {
       currentPassword: data.get('currentPassword') as string,
       newPassword: data.get('newPassword') as string,
@@ -71,15 +73,19 @@ export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePa
       next.currentPassword = t('account.password.validation.currentRequired');
     }
 
-     // Validate new password against shared password rules
-    const newPwResult = createUserValidationSchema(t).shape.password.safeParse(raw.newPassword);
+    // Validate new password against shared password rules
+    const newPwResult = createUserValidationSchema(t).shape.password.safeParse(
+      raw.newPassword
+    );
     if (!newPwResult.success) {
       next.newPassword = newPwResult.error.issues[0]?.message ?? '';
     }
 
     // Check if new passwords match
     if (raw.newPassword !== raw.confirmNewPassword) {
-      next.confirmNewPassword = t('account.password.validation.confirmMismatch');
+      next.confirmNewPassword = t(
+        'account.password.validation.confirmMismatch'
+      );
     }
 
     // If there are any validation errors, set field errors and return
@@ -110,7 +116,7 @@ export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePa
   };
 
   return (
-    <Modal 
+    <Modal
       isOpen={isOpen}
       onClose={onClose}
       ariaLabel={t('account.password.modalTitle')}
@@ -120,7 +126,10 @@ export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePa
         </h2>
       }
       headerRight={
-        <IconButton onClick={onClose} aria-label={t('account.password.closeAria')}>
+        <IconButton
+          onClick={onClose}
+          aria-label={t('account.password.closeAria')}
+        >
           <CloseIcon className="pointer-events-none" />
         </IconButton>
       }
@@ -136,19 +145,21 @@ export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePa
           >
             {t('account.password.cancel')}
           </Button>
-          <Button 
+          <Button
             type="submit"
             form={formId}
             className="shadow-none"
             disabled={isSaving}
             data-testid="account-password-submit"
           >
-            {isSaving ? t('account.password.saving') : t('account.password.save')}
+            {isSaving
+              ? t('account.password.saving')
+              : t('account.password.save')}
           </Button>
         </div>
       }
     >
-      <Form.Root 
+      <Form.Root
         noValidate
         id={formId}
         key={user.id}

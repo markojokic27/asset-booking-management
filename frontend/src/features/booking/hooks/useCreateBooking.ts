@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 // Components
-import { Toast } from '../../../components/ui/toast';
+import { Toast } from '../../../components/ui/Toast';
 
 // API
 import { createBooking } from '../api/bookingApi';

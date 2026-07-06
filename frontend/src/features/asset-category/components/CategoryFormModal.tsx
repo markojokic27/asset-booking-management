@@ -12,7 +12,7 @@ import { FormDropdown } from '../../../components/ui/FormDropdown';
 import { FormInput } from '../../../components/ui/FormInput';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
-import { Toast } from '../../../components/ui/toast';
+import { Toast } from '../../../components/ui/Toast';
 
 // Types
 import type { AssetCategoryDto, BookingPeriod } from '../types';

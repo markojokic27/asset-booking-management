@@ -7,7 +7,7 @@ import { Button } from '../../../components/ui/Button';
 import { Table, type TableColumn } from '../../../components/ui/Table';
 import { BookingStatusBadge } from './BookingStatusBadge';
 import { CancelBookingModal } from './CancelBookingModal';
-import { Toast } from '../../../components/ui/toast';
+import { Toast } from '../../../components/ui/Toast';
 
 // Utils
 import {

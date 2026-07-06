@@ -6,6 +6,8 @@ import { FloorMinus2 } from '../../../assets/Floor-2';
 import { useCreateBooking } from '../hooks/useCreateBooking';
 import type { BookingWithRelations, Filters } from '../types';
 import type { AssetDto } from '../../asset/types';
+import { IconButton } from '../../../components/ui/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 type FloorLevel = '-1' | '-2';
 
@@ -22,8 +24,13 @@ interface Props {
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
 }
 
-function getTakenSpots(bookings: BookingWithRelations[], filters?: Filters): number[] {
-  const referenceDate = filters?.fromDate ? new Date(filters.fromDate) : new Date();
+function getTakenSpots(
+  bookings: BookingWithRelations[],
+  filters?: Filters
+): number[] {
+  const referenceDate = filters?.fromDate
+    ? new Date(filters.fromDate)
+    : new Date();
   const refYear = referenceDate.getFullYear();
   const refMonth = referenceDate.getMonth();
   const refDay = referenceDate.getDate();
@@ -108,7 +115,7 @@ const SpotPopover: React.FC<PopoverProps> = ({
   const noDateSelected = !filters?.fromDate;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
       <button
         type="button"
         data-testid="spot-popover-backdrop"
@@ -117,37 +124,44 @@ const SpotPopover: React.FC<PopoverProps> = ({
         onClick={onClose}
       />
       <div className="relative z-10 w-72 rounded-xl bg-white p-6 shadow-2xl">
-
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+            <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
               {t('bookings.parkingMap.spotNumber')}
             </p>
             <p className="mt-1 text-3xl font-black text-gray-900">
               {info.spotNumber}
             </p>
           </div>
-          <button data-testid="spot-popover-close-button"
+          <button
+            data-testid="spot-popover-close-button"
             onClick={onClose}
             className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600"
             aria-label={t('bookings.parkingMap.closeAria')}
           >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+            <CloseIcon />
           </button>
         </div>
 
         <div className="mt-3">
-          <span data-testid="parking-spot-status" className={[
-            'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
-            isTaken ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700',
-          ].join(' ')}>
-            <span className={[
-              'h-1.5 w-1.5 rounded-full',
-              isTaken ? 'bg-orange-500' : 'bg-blue-500',
-            ].join(' ')} />
-            {isTaken ? t('bookings.parkingMap.taken') : t('bookings.parkingMap.available')}
+          <span
+            data-testid="parking-spot-status"
+            className={[
+              'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
+              isTaken
+                ? 'bg-orange-100 text-orange-700'
+                : 'bg-blue-100 text-blue-700',
+            ].join(' ')}
+          >
+            <span
+              className={[
+                'h-1.5 w-1.5 rounded-full',
+                isTaken ? 'bg-orange-500' : 'bg-blue-500',
+              ].join(' ')}
+            />
+            {isTaken
+              ? t('bookings.parkingMap.taken')
+              : t('bookings.parkingMap.available')}
           </span>
         </div>
 
@@ -164,10 +178,14 @@ const SpotPopover: React.FC<PopoverProps> = ({
           <Button
             data-testid="spot-book-button"
             className="w-full"
-            disabled={isTaken || info.assetId === null || isCreating || noDateSelected}
+            disabled={
+              isTaken || info.assetId === null || isCreating || noDateSelected
+            }
             onClick={handleBook}
           >
-            {isCreating ? t('bookings.parkingMap.booking') : t('bookings.table.book')}
+            {isCreating
+              ? t('bookings.parkingMap.booking')
+              : t('bookings.table.book')}
           </Button>
 
           {noDateSelected && (
@@ -191,9 +209,14 @@ export const ParkingMap: React.FC<Props> = ({
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeFloor, setActiveFloor] = React.useState<FloorLevel>('-1');
-  const [selectedSpot, setSelectedSpot] = React.useState<SpotClickInfo | null>(null);
+  const [selectedSpot, setSelectedSpot] = React.useState<SpotClickInfo | null>(
+    null
+  );
 
-  const takenSpots = React.useMemo(() => getTakenSpots(bookings, filters), [bookings, filters]);
+  const takenSpots = React.useMemo(
+    () => getTakenSpots(bookings, filters),
+    [bookings, filters]
+  );
   const spotAssetMap = React.useMemo(() => buildSpotAssetMap(assets), [assets]);
   const dateLabel = formatDate(filters);
 
@@ -205,7 +228,10 @@ export const ParkingMap: React.FC<Props> = ({
   };
 
   const openModal = () => setIsOpen(true);
-  const closeModal = () => { setIsOpen(false); setSelectedSpot(null); };
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedSpot(null);
+  };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const date = e.target.value;
@@ -234,12 +260,18 @@ export const ParkingMap: React.FC<Props> = ({
 
   React.useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   return (
     <>
-      <Button data-testid="parking-map-button" variant="outline" onClick={openModal}>
+      <Button
+        data-testid="parking-map-button"
+        variant="outline"
+        onClick={openModal}
+      >
         {t('bookings.viewParkingMap')}
       </Button>
 
@@ -258,11 +290,10 @@ export const ParkingMap: React.FC<Props> = ({
             aria-label={t('bookings.parkingMap.closeAria')}
             onClick={closeModal}
           />
-          <div className="relative z-10 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
-
-            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+          <div className="relative z-10 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white p-8 shadow-2xl">
+            <div className="mb-2 flex items-center justify-between pl-4">
               <div>
-                <h2 className="text-lg font-bold tracking-wide text-gray-900">
+                <h2 className="text-3xl font-bold tracking-wide text-gray-900">
                   {t('bookings.parkingMap.title')}
                 </h2>
                 <div className="mt-1 flex items-center gap-2">
@@ -290,7 +321,8 @@ export const ParkingMap: React.FC<Props> = ({
 
               <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1">
                 {(['-1', '-2'] as FloorLevel[]).map((level) => (
-                  <button data-testid={`level-button-${level}`}
+                  <button
+                    data-testid={`level-button-${level}`}
                     key={level}
                     onClick={() => setActiveFloor(level)}
                     className={[
@@ -304,23 +336,28 @@ export const ParkingMap: React.FC<Props> = ({
                   </button>
                 ))}
               </div>
+              <IconButton
+                data-testid="parking-close-button"
 
-              <button data-testid="parking-close-button"
                 onClick={closeModal}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
                 aria-label={t('bookings.parkingMap.closeAria')}
               >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M2 2L14 14M14 2L2 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
+                <CloseIcon className="pointer-events-none" />
+              </IconButton>
             </div>
 
             <div className="overflow-y-auto p-4">
-              {activeFloor === '-1'
-                ? <FloorMinus1 takenSpots={takenSpots} onSpotClick={handleSpotClick} />
-                : <FloorMinus2 takenSpots={takenSpots} onSpotClick={handleSpotClick} />
-              }
+              {activeFloor === '-1' ? (
+                <FloorMinus1
+                  takenSpots={takenSpots}
+                  onSpotClick={handleSpotClick}
+                />
+              ) : (
+                <FloorMinus2
+                  takenSpots={takenSpots}
+                  onSpotClick={handleSpotClick}
+                />
+              )}
             </div>
           </div>
 

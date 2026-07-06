@@ -18,7 +18,7 @@ import { AssetsTable } from '../features/asset/components/AssetTable';
 import { AssetReportModal } from '../features/asset/components/AssetReportModal';
 import { AssetFormModal } from '../features/asset/components/AssetFormModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
-import { Toast } from '../components/ui/toast';
+import { Toast } from '../components/ui/Toast';
 
 // API
 import {
