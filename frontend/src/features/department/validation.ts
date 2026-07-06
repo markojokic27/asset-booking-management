@@ -2,16 +2,18 @@ import type { TFunction } from 'i18next';
 import { z } from 'zod';
 
 export const DepartmentNameSchema = z.enum([
-  'ADVANCED_TECHNOLOGIES',
+  'ADVANCE_TECHNOLOGY',
+  'SECURE_SERVICES',
   'ARCHITECTURE',
-  'CLOUD_DATA_MANAGEMENT',
+  'FINANCE_AND_BUSINESS_ADMINISTRATION',
+  'MOBILE_AND_SECURITY',
+  'SYSTEM_TEST',
+  'HUMAN_RESOURCES',
+  'CLOUD_AND_DATA_MANAGEMENT',
   'DEVOPS',
-  'FINANCE',
-  'HR',
-  'MOBILE_SECURITY',
-  'OPERATIONS',
-  'SECURITY_SYSTEMS',
 ]);
+
+export type DepartmentName = z.infer<typeof DepartmentNameSchema>;
 
 export function createDepartmentValidationSchema(t: TFunction) {
   return z.object({
