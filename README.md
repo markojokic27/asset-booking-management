@@ -217,7 +217,7 @@ Open the file which will open the Ubuntu package manager and install the Bruno p
 
 1. Open Bruno
 2. Choose the "Open Collection" option
-3. In the menu, navigate to the folder with opencollection.yml (currently tests/api-tests/Bruno/Asset Booking Management/opencollection.yml)
+3. In the menu, navigate to the folder with opencollection.yml (currently tests/api-tests/bruno/Asset Booking Management/opencollection.yml)
 4. Choose Environment on the right hand side to be development so that it sets the proper baseUrl
 5. Test endpoints after starting the app with "make dev"
 
@@ -295,7 +295,7 @@ TODO Add or link content...
 [Non-Functional Requirements](docs/functional-requirements/non-functional-requirements.adoc)
 
 ### Link to Use Cases Document
-[Use Cases Document](docs/useCase/useCaseDocument.adoc)
+[Use Cases Document](docs/use-cases/useCaseDocument.adoc)
 
 ### Link to Use Cases Diagram
 [Use Case Diagram](docs/use-cases/UseCaseDiagram.png)
