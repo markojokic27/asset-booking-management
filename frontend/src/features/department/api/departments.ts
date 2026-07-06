@@ -11,18 +11,16 @@ type PageResponse<T> = {
 let departmentsCache: Promise<DepartmentDto[]> | null = null;
 
 export const getDepartments = async (): Promise<DepartmentDto[]> => {
-  if (!departmentsCache) {
-    // get departments from api
-    departmentsCache = api
-      .get<PageResponse<DepartmentDto>>('/departments', {
-        params: { page: 0, size: 200 },
-      })
-      .then((res) => res.data.content)
-      .catch((error) => {
-        departmentsCache = null;
-        throw error;
-      });
-  }
+  // get departments from api
+  departmentsCache ??= api
+    .get<PageResponse<DepartmentDto>>('/departments', {
+      params: { page: 0, size: 200 },
+    })
+    .then((res) => res.data.content)
+    .catch((error) => {
+      departmentsCache = null;
+      throw error;
+    });
 
   // return promise of departments
   return departmentsCache;

@@ -39,7 +39,7 @@ export type ChangePasswordModalProps = {
   onClose: () => void;
 };
 
-export function ChangePasswordModal({ user, isOpen, onClose }: ChangePasswordModalProps) {
+export function ChangePasswordModal({ user, isOpen, onClose }: Readonly<ChangePasswordModalProps>) {
   const { t } = useTranslation();
   const [fieldErrors, setFieldErrors] = useState<ChangePasswordFieldErrors>(emptyPasswordFieldErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);

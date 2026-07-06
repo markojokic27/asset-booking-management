@@ -35,6 +35,19 @@ export const Modal: React.FC<ModalProps> = ({
   testId,
 }) => {
   const { t } = useTranslation();
+  const dialogRef = React.useRef<HTMLDialogElement>(null);
+
+  React.useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (isOpen) {
+      if (!dialog.open) dialog.showModal();
+    } else if (dialog.open) {
+      dialog.close();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const resolvedAriaLabel =
@@ -43,11 +56,14 @@ export const Modal: React.FC<ModalProps> = ({
     t('ui.modal.dialogAria');
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6"
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
+      className="fixed inset-0 z-50 m-0 flex h-full max-h-full w-full max-w-full items-center justify-center border-0 bg-transparent p-6 backdrop:bg-transparent"
       aria-label={resolvedAriaLabel}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
     >
       <button
         type="button"
@@ -81,6 +97,6 @@ export const Modal: React.FC<ModalProps> = ({
           </>
         )}
       </div>
-    </div>
+    </dialog>
   );
 };

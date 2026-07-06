@@ -5,8 +5,7 @@ import * as React from 'react';
 import { hasBookingOverlap } from '../utilis/bookingLogic';
 
 // Types
-import type { Filters } from '../types';
-import type { BookingWithRelations } from '../types';
+import type { BookingWithRelations, Filters } from '../types';
 
 export function useBookingAvailability({
   assetStatus,
