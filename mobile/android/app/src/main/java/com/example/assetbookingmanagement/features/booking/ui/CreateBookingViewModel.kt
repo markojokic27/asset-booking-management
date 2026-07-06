@@ -200,72 +200,15 @@ class CreateBookingViewModel @Inject constructor(
         }
 
         val isHourlyBooking = state.bookingPeriod == "HOUR"
-        val startInstant = if (isHourlyBooking) {
-            toInstant(
-                dateMillis = state.selectedFromDateMillis,
-                hour = state.startHour,
-                minute = state.startMinute
-            )
-        } else {
-            toInstant(
-                dateMillis = state.selectedFromDateMillis,
-                hour = 0,
-                minute = 0
-            )
-        }
-        val endInstant = if (isHourlyBooking) {
-            toInstant(
-                dateMillis = state.selectedFromDateMillis,
-                hour = state.endHour,
-                minute = state.endMinute
-            )
-        } else {
-            toInstant(
-                dateMillis = state.selectedToDateMillis,
-                hour = 23,
-                minute = 59
-            )
-        }
-
-        when {
-            state.selectedFromDateMillis == null -> {
-                _uiState.update {
-                    it.copy(
-                        errorMessageRes = if (isHourlyBooking) {
-                            R.string.create_booking_error_select_date_from_time_to_time
-                        } else {
-                            R.string.create_booking_error_select_from_date_to_date
-                        }
-                    )
-                }
-                return
-            }
-
-            !isHourlyBooking && state.selectedToDateMillis == null -> {
-                _uiState.update {
-                    it.copy(errorMessageRes = R.string.create_booking_error_select_from_date_to_date)
-                }
-                return
-            }
-
-            startInstant == null || endInstant == null -> {
-                _uiState.update {
-                    it.copy(errorMessageRes = R.string.create_booking_error_invalid_selected_date)
-                }
-                return
-            }
-
-            isHourlyBooking && (!state.hasSelectedStartTime || !state.hasSelectedEndTime) -> {
-                _uiState.update {
-                    it.copy(errorMessageRes = R.string.create_booking_error_select_from_time_to_time)
-                }
-                return
-            }
-
-            isHourlyBooking && !endInstant.isAfter(startInstant) -> {
-                _uiState.update { it.copy(errorMessageRes = R.string.create_booking_error_end_time_after_start) }
-                return
-            }
+        val bookingInstants = resolveBookingInstants(state = state, isHourlyBooking = isHourlyBooking)
+        val validationError = validateSingleBookingInput(
+            state = state,
+            isHourlyBooking = isHourlyBooking,
+            bookingInstants = bookingInstants
+        )
+        if (validationError != null) {
+            _uiState.update { it.copy(errorMessageRes = validationError) }
+            return
         }
 
         viewModelScope.launch {
@@ -282,8 +225,8 @@ class CreateBookingViewModel @Inject constructor(
                     BookingCreateRequest(
                         userId = userId,
                         assetId = assetId,
-                        bookingStart = startInstant.toString(),
-                        bookingEnd = endInstant.toString()
+                        bookingStart = bookingInstants.start.toString(),
+                        bookingEnd = bookingInstants.end.toString()
                     )
                 )
 
@@ -293,8 +236,8 @@ class CreateBookingViewModel @Inject constructor(
                     it.copy(
                         isSubmitting = false,
                         bookingCreated = true,
-                        createdBookingStart = startInstant.toString(),
-                        createdBookingEnd = endInstant.toString(),
+                        createdBookingStart = bookingInstants.start.toString(),
+                        createdBookingEnd = bookingInstants.end.toString(),
                         errorMessageRes = null
                     )
                 }
@@ -302,11 +245,7 @@ class CreateBookingViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isSubmitting = false,
-                        errorMessageRes = when (error.code()) {
-                            401, 403 -> R.string.create_booking_error_not_authorized
-                            409 -> R.string.create_booking_error_period_taken
-                            else -> R.string.create_booking_error_failed
-                        }
+                        errorMessageRes = error.toCreateBookingErrorMessage()
                     )
                 }
             } catch (_: IOException) {
@@ -435,6 +374,76 @@ class CreateBookingViewModel @Inject constructor(
             it.copy(availableRecurringDates = recurringDates)
         }
     }
+}
+
+private data class BookingInstants(
+    val start: Instant?,
+    val end: Instant?
+)
+
+private fun resolveBookingInstants(
+    state: CreateBookingUiState,
+    isHourlyBooking: Boolean
+): BookingInstants = if (isHourlyBooking) {
+    BookingInstants(
+        start = toInstant(
+            dateMillis = state.selectedFromDateMillis,
+            hour = state.startHour,
+            minute = state.startMinute
+        ),
+        end = toInstant(
+            dateMillis = state.selectedFromDateMillis,
+            hour = state.endHour,
+            minute = state.endMinute
+        )
+    )
+} else {
+    BookingInstants(
+        start = toInstant(
+            dateMillis = state.selectedFromDateMillis,
+            hour = 0,
+            minute = 0
+        ),
+        end = toInstant(
+            dateMillis = state.selectedToDateMillis,
+            hour = 23,
+            minute = 59
+        )
+    )
+}
+
+private fun validateSingleBookingInput(
+    state: CreateBookingUiState,
+    isHourlyBooking: Boolean,
+    bookingInstants: BookingInstants
+): Int? = when {
+    state.selectedFromDateMillis == null -> {
+        if (isHourlyBooking) {
+            R.string.create_booking_error_select_date_from_time_to_time
+        } else {
+            R.string.create_booking_error_select_from_date_to_date
+        }
+    }
+
+    !isHourlyBooking && state.selectedToDateMillis == null ->
+        R.string.create_booking_error_select_from_date_to_date
+
+    bookingInstants.start == null || bookingInstants.end == null ->
+        R.string.create_booking_error_invalid_selected_date
+
+    isHourlyBooking && (!state.hasSelectedStartTime || !state.hasSelectedEndTime) ->
+        R.string.create_booking_error_select_from_time_to_time
+
+    isHourlyBooking && !bookingInstants.end.isAfter(bookingInstants.start) ->
+        R.string.create_booking_error_end_time_after_start
+
+    else -> null
+}
+
+private fun HttpException.toCreateBookingErrorMessage(): Int = when (code()) {
+    401, 403 -> R.string.create_booking_error_not_authorized
+    409 -> R.string.create_booking_error_period_taken
+    else -> R.string.create_booking_error_failed
 }
 
 private fun toInstant(

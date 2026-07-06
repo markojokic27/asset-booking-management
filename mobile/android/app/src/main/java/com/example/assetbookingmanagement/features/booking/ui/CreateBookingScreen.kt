@@ -28,7 +28,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.assetbookingmanagement.R
 import com.example.assetbookingmanagement.core.ui.components.AppButton
 import com.example.assetbookingmanagement.core.ui.components.AvailabilityCalendar
+import com.example.assetbookingmanagement.core.ui.components.DateRangeSelection
 import com.example.assetbookingmanagement.core.ui.components.DateTimePicker
+import com.example.assetbookingmanagement.core.ui.components.DateTimePickerCallbacks
+import com.example.assetbookingmanagement.core.ui.components.DateTimePickerState
+import com.example.assetbookingmanagement.core.ui.components.TimeSelection
 import com.example.assetbookingmanagement.core.ui.format.formatLocalizedBookingDisplayText
 
 @Composable
@@ -79,20 +83,30 @@ fun CreateBookingScreen(
 
         when (selectedTabIndex) {
             BookingTab.ChooseDate.ordinal -> DateTimePicker(
-                fromDateMillis = uiState.selectedFromDateMillis,
-                toDateMillis = uiState.selectedToDateMillis,
-                startHour = uiState.startHour,
-                startMinute = uiState.startMinute,
-                endHour = uiState.endHour,
-                endMinute = uiState.endMinute,
-                hasSelectedStartTime = uiState.hasSelectedStartTime,
-                hasSelectedEndTime = uiState.hasSelectedEndTime,
-                unavailableHours = uiState.bookedHoursByDate[uiState.selectedFromDateMillis].orEmpty(),
-                onFromDateSelected = viewModel::onFromDateSelected,
-                onToDateSelected = viewModel::onToDateSelected,
-                onStartTimeSelected = viewModel::onStartTimeSelected,
-                onEndTimeSelected = viewModel::onEndTimeSelected,
-                showTimeInputs = uiState.bookingPeriod == "HOUR"
+                state = DateTimePickerState(
+                    dateRange = DateRangeSelection(
+                        fromDateMillis = uiState.selectedFromDateMillis,
+                        toDateMillis = uiState.selectedToDateMillis
+                    ),
+                    startTime = TimeSelection(
+                        hour = uiState.startHour,
+                        minute = uiState.startMinute,
+                        hasSelected = uiState.hasSelectedStartTime
+                    ),
+                    endTime = TimeSelection(
+                        hour = uiState.endHour,
+                        minute = uiState.endMinute,
+                        hasSelected = uiState.hasSelectedEndTime
+                    ),
+                    unavailableHours = uiState.bookedHoursByDate[uiState.selectedFromDateMillis].orEmpty(),
+                    showTimeInputs = uiState.bookingPeriod == "HOUR"
+                ),
+                callbacks = DateTimePickerCallbacks(
+                    onFromDateSelected = viewModel::onFromDateSelected,
+                    onToDateSelected = viewModel::onToDateSelected,
+                    onStartTimeSelected = viewModel::onStartTimeSelected,
+                    onEndTimeSelected = viewModel::onEndTimeSelected
+                )
             )
             BookingTab.ShowAvailability.ordinal -> AvailabilityCalendar(
                 availabilityByDate = uiState.availabilityByDate,

@@ -43,91 +43,118 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneOffset
 
+data class DateRangeSelection(
+    val fromDateMillis: Long? = null,
+    val toDateMillis: Long? = null
+)
+
+data class TimeSelection(
+    val hour: Int,
+    val minute: Int,
+    val hasSelected: Boolean = true
+)
+
+data class DateTimePickerState(
+    val dateRange: DateRangeSelection,
+    val startTime: TimeSelection,
+    val endTime: TimeSelection,
+    val unavailableHours: Set<Int> = emptySet(),
+    val showTimeInputs: Boolean = true
+)
+
+data class DateTimePickerCallbacks(
+    val onFromDateSelected: (Long?) -> Unit,
+    val onToDateSelected: (Long?) -> Unit,
+    val onStartTimeSelected: (Int, Int) -> Unit,
+    val onEndTimeSelected: (Int, Int) -> Unit
+)
+
+private data class TimeFieldConfig(
+    val value: String,
+    val label: String,
+    val contentDescription: String,
+    val options: List<Int>,
+    val disabledOptions: Set<Int>,
+    val onHourSelected: (Int) -> Unit
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateTimePicker(
-    fromDateMillis: Long?,
-    toDateMillis: Long?,
-    startHour: Int,
-    startMinute: Int,
-    endHour: Int,
-    endMinute: Int,
-    hasSelectedStartTime: Boolean = true,
-    hasSelectedEndTime: Boolean = true,
-    unavailableHours: Set<Int> = emptySet(),
-    onFromDateSelected: (Long?) -> Unit,
-    onToDateSelected: (Long?) -> Unit,
-    onStartTimeSelected: (Int, Int) -> Unit,
-    onEndTimeSelected: (Int, Int) -> Unit,
-    showTimeInputs: Boolean = true,
+    state: DateTimePickerState,
+    callbacks: DateTimePickerCallbacks,
     modifier: Modifier = Modifier
 ) {
     var showFromDateDialog by rememberSaveable { mutableStateOf(false) }
     var showToDateDialog by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
-    val fromDateValue = fromDateMillis?.let(::formatLocalizedDate).orEmpty()
-    val toDateValue = toDateMillis?.let(::formatLocalizedDate).orEmpty()
+    val fromDateValue = state.dateRange.fromDateMillis?.let(::formatLocalizedDate).orEmpty()
+    val toDateValue = state.dateRange.toDateMillis?.let(::formatLocalizedDate).orEmpty()
     val startTimeValue = selectedTimeValue(
-        hasSelectedTime = hasSelectedStartTime,
+        hasSelectedTime = state.startTime.hasSelected,
         context = context,
-        hour = startHour,
-        minute = startMinute
+        hour = state.startTime.hour,
+        minute = state.startTime.minute
     )
     val endTimeValue = selectedTimeValue(
-        hasSelectedTime = hasSelectedEndTime,
+        hasSelectedTime = state.endTime.hasSelected,
         context = context,
-        hour = endHour,
-        minute = endMinute
+        hour = state.endTime.hour,
+        minute = state.endTime.minute
     )
 
     val startHourOptions = getAvailableHourOptions(
-        selectedDateMillis = fromDateMillis,
+        selectedDateMillis = state.dateRange.fromDateMillis,
         minHour = null
     )
     val endHourOptions = getAvailableHourOptions(
-        selectedDateMillis = fromDateMillis,
-        minHour = if (hasSelectedStartTime) startHour else null
+        selectedDateMillis = state.dateRange.fromDateMillis,
+        minHour = if (state.startTime.hasSelected) state.startTime.hour else null
     )
 
     Column(modifier = modifier.fillMaxWidth()) {
         DateSection(
-            showTimeInputs = showTimeInputs,
+            showTimeInputs = state.showTimeInputs,
             fromDateValue = fromDateValue,
             toDateValue = toDateValue,
             onFromDateClick = { showFromDateDialog = true },
             onToDateClick = { showToDateDialog = true }
         )
 
-        if (showTimeInputs) {
+        if (state.showTimeInputs) {
             Spacer(modifier = Modifier.height(16.dp))
             TimeRangeFieldRow(
-                startTimeValue = startTimeValue,
-                startTimeLabel = stringResource(R.string.common_from),
-                startTimeContentDescription = stringResource(R.string.create_booking_select_from_time),
-                startOptions = startHourOptions,
-                startDisabledOptions = unavailableHours,
-                onStartTimeSelected = { hour -> onStartTimeSelected(hour, 0) },
-                endTimeValue = endTimeValue,
-                endTimeLabel = stringResource(R.string.common_to),
-                endTimeContentDescription = stringResource(R.string.create_booking_select_to_time),
-                endOptions = endHourOptions,
-                endDisabledOptions = getUnavailableEndHours(
-                    endOptions = endHourOptions,
-                    unavailableHours = unavailableHours,
-                    hasSelectedStartTime = hasSelectedStartTime,
-                    selectedStartHour = startHour
+                startField = TimeFieldConfig(
+                    value = startTimeValue,
+                    label = stringResource(R.string.common_from),
+                    contentDescription = stringResource(R.string.create_booking_select_from_time),
+                    options = startHourOptions,
+                    disabledOptions = state.unavailableHours,
+                    onHourSelected = { hour -> callbacks.onStartTimeSelected(hour, 0) }
                 ),
-                onEndTimeSelected = { hour -> onEndTimeSelected(hour, 0) }
+                endField = TimeFieldConfig(
+                    value = endTimeValue,
+                    label = stringResource(R.string.common_to),
+                    contentDescription = stringResource(R.string.create_booking_select_to_time),
+                    options = endHourOptions,
+                    disabledOptions = getUnavailableEndHours(
+                    endOptions = endHourOptions,
+                    unavailableHours = state.unavailableHours,
+                    hasSelectedStartTime = state.startTime.hasSelected,
+                    selectedStartHour = state.startTime.hour
+                ),
+                    onHourSelected = { hour -> callbacks.onEndTimeSelected(hour, 0) }
+                )
             )
         }
     }
 
     if (showFromDateDialog) {
         AppDatePickerDialog(
-            initialSelectedDateMillis = fromDateMillis,
+            initialSelectedDateMillis = state.dateRange.fromDateMillis,
             onDismiss = { showFromDateDialog = false },
             onConfirm = {
-                onFromDateSelected(it)
+                callbacks.onFromDateSelected(it)
                 showFromDateDialog = false
             }
         )
@@ -135,10 +162,10 @@ fun DateTimePicker(
 
     if (showToDateDialog) {
         AppDatePickerDialog(
-            initialSelectedDateMillis = toDateMillis,
+            initialSelectedDateMillis = state.dateRange.toDateMillis,
             onDismiss = { showToDateDialog = false },
             onConfirm = {
-                onToDateSelected(it)
+                callbacks.onToDateSelected(it)
                 showToDateDialog = false
             }
         )
@@ -199,18 +226,8 @@ private fun selectedTimeValue(
 
 @Composable
 private fun TimeRangeFieldRow(
-    startTimeValue: String,
-    startTimeLabel: String,
-    startTimeContentDescription: String,
-    startOptions: List<Int>,
-    startDisabledOptions: Set<Int>,
-    onStartTimeSelected: (Int) -> Unit,
-    endTimeValue: String,
-    endTimeLabel: String,
-    endTimeContentDescription: String,
-    endOptions: List<Int>,
-    endDisabledOptions: Set<Int>,
-    onEndTimeSelected: (Int) -> Unit,
+    startField: TimeFieldConfig,
+    endField: TimeFieldConfig,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -218,22 +235,22 @@ private fun TimeRangeFieldRow(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         TimeDropdownField(
-            value = startTimeValue,
-            label = startTimeLabel,
-            contentDescription = startTimeContentDescription,
-            options = startOptions,
-            disabledOptions = startDisabledOptions,
-            onHourSelected = onStartTimeSelected,
+            value = startField.value,
+            label = startField.label,
+            contentDescription = startField.contentDescription,
+            options = startField.options,
+            disabledOptions = startField.disabledOptions,
+            onHourSelected = startField.onHourSelected,
             modifier = Modifier.weight(1f)
         )
 
         TimeDropdownField(
-            value = endTimeValue,
-            label = endTimeLabel,
-            contentDescription = endTimeContentDescription,
-            options = endOptions,
-            disabledOptions = endDisabledOptions,
-            onHourSelected = onEndTimeSelected,
+            value = endField.value,
+            label = endField.label,
+            contentDescription = endField.contentDescription,
+            options = endField.options,
+            disabledOptions = endField.disabledOptions,
+            onHourSelected = endField.onHourSelected,
             modifier = Modifier.weight(1f)
         )
     }
