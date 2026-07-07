@@ -186,6 +186,46 @@ class BookingsViewModelTest {
         assertEquals("Parking Spot 10", viewModel.uiState.value.filteredHistoryBookings.first().assetName)
     }
 
+    @Test
+    fun testSearchFiltersHistoryBookingsByCategoryName() = runTest {
+        val authSession = mock(AuthSession::class.java)
+        `when`(authSession.getCurrentUserId()).thenReturn(2L)
+
+        val fakeBookingApi = FakeBookingApi().apply {
+            response = BookingListResponse(
+                content = listOf(
+                    buildBookingResponse(
+                        id = 1L,
+                        assetName = "Meeting Room 12",
+                        categoryName = "Meeting room",
+                        status = "APPROVED",
+                        bookingEnd = Instant.now().minus(2, ChronoUnit.DAYS).toString()
+                    ),
+                    buildBookingResponse(
+                        id = 2L,
+                        assetName = "Parking Spot 10",
+                        categoryName = "Parking",
+                        status = "CANCELLED",
+                        bookingEnd = Instant.now().minus(3, ChronoUnit.DAYS).toString()
+                    )
+                )
+            )
+        }
+
+        val viewModel = BookingsViewModel(
+            bookingRepository = BookingRepository(fakeBookingApi),
+            authSession = authSession
+        )
+
+        viewModel.refreshBookingsData()
+        advanceUntilIdle()
+        viewModel.onSearchTextChange("meeting room")
+
+        assertTrue(viewModel.uiState.value.filteredMyBookings.isEmpty())
+        assertEquals(1, viewModel.uiState.value.filteredHistoryBookings.size)
+        assertEquals("Meeting room", viewModel.uiState.value.filteredHistoryBookings.first().categoryName)
+    }
+
     private fun buildBookingResponse(
         id: Long,
         assetName: String = "Parking Spot 10",

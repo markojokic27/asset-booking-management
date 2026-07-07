@@ -265,6 +265,44 @@ class CreateBookingViewModelTest {
     }
 
     @Test
+    fun testFromDateSelectionMovesToDateForwardWhenExistingToDateIsEarlier() = runTest {
+        val viewModel = viewModel()
+
+        viewModel.loadBookingPeriod(assetId = 1L)
+        advanceUntilIdle()
+
+        val originalFromDate = LocalDate.of(2026, 7, 14).toUtcStartOfDayMillis()
+        val earlierToDate = LocalDate.of(2026, 7, 15).toUtcStartOfDayMillis()
+        val laterFromDate = LocalDate.of(2026, 7, 16).toUtcStartOfDayMillis()
+
+        viewModel.onFromDateSelected(originalFromDate)
+        viewModel.onToDateSelected(earlierToDate)
+        viewModel.onFromDateSelected(laterFromDate)
+
+        assertEquals(laterFromDate, viewModel.uiState.value.selectedFromDateMillis)
+        assertEquals(laterFromDate, viewModel.uiState.value.selectedToDateMillis)
+    }
+
+    @Test
+    fun testFromDateSelectionKeepsToDateWhenExistingToDateIsStillValid() = runTest {
+        val viewModel = viewModel()
+
+        viewModel.loadBookingPeriod(assetId = 1L)
+        advanceUntilIdle()
+
+        val originalFromDate = LocalDate.of(2026, 7, 14).toUtcStartOfDayMillis()
+        val laterToDate = LocalDate.of(2026, 7, 16).toUtcStartOfDayMillis()
+        val updatedFromDate = LocalDate.of(2026, 7, 15).toUtcStartOfDayMillis()
+
+        viewModel.onFromDateSelected(originalFromDate)
+        viewModel.onToDateSelected(laterToDate)
+        viewModel.onFromDateSelected(updatedFromDate)
+
+        assertEquals(updatedFromDate, viewModel.uiState.value.selectedFromDateMillis)
+        assertEquals(laterToDate, viewModel.uiState.value.selectedToDateMillis)
+    }
+
+    @Test
     fun testCreateBookingCreatesHourlyMeetingRoomBooking() = runTest {
         val authSession = mock(AuthSession::class.java)
         `when`(authSession.getCurrentUserId()).thenReturn(USER_ID)
