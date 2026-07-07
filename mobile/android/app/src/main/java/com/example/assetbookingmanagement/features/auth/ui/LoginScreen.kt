@@ -156,6 +156,17 @@ fun LabeledInput(
     passwordVisibilityToggle: (() -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
+    val keyboardType = inputKeyboardType(isPassword = isPassword)
+    val visualTransformation = inputVisualTransformation(
+        isPassword = isPassword,
+        passwordVisible = passwordVisible
+    )
+    val passwordTrailingIcon = passwordVisibilityIcon(
+        isPassword = isPassword,
+        passwordVisible = passwordVisible,
+        passwordVisibilityToggle = passwordVisibilityToggle
+    )
+
     Text(
         text = label,
         fontSize = 13.sp,
@@ -167,36 +178,56 @@ fun LabeledInput(
         onValueChange = onValueChange,
         placeholder = placeholder,
         config = AppInputConfig(
-            keyboardOptions = KeyboardOptions(
-                keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text
-            ),
-            visualTransformation = if (isPassword && !passwordVisible) {
-                PasswordVisualTransformation()
-            } else {
-                VisualTransformation.None
-            },
-            passwordVisibilityToggle = if (isPassword && passwordVisibilityToggle != null) {
-                {
-                    IconButton(onClick = passwordVisibilityToggle) {
-                        Icon(
-                            imageVector = if (passwordVisible) {
-                                Icons.Filled.VisibilityOff
-                            } else {
-                                Icons.Filled.Visibility
-                            },
-                            contentDescription = if (passwordVisible) {
-                                stringResource(R.string.login_hide_password)
-                            } else {
-                                stringResource(R.string.login_show_password)
-                            }
-                        )
-                    }
-                }
-            } else {
-                null
-            }
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            visualTransformation = visualTransformation,
+            passwordVisibilityToggle = passwordTrailingIcon
         )
     )
+}
+
+private fun inputKeyboardType(isPassword: Boolean): KeyboardType =
+    if (isPassword) KeyboardType.Password else KeyboardType.Text
+
+private fun inputVisualTransformation(
+    isPassword: Boolean,
+    passwordVisible: Boolean
+): VisualTransformation {
+    return if (isPassword && !passwordVisible) {
+        PasswordVisualTransformation()
+    } else {
+        VisualTransformation.None
+    }
+}
+
+@Composable
+private fun passwordVisibilityIcon(
+    isPassword: Boolean,
+    passwordVisible: Boolean,
+    passwordVisibilityToggle: (() -> Unit)?
+): (@Composable () -> Unit)? {
+    if (!isPassword || passwordVisibilityToggle == null) {
+        return null
+    }
+
+    val icon = if (passwordVisible) {
+        Icons.Filled.VisibilityOff
+    } else {
+        Icons.Filled.Visibility
+    }
+    val contentDescription = if (passwordVisible) {
+        stringResource(R.string.login_hide_password)
+    } else {
+        stringResource(R.string.login_show_password)
+    }
+
+    return {
+        IconButton(onClick = passwordVisibilityToggle) {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription
+            )
+        }
+    }
 }
 
 @Composable

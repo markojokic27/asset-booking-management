@@ -118,7 +118,10 @@ fun CreateBookingScreen(
             )
         }
 
-        if (uiState.categoryName.equals("Parking", ignoreCase = true)) {
+        if (
+            selectedTabIndex == BookingTab.ChooseDate.ordinal &&
+            uiState.categoryName.equals("Parking", ignoreCase = true)
+        ) {
             Spacer(modifier = Modifier.height(16.dp))
             RecurringDaysSelector(
                 selectedDays = uiState.selectedWeekdays,
