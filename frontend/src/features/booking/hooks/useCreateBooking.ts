@@ -48,8 +48,27 @@ export function useCreateBooking({
       setIsCreating(true);
 
       if (availableRecurringDates.length > 0) {
-        const timeSlots = availableRecurringDates.map((date) => ({
-          bookingStart: new Date(`${date}T06:00:00`).toISOString(),
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+
+        console.log('Available recurring dates:', availableRecurringDates);
+        let firstDayStartHour = '06:00';
+
+        if (availableRecurringDates[0] === todayString) {
+          const nextHour = today.getHours() + 1;
+
+          if (nextHour > 21) {
+            Toast.error(t('layout.toast.invalidBookingPeriod'));
+            return false;
+          }
+
+          firstDayStartHour = `${nextHour.toString().padStart(2, '0')}:00`;
+        }
+
+        const timeSlots = availableRecurringDates.map((date, index) => ({
+          bookingStart: new Date(
+            `${date}T${index === 0 ? firstDayStartHour : '06:00'}:00`
+          ).toISOString(),
           bookingEnd: new Date(`${date}T22:00:00`).toISOString(),
         }));
 
@@ -68,7 +87,22 @@ export function useCreateBooking({
       }
 
       if (bookingPeriod === 'DAY') {
-        filters.fromHour = '06:00';
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0];
+
+        if (filters.fromDate === todayString) {
+          const nextHour = today.getHours() + 1;
+
+          if (nextHour > 21) {
+            Toast.error(t('layout.toast.invalidBookingPeriod'));
+            return false;
+          }
+
+          filters.fromHour = `${nextHour.toString().padStart(2, '0')}:00`;
+        } else {
+          filters.fromHour = '06:00';
+        }
+
         filters.toHour = '22:00';
       }
 
