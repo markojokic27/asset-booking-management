@@ -150,7 +150,7 @@ public class SecurityConfig {
                         // =========================
 
                         .requestMatchers("/v1/reports/**")
-                        .hasRole(ADMIN)
+                        .authenticated()
 
                         // =========================
                         // ACTUATORS
