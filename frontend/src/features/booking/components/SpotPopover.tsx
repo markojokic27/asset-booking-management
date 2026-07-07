@@ -12,6 +12,7 @@ import { IconButton } from '../../../components/ui/IconButton';
 // Types
 import type { Filters } from '../types';
 import { useCreateBooking } from '../hooks/useCreateBooking';
+import i18n from '../../../config/i18n';
 
 export interface SpotClickInfo {
   spotNumber: number;
@@ -60,7 +61,14 @@ export const SpotPopover: React.FC<Props> = ({
     await handleCreateBooking();
     onClose();
   };
-  console.log(info);
+
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString(i18n.language, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  const date = formatDate(parkingFilters.fromDate);
 
   return (
     <Modal
@@ -107,6 +115,13 @@ export const SpotPopover: React.FC<Props> = ({
         </IconButton>
       }
     >
+      <p className="mb-4 text-(--color-table-text)">
+        {isTaken
+          ? t('bookings.confirmation.parkingSpotTaken')
+          : t('bookings.confirmation.singleDay', {
+              date,
+            })}
+      </p>
       {!isTaken && (
         <input
           placeholder={t('bookings.parkingMap.notesPlaceholder')}

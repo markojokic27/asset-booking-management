@@ -80,7 +80,8 @@
     "singleHour": "Möchten Sie diese Ressource am {{date}} von {{from}} bis {{to}} buchen?",
     "singleDay": "Möchten Sie diese Ressource für den {{date}} buchen?",
     "multiDay": "Möchten Sie diese Ressource vom {{from}} bis zum {{to}} buchen?",
-    "needApproval": "Für diese Buchung ist die Genehmigung Ihres Vorgesetzten erforderlich. Eine E-Mail-Benachrichtigung wird zur Überprüfung an Ihren Vorgesetzten gesendet."
+    "needApproval": "Für diese Buchung ist die Genehmigung Ihres Vorgesetzten erforderlich. Eine E-Mail-Benachrichtigung wird zur Überprüfung an Ihren Vorgesetzten gesendet.",
+    "parkingSpotTaken": "Dieser Parkplatz ist bereits für das ausgewählte Datum gebucht. Bitte wählen Sie einen anderen Parkplatz oder ändern Sie das Datum."
   },
   "buttons": {
     "book": "Buchen",

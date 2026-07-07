@@ -79,7 +79,8 @@
     "singleHour": "Do you want to book this asset on {{date}}, from {{from}} to {{to}}?",
     "singleDay": "Do you want to book this asset for {{date}}?",
     "multiDay": "Do you want to book this asset from {{from}} to {{to}}?",
-    "needApproval": "This booking requires manager approval. An email notification will be sent to your manager for review."
+    "needApproval": "This booking requires manager approval. An email notification will be sent to your manager for review.",
+    "parkingSpotTaken": "This parking spot is already booked for the selected date. Please select another parking spot or change the date."
   },
   "buttons": {
     "book": "Book",

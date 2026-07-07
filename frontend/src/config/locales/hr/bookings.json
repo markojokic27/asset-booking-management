@@ -79,7 +79,8 @@
     "singleHour": "Želite li rezervirati ovo za {{date}}, od {{from}} do {{to}}?",
     "singleDay": "Želite li rezervirati ovo za {{date}}?",
     "multiDay": "Želite li rezervirati ovo od {{from}} do {{to}}?",
-    "needApproval": "Ova rezervacija zahtijeva odobrenje nadređenog. Obavijest e-poštom bit će poslana vašem nadređenom na pregled."
+    "needApproval": "Ova rezervacija zahtijeva odobrenje nadređenog. Obavijest e-poštom bit će poslana vašem nadređenom na pregled.",
+    "parkingSpotTaken": "Ovo parking mjesto je već rezervirano za odabrani datum. Molimo odaberite drugo parking mjesto ili promijenite datum."
   },
   "buttons": {
     "book": "Rezerviraj",
