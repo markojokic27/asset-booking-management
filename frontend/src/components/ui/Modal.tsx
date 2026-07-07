@@ -74,7 +74,7 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         data-testid={testId ?? 'modal-dialog'}
         className={twMerge(
-          'relative z-10 w-full overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)',
+          'relative z-10 flex max-h-[95vh] w-full flex-col overflow-hidden rounded-2xl border border-(--color-table-border) bg-(--color-table-surface) text-(--color-table-text) shadow-(--shadow-card)',
           sizeClassName[size],
           className
         )}
@@ -88,7 +88,9 @@ export const Modal: React.FC<ModalProps> = ({
 
         <div className="mx-8 h-px bg-(--color-table-border)" />
 
-        <div className="px-8 py-8">{children}</div>
+        <div className="min-h-0 flex-1 overflow-hidden px-8 py-8">
+          {children}
+        </div>
 
         {footer != null && (
           <>

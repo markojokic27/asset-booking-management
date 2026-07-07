@@ -26,7 +26,7 @@ export const FloorMinus2: React.FC<Props> = ({ takenSpots = [], onSpotClick }) =
   });
 
   return (
-    <svg width="100%" viewBox="0 0 680 700" role="img" aria-label={t('bookings.parkingMap.title')}>
+    <svg width="100%" height="100%" viewBox="0 0 680 700" role="img" preserveAspectRatio="xMidYMid meet" aria-label={t('bookings.parkingMap.title')}>
       <defs>
         <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
           <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

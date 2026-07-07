@@ -1,13 +1,24 @@
+// External packages
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '../../../components/ui/Button';
+import CloseIcon from '@mui/icons-material/Close';
+
+// Assets
 import { FloorMinus1 } from '../../../assets/Floor-1';
 import { FloorMinus2 } from '../../../assets/Floor-2';
-import { useCreateBooking } from '../hooks/useCreateBooking';
+
+// Components
+import { Button } from '../../../components/ui/Button';
+import { IconButton } from '../../../components/ui/IconButton';
+import { Modal } from '../../../components/ui/Modal';
+import { DateInput } from './DateInput';
+
+// Types
 import type { BookingWithRelations, Filters } from '../types';
 import type { AssetDto } from '../../asset/types';
-import { IconButton } from '../../../components/ui/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+
+// Hooks
+import { useCreateBooking } from '../hooks/useCreateBooking';
 
 type FloorLevel = '-1' | '-2';
 
@@ -233,37 +244,22 @@ export const ParkingMap: React.FC<Props> = ({
     setSelectedSpot(null);
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const date = e.target.value;
-    setFilters((prev) => ({
-      ...prev,
-      fromDate: date,
-      toDate: date,
-    }));
+  const handleDateChange = (value: string) => {
+    setFilters((prev) => ({ ...prev, fromDate: value }));
   };
 
   const handleClearDate = () => {
     setFilters((prev) => ({ ...prev, fromDate: '', toDate: '' }));
   };
 
-  React.useEffect(() => {
-    if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (selectedSpot) setSelectedSpot(null);
-        else closeModal();
-      }
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [isOpen, selectedSpot]);
+  const handleModalClose = () => {
+    if (selectedSpot) {
+      setSelectedSpot(null);
+      return;
+    }
 
-  React.useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+    closeModal();
+  };
 
   return (
     <>
@@ -275,103 +271,91 @@ export const ParkingMap: React.FC<Props> = ({
         {t('bookings.viewParkingMap')}
       </Button>
 
-      {isOpen && (
-        <div
-          data-testid="spot-popover"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label={t('bookings.parkingMap.title')}
-        >
-          <button
-            type="button"
-            data-testid="parking-map-backdrop"
-            className="fixed inset-0 cursor-default bg-black/50"
-            aria-label={t('bookings.parkingMap.closeAria')}
+      <Modal
+        isOpen={isOpen}
+        onClose={handleModalClose}
+        title={
+          <h2 className="text-3xl font-bold tracking-wide text-gray-900">
+            {t('bookings.parkingMap.title')}
+          </h2>
+        }
+        size="lg"
+        className="h-[95vh] max-h-[95vh]"
+        headerRight={
+          <IconButton
+            data-testid="parking-close-button"
             onClick={closeModal}
-          />
-          <div className="relative z-10 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white p-8 shadow-2xl">
-            <div className="mb-2 flex items-center justify-between pl-4">
-              <div>
-                <h2 className="text-3xl font-bold tracking-wide text-gray-900">
-                  {t('bookings.parkingMap.title')}
-                </h2>
-                <div className="mt-1 flex items-center gap-2">
-                  <input
-                    type="date"
-                    value={filters?.fromDate ?? ''}
-                    onChange={handleDateChange}
-                    className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-600 outline-none focus:border-blue-400"
-                  />
-                  {filters?.fromDate && (
-                    <button
-                      onClick={handleClearDate}
-                      className="text-xs text-gray-400 hover:text-gray-600"
-                    >
-                      {t('bookings.parkingMap.clearDate')}
-                    </button>
-                  )}
-                  {!filters?.fromDate && (
-                    <span className="text-xs text-gray-400">
-                      {t('bookings.parkingMap.today', { date: dateLabel })}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1">
-                {(['-1', '-2'] as FloorLevel[]).map((level) => (
-                  <button
-                    data-testid={`level-button-${level}`}
-                    key={level}
-                    onClick={() => setActiveFloor(level)}
-                    className={[
-                      'rounded-md px-4 py-1.5 text-sm font-semibold transition-colors',
-                      activeFloor === level
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700',
-                    ].join(' ')}
-                  >
-                    {t('bookings.parkingMap.levelTab', { level })}
-                  </button>
-                ))}
-              </div>
-              <IconButton
-                data-testid="parking-close-button"
-
-                onClick={closeModal}
-                aria-label={t('bookings.parkingMap.closeAria')}
-              >
-                <CloseIcon className="pointer-events-none" />
-              </IconButton>
+            aria-label={t('bookings.parkingMap.closeAria')}
+          >
+            <CloseIcon className="pointer-events-none" />
+          </IconButton>
+        }
+      >
+        <div className="flex h-full min-h-0 w-full flex-col items-center justify-center overflow-auto">
+          <div className="mb-6 flex w-full flex-wrap justify-between gap-4">
+            <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1">
+              {(['-1', '-2'] as FloorLevel[]).map((level) => (
+                <Button
+                  key={level}
+                  data-testid={`level-button-${level}`}
+                  onClick={() => setActiveFloor(level)}
+                  variant="outline"
+                  className={[
+                    'rounded-md border-gray-100 px-4 py-1.5 text-sm font-semibold text-gray-900 transition-colors hover:border-gray-100 hover:text-gray-900 active:scale-100',
+                    activeFloor === level
+                      ? 'bg-white shadow-sm'
+                      : 'border-gray-100 bg-gray-100 text-gray-500 hover:text-gray-700',
+                  ].join(' ')}
+                >
+                  {t('bookings.parkingMap.levelTab', { level })}
+                </Button>
+              ))}
             </div>
+            <div className="flex items-center gap-2">
+              <DateInput
+                id="parking-map-date"
+                label=""
+                placeholder={t('bookings.parkingMap.today', {
+                  date: dateLabel,
+                })}
+                value={filters?.fromDate ?? ''}
+                onChange={handleDateChange}
+                className="h-11 w-48"
+              />
 
-            <div className="overflow-y-auto p-4">
-              {activeFloor === '-1' ? (
-                <FloorMinus1
-                  takenSpots={takenSpots}
-                  onSpotClick={handleSpotClick}
-                />
-              ) : (
-                <FloorMinus2
-                  takenSpots={takenSpots}
-                  onSpotClick={handleSpotClick}
-                />
-              )}
+              <Button
+                onClick={handleClearDate}
+                variant="outline"
+                size="sm"
+                className="h-11"
+              >
+                {t('bookings.parkingMap.clearDate')}
+              </Button>
             </div>
           </div>
-
-          {selectedSpot && (
-            <SpotPopover
-              info={selectedSpot}
-              isTaken={takenSpots.includes(selectedSpot.spotNumber)}
-              filters={filters}
-              refetchBookings={refetchBookings}
-              onClose={() => setSelectedSpot(null)}
+          {activeFloor === '-1' ? (
+            <FloorMinus1
+              takenSpots={takenSpots}
+              onSpotClick={handleSpotClick}
+            />
+          ) : (
+            <FloorMinus2
+              takenSpots={takenSpots}
+              onSpotClick={handleSpotClick}
             />
           )}
         </div>
-      )}
+
+        {selectedSpot && (
+          <SpotPopover
+            info={selectedSpot}
+            isTaken={takenSpots.includes(selectedSpot.spotNumber)}
+            filters={filters}
+            refetchBookings={refetchBookings}
+            onClose={() => setSelectedSpot(null)}
+          />
+        )}
+      </Modal>
     </>
   );
 };

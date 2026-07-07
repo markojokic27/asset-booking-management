@@ -43,11 +43,16 @@ export const DateInput: React.FC<Props> = ({
 
   return (
     <div className={className}>
-      <p className="mb-1 text-sm font-medium text-(--color-table-text)">
-        {label}
-      </p>
+      {label && (
+        <p className="mb-1 text-sm font-medium text-(--color-table-text)">
+          {label}
+        </p>
+      )}
 
-      <button onClick={openDatePicker} className="relative w-full">
+      <button
+        onClick={openDatePicker}
+        className="relative w-full hover:cursor-pointer"
+      >
         <input
           ref={dateRef}
           id={id}
