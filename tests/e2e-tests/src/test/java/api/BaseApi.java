@@ -1,5 +1,6 @@
 package api;
 
+import constants.CommonConstants;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
@@ -22,11 +23,11 @@ public class BaseApi {
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body("""
-                    {
-                        "username": "user_admin",
-                        "password": "admin123"
-                    }
-                    """)
+                {
+                    "username": "%s",
+                    "password": "%s"
+                }
+                """.formatted(CommonConstants.ADMIN_USERNAME, CommonConstants.ADMIN_PASS))
                 .when()
                 .post("/v1/auth/login")
                 .then()
