@@ -4,7 +4,6 @@ const options: ToastOptions = {
   position: 'bottom-right',
   autoClose: 3000,
   theme: 'colored',
-  
 };
 
 export const Toast = {

@@ -13,6 +13,7 @@ export function ToastProvider() {
       draggable
       theme="colored"
       transition={Slide}
+      z-index={500}
     />
   );
 }

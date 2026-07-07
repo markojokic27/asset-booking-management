@@ -12,20 +12,14 @@ import { Button } from '../../../components/ui/Button';
 import { IconButton } from '../../../components/ui/IconButton';
 import { Modal } from '../../../components/ui/Modal';
 import { DateInput } from './DateInput';
+import { SpotPopover } from './SpotPopover';
 
 // Types
 import type { BookingWithRelations, Filters } from '../types';
 import type { AssetDto } from '../../asset/types';
-
-// Hooks
-import { useCreateBooking } from '../hooks/useCreateBooking';
+import type { SpotClickInfo } from './SpotPopover';
 
 type FloorLevel = '-1' | '-2';
-
-export interface SpotClickInfo {
-  spotNumber: number;
-  assetId: number | null;
-}
 
 interface Props {
   bookings: BookingWithRelations[];
@@ -79,136 +73,6 @@ function formatDate(filters?: Filters): string {
     year: 'numeric',
   });
 }
-
-interface PopoverProps {
-  info: SpotClickInfo;
-  isTaken: boolean;
-  filters?: Filters;
-  refetchBookings: () => Promise<unknown>;
-  onClose: () => void;
-}
-
-const SpotPopover: React.FC<PopoverProps> = ({
-  info,
-  isTaken,
-  filters,
-  refetchBookings,
-  onClose,
-}) => {
-  const { t } = useTranslation();
-  const [notes, setNotes] = React.useState('');
-
-  const parkingFilters: Filters = {
-    search: '',
-    fromDate: filters?.fromDate ?? '',
-    toDate: filters?.fromDate ?? '',
-    fromHour: '06:00',
-    toHour: '22:00',
-    selectedWeekdays: [],
-  };
-
-  const { isCreating, handleCreateBooking } = useCreateBooking({
-    assetId: info.assetId ?? 0,
-    filters: parkingFilters,
-    notes,
-    setNotes,
-    refetch: refetchBookings,
-    bookingPeriod: 'DAY',
-    availableRecurringDates: [],
-    t,
-  });
-
-  const handleBook = async () => {
-    await handleCreateBooking();
-    onClose();
-  };
-
-  const noDateSelected = !filters?.fromDate;
-
-  return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
-      <button
-        type="button"
-        data-testid="spot-popover-backdrop"
-        className="fixed inset-0 cursor-default bg-black/30"
-        aria-label={t('bookings.parkingMap.closeAria')}
-        onClick={onClose}
-      />
-      <div className="relative z-10 w-72 rounded-xl bg-white p-6 shadow-2xl">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
-              {t('bookings.parkingMap.spotNumber')}
-            </p>
-            <p className="mt-1 text-3xl font-black text-gray-900">
-              {info.spotNumber}
-            </p>
-          </div>
-          <button
-            data-testid="spot-popover-close-button"
-            onClick={onClose}
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-            aria-label={t('bookings.parkingMap.closeAria')}
-          >
-            <CloseIcon />
-          </button>
-        </div>
-
-        <div className="mt-3">
-          <span
-            data-testid="parking-spot-status"
-            className={[
-              'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold',
-              isTaken
-                ? 'bg-orange-100 text-orange-700'
-                : 'bg-blue-100 text-blue-700',
-            ].join(' ')}
-          >
-            <span
-              className={[
-                'h-1.5 w-1.5 rounded-full',
-                isTaken ? 'bg-orange-500' : 'bg-blue-500',
-              ].join(' ')}
-            />
-            {isTaken
-              ? t('bookings.parkingMap.taken')
-              : t('bookings.parkingMap.available')}
-          </span>
-        </div>
-
-        {!isTaken && !noDateSelected && (
-          <input
-            placeholder={t('bookings.parkingMap.notesPlaceholder')}
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="mt-4 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
-          />
-        )}
-
-        <div className="mt-4">
-          <Button
-            data-testid="spot-book-button"
-            className="w-full"
-            disabled={
-              isTaken || info.assetId === null || isCreating || noDateSelected
-            }
-            onClick={handleBook}
-          >
-            {isCreating
-              ? t('bookings.parkingMap.booking')
-              : t('bookings.table.book')}
-          </Button>
-
-          {noDateSelected && (
-            <p className="mt-2 text-center text-xs text-gray-400">
-              {t('bookings.parkingMap.selectDateFirst')}
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const ParkingMap: React.FC<Props> = ({
   bookings,
