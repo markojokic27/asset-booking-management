@@ -32,7 +32,7 @@ interface Props {
 function getTakenSpots(
   bookings: BookingWithRelations[],
   filters?: Filters
-): number[] {
+): SpotClickInfo[] {
   const referenceDate = filters?.fromDate
     ? new Date(filters.fromDate)
     : new Date();
@@ -52,7 +52,12 @@ function getTakenSpots(
     .flatMap((b) => {
       const match = b.asset.name.match(/Parking Spot (\d+)/i);
       if (!match) return [];
-      return [Number.parseInt(match[1], 10)];
+      return [
+        {
+          spotNumber: Number.parseInt(match[1], 10),
+          assetId: b.asset.id ?? null,
+        },
+      ];
     });
 }
 
@@ -87,22 +92,37 @@ export const ParkingMap: React.FC<Props> = ({
   const [selectedSpot, setSelectedSpot] = React.useState<SpotClickInfo | null>(
     null
   );
-
   const takenSpots = React.useMemo(
     () => getTakenSpots(bookings, filters),
     [bookings, filters]
   );
+
+  const takenSpotNumbers = React.useMemo(
+    () => takenSpots.map((s) => s.spotNumber),
+    [takenSpots]
+  );
+
   const spotAssetMap = React.useMemo(() => buildSpotAssetMap(assets), [assets]);
   const dateLabel = formatDate(filters);
 
   const handleSpotClick = (spotNumber: number) => {
-    setSelectedSpot({
-      spotNumber,
-      assetId: spotAssetMap.get(spotNumber) ?? null,
-    });
+    const takenSpot = takenSpots.find((s) => s.spotNumber === spotNumber);
+    setSelectedSpot(
+      takenSpot ?? {
+        spotNumber,
+        assetId: spotAssetMap.get(spotNumber) ?? null,
+      }
+    );
   };
 
-  const openModal = () => setIsOpen(true);
+  const openModal = () => {
+    if (filters?.fromDate === '')
+      setFilters((prev) => ({
+        ...prev,
+        fromDate: new Date().toISOString().split('T')[0],
+      }));
+    setIsOpen(true);
+  };
   const closeModal = () => {
     setIsOpen(false);
     setSelectedSpot(null);
@@ -110,10 +130,6 @@ export const ParkingMap: React.FC<Props> = ({
 
   const handleDateChange = (value: string) => {
     setFilters((prev) => ({ ...prev, fromDate: value }));
-  };
-
-  const handleClearDate = () => {
-    setFilters((prev) => ({ ...prev, fromDate: '', toDate: '' }));
   };
 
   return (
@@ -147,7 +163,7 @@ export const ParkingMap: React.FC<Props> = ({
         }
       >
         <div className="flex h-full min-h-0 w-full flex-col items-center justify-center overflow-auto">
-          <div className="mb-6 flex w-full flex-wrap justify-between gap-4">
+          <div className="mb-2 flex w-full flex-wrap justify-start gap-4">
             <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-100 p-1">
               {(['-1', '-2'] as FloorLevel[]).map((level) => (
                 <Button
@@ -166,36 +182,25 @@ export const ParkingMap: React.FC<Props> = ({
                 </Button>
               ))}
             </div>
-            <div className="flex items-center gap-2">
-              <DateInput
-                id="parking-map-date"
-                label=""
-                placeholder={t('bookings.parkingMap.today', {
-                  date: dateLabel,
-                })}
-                value={filters?.fromDate ?? ''}
-                onChange={handleDateChange}
-                className="h-11 w-48"
-              />
-
-              <Button
-                onClick={handleClearDate}
-                variant="outline"
-                size="sm"
-                className="h-11"
-              >
-                {t('bookings.parkingMap.clearDate')}
-              </Button>
-            </div>
+            <DateInput
+              id="parking-map-date"
+              label=""
+              placeholder={t('bookings.parkingMap.today', {
+                date: dateLabel,
+              })}
+              value={filters?.fromDate ?? ''}
+              onChange={handleDateChange}
+              className="h-11 w-48"
+            />
           </div>
           {activeFloor === '-1' ? (
             <FloorMinus1
-              takenSpots={takenSpots}
+              takenSpots={takenSpotNumbers}
               onSpotClick={handleSpotClick}
             />
           ) : (
             <FloorMinus2
-              takenSpots={takenSpots}
+              takenSpots={takenSpotNumbers}
               onSpotClick={handleSpotClick}
             />
           )}
@@ -204,7 +209,7 @@ export const ParkingMap: React.FC<Props> = ({
         {selectedSpot && (
           <SpotPopover
             info={selectedSpot}
-            isTaken={takenSpots.includes(selectedSpot.spotNumber)}
+            isTaken={takenSpotNumbers.includes(selectedSpot.spotNumber)}
             filters={filters}
             refetchBookings={refetchBookings}
             onClose={() => setSelectedSpot(null)}

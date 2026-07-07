@@ -36,7 +36,6 @@ export const getAllAssetBookings = async (
   const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
     params: { page, size, assetId },
   });
-  console.log(res);
   return res.data;
 };
 
@@ -74,7 +73,6 @@ export const getAllCategoryBookings = async (
   const res = await api.get<PageResponse<BookingWithRelations>>('/bookings', {
     params: { page, size, categoryId },
   });
-  console.log(res);
   return res.data;
 };
 

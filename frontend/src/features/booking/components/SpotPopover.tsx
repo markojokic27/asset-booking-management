@@ -60,8 +60,7 @@ export const SpotPopover: React.FC<Props> = ({
     await handleCreateBooking();
     onClose();
   };
-
-  const noDateSelected = !filters?.fromDate;
+  console.log(info);
 
   return (
     <Modal
@@ -108,7 +107,7 @@ export const SpotPopover: React.FC<Props> = ({
         </IconButton>
       }
     >
-      {!isTaken && !noDateSelected && (
+      {!isTaken && (
         <input
           placeholder={t('bookings.parkingMap.notesPlaceholder')}
           value={notes}
@@ -128,9 +127,7 @@ export const SpotPopover: React.FC<Props> = ({
           <Button
             data-testid="spot-book-button"
             className="w-1/2"
-            disabled={
-              isTaken || info.assetId === null || isCreating || noDateSelected
-            }
+            disabled={isTaken || info.assetId === null || isCreating}
             onClick={handleBook}
           >
             {isCreating
@@ -138,11 +135,6 @@ export const SpotPopover: React.FC<Props> = ({
               : t('bookings.table.book')}
           </Button>
         </div>
-        {noDateSelected && (
-          <p className="mt-2 text-center text-xs text-gray-400">
-            {t('bookings.parkingMap.selectDateFirst')}
-          </p>
-        )}
       </div>
     </Modal>
   );
