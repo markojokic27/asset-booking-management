@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import CloseIcon from '@mui/icons-material/Close';
+import { Link } from 'react-router-dom';
 
 // Components
 import { Button } from '../../../components/ui/Button';
@@ -117,10 +118,12 @@ export const SpotPopover: React.FC<Props> = ({
       )}
 
       <div className="mt-4">
-        <div className='flex gap-4'>
-            <Button variant="outline" onClick={onClose} className="w-1/2">
-                Calendar
+        <div className="flex gap-4">
+          <Link to={`/assets/${info.assetId}/bookings`} className="w-1/2">
+            <Button variant="outline" onClick={onClose} className="w-full">
+              Calendar
             </Button>
+          </Link>
 
           <Button
             data-testid="spot-book-button"

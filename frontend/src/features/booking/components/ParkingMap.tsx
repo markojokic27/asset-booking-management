@@ -116,15 +116,6 @@ export const ParkingMap: React.FC<Props> = ({
     setFilters((prev) => ({ ...prev, fromDate: '', toDate: '' }));
   };
 
-  const handleModalClose = () => {
-    if (selectedSpot) {
-      setSelectedSpot(null);
-      return;
-    }
-
-    closeModal();
-  };
-
   return (
     <>
       <Button
@@ -137,7 +128,7 @@ export const ParkingMap: React.FC<Props> = ({
 
       <Modal
         isOpen={isOpen}
-        onClose={handleModalClose}
+        onClose={closeModal}
         title={
           <h2 className="text-3xl font-bold tracking-wide text-gray-900">
             {t('bookings.parkingMap.title')}
