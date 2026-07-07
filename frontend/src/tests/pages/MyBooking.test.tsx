@@ -3,7 +3,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { BookingWithRelations } from '../../features/booking/types';
 
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({ useCurrentUser: vi.fn() }));
 vi.mock('../../features/booking/hooks/useMyBookings', () => ({ useMyBookings: vi.fn() }));
 vi.mock('../../features/user/hooks/usePagination', () => ({
   usePagination: vi.fn((items: unknown[]) => ({
@@ -56,7 +55,7 @@ vi.mock('../../features/booking/components/MyBookingsTable', () => ({
 }));
 
 import MyBookings from '../../pages/MyBookings';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { authState, mockUseAuth } from '../mocks/auth';
 import { useMyBookings } from '../../features/booking/hooks/useMyBookings';
 import { isAdmin } from '../../features/user/utilis/users';
 import {
@@ -98,11 +97,7 @@ const bookingA = makeBooking(1, 10, 'Laptop');
 const bookingB = makeBooking(2, 20, 'Projector');
 
 const setUser = (overrides = {}) =>
-  vi.mocked(useCurrentUser).mockReturnValue({
-    user: { ...mockUser, ...overrides } as any,
-    isLoading: false,
-    error: null,
-  });
+  mockUseAuth.mockReturnValue(authState({ user: { ...mockUser, ...overrides } as any }));
 
 const setBookings = (bookings: BookingWithRelations[] = [bookingA, bookingB]) =>
   vi.mocked(useMyBookings).mockReturnValue({

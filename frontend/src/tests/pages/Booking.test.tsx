@@ -39,7 +39,7 @@ vi.mock('../../features/booking/components/FilterBar', () => ({
 vi.mock('../../features/booking/components/BookingTable', () => ({
   BookingTable: () => <div>booking-table</div>,
 }));
-vi.mock('../../pages/ParkingMap', () => ({
+vi.mock('../../features/booking/components/ParkingMap', () => ({
   ParkingMap: () => <div>parking-map</div>,
 }));
 

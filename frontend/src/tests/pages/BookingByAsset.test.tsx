@@ -19,7 +19,12 @@ const hookState = {
 };
 
 vi.mock('react-router-dom', () => ({ useParams: () => ({ assetId: '42' }) }));
-vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (k: string) => k,
+    i18n: { language: 'en' },
+  }),
+}));
 vi.mock('../../features/booking/hooks/useBookingByAsset', () => ({
   useBookingsByAsset: () => ({
     bookings: hookState.bookings,
@@ -64,6 +69,14 @@ vi.mock('../../features/booking/components/BookingDetailsModal', () => ({
       <button onClick={onClose}>Close</button>
     </div>
   ),
+}));
+vi.mock('../../features/booking/components/BookingModal', () => ({
+  BookingModal: ({ open, handleCreateBooking }: { open: boolean; handleCreateBooking: () => Promise<boolean> }) =>
+    open ? (
+      <div data-testid="booking-modal">
+        <button onClick={() => void handleCreateBooking()}>confirm-booking</button>
+      </div>
+    ) : null,
 }));
 vi.mock('../../components/ui/Button', () => ({
   Button: ({ children, onClick, disabled, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) => (
@@ -124,9 +137,8 @@ describe('BookingsByAsset', () => {
 
   describe('conditional render states', () => {
     it.each([
-      ['loading', { loading: true, bookings: [] }, 'Loading...'],
-      ['error', { error: new Error('fail'), bookings: [] }, /error loading bookings/i],
-      ['empty', { bookings: [] }, /asset doesnt have booking history/i],
+      ['loading', { loading: true, bookings: [defaultBooking] }, 'bookings.buttons.loading'],
+      ['error', { error: new Error('fail'), bookings: [defaultBooking] }, 'bookings.buttons.errorLoadingBookings'],
     ])('shows %s state', (_, state, expected) => {
       Object.assign(hookState, state);
       render(<BookingsByAsset />);
@@ -173,9 +185,9 @@ describe('BookingsByAsset', () => {
 
   describe('Book button', () => {
     it.each([
-      ['enabled by default',          { isButtonDisabled: false, isCreating: false }, false, 'Book'],
-      ['disabled when unavailable',   { isButtonDisabled: true,  isCreating: false }, true,  'Book'],
-      ['disabled and labeled while creating', { isButtonDisabled: false, isCreating: true  }, true,  'Booking...'],
+      ['enabled by default',          { isButtonDisabled: false, isCreating: false }, false, 'bookings.buttons.book'],
+      ['disabled when unavailable',   { isButtonDisabled: true,  isCreating: false }, true,  'bookings.buttons.book'],
+      ['disabled and labeled while creating', { isButtonDisabled: false, isCreating: true  }, true,  'bookings.buttons.booking'],
     ])('is %s', (_, state, expectedDisabled, expectedLabel) => {
       Object.assign(hookState, state);
       render(<BookingsByAsset />);
@@ -186,7 +198,9 @@ describe('BookingsByAsset', () => {
 
     it('calls handleCreateBooking on click', async () => {
       render(<BookingsByAsset />);
-      await userEvent.setup().click(screen.getByTestId('book-asset-button'));
+      const user = userEvent.setup();
+      await user.click(screen.getByTestId('book-asset-button'));
+      await user.click(screen.getByText('confirm-booking'));
       expect(mockHandleCreateBooking).toHaveBeenCalledOnce();
     });
   });

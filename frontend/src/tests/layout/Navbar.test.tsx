@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -8,11 +8,17 @@ vi.mock('../../components/layout/Layout', () => ({
     <div className={className}>{children}</div>
   ),
 }));
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({ useCurrentUser: vi.fn() }));
-vi.mock('../../features/user/utilis/users', () => ({
-  getFullName: vi.fn(() => 'Test User'),
-  isAdmin: vi.fn(),
-  isManager: vi.fn(),
+vi.mock('../../features/user/utilis/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+  return {
+    ...actual,
+    getFullName: vi.fn(() => 'Test User'),
+    isAdmin: vi.fn(),
+    isManager: vi.fn(),
+  };
+});
+vi.mock('../../features/user/api/users', () => ({
+  getUserById: vi.fn().mockResolvedValue({ id: 1, role: 'ADMIN', name: 'Test', surname: 'User' }),
 }));
 vi.mock('@mui/icons-material/MonitorSharp', () => ({ default: () => <svg /> }));
 vi.mock('@mui/icons-material/CalendarTodaySharp', () => ({ default: () => <svg /> }));
@@ -25,8 +31,10 @@ vi.mock('@mui/icons-material/EventNoteSharp', () => ({ default: () => <svg /> })
 vi.mock('@mui/icons-material', () => ({ AccountCircleSharp: () => <svg /> }));
 
 import { Navbar } from '../../components/layout/Navbar';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { authState, mockUseAuth } from '../mocks/auth';
 import { isAdmin, isManager } from '../../features/user/utilis/users';
+
+const adminUser = { id: 1, role: 'ADMIN', name: 'Test', surname: 'User' } as const;
 
 const renderNavbar = (initialEntries = ['/']) =>
   render(<MemoryRouter initialEntries={initialEntries}><Navbar /></MemoryRouter>);
@@ -36,7 +44,7 @@ describe('Navbar', () => {
     vi.clearAllMocks();
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(isManager).mockReturnValue(false);
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: adminUser as any }));
   });
 
   it('renders navigation with default links and correct hrefs', () => {
@@ -45,7 +53,7 @@ describe('Navbar', () => {
     for (const key of ['assets', 'categories', 'bookings', 'myBookings', 'report', 'logout']) {
       expect(screen.getByText(`layout.navbar.${key}`)).toBeInTheDocument();
     }
-    expect(screen.getByRole('link', { name: /layout\.navbar\.account/i })).toHaveAttribute('href', '/account-info');
+    expect(screen.getByRole('link', { name: /Test User/i })).toHaveAttribute('href', '/account-info');
     expect(screen.getByRole('link', { name: /layout\.navbar\.logout/i })).toHaveAttribute('href', '/login');
   });
 
@@ -67,18 +75,17 @@ describe('Navbar', () => {
     expect(screen.queryByText('layout.navbar.myBookings')).not.toBeInTheDocument();
   });
 
-  it('renders user full name and role when logged in, account key when not', () => {
+  it('renders user full name and role when logged in, account key when not', async () => {
+    mockUseAuth.mockReturnValue(authState({ user: null }));
     renderNavbar();
     expect(screen.getByText('layout.navbar.account')).toBeInTheDocument();
 
-    vi.mocked(useCurrentUser).mockReturnValue({
-      user: { id: 1, role: 'admin', firstName: 'Test', lastName: 'User' } as any,
-      isLoading: false,
-      error: null,
-    });
+    mockUseAuth.mockReturnValue(authState({ user: adminUser as any }));
     renderNavbar();
     expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('admin')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('ADMIN')).toBeInTheDocument();
+    });
   });
 
   it('applies inactive styles by default and active styles on current route', () => {

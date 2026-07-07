@@ -20,12 +20,15 @@ vi.mock('../../components/ui/Button', () => ({
     <button onClick={onClick} className={className}>{children}</button>
   ),
 }));
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({ useCurrentUser: vi.fn() }));
-vi.mock('../../features/user/utilis/users', () => ({
-  getFullName: vi.fn(() => 'Test User'),
-  isAdmin: vi.fn(),
-  isManager: vi.fn(),
-}));
+vi.mock('../../features/user/utilis/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+  return {
+    ...actual,
+    getFullName: vi.fn(() => 'Test User'),
+    isAdmin: vi.fn(),
+    isManager: vi.fn(),
+  };
+});
 vi.mock('@mui/icons-material', () => ({
   MonitorSharp: () => <svg />, DnsSharp: () => <svg />, CalendarTodaySharp: () => <svg />,
   PeopleSharp: () => <svg />, LogoutSharp: () => <svg />, AccountCircleSharp: () => <svg />,
@@ -33,8 +36,10 @@ vi.mock('@mui/icons-material', () => ({
 }));
 
 import MobileMenu from '../../components/layout/MobileMenu';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { authState, mockUseAuth } from '../mocks/auth';
 import { isAdmin, isManager } from '../../features/user/utilis/users';
+
+const adminUser = { id: 1, role: 'ADMIN', name: 'Test', surname: 'User' } as const;
 
 const renderMenu = () => render(<MemoryRouter><MobileMenu /></MemoryRouter>);
 const openMenu = () => userEvent.click(screen.getByRole('button', { name: '' }));
@@ -44,7 +49,7 @@ describe('MobileMenu', () => {
     vi.clearAllMocks();
     vi.mocked(isAdmin).mockReturnValue(false);
     vi.mocked(isManager).mockReturnValue(false);
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: adminUser as any }));
   });
 
   it('renders trigger button and opens menu on click', async () => {
@@ -60,7 +65,7 @@ describe('MobileMenu', () => {
     for (const key of ['layout.navbar.assets', 'layout.navbar.categories', 'layout.navbar.bookings', 'layout.navbar.myBookings', 'layout.navbar.logout']) {
       expect(screen.getByText(key)).toBeInTheDocument();
     }
-    expect(screen.getByRole('link', { name: /layout\.navbar\.account/i })).toHaveAttribute('href', '/account-info');
+    expect(screen.getByRole('link', { name: /Test User/i })).toHaveAttribute('href', '/account-info');
   });
 
   it.each([
@@ -86,11 +91,9 @@ describe('MobileMenu', () => {
   });
 
   it('renders user full name when logged in', async () => {
-    vi.mocked(useCurrentUser).mockReturnValue({
-      user: { id: 1, role: 'admin', firstName: 'Test', lastName: 'User' } as any,
-      isLoading: false,
-      error: null,
-    });
+    mockUseAuth.mockReturnValue(authState({
+      user: { id: 1, role: 'ADMIN', name: 'Test', surname: 'User' } as any,
+    }));
     renderMenu();
     await openMenu();
     expect(screen.getByText('Test User')).toBeInTheDocument();

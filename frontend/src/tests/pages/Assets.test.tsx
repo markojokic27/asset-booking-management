@@ -1,5 +1,6 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { authState, mockUseAuth } from '../mocks/auth';
 
 // ── Mocks ─────────────────────────────────────────────────────────────────────
 
@@ -7,11 +8,6 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string, opts?: Record<string, unknown>) => opts?.name ? `${key}:${opts.name}` : key }),
 }));
 vi.mock('@mui/icons-material/Add', () => ({ default: () => null }));
-
-const { mockUseCurrentUser } = vi.hoisted(() => ({ mockUseCurrentUser: vi.fn() }));
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({
-  useCurrentUser: () => mockUseCurrentUser(),
-}));
 
 const { mockGetAllAssets, mockGetAllCategories, mockDeleteAsset, mockCreateAsset, mockUpdateAsset } = vi.hoisted(() => ({
   mockGetAllAssets: vi.fn(),
@@ -30,7 +26,10 @@ vi.mock('../../features/asset-category/api/categoryApi', () => ({
   getAllCategories: () => mockGetAllCategories(),
 }));
 
-vi.mock('../../features/user/utilis/users', () => ({ isAdmin: vi.fn() }));
+vi.mock('../../features/user/utilis/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+  return { ...actual, isAdmin: vi.fn() };
+});
 import { isAdmin } from '../../features/user/utilis/users';
 const mockIsAdmin = vi.mocked(isAdmin);
 
@@ -152,7 +151,9 @@ const mockAsset = { id: 10, name: 'MacBook', categoryId: 1, categoryName: 'Lapto
 const deletedAsset = { id: 11, name: 'OldLaptop', categoryId: 1, categoryName: 'Laptops', status: 'DELETED' };
 
 const setupMocks = ({ admin = false } = {}) => {
-  mockUseCurrentUser.mockReturnValue({ user: { id: 1 } });
+  mockUseAuth.mockReturnValue(authState({
+    user: { id: 1, role: admin ? 'ADMIN' : 'MANAGER' } as any,
+  }));
   mockIsAdmin.mockReturnValue(admin);
   mockGetAllCategories.mockResolvedValue({ content: [mockCategory] });
   mockGetAllAssets.mockResolvedValue({ content: [mockAsset] });
@@ -215,7 +216,7 @@ describe('Assets', () => {
       await waitFor(() => {
         expect(screen.getByText('MacBook')).toBeInTheDocument();
         expect(screen.getByText('Monitor')).toBeInTheDocument();
-        expect(screen.getByText('assets.categories.all')).toBeInTheDocument();
+        expect(screen.getAllByText('assets.categories.all').length).toBeGreaterThan(0);
       });
     });
 
@@ -230,7 +231,7 @@ describe('Assets', () => {
       fireEvent.click(screen.getByText('Monitors'));
       expect(screen.getByText('Monitor')).toBeInTheDocument();
       expect(screen.queryByText('MacBook')).not.toBeInTheDocument();
-      expect(screen.queryByText('assets.categories.all')).not.toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Monitors' })).toBeInTheDocument();
     });
 
     it.each([

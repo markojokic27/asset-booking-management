@@ -99,9 +99,8 @@ describe('AssetsTable', () => {
   });
 
   it.each([
-    ['onView',     'assets.table.ariaView',   null],
-    ['onEdit',     'assets.table.ariaEdit',   null],
-    ['onReport',   'assets.table.ariaReport', null],
+    ['onView', 'assets.table.ariaView'],
+    ['onEdit', 'assets.table.ariaEdit'],
   ])('calls %s when its button is clicked', async (handler, ariaLabel) => {
     renderTable();
     await userEvent.click(screen.getByRole('button', { name: ariaLabel }));

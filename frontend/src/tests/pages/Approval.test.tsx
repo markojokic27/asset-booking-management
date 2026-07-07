@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Approvals from '../../pages/Approvals';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { mockUseAuth, authState } from '../mocks/auth';
 import { isManager } from '../../features/user/utilis/users';
 import { usePendingBookings } from '../../features/booking/hooks/usePendingBookings';
 import { filterPendingBookingsBySearch } from '../../features/booking/utilis/approvalFilter';
@@ -38,10 +38,6 @@ vi.mock('../../features/booking/components/PendingApprovalsTable', () => ({
       <button onClick={() => onReject(1)}>Reject</button>
     </div>
   ),
-}));
-
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({
-  useCurrentUser: vi.fn(() => ({ user: { id: 1, role: 'MANAGER' }, isLoading: false, error: null })),
 }));
 
 vi.mock('../../features/user/utilis/users', () => ({
@@ -89,7 +85,7 @@ const renderPage = (path = '/approvals') =>
 describe('Approvals', () => {
   afterEach(() => {
     vi.mocked(isManager).mockReturnValue(true);
-    vi.mocked(useCurrentUser).mockReturnValue({ user: { id: 1, role: 'MANAGER' } as any, isLoading: false, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: { id: 1, role: 'MANAGER' } as any }));
     vi.mocked(usePendingBookings).mockReturnValue({ bookings: [], loading: false, error: '', refetch: vi.fn().mockResolvedValue(undefined) });
   });
 
@@ -105,7 +101,7 @@ describe('Approvals', () => {
 
   it('redirects to /bookings for non-manager', () => {
     vi.mocked(isManager).mockReturnValue(false);
-    vi.mocked(useCurrentUser).mockReturnValue({ user: { id: 1, role: 'EMPLOYEE' } as any, isLoading: false, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: { id: 1, role: 'EMPLOYEE' } as any }));
     renderPage();
     expect(screen.getByText('BookingsPage')).toBeInTheDocument();
   });
@@ -144,7 +140,7 @@ describe('Approvals', () => {
   });
 
   it('does not redirect while user is loading', () => {
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: true, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: null, isLoading: true }));
     vi.mocked(isManager).mockReturnValue(false);
     renderPage();
     expect(screen.queryByText('BookingsPage')).not.toBeInTheDocument();

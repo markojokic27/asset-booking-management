@@ -11,14 +11,6 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../features/user/hooks/useUsers', () => ({ useUsers: vi.fn() }));
 
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({
-  useCurrentUser: vi.fn(() => ({
-    user: { id: 1, role: 'ADMIN' },
-    isLoading: false,
-    error: null,
-  })),
-}));
-
 vi.mock('../../features/user/utilis/users', () => ({
   getFullName: (u: { name: string; surname: string }) => `${u.name} ${u.surname}`,
   isAdmin: (user: { role?: string } | null | undefined) => user?.role === 'ADMIN',
@@ -147,7 +139,7 @@ vi.mock('../../components/ui/DeleteModal', () => ({
 
 import Users from '../../pages/Users';
 import { useUsers } from '../../features/user/hooks/useUsers';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { authState, mockUseAuth } from '../mocks/auth';
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
 
@@ -227,21 +219,15 @@ describe('Users page', () => {
     });
 
     it('redirects non-admin to /bookings', () => {
-      vi.mocked(useCurrentUser).mockReturnValue({
+      mockUseAuth.mockReturnValue(authState({
         user: { id: 2, role: 'EMPLOYEE' } as any,
-        isLoading: false,
-        error: null,
-      });
+      }));
       renderPage();
       expect(screen.getByText('BookingsPage')).toBeInTheDocument();
     });
 
     it('does not redirect while loading', () => {
-      vi.mocked(useCurrentUser).mockReturnValue({
-        user: null,
-        isLoading: true,
-        error: null,
-      });
+      mockUseAuth.mockReturnValue(authState({ user: null, isLoading: true }));
       renderPage();
       expect(screen.queryByText('BookingsPage')).not.toBeInTheDocument();
     });

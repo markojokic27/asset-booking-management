@@ -95,6 +95,8 @@ const parkingAsset: AssetDto = {
 
 const renderMap = (props = defaultProps) => render(<ParkingMap {...props} />);
 const openModal = () => fireEvent.click(screen.getByText('bookings.viewParkingMap'));
+const cancelDialog = (dialog: HTMLElement) =>
+  fireEvent(dialog, new Event('cancel', { bubbles: true, cancelable: true }));
 
 // Tests 
 
@@ -125,8 +127,8 @@ describe('ParkingMap', () => {
 
   it.each([
     ['close button',   () => fireEvent.click(screen.getByTestId('parking-close-button'))],
-    ['Escape key',     () => fireEvent.keyDown(window, { key: 'Escape' })],
-    ['backdrop click', () => fireEvent.click(screen.getByTestId('parking-map-backdrop'))],
+    ['cancel event',   () => cancelDialog(screen.getByRole('dialog'))],
+    ['backdrop click', () => fireEvent.click(screen.getByLabelText('ui.modal.closeAria'))],
   ])('closes modal on %s', (_, trigger) => {
     renderMap();
     openModal();
@@ -134,10 +136,10 @@ describe('ParkingMap', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('sets body overflow hidden when open and restores on close', () => {
+  it('does not change body overflow when modal opens and closes', () => {
     renderMap();
     openModal();
-    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.body.style.overflow).toBe('');
     fireEvent.click(screen.getByTestId('parking-close-button'));
     expect(document.body.style.overflow).toBe('');
   });
@@ -176,15 +178,15 @@ describe('ParkingMap', () => {
       renderMap(withDate);
       openModal();
       fireEvent.click(screen.getByText('spot-5'));
-      expect(screen.getByText('bookings.parkingMap.spotNumber')).toBeInTheDocument();
+      expect(screen.getByText(/bookings\.parkingMap\.spotNumber/)).toBeInTheDocument();
     });
 
-    it('closes popover on Escape when spot is selected, keeps modal open', () => {
+    it('closes popover on cancel when spot is selected, keeps modal open', () => {
       renderMap(withDate);
       openModal();
       fireEvent.click(screen.getByText('spot-5'));
-      fireEvent.keyDown(window, { key: 'Escape' });
-      expect(screen.queryByText('bookings.parkingMap.spotNumber')).not.toBeInTheDocument();
+      cancelDialog(screen.getAllByRole('dialog')[1]);
+      expect(screen.queryByText(/bookings\.parkingMap\.spotNumber/)).not.toBeInTheDocument();
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
@@ -275,9 +277,9 @@ describe('ParkingMap', () => {
     renderMap(withDate);
     openModal();
     fireEvent.click(screen.getByText('spot-5'));
-    expect(screen.getByText('bookings.parkingMap.spotNumber')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('spot-popover-backdrop'));
-    expect(screen.queryByText('bookings.parkingMap.spotNumber')).not.toBeInTheDocument();
+    expect(screen.getByText(/bookings\.parkingMap\.spotNumber/)).toBeInTheDocument();
+    fireEvent.click(screen.getAllByLabelText('ui.modal.closeAria')[1]);
+    expect(screen.queryByText(/bookings\.parkingMap\.spotNumber/)).not.toBeInTheDocument();
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 });

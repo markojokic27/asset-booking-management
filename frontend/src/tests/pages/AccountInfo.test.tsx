@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AccountInfo from '../../pages/AccountInfo';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { authState, mockUseAuth } from '../mocks/auth';
 import { useDepartments } from '../../features/department/hooks/useDepartments';
+import { getUserById } from '../../features/user/api/users';
 
 // Mocks 
 
@@ -27,11 +28,11 @@ vi.mock('../../components/ui/Button', () => ({
     <button onClick={onClick} {...props}>{children}</button>
   ),
 }));
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({
-  useCurrentUser: vi.fn(),
-}));
 vi.mock('../../features/department/hooks/useDepartments', () => ({
   useDepartments: vi.fn(),
+}));
+vi.mock('../../features/user/api/users', () => ({
+  getUserById: vi.fn(),
 }));
 vi.mock('../../features/user/components/ChangePasswordModal', () => ({
   ChangePasswordModal: ({ isOpen, onClose }: any) =>
@@ -53,12 +54,11 @@ const mockUser = {
   notes: 'Some notes',
 };
 
-const setUser = (overrides = {}) =>
-  vi.mocked(useCurrentUser).mockReturnValue({
-    user: { ...mockUser, ...overrides } as any,
-    isLoading: false,
-    error: null,
-  });
+const setUser = (overrides = {}) => {
+  const user = { ...mockUser, ...overrides };
+  mockUseAuth.mockReturnValue(authState({ user: user as any }));
+  vi.mocked(getUserById).mockResolvedValue(user as any);
+};
 
 const renderPage = () => render(<MemoryRouter><AccountInfo /></MemoryRouter>);
 
@@ -66,7 +66,7 @@ const renderPage = () => render(<MemoryRouter><AccountInfo /></MemoryRouter>);
 
 describe('AccountInfo', () => {
   beforeEach(() => {
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: null }));
     vi.mocked(useDepartments).mockReturnValue({ getDepartmentName: vi.fn(() => 'Engineering') } as any);
   });
 
@@ -78,13 +78,13 @@ describe('AccountInfo', () => {
   });
 
   it('shows loading state', () => {
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: true, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: null, isLoading: true }));
     renderPage();
     expect(screen.getByText('account.loading')).toBeInTheDocument();
   });
 
   it('shows error state', () => {
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: 'fetch error' });
+    mockUseAuth.mockReturnValue(authState({ user: null, error: 'fetch error' }));
     renderPage();
     expect(screen.getByText('fetch error')).toBeInTheDocument();
   });
@@ -95,46 +95,58 @@ describe('AccountInfo', () => {
   });
 
   describe('with user', () => {
-    it('renders name, email, department, manager and notes', () => {
+    it('renders name, email, department, manager and notes', async () => {
       setUser();
       renderPage();
-      expect(screen.getByText('Alice Smith')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Alice Smith')).toBeInTheDocument();
+      });
       expect(screen.getAllByText('alice@example.com').length).toBeGreaterThan(0);
       expect(screen.getByText('Engineering')).toBeInTheDocument();
       expect(screen.getByText('manager@example.com')).toBeInTheDocument();
       expect(screen.getByText('Some notes')).toBeInTheDocument();
     });
 
-    it('renders role and status badges', () => {
+    it('renders role and status badges', async () => {
       setUser();
       renderPage();
-      expect(screen.getByTestId('account-role')).toHaveTextContent('ADMIN');
+      await waitFor(() => {
+        expect(screen.getByTestId('account-role')).toHaveTextContent('ADMIN');
+      });
       expect(screen.getByTestId('account-status')).toHaveTextContent('ACTIVE');
     });
 
-    it.each(['ADMIN', 'MANAGER', 'EMPLOYEE'])('renders %s role badge', (role) => {
+    it.each(['ADMIN', 'MANAGER', 'EMPLOYEE'])('renders %s role badge', async (role) => {
       setUser({ role });
       renderPage();
-      expect(screen.getByTestId('account-role')).toHaveTextContent(role);
+      await waitFor(() => {
+        expect(screen.getByTestId('account-role')).toHaveTextContent(role);
+      });
     });
 
-    it('renders unknown status badge', () => {
+    it('renders unknown status badge', async () => {
       setUser({ status: 'DELETED' });
       renderPage();
-      expect(screen.getByTestId('account-status')).toHaveTextContent('DELETED');
+      await waitFor(() => {
+        expect(screen.getByTestId('account-status')).toHaveTextContent('DELETED');
+      });
     });
 
-    it('shows emptyValue when notes is null', () => {
+    it('shows emptyValue when notes is null', async () => {
       setUser({ notes: null });
       renderPage();
-      expect(screen.getAllByText('account.common.emptyValue').length).toBeGreaterThan(0);
+      await waitFor(() => {
+        expect(screen.getAllByText('account.common.emptyValue').length).toBeGreaterThan(0);
+      });
     });
 
-    it('shows emptyValue when department not found', () => {
+    it('shows emptyValue when department not found', async () => {
       vi.mocked(useDepartments).mockReturnValue({ getDepartmentName: vi.fn(() => undefined) } as any);
       setUser();
       renderPage();
-      expect(screen.getAllByText('account.common.emptyValue').length).toBeGreaterThan(0);
+      await waitFor(() => {
+        expect(screen.getAllByText('account.common.emptyValue').length).toBeGreaterThan(0);
+      });
     });
 
     it('opens and closes change password modal', async () => {
@@ -142,6 +154,9 @@ describe('AccountInfo', () => {
       renderPage();
       const user = userEvent.setup();
 
+      await waitFor(() => {
+        expect(screen.getByTestId('account-open-change-password')).toBeInTheDocument();
+      });
       await user.click(screen.getByTestId('account-open-change-password'));
       expect(screen.getByText('ChangePasswordModal')).toBeInTheDocument();
 

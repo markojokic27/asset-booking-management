@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import './tests/mocks/auth';
 
 if (!HTMLDialogElement.prototype.showModal) {
   HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {

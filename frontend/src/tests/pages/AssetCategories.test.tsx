@@ -3,15 +3,17 @@ import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AssetCategories from '../../pages/AssetCategories';
-import { useCurrentUser } from '../../features/user/hooks/useCurrentUser';
+import { mockUseAuth, authState } from '../mocks/auth';
 import { isAdmin } from '../../features/user/utilis/users';
 import { getAllCategories, getCategoryById } from '../../features/asset-category/api/categoryApi';
 
 // Mocks 
 
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
-vi.mock('../../features/user/hooks/useCurrentUser', () => ({ useCurrentUser: vi.fn() }));
-vi.mock('../../features/user/utilis/users', () => ({ isAdmin: vi.fn() }));
+vi.mock('../../features/user/utilis/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+  return { ...actual, isAdmin: vi.fn() };
+});
 vi.mock('../../features/asset-category/api/categoryApi', () => ({
   getAllCategories: vi.fn(),
   getCategoryById: vi.fn(),
@@ -81,7 +83,7 @@ describe('AssetCategories', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(isAdmin).mockReturnValue(false);
-    vi.mocked(useCurrentUser).mockReturnValue({ user: null, isLoading: false, error: null });
+    mockUseAuth.mockReturnValue(authState({ user: null }));
     setCategories([]);
   });
 
