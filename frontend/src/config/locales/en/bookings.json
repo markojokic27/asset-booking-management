@@ -64,14 +64,28 @@
     "rooms": {
       "office": "Office",
       "meetingRoom": "Meeting room",
+      "meetingRoomShort": "MR",
       "kitchenWc": "Kitchen / WC",
       "stairs": "Staircase",
-      "corridor": "Corridor"
+      "corridor": "Corridor",
+      "commonArea": "Common area"
+    },
+    "depts": {
+      "AT": "Advanced Technologies",
+      "MR": "Meeting Rooms",
+      "MS": "Mobile & Security",
+      "ST": "System Test",
+      "D": "Director",
+      "A": "Architects"
     }
   },
   "officeMap": {
     "title": "Office Map",
-    "closeAria": "Close map"
+    "closeAria": "Close map",
+    "floorTab": "Floor {{floor}}",
+    "showLegend": "Show legend",
+    "hideLegend": "Hide legend",
+    "legend": "Legend"
   },
   "confirmation": {
     "and": "i",

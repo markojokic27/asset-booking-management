@@ -64,14 +64,28 @@
     "rooms": {
       "office": "Ured",
       "meetingRoom": "Sala za sastanke",
+      "meetingRoomShort": "SZS",
       "kitchenWc": "Kuhinja / WC",
       "stairs": "Stubište",
-      "corridor": "Hodnik"
+      "corridor": "Hodnik",
+      "commonArea": "Zajednički prostor"
+    },
+    "depts": {
+      "AT": "Napredne tehnologije",
+      "MR": "Sala za sastanke",
+      "MS": "Mobilne tehnologije i sigurnost",
+      "ST": "Testiranje sustava",
+      "D": "Direktor",
+      "A": "Arhitekti"
     }
   },
   "officeMap": {
     "title": "Karta ureda",
-    "closeAria": "Zatvori kartu"
+    "closeAria": "Zatvori kartu",
+    "floorTab": "Kat {{floor}}",
+    "showLegend": "Prikaži legendu",
+  "hideLegend": "Zatvori legendu",
+  "legend": "Legenda"
   },
   "confirmation": {
     "and": "i",

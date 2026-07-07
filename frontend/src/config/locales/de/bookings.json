@@ -64,14 +64,28 @@
     "rooms": {
       "office": "Büro",
       "meetingRoom": "Besprechungsraum",
+      "meetingRoomShort": "B",
       "kitchenWc": "Küche / WC",
       "stairs": "Treppenhaus",
-      "corridor": "Flur"
+      "corridor": "Flur",
+      "commonArea": "Gemeinschaftsbereich"
+    },
+    "depts": {
+      "AT": "Fortgeschrittene Technologien",
+      "MR": "Besprechungsräume",
+      "MS": "Mobilität & Sicherheit",
+      "ST": "Systemtest",
+      "D": "Direktor",
+      "A": "Architekten"
     }
   },
   "officeMap": {
     "title": "Bürokarte",
-    "closeAria": "Karte schließen"
+    "closeAria": "Karte schließen",
+    "floorTab": "Etage {{floor}}",
+    "showLegend": "Legende anzeigen",
+    "hideLegend": "Legende schließen",
+    "legend": "Legende"
   },
 
   "confirmation": {
