@@ -72,8 +72,16 @@ export const hasBookingOverlap = ({
       : new Date(`${fromDate}T00:00:00`);
 
   // check if the selected start time is in the past
-  if (selectedStart.toISOString() < new Date().toISOString()) {
-    return true;
+  if (bookingPeriod === 'HOUR') {
+    if (selectedStart.getTime() < Date.now()) {
+      return true;
+    }
+  } else {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (selectedStart < today) {
+      return true;
+    }
   }
 
   const selectedEnd =

@@ -66,6 +66,7 @@ export function AvailabilityCalendar({
     today.setHours(0, 0, 0, 0);
     const compareDate = new Date(date);
     compareDate.setHours(0, 0, 0, 0);
+
     return compareDate < today;
   };
 
