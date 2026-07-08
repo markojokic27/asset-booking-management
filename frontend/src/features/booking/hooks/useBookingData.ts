@@ -1,10 +1,17 @@
+// External packages
 import * as React from 'react';
+
+// Types
 import type { AssetDto } from '../../asset/types';
 import type { AssetCategoryDto } from '../../asset-category/types';
 import type { BookingWithRelations, Filters } from '../types';
+
+// API
 import { getAllAssets } from '../../asset/api/assetApi';
 import { getAllCategories } from '../../asset-category/api/categoryApi';
 import { getAllCategoryBookings } from '../api/bookingApi';
+
+// Utilis
 import { filterAvailableAssets } from '../utilis/filterAvailableAssets';
 
 type Props = {

@@ -1,17 +1,20 @@
 // External packages
 import * as React from 'react';
+import type { TFunction } from 'i18next';
 
 // Components
 import { Toast } from '../../../components/ui/Toast';
 
 // API
 import { createBooking } from '../api/bookingApi';
-import { createRecurringBooking } from '../api/bookingApi';
+import { useAuth } from '../../auth/context/AuthContext';
 
 // Types
 import type { Filters } from '../types';
-import { useAuth } from '../../auth/context/AuthContext';
-import type { TFunction } from 'i18next';
+
+// Utilis
+import { reccuringBooking } from '../utilis/reccuringBooking';
+import { prepareDayBooking } from '../utilis/prepareDayBooking';
 
 export function useCreateBooking({
   assetId,
@@ -48,62 +51,20 @@ export function useCreateBooking({
       setIsCreating(true);
 
       if (availableRecurringDates.length > 0) {
-        const today = new Date();
-        const todayString = today.toISOString().split('T')[0];
-
-        console.log('Available recurring dates:', availableRecurringDates);
-        let firstDayStartHour = '06:00';
-
-        if (availableRecurringDates[0] === todayString) {
-          const nextHour = today.getHours() + 1;
-
-          if (nextHour > 21) {
-            Toast.error(t('layout.toast.invalidBookingPeriod'));
-            return false;
-          }
-
-          firstDayStartHour = `${nextHour.toString().padStart(2, '0')}:00`;
-        }
-
-        const timeSlots = availableRecurringDates.map((date, index) => ({
-          bookingStart: new Date(
-            `${date}T${index === 0 ? firstDayStartHour : '06:00'}:00`
-          ).toISOString(),
-          bookingEnd: new Date(`${date}T22:00:00`).toISOString(),
-        }));
-
-        await createRecurringBooking({
+        reccuringBooking(
           userId,
           assetId,
           notes,
-          timeSlots,
-        });
-
-        setNotes('');
-        await refetch();
-        Toast.success(t('layout.toast.bookingCreated'));
-
+          availableRecurringDates,
+          setNotes,
+          refetch,
+          t
+        );
         return true;
       }
 
-      if (bookingPeriod === 'DAY') {
-        const today = new Date();
-        const todayString = today.toISOString().split('T')[0];
-
-        if (filters.fromDate === todayString) {
-          const nextHour = today.getHours() + 1;
-
-          if (nextHour > 21) {
-            Toast.error(t('layout.toast.invalidBookingPeriod'));
-            return false;
-          }
-
-          filters.fromHour = `${nextHour.toString().padStart(2, '0')}:00`;
-        } else {
-          filters.fromHour = '06:00';
-        }
-
-        filters.toHour = '22:00';
+      if (bookingPeriod === 'DAY' && !prepareDayBooking(filters, t)) {
+        return false;
       }
 
       if (
