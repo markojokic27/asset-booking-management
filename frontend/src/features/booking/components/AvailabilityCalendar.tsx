@@ -35,6 +35,7 @@ type Props = {
   onRangeSelect: (fromDate: string, toDate: string) => void;
   availableRecurringDates?: string[];
   maxBookingDate: Date;
+  visibleMonth: Date;
   onMonthChange?: (date: Date) => void;
 };
 
@@ -46,6 +47,7 @@ export function AvailabilityCalendar({
   setSelectedBooking,
   onRangeSelect,
   onMonthChange,
+  visibleMonth,
   availableRecurringDates = [],
   maxBookingDate,
   variant = 'DAY',
@@ -110,10 +112,26 @@ export function AvailabilityCalendar({
     }
     return date >= from && date <= to;
   };
+  const calendarRef = React.useRef<FullCalendar>(null);
+  React.useEffect(() => {
+    const api = calendarRef.current?.getApi();
+
+    if (!api || !visibleMonth) return;
+
+    const current = api.getDate();
+
+    if (
+      current.getFullYear() !== visibleMonth.getFullYear() ||
+      current.getMonth() !== visibleMonth.getMonth()
+    ) {
+      api.gotoDate(visibleMonth);
+    }
+  }, [visibleMonth]);
 
   return (
     <div className="rounded-xl border border-(--color-border) bg-(--color-bg) p-4">
       <FullCalendar
+        ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         locale={calendarLocale}
@@ -140,7 +158,14 @@ export function AvailabilityCalendar({
         eventClick={handleEventClick}
 
         datesSet={(info) => {
-          onMonthChange?.(info.view.currentStart);
+          const current = info.view.currentStart;
+
+          if (
+            current.getFullYear() !== visibleMonth.getFullYear() ||
+            current.getMonth() !== visibleMonth.getMonth()
+          ) {
+            onMonthChange?.(current);
+          }
         }}
         selectAllow={(selectInfo) => {
           const today = new Date();

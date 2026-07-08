@@ -19,6 +19,7 @@ type Props = {
   showSearch?: boolean;
   variant: Variant;
   bookingLimit?: Date;
+  setVisibleMonth?: React.Dispatch<React.SetStateAction<Date>>;
   className?: string;
 };
 
@@ -28,9 +29,16 @@ export function FiltersBar({
   showSearch = true,
   variant,
   bookingLimit,
+  setVisibleMonth,
   className,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+
+  React.useEffect(() => {
+    if (filters.fromDate) {
+      setVisibleMonth?.(new Date(`${filters.fromDate}T00:00:00`));
+    }
+  }, [filters.fromDate, setVisibleMonth]);
 
   const maxDate = bookingLimit
     ? bookingLimit.toLocaleDateString('sv-SE')
@@ -40,9 +48,12 @@ export function FiltersBar({
     setFilters((prev) => {
       const next = { ...prev, ...partial };
 
-      if (Object.keys(partial).includes('fromDate') && !partial.toDate) {
-        next.toDate = next.fromDate;
+      if ('fromDate' in partial && !partial.toDate) {
         next.selectedWeekdays = [];
+      }
+
+      if ('fromDate' in partial && next.fromDate > next.toDate) {
+        next.toDate = next.fromDate;
       }
 
       if ('toDate' in partial && next.toDate < next.fromDate) {

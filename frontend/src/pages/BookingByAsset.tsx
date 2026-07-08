@@ -215,6 +215,7 @@ export default function BookingsByAsset() {
           setFilters={setFilters}
           showSearch={false}
           bookingLimit={maxBookingDate}
+          setVisibleMonth={setVisibleMonth}
           className="mt-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2"
         />
       </div>
@@ -276,6 +277,7 @@ export default function BookingsByAsset() {
         }
         variant={bookingPeriod}
         onMonthChange={setVisibleMonth}
+        visibleMonth={visibleMonth}
         availableRecurringDates={availableRecurringDates}
         maxBookingDate={maxBookingDate}
       />
