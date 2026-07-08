@@ -8,6 +8,7 @@ type Props = {
   onChange: (value: string) => void;
   className?: string;
   testId?: string;
+  max?: string;
 };
 
 export const DateInput: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const DateInput: React.FC<Props> = ({
   onChange,
   className,
   testId,
+  max,
 }) => {
   const dateRef = React.useRef<HTMLInputElement>(null);
 
@@ -60,6 +62,7 @@ export const DateInput: React.FC<Props> = ({
           data-testid={testId}
           value={value}
           min={new Date().toISOString().split('T')[0]}
+          max={max}
           onChange={(e) => onChange(e.target.value)}
           className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
         />
@@ -83,6 +86,7 @@ export const DateInputNoMin: React.FC<Props> = ({
   onChange,
   className,
   testId,
+  max,
 }) => {
   const dateRef = React.useRef<HTMLInputElement>(null);
 
@@ -119,6 +123,7 @@ export const DateInputNoMin: React.FC<Props> = ({
           type="date"
           data-testid={testId}
           value={value}
+          max={max}
           onChange={(e) => onChange(e.target.value)}
           className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
         />

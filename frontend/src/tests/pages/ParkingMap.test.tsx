@@ -194,7 +194,7 @@ describe('ParkingMap', () => {
       renderMap(withDate);
       openModal();
       fireEvent.click(screen.getByText('spot-5'));
-      fireEvent.click(screen.getByTestId('spot-popover-close-buttonn'));
+      fireEvent.click(screen.getByTestId('spot-popover-close-button'));
       expect(screen.queryByText(/bookings\.parkingMap\.spotNumber/)).not.toBeInTheDocument();
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });

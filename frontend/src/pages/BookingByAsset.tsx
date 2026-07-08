@@ -33,6 +33,7 @@ import { Toast } from '../components/ui/Toast';
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
 import type { AssetCategoryDto } from '../features/asset-category/types';
+import { getBookingLimit } from '../features/booking/utilis/getBookingLimit';
 
 export default function BookingsByAsset() {
   const { assetId } = useParams();
@@ -151,6 +152,8 @@ export default function BookingsByAsset() {
     t,
   });
 
+  const maxBookingDate = getBookingLimit(user?.role, resolvedCategory?.name);
+
   if (!asset || !resolvedCategory) {
     return (
       <LayoutColumn span={12} mdSpan={9} mdOffset={3}>
@@ -211,6 +214,7 @@ export default function BookingsByAsset() {
           filters={filters}
           setFilters={setFilters}
           showSearch={false}
+          bookingLimit={maxBookingDate}
           className="mt-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2"
         />
       </div>
@@ -273,6 +277,7 @@ export default function BookingsByAsset() {
         variant={bookingPeriod}
         onMonthChange={setVisibleMonth}
         availableRecurringDates={availableRecurringDates}
+        maxBookingDate={maxBookingDate}
       />
 
       <BookingModal

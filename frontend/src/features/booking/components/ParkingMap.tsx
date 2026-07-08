@@ -19,6 +19,9 @@ import type { BookingWithRelations, Filters } from '../types';
 import type { AssetDto } from '../../asset/types';
 import type { SpotClickInfo } from './SpotPopover';
 
+import { getBookingLimit } from '../utilis/getBookingLimit';
+import { useAuth } from '../../../features/auth/context/AuthContext';
+
 type FloorLevel = '-1' | '-2';
 
 interface Props {
@@ -87,6 +90,8 @@ export const ParkingMap: React.FC<Props> = ({
   setFilters,
 }) => {
   const { t } = useTranslation();
+  const { user, isLoading } = useAuth();
+  const userRole = user?.role ?? '';
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeFloor, setActiveFloor] = React.useState<FloorLevel>('-1');
   const [selectedSpot, setSelectedSpot] = React.useState<SpotClickInfo | null>(
@@ -101,6 +106,8 @@ export const ParkingMap: React.FC<Props> = ({
     () => takenSpots.map((s) => s.spotNumber),
     [takenSpots]
   );
+
+  const maxBookingDate = getBookingLimit(userRole, 'Parking');
 
   const spotAssetMap = React.useMemo(() => buildSpotAssetMap(assets), [assets]);
   const dateLabel = formatDate(filters);
@@ -131,6 +138,13 @@ export const ParkingMap: React.FC<Props> = ({
   const handleDateChange = (value: string) => {
     setFilters((prev) => ({ ...prev, fromDate: value }));
   };
+
+  if (isLoading)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <p className="text-sm text-gray-500">{t('bookings.loading')}</p>
+      </div>
+    );
 
   return (
     <>
@@ -190,6 +204,7 @@ export const ParkingMap: React.FC<Props> = ({
               })}
               value={filters?.fromDate ?? ''}
               onChange={handleDateChange}
+              max={maxBookingDate.toLocaleDateString('sv-SE')}
               className="h-11 w-48"
             />
           </div>

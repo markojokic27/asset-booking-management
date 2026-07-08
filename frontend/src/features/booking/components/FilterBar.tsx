@@ -18,6 +18,7 @@ type Props = {
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
   showSearch?: boolean;
   variant: Variant;
+  bookingLimit?: Date;
   className?: string;
 };
 
@@ -26,9 +27,14 @@ export function FiltersBar({
   setFilters,
   showSearch = true,
   variant,
+  bookingLimit,
   className,
 }: Readonly<Props>) {
   const { t } = useTranslation();
+
+  const maxDate = bookingLimit
+    ? bookingLimit.toLocaleDateString('sv-SE')
+    : undefined;
 
   const update = (partial: Partial<Filters>) => {
     setFilters((prev) => {
@@ -77,6 +83,7 @@ export function FiltersBar({
                 toDate: v,
               })
             }
+            max={maxDate}
             className="w-full"
           />
           <div className="flex gap-3">
@@ -105,6 +112,7 @@ export function FiltersBar({
           placeholder={t('ui.filters.selectDate')}
           value={filters.fromDate}
           onChange={(v) => update({ fromDate: v })}
+          max={maxDate}
           className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-start-1 lg:w-1/2"
         />
       ) : (
@@ -116,6 +124,7 @@ export function FiltersBar({
             value={filters.fromDate}
             testId="from-date-input"
             onChange={(v) => update({ fromDate: v })}
+            max={maxDate}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />
           <DateInput
@@ -125,6 +134,7 @@ export function FiltersBar({
             value={filters.toDate}
             testId="to-date-input"
             onChange={(v) => update({ toDate: v })}
+            max={maxDate}
             className="col-span-1 w-full sm:col-span-2 md:col-span-2 lg:col-span-1"
           />
         </>

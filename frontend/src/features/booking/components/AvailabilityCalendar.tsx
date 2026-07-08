@@ -34,6 +34,7 @@ type Props = {
   setSelectedBooking?: (booking: BookingWithRelations | null) => void;
   onRangeSelect: (fromDate: string, toDate: string) => void;
   availableRecurringDates?: string[];
+  maxBookingDate: Date;
   onMonthChange?: (date: Date) => void;
 };
 
@@ -46,6 +47,7 @@ export function AvailabilityCalendar({
   onRangeSelect,
   onMonthChange,
   availableRecurringDates = [],
+  maxBookingDate,
   variant = 'DAY',
 }: Props) {
   const { i18n } = useTranslation();
@@ -61,24 +63,26 @@ export function AvailabilityCalendar({
     }
   }, [i18n.resolvedLanguage]);
 
-  const isPastDate = (date: Date) => {
+  const isSelectableDate = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const compareDate = new Date(date);
-    compareDate.setHours(0, 0, 0, 0);
-    return compareDate < today;
+
+    const max = new Date(maxBookingDate);
+    max.setHours(23, 59, 59, 999);
+
+    return date >= today && date <= max;
   };
 
   const handleDateClick = React.useCallback(
     (info: any) => {
-      if (isPastDate(info.date)) {
+      if (!isSelectableDate(info.date)) {
         return;
       }
+
       onDateClick?.(info.dateStr);
     },
-    [onDateClick]
+    [onDateClick, maxBookingDate]
   );
-
   const handleEventClick = React.useCallback(
     (info: any) => {
       setSelectedBooking?.(info.event.extendedProps?.booking ?? null);
@@ -88,16 +92,15 @@ export function AvailabilityCalendar({
 
   const handleDateRangeSelect = React.useCallback(
     (info: any) => {
-      const fromDate = info.startStr;
+      const end = new Date(info.end);
+      end.setDate(end.getDate() - 1);
 
-      const endDate = new Date(info.end);
-      endDate.setDate(endDate.getDate() - 1);
-
-      const toDate = endDate.toLocaleDateString('sv-SE');
-
-      onRangeSelect?.(fromDate, toDate);
+      if (!isSelectableDate(info.start) || !isSelectableDate(end)) {
+        return;
+      }
+      onRangeSelect(info.startStr, end.toLocaleDateString('sv-SE'));
     },
-    [onRangeSelect]
+    [onRangeSelect, maxBookingDate]
   );
 
   const isDateInRange = (date: string, from?: string, to?: string) => {
@@ -135,13 +138,16 @@ export function AvailabilityCalendar({
         dateClick={handleDateClick}
         select={variant !== 'HOUR' ? handleDateRangeSelect : undefined}
         eventClick={handleEventClick}
+
         datesSet={(info) => {
           onMonthChange?.(info.view.currentStart);
         }}
         selectAllow={(selectInfo) => {
           const today = new Date();
           today.setHours(0, 0, 0, 0);
-          return selectInfo.start >= today;
+          return (
+            selectInfo.start >= today && selectInfo.start <= maxBookingDate
+          );
         }}
         eventContent={(eventInfo) => {
           const start = eventInfo.event.start?.toLocaleTimeString([], {
@@ -174,9 +180,14 @@ export function AvailabilityCalendar({
             selectedToDate
           );
           const isRecurring = availableRecurringDates.includes(date);
+          const isUnavailable = !isSelectableDate(arg.date);
 
           return [
             'transition-all duration-150',
+            isUnavailable
+              ? 'pointer-events-none bg-gray-100 text-gray-400 opacity-50'
+              : 'cursor-pointer hover:bg-blue-50',
+
             isSelected || isRecurring
               ? 'bg-blue-100 ring-2 ring-blue-500 dark:bg-blue-900/40'
               : '',
