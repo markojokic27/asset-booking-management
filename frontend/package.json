@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage --project unit",
     "test:watch": "vitest --watch",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

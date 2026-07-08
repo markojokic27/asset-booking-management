@@ -1,10 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { BookingWithRelations } from '../../features/booking/types';
 import type { AssetDto } from '../../features/asset/types';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string, opts?: any) => opts ? `${key}:${JSON.stringify(opts)}` : key }),
+}));
+vi.mock('../../config/i18n', () => ({
+  default: { language: 'en' },
 }));
 vi.mock('../../components/ui/Button', () => ({
   Button: ({ children, onClick, disabled, ...props }: any) => (
@@ -93,7 +97,12 @@ const parkingAsset: AssetDto = {
   lastModifiedAt: new Date(),
 };
 
-const renderMap = (props = defaultProps) => render(<ParkingMap {...props} />);
+const renderMap = (props = defaultProps) =>
+  render(
+    <MemoryRouter>
+      <ParkingMap {...props} />
+    </MemoryRouter>
+  );
 const openModal = () => fireEvent.click(screen.getByText('bookings.viewParkingMap'));
 const cancelDialog = (dialog: HTMLElement) =>
   fireEvent(dialog, new Event('cancel', { bubbles: true, cancelable: true }));
@@ -151,10 +160,10 @@ describe('ParkingMap', () => {
       expect(screen.getByText(/bookings\.parkingMap\.today/)).toBeInTheDocument();
     });
 
-    it('shows clear date button when date is selected', () => {
+    it('shows formatted date when date is selected', () => {
       renderMap(withDate);
       openModal();
-      expect(screen.getByText('bookings.parkingMap.clearDate')).toBeInTheDocument();
+      expect(screen.getByText('1.6.2025.')).toBeInTheDocument();
     });
 
     it('calls setFilters with date on date input change', () => {
@@ -164,11 +173,11 @@ describe('ParkingMap', () => {
       expect(defaultProps.setFilters).toHaveBeenCalled();
     });
 
-    it('calls setFilters to clear date on clear button click', () => {
+    it('calls setFilters when date input is cleared', () => {
       const setFilters = vi.fn();
       renderMap({ ...withDate, setFilters });
       openModal();
-      fireEvent.click(screen.getByText('bookings.parkingMap.clearDate'));
+      fireEvent.change(screen.getByDisplayValue('2025-06-01'), { target: { value: '' } });
       expect(setFilters).toHaveBeenCalled();
     });
   });
@@ -181,11 +190,11 @@ describe('ParkingMap', () => {
       expect(screen.getByText(/bookings\.parkingMap\.spotNumber/)).toBeInTheDocument();
     });
 
-    it('closes popover on cancel when spot is selected, keeps modal open', () => {
+    it('closes popover on close button when spot is selected, keeps modal open', () => {
       renderMap(withDate);
       openModal();
       fireEvent.click(screen.getByText('spot-5'));
-      cancelDialog(screen.getAllByRole('dialog')[1]);
+      fireEvent.click(screen.getByTestId('spot-popover-close-buttonn'));
       expect(screen.queryByText(/bookings\.parkingMap\.spotNumber/)).not.toBeInTheDocument();
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
@@ -204,12 +213,12 @@ describe('ParkingMap', () => {
       expect(screen.getByText('bookings.parkingMap.taken')).toBeInTheDocument();
     });
 
-    it('shows select date message and disables book button when no date', () => {
+    it('disables book button when spot has no linked asset', () => {
       renderMap();
       openModal();
       fireEvent.click(screen.getByText('spot-5'));
-      expect(screen.getByText('bookings.parkingMap.selectDateFirst')).toBeInTheDocument();
-      expect(screen.getByText('bookings.table.book')).toBeDisabled();
+      expect(screen.getByText(/bookings\.confirmation\.singleDay/)).toBeInTheDocument();
+      expect(screen.getByTestId('spot-book-button')).toBeDisabled();
     });
 
     it('shows notes input when spot available and date selected', () => {
