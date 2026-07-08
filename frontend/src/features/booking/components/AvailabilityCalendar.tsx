@@ -66,7 +66,6 @@ export function AvailabilityCalendar({
     today.setHours(0, 0, 0, 0);
     const compareDate = new Date(date);
     compareDate.setHours(0, 0, 0, 0);
-
     return compareDate < today;
   };
 
@@ -133,11 +132,16 @@ export function AvailabilityCalendar({
         events={events}
         selectable={variant !== 'HOUR'}
         selectMirror={true}
-        dateClick={variant === 'HOUR' ? handleDateClick : undefined}
+        dateClick={handleDateClick}
         select={variant !== 'HOUR' ? handleDateRangeSelect : undefined}
         eventClick={handleEventClick}
         datesSet={(info) => {
           onMonthChange?.(info.view.currentStart);
+        }}
+        selectAllow={(selectInfo) => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return selectInfo.start >= today;
         }}
         eventContent={(eventInfo) => {
           const start = eventInfo.event.start?.toLocaleTimeString([], {
@@ -170,15 +174,9 @@ export function AvailabilityCalendar({
             selectedToDate
           );
           const isRecurring = availableRecurringDates.includes(date);
-          const isPast = isPastDate(arg.date);
 
           return [
             'transition-all duration-150',
-
-            isPast
-              ? 'bg-gray-100 text-gray-400 opacity-60 dark:bg-gray-900 dark:text-gray-600'
-              : 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20',
-
             isSelected || isRecurring
               ? 'bg-blue-100 ring-2 ring-blue-500 dark:bg-blue-900/40'
               : '',
