@@ -61,7 +61,7 @@ public class CommonConstants {
     public static final String DELETE_USER_USERNAME = "katarina";
 
     // Asset
-    public static final String VALID_ASSET_NAME = "Parking Spot 16";
+    public static final String VALID_ASSET_NAME = "Clean Code";
     public static final String VALID_LOCATION = "Floor plan 2";
     public static final String VALID_DESCRIPTION = "VIP parking";
     public static final String LONG_ASSET_NAME = "t".repeat(101);

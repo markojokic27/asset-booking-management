@@ -107,7 +107,7 @@ export const SpotPopover: React.FC<Props> = ({
       className="max-w-2xl"
       headerRight={
         <IconButton
-          data-testid="spot-popover-close-buttonn"
+          data-testid="spot-popover-close-button"
           onClick={onClose}
           aria-label={t('bookings.parkingMap.closeAria')}
         >

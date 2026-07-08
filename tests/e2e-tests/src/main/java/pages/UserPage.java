@@ -146,7 +146,6 @@ public class UserPage extends CommonMethods {
     public void userOpenEditModalByUsername(String username) {
         searchUsers(username);
         clickOnElement(userOpenEditModal);
-        typeInElement(searchField, "");
     }
 
     public void userEditCloseModal() {
@@ -166,6 +165,7 @@ public class UserPage extends CommonMethods {
     }
 
     public void typeEditSurname(String surname) {
+
         typeInElement(userEditSurnameField, surname);
     }
 

@@ -46,13 +46,16 @@ public class BookingPage extends CommonMethods {
     public By floorLevelMinus2Active = By.cssSelector("[data-testid='level-button--2'].bg-white");
     public By categoryParkingCard = By.cssSelector("[data-testid='category-card-parking']");
 
-    // Parking map - spot popover
-    public By spotPopover = By.cssSelector("[data-testid='spot-popover']");
+    public By spotPopover = By.cssSelector("[data-testid='parking-spot-status']");
     public By parkingSpotStatus = By.cssSelector("[data-testid='parking-spot-status']");
     public By parkingMapDateInput = By.cssSelector("input[type='date']");
     public By spotPopoverBookButton = By.cssSelector("[data-testid='spot-book-button']");
+
+
     public void clickSpotBookButton() {
-        clickOnElement(spotPopoverBookButton);
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(spotPopoverBookButton));
+        jsClick(element);
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(parkingSpotStatus));
     }
 
     public void selectParkingMapDate(String date) {
@@ -152,15 +155,13 @@ public class BookingPage extends CommonMethods {
 
     public void selectAllRecurringDays() {
         getDriver().findElements(checkBoxDays).forEach(BookingPage::jsClick);
-
-
     }
 
     public void clickParkingSpot(int spotNumber) {
         By backdrop = By.cssSelector("[data-testid='spot-popover-backdrop']");
         List<WebElement> backdrops = driver.findElements(backdrop);
-        if (!backdrops.isEmpty() && backdrops.get(0).isDisplayed()) {
-            jsClick(backdrops.get(0));
+        if (!backdrops.isEmpty() && backdrops.getFirst().isDisplayed()) {
+            jsClick(backdrops.getFirst());
             wait.until(ExpectedConditions.invisibilityOfElementLocated(backdrop));
         }
         clickOnElement(By.cssSelector("[data-testid='parking-spot-" + spotNumber + "']"));
@@ -172,6 +173,7 @@ public class BookingPage extends CommonMethods {
                 "arguments[0].scrollIntoView({block: 'center'});", element);
         jsClick(element);
     }
+
     public void clickCancelBookButton() {
         List<WebElement> buttons = driver.findElements(cancelBookButton);
         for (WebElement btn : buttons) {
@@ -199,7 +201,7 @@ public class BookingPage extends CommonMethods {
             String numberStr = testId.replace("parking-spot-", "");
             return Integer.parseInt(numberStr);
         }
-        throw new RuntimeException("Nema slobodnih parking spotova za odabrani datum!");
+        throw new RuntimeException("No free parking spots for the selected day!");
     }
 
     public void clickBookAssetButton() {
@@ -215,6 +217,5 @@ public class BookingPage extends CommonMethods {
                 "arguments[0].scrollIntoView({block: 'center'});", element);
         jsClick(element);
     }
-
 
 }
