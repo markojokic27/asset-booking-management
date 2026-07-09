@@ -36,6 +36,13 @@ public class UserSearchTest extends BaseLogin {
         assertTrue(waitForUrlContains(CommonConstants.USERS_URL));
     }
 
+    @Test
+    public void clickShowDeleted() {
+        userPage.clickShowDelete();
+        assertTrue(waitForUrlContains(CommonConstants.USERS_URL));
+    }
+
+
 
 
 

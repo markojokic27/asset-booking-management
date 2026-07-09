@@ -28,9 +28,8 @@ public class LanguageSwitcherTest extends BaseLogin {
     }
 
     @Test
-    void languageSwitcherSelectsDeutsch() throws  InterruptedException{
+    void languageSwitcherSelectsDeutsch(){
         languagePage.selectLanguage(languagePage.languageOptionDe);
-        Thread.sleep(2000);
         assertTrue(isElementVisible(languagePage.languageSwitcherButton));
     }
 }

@@ -52,6 +52,7 @@ public class UserPage extends CommonMethods {
     public By searchField = By.cssSelector("[data-testid='search-input']");
     public By filterRole = By.cssSelector("[data-testid='user-role-filter']");
     public By filterDepartment = By.cssSelector("[data-testid='user-department-filter']");
+    public By clickShowDeleted = By.cssSelector("[data-testid='toggle-deleted']");
 
 
 
@@ -220,6 +221,11 @@ public class UserPage extends CommonMethods {
     }
     public void selectUserRole(String role){selectByVisibleText(filterRole, role);}
     public void selectUserDepartment(String department){selectByVisibleText(filterDepartment, department);}
+    public void clickShowDelete(){
+        clickOnElement(clickShowDeleted);
+    }
+
+
 
 
 }
