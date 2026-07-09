@@ -1,18 +1,29 @@
 package api;
 
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.Matchers.*;
 
 public class BookingApiTest extends BaseApi {
 
-    private static final int VALID_BOOKING_ID = 1;
+    private static final int VALID_BOOKING_ID = 26;
     private static Integer createdBookingId = null;
-    private static final String BOOKING_START = LocalDateTime.now().plusYears(2).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
-    private static final String BOOKING_END = LocalDateTime.now().plusYears(2).plusDays(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"));
+
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    private static final LocalDateTime BOOKING_START_DT = LocalDateTime.now()
+            .plusYears(2)
+            .plusMinutes(ThreadLocalRandom.current().nextInt(0, 100_000));
+    private static final LocalDateTime BOOKING_END_DT = BOOKING_START_DT.plusDays(5);
+
+    private static final String BOOKING_START = BOOKING_START_DT.format(FORMATTER);
+    private static final String BOOKING_END = BOOKING_END_DT.format(FORMATTER);
 
     @Test(priority = 1)
     void getBookingsReturns200() {
@@ -76,4 +87,13 @@ public class BookingApiTest extends BaseApi {
                 .body("notes", equalTo("Smoke test booking updated"));
     }
 
+    @AfterClass
+    void cleanup() {
+        if (createdBookingId != null) {
+            try {
+                given().when().delete("/v1/bookings/" + createdBookingId);
+            } catch (Exception ignored) {
+            }
+        }
+    }
 }

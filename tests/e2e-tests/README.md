@@ -1,5 +1,5 @@
 # Asset Booking/Management
-### End To End test suite
+### End-To-End test suite
 
 # Running E2E Tests
 
@@ -99,14 +99,14 @@ mvn test -Dtest=AssetApiTest#createAssetReturns201
    ```
 2. Run the tests using one of the following commands:
 
-| Command | Description |
-|---|---|
-| `mvn gatling:test` | Run all simulations |
-| `mvn gatling:test -Dgatling.simulationClass=SimulationClassName` | Run a specific simulation |
+| Command                                                                      | Description |
+|------------------------------------------------------------------------------|---|
+| `mvn gatling:test`                                                           | Run all simulations |
+| `mvn gatling:test -Dgatling.simulationClass=simulations.SimulationClassName` | Run a specific simulation |
 
 **Examples:**
 ```
-mvn gatling:test -Dgatling.simulationClass=BookingLoadSimulation
+mvn gatling:test -Dgatling.simulationClass=simulations.BookingLoadSimulation
 ```
 
 3. After execution, Gatling prints a link to the HTML report in the console. Copy that link and open it in a browser to view the results (response times, throughput, error rate).

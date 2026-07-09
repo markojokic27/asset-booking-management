@@ -1,5 +1,6 @@
 package api;
 
+import constants.CommonConstants;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -13,10 +14,10 @@ public class AuthApiTest extends BaseApi{
             refreshToken = given()
                     .body("""
                 {
-                    "username": "user_admin",
-                    "password": "admin123"
+                    "username": "%s",
+                    "password": "%s"
                 }
-                """)
+                """.formatted(CommonConstants.ADMIN_USERNAME, CommonConstants.ADMIN_PASS))
                     .when()
                     .post("/v1/auth/login")
                     .then()

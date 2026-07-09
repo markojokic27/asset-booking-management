@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.Matchers.*;
 
-public class UserTestTest extends BaseApi {
+public class UserApiTest extends BaseApi {
 
     private static final int VALID_USER_ID = 1;
     private static Integer createdUserId = null;

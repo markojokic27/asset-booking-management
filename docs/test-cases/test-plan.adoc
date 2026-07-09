@@ -344,9 +344,9 @@ Smoke test suite includes:
 |===
 | Component | Specification
 | Backend | Spring Boot
-| Frontend | React 19
+| Frontend | React (TypeScript)
 | Mobile App | Android
-| Database | PostgreSQL 16
+| Database | PostgreSQL 18
 | Browser | Google Chrome (latest)
 | Test Framework | Selenium, TestNG
 | API Testing Tool | Bruno
