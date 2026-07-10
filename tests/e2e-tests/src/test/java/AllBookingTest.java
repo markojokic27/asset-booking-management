@@ -35,7 +35,7 @@ public class AllBookingTest extends BaseLogin {
     @Test
     public void filterBookingsByDateRange() {
         myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
-        myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_FROM);
+        myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_TO);
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
