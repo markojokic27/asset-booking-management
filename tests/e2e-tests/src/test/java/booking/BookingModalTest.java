@@ -3,6 +3,7 @@ package booking;
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
+import constants.TestDates;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -30,37 +31,46 @@ public class BookingModalTest extends BaseLogin {
 
     @Test
     public void bookNowIsEnabledAfterSelectingFreeSlot() {
+        String fromDate = TestDates.futureDateFrom();
+        String toDate = TestDates.futureDateTo();
+
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.enterToDate(toDate);
+        bookingPage.clickCalendarDate(toDate);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
     @Test
     public void bookButtonIsEnabledAfterSelectingDateOnHourlyAsset() {
+        String fromDate = TestDates.futureDateFrom();
+        String toDate = TestDates.futureDateTo();
+
         bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.enterToDate(toDate);
+        bookingPage.clickCalendarDate(toDate);
         assertTrue(isElementVisible(bookingPage.bookAssetButton));
     }
 
     @Test
     public void successfulBookingLaptopAddsEventToCalendar() {
+        String fromDate = TestDates.futureDateFrom();
+        String toDate = TestDates.futureDateTo();
+
         bookingPage.clickLaptopCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.enterToDate(toDate);
+        bookingPage.clickCalendarDate(toDate);
         bookingPage.clickBookAssetButton();
         bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
@@ -68,13 +78,16 @@ public class BookingModalTest extends BaseLogin {
 
     @Test
     public void successfulBookingItEquipmentAddsEventToCalendar() {
+        String fromDate = TestDates.futureDateFrom();
+        String toDate = TestDates.futureDateTo();
+
         bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
         bookingPage.clickNextMonth();
-        bookingPage.enterToDate(CommonConstants.FUTURE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.enterToDate(toDate);
+        bookingPage.clickCalendarDate(toDate);
         bookingPage.clickBookAssetButton();
         bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
@@ -82,11 +95,14 @@ public class BookingModalTest extends BaseLogin {
 
     @Test
     public void cancelBookingItEquipmentAddsEventToCalendar() {
+        String fromDate = TestDates.futureDateFrom();
+        String toDate = TestDates.futureDateTo();
+
         bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
+        bookingPage.clickCalendarDate(fromDate);
         bookingPage.clickNextMonth();
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_TO);
+        bookingPage.clickCalendarDate(toDate);
         bookingPage.clickBookAssetButton();
         bookingPage.clickCancelBookButton();
         assertTrue(bookingPage.isCalendarVisible());

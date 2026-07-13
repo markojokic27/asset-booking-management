@@ -3,6 +3,7 @@ package smokeTest;
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
+import constants.TestDates;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,13 +19,16 @@ public class BookingSmokeTest extends BaseLogin {
 
     @Test
     public void successfulBookingLaptopAddsEventToCalendar() {
+        String fromDate = TestDates.smokeDateFrom();
+        String toDate = TestDates.smokeDateTo();
+
         bookingPage.clickLaptopCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.SMOKE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
-        bookingPage.enterToDate(CommonConstants.SMOKE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_TO);
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
+        bookingPage.enterToDate(toDate);
+        bookingPage.clickCalendarDate(toDate);
         bookingPage.clickBookAssetButton();
         bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
@@ -32,13 +36,16 @@ public class BookingSmokeTest extends BaseLogin {
 
     @Test
     public void successfulBookingItEquipmentAddsEventToCalendar() {
+        String fromDate = TestDates.smokeDateFrom();
+        String toDate = TestDates.smokeDateTo();
+
         bookingPage.clickItEquipmentCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.enterFromDate(CommonConstants.SMOKE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
-        bookingPage.enterToDate(CommonConstants.SMOKE_DATE_TO);
-        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_TO);
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
+        bookingPage.enterToDate(toDate);
+        bookingPage.clickCalendarDate(toDate);
         bookingPage.clickBookAssetButton();
         bookingPage.clickBookNowButton();
         assertTrue(bookingPage.isCalendarVisible());
@@ -67,7 +74,7 @@ public class BookingSmokeTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_SMOKE);
+        bookingPage.selectParkingMapDate(TestDates.parkingSmoke());
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
@@ -82,7 +89,7 @@ public class BookingSmokeTest extends BaseLogin {
         bookingPage.clickParkingCategory();
         bookingPage.clickBookButton();
         bookingPage.clickNextMonth();
-        bookingPage.clickCalendarDate(CommonConstants.SMOKE_DATE_FROM);
+        bookingPage.clickCalendarDate(TestDates.smokeDateFrom());
         bookingPage.clickCheckBoxDays();
         bookingPage.selectAllRecurringDays();
         bookingPage.clickBookAssetButton();

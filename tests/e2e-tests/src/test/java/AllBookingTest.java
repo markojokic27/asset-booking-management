@@ -1,6 +1,7 @@
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
+import constants.TestDates;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -34,21 +35,21 @@ public class AllBookingTest extends BaseLogin {
 
     @Test
     public void filterBookingsByDateRange() {
-        myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
-        myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_TO);
+        myBookingsPage.inputFromDate(TestDates.futureDateFrom());
+        myBookingsPage.inputToDate(TestDates.futureDateTo());
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
     public void filterBookingsByFromDateOnly() {
-        myBookingsPage.inputFromDate(CommonConstants.FUTURE_DATE_FROM);
+        myBookingsPage.inputFromDate(TestDates.futureDateFrom());
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 
     @Test
     public void filterBookingsByToDateOnly()  {
         bookingPage.clickNextMonth();
-        myBookingsPage.inputToDate(CommonConstants.FUTURE_DATE_TO);
+        myBookingsPage.inputToDate(TestDates.futureDateTo());
         assertTrue(isElementVisible(myBookingsPage.bookingList));
     }
 

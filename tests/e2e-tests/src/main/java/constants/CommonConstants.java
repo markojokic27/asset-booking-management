@@ -97,16 +97,6 @@ public class CommonConstants {
     // Booking
     public static final String BOOKED_ASSET_ID = "1";
 
-    public static final String FUTURE_DATE_FROM = "2026-07-20";
-    public static final String FUTURE_DATE_TO = "2026-08-15";
-    public static final String PARKING_TEST_DATE = "2026-07-21";
-    public static final String SMOKE_DATE_FROM = "2026-08-16";
-    public static final String SMOKE_DATE_TO = "2026-08-31";
-    public static final String PARKING_SMOKE = "2026-10-05";
-    public static final String APPROVAL_SMOKE_FROM = "2026-09-19";
-    public static final String APPROVAL_SMOKE_TO = "2026-09-30";
-
-
     // Parking
     public static final String FLOOR_LEVEL_MINUS_1 = "-1";
     public static final String FLOOR_LEVEL_MINUS_2 = "-2";

@@ -3,6 +3,7 @@ package booking;
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
+import constants.TestDates;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -56,7 +57,7 @@ public class ParkingMapTest extends BaseLogin {
     @Test
     public void selectDateClickSpotAndBookLevel1() {
         bookingPage.clickParkingMapButton();
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
+        bookingPage.selectParkingMapDate(TestDates.parkingTestDate());
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
@@ -70,7 +71,7 @@ public class ParkingMapTest extends BaseLogin {
     public void selectDateClickSpotAndBookLevel2() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
+        bookingPage.selectParkingMapDate(TestDates.parkingTestDate());
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));
@@ -84,7 +85,7 @@ public class ParkingMapTest extends BaseLogin {
     public void clickTakenSpotShowsTakenStatus() {
         bookingPage.clickParkingMapButton();
         bookingPage.clickFloorLevel(CommonConstants.FLOOR_LEVEL_MINUS_2);
-        bookingPage.selectParkingMapDate(CommonConstants.PARKING_TEST_DATE);
+        bookingPage.selectParkingMapDate(TestDates.parkingTestDate());
         int freeSpot = bookingPage.getFirstAvailableParkingSpot();
         bookingPage.clickParkingSpot(freeSpot);
         assertTrue(isElementVisible(bookingPage.spotPopover));

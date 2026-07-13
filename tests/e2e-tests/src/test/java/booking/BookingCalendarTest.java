@@ -3,6 +3,7 @@ package booking;
 import baselogin.BaseLogin;
 import config.ConfigFromFile;
 import constants.CommonConstants;
+import constants.TestDates;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,16 +26,20 @@ public class BookingCalendarTest extends BaseLogin {
 
     @Test
     public void clickFutureDateHighlightsCell() {
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
-        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE_FROM));
+        String fromDate = TestDates.futureDateFrom();
+
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
+        assertTrue(bookingPage.isCalendarCellSelected(fromDate));
     }
 
     @Test
     public void clickFutureDatePopulatesDateFilter(){
-        bookingPage.enterFromDate(CommonConstants.FUTURE_DATE_FROM);
-        bookingPage.clickCalendarDate(CommonConstants.FUTURE_DATE_FROM);
-        assertTrue(bookingPage.isCalendarCellSelected(CommonConstants.FUTURE_DATE_FROM));
+        String fromDate = TestDates.futureDateFrom();
+
+        bookingPage.enterFromDate(fromDate);
+        bookingPage.clickCalendarDate(fromDate);
+        assertTrue(bookingPage.isCalendarCellSelected(fromDate));
     }
 
     @Test
