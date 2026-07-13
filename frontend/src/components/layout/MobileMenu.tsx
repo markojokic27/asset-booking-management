@@ -27,7 +27,7 @@ import {
   isAdmin,
   isEmployee,
   isManager,
-} from '../../features/user/utilis/users';
+} from '../../features/user/utils/users';
 
 export default function MobileMenu() {
   const { t } = useTranslation();

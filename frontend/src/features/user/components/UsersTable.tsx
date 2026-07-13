@@ -14,7 +14,7 @@ import { Table, type TableColumn } from '../../../components/ui/Table';
 import type { UserDto } from '../types';
 
 // utils
-import { getDisplayName } from '../utilis/users';
+import { getDisplayName } from '../utils/users';
 
 type Props = {
   data: UserDto[];

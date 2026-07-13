@@ -1,5 +1,5 @@
 // external imports
-import { getFullName, isAdmin } from '../../user/utilis/users';
+import { getFullName, isAdmin } from '../../user/utils/users';
 
 // types
 import type { UserDto } from '../../user/types';

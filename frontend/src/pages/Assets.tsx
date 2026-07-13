@@ -32,7 +32,7 @@ import { getAllCategories } from '../features/asset-category/api/categoryApi';
 // Hooks
 import { usePagination } from '../features/user/hooks/usePagination';
 import { useAuth } from '../features/auth/context/AuthContext';
-import { isAdmin, isEmployee } from '../features/user/utilis/users';
+import { isAdmin, isEmployee } from '../features/user/utils/users';
 
 // Types
 import type { AssetDto } from '../features/asset/types';

@@ -22,10 +22,10 @@ import {
   filterBookingsByDateRange,
   filterBookingsByStatus,
   filterPendingBookingsBySearch,
-} from '../features/booking/utilis/approvalFilter';
+} from '../features/booking/utils/approvalFilter';
 import { bookingStatuses } from '../features/booking/types';
 import type { BookingStatus } from '../features/booking/types';
-import { isAdmin } from '../features/user/utilis/users';
+import { isAdmin } from '../features/user/utils/users';
 
 export default function MyBookings() {
   const { t } = useTranslation();

@@ -8,7 +8,7 @@ import type { AssetDto } from '../../asset/types';
 import type { UserDto } from '../../user/types';
 
 // Utilis
-import { getBookingMessage } from '../utilis/getBookingMessage';
+import { getBookingMessage } from '../utils/getBookingMessage';
 import { useTranslation } from 'react-i18next';
 
 type BookingModalProps = {

@@ -5,7 +5,7 @@ import { createUser, deleteUser, getUsers, updateUser } from '../api/users';
 // Types
 import type { UserDto } from '../types';
 // Utils
-import { mapUserDtoToUpdateRequest } from '../utilis/users';
+import { mapUserDtoToUpdateRequest } from '../utils/users';
 
 export function useUsersData() {
   const [users, setUsers] = useState<UserDto[]>([]);

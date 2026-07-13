@@ -13,7 +13,7 @@ import {
   buildDepartmentNameById,
   formatDepartmentName,
   getDepartmentNameById,
-} from '../utilis/department';
+} from '../utils/department';
 
 export function useDepartments() {
   const { t } = useTranslation();

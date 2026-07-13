@@ -6,13 +6,13 @@ vi.mock('../../features/user/hooks/useUsersData',    () => ({ useUsersData:    v
 vi.mock('../../features/user/hooks/useUsersFilters', () => ({ useUserFilters:  vi.fn() }));
 vi.mock('../../features/user/hooks/usePagination',   () => ({ usePagination:   vi.fn() }));
 vi.mock('../../features/user/hooks/useUserModals',   () => ({ useUserModals:   vi.fn() }));
-vi.mock('../../features/user/utilis/csv',            () => ({ exportUsersCsv:  vi.fn() }));
+vi.mock('../../features/user/utils/csv',            () => ({ exportUsersCsv:  vi.fn() }));
 
 import { useUsersData }   from '../../features/user/hooks/useUsersData';
 import { useUserFilters } from '../../features/user/hooks/useUsersFilters';
 import { usePagination }  from '../../features/user/hooks/usePagination';
 import { useUserModals }  from '../../features/user/hooks/useUserModals';
-import { exportUsersCsv } from '../../features/user/utilis/csv';
+import { exportUsersCsv } from '../../features/user/utils/csv';
 import { useUsers }       from '../../features/user/hooks/useUsers';
 
 

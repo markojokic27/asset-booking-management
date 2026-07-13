@@ -8,7 +8,7 @@ import { IconButton } from '../../../components/ui/IconButton';
 import { BookingStatusBadge } from './BookingStatusBadge';
 
 // utils
-import { formatBookingTime } from '../utilis/bookingLogic';
+import { formatBookingTime } from '../utils/bookingLogic';
 
 // types
 import type { BookingWithRelations } from '../types';

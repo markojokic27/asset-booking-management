@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { getPendingBookings } from '../api/bookingApi';
 
 // utils
-import { filterPendingBookingsForApprover } from '../utilis/approvalFilter';
+import { filterPendingBookingsForApprover } from '../utils/approvalFilter';
 
 // types
 import type { BookingWithRelations } from '../types';

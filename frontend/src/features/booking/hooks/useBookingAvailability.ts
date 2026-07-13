@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 // Utilis
-import { hasBookingOverlap } from '../utilis/bookingLogic';
+import { hasBookingOverlap } from '../utils/bookingLogic';
 
 // Types
 import type { BookingWithRelations, Filters } from '../types';

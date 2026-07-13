@@ -8,8 +8,8 @@ import { ApprovalActionButtons } from './ApprovalActionButtons';
 import { PendingApprovalDetailsModal } from './PendingApprovalDetailsModal';
 
 // utils
-import { formatBookingTime } from '../utilis/bookingLogic';
-import { getFullName } from '../../user/utilis/users';
+import { formatBookingTime } from '../utils/bookingLogic';
+import { getFullName } from '../../user/utils/users';
 
 // types
 import type { BookingWithRelations } from '../types';

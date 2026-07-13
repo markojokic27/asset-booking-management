@@ -1,7 +1,7 @@
 /* unit tests for user CSV export */
 
 import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
-import { exportUsersCsv } from '../../features/user/utilis/csv';
+import { exportUsersCsv } from '../../features/user/utils/csv';
 
 /* base user for testing */
 const baseUser = {

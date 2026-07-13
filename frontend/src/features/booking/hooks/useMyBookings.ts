@@ -10,7 +10,7 @@ import type { BookingWithRelations } from '../types';
 import type { UserDto } from '../../user/types';
 
 // utils
-import { isAdmin } from '../../user/utilis/users';
+import { isAdmin } from '../../user/utils/users';
 
 // hook for the my bookings
 export function useMyBookings(user: UserDto | null, enabled: boolean) {

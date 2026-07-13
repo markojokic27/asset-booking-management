@@ -15,8 +15,8 @@ import { BookingStatusBadge } from '../../booking/components/BookingStatusBadge'
 import { getAllUserBookings } from '../../booking/api/bookingApi';
 
 // utils
-import { isBookingPastEnd } from '../../booking/utilis/bookingLogic';
-import { exportUserBookingsCsv } from '../utilis/csv';
+import { isBookingPastEnd } from '../../booking/utils/bookingLogic';
+import { exportUserBookingsCsv } from '../utils/csv';
 
 // types
 import type { BookingWithRelations } from '../../booking/types';

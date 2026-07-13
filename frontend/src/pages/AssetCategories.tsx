@@ -26,7 +26,7 @@ import {
 // Hooks
 import { useAuth } from '../features/auth/context/AuthContext';
 import { usePagination } from '../features/user/hooks/usePagination';
-import { isAdmin, isEmployee } from '../features/user/utilis/users';
+import { isAdmin, isEmployee } from '../features/user/utils/users';
 
 // Assets
 import AddSharpIcon from '@mui/icons-material/AddSharp';

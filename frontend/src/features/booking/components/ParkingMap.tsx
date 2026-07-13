@@ -19,7 +19,7 @@ import type { BookingWithRelations, Filters } from '../types';
 import type { AssetDto } from '../../asset/types';
 import type { SpotClickInfo } from './SpotPopover';
 
-import { getBookingLimit } from '../utilis/getBookingLimit';
+import { getBookingLimit } from '../utils/getBookingLimit';
 import { useAuth } from '../../../features/auth/context/AuthContext';
 
 type FloorLevel = '-1' | '-2';

@@ -6,7 +6,7 @@ import {
   filterBookingsByStatus,
   filterPendingBookingsBySearch,
   filterPendingBookingsForApprover,
-} from '../../features/booking/utilis/approvalFilter';
+} from '../../features/booking/utils/approvalFilter';
 import type { BookingWithRelations } from '../../features/booking/types';
 
 const baseBooking = (managerEmail: string): BookingWithRelations =>

@@ -4,14 +4,14 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AssetCategories from '../../pages/AssetCategories';
 import { mockUseAuth, authState } from '../mocks/auth';
-import { isAdmin } from '../../features/user/utilis/users';
+import { isAdmin } from '../../features/user/utils/users';
 import { getAllCategories, getCategoryById } from '../../features/asset-category/api/categoryApi';
 
 // Mocks 
 
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }));
-vi.mock('../../features/user/utilis/users', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+vi.mock('../../features/user/utils/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utils/users')>();
   return { ...actual, isAdmin: vi.fn() };
 });
 vi.mock('../../features/asset-category/api/categoryApi', () => ({

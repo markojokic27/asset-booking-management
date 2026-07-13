@@ -12,7 +12,7 @@ import { getAllCategories } from '../../asset-category/api/categoryApi';
 import { getAllCategoryBookings } from '../api/bookingApi';
 
 // Utilis
-import { filterAvailableAssets } from '../utilis/filterAvailableAssets';
+import { filterAvailableAssets } from '../utils/filterAvailableAssets';
 
 type Props = {
   filters: Filters;

@@ -49,9 +49,9 @@ vi.mock('../../features/booking/hooks/useCreateBooking', () => ({
     handleCreateBooking: mockHandleCreateBooking,
   }),
 }));
-vi.mock('../../features/booking/utilis/bookingLogic', () => ({ mapBookingsToCalendarEvents: () => [] }));
-vi.mock('../../features/booking/utilis/getDatesForWeekdays', () => ({ getDatesForWeekdays: () => [] }));
-vi.mock('../../features/booking/utilis/getAvailableRecurringDates', () => ({ getAvailableRecurringDates: () => [] }));
+vi.mock('../../features/booking/utils/bookingLogic', () => ({ mapBookingsToCalendarEvents: () => [] }));
+vi.mock('../../features/booking/utils/getDatesForWeekdays', () => ({ getDatesForWeekdays: () => [] }));
+vi.mock('../../features/booking/utils/getAvailableRecurringDates', () => ({ getAvailableRecurringDates: () => [] }));
 vi.mock('../../components/layout/Layout', () => ({
   LayoutColumn: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));

@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../components/ui/Button';
 import { IconButton } from '../../../components/ui/IconButton';
-import { getFullName } from '../../user/utilis/users';
-import { formatBookingTime } from '../utilis/bookingLogic';
+import { getFullName } from '../../user/utils/users';
+import { formatBookingTime } from '../utils/bookingLogic';
 import type { BookingWithRelations } from '../types';
 import { ApprovalActionButtons } from './ApprovalActionButtons';
 

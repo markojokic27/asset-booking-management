@@ -26,11 +26,11 @@ vi.mock('../../features/asset-category/api/categoryApi', () => ({
   getAllCategories: () => mockGetAllCategories(),
 }));
 
-vi.mock('../../features/user/utilis/users', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+vi.mock('../../features/user/utils/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utils/users')>();
   return { ...actual, isAdmin: vi.fn() };
 });
-import { isAdmin } from '../../features/user/utilis/users';
+import { isAdmin } from '../../features/user/utils/users';
 const mockIsAdmin = vi.mocked(isAdmin);
 
 vi.mock('../../features/user/hooks/usePagination', () => ({

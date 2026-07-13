@@ -8,8 +8,8 @@ vi.mock('../../components/layout/Layout', () => ({
     <div className={className}>{children}</div>
   ),
 }));
-vi.mock('../../features/user/utilis/users', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+vi.mock('../../features/user/utils/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utils/users')>();
   return {
     ...actual,
     getFullName: vi.fn(() => 'Test User'),
@@ -32,7 +32,7 @@ vi.mock('@mui/icons-material', () => ({ AccountCircleSharp: () => <svg /> }));
 
 import { Navbar } from '../../components/layout/Navbar';
 import { authState, mockUseAuth } from '../mocks/auth';
-import { isAdmin, isManager } from '../../features/user/utilis/users';
+import { isAdmin, isManager } from '../../features/user/utils/users';
 
 const adminUser = { id: 1, role: 'ADMIN', name: 'Test', surname: 'User' } as const;
 

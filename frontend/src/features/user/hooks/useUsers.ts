@@ -5,7 +5,7 @@ import { usePagination } from './usePagination';
 import { useUserModals } from './useUserModals';
 
 // Utilis
-import { exportUsersCsv } from '../utilis/csv';
+import { exportUsersCsv } from '../utils/csv';
 
 export function useUsers() {
   const data = useUsersData();

@@ -5,7 +5,7 @@ import {
   getDisplayName,
   getFullName,
   mapUserDtoToUpdateRequest,
-} from '../../features/user/utilis/users';
+} from '../../features/user/utils/users';
 import type { UserDto } from '../../features/user/types';
 
 // base user dto for testing

@@ -12,9 +12,9 @@ import { useAuth } from '../features/auth/context/AuthContext';
 import { useBookingCancellation } from '../features/booking/hooks/useBookingCancellation';
 
 // Utils
-import { mapBookingsToCalendarEvents } from '../features/booking/utilis/bookingLogic';
-import { getDatesForWeekdays } from '../features/booking/utilis/getDatesForWeekdays';
-import { getAvailableRecurringDates } from '../features/booking/utilis/getAvailableRecurringDates';
+import { mapBookingsToCalendarEvents } from '../features/booking/utils/bookingLogic';
+import { getDatesForWeekdays } from '../features/booking/utils/getDatesForWeekdays';
+import { getAvailableRecurringDates } from '../features/booking/utils/getAvailableRecurringDates';
 import { getAssetById } from '../features/asset/api/assetApi';
 import { getCategoryById } from '../features/asset-category/api/categoryApi';
 
@@ -33,7 +33,7 @@ import { Toast } from '../components/ui/Toast';
 // Types
 import type { BookingWithRelations } from '../features/booking/types';
 import type { AssetCategoryDto } from '../features/asset-category/types';
-import { getBookingLimit } from '../features/booking/utilis/getBookingLimit';
+import { getBookingLimit } from '../features/booking/utils/getBookingLimit';
 
 export default function BookingsByAsset() {
   const { assetId } = useParams();

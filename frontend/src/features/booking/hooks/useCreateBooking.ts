@@ -13,8 +13,8 @@ import { useAuth } from '../../auth/context/AuthContext';
 import type { Filters } from '../types';
 
 // Utilis
-import { reccuringBooking } from '../utilis/reccuringBooking';
-import { prepareDayBooking } from '../utilis/prepareDayBooking';
+import { reccuringBooking } from '../utils/reccuringBooking';
+import { prepareDayBooking } from '../utils/prepareDayBooking';
 
 export function useCreateBooking({
   assetId,

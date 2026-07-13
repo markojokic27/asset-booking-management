@@ -4,7 +4,7 @@ import {
   buildDepartmentNameById,
   formatDepartmentName,
   getDepartmentNameById,
-} from '../../features/department/utilis/department';
+} from '../../features/department/utils/department';
 
 const t = ((key: string, options?: { defaultValue?: string }) =>
   options?.defaultValue ?? key) as never;

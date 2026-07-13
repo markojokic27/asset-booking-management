@@ -9,8 +9,8 @@ vi.mock('../../features/user/hooks/usePagination', () => ({
     paged: items, page: 1, totalPages: 1, items, setPage: vi.fn(),
   })),
 }));
-vi.mock('../../features/user/utilis/users', () => ({ isAdmin: vi.fn() }));
-vi.mock('../../features/booking/utilis/approvalFilter', () => ({
+vi.mock('../../features/user/utils/users', () => ({ isAdmin: vi.fn() }));
+vi.mock('../../features/booking/utils/approvalFilter', () => ({
   filterBookingsByAsset: vi.fn((b: unknown[]) => b),
   filterBookingsByDateRange: vi.fn((b: unknown[]) => b),
   filterBookingsByStatus: vi.fn((b: unknown[]) => b),
@@ -57,13 +57,13 @@ vi.mock('../../features/booking/components/MyBookingsTable', () => ({
 import MyBookings from '../../pages/MyBookings';
 import { authState, mockUseAuth } from '../mocks/auth';
 import { useMyBookings } from '../../features/booking/hooks/useMyBookings';
-import { isAdmin } from '../../features/user/utilis/users';
+import { isAdmin } from '../../features/user/utils/users';
 import {
   filterBookingsByAsset,
   filterBookingsByDateRange,
   filterBookingsByStatus,
   filterPendingBookingsBySearch,
-} from '../../features/booking/utilis/approvalFilter';
+} from '../../features/booking/utils/approvalFilter';
 
 
 const mockUser = { id: 1, role: 'EMPLOYEE' };

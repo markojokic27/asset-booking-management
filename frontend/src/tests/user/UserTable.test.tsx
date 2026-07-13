@@ -8,7 +8,7 @@ vi.mock('react-i18next', () => ({
       opts?.direction ? `Sort by name ${opts.direction}` : key,
   }),
 }));
-vi.mock('../../features/user/utilis/users', () => ({
+vi.mock('../../features/user/utils/users', () => ({
   getDisplayName: (user: UserDto) => `${user.surname} ${user.name}`.trim(),
 }));
 

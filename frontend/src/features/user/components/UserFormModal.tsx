@@ -17,7 +17,7 @@ import { Toast } from '../../../components/ui/Toast';
 // hooks
 import { useEditFormChanges } from '../../../hooks/useEditFormChanges';
 import { useDepartments } from '../../department/hooks/useDepartments';
-import { getFullName } from '../utilis/users';
+import { getFullName } from '../utils/users';
 
 // validation
 import {

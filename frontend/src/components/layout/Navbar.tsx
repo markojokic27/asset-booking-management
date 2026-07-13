@@ -21,7 +21,7 @@ import type { UserDto } from '../../features/user/types';
 // API
 import { useAuth } from '../../features/auth/context/AuthContext';
 import { getUserById } from '../../features/user/api/users';
-import { getFullName, isAdmin, isEmployee, isManager } from '../../features/user/utilis/users';
+import { getFullName, isAdmin, isEmployee, isManager } from '../../features/user/utils/users';
 
 export const Navbar: React.FC = () => {
   const { t } = useTranslation();

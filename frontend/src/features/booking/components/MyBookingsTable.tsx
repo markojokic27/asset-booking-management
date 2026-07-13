@@ -14,8 +14,8 @@ import {
   canCancelBooking,
   formatBookingTime,
   isBookingPastEnd,
-} from '../utilis/bookingLogic';
-import { getFullName } from '../../user/utilis/users';
+} from '../utils/bookingLogic';
+import { getFullName } from '../../user/utils/users';
 
 // Types
 import type { BookingWithRelations } from '../types';

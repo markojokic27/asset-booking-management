@@ -11,7 +11,7 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('../../features/user/hooks/useUsers', () => ({ useUsers: vi.fn() }));
 
-vi.mock('../../features/user/utilis/users', () => ({
+vi.mock('../../features/user/utils/users', () => ({
   getFullName: (u: { name: string; surname: string }) => `${u.name} ${u.surname}`,
   isAdmin: (user: { role?: string } | null | undefined) => user?.role === 'ADMIN',
 }));

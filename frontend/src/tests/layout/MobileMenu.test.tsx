@@ -20,8 +20,8 @@ vi.mock('../../components/ui/Button', () => ({
     <button onClick={onClick} className={className}>{children}</button>
   ),
 }));
-vi.mock('../../features/user/utilis/users', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../features/user/utilis/users')>();
+vi.mock('../../features/user/utils/users', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../features/user/utils/users')>();
   return {
     ...actual,
     getFullName: vi.fn(() => 'Test User'),
@@ -37,7 +37,7 @@ vi.mock('@mui/icons-material', () => ({
 
 import MobileMenu from '../../components/layout/MobileMenu';
 import { authState, mockUseAuth } from '../mocks/auth';
-import { isAdmin, isManager } from '../../features/user/utilis/users';
+import { isAdmin, isManager } from '../../features/user/utils/users';
 
 const adminUser = { id: 1, role: 'ADMIN', name: 'Test', surname: 'User' } as const;
 

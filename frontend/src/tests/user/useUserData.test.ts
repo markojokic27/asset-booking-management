@@ -10,7 +10,7 @@ vi.mock('../../features/user/api/users', () => ({
   deleteUser: vi.fn(),
 }));
 
-vi.mock('../../features/user/utilis/users', () => ({
+vi.mock('../../features/user/utils/users', () => ({
   mapUserDtoToUpdateRequest: vi.fn((user) => user),
 }));
 

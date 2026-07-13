@@ -4,9 +4,9 @@ import { vi } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Approvals from '../../pages/Approvals';
 import { mockUseAuth, authState } from '../mocks/auth';
-import { isManager } from '../../features/user/utilis/users';
+import { isManager } from '../../features/user/utils/users';
 import { usePendingBookings } from '../../features/booking/hooks/usePendingBookings';
-import { filterPendingBookingsBySearch } from '../../features/booking/utilis/approvalFilter';
+import { filterPendingBookingsBySearch } from '../../features/booking/utils/approvalFilter';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
@@ -40,7 +40,7 @@ vi.mock('../../features/booking/components/PendingApprovalsTable', () => ({
   ),
 }));
 
-vi.mock('../../features/user/utilis/users', () => ({
+vi.mock('../../features/user/utils/users', () => ({
   isManager: vi.fn(() => true),
 }));
 
@@ -62,7 +62,7 @@ vi.mock('../../features/booking/hooks/useBookingApproval', () => ({
   })),
 }));
 
-vi.mock('../../features/booking/utilis/approvalFilter', () => ({
+vi.mock('../../features/booking/utils/approvalFilter', () => ({
   filterPendingBookingsBySearch: vi.fn((bookings: any[]) => bookings),
 }));
 

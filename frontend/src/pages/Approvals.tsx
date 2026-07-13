@@ -12,8 +12,8 @@ import { PendingApprovalsTable } from '../features/booking/components/PendingApp
 import { useBookingApproval } from '../features/booking/hooks/useBookingApproval';
 import { usePendingBookings } from '../features/booking/hooks/usePendingBookings';
 import { useAuth } from '../features/auth/context/AuthContext';
-import { filterPendingBookingsBySearch } from '../features/booking/utilis/approvalFilter';
-import { isManager } from '../features/user/utilis/users';
+import { filterPendingBookingsBySearch } from '../features/booking/utils/approvalFilter';
+import { isManager } from '../features/user/utils/users';
 
 // Approvals page
 export default function Approvals() {

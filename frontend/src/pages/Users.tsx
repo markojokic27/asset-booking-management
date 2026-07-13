@@ -22,7 +22,7 @@ import { UserReportModal } from '../features/user/components/UserReportModal';
 import { ShowDeletedFilter } from '../features/user/components/ShowDeletedFilter';
 
 // Utility functions
-import { getFullName, isAdmin } from '../features/user/utilis/users';
+import { getFullName, isAdmin } from '../features/user/utils/users';
 
 // Custom hooks
 import { useUsers } from '../features/user/hooks/useUsers';
