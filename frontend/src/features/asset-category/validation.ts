@@ -17,10 +17,7 @@ export function createAssetCategoryValidationSchema(t: TFunction) {
       .max(255, t('assetCategories.validation.descriptionMax'))
       .optional(),
 
-    bookingPeriod: z.coerce
-      .number({ message: t('assetCategories.validation.bookingPeriodRequired') })
-      .int()
-      .positive(t('assetCategories.validation.bookingPeriodRequired')),
+    bookingPeriod: bookingPeriodSchema,
 
     approval: z.boolean({
       message: t('assetCategories.validation.approvalRequired'),

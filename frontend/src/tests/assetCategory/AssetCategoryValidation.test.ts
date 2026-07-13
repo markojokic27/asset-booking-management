@@ -9,7 +9,7 @@ describe("Asset category schema validation", () => {
         const result = assetCategoryValidationSchema.safeParse({
             name: "Books",
             description: "A collection of books available for borrowing within the company library.",
-            bookingPeriod: 1,
+            bookingPeriod: 'DAY',
             approval: true
         });
 
@@ -22,7 +22,7 @@ describe("Asset category schema validation", () => {
             const result = assetCategoryValidationSchema.safeParse({
                 name: "",
                 description: "A collection of books available for borrowing within the company library.",
-                bookingPeriod: 1,
+                bookingPeriod: 'DAY',
                 approval: true
             });
 
@@ -34,7 +34,7 @@ describe("Asset category schema validation", () => {
             const result = assetCategoryValidationSchema.safeParse({
                 name: "b".repeat(101),
                 description: "A collection of books available for borrowing within the company library.",
-                bookingPeriod: 1,
+                bookingPeriod: 'DAY',
                 approval: true
             });
 
@@ -49,7 +49,7 @@ describe("Asset category schema validation", () => {
             const result = assetCategoryValidationSchema.safeParse({
                 name: "Books",
                 description: "",
-                bookingPeriod: 1,
+                bookingPeriod: 'DAY',
                 approval: true
             });
 
@@ -61,7 +61,7 @@ describe("Asset category schema validation", () => {
             const result = assetCategoryValidationSchema.safeParse({
                 name: "Books",
                 description: "b".repeat(256),
-                bookingPeriod: 1,
+                bookingPeriod: 'DAY',
                 approval: true
             });
 
@@ -85,6 +85,18 @@ describe("Asset category schema validation", () => {
 
         });
 
+        test("should fail when bookingPeriod is not a valid enum value", () => {
+            const result = assetCategoryValidationSchema.safeParse({
+                name: "Books",
+                description: "A collection of books available for borrowing within the company library.",
+                bookingPeriod: 1,
+                approval: true
+            });
+
+            expect(result.success).toBe(false);
+
+        });
+
     })
 
     describe("Approval validation", () => {
@@ -92,7 +104,7 @@ describe("Asset category schema validation", () => {
             const result = assetCategoryValidationSchema.safeParse({
                 name: "Books",
                 description: "A collection of books available for borrowing within the company library.",
-                bookingPeriod: 1,
+                bookingPeriod: 'DAY',
                 approval: null
             });
 
