@@ -1,5 +1,6 @@
 // External packages
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // API
 import {
@@ -13,6 +14,7 @@ import {
 import type { AssetDto } from '../types';
 
 export function useAssetsData() {
+  const { t } = useTranslation();
   const [assets, setAssets] = useState<AssetDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +34,7 @@ export function useAssetsData() {
         }
       } catch {
         if (mounted) {
-          setError('Failed to load assets.');
+          setError(t('assets.errors.loadAssets'));
         }
       } finally {
         if (mounted) {
@@ -44,7 +46,7 @@ export function useAssetsData() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [t]);
 
   const update = async (asset: AssetDto) => {
     const dto = await updateAsset(asset.id, {

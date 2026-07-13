@@ -24,6 +24,7 @@
     "none": "No users yet."
   },
   "errors": {
+    "loadUsers": "Failed to load users.",
     "loadReport": "Failed to load report.",
     "loadBookings": "Failed to load bookings."
   },

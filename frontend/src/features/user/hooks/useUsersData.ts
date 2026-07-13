@@ -1,5 +1,6 @@
 // External packages
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 // API
 import { createUser, deleteUser, getUsers, updateUser } from '../api/users';
 // Types
@@ -8,6 +9,7 @@ import type { UserDto } from '../types';
 import { mapUserDtoToUpdateRequest } from '../utils/users';
 
 export function useUsersData() {
+  const { t } = useTranslation();
   const [users, setUsers] = useState<UserDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +24,7 @@ export function useUsersData() {
         const data = await getUsers({ page: 0, size: 200 });
         if (mounted) setUsers(data);
       } catch {
-        if (mounted) setError('Failed to load users.');
+        if (mounted) setError(t('users.errors.loadUsers'));
       } finally {
         if (mounted) setLoading(false);
       }
@@ -31,7 +33,7 @@ export function useUsersData() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [t]);
 
   const update = async (user: UserDto) => {
     const dto = await updateUser(user.id, mapUserDtoToUpdateRequest(user));

@@ -247,7 +247,7 @@ describe('Users page', () => {
 
     it.each([
       ['loading', { isLoading: true, pagedUsers: [] }, 'users.empty.loading'],
-      ['error', { error: 'Failed to load users.', pagedUsers: [] }, 'Failed to load users.'],
+      ['error', { error: 'users.errors.loadUsers', pagedUsers: [] }, 'users.errors.loadUsers'],
       ['empty', { pagedUsers: [], filteredUsers: [] }, 'users.empty.none'],
     ])('shows correct message when %s', (_, listOverrides, expectedText) => {
       renderPage({ list: { ...baseList, ...listOverrides } });

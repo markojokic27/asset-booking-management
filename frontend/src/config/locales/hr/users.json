@@ -24,6 +24,7 @@
     "none": "Još nema korisnika."
   },
   "errors": {
+    "loadUsers": "Učitavanje korisnika nije uspjelo.",
     "loadReport": "Učitavanje izvještaja nije uspjelo.",
     "loadBookings": "Učitavanje rezervacija nije uspjelo."
   },

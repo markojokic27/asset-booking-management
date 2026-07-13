@@ -24,6 +24,7 @@
     "none": "Noch keine Benutzer."
   },
   "errors": {
+    "loadUsers": "Benutzer konnten nicht geladen werden.",
     "loadReport": "Bericht konnte nicht geladen werden.",
     "loadBookings": "Buchungen konnten nicht geladen werden."
   },

@@ -3,6 +3,13 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { getUsers, createUser, updateUser, deleteUser } from '../../features/user/api/users';
 import { useUsersData } from '../../features/user/hooks/useUsersData';
 
+vi.mock('react-i18next', () => {
+  const t = (key: string) => key;
+  return {
+    useTranslation: () => ({ t }),
+  };
+});
+
 vi.mock('../../features/user/api/users', () => ({
   getUsers: vi.fn(),
   createUser: vi.fn(),
@@ -59,7 +66,7 @@ describe('useUsersData', () => {
     vi.mocked(getUsers).mockRejectedValue(new Error('Network error'));
     const { result } = renderHook(() => useUsersData());
     await waitFor(() => expect(result.current.loading).toBe(false));
-    expect(result.current.error).toBe('Failed to load users.');
+    expect(result.current.error).toBe('users.errors.loadUsers');
     expect(result.current.users).toEqual([]);
   });
 
