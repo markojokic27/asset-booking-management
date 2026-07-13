@@ -22,12 +22,6 @@ export function createAssetValidationSchema(t: TFunction) {
       .max(255, t('assets.validation.descriptionMax'))
       .optional(),
 
-    code: z
-      .string()
-      .trim()
-      .min(1, t('assets.validation.codeRequired'))
-      .max(2000, t('assets.validation.codeMax')),
-
     status: assetStatusSchema,
 
     location: z

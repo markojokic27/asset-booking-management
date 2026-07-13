@@ -73,17 +73,7 @@ export const AssetFormModal = ({
   const { t } = useTranslation();
   const isCreate = mode === 'create';
 
-  const validationSchema = useMemo(
-    () =>
-      createAssetValidationSchema(t).pick({
-        name: true,
-        categoryId: true,
-        description: true,
-        status: true,
-        location: true,
-      }),
-    [t]
-  );
+  const validationSchema = useMemo(() => createAssetValidationSchema(t), [t]);
 
   const [errors, setErrors] = useState<FormErrors>(initialErrors);
   const [submitError, setSubmitError] = useState<string | null>(null);
